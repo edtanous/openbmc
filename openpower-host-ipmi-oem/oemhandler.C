@@ -6,10 +6,7 @@
 void register_netfn_oem_partial_esel() __attribute__((constructor));
 
 const char *g_esel_path = "/tmp/";
-uint16_t g_record_id = 0x0100;
-
-
-#define LSMSSWAP(x,y) ((y)<<8|(x))
+uint16_t g_record_id = 0x0001;
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -30,20 +27,20 @@ ipmi_ret_t ipmi_ibm_oem_partial_esel(ipmi_netfn_t netfn, ipmi_cmd_t cmd,
 {
     esel_request_t *reqptr = (esel_request_t*) request;
     FILE *fp;
-    short recid, offset = 0;
+    // TODO: Issue 5: This is not endian-safe.
+    short *recid  =  (short*) &reqptr->selrecordls;
+    short *offset =  (short*) &reqptr->offsetls;
     uint8_t rlen;
     ipmi_ret_t rc = IPMI_CC_OK;
     char string[64];
     const char *pio;
 
-    recid  = LSMSSWAP(reqptr->selrecordls, reqptr->selrecordms);
-    offset = LSMSSWAP(reqptr->offsetls, reqptr->offsetms);
 
-    if (!recid && !offset) {
+    if (!*recid && !*offset) {
         // OpenPOWER Host Interface spec says if RecordID and Offset are
         // 0 then then this is a new request
         pio = "wb";
-        snprintf(string, sizeof(string), "%s%s%02x%02x", g_esel_path, "esel", (g_record_id&0xFF00>>8), (g_record_id&0xFF));
+        snprintf(string, sizeof(string), "%s%s%04x", g_esel_path, "esel", g_record_id);
     } else {
         pio = "rb+";
         snprintf(string, sizeof(string), "%s%s%02x%02x", g_esel_path, "esel", reqptr->selrecordms, reqptr->selrecordls);
@@ -57,11 +54,11 @@ ipmi_ret_t ipmi_ibm_oem_partial_esel(ipmi_netfn_t netfn, ipmi_cmd_t cmd,
 
 
     printf("IPMI PARTIAL ESEL for %s  Offset = %d Length = %d\n",
-        string, offset, rlen);
+        string, *offset, rlen);
 
 
     if ((fp = fopen(string, pio)) != NULL) {
-        fseek(fp, offset, SEEK_SET);
+        fseek(fp, *offset, SEEK_SET);
         fwrite(reqptr+1,rlen,1,fp);
         fclose(fp);
 
