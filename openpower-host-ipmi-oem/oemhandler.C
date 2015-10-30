@@ -13,19 +13,19 @@ uint16_t g_record_id = 0x0100;
 
 
 ///////////////////////////////////////////////////////////////////////////////
-// For the First partial add eSEL the SEL Record ID and offset 
-// value should be 0x0000. The extended data needs to be in 
-// the form of an IPMI SEL Event Record, with Event sensor type 
-// of 0xDF and Event Message format of 0x04. The returned 
+// For the First partial add eSEL the SEL Record ID and offset
+// value should be 0x0000. The extended data needs to be in
+// the form of an IPMI SEL Event Record, with Event sensor type
+// of 0xDF and Event Message format of 0x04. The returned
 // Record ID should be used for all partial eSEL adds.
 //
-// This function creates a /tmp/esel# file to store the 
+// This function creates a /tmp/esel# file to store the
 // incoming partial esel.  It is the role of some other
-// function to commit the error log in to long term 
-// storage.  Likely via the ipmi add_sel command.  
+// function to commit the error log in to long term
+// storage.  Likely via the ipmi add_sel command.
 ///////////////////////////////////////////////////////////////////////////////
-ipmi_ret_t ipmi_ibm_oem_partial_esel(ipmi_netfn_t netfn, ipmi_cmd_t cmd, 
-                              ipmi_request_t request, ipmi_response_t response, 
+ipmi_ret_t ipmi_ibm_oem_partial_esel(ipmi_netfn_t netfn, ipmi_cmd_t cmd,
+                              ipmi_request_t request, ipmi_response_t response,
                               ipmi_data_len_t data_len, ipmi_context_t context)
 {
     esel_request_t *reqptr = (esel_request_t*) request;
@@ -36,7 +36,7 @@ ipmi_ret_t ipmi_ibm_oem_partial_esel(ipmi_netfn_t netfn, ipmi_cmd_t cmd,
     char string[64];
     const char *pio;
 
-    
+
     offset = LSMSSWAP(reqptr->offsetls, reqptr->offsetms);
 
     snprintf(string, sizeof(string), "%s%s%02x%02x", g_esel_path, "esel", reqptr->selrecordms, reqptr->selrecordls);
@@ -49,7 +49,7 @@ ipmi_ret_t ipmi_ibm_oem_partial_esel(ipmi_netfn_t netfn, ipmi_cmd_t cmd,
     rlen = (*data_len) - (uint8_t) (sizeof(esel_request_t));
 
 
-    printf("IPMI PARTIAL ESEL for %s  Offset = %d Length = %d\n", 
+    printf("IPMI PARTIAL ESEL for %s  Offset = %d Length = %d\n",
         string, offset, rlen);
 
 
@@ -78,7 +78,7 @@ ipmi_ret_t ipmi_ibm_oem_partial_esel(ipmi_netfn_t netfn, ipmi_cmd_t cmd,
         rc = IPMI_CC_INVALID;
         *data_len     = 0;
     }
-    
+
     return rc;
 }
 
