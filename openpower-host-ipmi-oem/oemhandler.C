@@ -46,10 +46,6 @@ ipmi_ret_t ipmi_ibm_oem_partial_esel(ipmi_netfn_t netfn, ipmi_cmd_t cmd,
         snprintf(string, sizeof(string), "%s%s%02x%02x", g_esel_path, "esel", reqptr->selrecordms, reqptr->selrecordls);
     }
 
-    // Length is the number of request bytes minus the header itself.
-    // The header contains an extra byte to indicate the start of
-    // the data (so didn't need to worry about word/byte boundaries)
-    // hence the -1...
     rlen = (*data_len) - (uint8_t) (sizeof(esel_request_t));
 
 
@@ -68,6 +64,14 @@ ipmi_ret_t ipmi_ibm_oem_partial_esel(ipmi_netfn_t netfn, ipmi_cmd_t cmd,
         fprintf(stderr, "Error trying to perform %s for esel%s\n",pio, string);
         rc = IPMI_CC_INVALID;
         *data_len     = 0;
+    }
+
+    // The first bit prepresents that this is the last partial packet
+    // coming down.  If that is the case advance the record id so we
+    // don't overlap logs.  This allows anyone to establish a log
+    // directory system.
+    if (reqptr->progress & 1 ) {
+        g_record_id++;
     }
 
     return rc;
