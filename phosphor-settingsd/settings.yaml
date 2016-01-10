@@ -1,0 +1,14 @@
+---
+# Settings Config File
+host:
+    powercap:
+        name: power_cap
+        type: i
+        default: 0
+        min: 0
+        max: 1000
+        unit: watts
+    bootflags:
+        name: boot_flags
+        type: s
+        default: "0000000000"
