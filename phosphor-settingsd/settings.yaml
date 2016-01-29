@@ -12,3 +12,7 @@ host:
         name: boot_flags
         type: s
         default: "0000000000"
+    sysstate:
+        name: system_state
+        type: s
+        default: ""
