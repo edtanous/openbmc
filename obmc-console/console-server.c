@@ -4,6 +4,8 @@
  * Copyright © 2016 IBM Corporation <jk@ozlabs.org>
  */
 
+#define _GNU_SOURCE
+
 #include <stdint.h>
 #include <stdbool.h>
 #include <stdlib.h>
@@ -14,6 +16,7 @@
 #include <termios.h>
 #include <string.h>
 #include <getopt.h>
+#include <limits.h>
 
 #include <sys/types.h>
 #include <sys/poll.h>
@@ -23,7 +26,9 @@
 static const char esc_str[] = { '\r', '~', '.' };
 
 struct console_ctx {
-	const char	*tty_dev;
+	const char	*tty_kname;
+	char		*tty_sysfs_devnode;
+	char		*tty_dev;
 	int		tty_fd;
 	int		console_fd_in;
 	int		console_fd_out;
@@ -38,9 +43,57 @@ static void usage(const char *progname)
 "usage: %s [options]\n"
 "\n"
 "Options:\n"
-"  --device <TTY>  Use serial device TTY\n"
+"  --device <TTY>  Use serial device TTY (eg, ttyS0)\n"
 "",
 		progname);
+}
+
+/* populates tty_dev and tty_sysfs_devnode, using the tty kernel name */
+static int tty_find_device(struct console_ctx *ctx)
+{
+	char *tty_class_device_link;
+	char *tty_device_tty_dir;
+	char *tty_device_reldir;
+	int rc;
+
+	rc = -1;
+	tty_class_device_link = NULL;
+	tty_device_tty_dir = NULL;
+	tty_device_reldir = NULL;
+
+	rc = asprintf(&tty_class_device_link,
+			"/sys/class/tty/%s", ctx->tty_kname);
+	if (rc < 0)
+		return -1;
+
+	tty_device_tty_dir = realpath(tty_class_device_link, NULL);
+	if (rc < 0) {
+		warn("Can't query sysfs for device %s", ctx->tty_kname);
+		goto out_free;
+	}
+
+	rc = asprintf(&tty_device_reldir, "%s/../../", tty_device_tty_dir);
+	if (rc < 0)
+		goto out_free;
+
+	ctx->tty_sysfs_devnode = realpath(tty_device_reldir, NULL);
+	if (!ctx->tty_sysfs_devnode)
+		warn("Can't find parent device for %s", ctx->tty_kname);
+
+
+	/* todo: lookup from major/minor info in sysfs, in case udev has
+	 * renamed us */
+	rc = asprintf(&ctx->tty_dev, "/dev/%s", ctx->tty_kname);
+	if (rc < 0)
+		goto out_free;
+
+	rc = 0;
+
+out_free:
+	free(tty_class_device_link);
+	free(tty_device_tty_dir);
+	free(tty_device_reldir);
+	return rc;
 }
 
 /**
@@ -48,6 +101,7 @@ static void usage(const char *progname)
  */
 static int tty_init_io(struct console_ctx *ctx)
 {
+
 	ctx->tty_fd = open(ctx->tty_dev, O_RDWR);
 	if (ctx->tty_fd <= 0) {
 		warn("Can't open tty %s", ctx->tty_dev);
@@ -212,7 +266,7 @@ int main(int argc, char **argv)
 
 		switch (c) {
 		case 'd':
-			ctx->tty_dev = optarg;
+			ctx->tty_kname = optarg;
 			break;
 
 		case 'h':
@@ -222,11 +276,17 @@ int main(int argc, char **argv)
 		}
 	}
 
-	if (!ctx->tty_dev) {
+	if (!ctx->tty_kname) {
 		fprintf(stderr,
 			"Error: No TTY device specified (use --device)\n");
 		return EXIT_FAILURE;
 	}
+
+	rc = tty_find_device(ctx);
+	if (rc)
+		return EXIT_FAILURE;
+
+	return EXIT_SUCCESS;
 
 	rc = tty_init_io(ctx);
 	if (rc)
@@ -240,6 +300,8 @@ int main(int argc, char **argv)
 
 	console_restore_termios(ctx);
 
+	free(ctx->tty_sysfs_devnode);
+	free(ctx->tty_dev);
 	free(ctx);
 
 	return rc == 0 ? EXIT_SUCCESS : EXIT_FAILURE;
