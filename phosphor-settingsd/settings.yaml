@@ -11,7 +11,7 @@ host:
     bootflags:
         name: boot_flags
         type: s
-        default: "0000000000"
+        default: "default"
     sysstate:
         name: system_state
         type: s
