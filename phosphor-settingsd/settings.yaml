@@ -16,3 +16,7 @@ host:
         name: system_state
         type: s
         default: ""
+    powerpolicy:
+        name: power_policy
+        type: s
+        default: "RESTORE_LAST_STATE"
