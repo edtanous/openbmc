@@ -5,7 +5,7 @@
 
 void register_netfn_oem_partial_esel() __attribute__((constructor));
 
-const char *g_esel_path = "/tmp/";
+const char *g_esel_path = "/tmp/esel";
 uint16_t g_record_id = 0x0001;
 
 
@@ -32,7 +32,6 @@ ipmi_ret_t ipmi_ibm_oem_partial_esel(ipmi_netfn_t netfn, ipmi_cmd_t cmd,
     short *offset =  (short*) &reqptr->offsetls;
     uint8_t rlen;
     ipmi_ret_t rc = IPMI_CC_OK;
-    char string[64];
     const char *pio;
 
 
@@ -40,20 +39,18 @@ ipmi_ret_t ipmi_ibm_oem_partial_esel(ipmi_netfn_t netfn, ipmi_cmd_t cmd,
         // OpenPOWER Host Interface spec says if RecordID and Offset are
         // 0 then then this is a new request
         pio = "wb";
-        snprintf(string, sizeof(string), "%s%s%04x", g_esel_path, "esel", g_record_id);
     } else {
         pio = "rb+";
-        snprintf(string, sizeof(string), "%s%s%02x%02x", g_esel_path, "esel", reqptr->selrecordms, reqptr->selrecordls);
     }
 
     rlen = (*data_len) - (uint8_t) (sizeof(esel_request_t));
 
 
     printf("IPMI PARTIAL ESEL for %s  Offset = %d Length = %d\n",
-        string, *offset, rlen);
+        g_esel_path, *offset, rlen);
 
 
-    if ((fp = fopen(string, pio)) != NULL) {
+    if ((fp = fopen(g_esel_path, pio)) != NULL) {
         fseek(fp, *offset, SEEK_SET);
         fwrite(reqptr+1,rlen,1,fp);
         fclose(fp);
@@ -61,7 +58,7 @@ ipmi_ret_t ipmi_ibm_oem_partial_esel(ipmi_netfn_t netfn, ipmi_cmd_t cmd,
         *data_len = sizeof(g_record_id);
         memcpy(response, &g_record_id, *data_len);
     } else {
-        fprintf(stderr, "Error trying to perform %s for esel%s\n",pio, string);
+        fprintf(stderr, "Error trying to perform %s for esel%s\n",pio, g_esel_path);
         rc = IPMI_CC_INVALID;
         *data_len     = 0;
     }
