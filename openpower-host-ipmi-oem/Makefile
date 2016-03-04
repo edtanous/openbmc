@@ -10,7 +10,7 @@ CXXFLAGS += -fPIC -Wall
 all:  $(LIB_OEM)
 
 %.o: %.C
-	$(CXX) -c $< $(CXXFLAGS) -o $@
+	$(CXX) -std=c++14 -c $< $(CXXFLAGS) -o $@
 
 $(LIB_OEM): $(LIB_OEM_OBJ)
 	$(CXX) $^ -shared $(LDFLAGS) -o $@

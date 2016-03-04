@@ -1,7 +1,9 @@
 #include "oemhandler.h"
 #include <host-ipmid/ipmid-api.h>
+#include <fstream>
 #include <stdio.h>
 #include <string.h>
+#include <systemd/sd-bus.h>
 
 void register_netfn_oem_partial_esel() __attribute__((constructor));
 
@@ -70,10 +72,60 @@ ipmi_ret_t ipmi_ibm_oem_partial_esel(ipmi_netfn_t netfn, ipmi_cmd_t cmd,
 	return rc;
 }
 
+// Prepare for FW Update.
+// Execute needed commands to prepare the system for a fw update from the host.
+ipmi_ret_t ipmi_ibm_oem_prep_fw_update(ipmi_netfn_t netfn, ipmi_cmd_t cmd,
+                                     ipmi_request_t request, ipmi_response_t response,
+                                     ipmi_data_len_t data_len, ipmi_context_t context)
+{
+    ipmi_ret_t ipmi_rc = IPMI_CC_OK;
+    *data_len = 0;
+
+    int rc = 0;
+    std::ofstream rwfs_file;
+    const char  *busname = "org.openbmc.control.Bmc";
+    const char  *objname = "/org/openbmc/control/bmc0";
+    const char  *iface = "org.openbmc.control.Bmc";
+    sd_bus *bus = ipmid_get_sd_bus_connection();
+    sd_bus_message *reply = NULL;
+    sd_bus_error error = SD_BUS_ERROR_NULL;
+    int r = 0;
+
+    // Set one time flag
+    rc = system("fw_setenv openbmconce copy-files-to-ram copy-base-filesystem-to-ram");
+    rc = WEXITSTATUS(rc);
+    if (rc != 0) {
+        fprintf(stderr, "fw_setenv openbmconce failed with rc=%d\n", rc);
+        return IPMI_CC_UNSPECIFIED_ERROR; 
+    }
+
+    // Touch the image-rwfs file to perform an empty update to force the save
+    // in case we're already in ram and the flash is the same causing the ram files
+    // to not be copied back to flash
+    rwfs_file.open("/run/initramfs/image-rwfs", std::ofstream::out | std::ofstream::app);
+    rwfs_file.close();
+
+    // Reboot the BMC for settings to take effect
+    r = sd_bus_call_method(bus, busname, objname, iface,
+                           "warmReset", &error, &reply, NULL);
+    if (r < 0) {
+        fprintf(stderr, "Failed to reset BMC: %s\n", strerror(-r));
+        return -1;
+    }
+    printf("Warning: BMC is going down for reboot!\n");
+    sd_bus_error_free(&error);
+    reply = sd_bus_message_unref(reply);
+
+    return ipmi_rc;
+}
 
 void register_netfn_oem_partial_esel()
 {
 	printf("Registering NetFn:[0x%X], Cmd:[0x%X]\n",NETFUN_OEM, IPMI_CMD_PESEL);
 	ipmi_register_callback(NETFUN_OEM, IPMI_CMD_PESEL, NULL, ipmi_ibm_oem_partial_esel);
+
+    printf("Registering NetFn:[0x%X], Cmd:[0x%X]\n", NETFUN_OEM, IPMI_CMD_PREP_FW_UPDATE);
+    ipmi_register_callback(NETFUN_OEM, IPMI_CMD_PREP_FW_UPDATE, NULL, ipmi_ibm_oem_prep_fw_update);
+
 	return;
 }
