@@ -29,6 +29,8 @@ struct console_ctx {
 	const char	*tty_kname;
 	char		*tty_sysfs_devnode;
 	char		*tty_dev;
+	int		tty_sirq;
+	int		tty_lpc_addr;
 	int		tty_fd;
 	int		console_fd_in;
 	int		console_fd_out;
@@ -96,11 +98,50 @@ out_free:
 	return rc;
 }
 
+static int tty_set_sysfs_attr(struct console_ctx *ctx, const char *name,
+		int value)
+{
+	char *path;
+	FILE *fp;
+	int rc;
+
+	rc = asprintf(&path, "%s/%s", ctx->tty_sysfs_devnode, name);
+	if (rc < 0)
+		return -1;
+
+	fp = fopen(path, "w");
+	if (!fp) {
+		warn("Can't access attribute %s on device %s",
+				name, ctx->tty_kname);
+		rc = -1;
+		goto out_free;
+	}
+	setvbuf(fp, NULL, _IONBF, 0);
+
+	rc = fprintf(fp, "0x%x", value);
+	if (rc < 0)
+		warn("Error writing to %s attribute of device %s",
+				name, ctx->tty_kname);
+	fclose(fp);
+
+
+
+out_free:
+	free(path);
+	return rc;
+}
+
 /**
  * Open and initialise the serial device
  */
 static int tty_init_io(struct console_ctx *ctx)
 {
+	if (ctx->tty_sirq)
+		tty_set_sysfs_attr(ctx, "sirq", ctx->tty_sirq);
+	if (ctx->tty_lpc_addr)
+		tty_set_sysfs_attr(ctx, "lpc_address", ctx->tty_lpc_addr);
+	tty_set_sysfs_attr(ctx, "enabled", 1);
+
 
 	ctx->tty_fd = open(ctx->tty_dev, O_RDWR);
 	if (ctx->tty_fd <= 0) {
@@ -246,6 +287,8 @@ int run_console(struct console_ctx *ctx)
 
 static const struct option options[] = {
 	{ "device",	required_argument,	0, 'd'},
+	{ "sirq",	required_argument,	0, 's'},
+	{ "lpc-addr",	required_argument,	0, 'l'},
 	{ },
 };
 
@@ -256,11 +299,13 @@ int main(int argc, char **argv)
 
 	ctx = malloc(sizeof(struct console_ctx));
 	memset(ctx, 0, sizeof(*ctx));
+	rc = -1;
 
 	for (;;) {
+		char *endp;
 		int c, idx;
 
-		c = getopt_long(argc, argv, "d", options, &idx);
+		c = getopt_long(argc, argv, "d:s:l:", options, &idx);
 		if (c == -1)
 			break;
 
@@ -268,11 +313,27 @@ int main(int argc, char **argv)
 		case 'd':
 			ctx->tty_kname = optarg;
 			break;
+		case 'l':
+			ctx->tty_lpc_addr = strtoul(optarg, &endp, 0);
+			if (endp == optarg) {
+				warnx("Invalid sirq: '%s'", optarg);
+				goto out_free;
+			}
+			break;
+
+		case 's':
+			ctx->tty_sirq = strtoul(optarg, &endp, 0);
+			if (endp == optarg) {
+				warnx("Invalid sirq: '%s'", optarg);
+				goto out_free;
+			}
+			break;
 
 		case 'h':
 		case '?':
 			usage(argv[0]);
-			break;
+			rc = 0;
+			goto out_free;
 		}
 	}
 
@@ -286,8 +347,6 @@ int main(int argc, char **argv)
 	if (rc)
 		return EXIT_FAILURE;
 
-	return EXIT_SUCCESS;
-
 	rc = tty_init_io(ctx);
 	if (rc)
 		return EXIT_FAILURE;
@@ -300,6 +359,7 @@ int main(int argc, char **argv)
 
 	console_restore_termios(ctx);
 
+out_free:
 	free(ctx->tty_sysfs_devnode);
 	free(ctx->tty_dev);
 	free(ctx);
