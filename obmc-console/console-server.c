@@ -13,7 +13,6 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <err.h>
-#include <termios.h>
 #include <string.h>
 #include <getopt.h>
 #include <limits.h>
@@ -21,22 +20,17 @@
 #include <sys/types.h>
 #include <sys/poll.h>
 
-#define ARRAY_SIZE(a) (sizeof(a) / sizeof(a[0]))
+#include "console-server.h"
 
-static const char esc_str[] = { '\r', '~', '.' };
-
-struct console_ctx {
+struct console {
 	const char	*tty_kname;
 	char		*tty_sysfs_devnode;
 	char		*tty_dev;
 	int		tty_sirq;
 	int		tty_lpc_addr;
 	int		tty_fd;
-	int		console_fd_in;
-	int		console_fd_out;
-	bool		console_is_tty;
-	struct termios	orig_termios;
-	int		esc_str_pos;
+	struct handler	**handlers;
+	int		n_handlers;
 };
 
 static void usage(const char *progname)
@@ -51,7 +45,7 @@ static void usage(const char *progname)
 }
 
 /* populates tty_dev and tty_sysfs_devnode, using the tty kernel name */
-static int tty_find_device(struct console_ctx *ctx)
+static int tty_find_device(struct console *console)
 {
 	char *tty_class_device_link;
 	char *tty_device_tty_dir;
@@ -64,13 +58,13 @@ static int tty_find_device(struct console_ctx *ctx)
 	tty_device_reldir = NULL;
 
 	rc = asprintf(&tty_class_device_link,
-			"/sys/class/tty/%s", ctx->tty_kname);
+			"/sys/class/tty/%s", console->tty_kname);
 	if (rc < 0)
 		return -1;
 
 	tty_device_tty_dir = realpath(tty_class_device_link, NULL);
 	if (rc < 0) {
-		warn("Can't query sysfs for device %s", ctx->tty_kname);
+		warn("Can't query sysfs for device %s", console->tty_kname);
 		goto out_free;
 	}
 
@@ -78,14 +72,14 @@ static int tty_find_device(struct console_ctx *ctx)
 	if (rc < 0)
 		goto out_free;
 
-	ctx->tty_sysfs_devnode = realpath(tty_device_reldir, NULL);
-	if (!ctx->tty_sysfs_devnode)
-		warn("Can't find parent device for %s", ctx->tty_kname);
+	console->tty_sysfs_devnode = realpath(tty_device_reldir, NULL);
+	if (!console->tty_sysfs_devnode)
+		warn("Can't find parent device for %s", console->tty_kname);
 
 
 	/* todo: lookup from major/minor info in sysfs, in case udev has
 	 * renamed us */
-	rc = asprintf(&ctx->tty_dev, "/dev/%s", ctx->tty_kname);
+	rc = asprintf(&console->tty_dev, "/dev/%s", console->tty_kname);
 	if (rc < 0)
 		goto out_free;
 
@@ -98,21 +92,21 @@ out_free:
 	return rc;
 }
 
-static int tty_set_sysfs_attr(struct console_ctx *ctx, const char *name,
+static int tty_set_sysfs_attr(struct console *console, const char *name,
 		int value)
 {
 	char *path;
 	FILE *fp;
 	int rc;
 
-	rc = asprintf(&path, "%s/%s", ctx->tty_sysfs_devnode, name);
+	rc = asprintf(&path, "%s/%s", console->tty_sysfs_devnode, name);
 	if (rc < 0)
 		return -1;
 
 	fp = fopen(path, "w");
 	if (!fp) {
 		warn("Can't access attribute %s on device %s",
-				name, ctx->tty_kname);
+				name, console->tty_kname);
 		rc = -1;
 		goto out_free;
 	}
@@ -121,7 +115,7 @@ static int tty_set_sysfs_attr(struct console_ctx *ctx, const char *name,
 	rc = fprintf(fp, "0x%x", value);
 	if (rc < 0)
 		warn("Error writing to %s attribute of device %s",
-				name, ctx->tty_kname);
+				name, console->tty_kname);
 	fclose(fp);
 
 
@@ -134,157 +128,154 @@ out_free:
 /**
  * Open and initialise the serial device
  */
-static int tty_init_io(struct console_ctx *ctx)
+static int tty_init_io(struct console *console)
 {
-	if (ctx->tty_sirq)
-		tty_set_sysfs_attr(ctx, "sirq", ctx->tty_sirq);
-	if (ctx->tty_lpc_addr)
-		tty_set_sysfs_attr(ctx, "lpc_address", ctx->tty_lpc_addr);
-	tty_set_sysfs_attr(ctx, "enabled", 1);
+	if (console->tty_sirq)
+		tty_set_sysfs_attr(console, "sirq", console->tty_sirq);
+	if (console->tty_lpc_addr)
+		tty_set_sysfs_attr(console, "lpc_address",
+				console->tty_lpc_addr);
+	tty_set_sysfs_attr(console, "enabled", 1);
 
-
-	ctx->tty_fd = open(ctx->tty_dev, O_RDWR);
-	if (ctx->tty_fd <= 0) {
-		warn("Can't open tty %s", ctx->tty_dev);
+	console->tty_fd = open(console->tty_dev, O_RDWR);
+	if (console->tty_fd <= 0) {
+		warn("Can't open tty %s", console->tty_dev);
 		return -1;
 	}
 
 	/* Disable character delay. We may want to later enable this when
 	 * we detect larger amounts of data
 	 */
-	fcntl(ctx->tty_fd, F_SETFL, FNDELAY);
+	fcntl(console->tty_fd, F_SETFL, FNDELAY);
 
 	return 0;
 }
 
-/*
- * Setup our console channel for IO: use stdin/stdout, and if we're on a TTY,
- * put it in canonical mode
- */
-static int console_init_io(struct console_ctx *ctx)
+
+int console_data_out(struct console *console, const uint8_t *data, size_t len)
 {
-	struct termios termios;
-	int rc;
-
-	ctx->console_fd_in = STDIN_FILENO;
-	ctx->console_fd_out = STDOUT_FILENO;
-	ctx->console_is_tty = isatty(ctx->console_fd_in);
-
-	if (!ctx->console_is_tty)
-		return 0;
-
-	rc = tcgetattr(ctx->console_fd_in, &termios);
-	if (rc) {
-		warn("Can't get terminal attributes for console");
-		return -1;
-	}
-	memcpy(&ctx->orig_termios, &termios, sizeof(ctx->orig_termios));
-	cfmakeraw(&termios);
-
-	rc = tcsetattr(ctx->console_fd_in, TCSANOW, &termios);
-	if (rc) {
-		warn("Can't set terminal attributes for console");
-		return -1;
-	}
-
-	return 0;
+	return write_buf_to_fd(console->tty_fd, data, len);
 }
 
-static int console_process_input(struct console_ctx *ctx,
-		uint8_t *buf, size_t len)
+static void handlers_init(struct console *console)
 {
-	unsigned long i;
-	uint8_t e;
+	extern struct handler *__start_handlers, *__stop_handlers;
+	struct handler *handler;
+	int i;
 
-	e = esc_str[ctx->esc_str_pos];
+	console->n_handlers = &__stop_handlers - &__start_handlers;
+	console->handlers = &__start_handlers;
 
-	for (i = 0; i < len; i++) {
-		if (buf[i] == e) {
-			ctx->esc_str_pos++;
-			if (ctx->esc_str_pos == ARRAY_SIZE(esc_str))
-				return 1;
-			e = esc_str[ctx->esc_str_pos];
-		} else {
+	printf("%d handler%s\n", console->n_handlers,
+			console->n_handlers == 1 ? "" : "s");
 
-			ctx->esc_str_pos = 0;
-		}
+	for (i = 0; i < console->n_handlers; i++) {
+		handler = console->handlers[i];
+
+		printf("  %s\n", handler->name);
+
+		if (handler->init)
+			handler->init(handler, console);
 	}
-	return 0;
 }
 
-static void console_restore_termios(struct console_ctx *ctx)
+static void handlers_fini(struct console *console)
 {
-	if (ctx->console_is_tty)
-		tcsetattr(ctx->console_fd_in, TCSANOW, &ctx->orig_termios);
+	struct handler *handler;
+	int i;
+
+	for (i = 0; i < console->n_handlers; i++) {
+		handler = console->handlers[i];
+		if (handler->fini)
+			handler->fini(handler);
+	}
 }
 
-static int write_buf_to_fd(int fd, uint8_t *buf, size_t len)
+static int handlers_data_in(struct console *console, uint8_t *buf, size_t len)
 {
-	size_t pos;
-	ssize_t rc;
+	struct handler *handler;
+	int i, rc, tmp;
 
-	for (pos = 0; pos < len; pos += rc) {
-		rc = write(fd, buf + pos, len - pos);
-		if (rc <= 0) {
-			warn("Write error");
-			return -1;
-		}
+	rc = 0;
+
+	for (i = 0; i < console->n_handlers; i++) {
+		handler = console->handlers[i];
+
+		if (!handler->data_in)
+			continue;
+
+		tmp = handler->data_in(handler, buf, len);
+		if (tmp == HANDLER_EXIT)
+			rc = 1;
 	}
 
-	return 0;
+	return rc;
 }
 
-int run_console(struct console_ctx *ctx)
+static int handlers_poll_event(struct console *console,
+		struct pollfd *pollfds)
 {
-	struct pollfd pollfds[2];
-	int rc, len;
+	struct handler *handler;
+	int i, rc, tmp;
 
-	pollfds[0].fd = ctx->tty_fd;
+	rc = 0;
+
+	for (i = 0; i < console->n_handlers; i++) {
+		handler = console->handlers[i];
+
+		if (!handler->poll_event)
+			continue;
+
+		tmp = handler->poll_event(handler, pollfds[i].revents);
+		if (tmp == HANDLER_EXIT)
+			rc = 1;
+	}
+
+	return rc;
+}
+
+int run_console(struct console *console)
+{
+	struct handler *handler;
+	struct pollfd *pollfds;
+	int i, rc;
+
+	pollfds = calloc(console->n_handlers + 1, sizeof(*pollfds));
+
+	pollfds[0].fd = console->tty_fd;
 	pollfds[0].events = POLLIN;
-	pollfds[1].fd = ctx->console_fd_in;
-	pollfds[1].events = POLLIN;
 
 	for (;;) {
 		uint8_t buf[4096];
 
-		rc = poll(pollfds, 2, -1);
+		/* init pollers */
+		for (i = 0; i < console->n_handlers; i++) {
+			handler = console->handlers[i];
+			handler->init_poll(handler, &pollfds[i+1]);
+		}
+
+		rc = poll(pollfds, console->n_handlers + 1, -1);
 		if (rc < 0) {
 			warn("poll error");
 			return -1;
 		}
 
 		if (pollfds[0].revents) {
-			rc = read(ctx->tty_fd, buf, sizeof(buf));
+			rc = read(console->tty_fd, buf, sizeof(buf));
 			if (rc <= 0) {
 				warn("Error reading from tty device");
 				return -1;
 			}
-			rc = write_buf_to_fd(ctx->console_fd_out, buf, rc);
-			if (rc < 0)
-				return -1;
-		}
-		if (pollfds[1].revents) {
-			rc = read(ctx->console_fd_in, buf, sizeof(buf));
-			if (rc == 0)
+			rc = handlers_data_in(console, buf, rc);
+			if (rc)
 				return 0;
+		}
 
-			if (rc <= 0) {
-				warn("Error reading from console");
-				return -1;
-			}
-			len = rc;
-			rc = console_process_input(ctx, buf, len);
-			if (rc) {
-				rc = 0;
-				return 0;
-			}
-			rc = write_buf_to_fd(ctx->tty_fd, buf, len);
-			if (rc < 0)
-				return -1;
-		}
+		rc = handlers_poll_event(console, pollfds + 1);
+		if (rc)
+			return 0;
 	}
 }
-
 static const struct option options[] = {
 	{ "device",	required_argument,	0, 'd'},
 	{ "sirq",	required_argument,	0, 's'},
@@ -294,11 +285,11 @@ static const struct option options[] = {
 
 int main(int argc, char **argv)
 {
-	struct console_ctx *ctx;
+	struct console *console;
 	int rc;
 
-	ctx = malloc(sizeof(struct console_ctx));
-	memset(ctx, 0, sizeof(*ctx));
+	console = malloc(sizeof(struct console));
+	memset(console, 0, sizeof(*console));
 	rc = -1;
 
 	for (;;) {
@@ -311,10 +302,10 @@ int main(int argc, char **argv)
 
 		switch (c) {
 		case 'd':
-			ctx->tty_kname = optarg;
+			console->tty_kname = optarg;
 			break;
 		case 'l':
-			ctx->tty_lpc_addr = strtoul(optarg, &endp, 0);
+			console->tty_lpc_addr = strtoul(optarg, &endp, 0);
 			if (endp == optarg) {
 				warnx("Invalid sirq: '%s'", optarg);
 				goto out_free;
@@ -322,7 +313,7 @@ int main(int argc, char **argv)
 			break;
 
 		case 's':
-			ctx->tty_sirq = strtoul(optarg, &endp, 0);
+			console->tty_sirq = strtoul(optarg, &endp, 0);
 			if (endp == optarg) {
 				warnx("Invalid sirq: '%s'", optarg);
 				goto out_free;
@@ -337,32 +328,30 @@ int main(int argc, char **argv)
 		}
 	}
 
-	if (!ctx->tty_kname) {
+	if (!console->tty_kname) {
 		fprintf(stderr,
 			"Error: No TTY device specified (use --device)\n");
 		return EXIT_FAILURE;
 	}
 
-	rc = tty_find_device(ctx);
+	rc = tty_find_device(console);
 	if (rc)
 		return EXIT_FAILURE;
 
-	rc = tty_init_io(ctx);
+	rc = tty_init_io(console);
 	if (rc)
 		return EXIT_FAILURE;
 
-	rc = console_init_io(ctx);
-	if (rc)
-		return EXIT_FAILURE;
+	handlers_init(console);
 
-	rc = run_console(ctx);
+	rc = run_console(console);
 
-	console_restore_termios(ctx);
+	handlers_fini(console);
 
 out_free:
-	free(ctx->tty_sysfs_devnode);
-	free(ctx->tty_dev);
-	free(ctx);
+	free(console->tty_sysfs_devnode);
+	free(console->tty_dev);
+	free(console);
 
 	return rc == 0 ? EXIT_SUCCESS : EXIT_FAILURE;
 }
