@@ -44,3 +44,7 @@ int write_buf_to_fd(int fd, const uint8_t *buf, size_t len);
 #define container_of(ptr, type, member) \
 	((type *)((void *)((ptr) - offsetof(type, member))))
 
+#define BUILD_ASSERT(c) \
+	do { \
+		char __c[(c)?1:-1] __attribute__((unused)); \
+	} while (0)
