@@ -48,6 +48,11 @@ struct poller *console_register_poller(struct console *console,
 
 void console_unregister_poller(struct console *console, struct poller *poller);
 
+/* socket paths */
+const char *console_socket_path;
+const size_t console_socket_path_len;
+const char *console_socket_path_readable;
+
 /* utils */
 int write_buf_to_fd(int fd, const uint8_t *buf, size_t len);
 

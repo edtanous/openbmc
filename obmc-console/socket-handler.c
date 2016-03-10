@@ -1,0 +1,177 @@
+
+#include <err.h>
+#include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <termios.h>
+#include <unistd.h>
+#include <endian.h>
+
+#include <sys/socket.h>
+#include <sys/un.h>
+
+#include "console-server.h"
+
+struct client {
+	struct poller	*poller;
+	int		fd;
+};
+
+struct socket_handler {
+	struct handler	handler;
+	struct console	*console;
+	int		sd;
+
+	struct client	*clients;
+	int		n_clients;
+};
+
+static struct socket_handler *to_socket_handler(struct handler *handler)
+{
+	return container_of(handler, struct socket_handler, handler);
+}
+
+static void client_close(struct socket_handler *sh, struct client *client)
+{
+	int idx;
+
+	close(client->fd);
+	if (client->poller)
+		console_unregister_poller(sh->console, client->poller);
+
+	idx = client - sh->clients;
+
+	sh->n_clients--;
+	memmove(&sh->clients[idx], &sh->clients[idx+1],
+			sizeof(*sh->clients) * (sh->n_clients - idx));
+	sh->clients = realloc(sh->clients, sizeof(sh->clients) * sh->n_clients);
+}
+
+static enum poller_ret client_poll(struct handler *handler,
+		int events, void *data)
+{
+	struct socket_handler *sh = to_socket_handler(handler);
+	struct client *client = data;
+	uint8_t buf[4096];
+	int rc;
+
+	if (!(events & POLLIN))
+		return POLLER_OK;
+
+	rc = read(client->fd, buf, sizeof(buf));
+	if (rc <= 0) {
+		client->poller = NULL;
+		client_close(sh, client);
+		return POLLER_REMOVE;
+	}
+
+	console_data_out(sh->console, buf, rc);
+
+	return POLLER_OK;
+}
+
+static void client_send_data(struct socket_handler *sh,
+		struct client *client, uint8_t *buf, size_t len)
+{
+	int rc;
+
+	rc = write_buf_to_fd(client->fd, buf, len);
+	if (rc)
+		client_close(sh, client);
+}
+
+static enum poller_ret socket_poll(struct handler *handler,
+		int events, void __attribute__((unused)) *data)
+{
+	struct socket_handler *sh = to_socket_handler(handler);
+	struct client *client;
+	int fd, n;
+
+	if (!(events & POLLIN))
+		return POLLER_OK;
+
+	fd = accept(sh->sd, NULL, NULL);
+	if (fd < 0)
+		return POLLER_OK;
+
+	n = sh->n_clients++;
+	sh->clients = realloc(sh->clients, sizeof(*client) * sh->n_clients);
+	client = &sh->clients[n];
+
+	client->fd = fd;
+	client->poller = console_register_poller(sh->console, handler,
+			client_poll, client->fd, POLLIN, client);
+
+	return POLLER_OK;
+
+}
+
+static int socket_init(struct handler *handler, struct console *console)
+{
+	struct socket_handler *sh = to_socket_handler(handler);
+	struct sockaddr_un addr;
+	int rc;
+
+	sh->console = console;
+	sh->clients = NULL;
+	sh->n_clients = 0;
+
+	sh->sd = socket(AF_UNIX, SOCK_STREAM, 0);
+	if(sh->sd < 0) {
+		warn("Can't create socket");
+		return -1;
+	}
+
+	memset(&addr, 0, sizeof(addr));
+	addr.sun_family = AF_UNIX;
+	memcpy(addr.sun_path, console_socket_path, console_socket_path_len);
+
+	rc = bind(sh->sd, (struct sockaddr *)&addr, sizeof(addr));
+	if (rc) {
+		warn("Can't bind to socket path %s",
+				console_socket_path_readable);
+		return -1;
+	}
+
+	rc = listen(sh->sd, 1);
+	if (rc) {
+		warn("Can't listen for incoming connections");
+		return -1;
+	}
+
+	console_register_poller(console, handler, socket_poll, sh->sd, POLLIN,
+			NULL);
+
+	return 0;
+}
+
+static int socket_data(struct handler *handler, uint8_t *buf, size_t len)
+{
+	struct socket_handler *sh = to_socket_handler(handler);
+	int i;
+
+	for (i = 0; i < sh->n_clients; i++) {
+		struct client *client = &sh->clients[i];
+		client_send_data(sh, client, buf, len);
+	}
+	return 0;
+}
+
+static void socket_fini(struct handler *handler)
+{
+	struct socket_handler *sh = to_socket_handler(handler);
+	close(sh->sd);
+}
+
+static struct socket_handler socket_handler = {
+	.handler = {
+		.name		= "socket",
+		.init		= socket_init,
+		.data_in	= socket_data,
+		.fini		= socket_fini,
+	},
+};
+
+console_register_handler(&socket_handler.handler);
+
