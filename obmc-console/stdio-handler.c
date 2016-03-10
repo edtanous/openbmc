@@ -12,6 +12,7 @@
 struct stdio_handler {
 	struct handler	handler;
 	struct console	*console;
+	struct poller	*poller;
 	int		fd_in;
 	int		fd_out;
 	bool		is_tty;
@@ -27,6 +28,59 @@ static struct stdio_handler *to_stdio_handler(struct handler *handler)
 
 static const uint8_t esc_str[] = { '\r', '~', '.' };
 
+
+static int process_input(struct stdio_handler *sh,
+		uint8_t *buf, size_t len)
+{
+	unsigned long i;
+	uint8_t e;
+
+	e = esc_str[sh->esc_str_pos];
+
+	for (i = 0; i < len; i++) {
+		if (buf[i] == e) {
+			sh->esc_str_pos++;
+			if (sh->esc_str_pos == ARRAY_SIZE(esc_str))
+				return 1;
+			e = esc_str[sh->esc_str_pos];
+		} else {
+			console_data_out(sh->console,
+					esc_str, sh->esc_str_pos);
+			sh->esc_str_pos = 0;
+		}
+	}
+	return 0;
+}
+
+static enum poller_ret stdio_poll(struct handler *handler,
+		int events, void __attribute__((unused)) *data)
+{
+	struct stdio_handler *sh = to_stdio_handler(handler);
+	uint8_t buf[4096];
+	ssize_t len;
+	int rc;
+
+	if (!(events & POLLIN))
+		return POLLER_OK;
+
+	len = read(sh->fd_in, buf, sizeof(buf));
+	if (len <= 0)
+		goto err;
+
+	rc = process_input(sh, buf, len);
+	if (rc)
+		return POLLER_EXIT;
+
+	rc = console_data_out(sh->console, buf, len);
+	if (rc < 0)
+		goto err;
+
+	return POLLER_OK;
+
+err:
+	sh->poller = NULL;
+	return POLLER_REMOVE;
+}
 
 
 
@@ -62,14 +116,9 @@ static int stdio_init(struct handler *handler, struct console *console)
 		return -1;
 	}
 
-	return 0;
-}
+	sh->poller = console_register_poller(console, handler, stdio_poll,
+			sh->fd_in, POLLIN, NULL);
 
-static int stdio_init_poll(struct handler *handler, struct pollfd *pollfd)
-{
-	struct stdio_handler *sh = to_stdio_handler(handler);
-	pollfd->fd = sh->fd_in;
-	pollfd->events = POLLIN;
 	return 0;
 }
 
@@ -79,67 +128,19 @@ static int stdio_data(struct handler *handler, uint8_t *buf, size_t len)
 	return write_buf_to_fd(sh->fd_out, buf, len);
 }
 
-static int process_input(struct stdio_handler *sh,
-		uint8_t *buf, size_t len)
-{
-	unsigned long i;
-	uint8_t e;
-
-	e = esc_str[sh->esc_str_pos];
-
-	for (i = 0; i < len; i++) {
-		if (buf[i] == e) {
-			sh->esc_str_pos++;
-			if (sh->esc_str_pos == ARRAY_SIZE(esc_str))
-				return 1;
-			e = esc_str[sh->esc_str_pos];
-		} else {
-			console_data_out(sh->console,
-					esc_str, sh->esc_str_pos);
-			sh->esc_str_pos = 0;
-		}
-	}
-	return 0;
-}
-
-static int stdio_poll_event(struct handler *handler, int events)
-{
-	struct stdio_handler *sh = to_stdio_handler(handler);
-	uint8_t buf[4096];
-	ssize_t len;
-	int rc;
-
-	if (!(events & POLLIN))
-		return 0;
-
-	len = read(sh->fd_in, buf, sizeof(buf));
-	if (len <= 0)
-		return -1;
-
-	rc = process_input(sh, buf, len);
-	if (rc)
-		return HANDLER_EXIT;
-
-	rc = console_data_out(sh->console, buf, len);
-	if (rc < 0)
-		return -1;
-
-	return 0;
-}
-
 static void stdio_fini(struct handler *handler)
 {
 	struct stdio_handler *sh = to_stdio_handler(handler);
 	if (sh->is_tty)
 		tcsetattr(sh->fd_in, TCSANOW, &sh->orig_termios);
+	if (sh->poller)
+		console_unregister_poller(sh->console, sh->poller);
 }
 
 static struct stdio_handler stdio_handler = {
 	.handler = {
 		.name		= "stdio",
 		.init		= stdio_init,
-		.init_poll	= stdio_init_poll,
-		.poll_event	= stdio_poll_event,
 		.data_in	= stdio_data,
 		.fini		= stdio_fini,
 	},

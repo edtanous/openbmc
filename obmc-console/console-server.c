@@ -6,6 +6,7 @@
 
 #define _GNU_SOURCE
 
+#include <assert.h>
 #include <stdint.h>
 #include <stdbool.h>
 #include <stdlib.h>
@@ -29,9 +30,26 @@ struct console {
 	int		tty_sirq;
 	int		tty_lpc_addr;
 	int		tty_fd;
+
 	struct handler	**handlers;
 	int		n_handlers;
+
+	struct poller	**pollers;
+	int		n_pollers;
+
+	struct pollfd	*pollfds;
 };
+
+struct poller {
+	struct handler	*handler;
+	void		*data;
+	poller_fn_t	fn;
+	bool		remove;
+};
+
+/* we have one extra entry in the pollfds array for the VUART tty */
+static const int n_internal_pollfds = 1;
+
 
 static void usage(const char *progname)
 {
@@ -148,6 +166,9 @@ static int tty_init_io(struct console *console)
 	 */
 	fcntl(console->tty_fd, F_SETFL, FNDELAY);
 
+	console->pollfds[console->n_pollers].fd = console->tty_fd;
+	console->pollfds[console->n_pollers].events = POLLIN;
+
 	return 0;
 }
 
@@ -210,25 +231,125 @@ static int handlers_data_in(struct console *console, uint8_t *buf, size_t len)
 	}
 
 	return rc;
+
 }
 
-static int handlers_poll_event(struct console *console,
-		struct pollfd *pollfds)
+struct poller *console_register_poller(struct console *console,
+		struct handler *handler, poller_fn_t poller_fn,
+		int fd, int events, void *data)
 {
-	struct handler *handler;
-	int i, rc, tmp;
+	struct poller *poller;
+	int n;
+
+	poller = malloc(sizeof(*poller));
+	poller->remove = false;
+	poller->handler = handler;
+	poller->fn = poller_fn;
+	poller->data = data;
+
+	/* add one to our pollers array */
+	n = console->n_pollers++;
+	console->pollers = realloc(console->pollers,
+			sizeof(*console->pollers) * console->n_pollers);
+
+	console->pollers[n] = poller;
+
+	/* increase pollfds array too  */
+	console->pollfds = realloc(console->pollfds,
+			sizeof(*console->pollfds) *
+				(n_internal_pollfds + console->n_pollers));
+
+	/* shift the end pollfds up by one */
+	memcpy(&console->pollfds[n+n_internal_pollfds],
+			&console->pollfds[n],
+			sizeof(*console->pollfds) * n_internal_pollfds);
+
+	console->pollfds[n].fd = fd;
+	console->pollfds[n].events = events;
+
+	return poller;
+}
+
+void console_unregister_poller(struct console *console,
+		struct poller *poller)
+{
+	int i;
+
+	/* find the entry in our pollers array */
+	for (i = 0; i < console->n_pollers; i++)
+		if (console->pollers[i] == poller)
+			break;
+
+	assert(i < console->n_pollers);
+
+	console->n_pollers--;
+
+	/* remove the item from the pollers array... */
+	memmove(&console->pollers[i], &console->pollers[i+1],
+			sizeof(*console->pollers)
+				* (console->n_pollers - i));
+
+	console->pollers = realloc(console->pollers,
+			sizeof(*console->pollers) * console->n_pollers);
+
+	/* ... and the pollfds array */
+	memmove(&console->pollfds[i], &console->pollfds[i+1],
+			sizeof(*console->pollfds) *
+				(n_internal_pollfds + console->n_pollers - i));
+
+	console->pollfds = realloc(console->pollfds,
+			sizeof(*console->pollfds) *
+				(n_internal_pollfds + console->n_pollers));
+
+
+	free(poller);
+}
+
+static int call_pollers(struct console *console)
+{
+	struct poller *poller;
+	struct pollfd *pollfd;
+	enum poller_ret prc;
+	int i, rc;
 
 	rc = 0;
 
-	for (i = 0; i < console->n_handlers; i++) {
-		handler = console->handlers[i];
+	/*
+	 * Process poll events by iterating through the pollers and pollfds
+	 * in-step, calling any pollers that we've found revents for.
+	 */
+	for (i = 0; i < console->n_pollers; i++) {
+		poller = console->pollers[i];
+		pollfd = &console->pollfds[i];
 
-		if (!handler->poll_event)
+		if (!pollfd->revents)
 			continue;
 
-		tmp = handler->poll_event(handler, pollfds[i].revents);
-		if (tmp == HANDLER_EXIT)
-			rc = 1;
+		prc = poller->fn(poller->handler, pollfd->revents,
+				poller->data);
+		if (prc == POLLER_EXIT)
+			rc = -1;
+		else if (prc == POLLER_REMOVE)
+			poller->remove = true;
+	}
+
+	/**
+	 * Process deferred removals; restarting each time we unregister, as
+	 * the array will have changed
+	 */
+	for (;;) {
+		bool removed = false;
+
+		for (i = 0; i < console->n_pollers; i++) {
+			poller = console->pollers[i];
+			if (poller->remove) {
+				console_unregister_poller(console, poller);
+				removed = true;
+				break;
+			}
+		}
+		if (!removed)
+			break;
 	}
 
 	return rc;
@@ -236,31 +357,22 @@ static int handlers_poll_event(struct console *console,
 
 int run_console(struct console *console)
 {
-	struct handler *handler;
-	struct pollfd *pollfds;
-	int i, rc;
-
-	pollfds = calloc(console->n_handlers + 1, sizeof(*pollfds));
-
-	pollfds[0].fd = console->tty_fd;
-	pollfds[0].events = POLLIN;
+	int rc;
 
 	for (;;) {
 		uint8_t buf[4096];
 
-		/* init pollers */
-		for (i = 0; i < console->n_handlers; i++) {
-			handler = console->handlers[i];
-			handler->init_poll(handler, &pollfds[i+1]);
-		}
-
-		rc = poll(pollfds, console->n_handlers + 1, -1);
+		rc = poll(console->pollfds,
+				console->n_pollers + n_internal_pollfds, -1);
 		if (rc < 0) {
 			warn("poll error");
 			return -1;
 		}
 
-		if (pollfds[0].revents) {
+		/* process internal fd first */
+		BUILD_ASSERT(n_internal_pollfds == 1);
+
+		if (console->pollfds[console->n_pollers].revents) {
 			rc = read(console->tty_fd, buf, sizeof(buf));
 			if (rc <= 0) {
 				warn("Error reading from tty device");
@@ -271,7 +383,8 @@ int run_console(struct console *console)
 				return 0;
 		}
 
-		rc = handlers_poll_event(console, pollfds + 1);
+		/* ... and then the pollers */
+		rc = call_pollers(console);
 		if (rc)
 			return 0;
 	}
@@ -327,6 +440,9 @@ int main(int argc, char **argv)
 			goto out_free;
 		}
 	}
+
+	console->pollfds = calloc(n_internal_pollfds,
+			sizeof(*console->pollfds));
 
 	if (!console->tty_kname) {
 		fprintf(stderr,

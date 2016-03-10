@@ -57,14 +57,6 @@ static int log_init(struct handler *handler, struct console *console)
 	return 0;
 }
 
-static int log_init_poll(struct handler *handler, struct pollfd *pollfd)
-{
-	(void)handler;
-	pollfd->fd = -1;
-	pollfd->events = 0;
-	return 0;
-}
-
 static int log_trim(struct log_handler *lh, size_t space)
 {
 	int rc, n_shift_pages, shift_len, shift_start;
@@ -130,7 +122,6 @@ static struct log_handler log_handler = {
 	.handler = {
 		.name		= "log",
 		.init		= log_init,
-		.init_poll	= log_init_poll,
 		.data_in	= log_data,
 		.fini		= log_fini,
 	},
