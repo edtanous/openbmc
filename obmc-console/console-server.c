@@ -7,6 +7,8 @@
 #define _GNU_SOURCE
 
 #include <assert.h>
+#include <errno.h>
+#include <signal.h>
 #include <stdint.h>
 #include <stdbool.h>
 #include <stdlib.h>
@@ -50,6 +52,8 @@ struct poller {
 /* we have one extra entry in the pollfds array for the VUART tty */
 static const int n_internal_pollfds = 1;
 
+/* state shared with the signal handler */
+static bool sigint;
 
 static void usage(const char *progname)
 {
@@ -355,18 +359,38 @@ static int call_pollers(struct console *console)
 	return rc;
 }
 
+static void sighandler(int signal)
+{
+	if (signal == SIGINT)
+		sigint = true;
+}
+
 int run_console(struct console *console)
 {
+	sighandler_t sighandler_save;
 	int rc;
+
+	sighandler_save = signal(SIGINT, sighandler);
+
+	rc = 0;
 
 	for (;;) {
 		uint8_t buf[4096];
 
+		if (sigint) {
+			fprintf(stderr, "Received interrupt, exiting\n");
+			break;
+		}
+
 		rc = poll(console->pollfds,
 				console->n_pollers + n_internal_pollfds, -1);
 		if (rc < 0) {
-			warn("poll error");
-			return -1;
+			if (errno == EINTR) {
+				continue;
+			} else {
+				warn("poll error");
+				break;
+			}
 		}
 
 		/* process internal fd first */
@@ -376,18 +400,23 @@ int run_console(struct console *console)
 			rc = read(console->tty_fd, buf, sizeof(buf));
 			if (rc <= 0) {
 				warn("Error reading from tty device");
-				return -1;
+				rc = -1;
+				break;
 			}
 			rc = handlers_data_in(console, buf, rc);
 			if (rc)
-				return 0;
+				break;
 		}
 
 		/* ... and then the pollers */
 		rc = call_pollers(console);
 		if (rc)
-			return 0;
+			break;
 	}
+
+	signal(SIGINT, sighandler_save);
+
+	return rc ? -1 : 0;
 }
 static const struct option options[] = {
 	{ "device",	required_argument,	0, 'd'},
