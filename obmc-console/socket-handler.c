@@ -21,6 +21,7 @@ struct client {
 struct socket_handler {
 	struct handler	handler;
 	struct console	*console;
+	struct poller	*poller;
 	int		sd;
 
 	struct client	*clients;
@@ -140,8 +141,8 @@ static int socket_init(struct handler *handler, struct console *console)
 		return -1;
 	}
 
-	console_register_poller(console, handler, socket_poll, sh->sd, POLLIN,
-			NULL);
+	sh->poller = console_register_poller(console, handler, socket_poll,
+			sh->sd, POLLIN, NULL);
 
 	return 0;
 }
@@ -161,6 +162,14 @@ static int socket_data(struct handler *handler, uint8_t *buf, size_t len)
 static void socket_fini(struct handler *handler)
 {
 	struct socket_handler *sh = to_socket_handler(handler);
+	int i;
+
+	for (i = 0; i < sh->n_clients; i++)
+		client_close(sh, &sh->clients[i]);
+
+	if (sh->poller)
+		console_unregister_poller(sh->console, sh->poller);
+
 	close(sh->sd);
 }
 

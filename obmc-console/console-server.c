@@ -428,7 +428,7 @@ static const struct option options[] = {
 int main(int argc, char **argv)
 {
 	struct console *console;
-	int rc;
+	int rc, i;
 
 	console = malloc(sizeof(struct console));
 	memset(console, 0, sizeof(*console));
@@ -494,6 +494,8 @@ int main(int argc, char **argv)
 	handlers_fini(console);
 
 out_free:
+	free(console->pollers);
+	free(console->pollfds);
 	free(console->tty_sysfs_devnode);
 	free(console->tty_dev);
 	free(console);
