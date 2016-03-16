@@ -24,7 +24,7 @@ struct log_handler {
 };
 
 
-static const char *filename = LOCALSTATEDIR "/log/openbmc-console.log";
+static const char *default_filename = LOCALSTATEDIR "/log/openbmc-console.log";
 
 static const size_t logsize = 16 * 1024;
 
@@ -37,12 +37,17 @@ static int log_init(struct handler *handler, struct console *console,
 		struct config *config __attribute__((unused)))
 {
 	struct log_handler *lh = to_log_handler(handler);
+	const char *filename;
 	int rc;
 
 	lh->console = console;
 	lh->maxsize = logsize;
 	lh->pagesize = 4096;
 	lh->size = 0;
+
+	filename = config_get_value(config, "logfile");
+	if (!filename)
+		filename = default_filename;
 
 	lh->fd = open(filename, O_RDWR | O_CREAT, 0644);
 	if (lh->fd < 0) {
