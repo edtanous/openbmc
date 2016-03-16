@@ -61,7 +61,7 @@ static void usage(const char *progname)
 "usage: %s [options]\n"
 "\n"
 "Options:\n"
-"  --device <TTY>  Use serial device TTY (eg, ttyS0)\n"
+"  --config <FILE>  Use FILE for configuration\n"
 "",
 		progname);
 }
@@ -174,6 +174,43 @@ static int tty_init_io(struct console *console)
 	console->pollfds[console->n_pollers].events = POLLIN;
 
 	return 0;
+}
+
+static int tty_init(struct console *console, struct config *config)
+{
+	const char *val;
+	char *endp;
+	int rc;
+
+	console->tty_kname = config_get_value(config, "device");
+
+	val = config_get_value(config, "lpc-address");
+	if (val) {
+		console->tty_lpc_addr = strtoul(val, &endp, 0);
+		if (endp == optarg) {
+			warn("Invalid LPC address: '%s'", val);
+			return -1;
+		}
+	}
+
+	val = config_get_value(config, "sirq");
+	if (val) {
+		console->tty_sirq = strtoul(val, &endp, 0);
+		if (endp == optarg)
+			warn("Invalid sirq: '%s'", val);
+	}
+
+	if (!console->tty_kname) {
+		warnx("Error: No TTY device specified");
+		return -1;
+	}
+
+	rc = tty_find_device(console);
+	if (rc)
+		return rc;
+
+	rc = tty_init_io(console);
+	return rc;
 }
 
 
@@ -419,79 +456,60 @@ int run_console(struct console *console)
 	return rc ? -1 : 0;
 }
 static const struct option options[] = {
-	{ "device",	required_argument,	0, 'd'},
-	{ "sirq",	required_argument,	0, 's'},
-	{ "lpc-addr",	required_argument,	0, 'l'},
+	{ "config",	required_argument,	0, 'c'},
 	{ },
 };
 
 int main(int argc, char **argv)
 {
+	const char *config_filename = NULL;
 	struct console *console;
-	int rc, i;
+	struct config *config;
+	int rc;
 
-	console = malloc(sizeof(struct console));
-	memset(console, 0, sizeof(*console));
 	rc = -1;
 
 	for (;;) {
-		char *endp;
 		int c, idx;
 
-		c = getopt_long(argc, argv, "d:s:l:", options, &idx);
+		c = getopt_long(argc, argv, "c:", options, &idx);
 		if (c == -1)
 			break;
 
 		switch (c) {
-		case 'd':
-			console->tty_kname = optarg;
+		case 'c':
+			config_filename = optarg;
 			break;
-		case 'l':
-			console->tty_lpc_addr = strtoul(optarg, &endp, 0);
-			if (endp == optarg) {
-				warnx("Invalid sirq: '%s'", optarg);
-				goto out_free;
-			}
-			break;
-
-		case 's':
-			console->tty_sirq = strtoul(optarg, &endp, 0);
-			if (endp == optarg) {
-				warnx("Invalid sirq: '%s'", optarg);
-				goto out_free;
-			}
-			break;
-
 		case 'h':
 		case '?':
 			usage(argv[0]);
-			rc = 0;
-			goto out_free;
+			return EXIT_SUCCESS;
 		}
 	}
 
+	console = malloc(sizeof(struct console));
+	memset(console, 0, sizeof(*console));
 	console->pollfds = calloc(n_internal_pollfds,
 			sizeof(*console->pollfds));
 
-	if (!console->tty_kname) {
-		fprintf(stderr,
-			"Error: No TTY device specified (use --device)\n");
-		return EXIT_FAILURE;
+	config = config_init(config_filename);
+	if (!config) {
+		warnx("Can't read configuration, exiting.");
+		goto out_free;
 	}
 
-	rc = tty_find_device(console);
+	rc = tty_init(console, config);
 	if (rc)
-		return EXIT_FAILURE;
-
-	rc = tty_init_io(console);
-	if (rc)
-		return EXIT_FAILURE;
+		goto out_config_fini;
 
 	handlers_init(console);
 
 	rc = run_console(console);
 
 	handlers_fini(console);
+
+out_config_fini:
+	config_fini(config);
 
 out_free:
 	free(console->pollers);

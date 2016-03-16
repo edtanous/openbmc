@@ -48,6 +48,12 @@ struct poller *console_register_poller(struct console *console,
 
 void console_unregister_poller(struct console *console, struct poller *poller);
 
+/* config API */
+struct config;
+const char *config_get_value(struct config *config, const char *name);
+struct config *config_init(const char *filename);
+void config_fini(struct config *config);
+
 /* socket paths */
 const char *console_socket_path;
 const size_t console_socket_path_len;

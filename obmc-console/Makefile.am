@@ -5,12 +5,16 @@ bin_PROGRAMS = console-client
 
 AM_CFLAGS = -Wall -Wextra -Werror
 
-console_server_CPPFLAGS = -DLOCALSTATEDIR=\"$(localstatedir)\"
+EXTRA_DIST = openbmc-console.conf.sample
+
+console_server_CPPFLAGS = -DLOCALSTATEDIR=\"$(localstatedir)\" \
+			  -DSYSCONFDIR=\"$(sysconfdir)\"
 
 console_server_SOURCES = \
 	 console-server.c \
 	 console-server.h \
 	 util.c \
+	 config.c \
 	 log-handler.c \
 	 socket-handler.c
 
