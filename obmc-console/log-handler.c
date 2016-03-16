@@ -24,7 +24,8 @@ struct log_handler {
 };
 
 
-static const char *filename = "uart.log";
+static const char *filename = LOCALSTATEDIR "/log/openbmc-console.log";
+
 static const size_t logsize = 16 * 1024;
 
 static struct log_handler *to_log_handler(struct handler *handler)

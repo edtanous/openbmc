@@ -5,6 +5,8 @@ bin_PROGRAMS = console-client
 
 AM_CFLAGS = -Wall -Wextra -Werror
 
+console_server_CPPFLAGS = -DLOCALSTATEDIR=\"$(localstatedir)\"
+
 console_server_SOURCES = \
 	 console-server.c \
 	 console-server.h \
