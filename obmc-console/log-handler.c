@@ -33,7 +33,8 @@ static struct log_handler *to_log_handler(struct handler *handler)
 	return container_of(handler, struct log_handler, handler);
 }
 
-static int log_init(struct handler *handler, struct console *console)
+static int log_init(struct handler *handler, struct console *console,
+		struct config *config __attribute__((unused)))
 {
 	struct log_handler *lh = to_log_handler(handler);
 	int rc;

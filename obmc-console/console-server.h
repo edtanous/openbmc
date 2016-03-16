@@ -3,6 +3,7 @@
 #include <stdint.h>
 
 struct console;
+struct config;
 
 /* handler API */
 enum {
@@ -13,7 +14,8 @@ enum {
 struct handler {
 	const char	*name;
 	int		(*init)(struct handler *handler,
-				struct console *console);
+				struct console *console,
+				struct config *config);
 	int		(*data_in)(struct handler *handler,
 				uint8_t *buf, size_t len);
 	void		(*fini)(struct handler *handler);

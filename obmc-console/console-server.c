@@ -219,7 +219,7 @@ int console_data_out(struct console *console, const uint8_t *data, size_t len)
 	return write_buf_to_fd(console->tty_fd, data, len);
 }
 
-static void handlers_init(struct console *console)
+static void handlers_init(struct console *console, struct config *config)
 {
 	extern struct handler *__start_handlers, *__stop_handlers;
 	struct handler *handler;
@@ -237,7 +237,7 @@ static void handlers_init(struct console *console)
 		printf("  %s\n", handler->name);
 
 		if (handler->init)
-			handler->init(handler, console);
+			handler->init(handler, console, config);
 	}
 }
 
@@ -502,7 +502,7 @@ int main(int argc, char **argv)
 	if (rc)
 		goto out_config_fini;
 
-	handlers_init(console);
+	handlers_init(console, config);
 
 	rc = run_console(console);
 

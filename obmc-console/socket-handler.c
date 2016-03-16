@@ -108,7 +108,8 @@ static enum poller_ret socket_poll(struct handler *handler,
 
 }
 
-static int socket_init(struct handler *handler, struct console *console)
+static int socket_init(struct handler *handler, struct console *console,
+		struct config *config __attribute__((unused)))
 {
 	struct socket_handler *sh = to_socket_handler(handler);
 	struct sockaddr_un addr;
