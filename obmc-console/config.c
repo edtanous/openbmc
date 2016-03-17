@@ -70,31 +70,23 @@ static void config_parse(struct config *config, char *buf)
 	}
 }
 
-struct config *config_init(const char *filename)
+static struct config *config_init_fd(int fd, const char *filename)
 {
 	struct config *config;
 	size_t size, len;
-	int fd, rc;
 	char *buf;
-
-	if (!filename)
-		filename = config_default_filename;
-
-	fd = open(filename, O_RDONLY);
-	if (fd < 0) {
-		warn("Can't open configuration file %s", filename);
-		return NULL;
-	}
+	int rc;
 
 	size = 4096;
 	len = 0;
 	buf = malloc(size + 1);
+	config = NULL;
 
 	for (;;) {
 		rc = read(fd, buf + len, size - len);
 		if (rc < 0) {
-			warn("Can't read configuration file %s", filename);
-			goto err_free;
+			warn("Can't read from configuration file %s", filename);
+			goto out_free;
 
 		} else if (!rc) {
 			break;
@@ -108,22 +100,35 @@ struct config *config_init(const char *filename)
 	}
 	buf[len] = '\0';
 
-	close(fd);
-
 	config = malloc(sizeof(*config));
 	config->items = NULL;
 
 	config_parse(config, buf);
 
+out_free:
 	free(buf);
+	return config;
+}
+
+struct config *config_init(const char *filename)
+{
+	struct config *config;
+	int fd;
+
+	if (!filename)
+		filename = config_default_filename;
+
+	fd = open(filename, O_RDONLY);
+	if (fd < 0) {
+		warn("Can't open configuration file %s", filename);
+		return NULL;
+	}
+
+	config = config_init_fd(fd, filename);
+
+	close(fd);
 
 	return config;
-
-err_free:
-	free(buf);
-err_close:
-	close(fd);
-	return NULL;
 }
 
 void config_fini(struct config *config)
@@ -139,3 +144,23 @@ void config_fini(struct config *config)
 
 	free(config);
 }
+
+#ifdef CONFIG_TEST
+int main(void)
+{
+	struct config_item *item;
+	struct config *config;
+
+	config = config_init_fd(STDIN_FILENO, "<stdin>");
+	if (!config)
+		return EXIT_FAILURE;
+
+	for (item = config->items; item; item = item->next)
+		printf("%s: %s\n", item->name, item->value);
+
+	config_fini(config);
+
+	return EXIT_SUCCESS;
+
+}
+#endif

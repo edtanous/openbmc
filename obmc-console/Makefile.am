@@ -3,6 +3,8 @@ AUTOMAKE_OPTIONS = foreign
 sbin_PROGRAMS = console-server
 bin_PROGRAMS = console-client
 
+check_PROGRAMS = config-test
+
 AM_CFLAGS = -Wall -Wextra -Werror
 
 EXTRA_DIST = openbmc-console.conf.sample
@@ -22,3 +24,7 @@ console_client_SOURCES = \
 	 console-client.c \
 	 console-server.h \
 	 util.c
+
+config_test_CPPFLAGS = -DCONFIG_TEST -DSYSCONFDIR=\"\"
+config_test_SOURCES = \
+	config.c
