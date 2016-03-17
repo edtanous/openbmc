@@ -208,6 +208,7 @@ int main(void)
 	if (rc)
 		goto out_fini;
 
+	prc = PROCESS_OK;
 	for (;;) {
 		pollfds[0].fd = client->fd_in;
 		pollfds[0].events = POLLIN;
