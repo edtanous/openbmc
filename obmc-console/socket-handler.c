@@ -61,7 +61,8 @@ static void client_close(struct socket_handler *sh, struct client *client)
 	sh->n_clients--;
 	memmove(&sh->clients[idx], &sh->clients[idx+1],
 			sizeof(*sh->clients) * (sh->n_clients - idx));
-	sh->clients = realloc(sh->clients, sizeof(sh->clients) * sh->n_clients);
+	sh->clients = realloc(sh->clients,
+			sizeof(*sh->clients) * sh->n_clients);
 }
 
 static enum poller_ret client_poll(struct handler *handler,
