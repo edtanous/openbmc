@@ -1,18 +1,19 @@
 AUTOMAKE_OPTIONS = foreign
 
-sbin_PROGRAMS = console-server
-bin_PROGRAMS = console-client
+sbin_PROGRAMS = obmc-console-server
+bin_PROGRAMS = obmc-console-client
 
 check_PROGRAMS = config-test
 
 AM_CFLAGS = -Wall -Wextra -Werror
 
-EXTRA_DIST = openbmc-console.conf.sample
+EXTRA_DIST = obmc-console.conf.sample
 
-console_server_CPPFLAGS = -DLOCALSTATEDIR=\"$(localstatedir)\" \
-			  -DSYSCONFDIR=\"$(sysconfdir)\"
+obmc_console_server_CPPFLAGS = \
+	-DLOCALSTATEDIR=\"$(localstatedir)\" \
+	-DSYSCONFDIR=\"$(sysconfdir)\"
 
-console_server_SOURCES = \
+obmc_console_server_SOURCES = \
 	 console-server.c \
 	 console-server.h \
 	 util.c \
@@ -20,7 +21,7 @@ console_server_SOURCES = \
 	 log-handler.c \
 	 socket-handler.c
 
-console_client_SOURCES = \
+obmc_console_client_SOURCES = \
 	 console-client.c \
 	 console-server.h \
 	 util.c

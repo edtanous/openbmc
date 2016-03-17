@@ -24,7 +24,7 @@ struct log_handler {
 };
 
 
-static const char *default_filename = LOCALSTATEDIR "/log/openbmc-console.log";
+static const char *default_filename = LOCALSTATEDIR "/log/obmc-console.log";
 
 static const size_t logsize = 16 * 1024;
 

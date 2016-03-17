@@ -11,7 +11,7 @@
 #include <sys/mman.h>
 #include <sys/stat.h>
 
-static const char *config_default_filename = SYSCONFDIR "/openbmc-console.conf";
+static const char *config_default_filename = SYSCONFDIR "/obmc-console.conf";
 
 struct config_item {
 	char			*name;
