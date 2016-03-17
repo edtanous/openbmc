@@ -73,10 +73,9 @@ static void config_parse(struct config *config, char *buf)
 struct config *config_init(const char *filename)
 {
 	struct config *config;
-	struct stat statbuf;
-	size_t len, i;
-	char *buf;
+	size_t size, len;
 	int fd, rc;
+	char *buf;
 
 	if (!filename)
 		filename = config_default_filename;
@@ -87,17 +86,12 @@ struct config *config_init(const char *filename)
 		return NULL;
 	}
 
-	rc = fstat(fd, &statbuf);
-	if (rc) {
-		warn("Can't stat %s", filename);
-		goto err_close;
-	}
+	size = 4096;
+	len = 0;
+	buf = malloc(size + 1);
 
-	len = statbuf.st_size;
-
-	buf = malloc(len + 1);
-	for (i = 0; i < len;) {
-		rc = read(fd, buf + i, len - i);
+	for (;;) {
+		rc = read(fd, buf + len, size - len);
 		if (rc < 0) {
 			warn("Can't read configuration file %s", filename);
 			goto err_free;
@@ -105,7 +99,11 @@ struct config *config_init(const char *filename)
 		} else if (!rc) {
 			break;
 		}
-		i += rc;
+		len += rc;
+		if (len == size) {
+			size <<= 1;
+			buf = realloc(buf, size + 1);
+		}
 
 	}
 	buf[len] = '\0';
