@@ -86,7 +86,6 @@ static int tty_find_device(struct console *console)
 	char *tty_device_reldir;
 	int rc;
 
-	rc = -1;
 	tty_class_device_link = NULL;
 	tty_device_tty_dir = NULL;
 	tty_device_reldir = NULL;
