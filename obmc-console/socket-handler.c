@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+
+#include <assert.h>
 #include <err.h>
 #include <stdbool.h>
 #include <stdio.h>
@@ -39,7 +41,7 @@ struct socket_handler {
 	struct poller	*poller;
 	int		sd;
 
-	struct client	*clients;
+	struct client	**clients;
 	int		n_clients;
 };
 
@@ -56,7 +58,14 @@ static void client_close(struct socket_handler *sh, struct client *client)
 	if (client->poller)
 		console_unregister_poller(sh->console, client->poller);
 
-	idx = client - sh->clients;
+	for (idx = 0; idx < sh->n_clients; idx++)
+		if (sh->clients[idx] == client)
+			break;
+
+	assert(idx < sh->n_clients);
+
+	free(client);
+	client = NULL;
 
 	sh->n_clients--;
 	memmove(&sh->clients[idx], &sh->clients[idx+1],
@@ -112,13 +121,17 @@ static enum poller_ret socket_poll(struct handler *handler,
 	if (fd < 0)
 		return POLLER_OK;
 
-	n = sh->n_clients++;
-	sh->clients = realloc(sh->clients, sizeof(*client) * sh->n_clients);
-	client = &sh->clients[n];
+	client = malloc(sizeof(*client));
+	memset(client, 0, sizeof(*client));
 
 	client->fd = fd;
 	client->poller = console_register_poller(sh->console, handler,
 			client_poll, client->fd, POLLIN, client);
+
+	n = sh->n_clients++;
+	sh->clients = realloc(sh->clients,
+			sizeof(*sh->clients) * sh->n_clients);
+	sh->clients[n] = client;
 
 	return POLLER_OK;
 
@@ -170,7 +183,7 @@ static int socket_data(struct handler *handler, uint8_t *buf, size_t len)
 	int i;
 
 	for (i = 0; i < sh->n_clients; i++) {
-		struct client *client = &sh->clients[i];
+		struct client *client = sh->clients[i];
 		client_send_data(sh, client, buf, len);
 	}
 	return 0;
@@ -182,7 +195,7 @@ static void socket_fini(struct handler *handler)
 	int i;
 
 	for (i = 0; i < sh->n_clients; i++)
-		client_close(sh, &sh->clients[i]);
+		client_close(sh, sh->clients[i]);
 
 	if (sh->poller)
 		console_unregister_poller(sh->console, sh->poller);
