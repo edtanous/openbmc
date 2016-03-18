@@ -468,7 +468,7 @@ int run_console(struct console *console)
 }
 static const struct option options[] = {
 	{ "config",	required_argument,	0, 'c'},
-	{ 0 },
+	{ 0,  0, 0, 0},
 };
 
 int main(int argc, char **argv)
