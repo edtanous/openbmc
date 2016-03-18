@@ -33,11 +33,13 @@ obmc_console_server_SOURCES = \
 	 util.c \
 	 config.c \
 	 log-handler.c \
-	 socket-handler.c
+	 socket-handler.c \
+	 console-socket.c
 
 obmc_console_client_SOURCES = \
 	 console-client.c \
 	 console-server.h \
+	 console-socket.c \
 	 util.c
 
 config_test_CPPFLAGS = -DCONFIG_TEST -DSYSCONFDIR=\"\"

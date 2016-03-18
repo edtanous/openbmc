@@ -170,7 +170,7 @@ static int client_init(struct console_client *client)
 
 	memset(&addr, 0, sizeof(addr));
 	addr.sun_family = AF_UNIX;
-	memcpy(addr.sun_path, console_socket_path, console_socket_path_len);
+	memcpy(&addr.sun_path, &console_socket_path, console_socket_path_len);
 
 	rc = connect(client->console_sd, (struct sockaddr *)&addr,
 			sizeof(addr));

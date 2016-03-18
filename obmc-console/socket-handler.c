@@ -143,7 +143,7 @@ static int socket_init(struct handler *handler, struct console *console,
 
 	memset(&addr, 0, sizeof(addr));
 	addr.sun_family = AF_UNIX;
-	memcpy(addr.sun_path, console_socket_path, console_socket_path_len);
+	memcpy(&addr.sun_path, &console_socket_path, console_socket_path_len);
 
 	rc = bind(sh->sd, (struct sockaddr *)&addr, sizeof(addr));
 	if (rc) {
