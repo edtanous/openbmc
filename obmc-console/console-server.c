@@ -31,6 +31,7 @@
 #include <string.h>
 #include <getopt.h>
 #include <limits.h>
+#include <termios.h>
 
 #include <sys/types.h>
 #include <sys/poll.h>
@@ -159,6 +160,27 @@ out_free:
 }
 
 /**
+ * Set console to raw mode: we don't want any processing to occur on
+ * the underlying terminal input/output.
+ */
+static void tty_init_termios(struct console *console)
+{
+	struct termios termios;
+	int rc;
+
+	rc = tcgetattr(console->tty_fd, &termios);
+	if (rc) {
+		warn("Can't read tty termios");
+		return;
+	}
+
+	cfmakeraw(&termios);
+	rc = tcsetattr(console->tty_fd, TCSANOW, &termios);
+	if (rc)
+		warn("Can't set terminal raw mode for tty");
+}
+
+/**
  * Open and initialise the serial device
  */
 static int tty_init_io(struct console *console)
@@ -179,6 +201,8 @@ static int tty_init_io(struct console *console)
 	 * we detect larger amounts of data
 	 */
 	fcntl(console->tty_fd, F_SETFL, FNDELAY);
+
+	tty_init_termios(console);
 
 	console->pollfds[console->n_pollers].fd = console->tty_fd;
 	console->pollfds[console->n_pollers].events = POLLIN;
