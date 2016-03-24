@@ -168,7 +168,6 @@ static int tty_init_io(struct console *console)
 	if (console->tty_lpc_addr)
 		tty_set_sysfs_attr(console, "lpc_address",
 				console->tty_lpc_addr);
-	tty_set_sysfs_attr(console, "enabled", 1);
 
 	console->tty_fd = open(console->tty_dev, O_RDWR);
 	if (console->tty_fd <= 0) {
