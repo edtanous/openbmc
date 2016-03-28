@@ -20,3 +20,7 @@ host:
         name: power_policy
         type: s
         default: "RESTORE_LAST_STATE"
+    restrictedmode:
+        name: restricted_mode
+        type: b
+        default: false 
