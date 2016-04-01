@@ -53,6 +53,8 @@ class HostSettingsObject(Openbmc.DbusProperties):
             self.Set(DBUS_NAME, name, value)
         elif type=="s":
             self.Set(DBUS_NAME, name, str(value))
+        elif type=="b":
+            self.Set(DBUS_NAME, name, value)
 
     # Save the settings to the BMC. This will write the settings value in
     # individual files named by the property name to the BMC.
