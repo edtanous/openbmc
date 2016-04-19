@@ -5,6 +5,7 @@
 # adding dependencies to additional modules like yaml
 
 import yaml
+import pprint
 
 SETTINGS_FILE = 'settings.yaml'
 OUTPUT_FILE = 'settings_file.py'
@@ -16,5 +17,5 @@ with open(SETTINGS_FILE) as s:
 with open(OUTPUT_FILE, 'w') as f:
     f.write(FILE_HEADER)
     f.write('\n')
-    f.write('SETTINGS=')
-    f.write(str(data))
+    f.write('SETTINGS=\\\n')
+    pprint.pprint(data, stream=f)
