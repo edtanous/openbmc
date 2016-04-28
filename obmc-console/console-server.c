@@ -257,7 +257,7 @@ static void handlers_init(struct console *console, struct config *config)
 {
 	extern struct handler *__start_handlers, *__stop_handlers;
 	struct handler *handler;
-	int i;
+	int i, rc;
 
 	console->n_handlers = &__stop_handlers - &__start_handlers;
 	console->handlers = &__start_handlers;
@@ -268,10 +268,14 @@ static void handlers_init(struct console *console, struct config *config)
 	for (i = 0; i < console->n_handlers; i++) {
 		handler = console->handlers[i];
 
-		printf("  %s\n", handler->name);
-
+		rc = 0;
 		if (handler->init)
-			handler->init(handler, console, config);
+			rc = handler->init(handler, console, config);
+
+		handler->active = rc == 0;
+
+		printf("  %s [%sactive]\n", handler->name,
+				handler->active ? "" : "in");
 	}
 }
 
@@ -282,7 +286,7 @@ static void handlers_fini(struct console *console)
 
 	for (i = 0; i < console->n_handlers; i++) {
 		handler = console->handlers[i];
-		if (handler->fini)
+		if (handler->fini && handler->active)
 			handler->fini(handler);
 	}
 }
@@ -296,6 +300,9 @@ static int handlers_data_in(struct console *console, uint8_t *buf, size_t len)
 
 	for (i = 0; i < console->n_handlers; i++) {
 		handler = console->handlers[i];
+
+		if (!handler->active)
+			continue;
 
 		if (!handler->data_in)
 			continue;

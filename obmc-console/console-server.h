@@ -16,6 +16,7 @@
 
 #include <poll.h>
 #include <stdint.h>
+#include <stdbool.h>
 
 struct console;
 struct config;
@@ -34,6 +35,7 @@ struct handler {
 	int		(*data_in)(struct handler *handler,
 				uint8_t *buf, size_t len);
 	void		(*fini)(struct handler *handler);
+	bool		active;
 };
 
 #define __handler_name(n) __handler_  ## n
