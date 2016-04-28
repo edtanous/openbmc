@@ -34,6 +34,7 @@ obmc_console_server_SOURCES = \
 	 config.c \
 	 log-handler.c \
 	 socket-handler.c \
+	 tty-handler.c \
 	 console-socket.c
 
 obmc_console_client_SOURCES = \

@@ -4,3 +4,6 @@ device = ttyUSB0
 # For VUART devices, we can specify the LPC address and SIRQ parameters
 lpc-address = 0x3f8
 sirq = 4
+
+# To mirror to a local tty device (typically a hardware UART), set local-tty
+# local-tty = ttyS0
