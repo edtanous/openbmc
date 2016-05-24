@@ -20,12 +20,9 @@ ipmi_ret_t ipmi_ibm_oem_partial_esel(ipmi_netfn_t netfn, ipmi_cmd_t cmd,
 
 
 struct esel_request_t {
-    uint8_t  residls;
-    uint8_t  residms;
-    uint8_t  selrecordls;
-    uint8_t  selrecordms;
-    uint8_t  offsetls;
-    uint8_t  offsetms;
+    uint16_t  resid;
+    uint16_t  selrecord;
+    uint16_t  offset;
     uint8_t  progress;
 }  __attribute__ ((packed)) ;
 
