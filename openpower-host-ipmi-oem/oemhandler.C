@@ -10,7 +10,6 @@ void register_netfn_oem_partial_esel() __attribute__((constructor));
 const char *g_esel_path = "/tmp/esel";
 uint16_t g_record_id = 0x0001;
 
-
 ///////////////////////////////////////////////////////////////////////////////
 // For the First partial add eSEL the SEL Record ID and offset
 // value should be 0x0000. The extended data needs to be in
@@ -29,6 +28,7 @@ ipmi_ret_t ipmi_ibm_oem_partial_esel(ipmi_netfn_t netfn, ipmi_cmd_t cmd,
 {
 	esel_request_t *reqptr = (esel_request_t*) request;
 	FILE *fp;
+	int r = 0;
 	// TODO: Issue 5: This is not endian-safe.
 	short *recid  =  (short*) &reqptr->selrecordls;
 	short *offset =  (short*) &reqptr->offsetls;
@@ -36,7 +36,28 @@ ipmi_ret_t ipmi_ibm_oem_partial_esel(ipmi_netfn_t netfn, ipmi_cmd_t cmd,
 	ipmi_ret_t rc = IPMI_CC_OK;
 	const char *pio;
 
-	// OpenPOWER Host Interface spec says if RecordID and Offset are
+	unsigned short used_res_id = 0;
+	unsigned short req_res_id = 0;
+
+	used_res_id = get_sel_reserve_id();
+
+	req_res_id = (((unsigned short)reqptr->residms) << 8) + reqptr->residls;
+
+	// According to IPMI spec, Reservation ID must be checked.
+	if ( used_res_id != req_res_id ) {
+		// 0xc5 means Reservation Cancelled or Invalid Reservation ID.
+		printf("Used Reservation ID = %d\n", used_res_id);
+		rc = IPMI_CC_INVALID_RESERVATION_ID;
+
+		// clean g_esel_path. 
+		r = remove(g_esel_path);
+		if(r < 0)
+			fprintf(stderr, "Error deleting %s\n", g_esel_path);
+
+		return rc;
+	}
+
+    // OpenPOWER Host Interface spec says if RecordID and Offset are
 	// 0 then then this is a new request
 	if (!*recid && !*offset)
 		pio = "wb";
