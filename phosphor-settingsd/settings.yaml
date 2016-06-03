@@ -23,4 +23,9 @@ host:
     restrictedmode:
         name: restricted_mode
         type: b
-        default: false 
+        default: false
+    bootpolicy:
+        name: boot_policy
+        type: s
+        default: "ONETIME"
+
