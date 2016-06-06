@@ -6,16 +6,16 @@ import dbus.service
 import dbus.mainloop.glib
 import os
 import os.path as path
-import Openbmc
+from obmc.dbuslib.bindings import DbusProperties, get_dbus
 import settings_file as s
 
 DBUS_NAME = 'org.openbmc.settings.Host'
 OBJ_NAME = '/org/openbmc/settings/host0'
 CONTROL_INTF = 'org.openbmc.Settings'
 
-class HostSettingsObject(Openbmc.DbusProperties):
+class HostSettingsObject(DbusProperties):
     def __init__(self, bus, name, settings, path):
-        Openbmc.DbusProperties.__init__(self)
+        DbusProperties.__init__(self)
         dbus.service.Object.__init__(self, bus, name)
 
         self.path = path
@@ -79,7 +79,7 @@ class HostSettingsObject(Openbmc.DbusProperties):
 if __name__ == '__main__':
     dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
 
-    bus = Openbmc.getDBus()
+    bus = get_dbus()
     name = dbus.service.BusName(DBUS_NAME, bus)
     obj = HostSettingsObject(bus, OBJ_NAME, s.SETTINGS, "/var/lib/obmc/")
     mainloop = gobject.MainLoop()
