@@ -28,4 +28,7 @@ host:
         name: boot_policy
         type: s
         default: "ONETIME"
-
+    networkconfig:
+        name: network_config
+        type: s
+        default: "ipaddress=,prefix=,gateway=,mac=,addr_type="

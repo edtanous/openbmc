@@ -6,6 +6,10 @@ SETTINGS=\
           'bootpolicy': {'default': 'ONETIME',
                          'name': 'boot_policy',
                          'type': 's'},
+          'networkconfig': {'default':
+              'ipaddress=,prefix=,gateway=,mac=,addr_type=',
+                            'name': 'network_config',
+                            'type': 's'},
           'powercap': {'default': 0,
                        'max': 1000,
                        'min': 0,
