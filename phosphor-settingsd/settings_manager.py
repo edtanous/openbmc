@@ -6,7 +6,11 @@ import dbus.service
 import dbus.mainloop.glib
 import os
 import os.path as path
+import sys
 from obmc.dbuslib.bindings import DbusProperties, get_dbus
+
+settings_file_path = os.path.join(sys.prefix, 'share/obmc-phosphor-settings')
+sys.path.insert(1, settings_file_path)
 import settings_file as s
 
 DBUS_NAME = 'org.openbmc.settings.Host'
