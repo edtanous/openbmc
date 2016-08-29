@@ -4,7 +4,7 @@ LIB_OEM_OBJ = oemhandler.o
 LIB_OEM     = liboemhandler.so
 
 LDFLAGS += -rdynamic -ldl
-CXXFLAGS += -fPIC -Wall
+CXXFLAGS += -fPIC -Wall -Werror
 
 
 all:  $(LIB_OEM)
