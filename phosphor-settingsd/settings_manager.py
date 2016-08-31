@@ -85,9 +85,10 @@ if __name__ == '__main__':
     dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
 
     bus = get_dbus()
-    name = dbus.service.BusName(DBUS_NAME, bus)
     obj = HostSettingsObject(bus, OBJ_NAME, s.SETTINGS, "/var/lib/obmc/")
     mainloop = gobject.MainLoop()
 
+    obj.unmask_signals()
+    name = dbus.service.BusName(DBUS_NAME, bus)
     print "Running HostSettingsService"
     mainloop.run()
