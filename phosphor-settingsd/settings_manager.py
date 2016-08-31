@@ -13,6 +13,7 @@ DBUS_NAME = 'org.openbmc.settings.Host'
 OBJ_NAME = '/org/openbmc/settings/host0'
 CONTROL_INTF = 'org.openbmc.Settings'
 
+
 class HostSettingsObject(DbusProperties):
     def __init__(self, bus, name, settings, path):
         DbusProperties.__init__(self)
@@ -23,10 +24,11 @@ class HostSettingsObject(DbusProperties):
             os.mkdir(path)
 
         # Listen to changes in the property values and sync them to the BMC
-        bus.add_signal_receiver(self.settings_signal_handler,
-            dbus_interface = "org.freedesktop.DBus.Properties",
-            signal_name = "PropertiesChanged",
-            path = "/org/openbmc/settings/host0")
+        bus.add_signal_receiver(
+            self.settings_signal_handler,
+            dbus_interface="org.freedesktop.DBus.Properties",
+            signal_name="PropertiesChanged",
+            path="/org/openbmc/settings/host0")
 
         # Create the dbus properties
         for i in settings['host'].iterkeys():
@@ -43,17 +45,19 @@ class HostSettingsObject(DbusProperties):
             pass
         return None
 
-    # Create dbus properties based on bmc value. This will be either a value
-    # previously set, or the default file value if the BMC value does not exist.
+    # Create dbus properties based on bmc value.
+    # This will be either a value previously set,
+    # or the default file value if the BMC value
+    # does not exist.
     def set_settings_property(self, name, type, value):
         bmcv = self.get_bmc_value(name)
         if bmcv:
             value = bmcv
-        if type=="i":
+        if type == "i":
             self.Set(DBUS_NAME, name, value)
-        elif type=="s":
+        elif type == "s":
             self.Set(DBUS_NAME, name, str(value))
-        elif type=="b":
+        elif type == "b":
             self.Set(DBUS_NAME, name, value)
 
     # Save the settings to the BMC. This will write the settings value in
@@ -67,7 +71,8 @@ class HostSettingsObject(DbusProperties):
 
     # Signal handler for when one ore more settings properties were updated.
     # This will sync the changes to the BMC.
-    def settings_signal_handler(self, interface_name, changed_properties, invalidated_properties):
+    def settings_signal_handler(
+            self, interface_name, changed_properties, invalidated_properties):
         for name, value in changed_properties.items():
             self.set_system_settings(name, value)
 
@@ -86,4 +91,3 @@ if __name__ == '__main__':
 
     print "Running HostSettingsService"
     mainloop.run()
-
