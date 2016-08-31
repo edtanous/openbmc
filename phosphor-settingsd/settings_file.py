@@ -1,6 +1,11 @@
 #!/usr/bin/python -u
 SETTINGS=\
-{'host': {'bootflags': {'default': 'default',
+{'host': {'TimeMode': {'default': 'NTP', 'name': 'time_mode', 'type': 's'},
+          'TimeOwner': {'default': 'BMC', 'name': 'time_owner', 'type': 's'},
+          'UseDhcpNtp': {'default': 'yes',
+                         'name': 'use_dhcp_ntp',
+                         'type': 's'},
+          'bootflags': {'default': 'default',
                         'name': 'boot_flags',
                         'type': 's'},
           'bootpolicy': {'default': 'ONETIME',

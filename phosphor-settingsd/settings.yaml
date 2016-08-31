@@ -32,3 +32,15 @@ host:
         name: network_config
         type: s
         default: "ipaddress=,prefix=,gateway=,mac=,addr_type="
+    TimeMode:
+        name: time_mode
+        type: s
+        default: "NTP"
+    TimeOwner:
+        name: time_owner
+        type: s
+        default: "BMC"
+    UseDhcpNtp:
+        name: use_dhcp_ntp
+        type: s
+        default: "yes"
