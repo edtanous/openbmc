@@ -1,8 +1,15 @@
-This .so file is designed to support the OpenPOWER's BIOS OEM commands.  Documentation can be found by contacting the OpenPOWER mailing list https://github.com/open-power/op-build 
+This .so file is designed to support the OpenPOWER's BIOS OEM commands.
+Documentation can be found by contacting the OpenPOWER mailing list @ https://github.com/open-power/op-build
 
 ## To Build
 ```
-make
+To build this package, do the following steps:
+
+    1. ./bootstrap.sh
+    2. ./configure ${CONFIGURE_FLAGS}
+    3. make
+
+To full clean the repository again run `./bootstrap.sh clean`.
 ```
 
 ## Supported Commands
