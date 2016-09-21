@@ -1,0 +1,3 @@
+To regenerate the settings file manually run:
+
+python setup.py build
