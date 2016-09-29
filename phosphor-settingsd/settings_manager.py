@@ -186,3 +186,5 @@ if __name__ == '__main__':
     name = dbus.service.BusName(DBUS_NAME, bus)
     print "Running HostSettingsService"
     mainloop.run()
+
+# vim: tabstop=8 expandtab shiftwidth=4 softtabstop=4

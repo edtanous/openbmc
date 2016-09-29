@@ -23,3 +23,5 @@ setup(
     scripts=['settings_manager.py'],
     data_files=[('phosphor-settings', ['settings_file.py'])],
     cmdclass={'build': CustomBuild})
+
+# vim: tabstop=8 expandtab shiftwidth=4 softtabstop=4
