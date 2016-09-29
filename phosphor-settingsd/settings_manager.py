@@ -25,8 +25,10 @@ CONTROL_INTF = 'org.openbmc.Settings'
 
 class HostSettingsObject(DbusProperties):
     def __init__(self, bus, name, settings, path):
-        super(HostSettingsObject, self).__init__(conn=bus, object_path=name,
-                                                validator=self.input_validator)
+        super(HostSettingsObject, self).__init__(
+            conn=bus,
+            object_path=name,
+            validator=self.input_validator)
         self.bus = bus
         self.path = path
         # Needed to ignore the validation on default networkconfig values as
@@ -98,15 +100,15 @@ class HostSettingsObject(DbusProperties):
 
     def validate_regex(self, regex, value):
         if not re.compile(regex).search(value):
-            raise ValueError, "Invalid input. Data does not satisfy regex"
+            raise ValueError("Invalid input. Data does not satisfy regex")
 
     def validate_range(self, min, max, value):
         if value not in range(min, max):
-            raise ValueError, "Invalid input. Data not in allowed range"
+            raise ValueError("Invalid input. Data not in allowed range")
 
     def validate_list_ignore_case(self, lst, value):
         if value.lower() not in map(lambda val: val.lower(), lst):
-            raise ValueError, "Invalid input. Data not in allowed values"
+            raise ValueError("Invalid input. Data not in allowed values")
 
     # validate host network configuration
     # need  "ipaddress=,prefix=,gateway=,mac=,addr_type="
@@ -121,20 +123,20 @@ class HostSettingsObject(DbusProperties):
 
         # This has a hard data format mentioned above so no blanks allowed.
         if value.count(" ") or value.count("=") != 5:
-            raise ValueError, "Invalid Network Data. No white spaces allowed"
+            raise ValueError("Invalid Network Data. No white spaces allowed")
 
         config = value.split(',')
         for key_value in config:
-            key , value = key_value.split('=')
+            key, value = key_value.split('=')
             if not key or not value:
-                raise ValueError, "Invalid key or Data"
+                raise ValueError("Invalid key or Data")
 
             # Add the current key seen so we can compare at the end to see
             # if all values have been given
             user_config.append(key.lower())
 
             if key.lower() == 'ipaddress' or key.lower() == 'gateway':
-	        IP(value)
+                IP(value)
 
             elif key.lower() == 'mac':
                 regex = '([a-fA-F0-9]{2}[:|\-]?){6}'
@@ -149,7 +151,8 @@ class HostSettingsObject(DbusProperties):
 
         # Did user pass everything ??
         if set(all_config) - set(user_config):
-            raise ValueError, "Invalid Network Data. All information is mandatory"
+            raise ValueError(
+                "Invalid Network Data. All information is mandatory")
 
     # Validate to see if the changes are in order
     def input_validator(self, iface, proprty, value):
@@ -161,7 +164,8 @@ class HostSettingsObject(DbusProperties):
                 break
 
         # User entered key is not present
-        if not shk: raise KeyError, "Invalid Property"
+        if not shk:
+            raise KeyError("Invalid Property")
 
         if shk['validation'] == 'list':
             self.validate_list_ignore_case(shk['allowed'], value)
@@ -173,7 +177,7 @@ class HostSettingsObject(DbusProperties):
             self.validate_regex(shk['regex'], value)
 
         elif shk['validation'] == 'custom':
-	    getattr(self, shk['method'])(value)
+            getattr(self, shk['method'])(value)
 
 if __name__ == '__main__':
     dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
