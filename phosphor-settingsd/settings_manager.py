@@ -10,7 +10,10 @@ import sys
 from obmc.dbuslib.bindings import DbusProperties, get_dbus
 from IPy import IP
 
-settings_file_path = os.path.join(sys.prefix, 'share/obmc-phosphor-settings')
+settings_file_path = os.path.join(
+    sys.prefix,
+    'share',
+    'phosphor-settings')
 sys.path.insert(1, settings_file_path)
 import settings_file as s
 import re
