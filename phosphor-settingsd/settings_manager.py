@@ -17,6 +17,7 @@ settings_file_path = os.path.join(
 sys.path.insert(1, settings_file_path)
 import settings_file as s
 import re
+import obmc.mapper
 
 DBUS_NAME = 'org.openbmc.settings.Host'
 CONTROL_INTF = 'org.openbmc.Settings'
@@ -37,26 +38,42 @@ def walk_nest(d, keys =()):
 def create_object(settings):
     """Create and format objects.
 
-    Parse dictionary file and return all objects and main properties
-    (name, type, default) for each attribute in the following format:
-    [obj_name, attr_ name, attr_ type, default]
+    Parse dictionary file and return all objects and settings
+    in the following format: {obj_name {settings}}
     """
+    mapper = obmc.mapper.Mapper(bus)
     allobjects = {}
+    queries = {}
     for compound_key, val in walk_nest(settings):
         obj_name = compound_key[0].lower()
         obj_name = obj_name.replace(".","/")
         obj_name = "/" + obj_name + "0"
 
-        for i in compound_key[1:len(compound_key)-2]:
+        for i in compound_key[2:len(compound_key)-2]:
             obj_name = obj_name + "/" + i
 
         setting = compound_key[len(compound_key) - 2]
         attribute = compound_key[len(compound_key) - 1]
-
-        o = allobjects.setdefault(obj_name, {})
-        s = o.setdefault(setting, {'name': None, 'type': None, 'default': None})
+        if settings.get(compound_key[0], {}).get('query', {}):
+            q = queries.setdefault(obj_name, {})
+            s = q.setdefault(
+                setting, {'name': None, 'type': None, 'default': None})
+        else:
+            o = allobjects.setdefault(obj_name, {})
+            s = o.setdefault(
+                setting, {'name': None, 'type': None, 'default': None})
         s[attribute] = val
-
+    for settings in queries.itervalues():
+        for setting in settings.itervalues():
+            if setting['type'] is not 'instance_query':
+                continue
+            paths = mapper.get_subtree_paths(setting['subtree'], 0)
+            for path in paths:
+                m = re.search(setting['matchregex'], path)
+                if not m:
+                    continue
+                allobjects.setdefault(
+                    "/org/openbmc/settings/" + m.group(1), settings)
     return allobjects
 
 class HostSettingsObject(DbusProperties):
@@ -69,6 +86,7 @@ class HostSettingsObject(DbusProperties):
         self.path = path
         self.name = name
         self.settings = settings
+        fname = name[name.rfind("/")+1:] + '-'
 
         # Needed to ignore the validation on default networkconfig values as
         # opposed to user giving the same.
@@ -86,15 +104,16 @@ class HostSettingsObject(DbusProperties):
 
         # Create the dbus properties
         for setting in settings.itervalues():
-            self.set_settings_property(setting['name'],
-                    setting['type'],
-                    setting['default'])
+            if setting['type'] is 'instance_query':
+                continue
+            self.set_settings_property(
+                setting['name'], setting['type'], setting['default'], fname)
         # Done with consuming factory settings.
         self.adminmode = False
 
-    def get_bmc_value(self, name):
+    def get_bmc_value(self, name, fname):
         try:
-            with open(path.join(self.path, name), 'r') as f:
+            with open(path.join(self.path, fname + name), 'r') as f:
                 return f.read()
         except (IOError):
             pass
@@ -104,8 +123,8 @@ class HostSettingsObject(DbusProperties):
     # This will be either a value previously set,
     # or the default file value if the BMC value
     # does not exist.
-    def set_settings_property(self, attr_name, attr_type, value):
-        bmcv = self.get_bmc_value(attr_name)
+    def set_settings_property(self, attr_name, attr_type, value, fname):
+        bmcv = self.get_bmc_value(attr_name, fname)
         if bmcv:
             value = bmcv
         if attr_type == "i":
@@ -117,19 +136,20 @@ class HostSettingsObject(DbusProperties):
 
     # Save the settings to the BMC. This will write the settings value in
     # individual files named by the property name to the BMC.
-    def set_system_settings(self, name, value):
-        bmcv = self.get_bmc_value(name)
+    def set_system_settings(self, name, value, fname):
+        bmcv = self.get_bmc_value(name, fname)
         if bmcv != value:
-            filepath = path.join(self.path, name)
+            filepath = path.join(self.path, fname + name)
             with open(filepath, 'w') as f:
                 f.write(str(value))
 
     # Signal handler for when one ore more settings properties were updated.
     # This will sync the changes to the BMC.
     def settings_signal_handler(
-            self, interface_name, changed_properties, invalidated_properties):
+            self, interface_name, changed_properties, invalidated_properties,
+            fname):
         for name, value in changed_properties.items():
-            self.set_system_settings(name, value)
+            self.set_system_settings(name, value, fname)
 
     # Placeholder signal. Needed to register the settings interface.
     @dbus.service.signal(DBUS_NAME, signature='s')
@@ -227,7 +247,6 @@ if __name__ == '__main__':
     for o, settings in allobjects.iteritems():
         objs.append(HostSettingsObject(bus, o, settings, "/var/lib/obmc/"))
         objs[-1].unmask_signals()
-
     mainloop = gobject.MainLoop()
     name = dbus.service.BusName(DBUS_NAME, bus)
     print "Running HostSettingsService"
