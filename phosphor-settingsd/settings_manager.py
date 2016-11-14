@@ -41,6 +41,7 @@ def create_object(settings):
     Parse dictionary file and return all objects and settings
     in the following format: {obj_name {settings}}
     """
+    bus = get_dbus()
     mapper = obmc.mapper.Mapper(bus)
     allobjects = {}
     queries = {}
