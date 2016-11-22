@@ -87,7 +87,7 @@ class HostSettingsObject(DbusProperties):
         self.path = path
         self.name = name
         self.settings = settings
-        fname = name[name.rfind("/")+1:] + '-'
+        self.fname = name[name.rfind("/")+1:] + '-'
 
         # Needed to ignore the validation on default networkconfig values as
         # opposed to user giving the same.
@@ -108,7 +108,8 @@ class HostSettingsObject(DbusProperties):
             if setting['type'] is 'instance_query':
                 continue
             self.set_settings_property(
-                setting['name'], setting['type'], setting['default'], fname)
+                setting['name'], setting['type'], setting['default'],
+                self.fname)
         # Done with consuming factory settings.
         self.adminmode = False
 
@@ -147,10 +148,9 @@ class HostSettingsObject(DbusProperties):
     # Signal handler for when one ore more settings properties were updated.
     # This will sync the changes to the BMC.
     def settings_signal_handler(
-            self, interface_name, changed_properties, invalidated_properties,
-            fname):
+            self, interface_name, changed_properties, invalidated_properties):
         for name, value in changed_properties.items():
-            self.set_system_settings(name, value, fname)
+            self.set_system_settings(name, value, self.fname)
 
     # Placeholder signal. Needed to register the settings interface.
     @dbus.service.signal(DBUS_NAME, signature='s')
