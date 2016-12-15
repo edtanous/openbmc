@@ -69,6 +69,11 @@ def create_object(settings):
             if setting['type'] is not 'instance_query':
                 continue
             paths = mapper.get_subtree_paths(setting['subtree'], 0)
+
+            if setting['keyregex'] == 'host':
+                # Always create at least one host object.
+                paths = set(paths + ['/org/openbmc/control/host0'])
+
             for path in paths:
                 m = re.search(setting['matchregex'], path)
                 if not m:
