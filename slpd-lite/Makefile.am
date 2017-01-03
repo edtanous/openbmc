@@ -6,7 +6,6 @@ slpd_SOURCES = \
 	sock_channel.cpp \
 	slp_server.cpp \
 	slp_parser.cpp \
-	slp.cpp \
 	slp_message_handler.cpp
 
 slpd_LDFLAGS = $(SYSTEMD_LIBS)
