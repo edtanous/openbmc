@@ -16,7 +16,7 @@
  */
 int slp::udp::Server::run()
 {
-    struct sockaddr_in in {};
+    struct sockaddr_in6 serverAddr {};
 
     sd_event* event = nullptr;
 
@@ -68,18 +68,17 @@ int slp::udp::Server::run()
         goto finish;
     }
 
-    fd = socket(AF_INET, SOCK_DGRAM | SOCK_CLOEXEC | SOCK_NONBLOCK, 0);
+    fd = socket(AF_INET6, SOCK_DGRAM | SOCK_CLOEXEC | SOCK_NONBLOCK, 0);
     if (fd < 0)
     {
         r = -errno;
         goto finish;
     }
 
-    in.sin_family = AF_INET;
-    in.sin_port = htons(this->port);
-    in.sin_addr.s_addr = INADDR_ANY;
+    serverAddr.sin6_family = AF_INET6;
+    serverAddr.sin6_port = htons(this->port);
 
-    if (bind(fd, (struct sockaddr*)&in, sizeof(in)) < 0)
+    if (bind(fd, (struct sockaddr*)&serverAddr, sizeof(serverAddr)) < 0)
     {
         r = -errno;
         goto finish;
