@@ -254,7 +254,7 @@ std::tuple<int, buffer> processSrvTypeRequest(const Message& msg);
  * @internal
  *
  */
-ServiceList readSLPServiceInfo(const std::string& filename);
+ServiceList readSLPServiceInfo();
 
 /**  Get all the interface address
  *

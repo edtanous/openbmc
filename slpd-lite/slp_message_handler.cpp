@@ -1,12 +1,14 @@
 #include "slp.hpp"
 
 #include <arpa/inet.h>
+#include <dirent.h>
 #include <ifaddrs.h>
 #include <net/if.h>
 #include <string.h>
 
 #include <algorithm>
 
+#include "config.h"
 #include "endian.hpp"
 #include "slp_meta.hpp"
 
@@ -84,7 +86,7 @@ std::tuple<int, buffer> processSrvTypeRequest(
 
     //read the slp service info from conf and create the service type string
     slp::handler::internal::ServiceList svcList =
-        slp::handler::internal::readSLPServiceInfo(slp::CONF_FILE);
+        slp::handler::internal::readSLPServiceInfo();
     if (svcList.size() <= 0)
     {
         buff.resize(0);
@@ -175,7 +177,7 @@ std::tuple<int, buffer> processSrvRequest(
     buffer buff;
     //Get all the services which are registered
     slp::handler::internal::ServiceList svcList =
-        slp::handler::internal::readSLPServiceInfo(slp::CONF_FILE);
+        slp::handler::internal::readSLPServiceInfo();
     if (svcList.size() <= 0)
     {
         buff.resize(0);
@@ -314,25 +316,42 @@ std::list<std::string> getIntfAddrs()
     return addrList;
 }
 
-slp::handler::internal::ServiceList  readSLPServiceInfo(
-    const std::string& filename)
+slp::handler::internal::ServiceList  readSLPServiceInfo()
 {
     using namespace std::string_literals;
-    /*Conf File format would be
-      ServiceName serviceType Port */
-
     slp::handler::internal::ServiceList svcLst;
-
-    std::ifstream readFile(filename);
     slp::ConfigData service;
-    //Read all the service from the file
-    while (readFile >> service)
-    {
-        std::string tmp = "service:"s + service.name;
-        service.name = tmp;
-        svcLst.emplace(service.name, service);
-    }
+    struct dirent* dent = nullptr;
 
+    // Open the services dir and get the service info
+    // from service files.
+    // Service File format would be "ServiceName serviceType Port"
+    DIR* dir = opendir(SERVICE_DIR);
+    // wrap the pointer into smart pointer.
+    slp::deleted_unique_ptr<DIR> dirPtr(dir, [](DIR * dir)
+    {
+        if (!dir)
+        {
+            closedir(dir);
+        }
+    });
+    dir = nullptr;
+
+    if (dirPtr.get())
+    {
+        while ((dent = readdir(dirPtr.get())) != NULL)
+        {
+            if (dent->d_type == DT_REG) //regular file
+            {
+                auto absFileName = std::string(SERVICE_DIR) + dent->d_name;
+                std::ifstream readFile(absFileName);
+                readFile >> service;
+                service.name = "service:"s + service.name;
+                svcLst.emplace(service.name, service);
+            }
+        }
+
+    }
     return svcLst;
 }
 }//namespace internal
