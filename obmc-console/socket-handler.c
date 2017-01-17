@@ -87,14 +87,14 @@ static void client_close(struct socket_handler *sh, struct client *client)
  * return indicates that no bytes were written due to potential block,
  * but isn't a failure
  */
-static ssize_t client_write_data(struct client *client, uint8_t *buf,
+static ssize_t client_send_data(struct client *client, uint8_t *buf,
 		size_t len)
 {
 	size_t pos;
 	ssize_t rc;
 
 	for (pos = 0; pos < len; pos += rc) {
-		rc = write(client->fd, buf + pos, len - pos);
+		rc = send(client->fd, buf + pos, len - pos, MSG_DONTWAIT);
 		if (rc < 0) {
 			if (errno == EAGAIN || errno == EWOULDBLOCK)
 				break;
@@ -121,7 +121,7 @@ static enum poller_ret client_poll(struct handler *handler,
 	int rc;
 
 	if (events & POLLIN) {
-		rc = read(client->fd, buf, sizeof(buf));
+		rc = recv(client->fd, buf, sizeof(buf), MSG_DONTWAIT);
 		if (rc <= 0)
 			goto err_close;
 
@@ -129,7 +129,7 @@ static enum poller_ret client_poll(struct handler *handler,
 	}
 
 	if (events & POLLOUT) {
-		len = client_write_data(client, client->buf, client->buf_len);
+		len = client_send_data(client, client->buf, client->buf_len);
 		if (len < 0)
 			goto err_close;
 
@@ -169,9 +169,9 @@ static int client_send_or_queue(struct client *client, uint8_t *buf, size_t len)
 {
 	ssize_t rc;
 
-	/* only write if the queue is empty */
+	/* only send if the queue is empty */
 	if (!client->buf_len) {
-		rc = client_write_data(client, buf, len);
+		rc = client_send_data(client, buf, len);
 		if (rc < 0)
 			return -1;
 	} else {
@@ -197,7 +197,7 @@ static enum poller_ret socket_poll(struct handler *handler,
 	if (!(events & POLLIN))
 		return POLLER_OK;
 
-	fd = accept4(sh->sd, NULL, NULL, SOCK_NONBLOCK);
+	fd = accept(sh->sd, NULL, NULL);
 	if (fd < 0)
 		return POLLER_OK;
 
