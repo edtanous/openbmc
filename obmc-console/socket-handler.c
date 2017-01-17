@@ -92,9 +92,12 @@ static ssize_t client_send_data(struct client *client, uint8_t *buf,
 {
 	size_t pos;
 	ssize_t rc;
+	int flags;
+
+	flags = MSG_DONTWAIT | MSG_NOSIGNAL;
 
 	for (pos = 0; pos < len; pos += rc) {
-		rc = send(client->fd, buf + pos, len - pos, MSG_DONTWAIT);
+		rc = send(client->fd, buf + pos, len - pos, flags);
 		if (rc < 0) {
 			if (errno == EAGAIN || errno == EWOULDBLOCK)
 				break;
