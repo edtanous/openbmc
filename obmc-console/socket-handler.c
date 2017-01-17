@@ -169,9 +169,14 @@ static int client_send_or_queue(struct client *client, uint8_t *buf, size_t len)
 {
 	ssize_t rc;
 
-	rc = client_write_data(client, buf, len);
-	if (rc < 0)
-		return -1;
+	/* only write if the queue is empty */
+	if (!client->buf_len) {
+		rc = client_write_data(client, buf, len);
+		if (rc < 0)
+			return -1;
+	} else {
+		rc = 0;
+	}
 
 	if ((size_t)rc < len) {
 		rc = client_queue_data(client, buf + rc, len - rc);
