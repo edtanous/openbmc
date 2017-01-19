@@ -355,10 +355,9 @@ static int socket_data(struct handler *handler, uint8_t *buf, size_t len)
 static void socket_fini(struct handler *handler)
 {
 	struct socket_handler *sh = to_socket_handler(handler);
-	int i;
 
-	for (i = 0; i < sh->n_clients; i++)
-		client_close(sh, sh->clients[i]);
+	while (sh->n_clients)
+		client_close(sh, sh->clients[0]);
 
 	if (sh->poller)
 		console_unregister_poller(sh->console, sh->poller);
