@@ -64,6 +64,12 @@ org.openbmc.settings.Host:
             default: "yes"
             validation: list
             allowed: ["yes", "no"]
+        AutoReboot:
+            name: auto_reboot
+            type: s
+            default: "yes"
+            validation: list
+            allowed: ["yes", "no"]
     query:
         type: instance_query
         keyregex: "host"
