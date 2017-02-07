@@ -199,7 +199,7 @@ static int tty_init(struct handler *handler, struct console *console,
 	if (make_terminal_raw(th, tty_name) != 0)
 		fprintf(stderr, "Couldn't make %s a raw terminal\n", tty_name);
 
-	th->poller = console_register_poller(console, handler, tty_poll,
+	th->poller = console_poller_register(console, handler, tty_poll,
 			th->fd, POLLIN, NULL);
 	th->console = console;
 
@@ -216,7 +216,7 @@ static void tty_fini(struct handler *handler)
 {
 	struct tty_handler *th = to_tty_handler(handler);
 	if (th->poller)
-		console_unregister_poller(th->console, th->poller);
+		console_poller_unregister(th->console, th->poller);
 	close(th->fd);
 }
 
@@ -229,5 +229,5 @@ static struct tty_handler tty_handler = {
 	},
 };
 
-console_register_handler(&tty_handler.handler);
+console_handler_register(&tty_handler.handler);
 
