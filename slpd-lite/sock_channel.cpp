@@ -28,7 +28,7 @@ std::tuple<int, buffer> Channel::read()
 
     if (ioctl(sockfd, FIONREAD, &readSize) < 0)
     {
-        std::cerr << "E> Channel::Read : ioctl failed with errno = " << errno;
+        std::cerr << "Channel::Read : ioctl failed with errno = " << errno;
         rc = -errno;
         return std::make_tuple(rc, std::move(outBuffer));
     }
@@ -50,12 +50,12 @@ std::tuple<int, buffer> Channel::read()
 
         if (readDataLen > 0) // Data read from the socket
         {
-            std::cout << "I> Channel::Read : DataIn Fd[" << sockfd << "] Req["
+            std::cout << "Channel::Read : DataIn Fd[" << sockfd << "] Req["
                       << bufferSize << "] Recv[" << readDataLen << "]\n";
         }
         else if (readDataLen == 0) // Peer has performed an orderly shutdown
         {
-            std::cerr << "E> Channel::Read : Connection Closed Fd[" << sockfd
+            std::cerr << "Channel::Read : Connection Closed Fd[" << sockfd
                       << "]\n";
             outBuffer.resize(0);
             rc = -1;
@@ -63,7 +63,7 @@ std::tuple<int, buffer> Channel::read()
         else if (readDataLen < 0) // Error
         {
             rc = -errno;
-            std::cerr << "E> Channel::Read : Receive Error Fd[" << sockfd << "]"
+            std::cerr << "Channel::Read : Receive Error Fd[" << sockfd << "]"
                       << "errno = " << rc << "\n";
             outBuffer.resize(0);
         }
@@ -126,7 +126,7 @@ int Channel::write(buffer& inBuffer)
             else
             {
                 // Spurious wake up
-                std::cerr << "E> Spurious wake up on select (writeset)\n";
+                std::cerr << "Spurious wake up on select (writeset)\n";
                 spuriousWakeup = true;
             }
         }
@@ -136,13 +136,13 @@ int Channel::write(buffer& inBuffer)
             {
                 // Timed out
                 rc = -1;
-                std::cerr << "E> We timed out on select call (writeset)\n";
+                std::cerr << "We timed out on select call (writeset)\n";
             }
             else
             {
                 // Error
                 rc  = -errno;
-                std::cerr << "E> select call (writeset) had an error : "
+                std::cerr << "select call (writeset) had an error : "
                           << rc << "\n";
             }
 
