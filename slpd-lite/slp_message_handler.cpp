@@ -90,6 +90,7 @@ std::tuple<int, buffer> processSrvTypeRequest(
     if (svcList.size() <= 0)
     {
         buff.resize(0);
+        std::cerr << "SLP unable to read the service info\n";
         return std::make_tuple((int)slp::Error::INTERNAL_ERROR, buff);
     }
 
@@ -181,6 +182,7 @@ std::tuple<int, buffer> processSrvRequest(
     if (svcList.size() <= 0)
     {
         buff.resize(0);
+        std::cerr << "SLP unable to read the service info\n";
         return std::make_tuple((int)slp::Error::INTERNAL_ERROR, buff);
     }
 
@@ -190,6 +192,7 @@ std::tuple<int, buffer> processSrvRequest(
     if (svcIt == svcList.end())
     {
         buff.resize(0);
+        std::cerr << "SLP unable to find the service=" << svcName << "\n";
         return std::make_tuple((int)slp::Error::INTERNAL_ERROR, buff);
     }
     //Get all the interface address
@@ -197,6 +200,7 @@ std::tuple<int, buffer> processSrvRequest(
     if (ifaddrList.size() <= 0)
     {
         buff.resize(0);
+        std::cerr << "SLP unable to read the interface address\n";
         return std::make_tuple((int)slp::Error::INTERNAL_ERROR, buff);
     }
 
@@ -363,6 +367,9 @@ std::tuple<int, buffer> processRequest(
     buffer resp(0);
     switch (msg.header.functionID)
     {
+        std::cout << "SLP Processing Request="
+                  << msg.header.functionID <<"\n";
+
         case (uint8_t)slp::FunctionType::SRVTYPERQST:
             std::tie(rc, resp) = slp::handler::internal::processSrvTypeRequest(msg);
             break;
