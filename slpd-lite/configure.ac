@@ -10,6 +10,8 @@ AM_PROG_AR
 AC_PROG_INSTALL
 AC_PROG_MAKE_SET
 
+LT_INIT
+
 # Checks for libraries.
 PKG_CHECK_MODULES([SYSTEMD], [libsystemd >= 221])
 
