@@ -7,6 +7,7 @@ openpower_proc_control_SOURCES = \
 	proc_control.cpp \
 	cfam_access.cpp \
 	filedescriptor.cpp \
+	registration.cpp \
 	targeting.cpp \
 	procedures/p9/start_host.cpp \
 	procedures/p9/vcs_workaround.cpp

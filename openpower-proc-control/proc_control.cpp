@@ -17,51 +17,44 @@
 #include <functional>
 #include <iostream>
 #include <phosphor-logging/log.hpp>
-#include "p9_procedures.hpp"
+#include "registration.hpp"
 
-constexpr auto procedures =
-{
-    std::make_tuple("startHost", openpower::p9::startHost),
-    std::make_tuple("vcsWorkaround", openpower::p9::vcsWorkaround)
-};
+using namespace openpower::util;
 
-void usage(char** argv)
+void usage(char** argv, const ProcedureMap& procedures)
 {
     std::cerr << "Usage: " << argv[0] << " [action]\n";
     std::cerr << "   actions:\n";
 
     for (const auto& p : procedures)
     {
-        std::cerr << "     " << std::get<0>(p) << "\n";
+        std::cerr << "     " << p.first << "\n";
     }
 }
 
 int main(int argc, char** argv)
 {
+    const ProcedureMap& procedures = Registration::getProcedures();
+
     if (argc != 2)
     {
-        usage(argv);
+        usage(argv, procedures);
         return -1;
     }
 
     std::string action{argv[1]};
 
-    auto finder = [&action](const auto& p)
-    {
-        return std::get<0>(p) == action;
-    };
-    auto procedure = std::find_if(procedures.begin(), procedures.end(), finder);
+    auto procedure = procedures.find(action);
 
     if (procedure == procedures.end())
     {
-        usage(argv);
+        usage(argv, procedures);
         return -1;
     }
 
-    auto function = std::get<1>(*procedure);
     try
     {
-        function();
+        procedure->second();
     }
     catch (std::exception& e)
     {

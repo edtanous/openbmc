@@ -17,8 +17,10 @@
 #include <experimental/filesystem>
 #include <fstream>
 #include <stdlib.h>
+#include "registration.hpp"
 #include "targeting.hpp"
 
+using namespace openpower::util;
 using namespace openpower::targeting;
 namespace fs = std::experimental::filesystem;
 
@@ -97,4 +99,32 @@ TEST_F(TargetingTest, CreateTargets)
             i++;
         }
     }
+}
+
+
+void func1()
+{
+    std::cout << "Hello\n";
+}
+
+void func2()
+{
+    std::cout << "World\n";
+}
+
+REGISTER_PROCEDURE("hello", func1);
+REGISTER_PROCEDURE("world", func2);
+
+
+TEST(RegistrationTest, TestReg)
+{
+    int count = 0;
+    for (const auto& p : Registration::getProcedures())
+    {
+        std::cout << p.first << std::endl;
+        p.second();
+        count++;
+    }
+
+    ASSERT_EQ(count, 2);
 }

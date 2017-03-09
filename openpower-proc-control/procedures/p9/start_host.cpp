@@ -16,6 +16,7 @@
 #include <phosphor-logging/log.hpp>
 #include "cfam_access.hpp"
 #include "p9_cfam.hpp"
+#include "registration.hpp"
 #include "targeting.hpp"
 
 namespace openpower
@@ -71,6 +72,7 @@ void startHost()
     writeRegWithMask(master, P9_CBS_CS, 0x80000000, 0x80000000);
 }
 
+REGISTER_PROCEDURE("startHost", startHost);
 
 }
 }
