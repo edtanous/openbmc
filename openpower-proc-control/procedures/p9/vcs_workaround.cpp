@@ -28,46 +28,11 @@ using namespace openpower::cfam::access;
 using namespace openpower::cfam::p9;
 using namespace openpower::targeting;
 
-void startHost()
-{
-    Targeting targets;
-    const auto& master = *(targets.begin());
 
-    log<level::INFO>("Running P9 procedure startHost",
-                     entry("NUM_PROCS=%d", targets.size()));
-
-
-    //Ensure asynchronous clock mode is set
-    writeReg(master, P9_LL_MODE_REG, 0x00000001);
-
-    //Clock mux select override
-    for (const auto& t : targets)
-    {
-        writeRegWithMask(t, P9_ROOT_CTRL8,
-                         0x0000000C, 0x0000000C);
-    }
-
-    //Enable P9 checkstop to be reported to the BMC
-
-    //Setup FSI2PIB to report checkstop
-    writeReg(master, P9_FSI_A_SI1S, 0x20000000);
-
-    //Enable Xstop/ATTN interrupt
-    writeReg(master, P9_FSI2PIB_TRUE_MASK, 0x60000000);
-
-    //Arm it
-    writeReg(master, P9_FSI2PIB_INTERRUPT, 0xFFFFFFFF);
-
-    //Kick off the SBE to start the boot
-
-    //First ensure ISTEP stepping isn't enabled
-    writeReg(master, P9_SCRATCH_REGISTER_8, 0x20000000);
-
-    //Start the SBE
-    writeRegWithMask(master, P9_CBS_CS, 0x80000000, 0x80000000);
-}
-
-
+/**
+ * @brief Performs the 'VCS Workaround' on all P9s in the system.
+ * @return void
+ */
 void vcsWorkaround()
 {
     Targeting targets;
