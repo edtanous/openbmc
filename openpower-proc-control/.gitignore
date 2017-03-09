@@ -1,4 +1,6 @@
 openpower-proc-control
+openpower_procedures.cpp
+Makefile.generated
 *.o
 *.lo
 *.la

@@ -37,6 +37,14 @@ AS_IF([test "x$enable_oe_sdk" == "xyes"],
     AC_SUBST([OESDK_TESTCASE_FLAGS], [$testcase_flags])
 )
 
+#CHIPS can be passed in a from a recipe, or it will default to P9
+AC_ARG_VAR(CHIPS, [The list of chips to build the procedures for])
+AS_IF([test "x$CHIPS" == "x"], [CHIPS="p9"])
+
+AC_CONFIG_FILES([Makefile.generated],
+    [${srcdir}/gen_makefile.sh "$myChips" > Makefile.generated],
+    [myChips="$CHIPS"])
+
 PKG_CHECK_MODULES([PHOSPHOR_LOGGING], [phosphor-logging],, [AC_MSG_ERROR([Could not find phosphor-logging...openbmc/phosphor-logging package required])])
 
 AC_CONFIG_FILES([Makefile test/Makefile])
