@@ -2,6 +2,7 @@
 
 #include <memory>
 #include <vector>
+#include "filedescriptor.hpp"
 
 namespace openpower
 {
@@ -28,7 +29,7 @@ class Target
          * @param[in] - The sysfs device path
          */
         Target(size_t position, const std::string& devPath) :
-            pos(position), path(devPath)
+            pos(position), cfamPath(devPath)
         {
         }
 
@@ -47,12 +48,18 @@ class Target
         }
 
         /**
-         * Returns the path
+         * Returns the CFAM sysfs path
          */
-        inline auto getPath() const
+        inline auto getCFAMPath() const
         {
-            return path;
+            return cfamPath;
         }
+
+        /**
+         * Returns the file descriptor to use
+         * for read/writeCFAM operations.
+         */
+        int getCFAMFD();
 
     private:
 
@@ -62,9 +69,14 @@ class Target
         size_t pos;
 
         /**
-         * The sysfs device path
+         * The sysfs device path for the CFAM
          */
-        const std::string path;
+        const std::string cfamPath;
+
+        /**
+         * The file descriptor to use for read/writeCFAMReg
+         */
+        std::unique_ptr<openpower::util::FileDescriptor> cfamFD;
 };
 
 

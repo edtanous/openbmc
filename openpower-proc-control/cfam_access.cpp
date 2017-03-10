@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 #include <unistd.h>
-#include "filedescriptor.hpp"
 #include "cfam_access.hpp"
 #include "targeting.hpp"
 
@@ -28,7 +27,7 @@ namespace access
 constexpr auto cfamRegSize = 4;
 
 using namespace openpower::targeting;
-using namespace openpower::p9_util;
+using namespace openpower::util;
 
 /**
  * Converts the CFAM register address used by the calling
@@ -45,9 +44,7 @@ void writeReg(const std::unique_ptr<Target>& target,
               cfam_address_t address,
               cfam_data_t data)
 {
-    FileDescriptor fd(target->getPath());
-
-    int rc = lseek(fd(), makeOffset(address), SEEK_SET);
+    int rc = lseek(target->getCFAMFD(), makeOffset(address), SEEK_SET);
     if (rc < 0)
     {
         //Future: use a different exception to create an error log
@@ -58,7 +55,7 @@ void writeReg(const std::unique_ptr<Target>& target,
         throw std::runtime_error(msg);
     }
 
-    rc = write(fd(), &data, cfamRegSize);
+    rc = write(target->getCFAMFD(), &data, cfamRegSize);
     if (rc < 0)
     {
         //Future: use a different exception to create an error log
@@ -74,10 +71,9 @@ void writeReg(const std::unique_ptr<Target>& target,
 cfam_data_t readReg(const std::unique_ptr<Target>& target,
                     cfam_address_t address)
 {
-    FileDescriptor fd(target->getPath());
     cfam_data_t data = 0;
 
-    int rc = lseek(fd(), makeOffset(address), SEEK_SET);
+    int rc = lseek(target->getCFAMFD(), makeOffset(address), SEEK_SET);
     if (rc < 0)
     {
         //Future: use a different exception to create an error log
@@ -88,7 +84,7 @@ cfam_data_t readReg(const std::unique_ptr<Target>& target,
         throw std::runtime_error(msg);
     }
 
-    rc = read(fd(), &data, cfamRegSize);
+    rc = read(target->getCFAMFD(), &data, cfamRegSize);
     if (rc < 0)
     {
         //Future: use a different exception to create an error log

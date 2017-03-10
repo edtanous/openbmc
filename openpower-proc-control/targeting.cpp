@@ -26,6 +26,18 @@ namespace targeting
 using namespace phosphor::logging;
 namespace fs = std::experimental::filesystem;
 
+int Target::getCFAMFD()
+{
+    if (cfamFD.get() == nullptr)
+    {
+        cfamFD = std::make_unique<
+            openpower::util::FileDescriptor>(getCFAMPath());
+    }
+
+    return cfamFD->get();
+}
+
+
 Targeting::Targeting(const std::string& fsiMasterDev,
                      const std::string& fsiSlaveDir) :
     fsiMasterPath(fsiMasterDev),

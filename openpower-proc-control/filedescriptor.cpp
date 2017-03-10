@@ -19,7 +19,7 @@
 
 namespace openpower
 {
-namespace p9_util
+namespace util
 {
 
 FileDescriptor::FileDescriptor(const std::string& path)

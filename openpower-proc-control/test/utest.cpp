@@ -62,7 +62,7 @@ TEST_F(TargetingTest, CreateTargets)
         auto t = targets.begin();
         ASSERT_EQ((*t)->getPos(), 0);
 
-        ASSERT_EQ((*t)->getPath(), masterDir);
+        ASSERT_EQ((*t)->getCFAMPath(), masterDir);
     }
 
 
@@ -95,7 +95,7 @@ TEST_F(TargetingTest, CreateTargets)
                 path << _directory << "/slave@0" << i << ":00/raw";
             }
 
-            ASSERT_EQ(t->getPath(), path.str());
+            ASSERT_EQ(t->getCFAMPath(), path.str());
             i++;
         }
     }

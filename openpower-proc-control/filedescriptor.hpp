@@ -5,7 +5,7 @@
 
 namespace openpower
 {
-namespace p9_util
+namespace util
 {
 
 /**
@@ -40,7 +40,7 @@ class FileDescriptor
         /**
          * The method to access the file descriptor value
          */
-        inline int operator()() const
+        inline auto get() const
         {
             return fd;
         }
