@@ -16,23 +16,32 @@ AC_CHECK_PROG([FIND], find, find)
 AC_CHECK_PROG([BASENAME], basename, basename)
 AC_CHECK_PROG([DIRNAME], dirname, dirname)
 
-AC_PATH_PROG([SDBUSPLUSPLUS], [sdbus++])
-AS_IF([test "x$SDBUSPLUSPLUS" == "x"],
-    AC_MSG_ERROR([Cannot find sdbus++]))
+AC_ARG_ENABLE([libopenpower_dbus],
+    AS_HELP_STRING([--disable-libopenpower_dbus], [Disable libopenpower_dbus]))
 
-# Check for baseline language coverage in the compiler for the C++14 standard
-AX_CXX_COMPILE_STDCXX_14([noext])
-AX_APPEND_COMPILE_FLAGS([-Wall -Werror], [CFLAGS])
-AX_APPEND_COMPILE_FLAGS([-Wall -Werror], [CXXFLAGS])
+AM_CONDITIONAL([WANT_LIBOPENPOWER_DBUS], [test "x$enable_libopenpower_dbus" != "xno"])
 
-# Checks for library functions.
-LT_INIT([dlopen disable-static shared])
-LT_LIB_DLLOAD
+AS_IF([test "x$enable_libopenpower_dbus" != "xno"], [
+    AC_PATH_PROG([SDBUSPLUSPLUS], [sdbus++])
+    AS_IF([test "x$SDBUSPLUSPLUS" == "x"],
+        AC_MSG_ERROR([Cannot find sdbus++]))
 
-# Create configured output
-AC_CONFIG_FILES([Makefile.interfaces],
-    [${srcdir}/generate_makefile.sh ${srcdir} > Makefile.interfaces])
+    # Check for baseline language coverage in the compiler for the C++14 standard
+    AX_CXX_COMPILE_STDCXX_14([noext])
+    AX_APPEND_COMPILE_FLAGS([-Wall -Werror], [CFLAGS])
+    AX_APPEND_COMPILE_FLAGS([-Wall -Werror], [CXXFLAGS])
+
+    # Checks for library functions.
+    LT_INIT([dlopen disable-static shared])
+    LT_LIB_DLLOAD
+
+    # Create configured output
+    AC_CONFIG_FILES([Makefile.interfaces],
+        [${srcdir}/generate_makefile.sh ${srcdir} > Makefile.interfaces])
+    AC_CONFIG_FILES([openpower-dbus-interfaces.pc])
+])
+AC_CONFIG_FILES([Makefile.yaml],
+    [${srcdir}/generate_yaml_makefile.sh ${srcdir} > Makefile.yaml])
 
 AC_CONFIG_FILES([Makefile])
-AC_CONFIG_FILES([openpower-dbus-interfaces.pc])
 AC_OUTPUT
