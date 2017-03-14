@@ -10,6 +10,9 @@ libopenpower_dbus_la_CXXFLAGS = $(SDBUSPLUS_CFLAGS)
 BUILT_SOURCES = libopenpower_dbus.cpp
 CLEANFILES = libopenpower_dbus.cpp
 
+pkgconfiglibdir = ${libdir}/pkgconfig
+pkgconfiglib_DATA = openpower-dbus-interfaces.pc
+
 clean-local: clean-dbus
 
 -include Makefile.interfaces

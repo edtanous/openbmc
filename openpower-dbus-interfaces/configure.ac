@@ -34,4 +34,5 @@ AC_CONFIG_FILES([Makefile.interfaces],
     [${srcdir}/generate_makefile.sh ${srcdir} > Makefile.interfaces])
 
 AC_CONFIG_FILES([Makefile])
+AC_CONFIG_FILES([openpower-dbus-interfaces.pc])
 AC_OUTPUT
