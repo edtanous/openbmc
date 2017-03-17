@@ -47,7 +47,7 @@ Targeting::Targeting(const std::string& fsiMasterDev,
     targets.push_back(std::make_unique<Target>(0, fsiMasterPath));
 
     //Find the the remaining P9s dynamically based on which files show up
-    std::regex exp{"slave@([0-9]{2}):00", std::regex::extended};
+    std::regex exp{"hub@00/slave@([0-9]{2}):00", std::regex::extended};
 
     for (auto& file : fs::directory_iterator(fsiSlaveBasePath))
     {
@@ -59,7 +59,7 @@ Targeting::Targeting(const std::string& fsiMasterDev,
             if (pos == 0)
             {
                 log<level::ERR>("Unexpected FSI slave device name found",
-                                entry("DEVICE_NAME=%d", path.c_str()));
+                                entry("DEVICE_NAME=%s", path.c_str()));
                 continue;
             }
 
