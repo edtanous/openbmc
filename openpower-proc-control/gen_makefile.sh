@@ -1,11 +1,15 @@
 #!/bin/bash
 
 files=()
+dir=$1
+args=("$@")
+
 echo "openpower_procedures_cpp_files = \\"
-for type in "$@";
+for ((i=1; i<${#args[@]}; ++i));
 do
+    type=${args[$i]}
     type=${type// /} #remove spaces
-    for file in $(ls procedures/$type/*.cpp);
+    for file in $(ls $dir/procedures/$type/*.cpp);
     do
         files+=($file)
     done

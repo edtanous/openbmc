@@ -42,7 +42,7 @@ AC_ARG_VAR(CHIPS, [The list of chips to build the procedures for])
 AS_IF([test "x$CHIPS" == "x"], [CHIPS="p9"])
 
 AC_CONFIG_FILES([Makefile.generated],
-    [${srcdir}/gen_makefile.sh "$myChips" > Makefile.generated],
+    [${srcdir}/gen_makefile.sh ${srcdir} "$myChips" > Makefile.generated],
     [myChips="$CHIPS"])
 
 PKG_CHECK_MODULES([PHOSPHOR_LOGGING], [phosphor-logging],, [AC_MSG_ERROR([Could not find phosphor-logging...openbmc/phosphor-logging package required])])
