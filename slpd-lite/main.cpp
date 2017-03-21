@@ -51,7 +51,6 @@ static int requestHandler(sd_event_source* es, int fd, uint32_t revents,
     //or processing of request then handle the error.
     if (rc)
     {
-        std::cerr << "SLP Error rc=" << rc << "\n";
         resp = slp::handler::processError(req, rc);
     }
 

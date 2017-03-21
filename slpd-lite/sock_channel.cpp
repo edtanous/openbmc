@@ -48,15 +48,8 @@ std::tuple<int, buffer> Channel::read()
                                &address.sockAddr,    // Address
                                &address.addrSize);   // Address Length
 
-        if (readDataLen > 0) // Data read from the socket
+        if (readDataLen == 0) // Peer has performed an orderly shutdown
         {
-            std::cout << "Channel::Read : DataIn Fd[" << sockfd << "] Req["
-                      << bufferSize << "] Recv[" << readDataLen << "]\n";
-        }
-        else if (readDataLen == 0) // Peer has performed an orderly shutdown
-        {
-            std::cerr << "Channel::Read : Connection Closed Fd[" << sockfd
-                      << "]\n";
             outBuffer.resize(0);
             rc = -1;
         }
