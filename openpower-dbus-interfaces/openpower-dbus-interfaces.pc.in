@@ -7,6 +7,5 @@ Name: openpower-dbus-interfaces
 Description: Generated sdbusplus bindings for openpower-dbus-interfaces.
 URL: https://github.com/openbmc/openpower-dbus-interfaces
 Version: @VERSION@
-Requires.private: @AX_PACKAGE_REQUIRES_PRIVATE@
 Libs: -L@libdir@ -lopenpower_dbus
 Cflags: -I@includedir@
