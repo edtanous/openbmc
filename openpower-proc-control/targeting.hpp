@@ -127,6 +127,11 @@ class Targeting
             return targets.size();
         }
 
+        /**
+         * Returns a target by position.
+         */
+        std::unique_ptr<Target>& getTarget(size_t pos);
+
     private:
 
         /**

@@ -37,6 +37,24 @@ int Target::getCFAMFD()
     return cfamFD->get();
 }
 
+std::unique_ptr<Target>& Targeting::getTarget(size_t pos)
+{
+    auto search = [pos](const auto& t)
+    {
+        return t->getPos() == pos;
+    };
+
+    auto target = find_if(targets.begin(), targets.end(), search);
+    if (target == targets.end())
+    {
+        throw std::runtime_error("Target not found: " + std::to_string(pos));
+    }
+    else
+    {
+        return *target;
+    }
+}
+
 
 Targeting::Targeting(const std::string& fsiMasterDev,
                      const std::string& fsiSlaveDir) :
