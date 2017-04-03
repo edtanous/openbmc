@@ -13,9 +13,9 @@ org.openbmc.settings.Host:
         bootflags:
             name: boot_flags
             type: s
-            default: "default"
+            default: "Default"
             validation: list
-            allowed: ["Network", "Disk", "Safe", "CDROM", "Setup", "default"]
+            allowed: ["Network", "Disk", "Safe", "CDROM", "Setup", "Default"]
         sysstate:
             name: system_state
             type: s
