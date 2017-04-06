@@ -132,15 +132,26 @@ class HostSettingsObject(DbusProperties, DbusObjectManager):
     # or the default file value if the BMC value
     # does not exist.
     def set_settings_property(self, attr_name, attr_type, value, fname):
+        default = value
+
+        # Read from file.
         bmcv = self.get_bmc_value(attr_name, fname)
         if bmcv:
             value = bmcv
-        if attr_type == "i":
-            self.Set(DBUS_NAME, attr_name, int(value))
-        elif attr_type == "s":
-            self.Set(DBUS_NAME, attr_name, str(value))
-        elif attr_type == "b":
-            self.Set(DBUS_NAME, attr_name, bool(value))
+
+        # Perform type mapping.
+        type_map = {"i": int, "s": str, "b": bool}[attr_type]
+        real_value = type_map(value)
+        real_default = type_map(default)
+
+        try:
+            self.Set(DBUS_NAME, attr_name, real_value)
+        except ValueError:
+            print("Persistent value for {} is invalid: {}{} had '{}', "
+                  "using '{}'.".format(attr_name, fname, attr_name,
+                                       value, default))
+            self.Set(DBUS_NAME, attr_name, real_default)
+            self.set_system_settings(attr_name, real_default, fname)
 
     # Save the settings to the BMC. This will write the settings value in
     # individual files named by the property name to the BMC.
