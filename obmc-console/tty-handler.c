@@ -142,6 +142,28 @@ static int set_terminal_baud(struct tty_handler *th, const char *tty_name,
 	return 0;
 }
 
+static int make_terminal_raw(struct tty_handler *th, const char *tty_name) {
+	struct termios term_options;
+
+	if (tcgetattr(th->fd, &term_options) < 0) {
+		warn("Can't get config for %s", tty_name);
+		return -1;
+	}
+
+	/* Disable various input and output processing including character
+	 * translation, line edit (canonical) mode, flow control, and special signal
+	 * generating characters. */
+	cfmakeraw(&term_options);
+
+	if (tcsetattr(th->fd, TCSAFLUSH, &term_options) < 0) {
+		warn("Couldn't commit terminal options for %s", tty_name);
+		return -1;
+	}
+	printf("Set %s for raw byte handling\n", tty_name);
+
+	return 0;
+}
+
 static int tty_init(struct handler *handler, struct console *console,
 		struct config *config __attribute__((unused)))
 {
@@ -178,6 +200,9 @@ static int tty_init(struct handler *handler, struct console *console,
 		if (set_terminal_baud(th, tty_name, tty_baud) != 0)
 			fprintf(stderr, "Couldn't set baud rate for %s to %s\n",
 					tty_name, tty_baud);
+
+	if (make_terminal_raw(th, tty_name) != 0)
+		fprintf(stderr, "Couldn't make %s a raw terminal\n", tty_name);
 
 	th->poller = console_register_poller(console, handler, tty_poll,
 			th->fd, POLLIN, NULL);
