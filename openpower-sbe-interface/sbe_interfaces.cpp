@@ -2,11 +2,14 @@
 #include <stdexcept>
 #include <array>
 #include "sbe_interfaces.hpp"
+#include "sbe_chipOp_handler.hpp"
 
 namespace openpower
 {
 namespace sbe
 {
+
+constexpr size_t RESP_HEADER_LEN = 0x3;
 
 //Helper interfaces
 static inline uint32_t upper(uint64_t value)
@@ -29,6 +32,7 @@ static constexpr sbe_word_t READ_OPCODE  = 0x0000A201;
 static constexpr sbe_word_t WRITE_OPCODE = 0x0000A202;
 static constexpr size_t READ_CMD_LENGTH = 0x4;
 static constexpr size_t WRITE_CMD_LENGTH = 0x6;
+static constexpr size_t READ_RESP_LENGTH = 0x2;
 
 //Reading SCOM Registers
 uint64_t read(const char* devPath,
@@ -51,11 +55,16 @@ uint64_t read(const char* devPath,
         lower(address)
     };
 
-    std::cout << "Size of read command buffer:" << command.size();
+    //Buffer to hold the response data along with the SBE header
+    const size_t respLength = RESP_HEADER_LEN + READ_RESP_LENGTH ;
+    std::array<sbe_word_t, respLength> response = {};
 
-    // TODO: Call an interface to read the command to the SBE FIFO and read the
-    // response from the SBE FIFO device
+    //Write the command buffer to the SBE FIFO and obtain the response from the
+    //SBE FIFO device.This interface will parse the obtained SBE response and
+    //any internal SBE failures will be communicated via exceptions
+    invokeSBEChipOperation(devPath, command, response);
 
+    value = (((static_cast<uint64_t>(response[0])) << 32) | response[1]);
     return value;
 }
 
@@ -80,11 +89,14 @@ void write(const char* devPath,
         lower(data)
     };
 
-    std::cout << "Size of write command buffer:" << command.size();
- 
-    // TODO: Call an interface to write the command to the SBE FIFO and read the
-    // response from the SBE FIFO device
+    //Buffer to hold the SBE response status
+    const size_t respLength = RESP_HEADER_LEN;
+    std::array<sbe_word_t, respLength> response = {};
 
+    //Write the command buffer to the SBE FIFO and obtain the response from the
+    //SBE FIFO device.This interface will parse the obtained SBE response and
+    //any internal SBE failures will be communicated via exceptions
+    invokeSBEChipOperation(devPath, command, response);
 }
 
 } // namespace scom
