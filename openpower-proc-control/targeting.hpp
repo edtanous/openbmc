@@ -10,9 +10,16 @@ namespace targeting
 {
 
 constexpr auto fsiMasterDevPath =
+    "/sys/devices/platform/gpio-fsi/fsi0/slave@00:00/raw";
+constexpr auto fsiMasterDevPathOld =
     "/sys/devices/platform/fsi-master/slave@00:00/raw";
 
-constexpr auto fsiSlaveBaseDir = "/sys/devices/platform/fsi-master/slave@00:00/hub@00/";
+constexpr auto fsiSlaveBaseDir =
+    "/sys/devices/platform/gpio-fsi/fsi0/slave@00:00/00:00:00:0a/";
+constexpr auto fsiSlaveBaseDirOld =
+    "/sys/devices/platform/fsi-master/slave@00:00/hub@00/";
+
+typedef uint32_t (*swap_endian_t)(uint32_t);
 
 /**
  * Represents a specific P9 processor in the system.  Used by
@@ -27,9 +34,11 @@ class Target
          *
          * @param[in] - The logical position of the target
          * @param[in] - The sysfs device path
+         * @param[in] - The function pointer for swapping endianness
          */
-        Target(size_t position, const std::string& devPath) :
-            pos(position), cfamPath(devPath)
+        Target(size_t position, const std::string& devPath,
+               const swap_endian_t swapper) :
+            pos(position), cfamPath(devPath), doSwapEndian(swapper)
         {
         }
 
@@ -61,6 +70,16 @@ class Target
          */
         int getCFAMFD();
 
+        /**
+         * Returns correct byte-order data. (May or may not swap it depending
+         * on the function received during construction from Targeting and the
+         * host endianness).
+         */
+        inline uint32_t swapEndian(uint32_t data) const
+        {
+            return doSwapEndian(data);
+        }
+
     private:
 
         /**
@@ -77,6 +96,11 @@ class Target
          * The file descriptor to use for read/writeCFAMReg
          */
         std::unique_ptr<openpower::util::FileDescriptor> cfamFD;
+
+        /**
+         * The function pointer for swapping endianness
+         */
+        const swap_endian_t doSwapEndian;
 };
 
 
@@ -137,12 +161,12 @@ class Targeting
         /**
          * The path to the fsi-master sysfs device to access
          */
-        const std::string fsiMasterPath;
+        std::string fsiMasterPath;
 
         /**
          * The path to the fsi slave sysfs base directory
          */
-        const std::string fsiSlaveBasePath;
+        std::string fsiSlaveBasePath;
 
         /**
          * A container of Targets in the system

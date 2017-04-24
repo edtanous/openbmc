@@ -13,6 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+#include <endian.h>
 #include <experimental/filesystem>
 #include <phosphor-logging/log.hpp>
 #include <regex>
@@ -56,17 +58,41 @@ std::unique_ptr<Target>& Targeting::getTarget(size_t pos)
 }
 
 
+static uint32_t noEndianSwap(uint32_t data)
+{
+    return data;
+}
+
+static uint32_t endianSwap(uint32_t data)
+{
+    return htobe32(data);
+}
+
 Targeting::Targeting(const std::string& fsiMasterDev,
                      const std::string& fsiSlaveDir) :
     fsiMasterPath(fsiMasterDev),
     fsiSlaveBasePath(fsiSlaveDir)
 {
+    swap_endian_t swapper = endianSwap;
+    std::regex exp{"fsi1/slave@([0-9]{2}):00", std::regex::extended};
+
+    if (!fs::exists(fsiMasterPath))
+    {
+        std::regex expOld{"hub@00/slave@([0-9]{2}):00", std::regex::extended};
+
+        //Fall back to old (4.7) path
+        exp = expOld;
+        fsiMasterPath = fsiMasterDevPathOld;
+        fsiSlaveBasePath = fsiSlaveBaseDirOld;
+
+        //And don't swap the endianness of CFAM data
+        swapper = noEndianSwap;
+    }
+
     //Always create P0, the FSI master.
-    targets.push_back(std::make_unique<Target>(0, fsiMasterPath));
+    targets.push_back(std::make_unique<Target>(0, fsiMasterPath, swapper));
 
     //Find the the remaining P9s dynamically based on which files show up
-    std::regex exp{"hub@00/slave@([0-9]{2}):00", std::regex::extended};
-
     for (auto& file : fs::directory_iterator(fsiSlaveBasePath))
     {
         std::smatch match;
@@ -83,7 +109,7 @@ Targeting::Targeting(const std::string& fsiMasterDev,
 
             path += "/raw";
 
-            targets.push_back(std::make_unique<Target>(pos, path));
+            targets.push_back(std::make_unique<Target>(pos, path, swapper));
         }
     }
 

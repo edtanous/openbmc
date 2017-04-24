@@ -55,6 +55,8 @@ void writeReg(const std::unique_ptr<Target>& target,
         throw std::runtime_error(msg);
     }
 
+    data = target->swapEndian(data);
+
     rc = write(target->getCFAMFD(), &data, cfamRegSize);
     if (rc < 0)
     {
@@ -95,7 +97,7 @@ cfam_data_t readReg(const std::unique_ptr<Target>& target,
         throw std::runtime_error(msg);
     }
 
-    return data;
+    return target->swapEndian(data);
 }
 
 

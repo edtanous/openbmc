@@ -43,7 +43,7 @@ class TargetingTest : public ::testing::Test
 
             _slaveBaseDir = path;
 
-            _slaveDir = _slaveBaseDir / "hub@00";
+            _slaveDir = _slaveBaseDir / "fsi1";
             fs::create_directory(_slaveDir);
         }
 
