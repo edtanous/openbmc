@@ -17,7 +17,9 @@
 #include <functional>
 #include <iostream>
 #include <phosphor-logging/log.hpp>
+#include <phosphor-logging/elog.hpp>
 #include "registration.hpp"
+#include "elog-errors.hpp"
 
 using namespace openpower::util;
 
@@ -34,6 +36,7 @@ void usage(char** argv, const ProcedureMap& procedures)
 
 int main(int argc, char** argv)
 {
+    using namespace phosphor::logging;
     const ProcedureMap& procedures = Registration::getProcedures();
 
     if (argc != 2)
@@ -56,10 +59,24 @@ int main(int argc, char** argv)
     {
         procedure->second();
     }
-    catch (std::exception& e)
+    catch (org::open_power::Proc::CFAM::SeekFailure& e)
     {
-        //TODO: commit an actual error that does a callout
-        phosphor::logging::log<phosphor::logging::level::ERR>(e.what());
+        commit<org::open_power::Proc::CFAM::SeekFailure>();
+        return -1;
+    }
+    catch (org::open_power::Proc::CFAM::OpenFailure& e)
+    {
+        commit<org::open_power::Proc::CFAM::OpenFailure>();
+        return -1;
+    }
+    catch (org::open_power::Proc::CFAM::WriteFailure& e)
+    {
+        commit<org::open_power::Proc::CFAM::WriteFailure>();
+        return -1;
+    }
+    catch (org::open_power::Proc::CFAM::ReadFailure& e)
+    {
+        commit<org::open_power::Proc::CFAM::ReadFailure>();
         return -1;
     }
 

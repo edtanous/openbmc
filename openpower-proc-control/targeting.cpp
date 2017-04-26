@@ -18,7 +18,10 @@
 #include <experimental/filesystem>
 #include <phosphor-logging/log.hpp>
 #include <regex>
+#include <phosphor-logging/elog.hpp>
+#include "elog-errors.hpp"
 #include "targeting.hpp"
+
 
 namespace openpower
 {
@@ -91,26 +94,34 @@ Targeting::Targeting(const std::string& fsiMasterDev,
 
     //Always create P0, the FSI master.
     targets.push_back(std::make_unique<Target>(0, fsiMasterPath, swapper));
-
-    //Find the the remaining P9s dynamically based on which files show up
-    for (auto& file : fs::directory_iterator(fsiSlaveBasePath))
+    try
     {
-        std::smatch match;
-        std::string path = file.path();
-        if (std::regex_search(path, match, exp))
+        //Find the the remaining P9s dynamically based on which files show up
+        for (auto& file : fs::directory_iterator(fsiSlaveBasePath))
         {
-            auto pos = atoi(match[1].str().c_str());
-            if (pos == 0)
+            std::smatch match;
+            std::string path = file.path();
+            if (std::regex_search(path, match, exp))
             {
-                log<level::ERR>("Unexpected FSI slave device name found",
-                                entry("DEVICE_NAME=%s", path.c_str()));
-                continue;
+                auto pos = atoi(match[1].str().c_str());
+                if (pos == 0)
+                {
+                    log<level::ERR>("Unexpected FSI slave device name found",
+                                    entry("DEVICE_NAME=%s", path.c_str()));
+                    continue;
+                }
+
+                path += "/raw";
+
+                targets.push_back(std::make_unique<Target>(pos, path, swapper));
             }
-
-            path += "/raw";
-
-            targets.push_back(std::make_unique<Target>(pos, path, swapper));
         }
+    }
+    catch (fs::filesystem_error& e)
+    {
+        elog<org::open_power::Proc::CFAM::OpenFailure>(
+            org::open_power::Proc::CFAM::OpenFailure::ERRNO(e.code().value()),
+            org::open_power::Proc::CFAM::OpenFailure::PATH(e.path1().c_str()));
     }
 
     auto sortTargets = [](const std::unique_ptr<Target>& left,

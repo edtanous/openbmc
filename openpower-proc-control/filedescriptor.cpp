@@ -16,6 +16,8 @@
 #include <stdexcept>
 #include <unistd.h>
 #include "filedescriptor.hpp"
+#include <phosphor-logging/elog.hpp>
+#include "elog-errors.hpp"
 
 namespace openpower
 {
@@ -24,15 +26,15 @@ namespace util
 
 FileDescriptor::FileDescriptor(const std::string& path)
 {
+    using namespace phosphor::logging;
+
     fd = open(path.c_str(), O_RDWR | O_SYNC);
 
     if (fd < 0)
     {
-        //Future: use a different exception to create an error log
-        char msg[200];
-        sprintf(msg, "Failed to open FSI device path %s.  errno = %d",
-                path.c_str(), errno);
-        throw std::runtime_error(msg);
+        elog<org::open_power::Proc::CFAM::OpenFailure>(
+            org::open_power::Proc::CFAM::OpenFailure::ERRNO(errno),
+            org::open_power::Proc::CFAM::OpenFailure::PATH(path.c_str()));
     }
 }
 
