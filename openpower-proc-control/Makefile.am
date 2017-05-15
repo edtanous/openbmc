@@ -13,8 +13,10 @@ openpower_proc_control_SOURCES = \
 
 CLEANFILES = openpower_procedures.cpp
 
-openpower_proc_control_LDFLAGS = $(PHOSPHOR_LOGGING_LIBS) -lstdc++fs
-openpower_proc_control_CXXFLAGS = $(PHOSPHOR_LOGGING_CFLAGS)
+openpower_proc_control_LDFLAGS = $(PHOSPHOR_LOGGING_LIBS) -lstdc++fs \
+                                 $(PHOSPHOR_DBUS_INTERFACES_LIBS)
+openpower_proc_control_CXXFLAGS = $(PHOSPHOR_LOGGING_CFLAGS) \
+                                  $(PHOSPHOR_DBUS_INTERFACES_CFLAGS)
 
 SUBDIRS = test
 

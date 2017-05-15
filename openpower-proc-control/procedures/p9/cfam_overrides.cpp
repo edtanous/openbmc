@@ -5,6 +5,8 @@
 #include "p9_cfam.hpp"
 #include "registration.hpp"
 #include "targeting.hpp"
+#include "elog-errors.hpp"
+#include <xyz/openbmc_project/Common/error.hpp>
 
 /* File /var/lib/obmc/cfam_overrides requires whitespace-separated parameters
 Pos Address Data Mask with one register write per line. For example:
@@ -51,8 +53,13 @@ void CFAMOverride() {
                     }
                     else
                     {
-                        throw std::runtime_error("Cannot write to register - "
-                                "not enough parameters given.");
+                        namespace error =
+                            sdbusplus::xyz::openbmc_project::Common::Error;
+                        namespace metadata =
+                            phosphor::logging::xyz::openbmc_project::Common;
+                        phosphor::logging::elog<error::InvalidArgument>(
+                            metadata::InvalidArgument::ARGUMENT_NAME("line"),
+                            metadata::InvalidArgument::ARGUMENT_VALUE(line.c_str()));
                     }
                 }
             }

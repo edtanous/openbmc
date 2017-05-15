@@ -17,6 +17,23 @@ namespace openbmc_project
 {
 namespace Common
 {
+namespace Error
+{
+    struct Timeout;
+} // namespace Error
+} // namespace Common
+} // namespace openbmc_project
+} // namespace xyz
+} // namespace sdbusplus
+
+namespace sdbusplus
+{
+namespace xyz
+{
+namespace openbmc_project
+{
+namespace Common
+{
 namespace Callout
 {
 namespace Error
@@ -117,6 +134,23 @@ namespace openbmc_project
 {
 namespace Common
 {
+namespace Error
+{
+    struct InternalFailure;
+} // namespace Error
+} // namespace Common
+} // namespace openbmc_project
+} // namespace xyz
+} // namespace sdbusplus
+
+namespace sdbusplus
+{
+namespace xyz
+{
+namespace openbmc_project
+{
+namespace Common
+{
 namespace Callout
 {
 namespace Error
@@ -167,6 +201,23 @@ namespace Error
 } // namespace Proc
 } // namespace open_power
 } // namespace org
+} // namespace sdbusplus
+
+namespace sdbusplus
+{
+namespace xyz
+{
+namespace openbmc_project
+{
+namespace Common
+{
+namespace Error
+{
+    struct InvalidArgument;
+} // namespace Error
+} // namespace Common
+} // namespace openbmc_project
+} // namespace xyz
 } // namespace sdbusplus
 
 namespace sdbusplus
@@ -803,6 +854,186 @@ template <>
 struct map_exception_type<sdbusplus::org::open_power::Proc::CFAM::Error::SeekFailure>
 {
     using type = org::open_power::Proc::CFAM::SeekFailure;
+};
+
+}
+
+namespace xyz
+{
+namespace openbmc_project
+{
+namespace Common
+{
+namespace _Timeout
+{
+
+struct TIMEOUT_IN_MSEC
+{
+    static constexpr auto str = "TIMEOUT_IN_MSEC=%llu";
+    static constexpr auto str_short = "TIMEOUT_IN_MSEC";
+    using type = std::tuple<std::decay_t<decltype(str)>,uint64_t>;
+    explicit constexpr TIMEOUT_IN_MSEC(uint64_t a) : _entry(entry(str, a)) {};
+    type _entry;
+};
+
+}  // namespace _Timeout
+
+struct Timeout : public sdbusplus::exception_t
+{
+    static constexpr auto errName = "xyz.openbmc_project.Common.Timeout";
+    static constexpr auto errDesc = "Operation timed out.";
+    static constexpr auto L = level::INFO;
+    using TIMEOUT_IN_MSEC = _Timeout::TIMEOUT_IN_MSEC;
+    using metadata_types = std::tuple<TIMEOUT_IN_MSEC>;
+
+    const char* name() const noexcept
+    {
+        return errName;
+    }
+
+    const char* description() const noexcept
+    {
+        return errDesc;
+    }
+
+    const char* what() const noexcept
+    {
+        return errName;
+    }
+};
+
+} // namespace Common
+} // namespace openbmc_project
+} // namespace xyz
+
+
+namespace details
+{
+
+template <>
+struct map_exception_type<sdbusplus::xyz::openbmc_project::Common::Error::Timeout>
+{
+    using type = xyz::openbmc_project::Common::Timeout;
+};
+
+}
+
+namespace xyz
+{
+namespace openbmc_project
+{
+namespace Common
+{
+namespace _InvalidArgument
+{
+
+struct ARGUMENT_NAME
+{
+    static constexpr auto str = "ARGUMENT_NAME=%s";
+    static constexpr auto str_short = "ARGUMENT_NAME";
+    using type = std::tuple<std::decay_t<decltype(str)>,const char*>;
+    explicit constexpr ARGUMENT_NAME(const char* a) : _entry(entry(str, a)) {};
+    type _entry;
+};
+struct ARGUMENT_VALUE
+{
+    static constexpr auto str = "ARGUMENT_VALUE=%s";
+    static constexpr auto str_short = "ARGUMENT_VALUE";
+    using type = std::tuple<std::decay_t<decltype(str)>,const char*>;
+    explicit constexpr ARGUMENT_VALUE(const char* a) : _entry(entry(str, a)) {};
+    type _entry;
+};
+
+}  // namespace _InvalidArgument
+
+struct InvalidArgument : public sdbusplus::exception_t
+{
+    static constexpr auto errName = "xyz.openbmc_project.Common.InvalidArgument";
+    static constexpr auto errDesc = "Invalid argument was given.";
+    static constexpr auto L = level::INFO;
+    using ARGUMENT_NAME = _InvalidArgument::ARGUMENT_NAME;
+    using ARGUMENT_VALUE = _InvalidArgument::ARGUMENT_VALUE;
+    using metadata_types = std::tuple<ARGUMENT_NAME, ARGUMENT_VALUE>;
+
+    const char* name() const noexcept
+    {
+        return errName;
+    }
+
+    const char* description() const noexcept
+    {
+        return errDesc;
+    }
+
+    const char* what() const noexcept
+    {
+        return errName;
+    }
+};
+
+} // namespace Common
+} // namespace openbmc_project
+} // namespace xyz
+
+
+namespace details
+{
+
+template <>
+struct map_exception_type<sdbusplus::xyz::openbmc_project::Common::Error::InvalidArgument>
+{
+    using type = xyz::openbmc_project::Common::InvalidArgument;
+};
+
+}
+
+namespace xyz
+{
+namespace openbmc_project
+{
+namespace Common
+{
+namespace _InternalFailure
+{
+
+
+}  // namespace _InternalFailure
+
+struct InternalFailure : public sdbusplus::exception_t
+{
+    static constexpr auto errName = "xyz.openbmc_project.Common.InternalFailure";
+    static constexpr auto errDesc = "The operation failed internally.";
+    static constexpr auto L = level::ERR;
+    using metadata_types = std::tuple<>;
+
+    const char* name() const noexcept
+    {
+        return errName;
+    }
+
+    const char* description() const noexcept
+    {
+        return errDesc;
+    }
+
+    const char* what() const noexcept
+    {
+        return errName;
+    }
+};
+
+} // namespace Common
+} // namespace openbmc_project
+} // namespace xyz
+
+
+namespace details
+{
+
+template <>
+struct map_exception_type<sdbusplus::xyz::openbmc_project::Common::Error::InternalFailure>
+{
+    using type = xyz::openbmc_project::Common::InternalFailure;
 };
 
 }

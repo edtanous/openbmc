@@ -46,6 +46,6 @@ AC_CONFIG_FILES([Makefile.generated],
     [myChips="$CHIPS"])
 
 PKG_CHECK_MODULES([PHOSPHOR_LOGGING], [phosphor-logging],, [AC_MSG_ERROR([Could not find phosphor-logging...openbmc/phosphor-logging package required])])
-
+PKG_CHECK_MODULES([PHOSPHOR_DBUS_INTERFACES], [phosphor-dbus-interfaces], [], [AC_MSG_ERROR(["phosphor-dbus-interfaces required and not found."])])
 AC_CONFIG_FILES([Makefile test/Makefile])
 AC_OUTPUT
