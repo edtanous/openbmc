@@ -1,0 +1,8 @@
+description: >
+    Implement to indicate status of the OCC.
+
+properties:
+    - name: OccActive
+      type: boolean
+      description: >
+        Indicates whether OCC is active or not
