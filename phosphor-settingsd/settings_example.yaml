@@ -1,0 +1,9 @@
+/xyz/openbmc_project/control/host0/boot_mode:
+    Interface: xyz.openbmc_project.Control.Boot.Mode
+    Defaults:
+        BootMode: Mode::Modes::Safe
+
+/xyz/openbmc_project/control/host1/boot_mode:
+    Interface: xyz.openbmc_project.Control.Boot.Mode
+    Defaults:
+        BootMode: Mode::Modes::Regular
