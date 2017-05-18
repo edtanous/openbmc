@@ -18,6 +18,7 @@
 #include "p9_cfam.hpp"
 #include "registration.hpp"
 #include "targeting.hpp"
+#include "ext_interface.hpp"
 
 namespace openpower
 {
@@ -65,7 +66,25 @@ void startHost()
 
     //Kick off the SBE to start the boot
 
-    //First ensure ISTEP stepping isn't enabled
+    // Choose seeprom side to boot from
+    cfam_data_t sbeSide = 0;
+    if(getBootCount() > 1)
+    {
+        sbeSide = 0;
+        log<level::INFO>("Setting SBE seeprom side to 0",
+                entry("SBE_SIDE_SELECT=%d", 0));
+    }
+    else
+    {
+        sbeSide = 0x00004000;
+        log<level::INFO>("Setting SBE seeprom side to 1",
+                entry("SBE_SIDE_SELECT=%d", 1));
+    }
+    // Bit 17 of the ctrl status reg indicates sbe seeprom boot side
+    // 0 -> Side 0, 1 -> Side 1
+    writeRegWithMask(master, P9_SBE_CTRL_STATUS, sbeSide, 0x00004000);
+
+    //Ensure ISTEP stepping isn't enabled
     writeRegWithMask(master, P9_SCRATCH_REGISTER_8, 0x20000000, 0x20000000);
 
     //Start the SBE
