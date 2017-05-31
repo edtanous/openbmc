@@ -4,6 +4,8 @@
 
 <%
 objects = list(settingsDict.viewkeys())
+ns_list = []
+includes = []
 
 def get_setting_type(setting_intf):
     setting = "sdbusplus::" + setting_intf.replace('.', '::')
@@ -15,7 +17,6 @@ def get_setting_type(setting_intf):
 
 % for object in objects:
 <%
-    includes = []
     include = settingsDict[object]['Interface']
     include = include.replace('.', '/')
     include = include + "/server.hpp"
@@ -28,7 +29,6 @@ def get_setting_type(setting_intf):
 
 % for object in objects:
 <%
-    ns_list = []
     ns = get_setting_type(settingsDict[object]['Interface'])
     i = ns.rfind('::')
     ns = ns[:i]
