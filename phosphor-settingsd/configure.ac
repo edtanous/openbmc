@@ -28,12 +28,6 @@ AS_IF([test "x$SETTINGS_BUSNAME" == "x"],\
 AC_DEFINE_UNQUOTED([SETTINGS_BUSNAME], ["$SETTINGS_BUSNAME"],\
     [The DBus busname to own])
 
-AC_ARG_VAR(SETTINGS_ROOT, [The settings Dbus root])
-AS_IF([test "x$SETTINGS_ROOT" == "x"],\
-    [SETTINGS_ROOT="/xyz/openbmc_project/settings"])
-AC_DEFINE_UNQUOTED([SETTINGS_ROOT], ["$SETTINGS_ROOT"],\
-    [The settings Dbus root])
-
 AS_IF([test "x$SETTINGS_YAML" == "x"], [SETTINGS_YAML="settings_example.yaml"])
 SETTINGSGEN="$PYTHON $srcdir/settings.py -i $SETTINGS_YAML"
 AC_SUBST(SETTINGSGEN)

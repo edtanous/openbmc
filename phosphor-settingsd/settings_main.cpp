@@ -7,8 +7,10 @@ int main(int argc, char *argv[])
 {
     auto bus = sdbusplus::bus::new_default();
 
-    // Add sdbusplus ObjectManager for the settings root.
-    sdbusplus::server::manager::manager objManager(bus, SETTINGS_ROOT);
+    // Add sdbusplus ObjectManager. The settings objects are spread across
+    // the object namespace and are not under a (settings) root. Hence register
+    // "/" as the path.
+    sdbusplus::server::manager::manager objManager(bus, "/");
 
     phosphor::settings::Manager mgr(bus);
 
