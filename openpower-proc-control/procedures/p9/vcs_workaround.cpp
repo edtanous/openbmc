@@ -39,6 +39,18 @@ void vcsWorkaround()
     Targeting targets;
     const auto& master = *(targets.begin());
 
+    // First determine if we need to run this workaround (not needed on chips
+    // which are not DD1.0)
+    // Mixing DD1.0 parts with other levels is not allowed so just look
+    // at the first chip
+    auto chipID = readReg(master, P9_FSI2PIB_CHIPID);
+    if (chipID != P9_DD10_CHIPID)
+    {
+        log<level::INFO>("P9 procedure vcsWorkaround not needed",
+                         entry("CHIPID=0x%08X", chipID));
+        return;
+    }
+
     log<level::INFO>("Running P9 procedure vcsWorkaround",
                      entry("NUM_PROCS=%d", targets.size()));
 
