@@ -48,7 +48,7 @@ ipmi_ret_t ipmi_ibm_oem_partial_esel(ipmi_netfn_t netfn, ipmi_cmd_t cmd,
 		printf("Used Reservation ID = %d\n", used_res_id);
 		rc = IPMI_CC_INVALID_RESERVATION_ID;
 
-		// clean g_esel_path. 
+		// clean g_esel_path.
 		r = remove(g_esel_path);
 		if(r < 0)
 			fprintf(stderr, "Error deleting %s\n", g_esel_path);
@@ -64,9 +64,6 @@ ipmi_ret_t ipmi_ibm_oem_partial_esel(ipmi_netfn_t netfn, ipmi_cmd_t cmd,
 		pio = "rb+";
 
 	rlen = (*data_len) - (uint8_t) (sizeof(esel_request_t));
-
-	printf("IPMI PARTIAL ESEL for %s  Offset = %d Length = %d\n",
-		g_esel_path, esel_req.offset, rlen);
 
 	if ((fp = fopen(g_esel_path, pio)) != NULL) {
 		fseek(fp, esel_req.offset, SEEK_SET);
@@ -116,7 +113,7 @@ ipmi_ret_t ipmi_ibm_oem_prep_fw_update(ipmi_netfn_t netfn, ipmi_cmd_t cmd,
     rc = WEXITSTATUS(rc);
     if (rc != 0) {
         fprintf(stderr, "fw_setenv openbmconce failed with rc=%d\n", rc);
-        return IPMI_CC_UNSPECIFIED_ERROR; 
+        return IPMI_CC_UNSPECIFIED_ERROR;
     }
 
     // Touch the image-rwfs file to perform an empty update to force the save
