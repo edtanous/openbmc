@@ -32,5 +32,12 @@ AS_IF([test "x$SETTINGS_YAML" == "x"], [SETTINGS_YAML="settings_example.yaml"])
 SETTINGSGEN="$PYTHON $srcdir/settings.py -i $SETTINGS_YAML"
 AC_SUBST(SETTINGSGEN)
 
+AC_ARG_VAR(SETTINGS_PERSIST_PATH, \
+    [Path of directory housing persisted settings.])
+AS_IF([test "x$SETTINGS_PERSIST_PATH" == "x"], \
+    [SETTINGS_PERSIST_PATH="/var/lib/phosphor-settings-manager/settings"])
+AC_DEFINE_UNQUOTED([SETTINGS_PERSIST_PATH], ["$SETTINGS_PERSIST_PATH"], \
+    [Path of directory housing persisted settings])
+
 AC_CONFIG_FILES([Makefile])
 AC_OUTPUT
