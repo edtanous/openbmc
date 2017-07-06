@@ -15,7 +15,7 @@ constexpr auto fsiMasterDevPathOld =
     "/sys/devices/platform/fsi-master/slave@00:00/raw";
 
 constexpr auto fsiSlaveBaseDir =
-    "/sys/devices/platform/gpio-fsi/fsi0/slave@00:00/00:00:00:0a/";
+    "/sys/devices/platform/gpio-fsi/fsi0/slave@00:00/00:00:00:0a/fsi1/";
 constexpr auto fsiSlaveBaseDirOld =
     "/sys/devices/platform/fsi-master/slave@00:00/hub@00/";
 
