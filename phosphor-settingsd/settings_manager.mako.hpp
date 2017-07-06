@@ -111,9 +111,9 @@ class Impl : public Parent
         }
         using Base::${t};
 
+% endfor
     private:
         fs::path path;
-% endfor
 };
 
 template<class Archive>
