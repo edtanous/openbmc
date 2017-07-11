@@ -1,6 +1,7 @@
 #include <iostream>
 #include <stdexcept>
 #include <array>
+#include <endian.h>
 #include "sbe_interfaces.hpp"
 #include "sbe_chipOp_handler.hpp"
 
@@ -46,13 +47,15 @@ uint64_t read(const char* devPath,
         throw std::runtime_error("NULL FIFO device path");
     }
 
-    //Build SCOM read request command
+    //Build SCOM read request command.
+    //Handle byte order mismatch ,SBE is big endian and BMC is
+    //little endian.
     std::array<sbe_word_t, READ_CMD_LENGTH> command =
     {
         static_cast<sbe_word_t>(READ_CMD_LENGTH),
-        READ_OPCODE,
-        upper(address),
-        lower(address)
+        htobe32(READ_OPCODE),
+        htobe32(upper(address)),
+        htobe32(lower(address))
     };
 
     //Buffer to hold the response data along with the SBE header
@@ -79,14 +82,16 @@ void write(const char* devPath,
     }
 
     //Build SCOM write request command
+    //Handle byte order mismatch, SBE is big endian and BMC is
+    //little endian.
     std::array<sbe_word_t, WRITE_CMD_LENGTH> command =
     {
         static_cast<sbe_word_t>(WRITE_CMD_LENGTH),
-        WRITE_OPCODE,
-        upper(address),
-        lower(address),
-        upper(data),
-        lower(data)
+        htobe32(WRITE_OPCODE),
+        htobe32(upper(address)),
+        htobe32(lower(address)),
+        htobe32(upper(data)),
+        htobe32(lower(data))
     };
 
     //Buffer to hold the SBE response status

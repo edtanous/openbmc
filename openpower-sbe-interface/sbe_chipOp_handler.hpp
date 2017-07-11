@@ -5,6 +5,7 @@
 #include <sstream>
 #include <algorithm>
 #include <vector>
+#include <sbe_interfaces.hpp>
 
 namespace openpower
 {
@@ -31,25 +32,26 @@ namespace internal
  *
  * @return Response buffer returned by the SBE for the input command.
  */
-std::vector<sbe_word_t> write(const char* devPath,
-                              const sbe_word_t* cmdBuffer,
-                              size_t cmdBufLen,
-                              size_t respBufLen);
+std::vector<sbe_word_t> writeToFifo(const char* devPath,
+                                    const sbe_word_t* cmdBuffer,
+                                    size_t cmdBufLen,
+                                    size_t respBufLen);
 
 /**
- * @brief Helper function for invokeSBEChipOperation(), to parse the data
- * obtained from the SBE. The header and SBE response will be verified and on
- * success the required data will be returned to the caller. SBE interface
- * failure will be conveyed via respective exceptions.
+ * @brief Helper function for invokeSBEChipOperation(), to parse and validate
+ * the data obtained from the SBE. Input buffer will be validated and on failure
+ * the FFDC content will be extracted and returned to the caller via
+ * respective exception. On success the input buffer will be modified to have
+ * only valid response data after removing the header content.
  *
  * Exceptions thrown for:
  * - SBE Internal failures
  *
- * @param[in] SBE data obtained from the SBE FIFO device
- * @return Valid chip operation response obtained by SBE.
+ * @param[in/out] On input  - SBE data obtained from the SBE FIFO device.
+ *                On output - Chip operation data after removing the response
+ *                            header.
  */
-std::vector<sbe_word_t> parseResponse(
-    const std::vector<sbe_word_t>& sbeDataBuf);
+void parseResponse(std::vector<sbe_word_t>& sbeDataBuf);
 
 }//end of internal namespace
 
@@ -74,25 +76,26 @@ inline void invokeSBEChipOperation(const char* devPath,
                                    std::array<sbe_word_t, S2>& chipOpData)
 {
     //Write and read from the FIFO device.
-    auto sbeFifoResp = internal::write(devPath, request.data(), request.size(),
-                                       chipOpData.size());
+    auto sbeFifoResp = internal::writeToFifo(devPath, request.data(),
+                       request.size(), chipOpData.size());
 
     //Parse the obtained data
-    auto response = internal::parseResponse(sbeFifoResp);
-
-    if (response.size() != chipOpData.size())
+    internal::parseResponse(sbeFifoResp);
+    //Above interface would have stripped the SBE header content from the input
+    //response buffer.
+    if (sbeFifoResp.size() > chipOpData.size())
     {
         //TODO:use elog infrastructure
         std::ostringstream errMsg;
-        errMsg << "Obtained chip operation response length (" << response.size()
-               << "from SBE is not equal to the expected length of data (" <<
-               chipOpData.size();
+        errMsg << "Obtained chip operation response length (" <<
+               sbeFifoResp.size() << "from SBE is greater than maximum expected"
+               " lenght:" << chipOpData.size();
 
         throw std::runtime_error(errMsg.str().c_str());
     }
 
     //Move the contents of response buffer into the output buffer.
-    std::move(response.begin(), response.end(), chipOpData.begin());
+    std::move(sbeFifoResp.begin(), sbeFifoResp.end(), chipOpData.begin());
 }
 
 }

@@ -2,7 +2,8 @@ include_HEADERS = \
     sbe_interfaces.hpp
 
 noinst_HEADERS = \
-    sbe_chipOp_handler.hpp
+    sbe_chipOp_handler.hpp \
+    file.hpp
 
 libsbeinterfacedir = ${libdir}/sbe-interface
 libsbeinterface_LTLIBRARIES = libsbeinterface.la
