@@ -17,6 +17,8 @@ PKG_CHECK_MODULES([SYSTEMD], [libsystemd >= 221])
 # Checks for header files.
 AC_CHECK_HEADER(systemd/sd-bus.h, ,[AC_MSG_ERROR([Could not find systemd/sd-bus.h...systemd development package required])])
 AC_CHECK_HEADER(host-ipmid/ipmid-api.h, ,[AC_MSG_ERROR([Could not find host-ipmid/ipmid-api.h...host-ipmid package required])])
+PKG_CHECK_MODULES([OPENPOWER_DBUS_INTERFACES], [openpower-dbus-interfaces],,
+                  [AC_MSG_ERROR([Could not find openpower-dbus-interfaces...openbmc/openpower-dbus-interfaces package required])])
 
 # Checks for typedefs, structures, and compiler characteristics.
 AX_CXX_COMPILE_STDCXX(14, [noext])
@@ -46,6 +48,18 @@ AS_IF([test "x$enable_oe_sdk" == "xyes"],
     ]
     AC_SUBST([OESDK_TESTCASE_FLAGS], [$testcase_flags])
 )
+
+# Host object name in the D-Bus
+AC_ARG_VAR(HOST_NAME, [The Host name in the object path])
+AS_IF([test "x$HOST_NAME" == "x"],
+      [HOST_NAME="host"])
+AC_DEFINE_UNQUOTED([HOST_NAME], ["$HOST_NAME"], [The Host name in the object path])
+
+# Service dbus object manager
+AC_ARG_VAR(CONTROL_HOST_OBJ_MGR, [The Control Host D-Bus Object Manager])
+AS_IF([test "x$CONTROL_HOST_OBJ_MGR" == "x"],
+      [CONTROL_HOST_OBJ_MGR="/org/open_power/control"])
+AC_DEFINE_UNQUOTED([CONTROL_HOST_OBJ_MGR], ["$CONTROL_HOST_OBJ_MGR"], [The Control Host D-Bus Object Manager])
 
 # Create configured output.
 AC_CONFIG_FILES([Makefile])
