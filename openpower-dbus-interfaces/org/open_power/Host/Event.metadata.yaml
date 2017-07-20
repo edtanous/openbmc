@@ -3,3 +3,5 @@
   meta:
     - str: "ESEL=%s"
       type: string
+  inherits:
+    - xyz.openbmc_project.Common.Callout.Inventory
