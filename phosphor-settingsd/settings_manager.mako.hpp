@@ -2,12 +2,14 @@
 ## into the rendered file; feel free to edit this file.
 // WARNING: Generated header. Do not edit!
 <%
+import re
 from collections import defaultdict
 objects = list(settingsDict.viewkeys())
 sdbusplus_namespaces = []
 sdbusplus_includes = []
 interfaces = []
 props = defaultdict(list)
+validators = defaultdict(tuple)
 
 def get_setting_sdbusplus_type(setting_intf):
     setting = "sdbusplus::" + setting_intf.replace('.', '::')
@@ -33,7 +35,12 @@ def get_setting_type(setting_intf):
 #include <fstream>
 #include <utility>
 #include <experimental/filesystem>
+#include <regex>
+#include <phosphor-logging/elog.hpp>
+#include <phosphor-logging/elog-errors.hpp>
+#include <phosphor-logging/log.hpp>
 #include "config.h"
+#include <xyz/openbmc_project/Common/error.hpp>
 
 % for i in set(sdbusplus_includes):
 #include "${i}"
@@ -64,8 +71,14 @@ using namespace ${n};
     intf = settingsDict[object]['Interface']
     interfaces.append(intf)
     if intf not in props:
-        for property, value in settingsDict[object]['Defaults'].items():
+        for property, property_metadata in settingsDict[object]['Properties'].items():
             props[intf].append(property)
+            for attribute, value in property_metadata.items():
+                if attribute == 'Validation':
+                    if value['Type'] == "range":
+                        validators[property] = (value['Type'], value['Validator'], value['Unit'])
+                    else:
+                        validators[property] = (value['Type'], value['Validator'])
 %>\
 % endfor
 % for intf in set(interfaces):
@@ -94,11 +107,29 @@ class Impl : public Parent
 
 % for arg in props[intf]:
 <% t = arg[:1].lower() + arg[1:] %>\
+<% fname = "validate"+arg %>\
         decltype(std::declval<Base>().${t}()) ${t}(decltype(std::declval<Base>().${t}()) value) override
         {
             auto result = Base::${t}();
             if (value != result)
             {
+            % if arg in validators.keys():
+                if (!${fname}(value))
+                {
+                    namespace error =
+                        sdbusplus::xyz::openbmc_project::Common::Error;
+                    namespace metadata =
+                        phosphor::logging::xyz::openbmc_project::Common;
+                    phosphor::logging::report<error::InvalidArgument>(
+                        metadata::InvalidArgument::ARGUMENT_NAME("${t}"),
+                    % if validators[arg][0] != "regex":
+                        metadata::InvalidArgument::ARGUMENT_VALUE(std::to_string(value).c_str()));
+                    % else:
+                        metadata::InvalidArgument::ARGUMENT_VALUE(value.c_str()));
+                    % endif
+                    return result;
+                }
+             % endif
                 fs::path p(SETTINGS_PERSIST_PATH);
                 p /= path;
                 fs::create_directories(p.parent_path());
@@ -114,6 +145,46 @@ class Impl : public Parent
 % endfor
     private:
         fs::path path;
+% for arg in props[intf]:
+% if arg in validators.keys():
+<% funcName = "validate"+arg %>\
+<% t = arg[:1].lower() + arg[1:] %>\
+
+        bool ${funcName}(decltype(std::declval<Base>().${t}()) value)
+        {
+            bool matched = false;
+        % if (arg in validators.keys()) and (validators[arg][0] == 'regex'):
+            std::regex regexToCheck("${validators[arg][1]}");
+            matched = std::regex_search(value, regexToCheck);
+            if (!matched)
+            {
+                std::string err = "Input parameter for ${arg} is invalid "
+                    "Input: " + value + " not in the format of this regex: "
+                    "${validators[arg][1]}";
+                using namespace phosphor::logging;
+                log<level::ERR>(err.c_str());
+            }
+        % elif (arg in validators.keys()) and (validators[arg][0] == 'range'):
+<% lowhigh = re.split('\.\.', validators[arg][1]) %>\
+            if ((value <= ${lowhigh[1]}) && (value >= ${lowhigh[0]}))
+            {
+                matched = true;
+            }
+            else
+            {
+                std::string err = "Input parameter for ${arg} is invalid "
+                    "Input: " + std::to_string(value) + "in uint: "
+                    "${validators[arg][2]} is not in range:${validators[arg][1]}";
+                using namespace phosphor::logging;
+                log<level::ERR>(err.c_str());
+            }
+        % elif (arg in validators.keys()):
+            <% assert("Unknown validation type: arg") %>\
+        % endif
+            return matched;
+        }
+% endif
+% endfor
 };
 
 template<class Archive>
@@ -184,8 +255,9 @@ class Manager
 % endfor
 
 % for index, object in enumerate(objects):
-  % for property, value in settingsDict[object]['Defaults'].items():
+  % for property, value in settingsDict[object]['Properties'].items():
 <% p = property[:1].lower() + property[1:] %>\
+<% defaultValue = value['Default'] %>\
             path = fs::path(SETTINGS_PERSIST_PATH) / "${object}";
             if (fs::exists(path))
             {
@@ -196,7 +268,7 @@ class Manager
             else
             {
                 std::get<${index}>(settings)->
-                    ${get_setting_sdbusplus_type(settingsDict[object]['Interface'])}::${p}(${value});
+                    ${get_setting_sdbusplus_type(settingsDict[object]['Interface'])}::${p}(${defaultValue});
             }
   % endfor
             std::get<${index}>(settings)->emit_object_added();
