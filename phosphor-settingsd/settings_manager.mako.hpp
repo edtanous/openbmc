@@ -62,6 +62,21 @@ namespace settings
 
 namespace fs = std::experimental::filesystem;
 
+namespace persistent
+{
+
+// A setting d-bus object /foo/bar/baz is persisted in the filesystem with the
+// same path. This eases re-construction of settings objects when we restore
+// from the filesystem. This can be a problem though when you have two objects
+// such as - /foo/bar and /foo/bar/baz. This is because 'bar' will be treated as
+// a file in the first case, and a subdir in the second. To solve this, suffix
+// files with a trailing __. The __ is a safe character sequence to use, because
+// we won't have d-bus object paths ending with this.
+// With this the objects would be persisted as - /foo/bar__ and /foo/bar/baz__.
+constexpr auto fileSuffix = "__";
+
+}
+
 % for n in set(sdbusplus_namespaces):
 using namespace ${n};
 % endfor
@@ -132,6 +147,7 @@ class Impl : public Parent
              % endif
                 fs::path p(SETTINGS_PERSIST_PATH);
                 p /= path;
+                p += persistent::fileSuffix;
                 fs::create_directories(p.parent_path());
                 std::ofstream os(p.c_str(), std::ios::binary);
                 cereal::JSONOutputArchive oarchive(os);
@@ -259,6 +275,7 @@ class Manager
 <% p = property[:1].lower() + property[1:] %>\
 <% defaultValue = value['Default'] %>\
             path = fs::path(SETTINGS_PERSIST_PATH) / "${object}";
+            path += persistent::fileSuffix;
             if (fs::exists(path))
             {
                 std::ifstream is(path.c_str(), std::ios::in);
