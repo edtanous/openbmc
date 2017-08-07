@@ -9,8 +9,8 @@ constexpr auto MAPPER_PATH = "/xyz/openbmc_project/object_mapper";
 constexpr auto MAPPER_INTERFACE = "xyz.openbmc_project.ObjectMapper";
 
 // Reboot count
-constexpr auto REBOOTCOUNTER_PATH("/org/openbmc/sensors/host/BootCount");
-constexpr auto REBOOTCOUNTER_INTERFACE("org.openbmc.SensorValue");
+constexpr auto REBOOTCOUNTER_PATH("/xyz/openbmc_project/state/host0");
+constexpr auto REBOOTCOUNTER_INTERFACE("xyz.openbmc_project.Control.Boot.RebootAttempts");
 
 using namespace phosphor::logging;
 
@@ -71,9 +71,10 @@ int getBootCount()
     sdbusplus::message::variant<int> rebootCount = 0;
     auto method = bus.new_method_call(rebootSvc.c_str(),
                                       REBOOTCOUNTER_PATH,
-                                      REBOOTCOUNTER_INTERFACE,
-                                      "getValue");
+                                      "org.freedesktop.DBus.Properties",
+                                      "Get");
 
+    method.append(REBOOTCOUNTER_INTERFACE, "AttemptsLeft");
     auto reply = bus.call(method);
     if (reply.is_method_error())
     {
