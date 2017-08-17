@@ -68,7 +68,7 @@ void startHost()
 
     // Choose seeprom side to boot from
     cfam_data_t sbeSide = 0;
-    if(getBootCount() > 1)
+    if(getBootCount() > 0)
     {
         sbeSide = 0;
         log<level::INFO>("Setting SBE seeprom side to 0",
