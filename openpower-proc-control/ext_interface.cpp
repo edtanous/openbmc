@@ -60,7 +60,7 @@ std::string getService(sdbusplus::bus::bus& bus,
 }
 
 
-int getBootCount()
+uint32_t getBootCount()
 {
     auto bus = sdbusplus::bus::new_default();
 
@@ -68,7 +68,6 @@ int getBootCount()
                                 REBOOTCOUNTER_INTERFACE,
                                 REBOOTCOUNTER_PATH);
 
-    sdbusplus::message::variant<int> rebootCount = 0;
     auto method = bus.new_method_call(rebootSvc.c_str(),
                                       REBOOTCOUNTER_PATH,
                                       "org.freedesktop.DBus.Properties",
@@ -82,7 +81,8 @@ int getBootCount()
         // TODO openbmc/openbmc#851 - Once available, throw returned error
         throw std::runtime_error("ERROR in reading BOOTCOUNT");
     }
+    sdbusplus::message::variant<uint32_t> rebootCount;
     reply.read(rebootCount);
 
-    return (sdbusplus::message::variant_ns::get<int>(rebootCount));
+    return (rebootCount.get<uint32_t>());
 }

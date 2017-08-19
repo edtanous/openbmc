@@ -8,4 +8,4 @@
  *
  * @return Number of boot attempts left
  **/
-int getBootCount();
+uint32_t getBootCount();
