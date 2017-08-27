@@ -7,7 +7,6 @@ from collections import defaultdict
 objects = list(settingsDict.viewkeys())
 sdbusplus_namespaces = []
 sdbusplus_includes = []
-interfaces = []
 props = defaultdict(list)
 validators = defaultdict(tuple)
 
@@ -17,19 +16,22 @@ def get_setting_sdbusplus_type(setting_intf):
     setting = setting[:i] + '::server::' + setting[i+2:]
     return setting
 
-def get_setting_type(setting_intf):
-    setting = setting_intf.replace('.', '::')
-    return setting
+def get_setting_type(path):
+    path = path[1:]
+    path = path.replace('/', '::')
+    return path
 %>\
 #pragma once
 
 % for object in objects:
+    % for item in settingsDict[object]:
 <%
-    include = settingsDict[object]['Interface']
+    include = item['Interface']
     include = include.replace('.', '/')
     include = include + "/server.hpp"
     sdbusplus_includes.append(include)
 %>\
+    % endfor
 % endfor
 #include <cereal/archives/json.hpp>
 #include <fstream>
@@ -47,12 +49,14 @@ def get_setting_type(setting_intf):
 % endfor
 
 % for object in objects:
+    % for item in settingsDict[object]:
 <%
-    ns = get_setting_sdbusplus_type(settingsDict[object]['Interface'])
+    ns = get_setting_sdbusplus_type(item['Interface'])
     i = ns.rfind('::')
     ns = ns[:i]
     sdbusplus_namespaces.append(ns)
 %>\
+    % endfor
 % endfor
 
 namespace phosphor
@@ -83,31 +87,33 @@ using namespace ${n};
 
 % for object in objects:
 <%
-    intf = settingsDict[object]['Interface']
-    interfaces.append(intf)
-    if intf not in props:
-        for property, property_metadata in settingsDict[object]['Properties'].items():
-            props[intf].append(property)
-            for attribute, value in property_metadata.items():
-                if attribute == 'Validation':
-                    if value['Type'] == "range":
-                        validators[property] = (value['Type'], value['Validator'], value['Unit'])
-                    else:
-                        validators[property] = (value['Type'], value['Validator'])
-%>\
-% endfor
-% for intf in set(interfaces):
-<%
-    ns = intf.split(".")
-    sdbusplus_type = get_setting_sdbusplus_type(intf)
+   ns = object.split('/')
+   ns.pop(0)
 %>\
 % for n in ns:
 namespace ${n}
 {
 % endfor
-
-using Base = ${sdbusplus_type};
-<% parent = "sdbusplus::server::object::object" + "<" + sdbusplus_type + ">" %>\
+<%
+    interfaces = []
+    aliases = []
+    for item in settingsDict[object]:
+        interfaces.append(item['Interface'])
+        for name, meta in item['Properties'].items():
+            if 'Validation' in meta:
+                dict = meta['Validation']
+                if dict['Type'] == "range":
+                    validators[name] = (dict['Type'], dict['Validator'], dict['Unit'])
+                else:
+                    validators[name] = (dict['Type'], dict['Validator'])
+%>
+% for index, intf in enumerate(interfaces):
+using Iface${index} = ${get_setting_sdbusplus_type(intf)};
+<% aliases.append("Iface" + str(index)) %>\
+% endfor
+<%
+    parent = "sdbusplus::server::object::object" + "<" + ", ".join(aliases) + ">"
+%>\
 using Parent = ${parent};
 
 class Impl : public Parent
@@ -120,15 +126,16 @@ class Impl : public Parent
         }
         virtual ~Impl() = default;
 
-% for arg in props[intf]:
-<% t = arg[:1].lower() + arg[1:] %>\
-<% fname = "validate"+arg %>\
-        decltype(std::declval<Base>().${t}()) ${t}(decltype(std::declval<Base>().${t}()) value) override
+% for index, item in enumerate(settingsDict[object]):
+    % for propName, metaDict in item['Properties'].items():
+<% t = propName[:1].lower() + propName[1:] %>\
+<% fname = "validate" + propName %>\
+        decltype(std::declval<Iface${index}>().${t}()) ${t}(decltype(std::declval<Iface${index}>().${t}()) value) override
         {
-            auto result = Base::${t}();
+            auto result = Iface${index}::${t}();
             if (value != result)
             {
-            % if arg in validators.keys():
+            % if propName in validators:
                 if (!${fname}(value))
                 {
                     namespace error =
@@ -137,7 +144,7 @@ class Impl : public Parent
                         phosphor::logging::xyz::openbmc_project::Common;
                     phosphor::logging::report<error::InvalidArgument>(
                         metadata::InvalidArgument::ARGUMENT_NAME("${t}"),
-                    % if validators[arg][0] != "regex":
+                    % if validators[propName][0] != "regex":
                         metadata::InvalidArgument::ARGUMENT_VALUE(std::to_string(value).c_str()));
                     % else:
                         metadata::InvalidArgument::ARGUMENT_VALUE(value.c_str()));
@@ -151,55 +158,58 @@ class Impl : public Parent
                 fs::create_directories(p.parent_path());
                 std::ofstream os(p.c_str(), std::ios::binary);
                 cereal::JSONOutputArchive oarchive(os);
-                result = Base::${t}(value);
+                result = Iface${index}::${t}(value);
                 oarchive(*this);
             }
             return result;
         }
-        using Base::${t};
+        using Iface${index}::${t};
 
+    % endfor
 % endfor
     private:
         fs::path path;
-% for arg in props[intf]:
-% if arg in validators.keys():
-<% funcName = "validate"+arg %>\
-<% t = arg[:1].lower() + arg[1:] %>\
+% for index, item in enumerate(settingsDict[object]):
+  % for propName, metaDict in item['Properties'].items():
+<% t = propName[:1].lower() + propName[1:] %>\
+<% fname = "validate" + propName %>\
+    % if propName in validators:
 
-        bool ${funcName}(decltype(std::declval<Base>().${t}()) value)
+        bool ${fname}(decltype(std::declval<Iface${index}>().${t}()) value)
         {
             bool matched = false;
-        % if (arg in validators.keys()) and (validators[arg][0] == 'regex'):
-            std::regex regexToCheck("${validators[arg][1]}");
+        % if (validators[propName][0] == 'regex'):
+            std::regex regexToCheck("${validators[propName][1]}");
             matched = std::regex_search(value, regexToCheck);
             if (!matched)
             {
-                std::string err = "Input parameter for ${arg} is invalid "
+                std::string err = "Input parameter for ${propName} is invalid "
                     "Input: " + value + " not in the format of this regex: "
-                    "${validators[arg][1]}";
+                    "${validators[propName][1]}";
                 using namespace phosphor::logging;
                 log<level::ERR>(err.c_str());
             }
-        % elif (arg in validators.keys()) and (validators[arg][0] == 'range'):
-<% lowhigh = re.split('\.\.', validators[arg][1]) %>\
+        % elif (validators[propName][0] == 'range'):
+<% lowhigh = re.split('\.\.', validators[propName][1]) %>\
             if ((value <= ${lowhigh[1]}) && (value >= ${lowhigh[0]}))
             {
                 matched = true;
             }
             else
             {
-                std::string err = "Input parameter for ${arg} is invalid "
+                std::string err = "Input parameter for ${propName} is invalid "
                     "Input: " + std::to_string(value) + "in uint: "
-                    "${validators[arg][2]} is not in range:${validators[arg][1]}";
+                    "${validators[propName][2]} is not in range:${validators[propName][1]}";
                 using namespace phosphor::logging;
                 log<level::ERR>(err.c_str());
             }
-        % elif (arg in validators.keys()):
-            <% assert("Unknown validation type: arg") %>\
+        % else:
+            <% assert("Unknown validation type: propName") %>\
         % endif
             return matched;
         }
-% endif
+    % endif
+  % endfor
 % endfor
 };
 
@@ -208,33 +218,47 @@ void save(Archive& a,
           const Impl& setting)
 {
 <%
-    args = ["setting." + p[:1].lower() + p[1:] + "()" for p in props[intf]]
-    args = ','.join(args)
+props = []
+for index, item in enumerate(settingsDict[object]):
+    intfProps = ["setting." + propName[:1].lower() + propName[1:] + "()" for \
+                    propName, metaDict in item['Properties'].items()]
+    props.extend(intfProps)
+props = ', '.join(props)
 %>\
-    a(${args});
+    a(${props});
 }
 
 template<class Archive>
 void load(Archive& a,
           Impl& setting)
 {
-% for arg in props[intf]:
-<% t = "setting." + arg[:1].lower() + arg[1:] + "()" %>\
-    decltype(${t}) ${arg}{};
-% endfor
+<% props = [] %>\
+% for index, item in enumerate(settingsDict[object]):
+  % for  prop, metaDict in item['Properties'].items():
 <%
-    args = ','.join(props[intf])
+    t = "setting." + prop[:1].lower() + prop[1:] + "()"
+    props.append(prop)
 %>\
-    a(${args});
-% for arg in props[intf]:
-<% t = "setting." + arg[:1].lower() + arg[1:] + "(" + arg + ")" %>\
+    decltype(${t}) ${prop}{};
+  % endfor
+% endfor
+<% props = ', '.join(props) %>
+    a(${props});
+<% props = [] %>
+% for index, item in enumerate(settingsDict[object]):
+  % for  prop, metaDict in item['Properties'].items():
+<%
+    t = "setting." + prop[:1].lower() + prop[1:] + "(" + prop + ")"
+%>\
     ${t};
+  % endfor
 % endfor
 }
 
 % for n in reversed(ns):
 } // namespace ${n}
 % endfor
+
 % endfor
 
 /** @class Manager
@@ -259,22 +283,19 @@ class Manager
             fs::path path{};
             settings =
                 std::make_tuple(
-% for index, object in enumerate(objects):
-<% type = get_setting_type(settingsDict[object]['Interface']) + "::Impl" %>\
+% for index, path in enumerate(objects):
+<% type = get_setting_type(path) + "::Impl" %>\
                     std::make_unique<${type}>(
                         bus,
   % if index < len(settingsDict) - 1:
-                        "${object}"),
+                        "${path}"),
   % else:
-                        "${object}"));
+                        "${path}"));
   % endif
 % endfor
 
-% for index, object in enumerate(objects):
-  % for property, value in settingsDict[object]['Properties'].items():
-<% p = property[:1].lower() + property[1:] %>\
-<% defaultValue = value['Default'] %>\
-            path = fs::path(SETTINGS_PERSIST_PATH) / "${object}";
+% for index, path in enumerate(objects):
+            path = fs::path(SETTINGS_PERSIST_PATH) / "${path}";
             path += persistent::fileSuffix;
             if (fs::exists(path))
             {
@@ -284,10 +305,15 @@ class Manager
             }
             else
             {
+  % for item in settingsDict[path]:
+    % for propName, metaDict in item['Properties'].items():
+<% p = propName[:1].lower() + propName[1:] %>\
+<% defaultValue = metaDict['Default'] %>\
                 std::get<${index}>(settings)->
-                    ${get_setting_sdbusplus_type(settingsDict[object]['Interface'])}::${p}(${defaultValue});
-            }
+                    ${get_setting_sdbusplus_type(item['Interface'])}::${p}(${defaultValue});
+    % endfor
   % endfor
+            }
             std::get<${index}>(settings)->emit_object_added();
 
 % endfor
@@ -296,8 +322,8 @@ class Manager
     private:
         /* @brief Composition of settings objects. */
         std::tuple<
-% for index, object in enumerate(objects):
-<% type = get_setting_type(settingsDict[object]['Interface']) + "::Impl" %>\
+% for index, path in enumerate(objects):
+<% type = get_setting_type(path) + "::Impl" %>\
   % if index < len(settingsDict) - 1:
             std::unique_ptr<${type}>,
   % else:
