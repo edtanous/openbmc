@@ -19,6 +19,7 @@
 #include <phosphor-logging/log.hpp>
 #include <phosphor-logging/elog.hpp>
 #include <phosphor-logging/elog-errors.hpp>
+#include <org/open_power/Proc/FSI/error.hpp>
 #include <xyz/openbmc_project/Common/error.hpp>
 #include <xyz/openbmc_project/Common/Device/error.hpp>
 #include <xyz/openbmc_project/Common/File/error.hpp>
@@ -31,6 +32,7 @@ namespace device_error = sdbusplus::xyz::openbmc_project::
         Common::Device::Error;
 namespace file_error = sdbusplus::xyz::openbmc_project::
         Common::File::Error;
+namespace fsi_error = sdbusplus::org::open_power::Proc::FSI::Error;
 
 void usage(char** argv, const ProcedureMap& procedures)
 {
@@ -93,6 +95,17 @@ int main(int argc, char** argv)
         commit<common_error::InvalidArgument>();
         return -1;
     }
+    catch (fsi_error::MasterDetectionFailure& e)
+    {
+        commit<fsi_error::MasterDetectionFailure>();
+        return -1;
+    }
+    catch (fsi_error::SlaveDetectionFailure& e)
+    {
+        commit<fsi_error::SlaveDetectionFailure>();
+        return -1;
+    }
+
 
     return 0;
 }
