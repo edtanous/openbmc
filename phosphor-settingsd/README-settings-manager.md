@@ -2,7 +2,7 @@
 
 The settings manager has the following design goals:
 
-* Each setting should be a distinct d-bus object.
+* Each setting should be a distinct D-Bus object.
 
 * The above makes it possible to not even create settings objects that do not
   apply to a specific system.
@@ -12,14 +12,14 @@ The settings manager has the following design goals:
   have different applicable settings as well.
 
 * It should be possible to specify default settings for a system at build-time,
-  based on which the settings manager should at run-time create appopriate
-  d-bus objects and place them on the bus.
+  based on which the settings manager should at run-time create appropriate
+  D-Bus objects and place them on the bus.
 
 ## Settings policy file
 
 Some of the design goals above are achieved via a policy file, which is written
 in YAML. Based on this policy file, the settings manager code is generated to be
-able to create only relevant settings d-bus objects along with specifying their
+able to create only relevant settings D-Bus objects along with specifying their
 defaults.
 
 Here's an example of how entries in the YAML would look:
