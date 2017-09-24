@@ -43,6 +43,7 @@ def get_setting_type(path):
 #include <phosphor-logging/log.hpp>
 #include "config.h"
 #include <xyz/openbmc_project/Common/error.hpp>
+using namespace phosphor::logging;
 
 % for i in set(sdbusplus_includes):
 #include "${i}"
@@ -297,22 +298,36 @@ class Manager
 % for index, path in enumerate(objects):
             path = fs::path(SETTINGS_PERSIST_PATH) / "${path}";
             path += persistent::fileSuffix;
-            if (fs::exists(path))
-            {
-                std::ifstream is(path.c_str(), std::ios::in);
-                cereal::JSONInputArchive iarchive(is);
-                iarchive(*std::get<${index}>(settings));
-            }
-            else
+            auto initSetting${index} = [&]()
             {
   % for item in settingsDict[path]:
     % for propName, metaDict in item['Properties'].items():
 <% p = propName[:1].lower() + propName[1:] %>\
 <% defaultValue = metaDict['Default'] %>\
                 std::get<${index}>(settings)->
-                    ${get_setting_sdbusplus_type(item['Interface'])}::${p}(${defaultValue});
-    % endfor
+                  ${get_setting_sdbusplus_type(item['Interface'])}::${p}(${defaultValue});
   % endfor
+% endfor
+            };
+
+            try
+            {
+                if (fs::exists(path))
+                {
+                    std::ifstream is(path.c_str(), std::ios::in);
+                    cereal::JSONInputArchive iarchive(is);
+                    iarchive(*std::get<${index}>(settings));
+                }
+                else
+                {
+                    initSetting${index}();
+                }
+            }
+            catch (cereal::Exception& e)
+            {
+                log<level::ERR>(e.what());
+                fs::remove(path);
+                initSetting${index}();
             }
             std::get<${index}>(settings)->emit_object_added();
 
