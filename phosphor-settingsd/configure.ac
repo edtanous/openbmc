@@ -41,5 +41,9 @@ AS_IF([test "x$SETTINGS_PERSIST_PATH" == "x"], \
 AC_DEFINE_UNQUOTED([SETTINGS_PERSIST_PATH], ["$SETTINGS_PERSIST_PATH"], \
     [Path of directory housing persisted settings])
 
+AC_ARG_VAR(CLASS_VERSION, [Class version to register with Cereal])
+AS_IF([test "x$CLASS_VERSION" == "x"], [CLASS_VERSION=1])
+AC_DEFINE_UNQUOTED([CLASS_VERSION], [$CLASS_VERSION], [Class version to register with Cereal])
+
 AC_CONFIG_FILES([Makefile])
 AC_OUTPUT

@@ -216,7 +216,8 @@ class Impl : public Parent
 
 template<class Archive>
 void save(Archive& a,
-          const Impl& setting)
+          const Impl& setting,
+          const std::uint32_t version)
 {
 <%
 props = []
@@ -231,7 +232,8 @@ props = ', '.join(props)
 
 template<class Archive>
 void load(Archive& a,
-          Impl& setting)
+          Impl& setting,
+          const std::uint32_t version)
 {
 <% props = [] %>\
 % for index, item in enumerate(settingsDict[object]):
@@ -349,3 +351,18 @@ class Manager
 
 } // namespace settings
 } // namespace phosphor
+
+// Now register the class version with Cereal
+% for object in objects:
+<%
+   classname = "phosphor::settings"
+   ns = object.split('/')
+   ns.pop(0)
+%>\
+% for n in ns:
+<%
+    classname += "::" + n
+%>\
+% endfor
+CEREAL_CLASS_VERSION(${classname + "::Impl"}, CLASS_VERSION);
+% endfor
