@@ -13,11 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+#include <phosphor-logging/elog.hpp>
+#include <phosphor-logging/elog-errors.hpp>
+#include <xyz/openbmc_project/Common/Device/error.hpp>
+#include <xyz/openbmc_project/Common/File/error.hpp>
 #include <unistd.h>
 #include "cfam_access.hpp"
 #include "targeting.hpp"
-#include <phosphor-logging/elog.hpp>
-#include "elog-errors.hpp"
 
 namespace openpower
 {
@@ -30,6 +32,10 @@ constexpr auto cfamRegSize = 4;
 
 using namespace openpower::targeting;
 using namespace openpower::util;
+namespace file_error = sdbusplus::xyz::openbmc_project::
+        Common::File::Error;
+namespace device_error = sdbusplus::xyz::openbmc_project::
+        Common::Device::Error;
 
 /**
  * Converts the CFAM register address used by the calling
@@ -50,11 +56,16 @@ void writeReg(const std::unique_ptr<Target>& target,
     int rc = lseek(target->getCFAMFD(), makeOffset(address), SEEK_SET);
     if (rc < 0)
     {
-        elog<org::open_power::Proc::CFAM::SeekFailure>(
-            org::open_power::Proc::CFAM::SeekFailure::ERRNO(errno),
-            org::open_power::Proc::CFAM::SeekFailure::ADDRESS(address),
-            org::open_power::Proc::CFAM::SeekFailure::OFFSET(makeOffset(address)),
-            org::open_power::Proc::CFAM::SeekFailure::PATH(target->getCFAMPath().c_str()));
+        log<level::ERR>("Failed seeking on a processor CFAM",
+                entry("CFAM_ADDRESS=0x%X", address));
+
+        using metadata = xyz::openbmc_project::Common::File::Seek;
+
+        elog<file_error::Seek>(
+                metadata::OFFSET(makeOffset(address)),
+                metadata::WHENCE(SEEK_SET),
+                metadata::ERRNO(errno),
+                metadata::PATH(target->getCFAMPath().c_str()));
     }
 
     data = target->swapEndian(data);
@@ -62,10 +73,12 @@ void writeReg(const std::unique_ptr<Target>& target,
     rc = write(target->getCFAMFD(), &data, cfamRegSize);
     if (rc < 0)
     {
-        elog<org::open_power::Proc::CFAM::WriteFailure>(
-            org::open_power::Proc::CFAM::WriteFailure::CALLOUT_ERRNO(errno),
-            org::open_power::Proc::CFAM::WriteFailure::CALLOUT_DEVICE_PATH(
-                target->getCFAMPath().c_str()));
+        using metadata = xyz::openbmc_project::Common::Device::WriteFailure;
+
+        elog<device_error::WriteFailure>(
+                metadata::CALLOUT_ERRNO(errno),
+                metadata::CALLOUT_DEVICE_PATH(
+                        target->getCFAMPath().c_str()));
     }
 }
 
@@ -80,20 +93,26 @@ cfam_data_t readReg(const std::unique_ptr<Target>& target,
     int rc = lseek(target->getCFAMFD(), makeOffset(address), SEEK_SET);
     if (rc < 0)
     {
-        elog<org::open_power::Proc::CFAM::SeekFailure>(
-            org::open_power::Proc::CFAM::SeekFailure::ERRNO(errno),
-            org::open_power::Proc::CFAM::SeekFailure::ADDRESS(address),
-            org::open_power::Proc::CFAM::SeekFailure::OFFSET(makeOffset(address)),
-            org::open_power::Proc::CFAM::SeekFailure::PATH(target->getCFAMPath().c_str()));
+        log<level::ERR>("Failed seeking on a processor CFAM",
+                entry("CFAM_ADDRESS=0x%X", address));
+
+        using metadata = xyz::openbmc_project::Common::File::Seek;
+
+        elog<file_error::Seek>(
+                metadata::OFFSET(makeOffset(address)),
+                metadata::WHENCE(SEEK_SET),
+                metadata::ERRNO(errno),
+                metadata::PATH(target->getCFAMPath().c_str()));
     }
 
     rc = read(target->getCFAMFD(), &data, cfamRegSize);
     if (rc < 0)
     {
-        elog<org::open_power::Proc::CFAM::ReadFailure>(
-            org::open_power::Proc::CFAM::WriteFailure::CALLOUT_ERRNO(errno),
-            org::open_power::Proc::CFAM::WriteFailure::CALLOUT_DEVICE_PATH(
-                target->getCFAMPath().c_str()));
+        using metadata = xyz::openbmc_project::Common::Device::ReadFailure;
+
+        elog<device_error::ReadFailure>(
+            metadata::CALLOUT_ERRNO(errno),
+            metadata::CALLOUT_DEVICE_PATH(target->getCFAMPath().c_str()));
     }
 
     return target->swapEndian(data);

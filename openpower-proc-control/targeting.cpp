@@ -16,10 +16,11 @@
 
 #include <endian.h>
 #include <experimental/filesystem>
+#include <phosphor-logging/elog.hpp>
+#include <phosphor-logging/elog-errors.hpp>
 #include <phosphor-logging/log.hpp>
 #include <regex>
-#include <phosphor-logging/elog.hpp>
-#include "elog-errors.hpp"
+#include <xyz/openbmc_project/Common/File/error.hpp>
 #include "targeting.hpp"
 
 
@@ -30,6 +31,7 @@ namespace targeting
 
 using namespace phosphor::logging;
 namespace fs = std::experimental::filesystem;
+namespace file_error = sdbusplus::xyz::openbmc_project::Common::File::Error;
 
 int Target::getCFAMFD()
 {
@@ -119,9 +121,11 @@ Targeting::Targeting(const std::string& fsiMasterDev,
     }
     catch (fs::filesystem_error& e)
     {
-        elog<org::open_power::Proc::CFAM::OpenFailure>(
-            org::open_power::Proc::CFAM::OpenFailure::ERRNO(e.code().value()),
-            org::open_power::Proc::CFAM::OpenFailure::PATH(e.path1().c_str()));
+        using metadata = xyz::openbmc_project::Common::File::Open;
+
+        elog<file_error::Open>(
+                metadata::ERRNO(e.code().value()),
+                metadata::PATH(e.path1().c_str()));
     }
 
     auto sortTargets = [](const std::unique_ptr<Target>& left,

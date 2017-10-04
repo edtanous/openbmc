@@ -18,11 +18,19 @@
 #include <iostream>
 #include <phosphor-logging/log.hpp>
 #include <phosphor-logging/elog.hpp>
-#include "registration.hpp"
-#include "elog-errors.hpp"
+#include <phosphor-logging/elog-errors.hpp>
 #include <xyz/openbmc_project/Common/error.hpp>
+#include <xyz/openbmc_project/Common/Device/error.hpp>
+#include <xyz/openbmc_project/Common/File/error.hpp>
+#include "registration.hpp"
 
 using namespace openpower::util;
+namespace common_error = sdbusplus::xyz::openbmc_project::
+        Common::Error;
+namespace device_error = sdbusplus::xyz::openbmc_project::
+        Common::Device::Error;
+namespace file_error = sdbusplus::xyz::openbmc_project::
+        Common::File::Error;
 
 void usage(char** argv, const ProcedureMap& procedures)
 {
@@ -60,29 +68,29 @@ int main(int argc, char** argv)
     {
         procedure->second();
     }
-    catch (org::open_power::Proc::CFAM::SeekFailure& e)
+    catch (file_error::Seek& e)
     {
-        commit<org::open_power::Proc::CFAM::SeekFailure>();
+        commit<file_error::Seek>();
         return -1;
     }
-    catch (org::open_power::Proc::CFAM::OpenFailure& e)
+    catch (file_error::Open& e)
     {
-        commit<org::open_power::Proc::CFAM::OpenFailure>();
+        commit<file_error::Open>();
         return -1;
     }
-    catch (org::open_power::Proc::CFAM::WriteFailure& e)
+    catch (device_error::WriteFailure& e)
     {
-        commit<org::open_power::Proc::CFAM::WriteFailure>();
+        commit<device_error::WriteFailure>();
         return -1;
     }
-    catch (org::open_power::Proc::CFAM::ReadFailure& e)
+    catch (device_error::ReadFailure& e)
     {
-        commit<org::open_power::Proc::CFAM::ReadFailure>();
+        commit<device_error::ReadFailure>();
         return -1;
     }
-    catch (sdbusplus::xyz::openbmc_project::Common::Error::InvalidArgument& e)
+    catch (common_error::InvalidArgument& e)
     {
-        commit<sdbusplus::xyz::openbmc_project::Common::Error::InvalidArgument>();
+        commit<common_error::InvalidArgument>();
         return -1;
     }
 

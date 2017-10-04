@@ -5,7 +5,8 @@
 #include "p9_cfam.hpp"
 #include "registration.hpp"
 #include "targeting.hpp"
-#include "elog-errors.hpp"
+#include <phosphor-logging/elog.hpp>
+#include <phosphor-logging/elog-errors.hpp>
 #include <xyz/openbmc_project/Common/error.hpp>
 
 /* File /var/lib/obmc/cfam_overrides requires whitespace-separated parameters

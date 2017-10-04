@@ -15,14 +15,17 @@
  */
 #include <stdexcept>
 #include <unistd.h>
-#include "filedescriptor.hpp"
 #include <phosphor-logging/elog.hpp>
-#include "elog-errors.hpp"
+#include <phosphor-logging/elog-errors.hpp>
+#include <xyz/openbmc_project/Common/File/error.hpp>
+#include "filedescriptor.hpp"
 
 namespace openpower
 {
 namespace util
 {
+
+namespace file_error = sdbusplus::xyz::openbmc_project::Common::File::Error;
 
 FileDescriptor::FileDescriptor(const std::string& path)
 {
@@ -32,9 +35,11 @@ FileDescriptor::FileDescriptor(const std::string& path)
 
     if (fd < 0)
     {
-        elog<org::open_power::Proc::CFAM::OpenFailure>(
-            org::open_power::Proc::CFAM::OpenFailure::ERRNO(errno),
-            org::open_power::Proc::CFAM::OpenFailure::PATH(path.c_str()));
+        using metadata = xyz::openbmc_project::Common::File::Open;
+
+        elog<file_error::Open>(
+                metadata::ERRNO(errno),
+                metadata::PATH(path.c_str()));
     }
 }
 
