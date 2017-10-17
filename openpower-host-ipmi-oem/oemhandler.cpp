@@ -1,8 +1,10 @@
 #include "oemhandler.hpp"
 #include "config.h"
+#include "elog-errors.hpp"
 #include <host-ipmid/ipmid-api.h>
 #include <host-ipmid/ipmid-host-cmd.hpp>
 #include <fstream>
+#include <memory>
 #include <stdio.h>
 #include <string.h>
 #include <endian.h>
@@ -10,11 +12,58 @@
 #include <systemd/sd-bus.h>
 #include <sdbusplus/bus.hpp>
 #include <host-interface.hpp>
+#include <org/open_power/OCC/Metrics/error.hpp>
 
 void register_netfn_oem_partial_esel() __attribute__((constructor));
 
 const char *g_esel_path = "/tmp/esel";
 uint16_t g_record_id = 0x0001;
+using namespace phosphor::logging;
+constexpr auto occMetricsType = 0xDD;
+
+std::string readESEL(const char* fileName)
+{
+    std::string content {};
+
+    std::ifstream handle(fileName);
+
+    if (handle.fail())
+    {
+        log<level::ERR>("Failed to open eSEL",
+                entry("FILENAME=%s", fileName));
+        return content;
+    }
+
+    handle.seekg(0, std::ios::end);
+    content.resize(handle.tellg());
+    handle.seekg(0, std::ios::beg);
+    handle.read(&content[0], content.size());
+    handle.close();
+
+    return content;
+}
+
+void createOCCLogEntry(const std::string& eSELData)
+{
+    // Each byte in eSEL is formatted as %02x with a space between bytes and
+    // insert '/0' at the end of the character array.
+    constexpr auto byteSeperator = 3;
+
+    std::unique_ptr<char[]> data(new char[
+        (eSELData.size() * byteSeperator) + 1]());
+
+    for (size_t i = 0; i < eSELData.size(); i++)
+    {
+        sprintf(&data[i * byteSeperator], "%02x ", eSELData[i]);
+    }
+    data[eSELData.size() * byteSeperator] = '\0';
+
+    using error =  sdbusplus::org::open_power::OCC::Metrics::Error::Event;
+    using metadata = org::open_power::OCC::Metrics::Event;
+
+    report<error>(metadata::ESEL(data.get()));
+}
+
 
 ///////////////////////////////////////////////////////////////////////////////
 // For the First partial add eSEL the SEL Record ID and offset
@@ -83,15 +132,30 @@ ipmi_ret_t ipmi_ibm_oem_partial_esel(ipmi_netfn_t netfn, ipmi_cmd_t cmd,
 		*data_len     = 0;
 	}
 
-	// The first bit prepresents that this is the last partial packet
+	// The first bit presents that this is the last partial packet
 	// coming down.  If that is the case advance the record id so we
 	// don't overlap logs.  This allows anyone to establish a log
 	// directory system.
-	if (esel_req.progress & 1 ) {
-		g_record_id++;
-	}
+    if (esel_req.progress & 1 )
+    {
+         g_record_id++;
 
-	return rc;
+         auto eSELData = readESEL(g_esel_path);
+
+         if (eSELData.empty())
+         {
+             return IPMI_CC_UNSPECIFIED_ERROR;
+         }
+
+         // If the eSEL record type is OCC metrics, then create the OCC log
+         // entry.
+         if (eSELData[2] == occMetricsType)
+         {
+             createOCCLogEntry(eSELData);
+         }
+    }
+
+    return rc;
 }
 
 // Prepare for FW Update.
