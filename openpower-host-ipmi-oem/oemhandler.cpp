@@ -151,8 +151,8 @@ std::unique_ptr<sdbusplus::server::manager::manager> objManager
 
 void register_netfn_oem_partial_esel()
 {
-    printf("Registering NetFn:[0x%X], Cmd:[0x%X]\n",NETFUN_OEM, IPMI_CMD_PESEL);
-    ipmi_register_callback(NETFUN_OEM, IPMI_CMD_PESEL, NULL, ipmi_ibm_oem_partial_esel,
+    printf("Registering NetFn:[0x%X], Cmd:[0x%X]\n",NETFUN_IBM_OEM, IPMI_CMD_PESEL);
+    ipmi_register_callback(NETFUN_IBM_OEM, IPMI_CMD_PESEL, NULL, ipmi_ibm_oem_partial_esel,
                            SYSTEM_INTERFACE);
 
     printf("Registering NetFn:[0x%X], Cmd:[0x%X]\n", NETFUN_OEM, IPMI_CMD_PREP_FW_UPDATE);
