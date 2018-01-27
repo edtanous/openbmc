@@ -22,7 +22,8 @@ import obmc.mapper
 DBUS_NAME = 'org.openbmc.settings.Host'
 CONTROL_INTF = 'org.openbmc.Settings'
 
-def walk_nest(d, keys =()):
+
+def walk_nest(d, keys=()):
     """Arrange dictionary keys and values.
 
     Walk the dictionary and establish every possible path
@@ -34,6 +35,7 @@ def walk_nest(d, keys =()):
                 yield rv
     else:
         yield keys, d
+
 
 def create_object(settings):
     """Create and format objects.
@@ -47,10 +49,10 @@ def create_object(settings):
     queries = {}
     for compound_key, val in walk_nest(settings):
         obj_name = compound_key[0].lower()
-        obj_name = obj_name.replace(".","/")
+        obj_name = obj_name.replace(".", "/")
         obj_name = "/" + obj_name + "0"
 
-        for i in compound_key[2:len(compound_key)-2]:
+        for i in compound_key[2:len(compound_key) - 2]:
             obj_name = obj_name + "/" + i
 
         setting = compound_key[len(compound_key) - 2]
@@ -83,6 +85,7 @@ def create_object(settings):
                     "/org/openbmc/settings/" + m.group(1), settings)
     return allobjects
 
+
 class HostSettingsObject(DbusProperties, DbusObjectManager):
     def __init__(self, bus, name, settings, path):
         super(HostSettingsObject, self).__init__(
@@ -93,7 +96,7 @@ class HostSettingsObject(DbusProperties, DbusObjectManager):
         self.path = path
         self.name = name
         self.settings = settings
-        self.fname = name[name.rfind("/")+1:] + '-'
+        self.fname = name[name.rfind("/") + 1:] + '-'
 
         # Needed to ignore the validation on default networkconfig values as
         # opposed to user giving the same.
@@ -247,13 +250,14 @@ class HostSettingsObject(DbusProperties, DbusObjectManager):
             self.validate_list(shk['allowed'], value)
 
         elif validation == 'range':
-            self.validate_range(shk['min'], shk['max']+1, value)
+            self.validate_range(shk['min'], shk['max'] + 1, value)
 
         elif validation == 'regex':
             self.validate_regex(shk['regex'], value)
 
         elif validation == 'custom':
             getattr(self, shk['method'])(value)
+
 
 if __name__ == '__main__':
     dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)

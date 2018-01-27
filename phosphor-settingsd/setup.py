@@ -18,6 +18,7 @@ class CustomBuild(build):
             f.write('SETTINGS=\\\n')
             pprint.pprint(data, stream=f)
 
+
 setup(
     name='phosphor-settings',
     version='1.0',

@@ -5,6 +5,7 @@ import yaml
 from mako.template import Template
 import argparse
 
+
 def main():
     parser = argparse.ArgumentParser(
         description="Settings YAML parser and code generator")
