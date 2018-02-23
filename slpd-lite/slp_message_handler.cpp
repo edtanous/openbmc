@@ -365,11 +365,11 @@ std::tuple<int, buffer> processRequest(
 {
     int rc = slp::SUCCESS;
     buffer resp(0);
+    std::cout << "SLP Processing Request="
+              << msg.header.functionID <<"\n";
+
     switch (msg.header.functionID)
     {
-        std::cout << "SLP Processing Request="
-                  << msg.header.functionID <<"\n";
-
         case (uint8_t)slp::FunctionType::SRVTYPERQST:
             std::tie(rc, resp) = slp::handler::internal::processSrvTypeRequest(msg);
             break;
