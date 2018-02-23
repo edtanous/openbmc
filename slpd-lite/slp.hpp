@@ -3,6 +3,7 @@
 #include <stdio.h>
 
 #include <array>
+#include <functional>
 #include <list>
 #include <map>
 #include <memory>
