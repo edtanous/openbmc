@@ -89,7 +89,7 @@ inline void invokeSBEChipOperation(const char* devPath,
         std::ostringstream errMsg;
         errMsg << "Obtained chip operation response length (" <<
                sbeFifoResp.size() << "from SBE is greater than maximum expected"
-               " lenght:" << chipOpData.size();
+               " length:" << chipOpData.size();
 
         throw std::runtime_error(errMsg.str().c_str());
     }

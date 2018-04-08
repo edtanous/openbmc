@@ -127,7 +127,7 @@ void parseResponse(std::vector<sbe_word_t>& sbeDataBuf)
         //TODO:use elog infrastructure
         std::ostringstream errMsg;
         errMsg << "Distance to SBE status header value " <<
-               distanceToStatusHeader << " is greater then total lenght of "
+               distanceToStatusHeader << " is greater then total length of "
                "response buffer " << lengthObtained;
         throw std::runtime_error(errMsg.str().c_str());
     }
