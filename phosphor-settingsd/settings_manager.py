@@ -218,7 +218,7 @@ class HostSettingsObject(DbusProperties, DbusObjectManager):
                 IP(value)
 
             elif key.lower() == 'mac':
-                regex = '([a-fA-F0-9]{2}[:|\-]?){6}'
+                regex = r'([a-fA-F0-9]{2}[:|\-]?){6}'
                 self.validate_regex(regex, value)
 
             elif key.lower() == 'prefix':
