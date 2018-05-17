@@ -95,7 +95,7 @@ std::vector<sbe_word_t> writeToFifo(const char* devPath,
     }
 
     //Extract the valid number of words read.
-    for (auto i = 0; i < (rc / WORD_SIZE); ++i)
+    for (auto i = 0; i < (len / WORD_SIZE); ++i)
     {
         response.push_back(be32toh(buffer[i]));
     }
