@@ -26,7 +26,7 @@ std::vector<sbe_word_t> writeToFifo(const char* devPath,
                                     size_t cmdBufLen,
                                     size_t respBufLen)
 {
-    size_t len = 0;
+    ssize_t len = 0;
     std::vector<sbe_word_t> response;
     std::ostringstream errMsg;
 
@@ -84,7 +84,7 @@ std::vector<sbe_word_t> writeToFifo(const char* devPath,
     //Create a temporary buffer
     std::vector<sbe_word_t> buffer(totalReadLen);
 
-    auto bytesToRead = (totalReadLen * WORD_SIZE);
+    ssize_t bytesToRead = (totalReadLen * WORD_SIZE);
     len = read(fileFd(), buffer.data(), bytesToRead);
     if (len < 0)
     {
