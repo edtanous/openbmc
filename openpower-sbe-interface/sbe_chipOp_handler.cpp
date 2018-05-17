@@ -93,14 +93,6 @@ std::vector<sbe_word_t> writeToFifo(const char* devPath,
                << len << " errno=" << errno;
         throw std::runtime_error(errMsg.str().c_str());
     }
-    else if (len != bytesToRead)
-    {
-        //TODO:use elog infrastructure
-        errMsg << "Exepcted " << bytesToRead << " bytes to be read from FIFO"
-               " device:" << devPath << ", but bytes read are " << len <<
-               " errno= " << errno;
-        throw std::runtime_error(errMsg.str().c_str());
-    }
 
     //Extract the valid number of words read.
     for (auto i = 0; i < (rc / WORD_SIZE); ++i)
