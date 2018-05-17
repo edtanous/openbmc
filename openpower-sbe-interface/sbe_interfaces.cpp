@@ -52,7 +52,7 @@ uint64_t read(const char* devPath,
     //little endian.
     std::array<sbe_word_t, READ_CMD_LENGTH> command =
     {
-        static_cast<sbe_word_t>(READ_CMD_LENGTH),
+        static_cast<sbe_word_t>(htobe32(READ_CMD_LENGTH)),
         htobe32(READ_OPCODE),
         htobe32(upper(address)),
         htobe32(lower(address))
@@ -86,7 +86,7 @@ void write(const char* devPath,
     //little endian.
     std::array<sbe_word_t, WRITE_CMD_LENGTH> command =
     {
-        static_cast<sbe_word_t>(WRITE_CMD_LENGTH),
+        static_cast<sbe_word_t>(htobe32(WRITE_CMD_LENGTH)),
         htobe32(WRITE_OPCODE),
         htobe32(upper(address)),
         htobe32(lower(address)),
