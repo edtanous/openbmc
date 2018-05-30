@@ -36,7 +36,7 @@ void Host::execute(Base::Host::Command command,
 
     log<level::INFO>("Pushing cmd on to queue",
             entry("CONTROL_HOST_CMD=%s",
-                  convertForMessage(command)));
+                  convertForMessage(command).c_str()));
 
     // If the command is OCCReset, then all we need is just sensor ID
     // This is the only command that is being used now.
