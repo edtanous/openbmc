@@ -15,8 +15,9 @@
  */
 
 #include <poll.h>
-#include <stdint.h>
 #include <stdbool.h>
+#include <stdint.h>
+#include <termios.h> /* for speed_t */
 
 struct console;
 struct config;
@@ -115,6 +116,8 @@ struct config;
 const char *config_get_value(struct config *config, const char *name);
 struct config *config_init(const char *filename);
 void config_fini(struct config *config);
+
+int config_parse_baud(speed_t *speed, const char *baud_string);
 
 /* socket paths */
 extern const char *console_socket_path;
