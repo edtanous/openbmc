@@ -222,7 +222,7 @@ std::tuple<int, buffer> processSrvRequest(
 
     //Find the service
     const slp::ConfigData& svc = svcIt->second;
-    //Populate the URL Entrys
+    //Populate the URL Entries
     auto pos = slp::response::OFFSET_URL_ENTRY + slp::response::SIZE_URL_COUNT;
     for (const auto& addr : ifaddrList)
     {

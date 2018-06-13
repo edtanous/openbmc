@@ -121,7 +121,7 @@ struct Payload
 
 
 /*
- * @struct Messsage
+ * @struct Message
  *
  * This will denote the slp Message.
  */

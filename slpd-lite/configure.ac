@@ -16,7 +16,7 @@ LT_INIT
 PKG_CHECK_MODULES([SYSTEMD], [libsystemd >= 221])
 
 # Checks for header files.
-AC_CHECK_HEADER(systemd/sd-bus.h, ,[AC_MSG_ERROR([Could not find systemd/sd-bus.h...systemd developement package required])])
+AC_CHECK_HEADER(systemd/sd-bus.h, ,[AC_MSG_ERROR([Could not find systemd/sd-bus.h...systemd development package required])])
 # Checks for typedefs, structures, and compiler characteristics.
 
 AC_ARG_VAR(SERVICE_DIR, [Location of service files.])
