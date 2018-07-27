@@ -14,7 +14,7 @@
 #include <host-interface.hpp>
 #include <org/open_power/OCC/Metrics/error.hpp>
 
-void register_netfn_oem_partial_esel() __attribute__((constructor));
+void register_netfn_ibm_oem_commands() __attribute__((constructor));
 
 const char *g_esel_path = "/tmp/esel";
 uint16_t g_record_id = 0x0001;
@@ -213,7 +213,7 @@ std::unique_ptr<sdbusplus::server::manager::manager> objManager
         __attribute__((init_priority(101)));
 }
 
-void register_netfn_oem_partial_esel()
+void register_netfn_ibm_oem_commands()
 {
     printf("Registering NetFn:[0x%X], Cmd:[0x%X]\n",NETFUN_IBM_OEM, IPMI_CMD_PESEL);
     ipmi_register_callback(NETFUN_IBM_OEM, IPMI_CMD_PESEL, NULL, ipmi_ibm_oem_partial_esel,
