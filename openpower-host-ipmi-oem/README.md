@@ -15,4 +15,5 @@ To clean the repository run `./bootstrap.sh clean`.
 ## Supported Commands
 - Partial Add
 - Prepare for host update
+- Reset BMC password
 

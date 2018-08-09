@@ -10,6 +10,7 @@
 enum ipmi_netfn_oem_cmds
 {
     IPMI_CMD_PREP_FW_UPDATE = 0x10,
+    IPMI_CMD_RESET_BMC_PASSWORD = 0x11,
     IPMI_CMD_PESEL = 0xF0,
     IPMI_CMD_OCC_RESET = 0x0E,
 };
