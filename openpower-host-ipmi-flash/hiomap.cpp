@@ -11,10 +11,17 @@
 #include <systemd/sd-bus.h>
 
 #include <fstream>
+#include <functional>
+#include <host-ipmid/ipmid-host-cmd-utils.hpp>
+#include <host-ipmid/ipmid-host-cmd.hpp>
+#include <iostream>
+#include <phosphor-logging/log.hpp>
 #include <sdbusplus/bus.hpp>
+#include <sdbusplus/bus/match.hpp>
 #include <sdbusplus/exception.hpp>
 
 using namespace sdbusplus;
+using namespace phosphor::host::command;
 
 static void register_openpower_hiomap_commands() __attribute__((constructor));
 
@@ -22,6 +29,33 @@ namespace openpower
 {
 namespace flash
 {
+constexpr auto BMC_EVENT_DAEMON_READY = 1 << 7;
+constexpr auto BMC_EVENT_FLASH_CTRL_LOST = 1 << 6;
+constexpr auto BMC_EVENT_WINDOW_RESET = 1 << 1;
+constexpr auto BMC_EVENT_PROTOCOL_RESET = 1 << 0;
+
+constexpr auto IPMI_CMD_HIOMAP_EVENT = 0x0f;
+
+constexpr auto HIOMAPD_SERVICE = "xyz.openbmc_project.Hiomapd";
+constexpr auto HIOMAPD_OBJECT = "/xyz/openbmc_project/Hiomapd";
+constexpr auto HIOMAPD_IFACE = "xyz.openbmc_project.Hiomapd.Protocol";
+constexpr auto HIOMAPD_IFACE_V2 = "xyz.openbmc_project.Hiomapd.Protocol.V2";
+
+constexpr auto DBUS_IFACE_PROPERTIES = "org.freedesktop.DBus.Properties";
+
+struct hiomap
+{
+    bus::bus *bus;
+
+    /* Signals */
+    bus::match::match *properties;
+    bus::match::match *window_reset;
+    bus::match::match *bmc_reboot;
+
+    /* Protocol state */
+    std::map<std::string, int> event_lookup;
+    uint8_t bmc_events;
+};
 
 /* TODO: Replace get/put with packed structs and direct assignment */
 template <typename T> static inline T get(void *buf)
@@ -71,26 +105,131 @@ static int hiomap_xlate_errno(int err)
     return entry->cc;
 }
 
+static void ipmi_hiomap_event_response(IpmiCmdData cmd, bool status)
+{
+    using namespace phosphor::logging;
+
+    if (!status)
+    {
+        log<level::ERR>("Failed to deliver host command",
+                        entry("SEL_COMMAND=%x:%x", cmd.first, cmd.second));
+    }
+}
+
+static int hiomap_handle_property_update(struct hiomap *ctx,
+                                         sdbusplus::message::message &msg)
+{
+    std::map<std::string, sdbusplus::message::variant<bool>> msgData;
+
+    std::string iface;
+    msg.read(iface, msgData);
+
+    for (auto const &x : msgData)
+    {
+        if (!ctx->event_lookup.count(x.first))
+        {
+            /* Unsupported event? */
+            continue;
+        }
+
+        uint8_t mask = ctx->event_lookup[x.first];
+        auto value = sdbusplus::message::variant_ns::get<bool>(x.second);
+
+        if (value)
+        {
+            ctx->bmc_events |= mask;
+        }
+        else
+        {
+            ctx->bmc_events &= ~mask;
+        }
+    }
+
+    auto cmd = std::make_pair(IPMI_CMD_HIOMAP_EVENT, ctx->bmc_events);
+
+    ipmid_send_cmd_to_host(std::make_tuple(cmd, ipmi_hiomap_event_response));
+
+    return 0;
+}
+
+static bus::match::match hiomap_match_properties(struct hiomap *ctx)
+{
+    auto properties =
+        bus::match::rules::propertiesChanged(HIOMAPD_OBJECT, HIOMAPD_IFACE_V2);
+
+    bus::match::match match(
+        *ctx->bus, properties,
+        std::bind(hiomap_handle_property_update, ctx, std::placeholders::_1));
+
+    return match;
+}
+
+static int hiomap_handle_signal_v2(struct hiomap *ctx, const char *name)
+{
+    ctx->bmc_events |= ctx->event_lookup[name];
+
+    auto cmd = std::make_pair(IPMI_CMD_HIOMAP_EVENT, ctx->bmc_events);
+
+    ipmid_send_cmd_to_host(std::make_tuple(cmd, ipmi_hiomap_event_response));
+
+    return 0;
+}
+
+static bus::match::match hiomap_match_signal_v2(struct hiomap *ctx,
+                                                const char *name)
+{
+    using namespace bus::match;
+
+    auto signals = rules::type::signal() + rules::path(HIOMAPD_OBJECT) +
+                   rules::interface(HIOMAPD_IFACE_V2) + rules::member(name);
+
+    bus::match::match match(*ctx->bus, signals,
+                            std::bind(hiomap_handle_signal_v2, ctx, name));
+
+    return match;
+}
+
+static ipmi_ret_t hiomap_reset(ipmi_request_t request, ipmi_response_t response,
+                               ipmi_data_len_t data_len, ipmi_context_t context)
+{
+    struct hiomap *ctx = static_cast<struct hiomap *>(context);
+
+    auto m = ctx->bus->new_method_call(HIOMAPD_SERVICE, HIOMAPD_OBJECT,
+                                       HIOMAPD_IFACE, "Reset");
+    try
+    {
+        ctx->bus->call(m);
+
+        *data_len = 0;
+    }
+    catch (const exception::SdBusError &e)
+    {
+        return hiomap_xlate_errno(e.get_errno());
+    }
+
+    return IPMI_CC_OK;
+}
+
 static ipmi_ret_t hiomap_get_info(ipmi_request_t request,
                                   ipmi_response_t response,
                                   ipmi_data_len_t data_len,
                                   ipmi_context_t context)
 {
+    struct hiomap *ctx = static_cast<struct hiomap *>(context);
+
     if (*data_len < 1)
     {
         return IPMI_CC_REQ_DATA_LEN_INVALID;
     }
 
     uint8_t *reqdata = (uint8_t *)request;
-    auto b = bus::new_system();
-    auto m = b.new_method_call(
-        "xyz.openbmc_project.Hiomapd", "/xyz/openbmc_project/Hiomapd",
-        "xyz.openbmc_project.Hiomapd.Protocol", "GetInfo");
+    auto m = ctx->bus->new_method_call(HIOMAPD_SERVICE, HIOMAPD_OBJECT,
+                                       HIOMAPD_IFACE, "GetInfo");
     m.append(reqdata[0]);
 
     try
     {
-        auto reply = b.call(m);
+        auto reply = ctx->bus->call(m);
 
         uint8_t version;
         uint8_t blockSizeShift;
@@ -116,7 +255,7 @@ static ipmi_ret_t hiomap_get_info(ipmi_request_t request,
 
 static const hiomap_command hiomap_commands[] = {
     [0] = NULL, /* 0 is an invalid command ID */
-    [1] = NULL, /* RESET */
+    [1] = hiomap_reset,
     [2] = hiomap_get_info,
 };
 
@@ -130,6 +269,8 @@ static ipmi_ret_t hiomap_dispatch(ipmi_netfn_t netfn, ipmi_cmd_t cmd,
                                   ipmi_data_len_t data_len,
                                   ipmi_context_t context)
 {
+    struct hiomap *ctx = static_cast<struct hiomap *>(context);
+
     if (*data_len < 2)
     {
         *data_len = 0;
@@ -158,8 +299,8 @@ static ipmi_ret_t hiomap_dispatch(ipmi_netfn_t netfn, ipmi_cmd_t cmd,
     }
 
     /* Populate the response command and sequence */
-    put(&ipmi_resp[0], ipmi_req[0]);
-    put(&ipmi_resp[1], ipmi_req[1]);
+    ipmi_resp[0] = hiomap_cmd;
+    ipmi_resp[1] = ipmi_req[1];
 
     *data_len = flash_len + 2;
 
@@ -170,6 +311,32 @@ static ipmi_ret_t hiomap_dispatch(ipmi_netfn_t netfn, ipmi_cmd_t cmd,
 
 static void register_openpower_hiomap_commands()
 {
-    ipmi_register_callback(NETFUN_IBM_OEM, IPMI_CMD_HIOMAP, NULL,
+    using namespace openpower::flash;
+
+    /* FIXME: Clean this up? Can we unregister? */
+    struct hiomap *ctx = new hiomap();
+
+    /* Initialise mapping from signal and property names to status bit */
+    ctx->event_lookup["DaemonReady"] = BMC_EVENT_DAEMON_READY;
+    ctx->event_lookup["FlashControlLost"] = BMC_EVENT_FLASH_CTRL_LOST;
+    ctx->event_lookup["WindowReset"] = BMC_EVENT_WINDOW_RESET;
+    ctx->event_lookup["ProtocolReset"] = BMC_EVENT_PROTOCOL_RESET;
+
+    ctx->bus = new bus::bus(ipmid_get_sd_bus_connection());
+
+    /* Initialise signal handling */
+
+    /*
+     * Can't use temporaries here because that causes SEGFAULTs due to slot
+     * destruction (!?), so enjoy the weird wrapping.
+     */
+    ctx->properties =
+        new bus::match::match(std::move(hiomap_match_properties(ctx)));
+    ctx->bmc_reboot = new bus::match::match(
+        std::move(hiomap_match_signal_v2(ctx, "ProtocolReset")));
+    ctx->window_reset = new bus::match::match(
+        std::move(hiomap_match_signal_v2(ctx, "WindowReset")));
+
+    ipmi_register_callback(NETFUN_IBM_OEM, IPMI_CMD_HIOMAP, ctx,
                            openpower::flash::hiomap_dispatch, SYSTEM_INTERFACE);
 }
