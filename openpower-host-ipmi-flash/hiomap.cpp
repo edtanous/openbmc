@@ -345,13 +345,44 @@ static ipmi_ret_t hiomap_create_write_window(ipmi_request_t request,
     return hiomap_create_window(ctx, false, request, response, data_len);
 }
 
+static ipmi_ret_t hiomap_close_window(ipmi_request_t request,
+                                      ipmi_response_t response,
+                                      ipmi_data_len_t data_len,
+                                      ipmi_context_t context)
+{
+    struct hiomap *ctx = static_cast<struct hiomap *>(context);
+
+    if (*data_len < 1)
+    {
+        return IPMI_CC_REQ_DATA_LEN_INVALID;
+    }
+
+    uint8_t *reqdata = (uint8_t *)request;
+    auto m = ctx->bus->new_method_call(HIOMAPD_SERVICE, HIOMAPD_OBJECT,
+                                       HIOMAPD_IFACE_V2, "CloseWindow");
+    m.append(reqdata[0]);
+
+    try
+    {
+        auto reply = ctx->bus->call(m);
+
+        *data_len = 0;
+    }
+    catch (const exception::SdBusError &e)
+    {
+        return hiomap_xlate_errno(e.get_errno());
+    }
+
+    return IPMI_CC_OK;
+}
+
 static const hiomap_command hiomap_commands[] = {
     [0] = NULL, /* 0 is an invalid command ID */
     [1] = hiomap_reset,
     [2] = hiomap_get_info,
     [3] = hiomap_get_flash_info,
     [4] = hiomap_create_read_window,
-    [5] = NULL, /* CLOSE_WINDOW */
+    [5] = hiomap_close_window,
     [6] = hiomap_create_write_window,
 };
 
