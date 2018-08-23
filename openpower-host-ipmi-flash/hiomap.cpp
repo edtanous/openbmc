@@ -409,6 +409,29 @@ static ipmi_ret_t hiomap_mark_dirty(ipmi_request_t request,
     return IPMI_CC_OK;
 }
 
+static ipmi_ret_t hiomap_flush(ipmi_request_t request, ipmi_response_t response,
+                               ipmi_data_len_t data_len, ipmi_context_t context)
+{
+    struct hiomap *ctx = static_cast<struct hiomap *>(context);
+
+    auto m = ctx->bus->new_method_call(HIOMAPD_SERVICE, HIOMAPD_OBJECT,
+                                       HIOMAPD_IFACE_V2, "Flush");
+
+    try
+    {
+        /* FIXME: No argument call assumes v2 */
+        auto reply = ctx->bus->call(m);
+
+        *data_len = 0;
+    }
+    catch (const exception::SdBusError &e)
+    {
+        return hiomap_xlate_errno(e.get_errno());
+    }
+
+    return IPMI_CC_OK;
+}
+
 static const hiomap_command hiomap_commands[] = {
     [0] = NULL, /* 0 is an invalid command ID */
     [1] = hiomap_reset,
@@ -418,6 +441,7 @@ static const hiomap_command hiomap_commands[] = {
     [5] = hiomap_close_window,
     [6] = hiomap_create_write_window,
     [7] = hiomap_mark_dirty,
+    [8] = hiomap_flush,
 };
 
 /* FIXME: Define this in the "right" place, wherever that is */
