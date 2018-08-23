@@ -283,11 +283,76 @@ static ipmi_ret_t hiomap_get_flash_info(ipmi_request_t request,
     return IPMI_CC_OK;
 }
 
+static ipmi_ret_t hiomap_create_window(struct hiomap *ctx, bool ro,
+                                       ipmi_request_t request,
+                                       ipmi_response_t response,
+                                       ipmi_data_len_t data_len)
+{
+    if (*data_len < 4)
+    {
+        return IPMI_CC_REQ_DATA_LEN_INVALID;
+    }
+
+    uint8_t *reqdata = (uint8_t *)request;
+    auto windowType = ro ? "CreateReadWindow" : "CreateWriteWindow";
+
+    auto m = ctx->bus->new_method_call(HIOMAPD_SERVICE, HIOMAPD_OBJECT,
+                                       HIOMAPD_IFACE_V2, windowType);
+    m.append(le16toh(get<uint16_t>(&reqdata[0])));
+    m.append(le16toh(get<uint16_t>(&reqdata[2])));
+
+    try
+    {
+        auto reply = ctx->bus->call(m);
+
+        uint16_t lpcAddress, size, offset;
+        reply.read(lpcAddress, size, offset);
+
+        uint8_t *respdata = (uint8_t *)response;
+
+        /* FIXME: Assumes v2! */
+        put(&respdata[0], htole16(lpcAddress));
+        put(&respdata[2], htole16(size));
+        put(&respdata[4], htole16(offset));
+
+        *data_len = 6;
+    }
+    catch (const exception::SdBusError &e)
+    {
+        return hiomap_xlate_errno(e.get_errno());
+    }
+
+    return IPMI_CC_OK;
+}
+
+static ipmi_ret_t hiomap_create_read_window(ipmi_request_t request,
+                                            ipmi_response_t response,
+                                            ipmi_data_len_t data_len,
+                                            ipmi_context_t context)
+{
+    struct hiomap *ctx = static_cast<struct hiomap *>(context);
+
+    return hiomap_create_window(ctx, true, request, response, data_len);
+}
+
+static ipmi_ret_t hiomap_create_write_window(ipmi_request_t request,
+                                             ipmi_response_t response,
+                                             ipmi_data_len_t data_len,
+                                             ipmi_context_t context)
+{
+    struct hiomap *ctx = static_cast<struct hiomap *>(context);
+
+    return hiomap_create_window(ctx, false, request, response, data_len);
+}
+
 static const hiomap_command hiomap_commands[] = {
     [0] = NULL, /* 0 is an invalid command ID */
     [1] = hiomap_reset,
     [2] = hiomap_get_info,
     [3] = hiomap_get_flash_info,
+    [4] = hiomap_create_read_window,
+    [5] = NULL, /* CLOSE_WINDOW */
+    [6] = hiomap_create_write_window,
 };
 
 /* FIXME: Define this in the "right" place, wherever that is */
