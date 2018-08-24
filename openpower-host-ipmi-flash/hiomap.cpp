@@ -466,6 +466,37 @@ static ipmi_ret_t hiomap_ack(ipmi_request_t request, ipmi_response_t response,
     return IPMI_CC_OK;
 }
 
+static ipmi_ret_t hiomap_erase(ipmi_request_t request, ipmi_response_t response,
+                               ipmi_data_len_t data_len, ipmi_context_t context)
+{
+    struct hiomap *ctx = static_cast<struct hiomap *>(context);
+
+    if (*data_len < 4)
+    {
+        return IPMI_CC_REQ_DATA_LEN_INVALID;
+    }
+
+    uint8_t *reqdata = (uint8_t *)request;
+    auto m = ctx->bus->new_method_call(HIOMAPD_SERVICE, HIOMAPD_OBJECT,
+                                       HIOMAPD_IFACE_V2, "Erase");
+    /* FIXME: Assumes v2 */
+    m.append(le16toh(get<uint16_t>(&reqdata[0]))); /* offset */
+    m.append(le16toh(get<uint16_t>(&reqdata[2]))); /* size */
+
+    try
+    {
+        auto reply = ctx->bus->call(m);
+
+        *data_len = 0;
+    }
+    catch (const exception::SdBusError &e)
+    {
+        return hiomap_xlate_errno(e.get_errno());
+    }
+
+    return IPMI_CC_OK;
+}
+
 static const hiomap_command hiomap_commands[] = {
     [0] = NULL, /* 0 is an invalid command ID */
     [1] = hiomap_reset,
@@ -477,6 +508,7 @@ static const hiomap_command hiomap_commands[] = {
     [7] = hiomap_mark_dirty,
     [8] = hiomap_flush,
     [9] = hiomap_ack,
+    [10] = hiomap_erase,
 };
 
 /* FIXME: Define this in the "right" place, wherever that is */
