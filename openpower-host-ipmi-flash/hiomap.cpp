@@ -55,6 +55,7 @@ struct hiomap
     /* Protocol state */
     std::map<std::string, int> event_lookup;
     uint8_t bmc_events;
+    uint8_t seq;
 };
 
 /* TODO: Replace get/put with packed structs and direct assignment */
@@ -497,18 +498,29 @@ static ipmi_ret_t hiomap_erase(ipmi_request_t request, ipmi_response_t response,
     return IPMI_CC_OK;
 }
 
+#define HIOMAP_C_RESET 1
+#define HIOMAP_C_GET_INFO 2
+#define HIOMAP_C_GET_FLASH_INFO 3
+#define HIOMAP_C_CREATE_READ_WINDOW 4
+#define HIOMAP_C_CLOSE_WINDOW 5
+#define HIOMAP_C_CREATE_WRITE_WINDOW 6
+#define HIOMAP_C_MARK_DIRTY 7
+#define HIOMAP_C_FLUSH 8
+#define HIOMAP_C_ACK 9
+#define HIOMAP_C_ERASE 10
+
 static const hiomap_command hiomap_commands[] = {
-    [0] = NULL, /* 0 is an invalid command ID */
-    [1] = hiomap_reset,
-    [2] = hiomap_get_info,
-    [3] = hiomap_get_flash_info,
-    [4] = hiomap_create_read_window,
-    [5] = hiomap_close_window,
-    [6] = hiomap_create_write_window,
-    [7] = hiomap_mark_dirty,
-    [8] = hiomap_flush,
-    [9] = hiomap_ack,
-    [10] = hiomap_erase,
+    [0] = NULL, /* Invalid command ID */
+    [HIOMAP_C_RESET] = hiomap_reset,
+    [HIOMAP_C_GET_INFO] = hiomap_get_info,
+    [HIOMAP_C_GET_FLASH_INFO] = hiomap_get_flash_info,
+    [HIOMAP_C_CREATE_READ_WINDOW] = hiomap_create_read_window,
+    [HIOMAP_C_CLOSE_WINDOW] = hiomap_close_window,
+    [HIOMAP_C_CREATE_WRITE_WINDOW] = hiomap_create_write_window,
+    [HIOMAP_C_MARK_DIRTY] = hiomap_mark_dirty,
+    [HIOMAP_C_FLUSH] = hiomap_flush,
+    [HIOMAP_C_ACK] = hiomap_ack,
+    [HIOMAP_C_ERASE] = hiomap_erase,
 };
 
 /* FIXME: Define this in the "right" place, wherever that is */
@@ -538,6 +550,18 @@ static ipmi_ret_t hiomap_dispatch(ipmi_netfn_t netfn, ipmi_cmd_t cmd,
         *data_len = 0;
         return IPMI_CC_PARM_OUT_OF_RANGE;
     }
+
+    bool is_unversioned =
+        (hiomap_cmd == HIOMAP_C_RESET || hiomap_cmd == HIOMAP_C_GET_INFO ||
+         hiomap_cmd == HIOMAP_C_ACK);
+    if (!is_unversioned && ctx->seq == ipmi_req[1])
+    {
+        *data_len = 0;
+        return IPMI_CC_INVALID_FIELD_REQUEST;
+    }
+
+    ctx->seq = ipmi_req[1];
+
     uint8_t *flash_req = ipmi_req + 2;
     size_t flash_len = *data_len - 2;
     uint8_t *flash_resp = ipmi_resp + 2;
@@ -552,7 +576,7 @@ static ipmi_ret_t hiomap_dispatch(ipmi_netfn_t netfn, ipmi_cmd_t cmd,
 
     /* Populate the response command and sequence */
     ipmi_resp[0] = hiomap_cmd;
-    ipmi_resp[1] = ipmi_req[1];
+    ipmi_resp[1] = ctx->seq;
 
     *data_len = flash_len + 2;
 
