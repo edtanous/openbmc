@@ -3,6 +3,7 @@ liboemhandler_LTLIBRARIES = liboemhandler.la
 
 liboemhandler_la_SOURCES = oemhandler.cpp \
                            host-interface.cpp \
+                           local_users.cpp \
                            org/open_power/OCC/Metrics/error.cpp
 
 BUILT_SOURCES = org/open_power/OCC/Metrics/error.hpp \

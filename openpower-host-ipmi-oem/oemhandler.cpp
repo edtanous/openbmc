@@ -1,6 +1,7 @@
 #include "oemhandler.hpp"
 #include "config.h"
 #include "elog-errors.hpp"
+#include "local_users.hpp"
 #include <host-ipmid/ipmid-api.h>
 #include <host-ipmid/ipmid-host-cmd.hpp>
 #include <fstream>
@@ -211,7 +212,11 @@ ipmi_ret_t ipmi_ibm_oem_reset_bmc_auth(ipmi_netfn_t netfn, ipmi_cmd_t cmd,
                                        ipmi_data_len_t data_len,
                                        ipmi_context_t context)
 {
-    return IPMI_CC_OK;
+    ipmi_ret_t rc;
+
+    rc = local::users::enableUsers();
+
+    return rc;
 }
 
 namespace {

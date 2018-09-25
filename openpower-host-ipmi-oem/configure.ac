@@ -69,6 +69,15 @@ AS_IF([test "x$CONTROL_HOST_OBJ_MGR" == "x"],
       [CONTROL_HOST_OBJ_MGR="/org/open_power/control"])
 AC_DEFINE_UNQUOTED([CONTROL_HOST_OBJ_MGR], ["$CONTROL_HOST_OBJ_MGR"], [The Control Host D-Bus Object Manager])
 
+AC_DEFINE(MAPPER_BUS_NAME, "xyz.openbmc_project.ObjectMapper",
+          [The object mapper bus name])
+
+AC_DEFINE(MAPPER_OBJ, "/xyz/openbmc_project/object_mapper",
+          [The object mapper object path])
+
+AC_DEFINE(MAPPER_IFACE, "xyz.openbmc_project.ObjectMapper",
+          [The object mapper interface])
+
 # Create configured output.
 AC_CONFIG_FILES([Makefile])
 AC_OUTPUT
