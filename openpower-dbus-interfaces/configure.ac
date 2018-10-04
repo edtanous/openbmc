@@ -27,7 +27,7 @@ AS_IF([test "x$enable_libopenpower_dbus" != "xno"], [
         AC_MSG_ERROR([Cannot find sdbus++]))
 
     # Check for baseline language coverage in the compiler for the C++14 standard
-    AX_CXX_COMPILE_STDCXX_14([noext])
+    AX_CXX_COMPILE_STDCXX_17([noext])
     AX_APPEND_COMPILE_FLAGS([-Wall -Werror], [CFLAGS])
     AX_APPEND_COMPILE_FLAGS([-Wall -Werror], [CXXFLAGS])
 
