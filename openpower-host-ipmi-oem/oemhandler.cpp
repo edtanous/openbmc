@@ -95,12 +95,10 @@ ipmi_ret_t ipmi_ibm_oem_partial_esel(ipmi_netfn_t netfn, ipmi_cmd_t cmd,
 	esel_req.offset    = le16toh((((uint16_t) reqptr[5]) << 8) + reqptr[4]);
 	esel_req.progress  = reqptr[6];
 
-	uint16_t used_res_id = get_sel_reserve_id();
-
 	// According to IPMI spec, Reservation ID must be checked.
-	if ( used_res_id != esel_req.resid ) {
+	if ( !checkSELReservation(esel_req.resid) ) {
 		// 0xc5 means Reservation Cancelled or Invalid Reservation ID.
-		printf("Used Reservation ID = %d\n", used_res_id);
+		printf("Used Reservation ID = %d\n", esel_req.resid);
 		rc = IPMI_CC_INVALID_RESERVATION_ID;
 
 		// clean g_esel_path.
