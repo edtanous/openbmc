@@ -22,6 +22,7 @@ static constexpr uint16_t P9_PERV_CTRL0            = 0x281A;
 static constexpr uint16_t P9_HB_MBX5_REG           = 0x283C;
 static constexpr uint16_t P9_SCRATCH_REGISTER_8    = 0x283F;
 static constexpr uint16_t P9_ROOT_CTRL8            = 0x2918;
+static constexpr uint16_t P9_ROOT_CTRL1_CLEAR      = 0x2931;
 }
 }
 }
