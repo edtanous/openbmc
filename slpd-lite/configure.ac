@@ -3,6 +3,8 @@ AC_PREREQ([2.69])
 AC_INIT([slpd-lite], [1.0], [https://github.com/openbmc/slpd-lite/issues])
 AC_CONFIG_HEADERS([config.h])
 AM_INIT_AUTOMAKE([subdir-objects -Wall -Werror foreign dist-xz])
+AC_LANG([C++])
+
 # Checks for programs.
 AC_PROG_CXX
 AX_CXX_COMPILE_STDCXX_14([noext])
