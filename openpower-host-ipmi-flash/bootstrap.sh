@@ -1,7 +1,9 @@
+#!/bin/sh
 # SPDX-License-Identifier: Apache-2.0
 # Copyright (C) 2018 IBM Corp.
 
-#!/bin/sh
+set -e
+set -x
 
 AUTOCONF_FILES="Makefile.in aclocal.m4 ar-lib autom4te.cache compile \
         config.guess config.h.in config.sub configure depcomp install-sh \
@@ -17,5 +19,5 @@ case $1 in
         ;;
 esac
 
-autoreconf -i
+autoreconf -vfi
 echo 'Run "./configure ${CONFIGURE_FLAGS} && make"'
