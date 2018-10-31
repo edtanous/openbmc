@@ -7,18 +7,21 @@
 
 #include <endian.h>
 #include <host-ipmid/ipmid-api.h>
-#include <string.h>
-#include <systemd/sd-bus.h>
 
+#include <cstring>
 #include <fstream>
 #include <functional>
 #include <host-ipmid/ipmid-host-cmd-utils.hpp>
 #include <host-ipmid/ipmid-host-cmd.hpp>
 #include <iostream>
+#include <map>
 #include <phosphor-logging/log.hpp>
 #include <sdbusplus/bus.hpp>
 #include <sdbusplus/bus/match.hpp>
 #include <sdbusplus/exception.hpp>
+#include <string>
+#include <tuple>
+#include <utility>
 
 using namespace sdbusplus;
 using namespace phosphor::host::command;
@@ -63,14 +66,14 @@ template <typename T>
 static inline T get(void* buf)
 {
     T t;
-    memcpy(&t, buf, sizeof(t));
+    std::memcpy(&t, buf, sizeof(t));
     return t;
 }
 
 template <typename T>
 static inline void put(void* buf, T&& t)
 {
-    memcpy(buf, &t, sizeof(t));
+    std::memcpy(buf, &t, sizeof(t));
 }
 
 typedef ipmi_ret_t (*hiomap_command)(ipmi_request_t req, ipmi_response_t resp,
