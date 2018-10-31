@@ -1,10 +1,10 @@
 #ifndef __HOST_IPMI_OPENPOWEROEM_HANDLER_H__
 #define __HOST_IPMI_OPENPOWEROEM_HANDLER_H__
 
-#include <stdint.h>
 #include <host-ipmid/ipmid-api.h>
-#include <string>
+#include <stdint.h>
 
+#include <string>
 
 // IPMI commands for net functions.
 enum ipmi_netfn_oem_cmds
@@ -30,17 +30,17 @@ std::string readESEL(const char* filename);
 void createLogEntry(const std::string& eSELData);
 
 ipmi_ret_t ipmi_ibm_oem_partial_esel(ipmi_netfn_t netfn, ipmi_cmd_t cmd,
-                              ipmi_request_t request, ipmi_response_t response,
-                              ipmi_data_len_t data_len, ipmi_context_t context);
+                                     ipmi_request_t request,
+                                     ipmi_response_t response,
+                                     ipmi_data_len_t data_len,
+                                     ipmi_context_t context);
 
-
-struct esel_request_t {
-    uint16_t  resid;
-    uint16_t  selrecord;
-    uint16_t  offset;
-    uint8_t  progress;
-}  __attribute__ ((packed)) ;
-
-
+struct esel_request_t
+{
+    uint16_t resid;
+    uint16_t selrecord;
+    uint16_t offset;
+    uint8_t progress;
+} __attribute__((packed));
 
 #endif

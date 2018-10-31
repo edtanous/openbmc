@@ -17,5 +17,5 @@ namespace users
  */
 ipmi_ret_t enableUsers();
 
-}
-}
+} // namespace users
+} // namespace local

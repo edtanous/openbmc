@@ -1,5 +1,7 @@
 #include "config.h"
+
 #include "local_users.hpp"
+
 #include <host-ipmid/ipmid-host-cmd.hpp>
 #include <phosphor-logging/log.hpp>
 
@@ -16,8 +18,8 @@ constexpr auto propIface = "org.freedesktop.DBus.Properties";
 using DbusObjectPath = std::string;
 using DbusService = std::string;
 using DbusInterface = std::string;
-using ObjectTree = std::map<DbusObjectPath,
-                            std::map<DbusService, std::vector<DbusInterface>>>;
+using ObjectTree =
+    std::map<DbusObjectPath, std::map<DbusService, std::vector<DbusInterface>>>;
 
 /**
  * @brief Gets a list of all local users in the form of GetSubTree
@@ -32,12 +34,10 @@ void getUsers(ObjectTree& users)
 
     try
     {
-        auto method = bus->new_method_call(MAPPER_BUS_NAME,
-                MAPPER_OBJ,
-                MAPPER_IFACE,
-                "GetSubTree");
+        auto method = bus->new_method_call(MAPPER_BUS_NAME, MAPPER_OBJ,
+                                           MAPPER_IFACE, "GetSubTree");
         method.append("/xyz/openbmc_project/user/", 0,
-                std::vector<std::string>{userIface});
+                      std::vector<std::string>{userIface});
 
         auto reply = bus->call(method);
         if (reply.is_method_error())
@@ -65,10 +65,8 @@ void enableUser(const std::string& path, const std::string& service)
 
     try
     {
-        auto method = bus->new_method_call(service.c_str(),
-                path.c_str(),
-                propIface,
-                "Set");
+        auto method = bus->new_method_call(service.c_str(), path.c_str(),
+                                           propIface, "Set");
         sdbusplus::message::variant<bool> enabled{true};
         method.append(userIface, "UserEnabled", enabled);
 
@@ -100,12 +98,12 @@ ipmi_ret_t enableUsers()
     catch (std::runtime_error& e)
     {
         log<level::ERR>("Failed enabling local users",
-                entry("ERROR=%s", e.what()));
+                        entry("ERROR=%s", e.what()));
         return IPMI_CC_UNSPECIFIED_ERROR;
     }
 
     return IPMI_CC_OK;
 }
 
-}
-}
+} // namespace users
+} // namespace local

@@ -1,37 +1,40 @@
-#include "oemhandler.hpp"
 #include "config.h"
+
+#include "oemhandler.hpp"
+
 #include "elog-errors.hpp"
 #include "local_users.hpp"
+
+#include <endian.h>
 #include <host-ipmid/ipmid-api.h>
-#include <host-ipmid/ipmid-host-cmd.hpp>
-#include <fstream>
-#include <memory>
 #include <stdio.h>
 #include <string.h>
-#include <endian.h>
-#include <functional>
 #include <systemd/sd-bus.h>
-#include <sdbusplus/bus.hpp>
+
+#include <fstream>
+#include <functional>
 #include <host-interface.hpp>
+#include <host-ipmid/ipmid-host-cmd.hpp>
+#include <memory>
 #include <org/open_power/OCC/Metrics/error.hpp>
+#include <sdbusplus/bus.hpp>
 
 void register_netfn_ibm_oem_commands() __attribute__((constructor));
 
-const char *g_esel_path = "/tmp/esel";
+const char* g_esel_path = "/tmp/esel";
 uint16_t g_record_id = 0x0001;
 using namespace phosphor::logging;
 constexpr auto occMetricsType = 0xDD;
 
 std::string readESEL(const char* fileName)
 {
-    std::string content {};
+    std::string content{};
 
     std::ifstream handle(fileName);
 
     if (handle.fail())
     {
-        log<level::ERR>("Failed to open eSEL",
-                entry("FILENAME=%s", fileName));
+        log<level::ERR>("Failed to open eSEL", entry("FILENAME=%s", fileName));
         return content;
     }
 
@@ -50,8 +53,8 @@ void createOCCLogEntry(const std::string& eSELData)
     // insert '/0' at the end of the character array.
     constexpr auto byteSeperator = 3;
 
-    std::unique_ptr<char[]> data(new char[
-        (eSELData.size() * byteSeperator) + 1]());
+    std::unique_ptr<char[]> data(
+        new char[(eSELData.size() * byteSeperator) + 1]());
 
     for (size_t i = 0; i < eSELData.size(); i++)
     {
@@ -59,12 +62,11 @@ void createOCCLogEntry(const std::string& eSELData)
     }
     data[eSELData.size() * byteSeperator] = '\0';
 
-    using error =  sdbusplus::org::open_power::OCC::Metrics::Error::Event;
+    using error = sdbusplus::org::open_power::OCC::Metrics::Error::Event;
     using metadata = org::open_power::OCC::Metrics::Event;
 
     report<error>(metadata::ESEL(data.get()));
 }
-
 
 ///////////////////////////////////////////////////////////////////////////////
 // For the First partial add eSEL the SEL Record ID and offset
@@ -79,79 +81,86 @@ void createOCCLogEntry(const std::string& eSELData)
 // storage.  Likely via the ipmi add_sel command.
 ///////////////////////////////////////////////////////////////////////////////
 ipmi_ret_t ipmi_ibm_oem_partial_esel(ipmi_netfn_t netfn, ipmi_cmd_t cmd,
-                                     ipmi_request_t request, ipmi_response_t response,
-                                     ipmi_data_len_t data_len, ipmi_context_t context)
+                                     ipmi_request_t request,
+                                     ipmi_response_t response,
+                                     ipmi_data_len_t data_len,
+                                     ipmi_context_t context)
 {
-	uint8_t *reqptr = (uint8_t *) request;
-	esel_request_t esel_req;
-	FILE *fp;
-	int r = 0;
-	uint8_t rlen;
-	ipmi_ret_t rc = IPMI_CC_OK;
-	const char *pio;
+    uint8_t* reqptr = (uint8_t*)request;
+    esel_request_t esel_req;
+    FILE* fp;
+    int r = 0;
+    uint8_t rlen;
+    ipmi_ret_t rc = IPMI_CC_OK;
+    const char* pio;
 
-	esel_req.resid     = le16toh((((uint16_t) reqptr[1]) << 8) + reqptr[0]);
-	esel_req.selrecord = le16toh((((uint16_t) reqptr[3]) << 8) + reqptr[2]);
-	esel_req.offset    = le16toh((((uint16_t) reqptr[5]) << 8) + reqptr[4]);
-	esel_req.progress  = reqptr[6];
+    esel_req.resid = le16toh((((uint16_t)reqptr[1]) << 8) + reqptr[0]);
+    esel_req.selrecord = le16toh((((uint16_t)reqptr[3]) << 8) + reqptr[2]);
+    esel_req.offset = le16toh((((uint16_t)reqptr[5]) << 8) + reqptr[4]);
+    esel_req.progress = reqptr[6];
 
-	// According to IPMI spec, Reservation ID must be checked.
-	if ( !checkSELReservation(esel_req.resid) ) {
-		// 0xc5 means Reservation Cancelled or Invalid Reservation ID.
-		printf("Used Reservation ID = %d\n", esel_req.resid);
-		rc = IPMI_CC_INVALID_RESERVATION_ID;
+    // According to IPMI spec, Reservation ID must be checked.
+    if (!checkSELReservation(esel_req.resid))
+    {
+        // 0xc5 means Reservation Cancelled or Invalid Reservation ID.
+        printf("Used Reservation ID = %d\n", esel_req.resid);
+        rc = IPMI_CC_INVALID_RESERVATION_ID;
 
-		// clean g_esel_path.
-		r = remove(g_esel_path);
-		if(r < 0)
-			fprintf(stderr, "Error deleting %s\n", g_esel_path);
+        // clean g_esel_path.
+        r = remove(g_esel_path);
+        if (r < 0)
+            fprintf(stderr, "Error deleting %s\n", g_esel_path);
 
-		return rc;
-	}
+        return rc;
+    }
 
     // OpenPOWER Host Interface spec says if RecordID and Offset are
-	// 0 then then this is a new request
-	if (!esel_req.selrecord && !esel_req.offset)
-		pio = "wb";
-	else
-		pio = "rb+";
+    // 0 then then this is a new request
+    if (!esel_req.selrecord && !esel_req.offset)
+        pio = "wb";
+    else
+        pio = "rb+";
 
-	rlen = (*data_len) - (uint8_t) (sizeof(esel_request_t));
+    rlen = (*data_len) - (uint8_t)(sizeof(esel_request_t));
 
-	if ((fp = fopen(g_esel_path, pio)) != NULL) {
-		fseek(fp, esel_req.offset, SEEK_SET);
-		fwrite(reqptr+(uint8_t) (sizeof(esel_request_t)), rlen, 1, fp);
-		fclose(fp);
-
-		*data_len = sizeof(g_record_id);
-		memcpy(response, &g_record_id, *data_len);
-	} else {
-		fprintf(stderr, "Error trying to perform %s for esel%s\n",pio, g_esel_path);
-		rc = IPMI_CC_INVALID;
-		*data_len     = 0;
-	}
-
-	// The first bit presents that this is the last partial packet
-	// coming down.  If that is the case advance the record id so we
-	// don't overlap logs.  This allows anyone to establish a log
-	// directory system.
-    if (esel_req.progress & 1 )
+    if ((fp = fopen(g_esel_path, pio)) != NULL)
     {
-         g_record_id++;
+        fseek(fp, esel_req.offset, SEEK_SET);
+        fwrite(reqptr + (uint8_t)(sizeof(esel_request_t)), rlen, 1, fp);
+        fclose(fp);
 
-         auto eSELData = readESEL(g_esel_path);
+        *data_len = sizeof(g_record_id);
+        memcpy(response, &g_record_id, *data_len);
+    }
+    else
+    {
+        fprintf(stderr, "Error trying to perform %s for esel%s\n", pio,
+                g_esel_path);
+        rc = IPMI_CC_INVALID;
+        *data_len = 0;
+    }
 
-         if (eSELData.empty())
-         {
-             return IPMI_CC_UNSPECIFIED_ERROR;
-         }
+    // The first bit presents that this is the last partial packet
+    // coming down.  If that is the case advance the record id so we
+    // don't overlap logs.  This allows anyone to establish a log
+    // directory system.
+    if (esel_req.progress & 1)
+    {
+        g_record_id++;
 
-         // If the eSEL record type is OCC metrics, then create the OCC log
-         // entry.
-         if (eSELData[2] == occMetricsType)
-         {
-             createOCCLogEntry(eSELData);
-         }
+        auto eSELData = readESEL(g_esel_path);
+
+        if (eSELData.empty())
+        {
+            return IPMI_CC_UNSPECIFIED_ERROR;
+        }
+
+        // If the eSEL record type is OCC metrics, then create the OCC log
+        // entry.
+        if (eSELData[2] == occMetricsType)
+        {
+            createOCCLogEntry(eSELData);
+        }
     }
 
     return rc;
@@ -160,40 +169,46 @@ ipmi_ret_t ipmi_ibm_oem_partial_esel(ipmi_netfn_t netfn, ipmi_cmd_t cmd,
 // Prepare for FW Update.
 // Execute needed commands to prepare the system for a fw update from the host.
 ipmi_ret_t ipmi_ibm_oem_prep_fw_update(ipmi_netfn_t netfn, ipmi_cmd_t cmd,
-                                     ipmi_request_t request, ipmi_response_t response,
-                                     ipmi_data_len_t data_len, ipmi_context_t context)
+                                       ipmi_request_t request,
+                                       ipmi_response_t response,
+                                       ipmi_data_len_t data_len,
+                                       ipmi_context_t context)
 {
     ipmi_ret_t ipmi_rc = IPMI_CC_OK;
     *data_len = 0;
 
     int rc = 0;
     std::ofstream rwfs_file;
-    const char  *busname = "org.openbmc.control.Bmc";
-    const char  *objname = "/org/openbmc/control/bmc0";
-    const char  *iface = "org.openbmc.control.Bmc";
-    sd_bus *bus = ipmid_get_sd_bus_connection();
-    sd_bus_message *reply = NULL;
+    const char* busname = "org.openbmc.control.Bmc";
+    const char* objname = "/org/openbmc/control/bmc0";
+    const char* iface = "org.openbmc.control.Bmc";
+    sd_bus* bus = ipmid_get_sd_bus_connection();
+    sd_bus_message* reply = NULL;
     sd_bus_error error = SD_BUS_ERROR_NULL;
     int r = 0;
 
     // Set one time flag
-    rc = system("fw_setenv openbmconce copy-files-to-ram copy-base-filesystem-to-ram");
+    rc = system(
+        "fw_setenv openbmconce copy-files-to-ram copy-base-filesystem-to-ram");
     rc = WEXITSTATUS(rc);
-    if (rc != 0) {
+    if (rc != 0)
+    {
         fprintf(stderr, "fw_setenv openbmconce failed with rc=%d\n", rc);
         return IPMI_CC_UNSPECIFIED_ERROR;
     }
 
     // Touch the image-rwfs file to perform an empty update to force the save
-    // in case we're already in ram and the flash is the same causing the ram files
-    // to not be copied back to flash
-    rwfs_file.open("/run/initramfs/image-rwfs", std::ofstream::out | std::ofstream::app);
+    // in case we're already in ram and the flash is the same causing the ram
+    // files to not be copied back to flash
+    rwfs_file.open("/run/initramfs/image-rwfs",
+                   std::ofstream::out | std::ofstream::app);
     rwfs_file.close();
 
     // Reboot the BMC for settings to take effect
-    r = sd_bus_call_method(bus, busname, objname, iface,
-                           "warmReset", &error, &reply, NULL);
-    if (r < 0) {
+    r = sd_bus_call_method(bus, busname, objname, iface, "warmReset", &error,
+                           &reply, NULL);
+    if (r < 0)
+    {
         fprintf(stderr, "Failed to reset BMC: %s\n", strerror(-r));
         return -1;
     }
@@ -217,23 +232,26 @@ ipmi_ret_t ipmi_ibm_oem_reset_bmc_auth(ipmi_netfn_t netfn, ipmi_cmd_t cmd,
     return rc;
 }
 
-namespace {
+namespace
+{
 // Storage to keep the object alive during process life
 std::unique_ptr<open_power::host::command::Host> opHost
-        __attribute__((init_priority(101)));
+    __attribute__((init_priority(101)));
 std::unique_ptr<sdbusplus::server::manager::manager> objManager
-        __attribute__((init_priority(101)));
-}
+    __attribute__((init_priority(101)));
+} // namespace
 
 void register_netfn_ibm_oem_commands()
 {
-    printf("Registering NetFn:[0x%X], Cmd:[0x%X]\n",NETFUN_IBM_OEM, IPMI_CMD_PESEL);
-    ipmi_register_callback(NETFUN_IBM_OEM, IPMI_CMD_PESEL, NULL, ipmi_ibm_oem_partial_esel,
-                           SYSTEM_INTERFACE);
+    printf("Registering NetFn:[0x%X], Cmd:[0x%X]\n", NETFUN_IBM_OEM,
+           IPMI_CMD_PESEL);
+    ipmi_register_callback(NETFUN_IBM_OEM, IPMI_CMD_PESEL, NULL,
+                           ipmi_ibm_oem_partial_esel, SYSTEM_INTERFACE);
 
-    printf("Registering NetFn:[0x%X], Cmd:[0x%X]\n", NETFUN_OEM, IPMI_CMD_PREP_FW_UPDATE);
-    ipmi_register_callback(NETFUN_OEM, IPMI_CMD_PREP_FW_UPDATE, NULL, ipmi_ibm_oem_prep_fw_update,
-                           SYSTEM_INTERFACE);
+    printf("Registering NetFn:[0x%X], Cmd:[0x%X]\n", NETFUN_OEM,
+           IPMI_CMD_PREP_FW_UPDATE);
+    ipmi_register_callback(NETFUN_OEM, IPMI_CMD_PREP_FW_UPDATE, NULL,
+                           ipmi_ibm_oem_prep_fw_update, SYSTEM_INTERFACE);
 
     ipmi_register_callback(NETFUN_IBM_OEM, IPMI_CMD_RESET_BMC_AUTH, NULL,
                            ipmi_ibm_oem_reset_bmc_auth, SYSTEM_INTERFACE);
@@ -244,11 +262,10 @@ void register_netfn_ibm_oem_commands()
     // Add sdbusplus ObjectManager.
     auto& sdbusPlusHandler = ipmid_get_sdbus_plus_handler();
     objManager = std::make_unique<sdbusplus::server::manager::manager>(
-                    *sdbusPlusHandler,
-                    CONTROL_HOST_OBJ_MGR);
+        *sdbusPlusHandler, CONTROL_HOST_OBJ_MGR);
 
     opHost = std::make_unique<open_power::host::command::Host>(
-                        *sdbusPlusHandler, objPath.c_str());
+        *sdbusPlusHandler, objPath.c_str());
 
     // Service for this is provided by phosphor layer systemcmdintf
     // and this will be as part of that.

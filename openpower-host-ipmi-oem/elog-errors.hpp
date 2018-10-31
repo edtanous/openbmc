@@ -2,12 +2,12 @@
 // See elog-gen.py for more details
 #pragma once
 
+#include <phosphor-logging/elog.hpp>
+#include <phosphor-logging/log.hpp>
+#include <sdbusplus/exception.hpp>
 #include <string>
 #include <tuple>
 #include <type_traits>
-#include <sdbusplus/exception.hpp>
-#include <phosphor-logging/log.hpp>
-#include <phosphor-logging/elog.hpp>
 
 namespace sdbusplus
 {
@@ -21,14 +21,13 @@ namespace Metrics
 {
 namespace Error
 {
-    struct Event;
+struct Event;
 } // namespace Error
 } // namespace Metrics
 } // namespace OCC
 } // namespace open_power
 } // namespace org
 } // namespace sdbusplus
-
 
 namespace phosphor
 {
@@ -51,19 +50,18 @@ struct ESEL
 {
     static constexpr auto str = "ESEL=%s";
     static constexpr auto str_short = "ESEL";
-    using type = std::tuple<std::decay_t<decltype(str)>,const char*>;
-    explicit constexpr ESEL(const char* a) : _entry(entry(str, a)) {};
+    using type = std::tuple<std::decay_t<decltype(str)>, const char*>;
+    explicit constexpr ESEL(const char* a) : _entry(entry(str, a)){};
     type _entry;
 };
 
-}  // namespace _Event
+} // namespace _Event
 
 struct Event
 {
     static constexpr auto L = level::INFO;
     using ESEL = _Event::ESEL;
     using metadata_types = std::tuple<ESEL>;
-
 };
 
 } // namespace Metrics
@@ -71,17 +69,17 @@ struct Event
 } // namespace open_power
 } // namespace org
 
-
 namespace details
 {
 
 template <>
-struct map_exception_type<sdbusplus::org::open_power::OCC::Metrics::Error::Event>
+struct map_exception_type<
+    sdbusplus::org::open_power::OCC::Metrics::Error::Event>
 {
     using type = org::open_power::OCC::Metrics::Event;
 };
 
-}
+} // namespace details
 
 } // namespace logging
 
