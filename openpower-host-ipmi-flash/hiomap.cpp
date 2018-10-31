@@ -45,12 +45,12 @@ constexpr auto DBUS_IFACE_PROPERTIES = "org.freedesktop.DBus.Properties";
 
 struct hiomap
 {
-    bus::bus *bus;
+    bus::bus* bus;
 
     /* Signals */
-    bus::match::match *properties;
-    bus::match::match *window_reset;
-    bus::match::match *bmc_reboot;
+    bus::match::match* properties;
+    bus::match::match* window_reset;
+    bus::match::match* bmc_reboot;
 
     /* Protocol state */
     std::map<std::string, int> event_lookup;
@@ -59,14 +59,16 @@ struct hiomap
 };
 
 /* TODO: Replace get/put with packed structs and direct assignment */
-template <typename T> static inline T get(void *buf)
+template <typename T>
+static inline T get(void* buf)
 {
     T t;
     memcpy(&t, buf, sizeof(t));
     return t;
 }
 
-template <typename T> static inline void put(void *buf, T &&t)
+template <typename T>
+static inline void put(void* buf, T&& t)
 {
     memcpy(buf, &t, sizeof(t));
 }
@@ -96,7 +98,7 @@ static const errno_cc_entry errno_cc_map[] = {
 
 static int hiomap_xlate_errno(int err)
 {
-    const errno_cc_entry *entry = &errno_cc_map[0];
+    const errno_cc_entry* entry = &errno_cc_map[0];
 
     while (!(entry->err == err || entry->err == -1))
     {
@@ -117,15 +119,15 @@ static void ipmi_hiomap_event_response(IpmiCmdData cmd, bool status)
     }
 }
 
-static int hiomap_handle_property_update(struct hiomap *ctx,
-                                         sdbusplus::message::message &msg)
+static int hiomap_handle_property_update(struct hiomap* ctx,
+                                         sdbusplus::message::message& msg)
 {
     std::map<std::string, sdbusplus::message::variant<bool>> msgData;
 
     std::string iface;
     msg.read(iface, msgData);
 
-    for (auto const &x : msgData)
+    for (auto const& x : msgData)
     {
         if (!ctx->event_lookup.count(x.first))
         {
@@ -153,7 +155,7 @@ static int hiomap_handle_property_update(struct hiomap *ctx,
     return 0;
 }
 
-static bus::match::match hiomap_match_properties(struct hiomap *ctx)
+static bus::match::match hiomap_match_properties(struct hiomap* ctx)
 {
     auto properties =
         bus::match::rules::propertiesChanged(HIOMAPD_OBJECT, HIOMAPD_IFACE_V2);
@@ -165,7 +167,7 @@ static bus::match::match hiomap_match_properties(struct hiomap *ctx)
     return match;
 }
 
-static int hiomap_handle_signal_v2(struct hiomap *ctx, const char *name)
+static int hiomap_handle_signal_v2(struct hiomap* ctx, const char* name)
 {
     ctx->bmc_events |= ctx->event_lookup[name];
 
@@ -176,8 +178,8 @@ static int hiomap_handle_signal_v2(struct hiomap *ctx, const char *name)
     return 0;
 }
 
-static bus::match::match hiomap_match_signal_v2(struct hiomap *ctx,
-                                                const char *name)
+static bus::match::match hiomap_match_signal_v2(struct hiomap* ctx,
+                                                const char* name)
 {
     using namespace bus::match;
 
@@ -193,7 +195,7 @@ static bus::match::match hiomap_match_signal_v2(struct hiomap *ctx,
 static ipmi_ret_t hiomap_reset(ipmi_request_t request, ipmi_response_t response,
                                ipmi_data_len_t data_len, ipmi_context_t context)
 {
-    struct hiomap *ctx = static_cast<struct hiomap *>(context);
+    struct hiomap* ctx = static_cast<struct hiomap*>(context);
 
     auto m = ctx->bus->new_method_call(HIOMAPD_SERVICE, HIOMAPD_OBJECT,
                                        HIOMAPD_IFACE, "Reset");
@@ -203,7 +205,7 @@ static ipmi_ret_t hiomap_reset(ipmi_request_t request, ipmi_response_t response,
 
         *data_len = 0;
     }
-    catch (const exception::SdBusError &e)
+    catch (const exception::SdBusError& e)
     {
         return hiomap_xlate_errno(e.get_errno());
     }
@@ -216,14 +218,14 @@ static ipmi_ret_t hiomap_get_info(ipmi_request_t request,
                                   ipmi_data_len_t data_len,
                                   ipmi_context_t context)
 {
-    struct hiomap *ctx = static_cast<struct hiomap *>(context);
+    struct hiomap* ctx = static_cast<struct hiomap*>(context);
 
     if (*data_len < 1)
     {
         return IPMI_CC_REQ_DATA_LEN_INVALID;
     }
 
-    uint8_t *reqdata = (uint8_t *)request;
+    uint8_t* reqdata = (uint8_t*)request;
     auto m = ctx->bus->new_method_call(HIOMAPD_SERVICE, HIOMAPD_OBJECT,
                                        HIOMAPD_IFACE, "GetInfo");
     m.append(reqdata[0]);
@@ -237,7 +239,7 @@ static ipmi_ret_t hiomap_get_info(ipmi_request_t request,
         uint16_t timeout;
         reply.read(version, blockSizeShift, timeout);
 
-        uint8_t *respdata = (uint8_t *)response;
+        uint8_t* respdata = (uint8_t*)response;
 
         /* FIXME: Assumes v2! */
         put(&respdata[0], version);
@@ -246,7 +248,7 @@ static ipmi_ret_t hiomap_get_info(ipmi_request_t request,
 
         *data_len = 4;
     }
-    catch (const exception::SdBusError &e)
+    catch (const exception::SdBusError& e)
     {
         return hiomap_xlate_errno(e.get_errno());
     }
@@ -259,7 +261,7 @@ static ipmi_ret_t hiomap_get_flash_info(ipmi_request_t request,
                                         ipmi_data_len_t data_len,
                                         ipmi_context_t context)
 {
-    struct hiomap *ctx = static_cast<struct hiomap *>(context);
+    struct hiomap* ctx = static_cast<struct hiomap*>(context);
 
     auto m = ctx->bus->new_method_call(HIOMAPD_SERVICE, HIOMAPD_OBJECT,
                                        HIOMAPD_IFACE_V2, "GetFlashInfo");
@@ -270,13 +272,13 @@ static ipmi_ret_t hiomap_get_flash_info(ipmi_request_t request,
         uint16_t flashSize, eraseSize;
         reply.read(flashSize, eraseSize);
 
-        uint8_t *respdata = (uint8_t *)response;
+        uint8_t* respdata = (uint8_t*)response;
         put(&respdata[0], htole16(flashSize));
         put(&respdata[2], htole16(eraseSize));
 
         *data_len = 4;
     }
-    catch (const exception::SdBusError &e)
+    catch (const exception::SdBusError& e)
     {
         return hiomap_xlate_errno(e.get_errno());
     }
@@ -284,7 +286,7 @@ static ipmi_ret_t hiomap_get_flash_info(ipmi_request_t request,
     return IPMI_CC_OK;
 }
 
-static ipmi_ret_t hiomap_create_window(struct hiomap *ctx, bool ro,
+static ipmi_ret_t hiomap_create_window(struct hiomap* ctx, bool ro,
                                        ipmi_request_t request,
                                        ipmi_response_t response,
                                        ipmi_data_len_t data_len)
@@ -294,7 +296,7 @@ static ipmi_ret_t hiomap_create_window(struct hiomap *ctx, bool ro,
         return IPMI_CC_REQ_DATA_LEN_INVALID;
     }
 
-    uint8_t *reqdata = (uint8_t *)request;
+    uint8_t* reqdata = (uint8_t*)request;
     auto windowType = ro ? "CreateReadWindow" : "CreateWriteWindow";
 
     auto m = ctx->bus->new_method_call(HIOMAPD_SERVICE, HIOMAPD_OBJECT,
@@ -309,7 +311,7 @@ static ipmi_ret_t hiomap_create_window(struct hiomap *ctx, bool ro,
         uint16_t lpcAddress, size, offset;
         reply.read(lpcAddress, size, offset);
 
-        uint8_t *respdata = (uint8_t *)response;
+        uint8_t* respdata = (uint8_t*)response;
 
         /* FIXME: Assumes v2! */
         put(&respdata[0], htole16(lpcAddress));
@@ -318,7 +320,7 @@ static ipmi_ret_t hiomap_create_window(struct hiomap *ctx, bool ro,
 
         *data_len = 6;
     }
-    catch (const exception::SdBusError &e)
+    catch (const exception::SdBusError& e)
     {
         return hiomap_xlate_errno(e.get_errno());
     }
@@ -331,7 +333,7 @@ static ipmi_ret_t hiomap_create_read_window(ipmi_request_t request,
                                             ipmi_data_len_t data_len,
                                             ipmi_context_t context)
 {
-    struct hiomap *ctx = static_cast<struct hiomap *>(context);
+    struct hiomap* ctx = static_cast<struct hiomap*>(context);
 
     return hiomap_create_window(ctx, true, request, response, data_len);
 }
@@ -341,7 +343,7 @@ static ipmi_ret_t hiomap_create_write_window(ipmi_request_t request,
                                              ipmi_data_len_t data_len,
                                              ipmi_context_t context)
 {
-    struct hiomap *ctx = static_cast<struct hiomap *>(context);
+    struct hiomap* ctx = static_cast<struct hiomap*>(context);
 
     return hiomap_create_window(ctx, false, request, response, data_len);
 }
@@ -351,14 +353,14 @@ static ipmi_ret_t hiomap_close_window(ipmi_request_t request,
                                       ipmi_data_len_t data_len,
                                       ipmi_context_t context)
 {
-    struct hiomap *ctx = static_cast<struct hiomap *>(context);
+    struct hiomap* ctx = static_cast<struct hiomap*>(context);
 
     if (*data_len < 1)
     {
         return IPMI_CC_REQ_DATA_LEN_INVALID;
     }
 
-    uint8_t *reqdata = (uint8_t *)request;
+    uint8_t* reqdata = (uint8_t*)request;
     auto m = ctx->bus->new_method_call(HIOMAPD_SERVICE, HIOMAPD_OBJECT,
                                        HIOMAPD_IFACE_V2, "CloseWindow");
     m.append(reqdata[0]);
@@ -369,7 +371,7 @@ static ipmi_ret_t hiomap_close_window(ipmi_request_t request,
 
         *data_len = 0;
     }
-    catch (const exception::SdBusError &e)
+    catch (const exception::SdBusError& e)
     {
         return hiomap_xlate_errno(e.get_errno());
     }
@@ -382,14 +384,14 @@ static ipmi_ret_t hiomap_mark_dirty(ipmi_request_t request,
                                     ipmi_data_len_t data_len,
                                     ipmi_context_t context)
 {
-    struct hiomap *ctx = static_cast<struct hiomap *>(context);
+    struct hiomap* ctx = static_cast<struct hiomap*>(context);
 
     if (*data_len < 4)
     {
         return IPMI_CC_REQ_DATA_LEN_INVALID;
     }
 
-    uint8_t *reqdata = (uint8_t *)request;
+    uint8_t* reqdata = (uint8_t*)request;
     auto m = ctx->bus->new_method_call(HIOMAPD_SERVICE, HIOMAPD_OBJECT,
                                        HIOMAPD_IFACE_V2, "MarkDirty");
     /* FIXME: Assumes v2 */
@@ -402,7 +404,7 @@ static ipmi_ret_t hiomap_mark_dirty(ipmi_request_t request,
 
         *data_len = 0;
     }
-    catch (const exception::SdBusError &e)
+    catch (const exception::SdBusError& e)
     {
         return hiomap_xlate_errno(e.get_errno());
     }
@@ -413,7 +415,7 @@ static ipmi_ret_t hiomap_mark_dirty(ipmi_request_t request,
 static ipmi_ret_t hiomap_flush(ipmi_request_t request, ipmi_response_t response,
                                ipmi_data_len_t data_len, ipmi_context_t context)
 {
-    struct hiomap *ctx = static_cast<struct hiomap *>(context);
+    struct hiomap* ctx = static_cast<struct hiomap*>(context);
 
     auto m = ctx->bus->new_method_call(HIOMAPD_SERVICE, HIOMAPD_OBJECT,
                                        HIOMAPD_IFACE_V2, "Flush");
@@ -425,7 +427,7 @@ static ipmi_ret_t hiomap_flush(ipmi_request_t request, ipmi_response_t response,
 
         *data_len = 0;
     }
-    catch (const exception::SdBusError &e)
+    catch (const exception::SdBusError& e)
     {
         return hiomap_xlate_errno(e.get_errno());
     }
@@ -436,14 +438,14 @@ static ipmi_ret_t hiomap_flush(ipmi_request_t request, ipmi_response_t response,
 static ipmi_ret_t hiomap_ack(ipmi_request_t request, ipmi_response_t response,
                              ipmi_data_len_t data_len, ipmi_context_t context)
 {
-    struct hiomap *ctx = static_cast<struct hiomap *>(context);
+    struct hiomap* ctx = static_cast<struct hiomap*>(context);
 
     if (*data_len < 1)
     {
         return IPMI_CC_REQ_DATA_LEN_INVALID;
     }
 
-    uint8_t *reqdata = (uint8_t *)request;
+    uint8_t* reqdata = (uint8_t*)request;
     auto m = ctx->bus->new_method_call(HIOMAPD_SERVICE, HIOMAPD_OBJECT,
                                        HIOMAPD_IFACE_V2, "Ack");
     auto acked = reqdata[0];
@@ -459,7 +461,7 @@ static ipmi_ret_t hiomap_ack(ipmi_request_t request, ipmi_response_t response,
 
         *data_len = 0;
     }
-    catch (const exception::SdBusError &e)
+    catch (const exception::SdBusError& e)
     {
         return hiomap_xlate_errno(e.get_errno());
     }
@@ -470,14 +472,14 @@ static ipmi_ret_t hiomap_ack(ipmi_request_t request, ipmi_response_t response,
 static ipmi_ret_t hiomap_erase(ipmi_request_t request, ipmi_response_t response,
                                ipmi_data_len_t data_len, ipmi_context_t context)
 {
-    struct hiomap *ctx = static_cast<struct hiomap *>(context);
+    struct hiomap* ctx = static_cast<struct hiomap*>(context);
 
     if (*data_len < 4)
     {
         return IPMI_CC_REQ_DATA_LEN_INVALID;
     }
 
-    uint8_t *reqdata = (uint8_t *)request;
+    uint8_t* reqdata = (uint8_t*)request;
     auto m = ctx->bus->new_method_call(HIOMAPD_SERVICE, HIOMAPD_OBJECT,
                                        HIOMAPD_IFACE_V2, "Erase");
     /* FIXME: Assumes v2 */
@@ -490,7 +492,7 @@ static ipmi_ret_t hiomap_erase(ipmi_request_t request, ipmi_response_t response,
 
         *data_len = 0;
     }
-    catch (const exception::SdBusError &e)
+    catch (const exception::SdBusError& e)
     {
         return hiomap_xlate_errno(e.get_errno());
     }
@@ -533,7 +535,7 @@ static ipmi_ret_t hiomap_dispatch(ipmi_netfn_t netfn, ipmi_cmd_t cmd,
                                   ipmi_data_len_t data_len,
                                   ipmi_context_t context)
 {
-    struct hiomap *ctx = static_cast<struct hiomap *>(context);
+    struct hiomap* ctx = static_cast<struct hiomap*>(context);
 
     if (*data_len < 2)
     {
@@ -541,8 +543,8 @@ static ipmi_ret_t hiomap_dispatch(ipmi_netfn_t netfn, ipmi_cmd_t cmd,
         return IPMI_CC_REQ_DATA_LEN_INVALID;
     }
 
-    uint8_t *ipmi_req = (uint8_t *)request;
-    uint8_t *ipmi_resp = (uint8_t *)response;
+    uint8_t* ipmi_req = (uint8_t*)request;
+    uint8_t* ipmi_resp = (uint8_t*)response;
     uint8_t hiomap_cmd = ipmi_req[0];
 
     if (hiomap_cmd == 0 || hiomap_cmd > ARRAY_SIZE(hiomap_commands) - 1)
@@ -562,9 +564,9 @@ static ipmi_ret_t hiomap_dispatch(ipmi_netfn_t netfn, ipmi_cmd_t cmd,
 
     ctx->seq = ipmi_req[1];
 
-    uint8_t *flash_req = ipmi_req + 2;
+    uint8_t* flash_req = ipmi_req + 2;
     size_t flash_len = *data_len - 2;
-    uint8_t *flash_resp = ipmi_resp + 2;
+    uint8_t* flash_resp = ipmi_resp + 2;
 
     ipmi_ret_t cc =
         hiomap_commands[hiomap_cmd](flash_req, flash_resp, &flash_len, context);
@@ -590,7 +592,7 @@ static void register_openpower_hiomap_commands()
     using namespace openpower::flash;
 
     /* FIXME: Clean this up? Can we unregister? */
-    struct hiomap *ctx = new hiomap();
+    struct hiomap* ctx = new hiomap();
 
     /* Initialise mapping from signal and property names to status bit */
     ctx->event_lookup["DaemonReady"] = BMC_EVENT_DAEMON_READY;
