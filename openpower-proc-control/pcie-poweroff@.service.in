@@ -1,0 +1,11 @@
+[Unit]
+Description=POWER9 PCIe Power-off Workaround
+Before=op-power-stop@%i.service
+After=obmc-power-stop-pre@%i.target
+
+[Service]
+Type=oneshot
+ExecStart=@sbindir@/openpower-proc-control cleanupPcie
+
+[Install]
+WantedBy=obmc-chassis-poweroff@%i.target
