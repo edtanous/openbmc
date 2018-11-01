@@ -3,7 +3,6 @@
 #include "oemhandler.hpp"
 
 #include "elog-errors.hpp"
-#include "local_users.hpp"
 
 #include <endian.h>
 #include <ipmid/api.h>
@@ -19,6 +18,7 @@
 #include <org/open_power/Host/error.hpp>
 #include <org/open_power/OCC/Metrics/error.hpp>
 #include <sdbusplus/bus.hpp>
+#include <sdbusplus/exception.hpp>
 
 void register_netfn_ibm_oem_commands() __attribute__((constructor));
 
@@ -77,6 +77,40 @@ std::string mapCalloutAssociation(const std::string& eSELData)
     }
 
     return {};
+}
+
+std::string getService(sdbusplus::bus::bus& bus, const std::string& path,
+                       const std::string& interface)
+{
+    auto method = bus.new_method_call(MAPPER_BUS_NAME, MAPPER_OBJ, MAPPER_IFACE,
+                                      "GetObject");
+
+    method.append(path);
+    method.append(std::vector<std::string>({interface}));
+
+    std::map<std::string, std::vector<std::string>> response;
+
+    try
+    {
+        auto reply = bus.call(method);
+
+        reply.read(response);
+        if (response.empty())
+        {
+            log<level::ERR>("Error in mapper response for getting service name",
+                            entry("PATH=%s", path.c_str()),
+                            entry("INTERFACE=%s", interface.c_str()));
+            return std::string{};
+        }
+    }
+    catch (const sdbusplus::exception::SdBusError& e)
+    {
+        log<level::ERR>("Error in mapper method call",
+                        entry("ERROR=%s", e.what()));
+        return std::string{};
+    }
+
+    return response.begin()->first;
 }
 
 std::string readESEL(const char* fileName)
@@ -305,17 +339,87 @@ ipmi_ret_t ipmi_ibm_oem_prep_fw_update(ipmi_netfn_t netfn, ipmi_cmd_t cmd,
     return ipmi_rc;
 }
 
-ipmi_ret_t ipmi_ibm_oem_reset_bmc_auth(ipmi_netfn_t netfn, ipmi_cmd_t cmd,
-                                       ipmi_request_t request,
-                                       ipmi_response_t response,
-                                       ipmi_data_len_t data_len,
-                                       ipmi_context_t context)
+ipmi_ret_t ipmi_ibm_oem_bmc_factory_reset(ipmi_netfn_t netfn, ipmi_cmd_t cmd,
+                                          ipmi_request_t request,
+                                          ipmi_response_t response,
+                                          ipmi_data_len_t data_len,
+                                          ipmi_context_t context)
 {
-    ipmi_ret_t rc;
+    sdbusplus::bus::bus bus{ipmid_get_sd_bus_connection()};
+    // The timeout for IPMI commands is 5s
+    constexpr auto powerOffWait = std::chrono::seconds(1);
+    constexpr auto setFactoryWait = std::chrono::seconds(3);
 
-    rc = local::users::enableUsers();
+    // Power Off Chassis
+    auto service = getService(bus, stateChassisPath, stateChassisIntf);
+    if (service.empty())
+    {
+        return IPMI_CC_UNSPECIFIED_ERROR;
+    }
+    sdbusplus::message::variant<std::string> off =
+        "xyz.openbmc_project.State.Chassis.Transition.Off";
+    auto method = bus.new_method_call(service.c_str(), stateChassisPath,
+                                      propertiesIntf, "Set");
+    method.append(stateChassisIntf, "RequestedPowerTransition", off);
+    try
+    {
+        bus.call_noreply(method);
+    }
+    catch (const sdbusplus::exception::SdBusError& e)
+    {
+        log<level::ERR>("Error powering off the chassis",
+                        entry("ERROR=%s", e.what()));
+        return IPMI_CC_UNSPECIFIED_ERROR;
+    }
 
-    return rc;
+    // Wait a few seconds for the chassis to power off
+    std::this_thread::sleep_for(powerOffWait);
+
+    // Set Factory Reset
+    method = bus.new_method_call(bmcUpdaterServiceName, softwarePath,
+                                 factoryResetIntf, "Reset");
+    try
+    {
+        bus.call_noreply(method);
+    }
+    catch (const sdbusplus::exception::SdBusError& e)
+    {
+        log<level::ERR>("Error setting factory reset",
+                        entry("ERROR=%s", e.what()));
+        return IPMI_CC_UNSPECIFIED_ERROR;
+    }
+
+    // Wait a few seconds for service that sets the reset env variable to
+    // complete before the BMC is rebooted
+    std::this_thread::sleep_for(setFactoryWait);
+
+    // Reboot BMC
+    service = getService(bus, stateBmcPath, stateBmcIntf);
+    if (service.empty())
+    {
+        log<level::ALERT>("Error getting the service name to reboot the BMC. "
+                          "The BMC needs to be manually rebooted to complete "
+                          "the factory reset.");
+        return IPMI_CC_UNSPECIFIED_ERROR;
+    }
+    sdbusplus::message::variant<std::string> reboot =
+        "xyz.openbmc_project.State.BMC.Transition.Reboot";
+    method = bus.new_method_call(service.c_str(), stateBmcPath, propertiesIntf,
+                                 "Set");
+    method.append(stateBmcIntf, "RequestedBMCTransition", reboot);
+    try
+    {
+        bus.call_noreply(method);
+    }
+    catch (const sdbusplus::exception::SdBusError& e)
+    {
+        log<level::ALERT>("Error calling to reboot the BMC. The BMC needs to "
+                          "be manually rebooted to complete the factory reset.",
+                          entry("ERROR=%s", e.what()));
+        return IPMI_CC_UNSPECIFIED_ERROR;
+    }
+
+    return IPMI_CC_OK;
 }
 
 namespace
@@ -339,8 +443,8 @@ void register_netfn_ibm_oem_commands()
     ipmi_register_callback(NETFUN_OEM, IPMI_CMD_PREP_FW_UPDATE, NULL,
                            ipmi_ibm_oem_prep_fw_update, SYSTEM_INTERFACE);
 
-    ipmi_register_callback(NETFUN_IBM_OEM, IPMI_CMD_RESET_BMC_AUTH, NULL,
-                           ipmi_ibm_oem_reset_bmc_auth, SYSTEM_INTERFACE);
+    ipmi_register_callback(NETFUN_IBM_OEM, IPMI_CMD_BMC_FACTORY_RESET, NULL,
+                           ipmi_ibm_oem_bmc_factory_reset, SYSTEM_INTERFACE);
 
     // Create new object on the bus
     auto objPath = std::string{CONTROL_HOST_OBJ_MGR} + '/' + HOST_NAME + '0';

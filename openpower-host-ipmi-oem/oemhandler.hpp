@@ -6,11 +6,22 @@
 #include <map>
 #include <string>
 
+static constexpr auto propertiesIntf = "org.freedesktop.DBus.Properties";
+static constexpr auto bmcUpdaterServiceName =
+    "xyz.openbmc_project.Software.BMC.Updater";
+static constexpr auto softwarePath = "/xyz/openbmc_project/software";
+static constexpr auto factoryResetIntf =
+    "xyz.openbmc_project.Common.FactoryReset";
+static constexpr auto stateChassisPath = "/xyz/openbmc_project/state/chassis0";
+static constexpr auto stateChassisIntf = "xyz.openbmc_project.State.Chassis";
+static constexpr auto stateBmcPath = "/xyz/openbmc_project/state/bmc0";
+static constexpr auto stateBmcIntf = "xyz.openbmc_project.State.BMC";
+
 // IPMI commands for net functions.
 enum ipmi_netfn_oem_cmds
 {
     IPMI_CMD_PREP_FW_UPDATE = 0x10,
-    IPMI_CMD_RESET_BMC_AUTH = 0x11,
+    IPMI_CMD_BMC_FACTORY_RESET = 0x11,
     IPMI_CMD_PESEL = 0xF0,
     IPMI_CMD_OCC_RESET = 0x0E,
 };
