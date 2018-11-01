@@ -1,13 +1,13 @@
 #include "slp_server.hpp"
 
-#include <memory>
+#include "sock_channel.hpp"
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
 
-#include "sock_channel.hpp"
+#include <memory>
 
 /** General udp server which waits for the POLLIN event
     on the port and calls the call back once it gets the event.
@@ -16,12 +16,13 @@
  */
 int slp::udp::Server::run()
 {
-    struct sockaddr_in6 serverAddr {};
+    struct sockaddr_in6 serverAddr
+    {
+    };
 
     sd_event* event = nullptr;
 
-    slp::deleted_unique_ptr<sd_event> eventPtr(event, [](sd_event * event)
-    {
+    slp::deleted_unique_ptr<sd_event> eventPtr(event, [](sd_event* event) {
         if (!event)
         {
             event = sd_event_unref(event);
@@ -97,7 +98,7 @@ finish:
 
     if (fd >= 0)
     {
-        (void) close(fd);
+        (void)close(fd);
     }
 
     if (r < 0)

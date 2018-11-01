@@ -35,7 +35,7 @@ constexpr size_t OFFSET_LANG_LEN = 12;
 constexpr size_t OFFSET_LANG = 14;
 
 constexpr size_t MIN_LEN = 14;
-}//namespace header
+} // namespace header
 
 /** @brief Defines the constants for slp response.
  *  Size and the offsets.
@@ -58,7 +58,7 @@ constexpr size_t OFFSET_SERVICE_LEN = 18;
 constexpr size_t OFFSET_SERVICE = 20;
 constexpr size_t OFFSET_URL_ENTRY = 18;
 
-}//namespace response
+} // namespace response
 
 /** @brief Defines the constants for slp request.
  *  Size and the offsets.
@@ -80,5 +80,5 @@ constexpr size_t OFFSET_PR_LEN = 16;
 constexpr size_t OFFSET_PR = 18;
 constexpr size_t OFFSET_SERVICE = 20;
 
-}//namespace request
-}//namespace slp
+} // namespace request
+} // namespace slp

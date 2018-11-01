@@ -1,12 +1,11 @@
+#include "endian.hpp"
 #include "slp.hpp"
+#include "slp_meta.hpp"
 
 #include <string.h>
 
-#include <string>
 #include <algorithm>
-
-#include "endian.hpp"
-#include "slp_meta.hpp"
+#include <string>
 
 namespace slp
 {
@@ -31,32 +30,25 @@ std::tuple<int, Message> parseHeader(const buffer& buff)
        |      Language Tag Length      |         Language Tag          \
        +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ */
 
-    Message req {0};
+    Message req{0};
     int rc = slp::SUCCESS;
 
-    std::copy_n(buff.data(),
-                slp::header::SIZE_VERSION,
-                &req.header.version);
+    std::copy_n(buff.data(), slp::header::SIZE_VERSION, &req.header.version);
 
     std::copy_n(buff.data() + slp::header::OFFSET_FUNCTION,
-                slp::header::SIZE_VERSION,
-                &req.header.functionID);
+                slp::header::SIZE_VERSION, &req.header.functionID);
 
     std::copy_n(buff.data() + slp::header::OFFSET_LENGTH,
-                slp::header::SIZE_LENGTH,
-                req.header.length.data());
+                slp::header::SIZE_LENGTH, req.header.length.data());
 
     std::copy_n(buff.data() + slp::header::OFFSET_FLAGS,
-                slp::header::SIZE_FLAGS,
-                (uint8_t*)&req.header.flags);
+                slp::header::SIZE_FLAGS, (uint8_t*)&req.header.flags);
 
     req.header.flags = endian::from_network(req.header.flags);
-    std::copy_n(buff.data() + slp::header::OFFSET_EXT,
-                slp::header::SIZE_EXT,
+    std::copy_n(buff.data() + slp::header::OFFSET_EXT, slp::header::SIZE_EXT,
                 req.header.extOffset.data());
 
-    std::copy_n(buff.data() + slp::header::OFFSET_XID,
-                slp::header::SIZE_XID,
+    std::copy_n(buff.data() + slp::header::OFFSET_XID, slp::header::SIZE_XID,
                 (uint8_t*)&req.header.xid);
 
     req.header.xid = endian::from_network(req.header.xid);
@@ -64,21 +56,17 @@ std::tuple<int, Message> parseHeader(const buffer& buff)
     uint16_t langtagLen;
 
     std::copy_n(buff.data() + slp::header::OFFSET_LANG_LEN,
-                slp::header::SIZE_LANG,
-                (uint8_t*)&langtagLen);
-
+                slp::header::SIZE_LANG, (uint8_t*)&langtagLen);
 
     langtagLen = endian::from_network(langtagLen);
 
-
-    req.header.langtag.insert(0, (const char*)buff.data() +
-                              slp::header::OFFSET_LANG,
-                              langtagLen);
+    req.header.langtag.insert(
+        0, (const char*)buff.data() + slp::header::OFFSET_LANG, langtagLen);
 
     /* check for the validity of the function */
-    if (req.header.functionID < static_cast<uint8_t>
-        (slp::FunctionType::SRVRQST)
-        || req.header.functionID > static_cast<uint8_t>(slp::FunctionType::SAADV))
+    if (req.header.functionID <
+            static_cast<uint8_t>(slp::FunctionType::SRVRQST) ||
+        req.header.functionID > static_cast<uint8_t>(slp::FunctionType::SAADV))
     {
         rc = static_cast<int>(slp::Error::PARSE_ERROR);
     }
@@ -86,10 +74,8 @@ std::tuple<int, Message> parseHeader(const buffer& buff)
     return std::make_tuple(rc, std::move(req));
 }
 
-
 int parseSrvTypeRqst(const buffer& buff, Message& req)
 {
-
 
     /*  0                   1                   2                   3
         0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -110,21 +96,18 @@ int parseSrvTypeRqst(const buffer& buff, Message& req)
     /* Parse the PRList. */
     uint16_t prListLen;
     std::copy_n(buff.data() + slp::request::OFFSET_PR_LEN,
-                slp::request::SIZE_PRLIST,
-                (uint8_t*)&prListLen);
+                slp::request::SIZE_PRLIST, (uint8_t*)&prListLen);
 
     prListLen = endian::from_network(prListLen);
 
-    req.body.srvtyperqst.prList.insert(0, (const char*)buff.data() +
-                                       slp::request::OFFSET_PR,
-                                       prListLen);
+    req.body.srvtyperqst.prList.insert(
+        0, (const char*)buff.data() + slp::request::OFFSET_PR, prListLen);
 
     uint8_t pos = slp::request::OFFSET_PR + prListLen;
 
     /* Parse the Naming Authority. */
     uint16_t namingAuthLen;
-    std::copy_n(buff.data() + pos,
-                slp::request::SIZE_NAMING,
+    std::copy_n(buff.data() + pos, slp::request::SIZE_NAMING,
                 (uint8_t*)&namingAuthLen);
 
     pos += slp::request::SIZE_NAMING;
@@ -137,17 +120,15 @@ int parseSrvTypeRqst(const buffer& buff, Message& req)
     }
     else
     {
-        req.body.srvtyperqst.namingAuth.insert(0, (const char*)buff.data() +
-                                               pos,
-                                               namingAuthLen);
+        req.body.srvtyperqst.namingAuth.insert(
+            0, (const char*)buff.data() + pos, namingAuthLen);
     }
 
     pos += namingAuthLen;
 
     /* Parse the <scope-list>. */
     uint16_t scopeListLen;
-    std::copy_n(buff.data() + pos,
-                slp::request::SIZE_SCOPE,
+    std::copy_n(buff.data() + pos, slp::request::SIZE_SCOPE,
                 (uint8_t*)&scopeListLen);
 
     pos += slp::request::SIZE_SCOPE;
@@ -185,8 +166,7 @@ int parseSrvRqst(const buffer& buff, Message& req)
     /* 1) Parse the PRList. */
     uint16_t prListLen;
     std::copy_n(buff.data() + slp::request::OFFSET_PR_LEN,
-                slp::request::SIZE_PRLIST,
-                (uint8_t*)&prListLen);
+                slp::request::SIZE_PRLIST, (uint8_t*)&prListLen);
 
     auto pos = slp::request::OFFSET_PR_LEN + slp::request::SIZE_PRLIST;
 
@@ -197,11 +177,9 @@ int parseSrvRqst(const buffer& buff, Message& req)
 
     pos += prListLen;
 
-
     /* 2) Parse the <service-type> string. */
     uint16_t srvTypeLen;
-    std::copy_n(buff.data() + pos,
-                slp::request::SIZE_SERVICE_TYPE,
+    std::copy_n(buff.data() + pos, slp::request::SIZE_SERVICE_TYPE,
                 (uint8_t*)&srvTypeLen);
 
     srvTypeLen = endian::from_network(srvTypeLen);
@@ -215,8 +193,7 @@ int parseSrvRqst(const buffer& buff, Message& req)
 
     /* 3) Parse the <scope-list> string. */
     uint16_t scopeListLen;
-    std::copy_n(buff.data() + pos,
-                slp::request::SIZE_SCOPE,
+    std::copy_n(buff.data() + pos, slp::request::SIZE_SCOPE,
                 (uint8_t*)&scopeListLen);
 
     scopeListLen = endian::from_network(scopeListLen);
@@ -230,8 +207,7 @@ int parseSrvRqst(const buffer& buff, Message& req)
 
     /* 4) Parse the <predicate> string. */
     uint16_t predicateLen;
-    std::copy_n(buff.data() + pos,
-                slp::request::SIZE_PREDICATE,
+    std::copy_n(buff.data() + pos, slp::request::SIZE_PREDICATE,
                 (uint8_t*)&predicateLen);
 
     predicateLen = endian::from_network(predicateLen);
@@ -244,8 +220,7 @@ int parseSrvRqst(const buffer& buff, Message& req)
 
     /* 5) Parse the <SLP SPI> string. */
     uint16_t spistrLen;
-    std::copy_n(buff.data() + pos,
-                slp::request::SIZE_SLPI,
+    std::copy_n(buff.data() + pos, slp::request::SIZE_SLPI,
                 (uint8_t*)&spistrLen);
 
     spistrLen = endian::from_network(spistrLen);
@@ -256,7 +231,7 @@ int parseSrvRqst(const buffer& buff, Message& req)
 
     return slp::SUCCESS;
 }
-}//namespace internal
+} // namespace internal
 
 std::tuple<int, Message> parseBuffer(const buffer& buff)
 {
@@ -281,5 +256,5 @@ std::tuple<int, Message> parseBuffer(const buffer& buff)
     }
     return std::make_tuple(rc, std::move(req));
 }
-}//namespace parser
-}//namespace slp
+} // namespace parser
+} // namespace slp

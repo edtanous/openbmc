@@ -1,5 +1,7 @@
 #pragma once
 
+#include "slp_service_info.hpp"
+
 #include <stdio.h>
 
 #include <array>
@@ -11,14 +13,12 @@
 #include <tuple>
 #include <vector>
 
-#include "slp_service_info.hpp"
-
 namespace slp
 {
 
 using buffer = std::vector<uint8_t>;
 
-template<typename T>
+template <typename T>
 using deleted_unique_ptr = std::unique_ptr<T, std::function<void(T*)>>;
 
 namespace request
@@ -49,7 +49,7 @@ struct Service
     std::string predicate;
     std::string spistr;
 };
-}//namespace request
+} // namespace request
 
 /*
  * @enum FunctionType
@@ -58,13 +58,13 @@ struct Service
  */
 enum class FunctionType : uint8_t
 {
-    SRVRQST     = 0x01,
-    SRVRPLY     = 0x02,
-    ATTRRQST    = 0x06,
-    ATTRRPLY    = 0x07,
+    SRVRQST = 0x01,
+    SRVRPLY = 0x02,
+    ATTRRQST = 0x06,
+    ATTRRPLY = 0x07,
     SRVTYPERQST = 0x09,
     SRVTYPERPLY = 0x0A,
-    SAADV       = 0x0B,
+    SAADV = 0x0B,
 };
 
 /*
@@ -75,18 +75,18 @@ enum class FunctionType : uint8_t
 enum class Error : uint8_t
 {
     LANGUAGE_NOT_SUPPORTED = 0x01,
-    PARSE_ERROR            = 0x02,
-    INVALID_REGISTRATION   = 0x03,
-    SCOPE_NOT_SUPPORTED    = 0x04,
+    PARSE_ERROR = 0x02,
+    INVALID_REGISTRATION = 0x03,
+    SCOPE_NOT_SUPPORTED = 0x04,
     AUTHENTICATION_UNKNOWN = 0x05,
-    AUTHENTICATION_ABSENT  = 0x06,
-    AUTHENTICATION_FAILED  = 0x07,
-    VER_NOT_SUPPORTED      = 0x09,
-    INTERNAL_ERROR         = 0x0A,
-    DA_BUSY_NOW            = 0x0B,
-    OPTION_NOT_UNDERSTOOD  = 0x0C,
-    INVALID_UPDATE         = 0x0D,
-    MSG_NOT_SUPPORTED      = 0x0E,
+    AUTHENTICATION_ABSENT = 0x06,
+    AUTHENTICATION_FAILED = 0x07,
+    VER_NOT_SUPPORTED = 0x09,
+    INTERNAL_ERROR = 0x0A,
+    DA_BUSY_NOW = 0x0B,
+    OPTION_NOT_UNDERSTOOD = 0x0C,
+    INVALID_UPDATE = 0x0D,
+    MSG_NOT_SUPPORTED = 0x0E,
 };
 
 /*
@@ -104,7 +104,6 @@ struct Header
     uint16_t xid = 0;
     uint16_t langtagLen = 0;
     std::string langtag;
-
 };
 
 /*
@@ -119,7 +118,6 @@ struct Payload
     request::Service srvrqst;
 };
 
-
 /*
  * @struct Message
  *
@@ -130,7 +128,6 @@ struct Message
     Header header;
     Payload body;
 };
-
 
 namespace parser
 {
@@ -174,20 +171,19 @@ std::tuple<int, Message> parseHeader(const buffer& buf);
 int parseSrvTypeRqst(const buffer& buf, Message& req);
 
 /** Parse a service request.
-  *
-  * @param[in] buffer - The buffer from which data should be parsed.
-  *
-  * @return Zero on success,and fills the body object inside message.
-  *         non-zero on failure and empty msg object.
-  *
-  * @internal
-  */
+ *
+ * @param[in] buffer - The buffer from which data should be parsed.
+ *
+ * @return Zero on success,and fills the body object inside message.
+ *         non-zero on failure and empty msg object.
+ *
+ * @internal
+ */
 
 int parseSrvRqst(const buffer& buf, Message& req);
 
-}//namespace internal
-}//namespce parser
-
+} // namespace internal
+} // namespace parser
 
 namespace handler
 {
@@ -212,8 +208,7 @@ std::tuple<int, buffer> processRequest(const Message& msg);
  * @return the vector populated with the error data
  */
 
-buffer processError(const Message& req,
-                    const uint8_t err);
+buffer processError(const Message& req, const uint8_t err);
 namespace internal
 {
 
@@ -230,7 +225,6 @@ using ServiceList = std::map<std::string, slp::ConfigData>;
  */
 
 std::tuple<int, buffer> processSrvRequest(const Message& msg);
-
 
 /** Handle the  SrvTypeRequest message.
  *
@@ -277,7 +271,6 @@ std::list<std::string> getIntfAddrs();
  */
 buffer prepareHeader(const Message& req);
 
-
-}//namespace internal
-}//namespce handler
-}//namespce slp
+} // namespace internal
+} // namespace handler
+} // namespace slp

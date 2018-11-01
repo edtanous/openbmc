@@ -1,4 +1,8 @@
+#include "config.h"
+
+#include "endian.hpp"
 #include "slp.hpp"
+#include "slp_meta.hpp"
 
 #include <arpa/inet.h>
 #include <dirent.h>
@@ -7,10 +11,6 @@
 #include <string.h>
 
 #include <algorithm>
-
-#include "config.h"
-#include "endian.hpp"
-#include "slp_meta.hpp"
 
 namespace slp
 {
@@ -22,52 +22,46 @@ namespace internal
 
 buffer prepareHeader(const Message& req)
 {
-    uint8_t length =  slp::header::MIN_LEN +   /* 14 bytes for header     */
-                      req.header.langtag.length() + /* Actual length of lang tag */
-                      slp::response::SIZE_ERROR; /*  2 bytes for error code */
+    uint8_t length =
+        slp::header::MIN_LEN +        /* 14 bytes for header     */
+        req.header.langtag.length() + /* Actual length of lang tag */
+        slp::response::SIZE_ERROR;    /*  2 bytes for error code */
 
     buffer buff(length, 0);
 
     buff[slp::header::OFFSET_VERSION] = req.header.version;
 
-    //will increment the function id from 1 as reply
+    // will increment the function id from 1 as reply
     buff[slp::header::OFFSET_FUNCTION] = req.header.functionID + 1;
 
     std::copy_n(&length, slp::header::SIZE_LENGTH,
-                buff.data() +
-                slp::header::OFFSET_LENGTH);
+                buff.data() + slp::header::OFFSET_LENGTH);
 
     auto flags = endian::to_network(req.header.flags);
 
     std::copy_n((uint8_t*)&flags, slp::header::SIZE_FLAGS,
-                buff.data() +
-                slp::header::OFFSET_FLAGS);
+                buff.data() + slp::header::OFFSET_FLAGS);
 
     std::copy_n(req.header.extOffset.data(), slp::header::SIZE_EXT,
-                buff.data() +
-                slp::header::OFFSET_EXT);
+                buff.data() + slp::header::OFFSET_EXT);
 
     auto xid = endian::to_network(req.header.xid);
 
     std::copy_n((uint8_t*)&xid, slp::header::SIZE_XID,
-                buff.data() +
-                slp::header::OFFSET_XID);
+                buff.data() + slp::header::OFFSET_XID);
 
     uint16_t langtagLen = req.header.langtag.length();
     langtagLen = endian::to_network(langtagLen);
     std::copy_n((uint8_t*)&langtagLen, slp::header::SIZE_LANG,
-                buff.data() +
-                slp::header::OFFSET_LANG_LEN);
+                buff.data() + slp::header::OFFSET_LANG_LEN);
 
-    std::copy_n((uint8_t*)req.header.langtag.c_str(), req.header.langtag.length(),
-                buff.data() +
-                slp::header::OFFSET_LANG);
+    std::copy_n((uint8_t*)req.header.langtag.c_str(),
+                req.header.langtag.length(),
+                buff.data() + slp::header::OFFSET_LANG);
     return buff;
-
 }
 
-std::tuple<int, buffer> processSrvTypeRequest(
-    const Message& req)
+std::tuple<int, buffer> processSrvTypeRequest(const Message& req)
 {
 
     /*
@@ -84,7 +78,7 @@ std::tuple<int, buffer> processSrvTypeRequest(
 
     buffer buff;
 
-    //read the slp service info from conf and create the service type string
+    // read the slp service info from conf and create the service type string
     slp::handler::internal::ServiceList svcList =
         slp::handler::internal::readSLPServiceInfo();
     if (svcList.size() <= 0)
@@ -97,19 +91,18 @@ std::tuple<int, buffer> processSrvTypeRequest(
     std::string service;
     bool firstIteration = true;
     for_each(svcList.cbegin(), svcList.cend(),
-             [&service, &firstIteration](const auto& svc)
-    {
-        if (firstIteration == true)
-        {
-            service = svc.first;
-            firstIteration = false;
-        }
-        else
-        {
-            service += ",";
-            service += svc.first;
-        }
-    });
+             [&service, &firstIteration](const auto& svc) {
+                 if (firstIteration == true)
+                 {
+                     service = svc.first;
+                     firstIteration = false;
+                 }
+                 else
+                 {
+                     service += ",";
+                     service += svc.first;
+                 }
+             });
 
     buff = prepareHeader(req);
 
@@ -118,17 +111,15 @@ std::tuple<int, buffer> processSrvTypeRequest(
 
     std::cout << "service=" << service.c_str() << "\n";
 
-    uint8_t length =  buff.size() +   /* 14 bytes header + length of langtag */
-                      slp::response::SIZE_ERROR +    /* 2 byte err code */
-                      slp::response::SIZE_SERVICE +  /* 2 byte srvtype len */
-                      service.length();
-
+    uint8_t length = buff.size() + /* 14 bytes header + length of langtag */
+                     slp::response::SIZE_ERROR +   /* 2 byte err code */
+                     slp::response::SIZE_SERVICE + /* 2 byte srvtype len */
+                     service.length();
 
     buff.resize(length);
 
     std::copy_n(&length, slp::header::SIZE_LENGTH,
-                buff.data() +
-                slp::header::OFFSET_LENGTH);
+                buff.data() + slp::header::OFFSET_LENGTH);
 
     /* error code is already set to 0 moving to service type len */
 
@@ -136,19 +127,16 @@ std::tuple<int, buffer> processSrvTypeRequest(
     serviceTypeLen = endian::to_network(serviceTypeLen);
 
     std::copy_n((uint8_t*)&serviceTypeLen, slp::response::SIZE_SERVICE,
-                buff.data() +
-                slp::response::OFFSET_SERVICE_LEN);
+                buff.data() + slp::response::OFFSET_SERVICE_LEN);
 
     /* service type data */
     std::copy_n((uint8_t*)service.c_str(), service.length(),
-                (buff.data() +
-                 slp::response::OFFSET_SERVICE));
+                (buff.data() + slp::response::OFFSET_SERVICE));
 
     return std::make_tuple(slp::SUCCESS, buff);
 }
 
-std::tuple<int, buffer> processSrvRequest(
-    const Message& req)
+std::tuple<int, buffer> processSrvRequest(const Message& req)
 {
 
     /*
@@ -176,7 +164,7 @@ std::tuple<int, buffer> processSrvRequest(
     */
 
     buffer buff;
-    //Get all the services which are registered
+    // Get all the services which are registered
     slp::handler::internal::ServiceList svcList =
         slp::handler::internal::readSLPServiceInfo();
     if (svcList.size() <= 0)
@@ -186,7 +174,7 @@ std::tuple<int, buffer> processSrvRequest(
         return std::make_tuple((int)slp::Error::INTERNAL_ERROR, buff);
     }
 
-    //return error if serice type doesn't match
+    // return error if serice type doesn't match
     auto& svcName = req.body.srvrqst.srvType;
     auto svcIt = svcList.find(svcName);
     if (svcIt == svcList.end())
@@ -195,7 +183,7 @@ std::tuple<int, buffer> processSrvRequest(
         std::cerr << "SLP unable to find the service=" << svcName << "\n";
         return std::make_tuple((int)slp::Error::INTERNAL_ERROR, buff);
     }
-    //Get all the interface address
+    // Get all the interface address
     auto ifaddrList = slp::handler::internal::getIntfAddrs();
     if (ifaddrList.size() <= 0)
     {
@@ -205,34 +193,30 @@ std::tuple<int, buffer> processSrvRequest(
     }
 
     buff = prepareHeader(req);
-    //Calculate the length and resize the buffer
-    uint8_t length =  buff.size() + /* 14 bytes header + length of langtag */
-                      slp::response::SIZE_ERROR +    /* 2 bytes error code */
-                      slp::response::SIZE_URL_COUNT; /* 2 bytes srvtype len */
+    // Calculate the length and resize the buffer
+    uint8_t length = buff.size() + /* 14 bytes header + length of langtag */
+                     slp::response::SIZE_ERROR +    /* 2 bytes error code */
+                     slp::response::SIZE_URL_COUNT; /* 2 bytes srvtype len */
 
     buff.resize(length);
 
-    //Populate the url count
+    // Populate the url count
     uint16_t urlCount = ifaddrList.size();
     urlCount = endian::to_network(urlCount);
 
     std::copy_n((uint8_t*)&urlCount, slp::response::SIZE_URL_COUNT,
-                buff.data() +
-                slp::response::OFFSET_URL_ENTRY);
+                buff.data() + slp::response::OFFSET_URL_ENTRY);
 
-    //Find the service
+    // Find the service
     const slp::ConfigData& svc = svcIt->second;
-    //Populate the URL Entries
+    // Populate the URL Entries
     auto pos = slp::response::OFFSET_URL_ENTRY + slp::response::SIZE_URL_COUNT;
     for (const auto& addr : ifaddrList)
     {
-        std::string url = svc.name + ':' + svc.type +
-                          "//" + addr + ',' + svc.port;
+        std::string url =
+            svc.name + ':' + svc.type + "//" + addr + ',' + svc.port;
 
-
-        buff.resize(buff.size() +
-                    slp::response::SIZE_URL_ENTRY +
-                    url.length());
+        buff.resize(buff.size() + slp::response::SIZE_URL_ENTRY + url.length());
 
         uint8_t reserved = 0;
         uint16_t auth = 0;
@@ -244,7 +228,6 @@ std::tuple<int, buffer> processSrvRequest(
 
         pos += slp::response::SIZE_RESERVED;
 
-
         std::copy_n((uint8_t*)&lifetime, slp::response::SIZE_LIFETIME,
                     buff.data() + pos);
 
@@ -255,8 +238,7 @@ std::tuple<int, buffer> processSrvRequest(
                     buff.data() + pos);
         pos += slp::response::SIZE_URLLENGTH;
 
-        std::copy_n((uint8_t*)url.c_str(), url.length(),
-                    buff.data() + pos);
+        std::copy_n((uint8_t*)url.c_str(), url.length(), buff.data() + pos);
         pos += url.length();
 
         std::copy_n((uint8_t*)&auth, slp::response::SIZE_AUTH,
@@ -265,8 +247,7 @@ std::tuple<int, buffer> processSrvRequest(
     }
     uint8_t packetLength = buff.size();
     std::copy_n((uint8_t*)&packetLength, slp::header::SIZE_VERSION,
-                buff.data() +
-                slp::header::OFFSET_LENGTH);
+                buff.data() + slp::header::OFFSET_LENGTH);
 
     return std::make_tuple((int)slp::SUCCESS, buff);
 }
@@ -282,10 +263,8 @@ std::list<std::string> getIntfAddrs()
         return addrList;
     }
 
-    slp::deleted_unique_ptr<ifaddrs> ifaddrPtr(ifaddr, [](ifaddrs * addr)
-    {
-        freeifaddrs(addr);
-    });
+    slp::deleted_unique_ptr<ifaddrs> ifaddrPtr(
+        ifaddr, [](ifaddrs* addr) { freeifaddrs(addr); });
 
     ifaddr = nullptr;
 
@@ -307,11 +286,10 @@ std::list<std::string> getIntfAddrs()
                 continue;
             }
 
-            char tmp[INET_ADDRSTRLEN] = { 0 };
+            char tmp[INET_ADDRSTRLEN] = {0};
 
             inet_ntop(AF_INET,
-                      &(((struct sockaddr_in*)(ifa->ifa_addr))->sin_addr),
-                      tmp,
+                      &(((struct sockaddr_in*)(ifa->ifa_addr))->sin_addr), tmp,
                       sizeof(tmp));
             addrList.emplace_back(tmp);
         }
@@ -320,7 +298,7 @@ std::list<std::string> getIntfAddrs()
     return addrList;
 }
 
-slp::handler::internal::ServiceList  readSLPServiceInfo()
+slp::handler::internal::ServiceList readSLPServiceInfo()
 {
     using namespace std::string_literals;
     slp::handler::internal::ServiceList svcLst;
@@ -332,8 +310,7 @@ slp::handler::internal::ServiceList  readSLPServiceInfo()
     // Service File format would be "ServiceName serviceType Port"
     DIR* dir = opendir(SERVICE_DIR);
     // wrap the pointer into smart pointer.
-    slp::deleted_unique_ptr<DIR> dirPtr(dir, [](DIR * dir)
-    {
+    slp::deleted_unique_ptr<DIR> dirPtr(dir, [](DIR* dir) {
         if (!dir)
         {
             closedir(dir);
@@ -345,7 +322,7 @@ slp::handler::internal::ServiceList  readSLPServiceInfo()
     {
         while ((dent = readdir(dirPtr.get())) != NULL)
         {
-            if (dent->d_type == DT_REG) //regular file
+            if (dent->d_type == DT_REG) // regular file
             {
                 auto absFileName = std::string(SERVICE_DIR) + dent->d_name;
                 std::ifstream readFile(absFileName);
@@ -354,24 +331,22 @@ slp::handler::internal::ServiceList  readSLPServiceInfo()
                 svcLst.emplace(service.name, service);
             }
         }
-
     }
     return svcLst;
 }
-}//namespace internal
+} // namespace internal
 
-std::tuple<int, buffer> processRequest(
-    const Message& msg)
+std::tuple<int, buffer> processRequest(const Message& msg)
 {
     int rc = slp::SUCCESS;
     buffer resp(0);
-    std::cout << "SLP Processing Request="
-              << msg.header.functionID <<"\n";
+    std::cout << "SLP Processing Request=" << msg.header.functionID << "\n";
 
     switch (msg.header.functionID)
     {
         case (uint8_t)slp::FunctionType::SRVTYPERQST:
-            std::tie(rc, resp) = slp::handler::internal::processSrvTypeRequest(msg);
+            std::tie(rc, resp) =
+                slp::handler::internal::processSrvTypeRequest(msg);
             break;
         case (uint8_t)slp::FunctionType::SRVRQST:
             std::tie(rc, resp) = slp::handler::internal::processSrvRequest(msg);
@@ -382,17 +357,14 @@ std::tuple<int, buffer> processRequest(
     return std::make_tuple(rc, resp);
 }
 
-buffer processError(const Message& req,
-                    uint8_t err)
+buffer processError(const Message& req, uint8_t err)
 {
     buffer buff;
     buff = slp::handler::internal::prepareHeader(req);
 
     std::copy_n(&err, slp::response::SIZE_ERROR,
-                buff.data() +
-                slp::response::OFFSET_ERROR);
+                buff.data() + slp::response::OFFSET_ERROR);
     return buff;
-
 }
-}//namespace handler
-}//namespace slp
+} // namespace handler
+} // namespace slp

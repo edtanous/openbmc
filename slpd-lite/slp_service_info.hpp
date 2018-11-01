@@ -1,7 +1,11 @@
 #pragma once
-#include <iostream>
+
+#include <array>
 #include <fstream>
+#include <iostream>
 #include <sstream>
+#include <string>
+
 namespace slp
 {
 struct ConfigData
@@ -14,20 +18,22 @@ struct ConfigData
     {
         std::string line;
         constexpr auto DELIMITER = " ";
-        size_t  delimtrPos = 0;
-        size_t  delimtrPrevPos = 0;
-        std::array<std::string, 3>tokens;
+        size_t delimtrPos = 0;
+        size_t delimtrPrevPos = 0;
+        std::array<std::string, 3> tokens;
         std::getline(str, line);
         size_t count = 0;
 
         delimtrPos = line.find(DELIMITER, delimtrPrevPos);
         while (delimtrPos != std::string::npos)
         {
-            tokens[count] = line.substr(delimtrPrevPos, (delimtrPos - delimtrPrevPos));
+            tokens[count] =
+                line.substr(delimtrPrevPos, (delimtrPos - delimtrPrevPos));
             delimtrPrevPos = delimtrPos + 1;
 
             delimtrPos = line.find(DELIMITER, delimtrPrevPos);
-            if (delimtrPos == std::string::npos && delimtrPrevPos < line.length())
+            if (delimtrPos == std::string::npos &&
+                delimtrPrevPos < line.length())
             {
                 delimtrPos = line.length();
             }
@@ -47,6 +53,5 @@ struct ConfigData
         }
         return str;
     }
-
 };
-}
+} // namespace slp

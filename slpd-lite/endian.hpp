@@ -14,7 +14,8 @@ struct convert
     static T from_network(T) = delete;
 };
 
-template<> struct convert<uint16_t>
+template <>
+struct convert<uint16_t>
 {
     static uint16_t to_network(uint16_t i)
     {
@@ -26,7 +27,8 @@ template<> struct convert<uint16_t>
     };
 };
 
-template<> struct convert<uint32_t>
+template <>
+struct convert<uint32_t>
 {
     static uint32_t to_network(uint32_t i)
     {
@@ -37,13 +39,15 @@ template<> struct convert<uint32_t>
         return be32toh(i);
     };
 };
-}
-template<typename T> T to_network(T i)
+} // namespace details
+template <typename T>
+T to_network(T i)
 {
     return details::convert<T>::to_network(i);
 }
-template<typename T> T from_network(T i)
+template <typename T>
+T from_network(T i)
 {
     return details::convert<T>::from_network(i);
 }
-}
+} // namespace endian

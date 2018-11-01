@@ -1,11 +1,10 @@
-#include <algorithm>
-#include <iomanip>
-
 #include "slp.hpp"
 #include "slp_meta.hpp"
 #include "slp_server.hpp"
 #include "sock_channel.hpp"
 
+#include <algorithm>
+#include <iomanip>
 
 /* Call Back for the sd event loop */
 static int requestHandler(sd_event_source* es, int fd, uint32_t revents,
@@ -30,25 +29,25 @@ static int requestHandler(sd_event_source* es, int fd, uint32_t revents,
     {
         case slp::VERSION_2:
         {
-            //Parse the buffer and construct the req object
+            // Parse the buffer and construct the req object
             std::tie(rc, req) = slp::parser::parseBuffer(recvBuff);
             if (!rc)
             {
-                //Passing the req object to handler to serve it
+                // Passing the req object to handler to serve it
                 std::tie(rc, resp) = slp::handler::processRequest(req);
             }
             break;
         }
         default:
-            std::cout << "SLP Unsupported Request Version="
-                      << (int)recvBuff[0] <<"\n";
+            std::cout << "SLP Unsupported Request Version=" << (int)recvBuff[0]
+                      << "\n";
 
             rc = static_cast<uint8_t>(slp::Error::VER_NOT_SUPPORTED);
             break;
     }
 
-    //if there was error during Parsing of request
-    //or processing of request then handle the error.
+    // if there was error during Parsing of request
+    // or processing of request then handle the error.
     if (rc)
     {
         resp = slp::handler::processError(req, rc);
@@ -57,7 +56,6 @@ static int requestHandler(sd_event_source* es, int fd, uint32_t revents,
     channel.write(resp);
     return slp::SUCCESS;
 }
-
 
 int main(int argc, char* argv[])
 {
