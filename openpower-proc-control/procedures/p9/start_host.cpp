@@ -13,12 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#include <phosphor-logging/log.hpp>
 #include "cfam_access.hpp"
+#include "ext_interface.hpp"
 #include "p9_cfam.hpp"
 #include "registration.hpp"
 #include "targeting.hpp"
-#include "ext_interface.hpp"
+
+#include <phosphor-logging/log.hpp>
 
 namespace openpower
 {
@@ -29,7 +30,6 @@ using namespace phosphor::logging;
 using namespace openpower::cfam::access;
 using namespace openpower::cfam::p9;
 using namespace openpower::targeting;
-
 
 /**
  * @brief Starts the self boot engine on P9 position 0 to kick off a boot.
@@ -43,55 +43,54 @@ void startHost()
     log<level::INFO>("Running P9 procedure startHost",
                      entry("NUM_PROCS=%d", targets.size()));
 
-    //Ensure asynchronous clock mode is set
+    // Ensure asynchronous clock mode is set
     writeReg(master, P9_LL_MODE_REG, 0x00000001);
 
-    //Clock mux select override
+    // Clock mux select override
     for (const auto& t : targets)
     {
-        writeRegWithMask(t, P9_ROOT_CTRL8,
-                         0x0000000C, 0x0000000C);
+        writeRegWithMask(t, P9_ROOT_CTRL8, 0x0000000C, 0x0000000C);
     }
 
-    //Enable P9 checkstop to be reported to the BMC
+    // Enable P9 checkstop to be reported to the BMC
 
-    //Setup FSI2PIB to report checkstop
+    // Setup FSI2PIB to report checkstop
     writeReg(master, P9_FSI_A_SI1S, 0x20000000);
 
-    //Enable Xstop/ATTN interrupt
+    // Enable Xstop/ATTN interrupt
     writeReg(master, P9_FSI2PIB_TRUE_MASK, 0x60000000);
 
-    //Arm it
+    // Arm it
     writeReg(master, P9_FSI2PIB_INTERRUPT, 0xFFFFFFFF);
 
-    //Kick off the SBE to start the boot
+    // Kick off the SBE to start the boot
 
     // Choose seeprom side to boot from
     cfam_data_t sbeSide = 0;
-    if(getBootCount() > 0)
+    if (getBootCount() > 0)
     {
         sbeSide = 0;
         log<level::INFO>("Setting SBE seeprom side to 0",
-                entry("SBE_SIDE_SELECT=%d", 0));
+                         entry("SBE_SIDE_SELECT=%d", 0));
     }
     else
     {
         sbeSide = 0x00004000;
         log<level::INFO>("Setting SBE seeprom side to 1",
-                entry("SBE_SIDE_SELECT=%d", 1));
+                         entry("SBE_SIDE_SELECT=%d", 1));
     }
     // Bit 17 of the ctrl status reg indicates sbe seeprom boot side
     // 0 -> Side 0, 1 -> Side 1
     writeRegWithMask(master, P9_SBE_CTRL_STATUS, sbeSide, 0x00004000);
 
-    //Ensure ISTEP stepping isn't enabled
+    // Ensure ISTEP stepping isn't enabled
     writeRegWithMask(master, P9_SCRATCH_REGISTER_8, 0x20000000, 0x20000000);
 
-    //Start the SBE
+    // Start the SBE
     writeRegWithMask(master, P9_CBS_CS, 0x80000000, 0x80000000);
 }
 
 REGISTER_PROCEDURE("startHost", startHost);
 
-}
-}
+} // namespace p9
+} // namespace openpower

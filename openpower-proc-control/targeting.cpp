@@ -14,15 +14,16 @@
  * limitations under the License.
  */
 
+#include "targeting.hpp"
+
 #include <endian.h>
+
 #include <experimental/filesystem>
-#include <phosphor-logging/elog.hpp>
 #include <phosphor-logging/elog-errors.hpp>
+#include <phosphor-logging/elog.hpp>
 #include <phosphor-logging/log.hpp>
 #include <regex>
 #include <xyz/openbmc_project/Common/File/error.hpp>
-#include "targeting.hpp"
-
 
 namespace openpower
 {
@@ -37,8 +38,8 @@ int Target::getCFAMFD()
 {
     if (cfamFD.get() == nullptr)
     {
-        cfamFD = std::make_unique<
-            openpower::util::FileDescriptor>(getCFAMPath());
+        cfamFD =
+            std::make_unique<openpower::util::FileDescriptor>(getCFAMPath());
     }
 
     return cfamFD->get();
@@ -46,10 +47,7 @@ int Target::getCFAMFD()
 
 std::unique_ptr<Target>& Targeting::getTarget(size_t pos)
 {
-    auto search = [pos](const auto& t)
-    {
-        return t->getPos() == pos;
-    };
+    auto search = [pos](const auto& t) { return t->getPos() == pos; };
 
     auto target = find_if(targets.begin(), targets.end(), search);
     if (target == targets.end())
@@ -61,7 +59,6 @@ std::unique_ptr<Target>& Targeting::getTarget(size_t pos)
         return *target;
     }
 }
-
 
 static uint32_t noEndianSwap(uint32_t data)
 {
@@ -85,20 +82,20 @@ Targeting::Targeting(const std::string& fsiMasterDev,
     {
         std::regex expOld{"hub@00/slave@([0-9]{2}):00", std::regex::extended};
 
-        //Fall back to old (4.7) path
+        // Fall back to old (4.7) path
         exp = expOld;
         fsiMasterPath = fsiMasterDevPathOld;
         fsiSlaveBasePath = fsiSlaveBaseDirOld;
 
-        //And don't swap the endianness of CFAM data
+        // And don't swap the endianness of CFAM data
         swapper = noEndianSwap;
     }
 
-    //Always create P0, the FSI master.
+    // Always create P0, the FSI master.
     targets.push_back(std::make_unique<Target>(0, fsiMasterPath, swapper));
     try
     {
-        //Find the the remaining P9s dynamically based on which files show up
+        // Find the the remaining P9s dynamically based on which files show up
         for (auto& file : fs::directory_iterator(fsiSlaveBasePath))
         {
             std::smatch match;
@@ -123,18 +120,16 @@ Targeting::Targeting(const std::string& fsiMasterDev,
     {
         using metadata = xyz::openbmc_project::Common::File::Open;
 
-        elog<file_error::Open>(
-                metadata::ERRNO(e.code().value()),
-                metadata::PATH(e.path1().c_str()));
+        elog<file_error::Open>(metadata::ERRNO(e.code().value()),
+                               metadata::PATH(e.path1().c_str()));
     }
 
     auto sortTargets = [](const std::unique_ptr<Target>& left,
-                          const std::unique_ptr<Target>& right)
-    {
+                          const std::unique_ptr<Target>& right) {
         return left->getPos() < right->getPos();
     };
     std::sort(targets.begin(), targets.end(), sortTargets);
 }
 
-}
-}
+} // namespace targeting
+} // namespace openpower

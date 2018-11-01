@@ -13,11 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#include <phosphor-logging/log.hpp>
 #include "cfam_access.hpp"
 #include "p9_cfam.hpp"
 #include "registration.hpp"
 #include "targeting.hpp"
+
+#include <phosphor-logging/log.hpp>
 
 namespace openpower
 {
@@ -61,21 +62,21 @@ union MboxScratch5_HB_t
     struct
     {
 #if __BYTE_ORDER == __LITTLE_ENDIAN
-        uint32_t minorStep           :8;    //24:31
-        uint32_t majorStep           :8;    //16:23
-        uint32_t internalStep        :4;    //12:15
-        uint32_t reserved            :2;    //10:11
-        uint32_t stepFinish          :1;    //9
-        uint32_t stepStart           :1;    //8
-        uint32_t magic               :8;    //0:7
+        uint32_t minorStep : 8;    // 24:31
+        uint32_t majorStep : 8;    // 16:23
+        uint32_t internalStep : 4; // 12:15
+        uint32_t reserved : 2;     // 10:11
+        uint32_t stepFinish : 1;   // 9
+        uint32_t stepStart : 1;    // 8
+        uint32_t magic : 8;        // 0:7
 #else
-        uint32_t magic               :8;    //0:7
-        uint32_t stepStart           :1;    //8
-        uint32_t stepFinish          :1;    //9
-        uint32_t reserved            :2;    //10:11
-        uint32_t internalStep        :4;    //12:15
-        uint32_t majorStep           :8;    //16:23
-        uint32_t minorStep           :8;    //24:31
+        uint32_t magic : 8;        // 0:7
+        uint32_t stepStart : 1;    // 8
+        uint32_t stepFinish : 1;   // 9
+        uint32_t reserved : 2;     // 10:11
+        uint32_t internalStep : 4; // 12:15
+        uint32_t majorStep : 8;    // 16:23
+        uint32_t minorStep : 8;    // 24:31
 #endif
     } PACKED;
 };
@@ -95,7 +96,7 @@ void collectSBEHBData()
 
     Targeting targets;
 
-    for (const auto& proc: targets)
+    for (const auto& proc : targets)
     {
         // Read and parse SBE messaging register
         try
@@ -103,14 +104,10 @@ void collectSBEHBData()
             auto readData = readReg(proc, P9_SBE_MSG_REGISTER);
             auto msg = reinterpret_cast<const sbeMsgReg_t*>(&readData);
             log<level::INFO>("SBE status register",
-                             entry("PROC=%d",
-                                    proc->getPos()),
-                             entry("SBE_MAJOR_ISTEP=%d",
-                                    msg->PACKED.majorStep),
-                             entry("SBE_MINOR_ISTEP=%d",
-                                    msg->PACKED.minorStep),
-                             entry("REG_VAL=0x%08X",
-                                    msg->data32));
+                             entry("PROC=%d", proc->getPos()),
+                             entry("SBE_MAJOR_ISTEP=%d", msg->PACKED.majorStep),
+                             entry("SBE_MINOR_ISTEP=%d", msg->PACKED.minorStep),
+                             entry("REG_VAL=0x%08X", msg->data32));
         }
         catch (const std::exception& e)
         {
@@ -128,12 +125,9 @@ void collectSBEHBData()
         if (HB_MBX5_VALID_FLAG == msg->PACKED.magic)
         {
             log<level::INFO>("HB MBOX 5 register",
-                             entry("HB_MAJOR_ISTEP=%d",
-                                    msg->PACKED.majorStep),
-                             entry("HB_MINOR_ISTEP=%d",
-                                    msg->PACKED.minorStep),
-                             entry("REG_VAL=0x%08X",
-                                    msg->data32));
+                             entry("HB_MAJOR_ISTEP=%d", msg->PACKED.majorStep),
+                             entry("HB_MINOR_ISTEP=%d", msg->PACKED.minorStep),
+                             entry("REG_VAL=0x%08X", msg->data32));
         }
     }
     catch (const std::exception& e)

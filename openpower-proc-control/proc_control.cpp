@@ -13,25 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+#include "registration.hpp"
+
 #include <algorithm>
 #include <functional>
 #include <iostream>
-#include <phosphor-logging/log.hpp>
-#include <phosphor-logging/elog.hpp>
-#include <phosphor-logging/elog-errors.hpp>
 #include <org/open_power/Proc/FSI/error.hpp>
-#include <xyz/openbmc_project/Common/error.hpp>
+#include <phosphor-logging/elog-errors.hpp>
+#include <phosphor-logging/elog.hpp>
+#include <phosphor-logging/log.hpp>
 #include <xyz/openbmc_project/Common/Device/error.hpp>
 #include <xyz/openbmc_project/Common/File/error.hpp>
-#include "registration.hpp"
+#include <xyz/openbmc_project/Common/error.hpp>
 
 using namespace openpower::util;
-namespace common_error = sdbusplus::xyz::openbmc_project::
-        Common::Error;
-namespace device_error = sdbusplus::xyz::openbmc_project::
-        Common::Device::Error;
-namespace file_error = sdbusplus::xyz::openbmc_project::
-        Common::File::Error;
+namespace common_error = sdbusplus::xyz::openbmc_project::Common::Error;
+namespace device_error = sdbusplus::xyz::openbmc_project::Common::Device::Error;
+namespace file_error = sdbusplus::xyz::openbmc_project::Common::File::Error;
 namespace fsi_error = sdbusplus::org::open_power::Proc::FSI::Error;
 
 void usage(char** argv, const ProcedureMap& procedures)
@@ -105,7 +103,6 @@ int main(int argc, char** argv)
         commit<fsi_error::SlaveDetectionFailure>();
         return -1;
     }
-
 
     return 0;
 }

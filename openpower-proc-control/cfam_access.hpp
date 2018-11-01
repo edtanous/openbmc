@@ -1,7 +1,8 @@
 #pragma once
 
-#include <memory>
 #include "targeting.hpp"
+
+#include <memory>
 
 namespace openpower
 {
@@ -24,9 +25,7 @@ using cfam_mask_t = uint32_t;
  * @param[in] data - The data to write
  */
 void writeReg(const std::unique_ptr<openpower::targeting::Target>& target,
-              cfam_address_t address,
-              cfam_data_t data);
-
+              cfam_address_t address, cfam_data_t data);
 
 /**
  * @brief Reads a CFAM (Common FRU Access Macro) register in a P9.
@@ -37,10 +36,8 @@ void writeReg(const std::unique_ptr<openpower::targeting::Target>& target,
  * @param[in] address - The register address to read
  * @return - The register data
  */
-cfam_data_t readReg(
-    const std::unique_ptr<openpower::targeting::Target>& target,
-    cfam_address_t address);
-
+cfam_data_t readReg(const std::unique_ptr<openpower::targeting::Target>& target,
+                    cfam_address_t address);
 
 /**
  * @brief Writes a CFAM (Common FRU Access Macro) register in a P9
@@ -57,9 +54,7 @@ cfam_data_t readReg(
  */
 void writeRegWithMask(
     const std::unique_ptr<openpower::targeting::Target>& target,
-    cfam_address_t address,
-    cfam_data_t data,
-    cfam_mask_t mask);
-}
-}
-}
+    cfam_address_t address, cfam_data_t data, cfam_mask_t mask);
+} // namespace access
+} // namespace cfam
+} // namespace openpower

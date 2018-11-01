@@ -17,4 +17,3 @@
 
 using namespace openpower::util;
 ProcedureMap Registration::procedures{};
-

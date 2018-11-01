@@ -13,11 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+#include "registration.hpp"
+
 #include <experimental/filesystem>
 #include <fstream>
 #include <org/open_power/Proc/FSI/error.hpp>
 #include <phosphor-logging/log.hpp>
-#include "registration.hpp"
 
 namespace openpower
 {
@@ -29,15 +30,13 @@ namespace fs = std::experimental::filesystem;
 namespace fsi_error = sdbusplus::org::open_power::Proc::FSI::Error;
 
 constexpr auto masterScanPath =
-        "/sys/bus/platform/devices/gpio-fsi/fsi0/rescan";
+    "/sys/bus/platform/devices/gpio-fsi/fsi0/rescan";
 
-constexpr auto hubScanPath =
-        "/sys/devices/platform/gpio-fsi/fsi0/slave@00:00/"
-        "00:00:00:0a/fsi1/rescan";
+constexpr auto hubScanPath = "/sys/devices/platform/gpio-fsi/fsi0/slave@00:00/"
+                             "00:00:00:0a/fsi1/rescan";
 
 constexpr auto masterCalloutPath =
     "/sys/devices/platform/gpio-fsi/fsi0/slave@00:00/raw";
-
 
 /**
  * Writes a 1 to the sysfs file passed in to trigger
@@ -49,9 +48,9 @@ static void doScan(const std::string& path)
 {
     std::ofstream file;
 
-    file.exceptions(std::ofstream::failbit | //logic error on operation
-                    std::ofstream::badbit |  //read/write error on operation
-                    std::ofstream::eofbit);  //end of file reached
+    file.exceptions(std::ofstream::failbit | // logic error on operation
+                    std::ofstream::badbit |  // read/write error on operation
+                    std::ofstream::eofbit);  // end of file reached
     try
     {
         file.open(path);
@@ -72,12 +71,12 @@ static void doScan(const std::string& path)
  */
 void scan()
 {
-    //Note: Currently the FSI device driver will always return success on both
-    //the master and hub scans.  The only way we can detect something
-    //went wrong is if the master scan didn't create the hub scan file, so
-    //we will check for that.
-    //It is possible the driver will be updated in the future to actually
-    //return a failure so the code will still check for them.
+    // Note: Currently the FSI device driver will always return success on both
+    // the master and hub scans.  The only way we can detect something
+    // went wrong is if the master scan didn't create the hub scan file, so
+    // we will check for that.
+    // It is possible the driver will be updated in the future to actually
+    // return a failure so the code will still check for them.
 
     try
     {
@@ -90,8 +89,8 @@ void scan()
         using metadata = org::open_power::Proc::FSI::MasterDetectionFailure;
 
         elog<fsi_error::MasterDetectionFailure>(
-                metadata::CALLOUT_ERRNO(e.code().value()),
-                metadata::CALLOUT_DEVICE_PATH(masterCalloutPath));
+            metadata::CALLOUT_ERRNO(e.code().value()),
+            metadata::CALLOUT_DEVICE_PATH(masterCalloutPath));
     }
 
     if (!fs::exists(hubScanPath))
@@ -101,8 +100,8 @@ void scan()
         using metadata = org::open_power::Proc::FSI::MasterDetectionFailure;
 
         elog<fsi_error::MasterDetectionFailure>(
-                metadata::CALLOUT_ERRNO(0),
-                metadata::CALLOUT_DEVICE_PATH(masterCalloutPath));
+            metadata::CALLOUT_ERRNO(0),
+            metadata::CALLOUT_DEVICE_PATH(masterCalloutPath));
     }
 
     try
@@ -111,22 +110,22 @@ void scan()
     }
     catch (std::system_error& e)
     {
-        //If the device driver is ever updated in the future to fail the sysfs
-        //write call on a scan failure then it should also provide some hints
-        //about which hardware failed so we can do an appropriate callout
-        //here.  At this point in time, the driver shouldn't ever fail so
-        //we won't worry about guessing at the callout.
+        // If the device driver is ever updated in the future to fail the sysfs
+        // write call on a scan failure then it should also provide some hints
+        // about which hardware failed so we can do an appropriate callout
+        // here.  At this point in time, the driver shouldn't ever fail so
+        // we won't worry about guessing at the callout.
 
         log<level::ERR>("Failed to run the FSI hub scan");
 
         using metadata = org::open_power::Proc::FSI::SlaveDetectionFailure;
 
         elog<fsi_error::SlaveDetectionFailure>(
-                metadata::ERRNO(e.code().value()));
+            metadata::ERRNO(e.code().value()));
     }
 }
 
 REGISTER_PROCEDURE("scanFSI", scan);
 
-}
-}
+} // namespace openfsi
+} // namespace openpower

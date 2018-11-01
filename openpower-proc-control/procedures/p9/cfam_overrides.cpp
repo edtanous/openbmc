@@ -1,12 +1,13 @@
-#include <fstream>
-#include <sstream>
-#include <iostream>
 #include "cfam_access.hpp"
 #include "p9_cfam.hpp"
 #include "registration.hpp"
 #include "targeting.hpp"
-#include <phosphor-logging/elog.hpp>
+
+#include <fstream>
+#include <iostream>
 #include <phosphor-logging/elog-errors.hpp>
+#include <phosphor-logging/elog.hpp>
+#include <sstream>
 #include <xyz/openbmc_project/Common/error.hpp>
 
 /* File /var/lib/obmc/cfam_overrides requires whitespace-separated parameters
@@ -24,7 +25,8 @@ using namespace openpower::cfam::access;
 using namespace openpower::targeting;
 using namespace openpower::util;
 
-void CFAMOverride() {
+void CFAMOverride()
+{
     int pos = 0;
     cfam_address_t address = 0;
     cfam_data_t data = 0;
@@ -38,7 +40,7 @@ void CFAMOverride() {
 
     if (overrides.is_open())
     {
-        while (std::getline(overrides,line))
+        while (std::getline(overrides, line))
         {
             if (!line.empty())
             {
@@ -47,7 +49,7 @@ void CFAMOverride() {
                 {
                     mask = 0xFFFFFFFF;
                     if (sscanf(line.c_str(), "%x %hx %x %x", &pos, &address,
-                        &data, &mask) >= 3)
+                               &data, &mask) >= 3)
                     {
                         const auto& target = targets.getTarget(pos);
                         writeRegWithMask(target, address, data, mask);
@@ -60,7 +62,8 @@ void CFAMOverride() {
                             phosphor::logging::xyz::openbmc_project::Common;
                         phosphor::logging::elog<error::InvalidArgument>(
                             metadata::InvalidArgument::ARGUMENT_NAME("line"),
-                            metadata::InvalidArgument::ARGUMENT_VALUE(line.c_str()));
+                            metadata::InvalidArgument::ARGUMENT_VALUE(
+                                line.c_str()));
                     }
                 }
             }
@@ -73,5 +76,5 @@ void CFAMOverride() {
 
 REGISTER_PROCEDURE("CFAMOverride", CFAMOverride);
 
-}
-}
+} // namespace p9
+} // namespace openpower

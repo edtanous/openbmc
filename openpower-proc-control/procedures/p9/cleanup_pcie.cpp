@@ -13,11 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#include <phosphor-logging/log.hpp>
 #include "cfam_access.hpp"
 #include "p9_cfam.hpp"
 #include "registration.hpp"
 #include "targeting.hpp"
+
+#include <phosphor-logging/log.hpp>
 
 namespace openpower
 {
@@ -46,5 +47,5 @@ void cleanupPcie()
 
 REGISTER_PROCEDURE("cleanupPcie", cleanupPcie);
 
-}
-}
+} // namespace p9
+} // namespace openpower

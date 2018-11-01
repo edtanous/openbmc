@@ -13,12 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#include <stdexcept>
-#include <unistd.h>
-#include <phosphor-logging/elog.hpp>
-#include <phosphor-logging/elog-errors.hpp>
-#include <xyz/openbmc_project/Common/File/error.hpp>
 #include "filedescriptor.hpp"
+
+#include <unistd.h>
+
+#include <phosphor-logging/elog-errors.hpp>
+#include <phosphor-logging/elog.hpp>
+#include <stdexcept>
+#include <xyz/openbmc_project/Common/File/error.hpp>
 
 namespace openpower
 {
@@ -37,12 +39,10 @@ FileDescriptor::FileDescriptor(const std::string& path)
     {
         using metadata = xyz::openbmc_project::Common::File::Open;
 
-        elog<file_error::Open>(
-                metadata::ERRNO(errno),
-                metadata::PATH(path.c_str()));
+        elog<file_error::Open>(metadata::ERRNO(errno),
+                               metadata::PATH(path.c_str()));
     }
 }
-
 
 FileDescriptor::~FileDescriptor()
 {
@@ -52,5 +52,5 @@ FileDescriptor::~FileDescriptor()
     }
 }
 
-}
-}
+} // namespace util
+} // namespace openpower

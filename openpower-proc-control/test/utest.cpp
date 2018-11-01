@@ -13,12 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#include <gtest/gtest.h>
-#include <experimental/filesystem>
-#include <fstream>
-#include <stdlib.h>
 #include "registration.hpp"
 #include "targeting.hpp"
+
+#include <stdlib.h>
+
+#include <experimental/filesystem>
+#include <fstream>
+
+#include <gtest/gtest.h>
 
 using namespace openpower::util;
 using namespace openpower::targeting;
@@ -30,38 +33,36 @@ constexpr auto masterDir = "/tmp";
 
 class TargetingTest : public ::testing::Test
 {
-    protected:
+  protected:
+    virtual void SetUp()
+    {
+        char dir[50];
+        strcpy(dir, masterDir);
+        strcat(dir, "/targetingXXXXXX");
 
-        virtual void SetUp()
-        {
-            char dir[50];
-            strcpy(dir, masterDir);
-            strcat(dir, "/targetingXXXXXX");
+        auto path = mkdtemp(dir);
+        assert(path != nullptr);
 
-            auto path = mkdtemp(dir);
-            assert(path != nullptr);
+        _slaveBaseDir = path;
 
-            _slaveBaseDir = path;
+        _slaveDir = _slaveBaseDir / "fsi1";
+        fs::create_directory(_slaveDir);
+    }
 
-            _slaveDir = _slaveBaseDir / "fsi1";
-            fs::create_directory(_slaveDir);
-        }
+    virtual void TearDown()
+    {
+        fs::remove_all(_slaveDir);
+        fs::remove_all(_slaveBaseDir);
+    }
 
-        virtual void TearDown()
-        {
-            fs::remove_all(_slaveDir);
-            fs::remove_all(_slaveBaseDir);
-        }
-
-        fs::path _slaveBaseDir;
-        fs::path _slaveDir;
+    fs::path _slaveBaseDir;
+    fs::path _slaveDir;
 };
-
 
 TEST_F(TargetingTest, CreateTargets)
 {
 
-    //Test that we always create the first Target
+    // Test that we always create the first Target
     {
         Targeting targets{masterDir, _slaveDir};
         ASSERT_EQ(targets.size(), 1);
@@ -72,10 +73,9 @@ TEST_F(TargetingTest, CreateTargets)
         ASSERT_EQ((*t)->getCFAMPath(), masterDir);
     }
 
-
-    //Test that we can create multiple Targets
+    // Test that we can create multiple Targets
     {
-        //make some fake slave entries
+        // make some fake slave entries
         std::ofstream(_slaveDir / "slave@01:00");
         std::ofstream(_slaveDir / "slave@02:00");
         std::ofstream(_slaveDir / "slave@03:00");
@@ -112,7 +112,6 @@ TEST_F(TargetingTest, CreateTargets)
     }
 }
 
-
 void func1()
 {
     std::cout << "Hello\n";
@@ -125,7 +124,6 @@ void func2()
 
 REGISTER_PROCEDURE("hello", func1);
 REGISTER_PROCEDURE("world", func2);
-
 
 TEST(RegistrationTest, TestReg)
 {
