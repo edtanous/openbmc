@@ -1,9 +1,11 @@
-#include <sdbusplus/bus.hpp>
-#include <sdbusplus/server/manager.hpp>
-#include "settings_manager.hpp"
 #include "config.h"
 
-int main(int argc, char *argv[])
+#include "settings_manager.hpp"
+
+#include <sdbusplus/bus.hpp>
+#include <sdbusplus/server/manager.hpp>
+
+int main(int argc, char* argv[])
 {
     auto bus = sdbusplus::bus::new_default();
 
@@ -15,7 +17,7 @@ int main(int argc, char *argv[])
 
     phosphor::settings::Manager mgr(bus);
 
-    while(true)
+    while (true)
     {
         bus.process_discard();
         bus.wait();
