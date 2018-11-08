@@ -37,12 +37,14 @@ using namespace openpower::targeting;
 void cleanupPcie()
 {
     Targeting targets;
-    const auto& master = *(targets.begin());
 
     log<level::INFO>("Running P9 procedure cleanupPcie");
 
-    // Disable the PCIE drivers and receiver
-    writeReg(master, P9_ROOT_CTRL1_CLEAR, 0x00001C00);
+    // Disable the PCIE drivers and receiver on all CPUs
+    for (const auto& target : targets)
+    {
+        writeReg(target, P9_ROOT_CTRL1_CLEAR, 0x00001C00);
+    }
 }
 
 REGISTER_PROCEDURE("cleanupPcie", cleanupPcie);
