@@ -130,6 +130,17 @@ DISTRO_EXTRA_RDEPENDS_remove_qemuarm = "packagegroup-core-device-devel"
 # TODO: openbmc/openbmc#12345 - Upgrade to pygobject-3.
 PREFERRED_VERSION_python-pygobject = "2.%"
 
+GOVERSION ?= "1.10%"
+PREFERRED_VERSION_virtual/${TARGET_PREFIX}go ?= "${GOVERSION}"
+PREFERRED_VERSION_go-cross-${TARGET_ARCH} ?= "${GOVERSION}"
+PREFERRED_VERSION_go-crosssdk-${SDK_ARCH} ?= "${GOVERSION}"
+PREFERRED_VERSION_go-cross-canadian-${TRANSLATED_TARGET_ARCH} ?= "${GOVERSION}"
+PREFERRED_VERSION_go ?= "${GOVERSION}"
+PREFERRED_VERSION_go-native ?= "${GOVERSION}"
+PREFERRED_VERSION_go-runtime ?= "${GOVERSION}"
+PREFERRED_VERSION_nativesdk-go ?= "${GOVERSION}"
+PREFERRED_VERSION_nativesdk-go-runtime ?= "${GOVERSION}"
+
 include conf/distro/include/openbmc-phosphor/${MACHINE}.inc
 
 KERNEL_FEATURES_append = " phosphor-gpio-keys"
