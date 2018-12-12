@@ -13,6 +13,8 @@ AC_PROG_MAKE_SET
 # Check for libraries
 PKG_CHECK_MODULES([PHOSPHOR_LOGGING], [phosphor-logging],,\
     AC_MSG_ERROR(["Requires phosphor-logging package."]))
+PKG_CHECK_MODULES([GPIOPLUS], [gpioplus],,\
+    [AC_MSG_ERROR([Could not find gpioplus...openbmc/gpioplus package required])])
 
 # Checks for typedefs, structures, and compiler characteristics.
 AX_CXX_COMPILE_STDCXX_17([noext])
