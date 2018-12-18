@@ -1,8 +1,13 @@
 #pragma once
 
+#include "binarystore.hpp"
+
 #include <blobs-ipmid/blobs.hpp>
 #include <cstdint>
+#include <map>
+#include <memory>
 #include <string>
+#include <unordered_map>
 #include <vector>
 
 using std::size_t;
@@ -40,6 +45,24 @@ class BinaryStoreBlobHandler : public GenericBlobInterface
     bool close(uint16_t session) override;
     bool stat(uint16_t session, struct BlobMeta* meta) override;
     bool expire(uint16_t session) override;
+
+    /**
+     * Registers a binarystore in the main handler. Once called, handler will
+     * take over the ownership of of enclosed binary store.
+     *
+     * @param store: pointer to a valid BinaryStore.
+     * TODO: a minimal amount of error checking would be better
+     */
+    void addNewBinaryStore(
+        std::unique_ptr<binstore::BinaryStoreInterface> store);
+
+  private:
+    /* map of baseId: binaryStore, which has a 1:1 relationship. */
+    std::map<std::string, std::unique_ptr<binstore::BinaryStoreInterface>>
+        stores_;
+
+    /* map of sessionId: open binaryStore base, which has a 1:1 relationship. */
+    std::unordered_map<uint16_t, std::string> sessions_;
 };
 
 } // namespace blobs

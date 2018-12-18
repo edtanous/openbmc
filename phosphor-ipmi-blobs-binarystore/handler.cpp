@@ -1,18 +1,35 @@
 #include "handler.hpp"
 
+#include <algorithm>
+
 namespace blobs
 {
 
+void BinaryStoreBlobHandler::addNewBinaryStore(
+    std::unique_ptr<binstore::BinaryStoreInterface> store)
+{
+    // TODO: this is a very rough measure to test the mock interface for now.
+    stores_[store->getBaseBlobId()] = std::move(store);
+}
+
 bool BinaryStoreBlobHandler::canHandleBlob(const std::string& path)
 {
-    // TODO: implement
-    return false;
+    return std::any_of(stores_.begin(), stores_.end(),
+                       [&](const auto& baseStorePair) {
+                           return baseStorePair.second->canHandleBlob(path);
+                       });
 }
 
 std::vector<std::string> BinaryStoreBlobHandler::getBlobIds()
 {
-    // TODO: implement
     std::vector<std::string> result;
+
+    for (const auto& baseStorePair : stores_)
+    {
+        const auto& ids = baseStorePair.second->getBlobIds();
+        result.insert(result.end(), ids.begin(), ids.end());
+    }
+
     return result;
 }
 
@@ -32,6 +49,18 @@ bool BinaryStoreBlobHandler::stat(const std::string& path,
 bool BinaryStoreBlobHandler::open(uint16_t session, uint16_t flags,
                                   const std::string& path)
 {
+    if (!canHandleBlob(path))
+    {
+        return false;
+    }
+
+    auto found = sessions_.find(session);
+    if (found != sessions_.end())
+    {
+        /* This session is already active */
+        return false;
+    }
+
     // TODO: implement
     return false;
 }

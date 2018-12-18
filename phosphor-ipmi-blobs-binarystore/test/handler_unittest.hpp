@@ -1,5 +1,6 @@
 #pragma once
 
+#include "binarystore_mock.hpp"
 #include "handler.hpp"
 
 #include <gtest/gtest.h>
@@ -11,12 +12,7 @@ class BinaryStoreBlobHandlerTest : public ::testing::Test
 {
   protected:
     BinaryStoreBlobHandlerTest() = default;
-
-    BinaryStoreBlobHandler bstore;
-};
-
-class BinaryStoreBlobHandlerBasicTest : public BinaryStoreBlobHandlerTest
-{
+    BinaryStoreBlobHandler handler;
 };
 
 } // namespace blobs
