@@ -15,4 +15,8 @@ class BinaryStoreBlobHandlerTest : public ::testing::Test
     BinaryStoreBlobHandler handler;
 };
 
+class BinaryStoreBlobHandlerOpenTest : public BinaryStoreBlobHandlerTest
+{
+};
+
 } // namespace blobs

@@ -61,8 +61,8 @@ class BinaryStoreBlobHandler : public GenericBlobInterface
     std::map<std::string, std::unique_ptr<binstore::BinaryStoreInterface>>
         stores_;
 
-    /* map of sessionId: open binaryStore base, which has a 1:1 relationship. */
-    std::unordered_map<uint16_t, std::string> sessions_;
+    /* map of sessionId: open binaryStore pointer. */
+    std::unordered_map<uint16_t, binstore::BinaryStoreInterface*> sessions_;
 };
 
 } // namespace blobs

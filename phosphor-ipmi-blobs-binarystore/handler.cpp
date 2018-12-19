@@ -5,6 +5,17 @@
 namespace blobs
 {
 
+namespace internal
+{
+
+/* Strip the basename till the last '/' */
+std::string getBaseFromId(const std::string& blobId)
+{
+    return blobId.substr(0, blobId.find_last_of('/') + 1);
+}
+
+} // namespace internal
+
 void BinaryStoreBlobHandler::addNewBinaryStore(
     std::unique_ptr<binstore::BinaryStoreInterface> store)
 {
@@ -61,8 +72,20 @@ bool BinaryStoreBlobHandler::open(uint16_t session, uint16_t flags,
         return false;
     }
 
-    // TODO: implement
-    return false;
+    const auto& base = internal::getBaseFromId(path);
+
+    if (stores_.find(base) == stores_.end())
+    {
+        return false;
+    }
+
+    if (!stores_[base]->openOrCreateBlob(path, flags))
+    {
+        return false;
+    }
+
+    sessions_[session] = stores_[base].get();
+    return true;
 }
 
 std::vector<uint8_t> BinaryStoreBlobHandler::read(uint16_t session,
