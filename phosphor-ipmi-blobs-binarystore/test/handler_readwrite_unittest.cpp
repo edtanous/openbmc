@@ -1,5 +1,10 @@
 #include "handler_unittest.hpp"
 
+#include <cstdint>
+#include <memory>
+#include <string>
+#include <vector>
+
 using ::testing::_;
 using ::testing::Return;
 using ::testing::StartsWith;
@@ -23,28 +28,21 @@ class BinaryStoreBlobHandlerReadWriteTest : public BinaryStoreBlobHandlerTest
 
 TEST_F(BinaryStoreBlobHandlerReadWriteTest, ReadWriteReturnsWhatStoreReturns)
 {
-    auto testBaseId = "/test/"s;
-    auto testBlobId = "/test/blob0"s;
     uint16_t flags = OpenFlags::read;
     const std::vector<uint8_t> emptyData;
-    auto bstore = std::make_unique<MockBinaryStore>();
+    auto store = defaultMockStore(rwTestBaseId);
 
-    EXPECT_CALL(*bstore, getBaseBlobId()).WillRepeatedly(Return(testBaseId));
-    EXPECT_CALL(*bstore, canHandleBlob(StartsWith(testBaseId)))
-        .WillRepeatedly(Return(true));
-    EXPECT_CALL(*bstore, openOrCreateBlob(_, flags)).WillOnce(Return(true));
-    EXPECT_CALL(*bstore, read(rwTestOffset, _))
+    EXPECT_CALL(*store, openOrCreateBlob(_, flags)).WillOnce(Return(true));
+    EXPECT_CALL(*store, read(rwTestOffset, _))
         .WillOnce(Return(emptyData))
         .WillOnce(Return(rwTestData));
 
-    EXPECT_CALL(*bstore, write(rwTestOffset, emptyData))
-        .WillOnce(Return(false));
-    EXPECT_CALL(*bstore, write(rwTestOffset, rwTestData))
-        .WillOnce(Return(true));
+    EXPECT_CALL(*store, write(rwTestOffset, emptyData)).WillOnce(Return(false));
+    EXPECT_CALL(*store, write(rwTestOffset, rwTestData)).WillOnce(Return(true));
 
-    handler.addNewBinaryStore(std::move(bstore));
+    handler.addNewBinaryStore(std::move(store));
 
-    EXPECT_TRUE(handler.open(rwTestSessionId, flags, testBlobId));
+    EXPECT_TRUE(handler.open(rwTestSessionId, flags, rwTestBlobId));
     EXPECT_EQ(emptyData, handler.read(rwTestSessionId, rwTestOffset, 1));
     EXPECT_EQ(rwTestData, handler.read(rwTestSessionId, rwTestOffset, 1));
     EXPECT_FALSE(handler.write(rwTestSessionId, rwTestOffset, emptyData));

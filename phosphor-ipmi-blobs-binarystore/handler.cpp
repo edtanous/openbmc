@@ -8,8 +8,14 @@ namespace blobs
 namespace internal
 {
 
-/* Strip the basename till the last '/' */
-std::string getBaseFromId(const std::string& blobId)
+/**
+ * @brief: Get baseId from a blob id string
+ * @param blobId: Input blob id which is expected to only contain alphanumerical
+ *                characters and '/'.
+ * @returns: the baseId containing the blobId, stripping all contents from the
+ *           last '/'. If no '/' is present, an empty string is returned.
+ */
+static std::string getBaseFromId(const std::string& blobId)
 {
     return blobId.substr(0, blobId.find_last_of('/') + 1);
 }
@@ -25,9 +31,16 @@ void BinaryStoreBlobHandler::addNewBinaryStore(
 
 bool BinaryStoreBlobHandler::canHandleBlob(const std::string& path)
 {
+    auto base = internal::getBaseFromId(path);
+    if (base.empty() || base == path)
+    {
+        /* Operations on baseId itself or an empty base is not allowed */
+        return false;
+    }
+
     return std::any_of(stores_.begin(), stores_.end(),
                        [&](const auto& baseStorePair) {
-                           return baseStorePair.second->canHandleBlob(path);
+                           return base == baseStorePair.second->getBaseBlobId();
                        });
 }
 

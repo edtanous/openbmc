@@ -10,44 +10,47 @@ using namespace binstore;
 namespace blobs
 {
 
+class BinaryStoreBlobHandlerOpenTest : public BinaryStoreBlobHandlerTest
+{
+  protected:
+    static inline std::string openTestBaseId = "/test/"s;
+    static inline std::string openTestBlobId = "/test/blob0"s;
+    static inline std::string openTestInvalidBlobId = "/invalid/blob0"s;
+    static inline uint16_t openTestROFlags = OpenFlags::read;
+    static inline uint16_t openTestRWFlags = OpenFlags::read | OpenFlags::write;
+    static inline uint16_t openTestSessionId = 0;
+};
+
 TEST_F(BinaryStoreBlobHandlerOpenTest, FailWhenCannotHandleId)
 {
-    uint16_t flags = OpenFlags::read, sessionId = 0;
-    EXPECT_FALSE(handler.open(sessionId, flags, "/invalid/blob"s));
+    EXPECT_FALSE(handler.open(openTestSessionId, openTestROFlags,
+                              openTestInvalidBlobId));
 }
 
 TEST_F(BinaryStoreBlobHandlerOpenTest, FailWhenStoreOpenReturnsFailure)
 {
-    auto testBaseId = "/test/"s;
-    auto testBlobId = "/test/blob0"s;
-    uint16_t flags = OpenFlags::read, sessionId = 0;
-    auto bstore = std::make_unique<MockBinaryStore>();
+    auto store = defaultMockStore(openTestBaseId);
 
-    EXPECT_CALL(*bstore, getBaseBlobId()).WillRepeatedly(Return(testBaseId));
-    EXPECT_CALL(*bstore, canHandleBlob(StartsWith(testBaseId)))
-        .WillRepeatedly(Return(true));
-    EXPECT_CALL(*bstore, openOrCreateBlob(_, flags)).WillOnce(Return(false));
+    EXPECT_CALL(*store, openOrCreateBlob(_, openTestROFlags))
+        .WillOnce(Return(false));
 
-    handler.addNewBinaryStore(std::move(bstore));
+    handler.addNewBinaryStore(std::move(store));
 
-    EXPECT_FALSE(handler.open(sessionId, flags, testBlobId));
+    EXPECT_FALSE(
+        handler.open(openTestSessionId, openTestROFlags, openTestBlobId));
 }
 
 TEST_F(BinaryStoreBlobHandlerOpenTest, SucceedWhenStoreOpenReturnsTrue)
 {
-    auto testBaseId = "/test/"s;
-    auto testBlobId = "/test/blob0"s;
-    uint16_t flags = OpenFlags::read, sessionId = 0;
-    auto bstore = std::make_unique<MockBinaryStore>();
+    auto store = defaultMockStore(openTestBaseId);
 
-    EXPECT_CALL(*bstore, getBaseBlobId()).WillRepeatedly(Return(testBaseId));
-    EXPECT_CALL(*bstore, canHandleBlob(StartsWith(testBaseId)))
-        .WillRepeatedly(Return(true));
-    EXPECT_CALL(*bstore, openOrCreateBlob(_, flags)).WillOnce(Return(true));
+    EXPECT_CALL(*store, openOrCreateBlob(_, openTestROFlags))
+        .WillOnce(Return(true));
 
-    handler.addNewBinaryStore(std::move(bstore));
+    handler.addNewBinaryStore(std::move(store));
 
-    EXPECT_TRUE(handler.open(sessionId, flags, testBlobId));
+    EXPECT_TRUE(
+        handler.open(openTestSessionId, openTestROFlags, openTestBlobId));
 }
 
 TEST_F(BinaryStoreBlobHandlerOpenTest, CloseFailForInvalidSession)
@@ -58,60 +61,49 @@ TEST_F(BinaryStoreBlobHandlerOpenTest, CloseFailForInvalidSession)
 
 TEST_F(BinaryStoreBlobHandlerOpenTest, CloseFailWhenStoreCloseFails)
 {
-    auto testBaseId = "/test/"s;
-    auto testBlobId = "/test/blob0"s;
-    uint16_t flags = OpenFlags::read, sessionId = 0;
-    auto bstore = std::make_unique<MockBinaryStore>();
+    auto store = defaultMockStore(openTestBaseId);
 
-    EXPECT_CALL(*bstore, getBaseBlobId()).WillRepeatedly(Return(testBaseId));
-    EXPECT_CALL(*bstore, canHandleBlob(StartsWith(testBaseId)))
-        .WillRepeatedly(Return(true));
-    EXPECT_CALL(*bstore, openOrCreateBlob(_, flags)).WillOnce(Return(true));
-    EXPECT_CALL(*bstore, close()).WillOnce(Return(false));
+    EXPECT_CALL(*store, openOrCreateBlob(_, openTestROFlags))
+        .WillOnce(Return(true));
+    EXPECT_CALL(*store, close()).WillOnce(Return(false));
 
-    handler.addNewBinaryStore(std::move(bstore));
+    handler.addNewBinaryStore(std::move(store));
 
-    EXPECT_TRUE(handler.open(sessionId, flags, testBlobId));
-    EXPECT_FALSE(handler.close(sessionId));
+    EXPECT_TRUE(
+        handler.open(openTestSessionId, openTestROFlags, openTestBlobId));
+    EXPECT_FALSE(handler.close(openTestSessionId));
 }
 
 TEST_F(BinaryStoreBlobHandlerOpenTest, CloseSucceedWhenStoreCloseSucceeds)
 {
-    auto testBaseId = "/test/"s;
-    auto testBlobId = "/test/blob0"s;
-    uint16_t flags = OpenFlags::read, sessionId = 0;
-    auto bstore = std::make_unique<MockBinaryStore>();
+    auto store = defaultMockStore(openTestBaseId);
 
-    EXPECT_CALL(*bstore, getBaseBlobId()).WillRepeatedly(Return(testBaseId));
-    EXPECT_CALL(*bstore, canHandleBlob(StartsWith(testBaseId)))
-        .WillRepeatedly(Return(true));
-    EXPECT_CALL(*bstore, openOrCreateBlob(_, flags)).WillOnce(Return(true));
-    EXPECT_CALL(*bstore, close()).WillOnce(Return(true));
+    EXPECT_CALL(*store, openOrCreateBlob(_, openTestROFlags))
+        .WillOnce(Return(true));
+    EXPECT_CALL(*store, close()).WillOnce(Return(true));
 
-    handler.addNewBinaryStore(std::move(bstore));
+    handler.addNewBinaryStore(std::move(store));
 
-    EXPECT_TRUE(handler.open(sessionId, flags, testBlobId));
-    EXPECT_TRUE(handler.close(sessionId));
+    EXPECT_TRUE(
+        handler.open(openTestSessionId, openTestROFlags, openTestBlobId));
+    EXPECT_TRUE(handler.close(openTestSessionId));
 }
 
 TEST_F(BinaryStoreBlobHandlerOpenTest, ClosedSessionCannotBeReclosed)
 {
-    auto testBaseId = "/test/"s;
-    auto testBlobId = "/test/blob0"s;
-    uint16_t flags = OpenFlags::read, sessionId = 0;
-    auto bstore = std::make_unique<MockBinaryStore>();
+    auto store = defaultMockStore(openTestBaseId);
 
-    EXPECT_CALL(*bstore, getBaseBlobId()).WillRepeatedly(Return(testBaseId));
-    EXPECT_CALL(*bstore, canHandleBlob(StartsWith(testBaseId)))
-        .WillRepeatedly(Return(true));
-    EXPECT_CALL(*bstore, openOrCreateBlob(_, flags)).WillOnce(Return(true));
-    EXPECT_CALL(*bstore, close()).WillRepeatedly(Return(true));
+    EXPECT_CALL(*store, openOrCreateBlob(_, openTestROFlags))
+        .WillOnce(Return(true));
+    EXPECT_CALL(*store, close()).WillRepeatedly(Return(true));
 
-    handler.addNewBinaryStore(std::move(bstore));
+    handler.addNewBinaryStore(std::move(store));
 
-    EXPECT_TRUE(handler.open(sessionId, flags, testBlobId));
-    EXPECT_TRUE(handler.close(sessionId));
-    EXPECT_FALSE(handler.close(sessionId));
+    EXPECT_TRUE(
+        handler.open(openTestSessionId, openTestROFlags, openTestBlobId));
+    EXPECT_TRUE(handler.close(openTestSessionId));
+    EXPECT_FALSE(handler.close(openTestSessionId));
+    EXPECT_FALSE(handler.close(openTestSessionId));
 }
 
 } // namespace blobs
