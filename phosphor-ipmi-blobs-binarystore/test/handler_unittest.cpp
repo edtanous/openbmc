@@ -103,4 +103,27 @@ TEST_F(BinaryStoreBlobHandlerBasicTest, GetBlobIdEqualsConcatenationsOfIds)
     EXPECT_EQ(expectedIdList, handler.getBlobIds());
 }
 
+TEST_F(BinaryStoreBlobHandlerBasicTest, DeleteReturnsWhatStoreReturns)
+{
+    auto bstore = std::make_unique<MockBinaryStore>();
+
+    EXPECT_CALL(*bstore, getBaseBlobId())
+        .WillRepeatedly(Return(basicTestBaseId));
+    EXPECT_CALL(*bstore, canHandleBlob(StrNe(basicTestBlobId)))
+        .WillRepeatedly(Return(false));
+    EXPECT_CALL(*bstore, canHandleBlob(StrEq(basicTestBlobId)))
+        .WillRepeatedly(Return(true));
+    EXPECT_CALL(*bstore, deleteBlob(StrEq(basicTestBlobId)))
+        .WillOnce(Return(false))
+        .WillOnce(Return(true));
+    handler.addNewBinaryStore(std::move(bstore));
+
+    // Verify canHandleBlob return true for a blob id that it can handle
+    EXPECT_FALSE(handler.canHandleBlob(basicTestInvalidBlobId));
+    EXPECT_TRUE(handler.canHandleBlob(basicTestBlobId));
+    EXPECT_FALSE(handler.deleteBlob(basicTestInvalidBlobId));
+    EXPECT_FALSE(handler.deleteBlob(basicTestBlobId));
+    EXPECT_TRUE(handler.deleteBlob(basicTestBlobId));
+}
+
 } // namespace blobs

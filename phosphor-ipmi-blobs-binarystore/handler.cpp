@@ -46,8 +46,13 @@ std::vector<std::string> BinaryStoreBlobHandler::getBlobIds()
 
 bool BinaryStoreBlobHandler::deleteBlob(const std::string& path)
 {
-    // TODO: implement
-    return false;
+    auto it = stores_.find(internal::getBaseFromId(path));
+    if (it == stores_.end())
+    {
+        return false;
+    }
+
+    return it->second->deleteBlob(path);
 }
 
 bool BinaryStoreBlobHandler::stat(const std::string& path,
@@ -92,16 +97,25 @@ std::vector<uint8_t> BinaryStoreBlobHandler::read(uint16_t session,
                                                   uint32_t offset,
                                                   uint32_t requestedSize)
 {
-    // TODO: implement
-    std::vector<uint8_t> result;
-    return result;
+    auto it = sessions_.find(session);
+    if (it == sessions_.end())
+    {
+        return std::vector<uint8_t>();
+    }
+
+    return it->second->read(offset, requestedSize);
 }
 
 bool BinaryStoreBlobHandler::write(uint16_t session, uint32_t offset,
                                    const std::vector<uint8_t>& data)
 {
-    // TODO: implement
-    return false;
+    auto it = sessions_.find(session);
+    if (it == sessions_.end())
+    {
+        return false;
+    }
+
+    return it->second->write(offset, data);
 }
 
 bool BinaryStoreBlobHandler::writeMeta(uint16_t session, uint32_t offset,
@@ -120,8 +134,19 @@ bool BinaryStoreBlobHandler::commit(uint16_t session,
 
 bool BinaryStoreBlobHandler::close(uint16_t session)
 {
-    // TODO: implement
-    return false;
+    auto it = sessions_.find(session);
+    if (it == sessions_.end())
+    {
+        return false;
+    }
+
+    if (!it->second->close())
+    {
+        return false;
+    }
+
+    sessions_.erase(session);
+    return true;
 }
 
 bool BinaryStoreBlobHandler::stat(uint16_t session, struct BlobMeta* meta)

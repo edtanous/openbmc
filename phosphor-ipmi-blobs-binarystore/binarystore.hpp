@@ -27,6 +27,7 @@ class BinaryStoreInterface
     virtual bool canHandleBlob(const std::string& blobId) const = 0;
     virtual bool openOrCreateBlob(const std::string& blobId,
                                   uint16_t flags) = 0;
+    virtual bool deleteBlob(const std::string& blobId) = 0;
     virtual std::vector<uint8_t> read(uint32_t offset,
                                       uint32_t requestedSize) = 0;
     virtual bool write(uint32_t offset, const std::vector<uint8_t>& data) = 0;
