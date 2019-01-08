@@ -20,6 +20,7 @@ AX_APPEND_COMPILE_FLAGS([-Wall -Werror], [CXXFLAGS])
 LT_INIT # Required for systemd linking
 
 # Checks for libraries.
+PKG_CHECK_MODULES([PROTOBUF], [protobuf], [], [AC_MSG_ERROR(["protobuf required and not found"])])
 PKG_CHECK_MODULES([PHOSPHOR_LOGGING], [phosphor-logging],, [AC_MSG_ERROR([Could not find phosphor-logging...openbmc/phosphor-logging package required])])
 AC_CHECK_HEADER([blobs-ipmid], [AC_MSG_ERROR(["phosphor-ipmi-blobs required and not found."])])
 

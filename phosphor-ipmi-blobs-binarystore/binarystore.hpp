@@ -7,6 +7,8 @@
 #include <string>
 #include <vector>
 
+#include "binaryblob.pb.h"
+
 using std::size_t;
 using std::uint16_t;
 using std::uint32_t;
@@ -85,19 +87,6 @@ class BinaryStoreInterface
     virtual bool stat() = 0;
 };
 
-// TODO: move to protobuf definition
-struct BinaryBlobSingle
-{
-    std::string id;
-    std::vector<uint8_t> data;
-};
-
-struct BinaryBlob
-{
-    std::string baseBlobId;
-    std::vector<BinaryBlobSingle> blobs;
-};
-
 /**
  * @class BinaryStore instantiates a concrete implementation of
  *     BinaryStoreInterface. The dependency on file is injected through its
@@ -150,7 +139,8 @@ class BinaryStore : public BinaryStoreInterface
     int fd_;
     uint32_t offset_;
     uint32_t maxSize_;
-    BinaryBlob blob_;
+    binaryblobproto::BinaryBlobBase blob_;
+    binaryblobproto::BinaryBlob* currentBlob_;
 };
 
 } // namespace binstore

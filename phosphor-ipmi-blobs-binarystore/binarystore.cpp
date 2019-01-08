@@ -22,9 +22,9 @@ std::vector<std::string> BinaryStore::getBlobIds() const
     std::vector<std::string> result;
     result.push_back(baseBlobId_);
 
-    for (const auto& blob : blob_.blobs)
+    for (const auto& blob : blob_.blobs())
     {
-        result.push_back(blob.id);
+        result.push_back(blob.blob_id());
     }
 
     return result;
