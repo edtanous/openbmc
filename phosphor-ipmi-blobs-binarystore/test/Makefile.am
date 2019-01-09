@@ -11,10 +11,14 @@ AM_LDFLAGS = \
 
 # Run all 'check' test programs
 check_PROGRAMS = \
+	sys_file_unittest \
 	handler_open_unittest \
 	handler_readwrite_unittest \
 	handler_unittest
 TESTS = $(check_PROGRAMS)
+
+sys_file_unittest_SOURCES = sys_file_unittest.cpp
+sys_file_unittest_LDADD = $(top_builddir)/sys_file.o
 
 handler_unittest_SOURCES = handler_unittest.cpp
 handler_unittest_LDADD = $(PHOSPHOR_LOGGING_LIBS) \
