@@ -31,6 +31,8 @@ class MockBinaryStore : public BinaryStoreInterface
             .WillByDefault(Invoke(&real_store_, &BinaryStore::read));
         ON_CALL(*this, write)
             .WillByDefault(Invoke(&real_store_, &BinaryStore::write));
+        ON_CALL(*this, commit)
+            .WillByDefault(Invoke(&real_store_, &BinaryStore::commit));
     }
     MOCK_CONST_METHOD0(getBaseBlobId, std::string());
     MOCK_CONST_METHOD0(getBlobIds, std::vector<std::string>());

@@ -74,12 +74,15 @@ class BinaryStoreInterface
     virtual bool write(uint32_t offset, const std::vector<uint8_t>& data) = 0;
 
     /**
-     * TODO
+     * Commits data to the persistent storage specified during blob init.
+     * @returns True if able to write data to sysfile successfully
      */
     virtual bool commit() = 0;
 
     /**
-     * TODO
+     * Closes blob, which prevents further modifications. Uncommitted data will
+     * be lost.
+     * @returns True if able to close the blob successfully
      */
     virtual bool close() = 0;
 
@@ -136,12 +139,20 @@ class BinaryStore : public BinaryStoreInterface
                          std::unique_ptr<SysFile> file, uint32_t maxSize);
 
   private:
+    enum class CommitState
+    {
+        Dirty,      // In-memory data might not match persisted data
+        Clean,      // In-memory data matches persisted data
+        CommitError // Error happened during committing
+    };
+
     std::string baseBlobId_;
     binaryblobproto::BinaryBlobBase blob_;
     binaryblobproto::BinaryBlob* currentBlob_ = nullptr;
     bool writable_ = false;
     std::unique_ptr<SysFile> file_ = nullptr;
     uint32_t maxSize_;
+    CommitState commitState_ = CommitState::Dirty;
 };
 
 } // namespace binstore

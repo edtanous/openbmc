@@ -151,8 +151,13 @@ bool BinaryStoreBlobHandler::writeMeta(uint16_t session, uint32_t offset,
 bool BinaryStoreBlobHandler::commit(uint16_t session,
                                     const std::vector<uint8_t>& data)
 {
-    // TODO: implement
-    return false;
+    auto it = sessions_.find(session);
+    if (it == sessions_.end())
+    {
+        return false;
+    }
+
+    return it->second->commit();
 }
 
 bool BinaryStoreBlobHandler::close(uint16_t session)
