@@ -1,5 +1,8 @@
 #include "binarystore.hpp"
 
+#include <algorithm>
+#include <blobs-ipmid/blobs.hpp>
+
 namespace binstore
 {
 
@@ -32,7 +35,37 @@ std::vector<std::string> BinaryStore::getBlobIds() const
 
 bool BinaryStore::openOrCreateBlob(const std::string& blobId, uint16_t flags)
 {
-    return false;
+    if (!(flags & blobs::OpenFlags::read))
+    {
+        return false;
+    }
+
+    if (currentBlob_ && (currentBlob_->blob_id() != blobId))
+    {
+        /* Already handling a different blob */
+        return false;
+    }
+
+    writable_ = flags & blobs::OpenFlags::write;
+
+    /* Iterate and find if there is an existing blob with this id.
+     * blobsPtr points to a BinaryBlob container with STL-like semantics*/
+    auto blobsPtr = blob_.mutable_blobs();
+    auto blobIt =
+        std::find_if(blobsPtr->begin(), blobsPtr->end(),
+                     [&](const auto& b) { return b.blob_id() == blobId; });
+
+    if (blobIt != blobsPtr->end())
+    {
+        currentBlob_ = &(*blobIt);
+        return true;
+    }
+
+    /* Otherwise, create the blob and append it */
+    currentBlob_ = blob_.add_blobs();
+    currentBlob_->set_blob_id(blobId);
+
+    return true;
 }
 
 bool BinaryStore::deleteBlob(const std::string& blobId)
@@ -58,7 +91,9 @@ bool BinaryStore::commit()
 
 bool BinaryStore::close()
 {
-    return false;
+    currentBlob_ = nullptr;
+    writable_ = false;
+    return true;
 }
 
 bool BinaryStore::stat()

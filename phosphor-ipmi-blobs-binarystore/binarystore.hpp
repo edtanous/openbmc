@@ -98,7 +98,7 @@ class BinaryStore : public BinaryStoreInterface
     BinaryStore(const std::string& baseBlobId, int fd, uint32_t offset,
                 uint32_t maxSize) :
         baseBlobId_(baseBlobId),
-        fd_(fd), offset_(offset), maxSize_(maxSize)
+        fd_(fd), offset_(offset), maxSize_(maxSize), currentBlob_(nullptr)
     {
     }
 
@@ -141,6 +141,7 @@ class BinaryStore : public BinaryStoreInterface
     uint32_t maxSize_;
     binaryblobproto::BinaryBlobBase blob_;
     binaryblobproto::BinaryBlob* currentBlob_;
+    bool writable_ = false;
 };
 
 } // namespace binstore
