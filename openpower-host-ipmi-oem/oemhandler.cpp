@@ -16,6 +16,7 @@
 #include <host-interface.hpp>
 #include <host-ipmid/ipmid-host-cmd.hpp>
 #include <memory>
+#include <org/open_power/Host/error.hpp>
 #include <org/open_power/OCC/Metrics/error.hpp>
 #include <sdbusplus/bus.hpp>
 
@@ -66,6 +67,30 @@ void createOCCLogEntry(const std::string& eSELData)
     using metadata = org::open_power::OCC::Metrics::Event;
 
     report<error>(metadata::ESEL(data.get()));
+}
+
+void createHostEntry(const std::string& eSELData)
+{
+    // Each byte in eSEL is formatted as %02x with a space between bytes and
+    // insert '/0' at the end of the character array.
+    std::string inventoryPath{};
+    constexpr auto byteSeperator = 3;
+
+    std::unique_ptr<char[]> data(
+        new char[(eSELData.size() * byteSeperator) + 1]());
+
+    for (size_t i = 0; i < eSELData.size(); i++)
+    {
+        sprintf(&data[i * byteSeperator], "%02x ", eSELData[i]);
+    }
+    data[eSELData.size() * byteSeperator] = '\0';
+
+    using hosterror = sdbusplus::org::open_power::Host::Error::Event;
+    using hostmetadata = org::open_power::Host::Event;
+
+    report<hosterror>(
+        Entry::Level::Warning, hostmetadata::ESEL(data.get()),
+        hostmetadata::CALLOUT_INVENTORY_PATH(inventoryPath.c_str()));
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -160,6 +185,10 @@ ipmi_ret_t ipmi_ibm_oem_partial_esel(ipmi_netfn_t netfn, ipmi_cmd_t cmd,
         if (eSELData[2] == occMetricsType)
         {
             createOCCLogEntry(eSELData);
+        }
+        else
+        {
+            createHostEntry(eSELData);
         }
     }
 
