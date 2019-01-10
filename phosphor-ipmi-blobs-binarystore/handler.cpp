@@ -1,6 +1,16 @@
 #include "handler.hpp"
 
 #include <algorithm>
+#include <cstdint>
+#include <memory>
+#include <string>
+#include <vector>
+
+using std::size_t;
+using std::uint16_t;
+using std::uint32_t;
+using std::uint64_t;
+using std::uint8_t;
 
 namespace blobs
 {

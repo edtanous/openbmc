@@ -1,7 +1,21 @@
 #include "binarystore.hpp"
 
+#include <unistd.h>
+
 #include <algorithm>
 #include <blobs-ipmid/blobs.hpp>
+#include <cstdint>
+#include <memory>
+#include <string>
+#include <vector>
+
+#include "binaryblob.pb.h"
+
+using std::size_t;
+using std::uint16_t;
+using std::uint32_t;
+using std::uint64_t;
+using std::uint8_t;
 
 namespace binstore
 {
