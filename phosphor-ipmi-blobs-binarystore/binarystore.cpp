@@ -22,11 +22,20 @@ namespace binstore
 
 std::unique_ptr<BinaryStoreInterface>
     BinaryStore::createFromConfig(const std::string& baseBlobId,
-                                  const std::string& sysfilePath,
-                                  uint32_t offset, uint32_t maxSize)
+                                  std::unique_ptr<SysFile> file,
+                                  uint32_t maxSize)
 {
-    // TODO: implement sysFile parsing
-    return std::make_unique<BinaryStore>(baseBlobId, 0, offset, maxSize);
+    if (baseBlobId.empty() || !file)
+    {
+        return nullptr;
+    }
+
+    auto store =
+        std::make_unique<BinaryStore>(baseBlobId, std::move(file), maxSize);
+
+    store->blob_.set_blob_base_id(store->baseBlobId_);
+
+    return std::move(store);
 }
 
 std::string BinaryStore::getBaseBlobId() const

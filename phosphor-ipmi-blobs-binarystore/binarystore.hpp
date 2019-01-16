@@ -1,5 +1,7 @@
 #pragma once
 
+#include "sys_file.hpp"
+
 #include <unistd.h>
 
 #include <cstdint>
@@ -95,15 +97,16 @@ class BinaryStoreInterface
 class BinaryStore : public BinaryStoreInterface
 {
   public:
-    BinaryStore(const std::string& baseBlobId, int fd, uint32_t offset,
+    BinaryStore() = delete;
+    BinaryStore(const std::string& baseBlobId, std::unique_ptr<SysFile> file,
                 uint32_t maxSize) :
         baseBlobId_(baseBlobId),
-        fd_(fd), offset_(offset), maxSize_(maxSize), currentBlob_(nullptr)
+        file_(std::move(file)), maxSize_(maxSize)
     {
     }
 
-    BinaryStore() = delete;
     ~BinaryStore() = default;
+
     BinaryStore(const BinaryStore&) = delete;
     BinaryStore& operator=(const BinaryStore&) = delete;
     BinaryStore(BinaryStore&&) = default;
@@ -122,8 +125,7 @@ class BinaryStore : public BinaryStoreInterface
     /**
      * Helper factory method to create a BinaryStore instance
      * @param baseBlobId: base id for the created instance
-     * @param sysfilePath: path to the storage location
-     * @param offset: offset into the file for serializing the final blob
+     * @param sysFile: system file object for storing binary
      * @param maxSize: max size in bytes that this BinaryStore can expand to.
      *     Writing data more than allowed size will return failure.
      * @returns unique_ptr to constructed BinaryStore. Caller should take
@@ -131,17 +133,15 @@ class BinaryStore : public BinaryStoreInterface
      */
     static std::unique_ptr<BinaryStoreInterface>
         createFromConfig(const std::string& baseBlobId,
-                         const std::string& sysfilePath, uint32_t offset,
-                         uint32_t maxSize);
+                         std::unique_ptr<SysFile> file, uint32_t maxSize);
 
   private:
     std::string baseBlobId_;
-    int fd_;
-    uint32_t offset_;
-    uint32_t maxSize_;
     binaryblobproto::BinaryBlobBase blob_;
-    binaryblobproto::BinaryBlob* currentBlob_;
+    binaryblobproto::BinaryBlob* currentBlob_ = nullptr;
     bool writable_ = false;
+    std::unique_ptr<SysFile> file_ = nullptr;
+    uint32_t maxSize_;
 };
 
 } // namespace binstore

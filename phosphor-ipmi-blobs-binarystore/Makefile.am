@@ -9,9 +9,11 @@ SUFFIXES = .proto .pb.cc
 libbinarystoredir = ${libdir}/ipmid-providers
 libbinarystore_LTLIBRARIES = libbinarystore.la
 libbinarystore_la_SOURCES = main.cpp \
-			    handler.cpp \
 			    binaryblob.pb.cc \
-			    binarystore.cpp
+			    binarystore.cpp \
+			    sys.cpp \
+			    sys_file.cpp \
+			    handler.cpp
 
 libbinarystore_la_LDFLAGS = $(PHOSPHOR_LOGGING_LIBS) \
 			    -version-info 0:0:0 -shared \

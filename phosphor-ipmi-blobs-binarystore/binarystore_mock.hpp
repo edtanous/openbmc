@@ -1,6 +1,7 @@
 #pragma once
 
 #include "binarystore.hpp"
+#include "sys_file.hpp"
 
 #include <gmock/gmock.h>
 
@@ -12,9 +13,9 @@ namespace binstore
 class MockBinaryStore : public BinaryStoreInterface
 {
   public:
-    MockBinaryStore(const std::string& baseBlobId, int fd, uint32_t offset,
-                    uint32_t maxSize) :
-        real_store_(baseBlobId, fd, offset, maxSize)
+    MockBinaryStore(const std::string& baseBlobId,
+                    std::unique_ptr<SysFile> file, uint32_t maxSize) :
+        real_store_(baseBlobId, std::move(file), maxSize)
     {
         // Implemented calls in BinaryStore will be directed to the real object.
         ON_CALL(*this, getBaseBlobId)

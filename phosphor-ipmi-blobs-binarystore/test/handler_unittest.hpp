@@ -1,6 +1,7 @@
 #pragma once
 
 #include "binarystore_mock.hpp"
+#include "fake_sys_file.hpp"
 #include "handler.hpp"
 
 #include <memory>
@@ -13,6 +14,7 @@
 using ::testing::Contains;
 
 using namespace std::string_literals;
+using namespace binstore;
 
 namespace blobs
 {
@@ -21,18 +23,19 @@ class BinaryStoreBlobHandlerTest : public ::testing::Test
 {
   protected:
     BinaryStoreBlobHandlerTest() = default;
-    BinaryStoreBlobHandler handler;
 
-    std::unique_ptr<binstore::MockBinaryStore>
-        defaultMockStore(const std::string& baseId)
+    std::unique_ptr<MockBinaryStore> defaultMockStore(const std::string& baseId)
     {
-        return std::make_unique<binstore::MockBinaryStore>(baseId, 0, 0, 0);
+        return std::make_unique<MockBinaryStore>(
+            baseId, std::make_unique<FakeSysFile>(), 0);
     }
 
     void addDefaultStore(const std::string& baseId)
     {
         handler.addNewBinaryStore(defaultMockStore(baseId));
     }
+
+    BinaryStoreBlobHandler handler;
 };
 
 } // namespace blobs
