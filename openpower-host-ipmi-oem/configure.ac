@@ -70,6 +70,10 @@ AS_IF([test "x$CONTROL_HOST_OBJ_MGR" == "x"],
       [CONTROL_HOST_OBJ_MGR="/org/open_power/control"])
 AC_DEFINE_UNQUOTED([CONTROL_HOST_OBJ_MGR], ["$CONTROL_HOST_OBJ_MGR"], [The Control Host D-Bus Object Manager])
 
+AS_IF([test "x$INVSENSOR_YAML_GEN" == "x"], [INVSENSOR_YAML_GEN="inventory-sensor-example.yaml"])
+INVSENSORGEN="$PYTHON ${srcdir}/scripts/inventory-sensor.py -i $INVSENSOR_YAML_GEN"
+AC_SUBST(INVSENSORGEN)
+
 AC_DEFINE(MAPPER_BUS_NAME, "xyz.openbmc_project.ObjectMapper",
           [The object mapper bus name])
 

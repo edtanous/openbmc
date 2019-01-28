@@ -1,9 +1,9 @@
-#ifndef __HOST_IPMI_OPENPOWEROEM_HANDLER_H__
-#define __HOST_IPMI_OPENPOWEROEM_HANDLER_H__
+#pragma once
 
 #include <host-ipmid/ipmid-api.h>
 #include <stdint.h>
 
+#include <map>
 #include <string>
 
 // IPMI commands for net functions.
@@ -43,4 +43,37 @@ struct esel_request_t
     uint8_t progress;
 } __attribute__((packed));
 
-#endif
+/** @struct SELEventRecord
+ *
+ *  IPMI SEL event record format.
+ */
+struct SELEventRecord
+{
+    uint16_t recordID;        //!< Record ID.
+    uint8_t recordType;       //!< Record Type.
+    uint32_t timeStamp;       //!< Timestamp.
+    uint16_t generatorID;     //!< Generator ID.
+    uint8_t eventMsgRevision; //!< Event Message Revision.
+    uint8_t sensorType;       //!< Sensor Type.
+    uint8_t sensorNum;        //!< Sensor Number.
+    uint8_t eventType;        //!< Event Dir | Event Type.
+    uint8_t eventData1;       //!< Event Data 1.
+    uint8_t eventData2;       //!< Event Data 2.
+    uint8_t eventData3;       //!< Event Data 3.
+} __attribute__((packed));
+
+using Id = uint8_t;
+using Type = uint8_t;
+using ReadingType = uint8_t;
+using Offset = uint8_t;
+using Path = std::string;
+
+struct Data
+{
+    Id sensorID;
+    Type sensorType;
+    ReadingType eventReadingType;
+    Offset eventOffset;
+};
+
+using ObjectIDMap = std::map<Path, Data>;

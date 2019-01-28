@@ -27,6 +27,58 @@ uint16_t g_record_id = 0x0001;
 using namespace phosphor::logging;
 constexpr auto occMetricsType = 0xDD;
 
+extern const ObjectIDMap invSensors;
+const std::map<uint8_t, Entry::Level> severityMap{
+    {0x10, Entry::Level::Warning}, // Recoverable error
+    {0x20, Entry::Level::Warning}, // Predictive error
+    {0x40, Entry::Level::Error},   // Unrecoverable error
+    {0x50, Entry::Level::Error},   // Critical error
+    {0x60, Entry::Level::Error},   // Error from a diagnostic test
+    {0x70, Entry::Level::Warning}, // Recoverable symptom
+    {0xFF, Entry::Level::Error},   // Unknown error
+};
+
+Entry::Level mapSeverity(const std::string& eSELData)
+{
+    constexpr size_t severityOffset = 0x4A;
+
+    if (eSELData.size() > severityOffset)
+    {
+        // Dive in to the IBM log to find the severity
+        uint8_t sev = 0xF0 & eSELData[severityOffset];
+
+        auto find = severityMap.find(sev);
+        if (find != severityMap.end())
+        {
+            return find->second;
+        }
+    }
+
+    // Default to Entry::Level::Error if a matching is not found.
+    return Entry::Level::Error;
+}
+
+std::string mapCalloutAssociation(const std::string& eSELData)
+{
+    auto rec = reinterpret_cast<const SELEventRecord*>(&eSELData[0]);
+    uint8_t sensor = rec->sensorNum;
+
+    /*
+     * Search the sensor number to inventory path mapping to figure out the
+     * inventory associated with the ESEL.
+     */
+    auto found = std::find_if(invSensors.begin(), invSensors.end(),
+                              [&sensor](const auto& iter) {
+                                  return (iter.second.sensorID == sensor);
+                              });
+    if (found != invSensors.end())
+    {
+        return found->first;
+    }
+
+    return {};
+}
+
 std::string readESEL(const char* fileName)
 {
     std::string content{};
@@ -73,24 +125,29 @@ void createHostEntry(const std::string& eSELData)
 {
     // Each byte in eSEL is formatted as %02x with a space between bytes and
     // insert '/0' at the end of the character array.
-    std::string inventoryPath{};
     constexpr auto byteSeperator = 3;
 
-    std::unique_ptr<char[]> data(
-        new char[(eSELData.size() * byteSeperator) + 1]());
+    auto sev = mapSeverity(eSELData);
+    auto inventoryPath = mapCalloutAssociation(eSELData);
 
-    for (size_t i = 0; i < eSELData.size(); i++)
+    if (!inventoryPath.empty())
     {
-        sprintf(&data[i * byteSeperator], "%02x ", eSELData[i]);
+        std::unique_ptr<char[]> data(
+            new char[(eSELData.size() * byteSeperator) + 1]());
+
+        for (size_t i = 0; i < eSELData.size(); i++)
+        {
+            sprintf(&data[i * byteSeperator], "%02x ", eSELData[i]);
+        }
+        data[eSELData.size() * byteSeperator] = '\0';
+
+        using hosterror = sdbusplus::org::open_power::Host::Error::Event;
+        using hostmetadata = org::open_power::Host::Event;
+
+        report<hosterror>(
+            sev, hostmetadata::ESEL(data.get()),
+            hostmetadata::CALLOUT_INVENTORY_PATH(inventoryPath.c_str()));
     }
-    data[eSELData.size() * byteSeperator] = '\0';
-
-    using hosterror = sdbusplus::org::open_power::Host::Error::Event;
-    using hostmetadata = org::open_power::Host::Event;
-
-    report<hosterror>(
-        Entry::Level::Warning, hostmetadata::ESEL(data.get()),
-        hostmetadata::CALLOUT_INVENTORY_PATH(inventoryPath.c_str()));
 }
 
 ///////////////////////////////////////////////////////////////////////////////

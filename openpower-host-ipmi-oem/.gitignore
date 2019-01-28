@@ -49,3 +49,4 @@ Makefile
 *.lo
 *.la
 org/open_power/OCC/Metrics/*
+/inventory-sensor.cpp
