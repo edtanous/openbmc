@@ -43,7 +43,16 @@ void cleanupPcie()
     // Disable the PCIE drivers and receiver on all CPUs
     for (const auto& target : targets)
     {
-        writeReg(target, P9_ROOT_CTRL1_CLEAR, 0x00001C00);
+        try
+        {
+            writeReg(target, P9_ROOT_CTRL1_CLEAR, 0x00001C00);
+        }
+        catch (std::exception& e)
+        {
+            // Don't need an error log coming from the power off
+            // path, just keep trying on the other processors.
+            continue;
+        }
     }
 }
 
