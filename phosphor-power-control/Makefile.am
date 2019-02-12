@@ -1,6 +1,6 @@
 AM_DEFAULT_SOURCE_EXT = .cpp
 
-sbin_PROGRAMS = \
+libexec_PROGRAMS = \
 	chassiskill
 
 chassiskill_SOURCES = \
