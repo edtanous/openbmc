@@ -6,7 +6,7 @@
 #include "local_users.hpp"
 
 #include <endian.h>
-#include <host-ipmid/ipmid-api.h>
+#include <ipmid/api.h>
 #include <stdio.h>
 #include <string.h>
 #include <systemd/sd-bus.h>
@@ -14,7 +14,7 @@
 #include <fstream>
 #include <functional>
 #include <host-interface.hpp>
-#include <host-ipmid/ipmid-host-cmd.hpp>
+#include <ipmid-host/cmd.hpp>
 #include <memory>
 #include <org/open_power/Host/error.hpp>
 #include <org/open_power/OCC/Metrics/error.hpp>

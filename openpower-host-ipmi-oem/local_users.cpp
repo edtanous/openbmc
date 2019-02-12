@@ -2,7 +2,7 @@
 
 #include "local_users.hpp"
 
-#include <host-ipmid/ipmid-host-cmd.hpp>
+#include <ipmid-host/cmd.hpp>
 #include <phosphor-logging/log.hpp>
 
 namespace local

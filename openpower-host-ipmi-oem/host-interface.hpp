@@ -1,6 +1,6 @@
 #pragma once
 
-#include <host-ipmid/ipmid-host-cmd-utils.hpp>
+#include <ipmid-host/cmd-utils.hpp>
 #include <org/open_power/Control/Host/server.hpp>
 #include <sdbusplus/bus.hpp>
 namespace open_power
