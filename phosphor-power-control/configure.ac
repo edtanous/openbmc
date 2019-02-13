@@ -22,7 +22,6 @@ AX_APPEND_COMPILE_FLAGS([-Wall -Werror], [CXXFLAGS])
 LT_INIT # Removes WARNING: unrecognized options: --with-libtool-sysroot
 
 # Check for header files.
-AC_CHECK_HEADER(phosphor-logging/log.hpp, ,[AC_MSG_ERROR([Could not find phosphor-logging/log.hpp...openbmc/phosphor-logging package required])])
 AC_CHECK_HEADER(nlohmann/json.hpp, ,[AC_MSG_ERROR([Could not find nlohmann/json.hpp...nlohmann/json package required])])
 
 AC_CONFIG_FILES([Makefile])
