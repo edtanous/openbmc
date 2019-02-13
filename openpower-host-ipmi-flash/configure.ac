@@ -21,10 +21,8 @@ PKG_CHECK_MODULES([SYSTEMD], [libsystemd >= 221])
 # Checks for header files.
 AC_CHECK_HEADER(systemd/sd-bus.h, ,[AC_MSG_ERROR([Could not find systemd/sd-bus.h...systemd development package required])])
 AC_CHECK_HEADER(host-ipmid/ipmid-api.h, ,[AC_MSG_ERROR([Could not find host-ipmid/ipmid-api.h...host-ipmid package required])])
-PKG_CHECK_MODULES([SDBUSPLUS], [sdbusplus],,\
-    AC_MSG_ERROR(["Requires sdbusplus package."]))
-PKG_CHECK_MODULES([PHOSPHOR_LOGGING], [phosphor-logging],,\
-    AC_MSG_ERROR(["Requires phosphor-logging package."]))
+PKG_CHECK_MODULES([SDBUSPLUS], [sdbusplus])
+PKG_CHECK_MODULES([PHOSPHOR_LOGGING], [phosphor-logging])
 
 # Check for sdbus++ tool
 AC_PATH_PROG([SDBUSPLUSPLUS], [sdbus++])
