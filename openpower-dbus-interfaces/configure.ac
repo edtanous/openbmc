@@ -26,6 +26,10 @@ AS_IF([test "x$enable_libopenpower_dbus" != "xno"], [
     AS_IF([test "x$SDBUSPLUSPLUS" == "x"],
         AC_MSG_ERROR([Cannot find sdbus++]))
 
+    # Checks for libraries.
+    AX_PKG_CHECK_MODULES([SYSTEMD], [], [libsystemd >= 221], [],)
+    AX_PKG_CHECK_MODULES([SDBUSPLUS], [], [sdbusplus], [],)
+
     # Check for baseline language coverage in the compiler for the C++14 standard
     AX_CXX_COMPILE_STDCXX_17([noext])
     AX_APPEND_COMPILE_FLAGS([-Wall -Werror], [CFLAGS])
