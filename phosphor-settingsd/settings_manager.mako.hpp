@@ -34,6 +34,7 @@ def get_setting_type(path):
     % endfor
 % endfor
 #include <cereal/archives/json.hpp>
+#include <cereal/types/vector.hpp>
 #include <fstream>
 #include <utility>
 #include <experimental/filesystem>
