@@ -75,13 +75,56 @@ bool BinaryStore::deleteBlob(const std::string& blobId)
 
 std::vector<uint8_t> BinaryStore::read(uint32_t offset, uint32_t requestedSize)
 {
-    std::vector<std::uint8_t> result;
+    std::vector<uint8_t> result;
+
+    if (!currentBlob_)
+    {
+        return result;
+    }
+
+    auto dataPtr = currentBlob_->mutable_data();
+
+    /* If it is out of bound, return empty vector */
+    if (offset >= dataPtr->size())
+    {
+        return result;
+    }
+
+    uint32_t requestedEndPos = offset + requestedSize;
+
+    result = std::vector<uint8_t>(
+        dataPtr->begin() + offset,
+        std::min(dataPtr->begin() + requestedEndPos, dataPtr->end()));
     return result;
 }
 
 bool BinaryStore::write(uint32_t offset, const std::vector<uint8_t>& data)
 {
-    return false;
+    if (!currentBlob_)
+    {
+        return false;
+    }
+
+    if (!writable_)
+    {
+        return false;
+    }
+
+    auto dataPtr = currentBlob_->mutable_data();
+
+    if (offset > dataPtr->size())
+    {
+        /* Will leave a gap with undefined data */
+        return false;
+    }
+
+    /* Copy (overwrite) the data */
+    if (offset + data.size() > dataPtr->size())
+    {
+        dataPtr->resize(offset + data.size()); // not enough space, extend
+    }
+    std::copy(data.begin(), data.end(), dataPtr->begin() + offset);
+    return true;
 }
 
 bool BinaryStore::commit()
