@@ -6,6 +6,11 @@ vpath %.proto $(PROTOS_PATH)
 AM_DEFAULT_SOURCE_EXT = .cpp
 SUFFIXES = .proto .pb.cc
 
+BOOST_CXX = \
+	-DBOOST_ERROR_CODE_HEADER_ONLY \
+	-DBOOST_SYSTEM_NO_DEPRECATED \
+	-DBOOST_ALL_NO_LIB
+
 libbinarystoredir = ${libdir}/ipmid-providers
 libbinarystore_LTLIBRARIES = libbinarystore.la
 libbinarystore_la_SOURCES = main.cpp \
@@ -20,6 +25,7 @@ libbinarystore_la_LDFLAGS = $(PHOSPHOR_LOGGING_LIBS) \
 			    -lprotobuf
 
 libbinarystore_la_CXXFLAGS = -I$(srcdir) $(PHOSPHOR_LOGGING_CFLAGS) \
+			     $(BOOST_CXX) \
 			     -flto
 
 binaryblob.pb.h binaryblob.pb.cc: $(srcdir)/$(PROTOS_PATH)/binaryblob.proto

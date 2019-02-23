@@ -23,6 +23,7 @@ LT_INIT # Required for systemd linking
 PKG_CHECK_MODULES([PROTOBUF], [protobuf], [], [AC_MSG_ERROR(["protobuf required and not found"])])
 PKG_CHECK_MODULES([PHOSPHOR_LOGGING], [phosphor-logging],, [AC_MSG_ERROR([Could not find phosphor-logging...openbmc/phosphor-logging package required])])
 AC_CHECK_HEADER([blobs-ipmid], [AC_MSG_ERROR(["phosphor-ipmi-blobs required and not found."])])
+AC_CHECK_HEADER(boost/endian/arithmetic.hpp, [])
 
 # Check/set gtest specific functions.
 PKG_CHECK_MODULES([GTEST], [gtest], [], [AC_MSG_NOTICE([gtest not found, tests will not build])])

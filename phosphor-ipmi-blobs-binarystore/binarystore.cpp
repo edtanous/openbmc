@@ -4,6 +4,7 @@
 
 #include <algorithm>
 #include <blobs-ipmid/blobs.hpp>
+#include <boost/endian/arithmetic.hpp>
 #include <cstdint>
 #include <memory>
 #include <string>
@@ -19,42 +20,6 @@ using std::uint8_t;
 
 namespace binstore
 {
-
-namespace internal
-{
-
-/* Helper methods to interconvert an uint64_t and bytes, LSB first.
-   Convert bytes to uint64. Input should be exactly 8 bytes. */
-uint64_t bytesToUint64(const std::string& bytes)
-{
-    if (bytes.size() != sizeof(uint64_t))
-    {
-        return 0;
-    }
-
-    return static_cast<uint64_t>(bytes[7]) << 56 |
-           static_cast<uint64_t>(bytes[6]) << 48 |
-           static_cast<uint64_t>(bytes[5]) << 40 |
-           static_cast<uint64_t>(bytes[4]) << 32 |
-           static_cast<uint64_t>(bytes[3]) << 24 |
-           static_cast<uint64_t>(bytes[2]) << 16 |
-           static_cast<uint64_t>(bytes[1]) << 8 |
-           static_cast<uint64_t>(bytes[0]);
-}
-
-/* Convert uint64 to bytes, LSB first. */
-std::string uint64ToBytes(uint64_t num)
-{
-    std::string result;
-    for (size_t i = 0; i < sizeof(uint64_t); ++i)
-    {
-        result += static_cast<char>(num & 0xff);
-        num >>= 8;
-    }
-    return result;
-}
-
-} // namespace internal
 
 std::unique_ptr<BinaryStoreInterface>
     BinaryStore::createFromConfig(const std::string& baseBlobId,
@@ -114,8 +79,9 @@ bool BinaryStore::openOrCreateBlob(const std::string& blobId, uint16_t flags)
         try
         {
             /* Parse length-prefixed format to protobuf */
-            auto size =
-                internal::bytesToUint64(file_->readAsStr(0, sizeof(uint64_t)));
+            boost::endian::little_uint64_t size = 0;
+            file_->readToBuf(0, sizeof(size), reinterpret_cast<char*>(&size));
+
             if (!blob_.ParseFromString(
                     file_->readAsStr(sizeof(uint64_t), size)))
             {
@@ -213,9 +179,10 @@ bool BinaryStore::write(uint32_t offset, const std::vector<uint8_t>& data)
 
 bool BinaryStore::commit()
 {
-
+    /* Store as little endian to be platform agnostic. Consistent with read. */
     auto blobData = blob_.SerializeAsString();
-    std::string commitData(internal::uint64ToBytes((uint64_t)blobData.size()));
+    boost::endian::little_uint64_t sizeLE = blobData.size();
+    std::string commitData(sizeLE.data(), sizeof(sizeLE));
     commitData += blobData;
 
     try
@@ -224,7 +191,6 @@ bool BinaryStore::commit()
     }
     catch (const std::exception& e)
     {
-        // TODO: logging
         commitState_ = CommitState::CommitError;
         return false;
     };
