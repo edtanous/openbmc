@@ -108,7 +108,7 @@ void ringbuffer_consumer_unregister(struct ringbuffer_consumer *rbc)
 	free(rbc);
 }
 
-static size_t ringbuffer_len(struct ringbuffer_consumer *rbc)
+size_t ringbuffer_len(struct ringbuffer_consumer *rbc)
 {
 	if (rbc->pos <= rbc->rb->tail)
 		return rbc->rb->tail - rbc->pos;
@@ -148,6 +148,9 @@ int ringbuffer_queue(struct ringbuffer *rb, uint8_t *data, size_t len)
 	if (len >= rb->size)
 		return -1;
 
+	if (len == 0)
+		return 0;
+
 	/* Ensure there is at least len bytes of space available.
 	 *
 	 * If a client doesn't have sufficient space, perform a blocking write
@@ -175,6 +178,7 @@ int ringbuffer_queue(struct ringbuffer *rb, uint8_t *data, size_t len)
 
 	memcpy(rb->buf, data, len);
 	rb->tail += len;
+
 
 	/* Inform consumers of new data in non-blocking mode, by calling
 	 * ->poll_fn with 0 force_len */
