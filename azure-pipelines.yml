@@ -12,7 +12,8 @@ pool:
 steps:
 
 - bash: |
-    source oe-init-build-env
+    ./oe-init-build-env
     bitbake obmc-phosphor-image
   displayName: 'Build'
-  env: { TEMPLATECONF: meta-intel/meta-s2600wf }
+  env: 
+    TEMPLATECONF: meta-intel/meta-s2600wf 
