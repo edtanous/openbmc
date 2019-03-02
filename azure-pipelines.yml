@@ -13,7 +13,7 @@ steps:
 
 - bash: |
     rm -rf build/conf
-    ./oe-init-build-env
+    source oe-init-build-env
     bitbake obmc-phosphor-image
   displayName: 'Build'
   env: 
