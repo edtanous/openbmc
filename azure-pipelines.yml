@@ -17,5 +17,6 @@ steps:
     source oe-init-build-env
     bitbake obmc-phosphor-image
   displayName: 'Build'
+  timeoutInMinutes: 180
   env: 
     TEMPLATECONF: meta-intel/meta-s2600wf/conf
