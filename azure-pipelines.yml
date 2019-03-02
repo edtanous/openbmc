@@ -16,4 +16,4 @@ steps:
     bitbake obmc-phosphor-image
   displayName: 'Build'
   env: 
-    TEMPLATECONF: meta-intel/meta-s2600wf 
+    TEMPLATECONF: meta-intel/meta-s2600wf/conf
