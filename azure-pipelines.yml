@@ -1,0 +1,21 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- master
+
+pool:
+  vmImage: 'Ubuntu-16.04'
+
+steps:
+
+- bash: |
+    sudo apt-get install gawk wget git-core diffstat unzip texinfo gcc-multilib build-essential chrpath socat
+    rm -rf build/conf
+    source oe-init-build-env
+    bitbake obmc-phosphor-image
+  displayName: 'Build'
+  env: 
+    TEMPLATECONF: meta-intel/meta-s2600wf/conf
