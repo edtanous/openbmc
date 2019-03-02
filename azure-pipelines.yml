@@ -6,22 +6,21 @@
 trigger:
 - master
 
-pool:
-  vmImage: 'Ubuntu-16.04'
-
 jobs:
-- job: Test
+- job: Build
   timeoutInMinutes: 0
 
-steps:
+  pool:
+    vmImage: 'Ubuntu-16.04'
 
-- bash: |
-    sudo apt-get install gawk wget git-core diffstat unzip texinfo gcc-multilib build-essential chrpath socat
-    rm -rf build/conf
-    source oe-init-build-env
-    bitbake obmc-phosphor-image
-  displayName: 'Build'
-  timeoutInMinutes: 180
-  env: 
-    TEMPLATECONF: meta-intel/meta-s2600wf/conf
+  steps:
+    - bash: |
+        sudo apt-get install gawk wget git-core diffstat unzip texinfo gcc-multilib build-essential chrpath socat
+        rm -rf build/conf
+        source oe-init-build-env
+        bitbake obmc-phosphor-image
+      displayName: 'Build'
+      timeoutInMinutes: 180
+      env: 
+        TEMPLATECONF: meta-intel/meta-s2600wf/conf
 
