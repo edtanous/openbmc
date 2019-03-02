@@ -12,6 +12,7 @@ pool:
 steps:
 
 - bash: |
+    rm -rf build/conf
     ./oe-init-build-env
     bitbake obmc-phosphor-image
   displayName: 'Build'
