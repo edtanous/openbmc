@@ -11,8 +11,11 @@ pool:
 
 steps:
 
-- script: |
-    export TEMPLATECONF=meta-intel/meta-s2600wf
+- bash: |
+    sudo apt-get install gawk wget git-core diffstat unzip texinfo gcc-multilib build-essential chrpath socat
+    rm -rf build/conf
     source oe-init-build-env
     bitbake obmc-phosphor-image
   displayName: 'Build'
+  env: 
+    TEMPLATECONF: meta-intel/meta-s2600wf/conf
