@@ -11,7 +11,7 @@ pool:
 
 steps:
 
-- script: |
+- bash: |
     source oe-init-build-env
     bitbake obmc-phosphor-image
   displayName: 'Build'
