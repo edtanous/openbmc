@@ -9,6 +9,10 @@ trigger:
 pool:
   vmImage: 'Ubuntu-16.04'
 
+jobs:
+- job: Test
+  timeoutInMinutes: 0
+
 steps:
 
 - bash: |
@@ -20,3 +24,4 @@ steps:
   timeoutInMinutes: 180
   env: 
     TEMPLATECONF: meta-intel/meta-s2600wf/conf
+
