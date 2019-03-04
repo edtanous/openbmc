@@ -42,6 +42,11 @@ std::unique_ptr<BinaryStoreInterface>
     auto store =
         std::make_unique<BinaryStore>(baseBlobId, std::move(file), maxSize);
 
+    if (!store->loadSerializedData())
+    {
+        return nullptr;
+    }
+
     return std::move(store);
 }
 
@@ -77,6 +82,19 @@ bool BinaryStore::loadSerializedData()
         log<level::ERR>("Reading from sysfile failed",
                         entry("ERROR=%s", e.what()));
         return false;
+    }
+
+    if (blob_.blob_base_id() != baseBlobId_)
+    {
+        /* Uh oh, stale data loaded. Clean it and commit. */
+        // TODO: it might be safer to add an option in config to error out
+        // instead of to overwrite.
+        log<level::ERR>("Stale blob data, resetting internals...",
+                        entry("LOADED=%s", blob_.blob_base_id().c_str()),
+                        entry("EXPECTED=%s", baseBlobId_.c_str()));
+        blob_.Clear();
+        blob_.set_blob_base_id(baseBlobId_);
+        return this->commit();
     }
 
     return true;

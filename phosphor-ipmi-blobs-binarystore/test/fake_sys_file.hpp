@@ -23,6 +23,13 @@ namespace binstore
 class FakeSysFile : public SysFile
 {
   public:
+    FakeSysFile()
+    {
+    }
+    FakeSysFile(const std::string& s) : data_(s)
+    {
+    }
+
     size_t readToBuf(size_t pos, size_t count, char* buf) const override
     {
         auto result = readAsStr(pos, count);
