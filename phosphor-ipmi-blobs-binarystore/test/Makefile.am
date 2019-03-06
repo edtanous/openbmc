@@ -13,12 +13,15 @@ AM_LDFLAGS = \
 
 # Run all 'check' test programs
 check_PROGRAMS = \
+	parse_config_unittest \
 	sys_file_unittest \
 	handler_commit_unittest \
 	handler_open_unittest \
 	handler_readwrite_unittest \
 	handler_unittest
 TESTS = $(check_PROGRAMS)
+
+parse_config_unittest_SOURCES = parse_config_unittest.cpp
 
 sys_file_unittest_SOURCES = sys_file_unittest.cpp
 sys_file_unittest_LDADD = $(top_builddir)/sys_file.o
