@@ -106,6 +106,7 @@ class BinaryStore : public BinaryStoreInterface
         baseBlobId_(baseBlobId),
         file_(std::move(file)), maxSize_(maxSize)
     {
+        blob_.set_blob_base_id(baseBlobId_);
     }
 
     ~BinaryStore() = default;
@@ -145,6 +146,10 @@ class BinaryStore : public BinaryStoreInterface
         Clean,      // In-memory data matches persisted data
         CommitError // Error happened during committing
     };
+
+    /* Load the serialized data from sysfile if commit state is dirty.
+     * Returns False if encountered error when loading */
+    bool loadSerializedData();
 
     std::string baseBlobId_;
     binaryblobproto::BinaryBlobBase blob_;

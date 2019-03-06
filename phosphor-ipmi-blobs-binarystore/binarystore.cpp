@@ -1,5 +1,8 @@
 #include "binarystore.hpp"
 
+#include "sys_file.hpp"
+
+#include <sys/types.h>
 #include <unistd.h>
 
 #include <algorithm>
@@ -39,9 +42,44 @@ std::unique_ptr<BinaryStoreInterface>
     auto store =
         std::make_unique<BinaryStore>(baseBlobId, std::move(file), maxSize);
 
-    store->blob_.set_blob_base_id(store->baseBlobId_);
-
     return std::move(store);
+}
+
+bool BinaryStore::loadSerializedData()
+{
+    /* Load blob from sysfile if we know it might not match what we have.
+     * Note it will overwrite existing unsaved data per design. */
+    if (commitState_ == CommitState::Clean)
+    {
+        return true;
+    }
+
+    log<level::NOTICE>("Try loading blob from persistent data",
+                       entry("BASE_ID=%s", baseBlobId_.c_str()));
+    try
+    {
+        /* Parse length-prefixed format to protobuf */
+        boost::endian::little_uint64_t size = 0;
+        file_->readToBuf(0, sizeof(size), reinterpret_cast<char*>(&size));
+
+        if (!blob_.ParseFromString(file_->readAsStr(sizeof(uint64_t), size)))
+        {
+            /* Fail to parse the data, which might mean no preexsiting blobs
+             * and is a valid case to handle. Simply init an empty binstore. */
+            log<level::WARNING>(
+                "Fail to parse. There might be no persisted blobs",
+                entry("BASE_ID=%s", baseBlobId_.c_str()));
+        }
+    }
+    catch (const std::exception& e)
+    {
+        /* Read causes unexpected system-level failure */
+        log<level::ERR>("Reading from sysfile failed",
+                        entry("ERROR=%s", e.what()));
+        return false;
+    }
+
+    return true;
 }
 
 std::string BinaryStore::getBaseBlobId() const
@@ -81,35 +119,10 @@ bool BinaryStore::openOrCreateBlob(const std::string& blobId, uint16_t flags)
 
     writable_ = flags & blobs::OpenFlags::write;
 
-    /* Load blob from sysfile if we know it might not match what we have.
-     * Note it will overwrite existing unsaved data per design. */
-    if (commitState_ != CommitState::Clean)
+    /* If there are uncommitted data, discard them. */
+    if (!this->loadSerializedData())
     {
-        log<level::NOTICE>("Try loading blob from persistent data",
-                           entry("BLOB_ID=%s", blobId.c_str()));
-        try
-        {
-            /* Parse length-prefixed format to protobuf */
-            boost::endian::little_uint64_t size = 0;
-            file_->readToBuf(0, sizeof(size), reinterpret_cast<char*>(&size));
-
-            if (!blob_.ParseFromString(
-                    file_->readAsStr(sizeof(uint64_t), size)))
-            {
-                /* Fail to parse the data, which might mean no preexsiting data
-                 * and is a valid case to handle */
-                log<level::WARNING>(
-                    "Fail to parse. There might be no persisted blobs",
-                    entry("BLOB_ID=%s", blobId.c_str()));
-            }
-        }
-        catch (const std::exception& e)
-        {
-            /* Read causes unexpected system-level failure */
-            log<level::ERR>("Reading from sysfile failed",
-                            entry("ERROR=%s", e.what()));
-            return false;
-        }
+        return false;
     }
 
     /* Iterate and find if there is an existing blob with this id.
