@@ -3,7 +3,7 @@
 #include <exception>
 #include <string>
 
-namespace host_tool
+namespace ipmiblob
 {
 
 class BlobException : public std::exception
@@ -20,4 +20,4 @@ class BlobException : public std::exception
     std::string message;
 };
 
-} // namespace host_tool
+} // namespace ipmiblob

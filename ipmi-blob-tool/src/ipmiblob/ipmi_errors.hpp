@@ -5,7 +5,7 @@
 #include <sstream>
 #include <string>
 
-namespace host_tool
+namespace ipmiblob
 {
 
 class IpmiException : public std::exception
@@ -44,4 +44,4 @@ class IpmiException : public std::exception
     std::string message;
 };
 
-} // namespace host_tool
+} // namespace ipmiblob

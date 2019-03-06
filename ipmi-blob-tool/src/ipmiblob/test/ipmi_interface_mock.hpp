@@ -4,7 +4,7 @@
 
 #include <gmock/gmock.h>
 
-namespace host_tool
+namespace ipmiblob
 {
 
 class IpmiInterfaceMock : public IpmiInterface
@@ -15,4 +15,4 @@ class IpmiInterfaceMock : public IpmiInterface
                  std::vector<std::uint8_t>(std::vector<std::uint8_t>&));
 };
 
-} // namespace host_tool
+} // namespace ipmiblob

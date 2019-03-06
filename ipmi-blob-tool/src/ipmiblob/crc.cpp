@@ -1,6 +1,6 @@
 #include "crc.hpp"
 
-namespace host_tool
+namespace ipmiblob
 {
 
 /*
@@ -41,4 +41,4 @@ std::uint16_t generateCrc(const std::vector<std::uint8_t>& data)
     return crc;
 }
 
-} // namespace host_tool
+} // namespace ipmiblob

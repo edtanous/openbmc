@@ -3,7 +3,7 @@
 #include <ipmiblob/ipmi_errors.hpp>
 #include <ipmiblob/ipmi_handler.hpp>
 
-namespace host_tool
+namespace ipmiblob
 {
 
 using ::testing::_;
@@ -19,4 +19,4 @@ TEST(IpmiHandlerTest, OpenAllFails)
     EXPECT_THROW(ipmi.open(), IpmiException);
 }
 
-} // namespace host_tool
+} // namespace ipmiblob

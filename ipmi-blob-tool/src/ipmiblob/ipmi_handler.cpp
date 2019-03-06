@@ -30,7 +30,7 @@
 #include <string>
 #include <vector>
 
-namespace host_tool
+namespace ipmiblob
 {
 
 void IpmiHandler::open()
@@ -162,4 +162,4 @@ std::vector<std::uint8_t>
     return returning;
 }
 
-} // namespace host_tool
+} // namespace ipmiblob

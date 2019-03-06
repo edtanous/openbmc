@@ -23,7 +23,7 @@
 #include <array>
 #include <cstring>
 
-namespace host_tool
+namespace ipmiblob
 {
 
 namespace
@@ -312,4 +312,4 @@ std::vector<std::uint8_t> BlobHandler::readBytes(std::uint16_t session,
     return sendIpmiPayload(BlobOEMCommands::bmcBlobRead, payload);
 }
 
-} // namespace host_tool
+} // namespace ipmiblob

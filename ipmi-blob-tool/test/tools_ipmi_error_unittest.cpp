@@ -2,7 +2,7 @@
 
 #include <gtest/gtest.h>
 
-namespace host_tool
+namespace ipmiblob
 {
 
 TEST(IpmiExceptionTest, VerifyTimedOutIsString)
@@ -25,4 +25,4 @@ TEST(IpmiExceptionTest, VerifyTimedOutIsString)
     EXPECT_TRUE(verified);
 }
 
-} // namespace host_tool
+} // namespace ipmiblob

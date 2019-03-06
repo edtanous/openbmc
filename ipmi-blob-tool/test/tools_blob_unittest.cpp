@@ -5,7 +5,7 @@
 
 #include <gtest/gtest.h>
 
-namespace host_tool
+namespace ipmiblob
 {
 CrcInterface* crcIntf = nullptr;
 
@@ -286,4 +286,4 @@ TEST_F(BlobHandlerTest, readBytesSucceeds)
     EXPECT_EQ(blob.readBytes(0x0001, 0, 4), expectedBytes);
 }
 
-} // namespace host_tool
+} // namespace ipmiblob

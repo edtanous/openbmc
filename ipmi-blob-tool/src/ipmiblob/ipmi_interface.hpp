@@ -3,7 +3,7 @@
 #include <cstdint>
 #include <vector>
 
-namespace host_tool
+namespace ipmiblob
 {
 
 class IpmiInterface
@@ -22,4 +22,4 @@ class IpmiInterface
         sendPacket(std::vector<std::uint8_t>& data) = 0;
 };
 
-} // namespace host_tool
+} // namespace ipmiblob

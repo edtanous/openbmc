@@ -3,7 +3,7 @@
 #include <cstdint>
 #include <vector>
 
-namespace host_tool
+namespace ipmiblob
 {
 
 /**
@@ -17,4 +17,4 @@ namespace host_tool
  */
 std::uint16_t generateCrc(const std::vector<std::uint8_t>& data);
 
-} // namespace host_tool
+} // namespace ipmiblob

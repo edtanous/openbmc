@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 
-namespace host_tool
+namespace ipmiblob
 {
 
 struct StatResponse
@@ -88,4 +88,4 @@ class BlobInterface
                                                 std::uint32_t length) = 0;
 };
 
-} // namespace host_tool
+} // namespace ipmiblob

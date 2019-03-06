@@ -5,7 +5,7 @@
 
 #include <vector>
 
-namespace host_tool
+namespace ipmiblob
 {
 
 class IpmiHandler : public IpmiInterface
@@ -43,4 +43,4 @@ class IpmiHandler : public IpmiInterface
     int sequence = 0;
 };
 
-} // namespace host_tool
+} // namespace ipmiblob
