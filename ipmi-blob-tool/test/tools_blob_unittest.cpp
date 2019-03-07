@@ -1,6 +1,5 @@
-#include "crc_mock.hpp"
-
 #include <ipmiblob/blob_handler.hpp>
+#include <ipmiblob/test/crc_mock.hpp>
 #include <ipmiblob/test/ipmi_interface_mock.hpp>
 
 #include <gtest/gtest.h>

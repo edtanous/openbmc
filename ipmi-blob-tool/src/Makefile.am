@@ -20,4 +20,5 @@ nobase_include_HEADERS += ipmiblob/internal/sys.hpp
 libipmiblob_la_SOURCES += ipmiblob/internal/sys.cpp
 
 nobase_include_HEADERS += ipmiblob/test/blob_interface_mock.hpp
+nobase_include_HEADERS += ipmiblob/test/crc_mock.hpp
 nobase_include_HEADERS += ipmiblob/test/ipmi_interface_mock.hpp

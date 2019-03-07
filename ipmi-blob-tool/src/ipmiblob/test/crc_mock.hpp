@@ -5,6 +5,9 @@
 
 #include <gmock/gmock.h>
 
+namespace ipmiblob
+{
+
 class CrcInterface
 {
   public:
@@ -21,3 +24,5 @@ class CrcMock : public CrcInterface
     MOCK_CONST_METHOD1(generateCrc,
                        std::uint16_t(const std::vector<std::uint8_t>&));
 };
+
+} // namespace ipmiblob
