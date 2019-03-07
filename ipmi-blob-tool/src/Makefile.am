@@ -4,7 +4,7 @@ lib_LTLIBRARIES = libipmiblob.la
 libipmiblob_la_SOURCES =
 libipmiblob_la_LIBADD = $(COMMON_LIBS)
 
-# Don't install the crc header.
+nobase_include_HEADERS += ipmiblob/crc.hpp
 libipmiblob_la_SOURCES += ipmiblob/crc.cpp
 
 nobase_include_HEADERS += ipmiblob/blob_errors.hpp
