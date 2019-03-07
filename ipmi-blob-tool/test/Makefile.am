@@ -23,3 +23,9 @@ check_PROGRAMS += tools_ipmi_error_unittest
 tools_ipmi_error_unittest_SOURCES = tools_ipmi_error_unittest.cpp
 tools_ipmi_error_unittest_CPPFLAGS = $(gtest_cppflags)
 tools_ipmi_error_unittest_LDADD = $(gtest_ldadd)
+
+check_PROGRAMS += crc_unittest
+crc_unittest_SOURCES = crc_unittest.cpp
+crc_unittest_CPPFLAGS = $(gtest_cppflags)
+crc_unittest_LDADD = $(gtest_ldadd)
+crc_unittest_LDADD += $(top_builddir)/src/ipmiblob/crc.o
