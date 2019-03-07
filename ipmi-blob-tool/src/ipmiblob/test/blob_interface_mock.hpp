@@ -1,8 +1,8 @@
-#include "blob_interface.hpp"
+#include <ipmiblob/blob_interface.hpp>
 
 #include <gmock/gmock.h>
 
-namespace host_tool
+namespace ipmiblob
 {
 
 class BlobInterfaceMock : public BlobInterface
@@ -15,13 +15,11 @@ class BlobInterfaceMock : public BlobInterface
                                   const std::vector<std::uint8_t>&));
     MOCK_METHOD0(getBlobList, std::vector<std::string>());
     MOCK_METHOD1(getStat, StatResponse(const std::string&));
-    MOCK_METHOD2(openBlob,
-                 std::uint16_t(const std::string&,
-                               blobs::FirmwareBlobHandler::UpdateFlags));
+    MOCK_METHOD2(openBlob, std::uint16_t(const std::string&, std::uint16_t));
     MOCK_METHOD1(closeBlob, void(std::uint16_t));
     MOCK_METHOD3(readBytes,
                  std::vector<std::uint8_t>(std::uint16_t, std::uint32_t,
                                            std::uint32_t));
 };
 
-} // namespace host_tool
+} // namespace ipmiblob
