@@ -13,6 +13,8 @@
 #include <cinttypes>
 #include <cstddef>
 
+namespace ipmiblob
+{
 namespace internal
 {
 
@@ -59,3 +61,4 @@ class SysImpl : public Sys
 extern SysImpl sys_impl;
 
 } // namespace internal
+} // namespace ipmiblob

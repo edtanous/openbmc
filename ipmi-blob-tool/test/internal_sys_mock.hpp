@@ -6,6 +6,8 @@
 
 #include <gmock/gmock.h>
 
+namespace ipmiblob
+{
 namespace internal
 {
 
@@ -25,3 +27,4 @@ class InternalSysMock : public Sys
 };
 
 } // namespace internal
+} // namespace ipmiblob

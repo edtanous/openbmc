@@ -21,6 +21,8 @@
 #include <sys/mman.h>
 #include <unistd.h>
 
+namespace ipmiblob
+{
 namespace internal
 {
 
@@ -68,3 +70,4 @@ int SysImpl::poll(struct pollfd* fds, nfds_t nfds, int timeout) const
 SysImpl sys_impl;
 
 } // namespace internal
+} // namespace ipmiblob
