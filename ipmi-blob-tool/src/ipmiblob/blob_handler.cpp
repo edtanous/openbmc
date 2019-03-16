@@ -138,7 +138,7 @@ int BlobHandler::getBlobCount()
         return 0;
     }
 
-    std::fprintf(stderr, "BLOB Count: %d\n", count);
+    std::fprintf(stderr, "BLOB Count: %u\n", count);
     return count;
 }
 
