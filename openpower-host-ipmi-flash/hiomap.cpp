@@ -19,6 +19,7 @@
 #include <host-ipmid/ipmid-host-cmd-utils.hpp>
 #include <host-ipmid/ipmid-host-cmd.hpp>
 #include <iostream>
+#include <ipmid/api.hpp>
 #include <map>
 #include <phosphor-logging/log.hpp>
 #include <sdbusplus/bus.hpp>
@@ -251,7 +252,6 @@ constexpr auto DBUS_IFACE_PROPERTIES = "org.freedesktop.DBus.Properties";
  * process state, so its definition as a global at least aligns with its use.
  */
 static int active_event_updates;
-static struct sd_event_source* event_source;
 
 struct hiomap
 {
@@ -265,6 +265,8 @@ struct hiomap
     uint8_t bmc_events;
     uint8_t seq;
 };
+
+SignalResponse sigtermResponse = SignalResponse::continueExecution;
 
 /* TODO: Replace get/put with packed structs and direct assignment */
 template <typename T>
@@ -319,7 +321,6 @@ static int hiomap_xlate_errno(int err)
 static void ipmi_hiomap_event_response(IpmiCmdData cmd, bool status)
 {
     using namespace phosphor::logging;
-    int rc;
 
     if (!status)
     {
@@ -331,16 +332,8 @@ static void ipmi_hiomap_event_response(IpmiCmdData cmd, bool status)
     active_event_updates--;
     if (!active_event_updates)
     {
-        rc = sd_event_source_set_enabled(event_source, SD_EVENT_ON);
-        if (rc < 0)
-        {
-            log<level::WARNING>("Failed to unblock SIGTERM delivery",
-                                entry("RC=%d", rc));
-        }
-        else
-        {
-            log<level::DEBUG>("Unblocked SIGTERM");
-        }
+        sigtermResponse = SignalResponse::continueExecution;
+        log<level::DEBUG>("Unblocked SIGTERM");
     }
 }
 
@@ -350,20 +343,12 @@ static int hiomap_handle_property_update(struct hiomap* ctx,
     using namespace phosphor::logging;
 
     std::map<std::string, sdbusplus::message::variant<bool>> msgData;
-    int rc;
 
+    sigtermResponse = SignalResponse::breakExecution;
     if (!active_event_updates)
     {
-        rc = sd_event_source_set_enabled(event_source, SD_EVENT_OFF);
-        if (rc < 0)
-        {
-            log<level::WARNING>("Failed to block SIGTERM delivery",
-                                entry("RC=%d", rc));
-        }
-        else
-        {
-            log<level::DEBUG>("Blocked SIGTERM");
-        }
+        sigtermResponse = SignalResponse::breakExecution;
+        log<level::DEBUG>("Blocked SIGTERM");
     }
     active_event_updates++;
 
@@ -400,18 +385,18 @@ static int hiomap_handle_property_update(struct hiomap* ctx,
 
 static int hiomap_protocol_reset_response(IpmiCmdData cmd, bool status)
 {
-    return sd_event_exit(ipmid_get_sd_event_connection(), status ? 0 : EIO);
+    // If this is running in signal context, ipmid will shutdown
+    // the event queue as the last signal handler
+    return 0;
 }
 
-static int hiomap_protocol_reset(sd_event_source* source,
-                                 const struct signalfd_siginfo* si,
-                                 void* userdata)
+static int hiomap_protocol_reset(struct hiomap* ctx)
 {
-    struct hiomap* ctx = static_cast<struct hiomap*>(userdata);
-
     if (ctx->bmc_events == BMC_EVENT_PROTOCOL_RESET)
     {
-        return sd_event_exit(ipmid_get_sd_event_connection(), 0);
+        // If this is running in signal context, ipmid will shutdown
+        // the event queue as the last signal handler
+        return 0;
     }
 
     /*
@@ -841,10 +826,7 @@ static void register_openpower_hiomap_commands()
     using namespace phosphor::logging;
     using namespace openpower::flash;
 
-    sigset_t _sigset, *sigset = &_sigset;
     struct hiomap* ctx = new hiomap();
-    struct sd_event* events;
-    int rc;
 
     /* Initialise mapping from signal and property names to status bit */
     ctx->event_lookup["DaemonReady"] = BMC_EVENT_DAEMON_READY;
@@ -863,36 +845,12 @@ static void register_openpower_hiomap_commands()
     ctx->properties =
         new bus::match::match(std::move(hiomap_match_properties(ctx)));
 
-    rc = sigemptyset(sigset);
-    if (rc < 0)
-    {
-        log<level::ERR>("sigemptyset() failed", entry("RC=%d", rc));
-        return;
-    }
-
-    rc = sigaddset(sigset, SIGTERM);
-    if (rc < 0)
-    {
-        log<level::ERR>("sigaddset() failed", entry("RC=%d", rc));
-        return;
-    }
-
-    rc = sigprocmask(SIG_BLOCK, sigset, NULL);
-    if (rc < 0)
-    {
-        log<level::ERR>("sigprocmask() failed", entry("RC=%d", rc));
-        return;
-    }
-
-    events = ipmid_get_sd_event_connection();
-
-    rc = sd_event_add_signal(events, &event_source, SIGTERM,
-                             openpower::flash::hiomap_protocol_reset, ctx);
-    if (rc < 0)
-    {
-        log<level::ERR>("sd_event_add_signal() failed", entry("RC=%d", rc));
-        return;
-    }
+    std::function<SignalResponse(int)> shutdownHandler =
+        [ctx](int signalNumber) {
+            hiomap_protocol_reset(ctx);
+            return sigtermResponse;
+        };
+    registerSignalHandler(ipmi::prioMax, SIGTERM, shutdownHandler);
 
     ipmi_register_callback(NETFUN_IBM_OEM, IPMI_CMD_HIOMAP, ctx,
                            openpower::flash::hiomap_dispatch, SYSTEM_INTERFACE);

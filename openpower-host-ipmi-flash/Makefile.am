@@ -14,4 +14,5 @@ libhiomap_la_LDFLAGS = $(SYSTEMD_LIBS)\
 libhiomap_la_CXXFLAGS = $(SYSTEMD_CFLAGS) \
                         $(SDBUSPLUS_CFLAGS) \
                         $(PHOSPHOR_LOGGING_CFLAGS) \
-                        $(AM_CXXFLAGS)
+                        $(AM_CXXFLAGS) \
+                        -DBOOST_COROUTINES_NO_DEPRECATION_WARNING
