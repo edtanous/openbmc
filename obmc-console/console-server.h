@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+#pragma once
+
 #include <poll.h>
 #include <stdbool.h>
 #include <stdint.h>

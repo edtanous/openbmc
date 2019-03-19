@@ -7,7 +7,6 @@
 #define SYSCONFDIR
 
 #include "config.c"
-#include "console-server.h"
 
 struct test_parse_size_unit {
 	const char	*test_str;
