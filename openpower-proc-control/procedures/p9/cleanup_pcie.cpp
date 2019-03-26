@@ -19,6 +19,7 @@
 #include "targeting.hpp"
 
 #include <phosphor-logging/log.hpp>
+#include <xyz/openbmc_project/Common/File/error.hpp>
 
 namespace openpower
 {
@@ -29,6 +30,7 @@ using namespace phosphor::logging;
 using namespace openpower::cfam::access;
 using namespace openpower::cfam::p9;
 using namespace openpower::targeting;
+namespace file_error = sdbusplus::xyz::openbmc_project::Common::File::Error;
 
 /**
  * @brief Disables PCIE drivers and receiver in the PCIE root ctrl 1 register
@@ -36,23 +38,30 @@ using namespace openpower::targeting;
  */
 void cleanupPcie()
 {
-    Targeting targets;
-
-    log<level::INFO>("Running P9 procedure cleanupPcie");
-
-    // Disable the PCIE drivers and receiver on all CPUs
-    for (const auto& target : targets)
+    try
     {
-        try
+        Targeting targets;
+
+        log<level::INFO>("Running P9 procedure cleanupPcie");
+
+        // Disable the PCIE drivers and receiver on all CPUs
+        for (const auto& target : targets)
         {
-            writeReg(target, P9_ROOT_CTRL1_CLEAR, 0x00001C00);
+            try
+            {
+                writeReg(target, P9_ROOT_CTRL1_CLEAR, 0x00001C00);
+            }
+            catch (std::exception& e)
+            {
+                // Don't need an error log coming from the power off
+                // path, just keep trying on the other processors.
+                continue;
+            }
         }
-        catch (std::exception& e)
-        {
-            // Don't need an error log coming from the power off
-            // path, just keep trying on the other processors.
-            continue;
-        }
+    }
+    catch (file_error::Open& e)
+    {
+        // For this procedure we can ignore the ::Open error
     }
 }
 
