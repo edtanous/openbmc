@@ -3,7 +3,7 @@ AM_DEFAULT_SOURCE_EXT = .cpp
 systemdsystemunit_DATA = \
   pcie-poweroff@.service
 
-sbin_PROGRAMS = \
+bin_PROGRAMS = \
 	openpower-proc-control
 
 openpower_proc_control_SOURCES = \
