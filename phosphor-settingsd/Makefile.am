@@ -18,7 +18,7 @@ settings_manager.hpp: ${SETTINGS_GEN_SCRIPT} ${SETTINGS_GEN_SCRIPT_FILES}
 noinst_HEADERS = \
 	settings_manager.hpp
 
-sbin_PROGRAMS = \
+bin_PROGRAMS = \
 	phosphor-settings-manager
 
 phosphor_settings_manager_SOURCES = \
