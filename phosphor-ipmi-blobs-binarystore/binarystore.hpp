@@ -142,9 +142,10 @@ class BinaryStore : public BinaryStoreInterface
   private:
     enum class CommitState
     {
-        Dirty,      // In-memory data might not match persisted data
-        Clean,      // In-memory data matches persisted data
-        CommitError // Error happened during committing
+        Dirty,         // In-memory data might not match persisted data
+        Clean,         // In-memory data matches persisted data
+        Uninitialized, // Cannot find persisted data
+        CommitError    // Error happened during committing
     };
 
     /* Load the serialized data from sysfile if commit state is dirty.

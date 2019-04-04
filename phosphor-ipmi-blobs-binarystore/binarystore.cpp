@@ -54,7 +54,8 @@ bool BinaryStore::loadSerializedData()
 {
     /* Load blob from sysfile if we know it might not match what we have.
      * Note it will overwrite existing unsaved data per design. */
-    if (commitState_ == CommitState::Clean)
+    if (commitState_ == CommitState::Clean ||
+        commitState_ == CommitState::Uninitialized)
     {
         return true;
     }
@@ -71,11 +72,7 @@ bool BinaryStore::loadSerializedData()
         {
             /* Fail to parse the data, which might mean no preexsiting blobs
              * and is a valid case to handle. Simply init an empty binstore. */
-            log<level::WARNING>(
-                "Fail to parse. There might be no persisted blobs",
-                entry("BASE_ID=%s", baseBlobId_.c_str()));
-
-            return true;
+            commitState_ = CommitState::Uninitialized;
         }
     }
     catch (const std::system_error& e)
@@ -87,7 +84,14 @@ bool BinaryStore::loadSerializedData()
     }
     catch (const std::exception& e)
     {
-        log<level::WARNING>("Invalid size. There might be no persisted blobs.");
+        /* Non system error originates from junk value in 'size' */
+        commitState_ = CommitState::Uninitialized;
+    }
+
+    if (commitState_ == CommitState::Uninitialized)
+    {
+        log<level::WARNING>("Fail to parse. There might be no persisted blobs",
+                            entry("BASE_ID=%s", baseBlobId_.c_str()));
         return true;
     }
 
