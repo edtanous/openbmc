@@ -13,6 +13,8 @@
 
 #include "binaryblob.pb.h"
 
+#include <gtest/gtest.h>
+
 using ::testing::_;
 using ::testing::AtLeast;
 using ::testing::ElementsAreArray;
@@ -176,6 +178,27 @@ TEST_F(BinaryStoreBlobHandlerBasicTest, StaleDataIsClearedDuringCreation)
         basicTestBaseId, std::make_unique<FakeSysFile>(commitData), 0));
     EXPECT_FALSE(handler.canHandleBlob(staleBlobId));
     EXPECT_EQ(handler.getBlobIds(), expectedIdList);
+}
+
+TEST_F(BinaryStoreBlobHandlerBasicTest, CreatingFromEmptySysfile)
+{
+    const std::string emptyData;
+    EXPECT_NO_THROW(handler.addNewBinaryStore(BinaryStore::createFromConfig(
+        basicTestBaseId, std::make_unique<FakeSysFile>(emptyData), 0)));
+    EXPECT_TRUE(handler.canHandleBlob(basicTestBlobId));
+}
+
+TEST_F(BinaryStoreBlobHandlerBasicTest, CreatingFromJunkData)
+{
+    boost::endian::little_uint64_t tooLarge = 0xffffffffffffffffull;
+    const std::string junkDataWithLargeSize(tooLarge.data(), sizeof(tooLarge));
+    EXPECT_GE(tooLarge, junkDataWithLargeSize.max_size());
+
+    EXPECT_NO_THROW(handler.addNewBinaryStore(BinaryStore::createFromConfig(
+        basicTestBaseId, std::make_unique<FakeSysFile>(junkDataWithLargeSize),
+        0)));
+
+    EXPECT_TRUE(handler.canHandleBlob(basicTestBlobId));
 }
 
 } // namespace blobs

@@ -34,8 +34,10 @@ class SysFile
      * @param pos The byte pos into the file to read from
      * @param count How many bytes to read
      * @returns The data read in a vector, whose size might be smaller than
-     *          count if there is not enough to read.
+     *          count if there is not enough to read. Might be empty if the
+     *          count specified is too large to even fit in a std::string.
      * @throws std::system_error if read operation cannot be completed
+     *         std::bad_alloc if cannot construct string with 'count' size
      */
     virtual std::string readAsStr(size_t pos, size_t count) const = 0;
 
