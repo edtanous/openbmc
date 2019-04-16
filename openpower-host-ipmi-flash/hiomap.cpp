@@ -387,6 +387,7 @@ static int hiomap_protocol_reset_response(IpmiCmdData cmd, bool status)
 {
     // If this is running in signal context, ipmid will shutdown
     // the event queue as the last signal handler
+    sigtermResponse = SignalResponse::continueExecution;
     return 0;
 }
 
@@ -396,6 +397,7 @@ static int hiomap_protocol_reset(struct hiomap* ctx)
     {
         // If this is running in signal context, ipmid will shutdown
         // the event queue as the last signal handler
+        sigtermResponse = SignalResponse::continueExecution;
         return 0;
     }
 
