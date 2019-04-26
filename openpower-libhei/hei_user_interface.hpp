@@ -1,7 +1,7 @@
 
 #pragma once
 
-// This header provides access to headers and marcros defined by the user
+// This header provides access to headers and macros defined by the user
 // application.
 #include <hei_user_defines.hpp>
 

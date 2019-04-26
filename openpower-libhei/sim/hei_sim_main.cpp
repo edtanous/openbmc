@@ -1,9 +1,6 @@
 
 #include "../hei_isolator.hpp"
 
-namespace HEI_SIM
-{
-
 int main()
 {
     HEI::Isolator iso;
@@ -14,5 +11,3 @@ int main()
 
     return 0;
 }
-
-}; // end namespace HEI_SIM

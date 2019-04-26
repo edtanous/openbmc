@@ -1,7 +1,7 @@
 
 #pragma once
 
-#include "hei_user_interface.hpp";
+#include "hei_user_interface.hpp"
 
 namespace HEI
 {
@@ -22,5 +22,4 @@ class Isolator
 
 }; // end class Isolator
 
-}; // end namespace HEI
-
+} // end namespace HEI
