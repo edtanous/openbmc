@@ -63,6 +63,11 @@ class BlobHandler : public BlobInterface
     /**
      * @throws BlobException.
      */
+    StatResponse getStat(std::uint16_t session) override;
+
+    /**
+     * @throws BlobException.
+     */
     std::uint16_t openBlob(const std::string& id,
                            std::uint16_t handlerFlags) override;
 

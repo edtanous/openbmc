@@ -188,6 +188,36 @@ TEST_F(BlobHandlerTest, getStatNoMetadata)
     EXPECT_EQ(metadata, meta.metadata);
 }
 
+TEST_F(BlobHandlerTest, getSessionStatNoMetadata)
+{
+    /* The get session stat succeeds. */
+    IpmiInterfaceMock ipmiMock;
+    BlobHandler blob(&ipmiMock);
+
+    std::vector<std::uint8_t> request = {
+        0xcf, 0xc2, 0x00, BlobHandler::BlobOEMCommands::bmcBlobSessionStat,
+        0x00, 0x00, 0x01, 0x00};
+
+    /* return blob_state: 0xffff, size: 0x00, metadata 0x3445 */
+    std::vector<std::uint8_t> resp = {0xcf, 0xc2, 0x00, 0x00, 0x00, 0xff,
+                                      0xff, 0x00, 0x00, 0x00, 0x00, 0x00};
+
+    std::vector<std::uint8_t> reqCrc = {0x01, 0x00};
+    std::vector<std::uint8_t> respCrc = {0xff, 0xff, 0x00, 0x00,
+                                         0x00, 0x00, 0x00};
+
+    EXPECT_CALL(crcMock, generateCrc(Eq(reqCrc))).WillOnce(Return(0x00));
+    EXPECT_CALL(crcMock, generateCrc(Eq(respCrc))).WillOnce(Return(0x00));
+
+    EXPECT_CALL(ipmiMock, sendPacket(Eq(request))).WillOnce(Return(resp));
+
+    auto meta = blob.getStat(0x0001);
+    EXPECT_EQ(meta.blob_state, 0xffff);
+    EXPECT_EQ(meta.size, 0x00);
+    std::vector<std::uint8_t> metadata = {};
+    EXPECT_EQ(metadata, meta.metadata);
+}
+
 TEST_F(BlobHandlerTest, openBlobSucceeds)
 {
     /* The open blob succeeds. */

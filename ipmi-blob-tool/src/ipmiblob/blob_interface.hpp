@@ -57,6 +57,14 @@ class BlobInterface
     virtual StatResponse getStat(const std::string& id) = 0;
 
     /**
+     * Get the stat() on the blob session.
+     *
+     * @param[in] session - the blob session
+     * @return metadata structure
+     */
+    virtual StatResponse getStat(std::uint16_t session) = 0;
+
+    /**
      * Attempt to open the file using the specific data interface flag.
      *
      * @param[in] blob - the blob_id to open.

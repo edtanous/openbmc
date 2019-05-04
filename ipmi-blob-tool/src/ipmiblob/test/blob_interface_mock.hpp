@@ -15,6 +15,7 @@ class BlobInterfaceMock : public BlobInterface
                                   const std::vector<std::uint8_t>&));
     MOCK_METHOD0(getBlobList, std::vector<std::string>());
     MOCK_METHOD1(getStat, StatResponse(const std::string&));
+    MOCK_METHOD1(getStat, StatResponse(std::uint16_t));
     MOCK_METHOD2(openBlob, std::uint16_t(const std::string&, std::uint16_t));
     MOCK_METHOD1(closeBlob, void(std::uint16_t));
     MOCK_METHOD3(readBytes,
