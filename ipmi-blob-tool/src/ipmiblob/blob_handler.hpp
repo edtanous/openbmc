@@ -107,6 +107,17 @@ class BlobHandler : public BlobInterface
                       std::uint32_t offset,
                       const std::vector<std::uint8_t>& bytes);
 
+    /**
+     * Generic stat reader.
+     *
+     * @param[in] command - the command associated with this write.
+     * @param[in] request - the bytes of the request
+     * @return the metadata StatResponse
+     * @throws BlobException on failure.
+     */
+    StatResponse statGeneric(BlobOEMCommands command,
+                             const std::vector<std::uint8_t>& request);
+
     IpmiInterface* ipmi;
 };
 

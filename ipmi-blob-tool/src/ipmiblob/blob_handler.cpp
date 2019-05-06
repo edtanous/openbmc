@@ -212,17 +212,15 @@ std::vector<std::string> BlobHandler::getBlobList()
     return list;
 }
 
-StatResponse BlobHandler::getStat(const std::string& id)
+StatResponse BlobHandler::statGeneric(BlobOEMCommands command,
+                                      const std::vector<std::uint8_t>& request)
 {
     StatResponse meta;
-    std::vector<std::uint8_t> name, resp;
-
-    std::copy(id.begin(), id.end(), std::back_inserter(name));
-    name.push_back(0x00); /* need to add nul-terminator. */
+    std::vector<std::uint8_t> resp;
 
     try
     {
-        resp = sendIpmiPayload(BlobOEMCommands::bmcBlobStat, name);
+        resp = sendIpmiPayload(command, request);
     }
     catch (const BlobException& b)
     {
@@ -242,35 +240,23 @@ StatResponse BlobHandler::getStat(const std::string& id)
     return meta;
 }
 
+StatResponse BlobHandler::getStat(const std::string& id)
+{
+    std::vector<std::uint8_t> name;
+    std::copy(id.begin(), id.end(), std::back_inserter(name));
+    name.push_back(0x00); /* need to add nul-terminator. */
+
+    return statGeneric(BlobOEMCommands::bmcBlobStat, name);
+}
+
 StatResponse BlobHandler::getStat(std::uint16_t session)
 {
-    StatResponse meta;
-    std::vector<std::uint8_t> resp;
     std::vector<std::uint8_t> request;
     auto addrSession = reinterpret_cast<const std::uint8_t*>(&session);
     std::copy(addrSession, addrSession + sizeof(session),
               std::back_inserter(request));
 
-    try
-    {
-        resp = sendIpmiPayload(BlobOEMCommands::bmcBlobSessionStat, request);
-    }
-    catch (const BlobException& b)
-    {
-        throw;
-    }
-
-    std::memcpy(&meta.blob_state, &resp[0], sizeof(meta.blob_state));
-    std::memcpy(&meta.size, &resp[sizeof(meta.blob_state)], sizeof(meta.size));
-    int offset = sizeof(meta.blob_state) + sizeof(meta.size);
-    std::uint8_t len = resp[offset];
-    if (len > 0)
-    {
-        std::copy(&resp[offset + 1], &resp[resp.size()],
-                  std::back_inserter(meta.metadata));
-    }
-
-    return meta;
+    return statGeneric(BlobOEMCommands::bmcBlobSessionStat, request);
 }
 
 std::uint16_t BlobHandler::openBlob(const std::string& id,
