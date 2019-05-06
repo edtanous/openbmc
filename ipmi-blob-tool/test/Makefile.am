@@ -28,3 +28,8 @@ crc_unittest_SOURCES = crc_unittest.cpp
 crc_unittest_CPPFLAGS = $(gtest_cppflags)
 crc_unittest_LDADD = $(gtest_ldadd)
 crc_unittest_LDADD += $(top_builddir)/src/libipmiblob.la
+
+check_PROGRAMS += mocks_unittest
+mocks_unittest_SOURCES = build_mocks.cpp
+mocks_unittest_CPPFLAGS = $(gtest_cppflags)
+mocks_unittest_LDADD = $(gtest_ldadd)
