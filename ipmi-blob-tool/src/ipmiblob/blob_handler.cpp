@@ -233,7 +233,7 @@ StatResponse BlobHandler::statGeneric(BlobOEMCommands command,
     std::uint8_t len = resp[offset];
     if (len > 0)
     {
-        std::copy(&resp[offset + 1], &resp[resp.size()],
+        std::copy(resp.begin() + offset + sizeof(len), resp.end(),
                   std::back_inserter(meta.metadata));
     }
 
