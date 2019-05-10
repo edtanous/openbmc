@@ -153,12 +153,6 @@ std::vector<std::uint8_t>
     returning.insert(returning.begin(), responseBuffer.begin() + 1,
                      responseBuffer.begin() + dataLen + 1);
 
-    for (const auto& byte : returning)
-    {
-        std::fprintf(stderr, "0x%02x ", byte);
-    }
-    std::fprintf(stderr, "\n");
-
     return returning;
 }
 
