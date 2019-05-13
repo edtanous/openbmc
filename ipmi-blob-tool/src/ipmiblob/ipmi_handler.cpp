@@ -26,12 +26,18 @@
 #include <array>
 #include <cstdint>
 #include <cstring>
+#include <memory>
 #include <sstream>
 #include <string>
 #include <vector>
 
 namespace ipmiblob
 {
+
+std::unique_ptr<IpmiInterface> IpmiHandler::CreateIpmiHandler()
+{
+    return std::make_unique<IpmiHandler>();
+}
 
 void IpmiHandler::open()
 {

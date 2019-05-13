@@ -3,6 +3,7 @@
 #include "internal/sys.hpp"
 #include "ipmi_interface.hpp"
 
+#include <memory>
 #include <vector>
 
 namespace ipmiblob
@@ -11,6 +12,11 @@ namespace ipmiblob
 class IpmiHandler : public IpmiInterface
 {
   public:
+    /* Create an IpmiHandler object with default inputs. It is ill-advised to
+     * share IpmiHandlers between objects.
+     */
+    static std::unique_ptr<IpmiInterface> CreateIpmiHandler();
+
     explicit IpmiHandler(const internal::Sys* sys = &internal::sys_impl) :
         sys(sys){};
 
