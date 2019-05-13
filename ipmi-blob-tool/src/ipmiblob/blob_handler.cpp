@@ -19,9 +19,11 @@
 #include "blob_errors.hpp"
 #include "crc.hpp"
 #include "ipmi_errors.hpp"
+#include "ipmi_interface.hpp"
 
 #include <array>
 #include <cstring>
+#include <memory>
 
 namespace ipmiblob
 {
@@ -29,6 +31,12 @@ namespace ipmiblob
 namespace
 {
 const std::array<std::uint8_t, 3> ipmiPhosphorOen = {0xcf, 0xc2, 0x00};
+}
+
+std::unique_ptr<BlobInterface>
+    BlobHandler::CreateBlobHandler(std::unique_ptr<IpmiInterface> ipmi)
+{
+    return std::make_unique<BlobHandler>(std::move(ipmi));
 }
 
 std::vector<std::uint8_t>

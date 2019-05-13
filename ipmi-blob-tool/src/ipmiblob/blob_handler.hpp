@@ -26,6 +26,15 @@ class BlobHandler : public BlobInterface
         bmcBlobWriteMeta = 10,
     };
 
+    /**
+     * Create a BlobInterface pointer for use given an ipmi handler.
+     *
+     * @note This is a convenience method.
+     * @return a BlobHandler wrapped as a BlobInterface pointer.
+     */
+    static std::unique_ptr<BlobInterface>
+        CreateBlobHandler(std::unique_ptr<IpmiInterface> ipmi);
+
     explicit BlobHandler(std::unique_ptr<IpmiInterface> ipmi) :
         ipmi(std::move(ipmi)){};
 
