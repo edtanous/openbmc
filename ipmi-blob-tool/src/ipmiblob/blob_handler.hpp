@@ -3,6 +3,8 @@
 #include "blob_interface.hpp"
 #include "ipmi_interface.hpp"
 
+#include <memory>
+
 namespace ipmiblob
 {
 
@@ -24,7 +26,14 @@ class BlobHandler : public BlobInterface
         bmcBlobWriteMeta = 10,
     };
 
-    explicit BlobHandler(IpmiInterface* ipmi) : ipmi(ipmi){};
+    explicit BlobHandler(std::unique_ptr<IpmiInterface> ipmi) :
+        ipmi(std::move(ipmi)){};
+
+    ~BlobHandler() = default;
+    BlobHandler(const BlobHandler&) = delete;
+    BlobHandler& operator=(const BlobHandler&) = delete;
+    BlobHandler(BlobHandler&&) = default;
+    BlobHandler& operator=(BlobHandler&&) = default;
 
     /**
      * Retrieve the blob count.
@@ -118,7 +127,7 @@ class BlobHandler : public BlobInterface
     StatResponse statGeneric(BlobOEMCommands command,
                              const std::vector<std::uint8_t>& request);
 
-    IpmiInterface* ipmi;
+    std::unique_ptr<IpmiInterface> ipmi;
 };
 
 } // namespace ipmiblob
