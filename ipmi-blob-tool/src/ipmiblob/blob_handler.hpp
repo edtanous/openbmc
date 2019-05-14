@@ -62,6 +62,12 @@ class BlobHandler : public BlobInterface
     /**
      * @throws BlobException.
      */
+    void commit(std::uint16_t session,
+                const std::vector<std::uint8_t>& bytes) override;
+
+    /**
+     * @throws BlobException.
+     */
     void writeMeta(std::uint16_t session, std::uint32_t offset,
                    const std::vector<std::uint8_t>& bytes) override;
 

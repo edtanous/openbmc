@@ -162,6 +162,30 @@ std::string BlobHandler::enumerateBlob(std::uint32_t index)
     }
 }
 
+void BlobHandler::commit(std::uint16_t session,
+                         const std::vector<std::uint8_t>& bytes)
+{
+    std::vector<std::uint8_t> request;
+    auto addrSession = reinterpret_cast<const std::uint8_t*>(&session);
+    std::copy(addrSession, addrSession + sizeof(session),
+              std::back_inserter(request));
+
+    /* You have one byte to describe the length. */
+    if (bytes.size() > std::numeric_limits<std::uint8_t>::max())
+    {
+        throw BlobException("Commit data length greater than 8-bit limit\n");
+    }
+
+    std::uint8_t length = static_cast<std::uint8_t>(bytes.size());
+    auto addrLength = reinterpret_cast<const std::uint8_t*>(&length);
+    std::copy(addrLength, addrLength + sizeof(length),
+              std::back_inserter(request));
+
+    std::copy(bytes.begin(), bytes.end(), std::back_inserter(request));
+
+    sendIpmiPayload(BlobOEMCommands::bmcBlobCommit, request);
+}
+
 void BlobHandler::writeGeneric(BlobOEMCommands command, std::uint16_t session,
                                std::uint32_t offset,
                                const std::vector<std::uint8_t>& bytes)

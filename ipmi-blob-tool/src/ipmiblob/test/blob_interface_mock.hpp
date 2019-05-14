@@ -9,6 +9,7 @@ class BlobInterfaceMock : public BlobInterface
 {
   public:
     virtual ~BlobInterfaceMock() = default;
+    MOCK_METHOD2(commit, void(std::uint16_t, const std::vector<std::uint8_t>&));
     MOCK_METHOD3(writeMeta, void(std::uint16_t, std::uint32_t,
                                  const std::vector<std::uint8_t>&));
     MOCK_METHOD3(writeBytes, void(std::uint16_t, std::uint32_t,

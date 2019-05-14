@@ -20,6 +20,16 @@ class BlobInterface
     virtual ~BlobInterface() = default;
 
     /**
+     * Call commit on a blob.  The behavior here is up to the blob itself.
+     *
+     * @param[in] session - the session id.
+     * @param[in] bytes - the bytes to send.
+     * @throws BlobException on failure.
+     */
+    virtual void commit(std::uint16_t session,
+                        const std::vector<std::uint8_t>& bytes) = 0;
+
+    /**
      * Write metadata to a blob.
      *
      * @param[in] session - the session id.
