@@ -23,6 +23,7 @@
 
 #include <array>
 #include <cstring>
+#include <limits>
 #include <memory>
 
 namespace ipmiblob
