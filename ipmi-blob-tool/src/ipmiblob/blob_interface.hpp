@@ -12,6 +12,12 @@ struct StatResponse
     std::uint16_t blob_state;
     std::uint32_t size;
     std::vector<std::uint8_t> metadata;
+
+    bool operator==(const StatResponse& rhs) const
+    {
+        return (this->blob_state == rhs.blob_state && this->size == rhs.size &&
+                this->metadata == rhs.metadata);
+    }
 };
 
 class BlobInterface
