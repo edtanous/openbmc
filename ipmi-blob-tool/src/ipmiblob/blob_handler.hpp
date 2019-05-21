@@ -11,21 +11,6 @@ namespace ipmiblob
 class BlobHandler : public BlobInterface
 {
   public:
-    enum BlobOEMCommands
-    {
-        bmcBlobGetCount = 0,
-        bmcBlobEnumerate = 1,
-        bmcBlobOpen = 2,
-        bmcBlobRead = 3,
-        bmcBlobWrite = 4,
-        bmcBlobCommit = 5,
-        bmcBlobClose = 6,
-        bmcBlobDelete = 7,
-        bmcBlobStat = 8,
-        bmcBlobSessionStat = 9,
-        bmcBlobWriteMeta = 10,
-    };
-
     /**
      * Create a BlobInterface pointer for use given an ipmi handler.
      *

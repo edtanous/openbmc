@@ -48,7 +48,7 @@ std::vector<std::uint8_t>
 
     std::copy(ipmiPhosphorOen.begin(), ipmiPhosphorOen.end(),
               std::back_inserter(request));
-    request.push_back(command);
+    request.push_back(static_cast<std::uint8_t>(command));
 
     if (payload.size() > 0)
     {

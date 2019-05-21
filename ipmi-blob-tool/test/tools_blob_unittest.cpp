@@ -44,7 +44,8 @@ TEST_F(BlobHandlerTest, getCountIpmiHappy)
     BlobHandler blob(std::move(ipmi));
 
     std::vector<std::uint8_t> request = {
-        0xcf, 0xc2, 0x00, BlobHandler::BlobOEMCommands::bmcBlobGetCount};
+        0xcf, 0xc2, 0x00,
+        static_cast<std::uint8_t>(BlobOEMCommands::bmcBlobGetCount)};
 
     /* return 1 blob count. */
     std::vector<std::uint8_t> resp = {0xcf, 0xc2, 0x00, 0x00, 0x00,
@@ -66,8 +67,10 @@ TEST_F(BlobHandlerTest, enumerateBlobIpmiHappy)
     BlobHandler blob(std::move(ipmi));
 
     std::vector<std::uint8_t> request = {
-        0xcf, 0xc2, 0x00, BlobHandler::BlobOEMCommands::bmcBlobEnumerate,
-        0x00, 0x00, 0x01, 0x00,
+        0xcf, 0xc2,
+        0x00, static_cast<std::uint8_t>(BlobOEMCommands::bmcBlobEnumerate),
+        0x00, 0x00,
+        0x01, 0x00,
         0x00, 0x00};
 
     /* return value. */
@@ -92,8 +95,10 @@ TEST_F(BlobHandlerTest, enumerateBlobIpmiNoBytes)
     BlobHandler blob(std::move(ipmi));
 
     std::vector<std::uint8_t> request = {
-        0xcf, 0xc2, 0x00, BlobHandler::BlobOEMCommands::bmcBlobEnumerate,
-        0x00, 0x00, 0x01, 0x00,
+        0xcf, 0xc2,
+        0x00, static_cast<std::uint8_t>(BlobOEMCommands::bmcBlobEnumerate),
+        0x00, 0x00,
+        0x01, 0x00,
         0x00, 0x00};
 
     /* return value. */
@@ -115,7 +120,8 @@ TEST_F(BlobHandlerTest, getBlobListIpmiHappy)
     BlobHandler blob(std::move(ipmi));
 
     std::vector<std::uint8_t> request1 = {
-        0xcf, 0xc2, 0x00, BlobHandler::BlobOEMCommands::bmcBlobGetCount};
+        0xcf, 0xc2, 0x00,
+        static_cast<std::uint8_t>(BlobOEMCommands::bmcBlobGetCount)};
 
     /* return 1 blob count. */
     std::vector<std::uint8_t> resp1 = {0xcf, 0xc2, 0x00, 0x00, 0x00,
@@ -127,8 +133,10 @@ TEST_F(BlobHandlerTest, getBlobListIpmiHappy)
     EXPECT_CALL(*ipmiMock, sendPacket(Eq(request1))).WillOnce(Return(resp1));
 
     std::vector<std::uint8_t> request2 = {
-        0xcf, 0xc2, 0x00, BlobHandler::BlobOEMCommands::bmcBlobEnumerate,
-        0x00, 0x00, 0x00, 0x00,
+        0xcf, 0xc2,
+        0x00, static_cast<std::uint8_t>(BlobOEMCommands::bmcBlobEnumerate),
+        0x00, 0x00,
+        0x00, 0x00,
         0x00, 0x00};
 
     /* return value. */
@@ -157,9 +165,12 @@ TEST_F(BlobHandlerTest, getStatWithMetadata)
     BlobHandler blob(std::move(ipmi));
 
     std::vector<std::uint8_t> request = {
-        0xcf, 0xc2, 0x00, BlobHandler::BlobOEMCommands::bmcBlobStat,
-        0x00, 0x00, 'a',  'b',
-        'c',  'd',  0x00};
+        0xcf, 0xc2,
+        0x00, static_cast<std::uint8_t>(BlobOEMCommands::bmcBlobStat),
+        0x00, 0x00,
+        'a',  'b',
+        'c',  'd',
+        0x00};
 
     /* return blob_state: 0xffff, size: 0x00, metadata 0x3445 */
     std::vector<std::uint8_t> resp = {0xcf, 0xc2, 0x00, 0x00, 0x00, 0xff, 0xff,
@@ -189,9 +200,12 @@ TEST_F(BlobHandlerTest, getStatNoMetadata)
     BlobHandler blob(std::move(ipmi));
 
     std::vector<std::uint8_t> request = {
-        0xcf, 0xc2, 0x00, BlobHandler::BlobOEMCommands::bmcBlobStat,
-        0x00, 0x00, 'a',  'b',
-        'c',  'd',  0x00};
+        0xcf, 0xc2,
+        0x00, static_cast<std::uint8_t>(BlobOEMCommands::bmcBlobStat),
+        0x00, 0x00,
+        'a',  'b',
+        'c',  'd',
+        0x00};
 
     /* return blob_state: 0xffff, size: 0x00, metadata 0x3445 */
     std::vector<std::uint8_t> resp = {0xcf, 0xc2, 0x00, 0x00, 0x00, 0xff,
@@ -222,8 +236,10 @@ TEST_F(BlobHandlerTest, getSessionStatNoMetadata)
     BlobHandler blob(std::move(ipmi));
 
     std::vector<std::uint8_t> request = {
-        0xcf, 0xc2, 0x00, BlobHandler::BlobOEMCommands::bmcBlobSessionStat,
-        0x00, 0x00, 0x01, 0x00};
+        0xcf, 0xc2,
+        0x00, static_cast<std::uint8_t>(BlobOEMCommands::bmcBlobSessionStat),
+        0x00, 0x00,
+        0x01, 0x00};
 
     /* return blob_state: 0xffff, size: 0x00, metadata 0x3445 */
     std::vector<std::uint8_t> resp = {0xcf, 0xc2, 0x00, 0x00, 0x00, 0xff,
@@ -254,9 +270,12 @@ TEST_F(BlobHandlerTest, openBlobSucceeds)
     BlobHandler blob(std::move(ipmi));
 
     std::vector<std::uint8_t> request = {
-        0xcf, 0xc2, 0x00, BlobHandler::BlobOEMCommands::bmcBlobOpen,
-        0x00, 0x00, 0x02, 0x04,
-        'a',  'b',  'c',  'd',
+        0xcf, 0xc2,
+        0x00, static_cast<std::uint8_t>(BlobOEMCommands::bmcBlobOpen),
+        0x00, 0x00,
+        0x02, 0x04,
+        'a',  'b',
+        'c',  'd',
         0x00};
 
     std::vector<std::uint8_t> resp = {0xcf, 0xc2, 0x00, 0x00, 0x00, 0xfe, 0xed};
@@ -284,8 +303,10 @@ TEST_F(BlobHandlerTest, closeBlobSucceeds)
     BlobHandler blob(std::move(ipmi));
 
     std::vector<std::uint8_t> request = {
-        0xcf, 0xc2, 0x00, BlobHandler::BlobOEMCommands::bmcBlobClose,
-        0x00, 0x00, 0x01, 0x00};
+        0xcf, 0xc2,
+        0x00, static_cast<std::uint8_t>(BlobOEMCommands::bmcBlobClose),
+        0x00, 0x00,
+        0x01, 0x00};
     std::vector<std::uint8_t> resp = {0xcf, 0xc2, 0x00};
     std::vector<std::uint8_t> reqCrc = {0x01, 0x00};
     EXPECT_CALL(crcMock, generateCrc(Eq(reqCrc))).WillOnce(Return(0x00));
@@ -304,8 +325,10 @@ TEST_F(BlobHandlerTest, commitSucceedsNoData)
     BlobHandler blob(std::move(ipmi));
 
     std::vector<std::uint8_t> request = {
-        0xcf, 0xc2, 0x00, BlobHandler::BlobOEMCommands::bmcBlobCommit,
-        0x00, 0x00, 0x01, 0x00,
+        0xcf, 0xc2,
+        0x00, static_cast<std::uint8_t>(BlobOEMCommands::bmcBlobCommit),
+        0x00, 0x00,
+        0x01, 0x00,
         0x00};
 
     std::vector<std::uint8_t> resp = {0xcf, 0xc2, 0x00};
@@ -326,10 +349,14 @@ TEST_F(BlobHandlerTest, writeBytesSucceeds)
     BlobHandler blob(std::move(ipmi));
 
     std::vector<std::uint8_t> request = {
-        0xcf, 0xc2, 0x00, BlobHandler::BlobOEMCommands::bmcBlobWrite,
-        0x00, 0x00, 0x01, 0x00,
-        0x00, 0x00, 0x00, 0x00,
-        'a',  'b',  'c',  'd'};
+        0xcf, 0xc2,
+        0x00, static_cast<std::uint8_t>(BlobOEMCommands::bmcBlobWrite),
+        0x00, 0x00,
+        0x01, 0x00,
+        0x00, 0x00,
+        0x00, 0x00,
+        'a',  'b',
+        'c',  'd'};
 
     std::vector<std::uint8_t> bytes = {'a', 'b', 'c', 'd'};
     std::vector<std::uint8_t> resp = {0xcf, 0xc2, 0x00};
@@ -351,10 +378,14 @@ TEST_F(BlobHandlerTest, readBytesSucceeds)
     BlobHandler blob(std::move(ipmi));
 
     std::vector<std::uint8_t> request = {
-        0xcf, 0xc2, 0x00, BlobHandler::BlobOEMCommands::bmcBlobRead,
-        0x00, 0x00, 0x01, 0x00,
-        0x00, 0x00, 0x00, 0x00,
-        0x04, 0x00, 0x00, 0x00};
+        0xcf, 0xc2,
+        0x00, static_cast<std::uint8_t>(BlobOEMCommands::bmcBlobRead),
+        0x00, 0x00,
+        0x01, 0x00,
+        0x00, 0x00,
+        0x00, 0x00,
+        0x04, 0x00,
+        0x00, 0x00};
 
     std::vector<std::uint8_t> expectedBytes = {'a', 'b', 'c', 'd'};
     std::vector<std::uint8_t> resp = {0xcf, 0xc2, 0x00, 0x00, 0x00,
