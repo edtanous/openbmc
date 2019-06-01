@@ -130,4 +130,7 @@ class BlobHandler : public BlobInterface
     std::unique_ptr<IpmiInterface> ipmi;
 };
 
+constexpr int ipmiOEMNetFn = 46;
+constexpr int ipmiOEMBlobCmd = 128;
+
 } // namespace ipmiblob

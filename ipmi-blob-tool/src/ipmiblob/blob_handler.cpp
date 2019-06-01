@@ -67,7 +67,7 @@ std::vector<std::uint8_t>
 
     try
     {
-        reply = ipmi->sendPacket(request);
+        reply = ipmi->sendPacket(ipmiOEMNetFn, ipmiOEMBlobCmd, request);
     }
     catch (const IpmiException& e)
     {

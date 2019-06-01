@@ -37,7 +37,8 @@ class IpmiHandler : public IpmiInterface
      * @throws IpmiException on failure.
      */
     std::vector<std::uint8_t>
-        sendPacket(std::vector<std::uint8_t>& data) override;
+        sendPacket(std::uint8_t netfn, std::uint8_t cmd,
+                   std::vector<std::uint8_t>& data) override;
 
   private:
     const internal::Sys* sys;

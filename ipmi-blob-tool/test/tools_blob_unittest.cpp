@@ -16,6 +16,7 @@ std::uint16_t generateCrc(const std::vector<std::uint8_t>& data)
     return (crcIntf) ? crcIntf->generateCrc(data) : 0x00;
 }
 
+using ::testing::ContainerEq;
 using ::testing::Eq;
 using ::testing::Return;
 
@@ -52,9 +53,12 @@ TEST_F(BlobHandlerTest, getCountIpmiHappy)
                                       0x01, 0x00, 0x00, 0x00};
 
     std::vector<std::uint8_t> bytes = {0x01, 0x00, 0x00, 0x00};
-    EXPECT_CALL(crcMock, generateCrc(Eq(bytes))).WillOnce(Return(0x00));
+    EXPECT_CALL(crcMock, generateCrc(ContainerEq(bytes)))
+        .WillOnce(Return(0x00));
 
-    EXPECT_CALL(*ipmiMock, sendPacket(Eq(request))).WillOnce(Return(resp));
+    EXPECT_CALL(*ipmiMock,
+                sendPacket(ipmiOEMNetFn, ipmiOEMBlobCmd, ContainerEq(request)))
+        .WillOnce(Return(resp));
     EXPECT_EQ(1, blob.getBlobCount());
 }
 
@@ -79,10 +83,14 @@ TEST_F(BlobHandlerTest, enumerateBlobIpmiHappy)
 
     std::vector<std::uint8_t> bytes = {'a', 'b', 'c', 'd', 0x00};
     std::vector<std::uint8_t> reqCrc = {0x01, 0x00, 0x00, 0x00};
-    EXPECT_CALL(crcMock, generateCrc(Eq(reqCrc))).WillOnce(Return(0x00));
-    EXPECT_CALL(crcMock, generateCrc(Eq(bytes))).WillOnce(Return(0x00));
+    EXPECT_CALL(crcMock, generateCrc(ContainerEq(reqCrc)))
+        .WillOnce(Return(0x00));
+    EXPECT_CALL(crcMock, generateCrc(ContainerEq(bytes)))
+        .WillOnce(Return(0x00));
 
-    EXPECT_CALL(*ipmiMock, sendPacket(Eq(request))).WillOnce(Return(resp));
+    EXPECT_CALL(*ipmiMock,
+                sendPacket(ipmiOEMNetFn, ipmiOEMBlobCmd, ContainerEq(request)))
+        .WillOnce(Return(resp));
     EXPECT_STREQ("abcd", blob.enumerateBlob(1).c_str());
 }
 
@@ -105,9 +113,12 @@ TEST_F(BlobHandlerTest, enumerateBlobIpmiNoBytes)
     std::vector<std::uint8_t> resp = {};
 
     std::vector<std::uint8_t> reqCrc = {0x01, 0x00, 0x00, 0x00};
-    EXPECT_CALL(crcMock, generateCrc(Eq(reqCrc))).WillOnce(Return(0x00));
+    EXPECT_CALL(crcMock, generateCrc(ContainerEq(reqCrc)))
+        .WillOnce(Return(0x00));
 
-    EXPECT_CALL(*ipmiMock, sendPacket(Eq(request))).WillOnce(Return(resp));
+    EXPECT_CALL(*ipmiMock,
+                sendPacket(ipmiOEMNetFn, ipmiOEMBlobCmd, ContainerEq(request)))
+        .WillOnce(Return(resp));
     EXPECT_STREQ("", blob.enumerateBlob(1).c_str());
 }
 
@@ -128,9 +139,12 @@ TEST_F(BlobHandlerTest, getBlobListIpmiHappy)
                                        0x01, 0x00, 0x00, 0x00};
 
     std::vector<std::uint8_t> bytes1 = {0x01, 0x00, 0x00, 0x00};
-    EXPECT_CALL(crcMock, generateCrc(Eq(bytes1))).WillOnce(Return(0x00));
+    EXPECT_CALL(crcMock, generateCrc(ContainerEq(bytes1)))
+        .WillOnce(Return(0x00));
 
-    EXPECT_CALL(*ipmiMock, sendPacket(Eq(request1))).WillOnce(Return(resp1));
+    EXPECT_CALL(*ipmiMock,
+                sendPacket(ipmiOEMNetFn, ipmiOEMBlobCmd, ContainerEq(request1)))
+        .WillOnce(Return(resp1));
 
     std::vector<std::uint8_t> request2 = {
         0xcf, 0xc2,
@@ -145,10 +159,14 @@ TEST_F(BlobHandlerTest, getBlobListIpmiHappy)
 
     std::vector<std::uint8_t> reqCrc = {0x00, 0x00, 0x00, 0x00};
     std::vector<std::uint8_t> bytes2 = {'a', 'b', 'c', 'd', 0x00};
-    EXPECT_CALL(crcMock, generateCrc(Eq(reqCrc))).WillOnce(Return(0x00));
-    EXPECT_CALL(crcMock, generateCrc(Eq(bytes2))).WillOnce(Return(0x00));
+    EXPECT_CALL(crcMock, generateCrc(ContainerEq(reqCrc)))
+        .WillOnce(Return(0x00));
+    EXPECT_CALL(crcMock, generateCrc(ContainerEq(bytes2)))
+        .WillOnce(Return(0x00));
 
-    EXPECT_CALL(*ipmiMock, sendPacket(Eq(request2))).WillOnce(Return(resp2));
+    EXPECT_CALL(*ipmiMock,
+                sendPacket(ipmiOEMNetFn, ipmiOEMBlobCmd, ContainerEq(request2)))
+        .WillOnce(Return(resp2));
 
     /* A std::string is not nul-terminated by default. */
     std::vector<std::string> expectedList = {std::string{"abcd"}};
@@ -179,10 +197,14 @@ TEST_F(BlobHandlerTest, getStatWithMetadata)
     std::vector<std::uint8_t> reqCrc = {'a', 'b', 'c', 'd', 0x00};
     std::vector<std::uint8_t> respCrc = {0xff, 0xff, 0x00, 0x00, 0x00,
                                          0x00, 0x02, 0x34, 0x45};
-    EXPECT_CALL(crcMock, generateCrc(Eq(reqCrc))).WillOnce(Return(0x00));
-    EXPECT_CALL(crcMock, generateCrc(Eq(respCrc))).WillOnce(Return(0x00));
+    EXPECT_CALL(crcMock, generateCrc(ContainerEq(reqCrc)))
+        .WillOnce(Return(0x00));
+    EXPECT_CALL(crcMock, generateCrc(ContainerEq(respCrc)))
+        .WillOnce(Return(0x00));
 
-    EXPECT_CALL(*ipmiMock, sendPacket(Eq(request))).WillOnce(Return(resp));
+    EXPECT_CALL(*ipmiMock,
+                sendPacket(ipmiOEMNetFn, ipmiOEMBlobCmd, ContainerEq(request)))
+        .WillOnce(Return(resp));
 
     auto meta = blob.getStat("abcd");
     EXPECT_EQ(meta.blob_state, 0xffff);
@@ -215,10 +237,14 @@ TEST_F(BlobHandlerTest, getStatNoMetadata)
     std::vector<std::uint8_t> respCrc = {0xff, 0xff, 0x00, 0x00,
                                          0x00, 0x00, 0x00};
 
-    EXPECT_CALL(crcMock, generateCrc(Eq(reqCrc))).WillOnce(Return(0x00));
-    EXPECT_CALL(crcMock, generateCrc(Eq(respCrc))).WillOnce(Return(0x00));
+    EXPECT_CALL(crcMock, generateCrc(ContainerEq(reqCrc)))
+        .WillOnce(Return(0x00));
+    EXPECT_CALL(crcMock, generateCrc(ContainerEq(respCrc)))
+        .WillOnce(Return(0x00));
 
-    EXPECT_CALL(*ipmiMock, sendPacket(Eq(request))).WillOnce(Return(resp));
+    EXPECT_CALL(*ipmiMock,
+                sendPacket(ipmiOEMNetFn, ipmiOEMBlobCmd, ContainerEq(request)))
+        .WillOnce(Return(resp));
 
     auto meta = blob.getStat("abcd");
     EXPECT_EQ(meta.blob_state, 0xffff);
@@ -249,10 +275,14 @@ TEST_F(BlobHandlerTest, getSessionStatNoMetadata)
     std::vector<std::uint8_t> respCrc = {0xff, 0xff, 0x00, 0x00,
                                          0x00, 0x00, 0x00};
 
-    EXPECT_CALL(crcMock, generateCrc(Eq(reqCrc))).WillOnce(Return(0x00));
-    EXPECT_CALL(crcMock, generateCrc(Eq(respCrc))).WillOnce(Return(0x00));
+    EXPECT_CALL(crcMock, generateCrc(ContainerEq(reqCrc)))
+        .WillOnce(Return(0x00));
+    EXPECT_CALL(crcMock, generateCrc(ContainerEq(respCrc)))
+        .WillOnce(Return(0x00));
 
-    EXPECT_CALL(*ipmiMock, sendPacket(Eq(request))).WillOnce(Return(resp));
+    EXPECT_CALL(*ipmiMock,
+                sendPacket(ipmiOEMNetFn, ipmiOEMBlobCmd, ContainerEq(request)))
+        .WillOnce(Return(resp));
 
     auto meta = blob.getStat(0x0001);
     EXPECT_EQ(meta.blob_state, 0xffff);
@@ -282,10 +312,14 @@ TEST_F(BlobHandlerTest, openBlobSucceeds)
 
     std::vector<std::uint8_t> reqCrc = {0x02, 0x04, 'a', 'b', 'c', 'd', 0x00};
     std::vector<std::uint8_t> respCrc = {0xfe, 0xed};
-    EXPECT_CALL(crcMock, generateCrc(Eq(reqCrc))).WillOnce(Return(0x00));
-    EXPECT_CALL(crcMock, generateCrc(Eq(respCrc))).WillOnce(Return(0x00));
+    EXPECT_CALL(crcMock, generateCrc(ContainerEq(reqCrc)))
+        .WillOnce(Return(0x00));
+    EXPECT_CALL(crcMock, generateCrc(ContainerEq(respCrc)))
+        .WillOnce(Return(0x00));
 
-    EXPECT_CALL(*ipmiMock, sendPacket(Eq(request))).WillOnce(Return(resp));
+    EXPECT_CALL(*ipmiMock,
+                sendPacket(ipmiOEMNetFn, ipmiOEMBlobCmd, ContainerEq(request)))
+        .WillOnce(Return(resp));
 
     const int writeBit = (1 << 1);
     const int lpcBit = (1 << 10);
@@ -309,9 +343,12 @@ TEST_F(BlobHandlerTest, closeBlobSucceeds)
         0x01, 0x00};
     std::vector<std::uint8_t> resp = {0xcf, 0xc2, 0x00};
     std::vector<std::uint8_t> reqCrc = {0x01, 0x00};
-    EXPECT_CALL(crcMock, generateCrc(Eq(reqCrc))).WillOnce(Return(0x00));
+    EXPECT_CALL(crcMock, generateCrc(ContainerEq(reqCrc)))
+        .WillOnce(Return(0x00));
 
-    EXPECT_CALL(*ipmiMock, sendPacket(Eq(request))).WillOnce(Return(resp));
+    EXPECT_CALL(*ipmiMock,
+                sendPacket(ipmiOEMNetFn, ipmiOEMBlobCmd, ContainerEq(request)))
+        .WillOnce(Return(resp));
 
     blob.closeBlob(0x0001);
 }
@@ -333,9 +370,12 @@ TEST_F(BlobHandlerTest, commitSucceedsNoData)
 
     std::vector<std::uint8_t> resp = {0xcf, 0xc2, 0x00};
     std::vector<std::uint8_t> reqCrc = {0x01, 0x00, 0x00};
-    EXPECT_CALL(crcMock, generateCrc(Eq(reqCrc))).WillOnce(Return(0x00));
+    EXPECT_CALL(crcMock, generateCrc(ContainerEq(reqCrc)))
+        .WillOnce(Return(0x00));
 
-    EXPECT_CALL(*ipmiMock, sendPacket(Eq(request))).WillOnce(Return(resp));
+    EXPECT_CALL(*ipmiMock,
+                sendPacket(ipmiOEMNetFn, ipmiOEMBlobCmd, ContainerEq(request)))
+        .WillOnce(Return(resp));
 
     blob.commit(0x0001, {});
 }
@@ -362,9 +402,12 @@ TEST_F(BlobHandlerTest, writeBytesSucceeds)
     std::vector<std::uint8_t> resp = {0xcf, 0xc2, 0x00};
     std::vector<std::uint8_t> reqCrc = {0x01, 0x00, 0x00, 0x00, 0x00,
                                         0x00, 'a',  'b',  'c',  'd'};
-    EXPECT_CALL(crcMock, generateCrc(Eq(reqCrc))).WillOnce(Return(0x00));
+    EXPECT_CALL(crcMock, generateCrc(ContainerEq(reqCrc)))
+        .WillOnce(Return(0x00));
 
-    EXPECT_CALL(*ipmiMock, sendPacket(Eq(request))).WillOnce(Return(resp));
+    EXPECT_CALL(*ipmiMock,
+                sendPacket(ipmiOEMNetFn, ipmiOEMBlobCmd, ContainerEq(request)))
+        .WillOnce(Return(resp));
 
     blob.writeBytes(0x0001, 0, bytes);
 }
@@ -394,10 +437,14 @@ TEST_F(BlobHandlerTest, readBytesSucceeds)
                                         0x00, 0x04, 0x00, 0x00, 0x00};
     std::vector<std::uint8_t> respCrc = {'a', 'b', 'c', 'd'};
 
-    EXPECT_CALL(crcMock, generateCrc(Eq(reqCrc))).WillOnce(Return(0x00));
-    EXPECT_CALL(crcMock, generateCrc(Eq(respCrc))).WillOnce(Return(0x00));
+    EXPECT_CALL(crcMock, generateCrc(ContainerEq(reqCrc)))
+        .WillOnce(Return(0x00));
+    EXPECT_CALL(crcMock, generateCrc(ContainerEq(respCrc)))
+        .WillOnce(Return(0x00));
 
-    EXPECT_CALL(*ipmiMock, sendPacket(Eq(request))).WillOnce(Return(resp));
+    EXPECT_CALL(*ipmiMock,
+                sendPacket(ipmiOEMNetFn, ipmiOEMBlobCmd, ContainerEq(request)))
+        .WillOnce(Return(resp));
 
     EXPECT_EQ(blob.readBytes(0x0001, 0, 4), expectedBytes);
 }

@@ -65,17 +65,15 @@ void IpmiHandler::open()
 }
 
 std::vector<std::uint8_t>
-    IpmiHandler::sendPacket(std::vector<std::uint8_t>& data)
+    IpmiHandler::sendPacket(std::uint8_t netfn, std::uint8_t cmd,
+                            std::vector<std::uint8_t>& data)
 {
     if (fd < 0)
     {
         open();
     }
 
-    constexpr int ipmiOEMNetFn = 46;
     constexpr int ipmiOEMLun = 0;
-    /* /openbmc/phosphor-host-ipmid/blob/master/host-ipmid/oemopenbmc.hpp */
-    constexpr int ipmiOEMBlobCmd = 128;
     constexpr int fifteenMs = 15 * 1000;
     constexpr int ipmiReadTimeout = fifteenMs;
     constexpr int ipmiResponseBufferLen = IPMI_MAX_MSG_LENGTH;
@@ -98,8 +96,8 @@ std::vector<std::uint8_t>
     request.msgid = sequence++;
     request.msg.data = reinterpret_cast<unsigned char*>(data.data());
     request.msg.data_len = data.size();
-    request.msg.netfn = ipmiOEMNetFn;
-    request.msg.cmd = ipmiOEMBlobCmd;
+    request.msg.netfn = netfn;
+    request.msg.cmd = cmd;
 
     struct ipmi_recv reply;
     reply.addr = reinterpret_cast<unsigned char*>(&systemAddress);
