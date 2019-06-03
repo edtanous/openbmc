@@ -67,4 +67,6 @@ AS_IF([test "x$with_systemdsystemunitdir" != "xno"],
 
 AC_CONFIG_FILES([Makefile test/Makefile])
 AC_CONFIG_FILES([pcie-poweroff@.service])
+AC_CONFIG_FILES([xyz.openbmc_project.Control.Host.NMI.service])
+AC_CONFIG_FILES([nmi.service])
 AC_OUTPUT

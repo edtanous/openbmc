@@ -27,6 +27,7 @@
 #include <xyz/openbmc_project/Common/error.hpp>
 
 using namespace openpower::util;
+
 namespace common_error = sdbusplus::xyz::openbmc_project::Common::Error;
 namespace device_error = sdbusplus::xyz::openbmc_project::Common::Device::Error;
 namespace file_error = sdbusplus::xyz::openbmc_project::Common::File::Error;
