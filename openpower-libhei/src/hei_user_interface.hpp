@@ -1,10 +1,33 @@
 
 #pragma once
 
-// This header provides access to headers and macros defined by the user
-// application.
-#include <hei_trace.hpp>
+// The user application must define this header file with the following macros:
+//
+//   Tracing (inputs same as printf() from <cstdio>):
+//      HEI_INF( ... ) // Generic informational trace
+//      HEI_ERR( ... ) // Error path trace
+//
+//  Assertion (at a minimum should work like assert() from <cassert>):
+//      HEI_ASSERT( expression )
+//
+#include <hei_user_defines.hpp>
 
-// The rest of this header contains interfaces that the user application must
-// define.
+namespace libhei
+{
+
+/**
+ *  @brief Perform a hardware read operation.
+ */
+void deviceRead();
+
+#ifndef __HEI_READ_ONLY
+
+/**
+ *  @brief Perform a hardware write operation.
+ */
+void deviceWrite();
+
+#endif
+
+} // end namespace libhei
 

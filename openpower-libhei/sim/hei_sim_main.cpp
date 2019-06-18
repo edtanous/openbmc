@@ -3,7 +3,7 @@
 
 int main()
 {
-    HEI::Isolator iso;
+    libhei::Isolator iso;
 
     iso.initialize();
 

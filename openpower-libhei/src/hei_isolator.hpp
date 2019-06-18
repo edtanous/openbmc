@@ -3,7 +3,7 @@
 
 #include "hei_user_interface.hpp"
 
-namespace HEI
+namespace libhei
 {
 
 class Isolator
@@ -22,4 +22,4 @@ class Isolator
 
 }; // end class Isolator
 
-} // end namespace HEI
+} // end namespace libhei
