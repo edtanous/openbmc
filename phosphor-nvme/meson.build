@@ -12,6 +12,8 @@ executable(
     [
         'nvme_main.cpp',
         'nvme_manager.cpp',
+        'smbus.cpp',
+        'nvmes.cpp',
     ],
     dependencies: [
         dependency('phosphor-logging'),
@@ -22,6 +24,8 @@ executable(
     install: true,
     install_dir: get_option('bindir')
 )
+
+install_data(sources : 'nvme_config.json', install_dir : '/etc/nvme')
 
 conf_data = configuration_data()
 conf_data.set('NVME_REQUEST_NAME', '"xyz.openbmc_project.nvme.manager"')

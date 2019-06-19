@@ -1,8 +1,14 @@
 #include "nvme_manager.hpp"
 
+#include <string.h>
+
+#include <fstream>
+#include <phosphor-logging/elog-errors.hpp>
+#include <phosphor-logging/log.hpp>
 #include <sdbusplus/bus.hpp>
 #include <sdbusplus/sdbus.hpp>
 #include <sdbusplus/server/manager.hpp>
+using namespace phosphor::logging;
 
 int main(void)
 {
