@@ -29,10 +29,13 @@
 
 #include "console-server.h"
 
+#define EXIT_ESCAPE 2
+
 enum process_rc {
 	PROCESS_OK = 0,
 	PROCESS_ERR,
 	PROCESS_EXIT,
+	PROCESS_ESC,
 };
 
 enum esc_type {
@@ -77,7 +80,7 @@ static enum process_rc process_ssh_tty(
 				esc_state->state = '\0';
 				break;
 			}
-			return PROCESS_EXIT;
+			return PROCESS_ESC;
 		case '~':
 			if (esc_state->state != '\r') {
 				esc_state->state = '\0';
@@ -117,7 +120,7 @@ static enum process_rc process_str_tty(
 			esc_state->pos = 0;
 
 		if (esc_state->str[esc_state->pos] == '\0') {
-			prc = PROCESS_EXIT;
+			prc = PROCESS_ESC;
 			break;
 		}
 	}
@@ -239,7 +242,7 @@ int main(int argc, char *argv[])
 {
 	struct console_client _client, *client;
 	struct pollfd pollfds[2];
-	enum process_rc prc;
+	enum process_rc prc = PROCESS_OK;
 	int rc;
 
 	client = &_client;
@@ -277,7 +280,6 @@ int main(int argc, char *argv[])
 	if (rc)
 		goto out_fini;
 
-	prc = PROCESS_OK;
 	for (;;) {
 		pollfds[0].fd = client->fd_in;
 		pollfds[0].events = POLLIN;
@@ -303,6 +305,8 @@ int main(int argc, char *argv[])
 
 out_fini:
 	client_fini(client);
+	if (prc == PROCESS_ESC)
+		return EXIT_ESCAPE;
 	return rc ? EXIT_FAILURE : EXIT_SUCCESS;
 }
 
