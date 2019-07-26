@@ -11,7 +11,8 @@ check_PROGRAMS += \
 	test-ringbuffer-simple-poll \
 	test-ringbuffer-boundary-poll \
 	test-ringbuffer-poll-force \
-	test-config-parse-logsize
+	test-config-parse-logsize \
+	test-client-escape
 
 EXTRA_DIST = ringbuffer-test-utils.c
 
