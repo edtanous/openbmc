@@ -1,31 +1,3 @@
-/* IBM_PROLOG_BEGIN_TAG                                                   */
-/* This is an automatically generated prolog.                             */
-/*                                                                        */
-/* $Source: src/usr/diag/prdf/common/util/prdfBitString.C $               */
-/*                                                                        */
-/* OpenPOWER HostBoot Project                                             */
-/*                                                                        */
-/* Contributors Listed Below - COPYRIGHT 2012,2017                        */
-/* [+] International Business Machines Corp.                              */
-/*                                                                        */
-/*                                                                        */
-/* Licensed under the Apache License, Version 2.0 (the "License");        */
-/* you may not use this file except in compliance with the License.       */
-/* You may obtain a copy of the License at                                */
-/*                                                                        */
-/*     http://www.apache.org/licenses/LICENSE-2.0                         */
-/*                                                                        */
-/* Unless required by applicable law or agreed to in writing, software    */
-/* distributed under the License is distributed on an "AS IS" BASIS,      */
-/* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or        */
-/* implied. See the License for the specific language governing           */
-/* permissions and limitations under the License.                         */
-/*                                                                        */
-/* IBM_PROLOG_END_TAG                                                     */
-
-/** @file BitString.C
- *  @brief BitString and BitStringBuffer class Definitions
- */
 
 #include <prdfBitString.H>
 
@@ -33,16 +5,8 @@
 
 #include <algorithm>
 
-namespace PRDF
+namespace libhei
 {
-#if defined(PRDF_HOSTBOOT_ERRL_PLUGIN)
-namespace HOSTBOOT
-{
-#elif defined(PRDF_FSP_ERRL_PLUGIN)
-namespace FSP
-{
-#endif
-
 
 //##############################################################################
 //                             BitString class
@@ -478,32 +442,5 @@ void BitStringBuffer::initBuffer()
     if ( !isZero() ) clearAll();
 }
 
-/*--------------------------------------------------------------------*/
-/*  IO Stream Conditional Support                                     */
-/*--------------------------------------------------------------------*/
-
-#ifdef _USE_IOSTREAMS_
-
-std::ostream & operator<<(std::ostream & out,
-                          const BitString & bit_string )
-{
-  const uint32_t bit_field_length = BitString::CPU_WORD_BIT_LEN;
-  out << std::hex;
-  for(uint32_t pos = 0; pos < bit_string.getBitLen(); pos += bit_field_length)
-  {
-    uint32_t len = bit_string.getBitLen() - pos;
-    len = std::min(len,bit_field_length);
-    CPU_WORD value = bit_string.getField(pos,len);
-    out << std::setw(bit_field_length/4) << std::setfill('0') << value << " ";
-  }
-
-  return(out);
-}
-
-#endif
-
-#if defined(PRDF_HOSTBOOT_ERRL_PLUGIN) || defined(PRDF_FSP_ERRL_PLUGIN)
-} // end namespace FSP/HOSTBOOT
-#endif
-} // end namespace PRDF
+} // end namespace libhei
 
