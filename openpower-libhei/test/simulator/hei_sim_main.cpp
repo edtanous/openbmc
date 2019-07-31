@@ -1,5 +1,4 @@
-
-#include "../src/hei_isolator.hpp"
+#include "hei_isolator.hpp"
 
 int main()
 {

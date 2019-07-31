@@ -6,10 +6,11 @@ project('openpower-libhei', 'cpp',
             'cpp_std=c++11'
         ])
 
-incdir = include_directories('./')
+incdir = [ include_directories('src') ]
 
-build_simulator = get_option('tests')
+build_tests = get_option('tests')
 
-if not build_simulator.disabled()
-  subdir('sim')
+if not build_tests.disabled()
+  incdir += include_directories('test')
+  subdir('test')
 endif

@@ -1,0 +1,3 @@
+# build simulator
+subdir('simulator')
+
