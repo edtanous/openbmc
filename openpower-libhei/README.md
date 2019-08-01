@@ -5,14 +5,15 @@ This library is a common, portable code base for isolating errors reported by
 hardware registers on POWER Systems chips.
 
 The primary consumers (and requirements drivers) will be:
- * [OpenBMC Hardware Diagnostics](https://github.com/openbmc/openpower-hw-diags)
- * [POWER Systems Hostboot firmware](https://github.com/open-power/hostboot)
+ * [OpenBMC Hardware Diagnostics]
+ * [POWER Systems Hostboot firmware]
  * POWER Systems FSP firmware
 
 Core API
 --------
 
-Details TBD.
+The primary APIs are in the [Isolator class]. See the class definition for
+details on how to use it.
 
 Integration
 -----------
@@ -24,6 +25,7 @@ Details TBD.
 
 User Application Requirements and APIs
 --------------------------------------
+
  * The method to access hardware register data will vary per user application.
    Therefore, this library will declare the hardware access [user APIs], but
    each containing user application must implement the APIs for their own
@@ -40,9 +42,6 @@ User Application Requirements and APIs
    much like tracing, the user application will need to provide a specific
    header file that defines macros for assertion. Details are included in the
    [user APIs].
-
-[user APIs]: src/hei_user_interface.hpp
-[Chip Data Files]: src/chip_data/CHIP_DATA.md
 
 Environment configuration
 -------------------------
@@ -61,5 +60,11 @@ Development Notes
  * Hostboot has a very limited environment. It does not include libc or
    libstdc++. However, Hostboot has implemented select functions from those
    libraries as needed. For details, you can reference `src/include/` in the
-   [Hostboot project](https://github.com/open-power/hostboot).
+   [POWER Systems Hostboot firmware].
+
+[OpenBMC Hardware Diagnostics]: https://github.com/openbmc/openpower-hw-diags
+[POWER Systems Hostboot firmware]: https://github.com/open-power/hostboot
+[Isolator class]: src/hei_isolator.hpp
+[user APIs]: src/hei_user_interface.hpp
+[Chip Data Files]: src/chip_data/CHIP_DATA.md
 

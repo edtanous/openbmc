@@ -1,4 +1,3 @@
-
 #pragma once
 
 // The user application must define this header file with the following macros:
@@ -16,16 +15,26 @@ namespace libhei
 {
 
 /**
- *  @brief Perform a hardware read operation.
+ * @brief Perform a hardware read operation.
+ * @param i_chip This is a pointer to a user application object that represents
+ *               the target chip. The isolator does not know anything about this
+ *               object or how to use it. It is provide by the user application
+ *               via the Isolator APIs. The user application is responsible for
+ *               knowing what to do with this parameter.
  */
-void deviceRead();
+ReturnCode deviceRead( void * i_chip );
 
 #ifndef __HEI_READ_ONLY
 
 /**
- *  @brief Perform a hardware write operation.
+ * @brief Perform a hardware write operation.
+ * @param i_chip This is a pointer to a user application object that represents
+ *               the target chip. The isolator does not know anything about this
+ *               object or how to use it. It is provide by the user application
+ *               via the Isolator APIs. The user application is responsible for
+ *               knowing what to do with this parameter.
  */
-void deviceWrite();
+ReturnCode deviceWrite( void * i_chip );
 
 #endif
 
