@@ -1,3 +1,11 @@
+#pragma once
+
+/**
+* @file hei_user_defines.hpp
+* @brief The purpose of this file is to create common defines that
+*        will be used throughout this library.
+**/
+
 #include <stdio.h>
 #include <assert.h>
 
@@ -15,4 +23,3 @@
 
 #define HEI_ASSERT( expression ) \
   assert( expression );
-
