@@ -45,6 +45,8 @@ AC_CONFIG_FILES([Makefile.generated],
     [${srcdir}/gen_makefile.sh ${srcdir} "$myChips" > Makefile.generated],
     [myChips="$CHIPS"])
 
+AC_CHECK_LIB([pdbg], [thread_sreset_all])
+
 PKG_CHECK_MODULES([SYSTEMD], [libsystemd >= 221])
 PKG_CHECK_MODULES([PHOSPHOR_LOGGING], [phosphor-logging])
 PKG_CHECK_MODULES([PHOSPHOR_DBUS_INTERFACES], [phosphor-dbus-interfaces])
@@ -68,5 +70,4 @@ AS_IF([test "x$with_systemdsystemunitdir" != "xno"],
 AC_CONFIG_FILES([Makefile test/Makefile])
 AC_CONFIG_FILES([pcie-poweroff@.service])
 AC_CONFIG_FILES([xyz.openbmc_project.Control.Host.NMI.service])
-AC_CONFIG_FILES([nmi.service])
 AC_OUTPUT

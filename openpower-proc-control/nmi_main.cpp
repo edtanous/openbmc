@@ -16,6 +16,8 @@
 
 #include "nmi_interface.hpp"
 
+#include <libpdbg.h>
+
 #include <sdbusplus/bus.hpp>
 
 int main(int argc, char* argv[])
@@ -24,6 +26,8 @@ int main(int argc, char* argv[])
     constexpr auto BUSPATH_NMI = "/xyz/openbmc_project/control/host0/nmi";
     constexpr auto BUSNAME_NMI = "xyz.openbmc_project.Control.Host.NMI";
     auto bus = sdbusplus::bus::new_default();
+
+    pdbg_targets_init(NULL);
 
     // Add sdbusplus ObjectManager
     sdbusplus::server::manager::manager objManager(bus, BUSPATH_NMI);
