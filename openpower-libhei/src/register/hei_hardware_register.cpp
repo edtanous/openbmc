@@ -130,7 +130,7 @@ uint32_t ScomRegister::ForceRead() const
         }
 
         // Read hardware.
-        o_rc = Access( readCache(), MopRegisterAccess::READ );
+        o_rc = Access( readCache(), RegisterAccess::READ );
         if ( SUCCESS != o_rc )
         {
             // The read failed. Remove the entry from the cache so a subsequent
@@ -176,7 +176,7 @@ uint32_t ScomRegister::Write()
         }
 
         // Write hardware.
-        o_rc = Access( readCache(), MopRegisterAccess::WRITE );
+        o_rc = Access( readCache(), RegisterAccess::WRITE );
 
     } while (0);
 
@@ -188,7 +188,7 @@ uint32_t ScomRegister::Write()
 //------------------------------------------------------------------------------
 
 uint32_t ScomRegister::Access( BitString & bs,
-                               MopRegisterAccess::Operation op ) const
+                               RegisterAccess::Operation op ) const
 {
     int32_t l_rc = SCR_ACCESS_FAILED;
     TARGETING::TargetHandle_t i_pchipTarget = getChip()->GetChipHandle();

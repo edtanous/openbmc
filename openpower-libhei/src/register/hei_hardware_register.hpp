@@ -12,7 +12,7 @@
 
 #include <iipscr.h>
 #include <iipbits.h>
-#include <iipMopRegisterAccess.h>
+#include <prdfHomRegisterAccess.H>
 #include <prdfTrace.H>
 
 namespace libhei
@@ -175,7 +175,7 @@ class ScomRegister : public SCAN_COMM_REGISTER_CLASS
      * @return    [SUCCESS|FAIL]
      */
     uint32_t Access( BitString & bs,
-                     MopRegisterAccess::Operation op )const;
+                     RegisterAccess::Operation op )const;
 
     /**
      * @brief  Returns rulechip pointer associated with the register
