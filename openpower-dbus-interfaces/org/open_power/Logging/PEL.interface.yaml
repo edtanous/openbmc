@@ -6,7 +6,7 @@ methods:
       Returns a file desciptor to a PEL.
     parameters:
       - name: pelID
-        type: int32
+        type: uint32
         description: >
           The PEL log ID of the PEL to retrieve.
     returns:
@@ -23,7 +23,7 @@ methods:
       Returns PEL data based on the OpenBMC event log ID.
     parameters:
       - name: obmcLogID
-        type: int32
+        type: uint32
         description: >
           The OpenBMC event log ID of the PEL to retrieve.
     returns:
