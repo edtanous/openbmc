@@ -1,6 +1,6 @@
 sim_sources = [
     'hei_sim_main.cpp',
-    '../../src/hei_isolator.cpp'
+    '../../src/isolator/hei_isolator.cpp'
 ]
 
 sim = executable('simulator', sim_sources, \

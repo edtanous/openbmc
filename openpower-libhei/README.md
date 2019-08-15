@@ -5,15 +5,14 @@ This library is a common, portable code base for isolating errors reported by
 hardware registers on POWER Systems chips.
 
 The primary consumers (and requirements drivers) will be:
- * [OpenBMC Hardware Diagnostics]
- * [POWER Systems Hostboot firmware]
+ * [OpenBMC Hardware Diagnostics][]
+ * [POWER Systems Hostboot firmware][]
  * POWER Systems FSP firmware
 
 Core API
 --------
 
-The primary APIs are in the [Isolator class]. See the class definition for
-details on how to use it.
+See the [primary API definitions][] for details on how to use this library.
 
 Integration
 -----------
@@ -27,21 +26,21 @@ User Application Requirements and APIs
 --------------------------------------
 
  * The method to access hardware register data will vary per user application.
-   Therefore, this library will declare the hardware access [user APIs], but
+   Therefore, this library will declare the hardware access [user APIs][], but
    each containing user application must implement the APIs for their own
    environment.
  * This library will not contain data regarding hardware specific information.
    Instead, that information will be provided by the user application in the
-   form of the [Chip Data Files].
+   form of the [Chip Data Files][].
  * Tracing, or logging, methods will vary per user application. Specifically,
    FSP and Hostboot firmware utilize specialized macros as a mechanism to save
    code image space. Therefore, the user application will need to provide a
    specific header file that defines these macros. Details are included in the
-   [user APIs].
+   [user APIs][].
  * Methods to assert programming bugs will vary per user application. Therefore,
    much like tracing, the user application will need to provide a specific
    header file that defines macros for assertion. Details are included in the
-   [user APIs].
+   [user APIs][].
 
 Environment configuration
 -------------------------
@@ -60,11 +59,11 @@ Development Notes
  * Hostboot has a very limited environment. It does not include libc or
    libstdc++. However, Hostboot has implemented select functions from those
    libraries as needed. For details, you can reference `src/include/` in the
-   [POWER Systems Hostboot firmware].
+   [POWER Systems Hostboot firmware][].
 
 [OpenBMC Hardware Diagnostics]: https://github.com/openbmc/openpower-hw-diags
 [POWER Systems Hostboot firmware]: https://github.com/open-power/hostboot
-[Isolator class]: src/hei_isolator.hpp
+[primary API definitions]: src/hei_main.hpp
 [user APIs]: src/hei_user_interface.hpp
 [Chip Data Files]: src/chip_data/CHIP_DATA.md
 

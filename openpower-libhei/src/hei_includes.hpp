@@ -10,5 +10,5 @@
 #include <hei_user_defines.hpp> // For HEI_ASSERT, HEI_INF, and HEI_ERR
 
 // Internal includes
-#include "hei_return_code.hpp"
+#include <hei_return_code.hpp>
 

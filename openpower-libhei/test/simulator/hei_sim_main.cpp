@@ -1,19 +1,19 @@
-#include "hei_isolator.hpp"
+#include <hei_main.hpp>
 
 int main()
 {
-    libhei::Isolator iso;
-
     void * buffer = nullptr;
     size_t sz_buffer = 0;
 
-    iso.initialize( buffer, sz_buffer );
+    libhei::initialize( buffer, sz_buffer );
 
     void * chip = nullptr;
     libhei::ChipType_t chipType = 0;
-    libhei::IsolationData isoData;
+    libhei::IsolationData isoData { chip, chipType };
 
-    iso.isolate( chip, chipType, isoData );
+    libhei::isolate( isoData );
+
+    libhei::uninitialize();
 
     return 0;
 }
