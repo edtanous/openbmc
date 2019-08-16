@@ -1,7 +1,10 @@
 #pragma once
 
-// The purpose of this file is to include common headers that will be used
-// throughout this library.
+/**
+@file hei_includes.hpp
+@brief The purpose of this file is to include common headers that will be used
+throughout this library.
+*/
 
 // Standard library includes
 #include <stdint.h>
