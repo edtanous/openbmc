@@ -24,8 +24,9 @@
 #ifndef __PRDF_REGISTER_
 #define __PRDF_REGISTER_
 
-#include <prdfScomRegister.H>
-#include <prdfBitString.H>
+#include <register/hei_hardware_register.hpp>
+#include <util/hei_bit_string.hpp>
+
 #include <prdfPlatServices.H>
 
 /**

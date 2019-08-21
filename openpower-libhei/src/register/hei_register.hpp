@@ -17,11 +17,11 @@
 //  Includes
 //----------------------------------------------------------------------
 
-#include <iipbits.h>
-#include <iipconst.h>
+#include <hei_includes.hpp>
+#include <util/hei_bit_string.hpp>
+
 #include <iipsdbug.h>
 #include <prdfMain.H>
-#include <prdfTrace.H>
 
 namespace libhei
 {

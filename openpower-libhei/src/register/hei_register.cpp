@@ -15,11 +15,9 @@
 /*  Includes                                                          */
 /*--------------------------------------------------------------------*/
 
-#include <iipbits.h>
-#include <iipscr.h>
-#include <iipconst.h>
-
-#include <prdfAssert.h>
+#include <hei_includes.hpp>
+#include <register/hei_register.hpp>
+#include <util/hei_bit_string.hpp>
 
 namespace libhei
 {

@@ -23,8 +23,9 @@
 /*                                                                        */
 /* IBM_PROLOG_END_TAG                                                     */
 
+#include <hei_includes.hpp>
+
 #include <prdfRegisterCache.H>
-#include <iipconst.h>
 
 namespace PRDF
 {

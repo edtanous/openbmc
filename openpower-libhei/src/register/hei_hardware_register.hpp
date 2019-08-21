@@ -10,10 +10,11 @@
  * persist as long as prd object model survives.
  */
 
-#include <iipscr.h>
-#include <iipbits.h>
+#include <hei_includes.hpp>
+#include <register/hei_register.hpp>
+#include <util/hei_bit_string.hpp>
+
 #include <prdfHomRegisterAccess.H>
-#include <prdfTrace.H>
 
 namespace libhei
 {

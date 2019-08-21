@@ -2,7 +2,8 @@
 
 #include <algorithm>
 
-#include <iipscr.h>
+#include <register/hei_register.hpp>
+
 #include <prdrCommon.H>
 
 namespace libhei

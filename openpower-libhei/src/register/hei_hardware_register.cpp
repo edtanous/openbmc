@@ -9,10 +9,11 @@
 //  Includes
 //----------------------------------------------------------------------
 
+#include <hei_includes.hpp>
+#include <register/hei_hardware_register.hpp>
+#include <util/hei_bit_string.hpp>
+
 #include <iipchip.h>
-#include <prdfScomRegister.H>
-#include <iipconst.h>
-#include <iipbits.h>
 #include <prdfMain.H>
 #include <prdfRasServices.H>
 #include <prdfRegisterCache.H>

@@ -30,15 +30,13 @@
 //----------------------------------------------------------------------
 //  Includes
 //----------------------------------------------------------------------
-#define prdfScanFacility_C
 
-#include <iipscr.h>
+#include <register/hei_register.hpp>
+
 #include <prdfScanFacility.H>
 #include <prdfFlyWeight.C>
 #include <prdfFlyWeightS.C>
 #include <prdfScomRegisterAccess.H>
-
-#undef prdfScanFacility_C
 
 namespace PRDF
 {

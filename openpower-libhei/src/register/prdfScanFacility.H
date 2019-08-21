@@ -35,13 +35,14 @@
 // Includes
 //--------------------------------------------------------------------
 
+#include <register/hei_hardware_register.hpp>
+#include <register/hei_operator_register.hpp>
+
 #include <prdfFlyWeight.H>
 #include <prdfFlyWeightS.H>
 #include <vector>
 #include <prdfHomRegisterAccess.H>
-#include <prdfScomRegister.H>
 #include <prdfScomRegisterAccess.H>
-#include <prdfOperatorRegister.H>
 #include <prdfPlatServices.H>
 
 namespace PRDF

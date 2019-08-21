@@ -29,13 +29,13 @@
 /** @file prdfRegisterCache.H */
 
 #include <map>
-#include <iipbits.h>
+
+#include <util/hei_bit_string.hpp>
+
 #include <prdfGlobal.H>
 #include <prdfScanFacility.H>
 #include <prdfScomRegisterAccess.H>
 #include <prdfTargetFwdRef.H>
-
-class BitString;
 
 namespace PRDF
 {

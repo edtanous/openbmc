@@ -30,24 +30,21 @@
 //----------------------------------------------------------------------
 //  Includes
 //----------------------------------------------------------------------
-#define prdfHomRegisterAccess_C
+
+#include <hei_includes.hpp>
+#include <util/hei_bit_string.hpp>
 
 #include <prdfHomRegisterAccess.H>
 #include <prdf_service_codes.H>
-#include <iipbits.h>
 #include <prdfMain.H>
 #include <prdfPlatServices.H>
 #include <prdfGlobal.H>
 #include <prdfErrlUtil.H>
-#include <prdfTrace.H>
 
 #ifdef __HOSTBOOT_RUNTIME
 #include <pm_common_ext.H>
 #include <p9_stop_api.H>
 #endif
-
-#undef prdfHomRegisterAccess_C
-
 
 using namespace TARGETING;
 
