@@ -61,7 +61,7 @@ namespace libhei
  *                      - true, the function will delete the previous isolation
  *                        objects for this chip type and reinitialize.
  *
- * @return RC_SUCCESS or RC_CDF_INVALID or RC_CDF_INITIALIZED
+ * @return RC_SUCCESS or RC_CHIP_DATA_INVALID or RC_CHIP_DATA_INITIALIZED
  */
 inline ReturnCode initialize( void * i_buffer, size_t i_bufferSize,
                               bool i_forceInit = false )

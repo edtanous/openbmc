@@ -35,12 +35,12 @@ User Application Requirements and APIs
  * Tracing, or logging, methods will vary per user application. Specifically,
    FSP and Hostboot firmware utilize specialized macros as a mechanism to save
    code image space. Therefore, the user application will need to provide a
-   specific header file that defines these macros. Details are included in the
-   [user APIs][].
+   specific header file that defines these macros. Details are in the
+   [common includes header][].
  * Methods to assert programming bugs will vary per user application. Therefore,
    much like tracing, the user application will need to provide a specific
    header file that defines macros for assertion. Details are included in the
-   [user APIs][].
+   [common includes header][].
 
 Environment configuration
 -------------------------
@@ -65,5 +65,6 @@ Development Notes
 [POWER Systems Hostboot firmware]: https://github.com/open-power/hostboot
 [primary API definitions]: src/hei_main.hpp
 [user APIs]: src/hei_user_interface.hpp
+[common includes header]: src/hei_includes.hpp
 [Chip Data Files]: src/chip_data/CHIP_DATA.md
 
