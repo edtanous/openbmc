@@ -121,7 +121,7 @@ void CaptureData::AddDataElement( TargetHandle_t i_trgt, int i_scomId,
 //------------------------------------------------------------------------------
 
 void CaptureData::Add( TargetHandle_t i_trgt, int32_t i_scomId,
-                       SCAN_COMM_REGISTER_CLASS & io_scr,
+                       Register & io_scr,
                        Place i_place, RegType i_type )
 {
     if ( SUCCESS == io_scr.Read() )

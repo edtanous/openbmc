@@ -75,48 +75,48 @@ public:
     * @param     i_regOp          operations supported for given register
     * @return   returns reference to flyweight object from factory
     */
-   SCAN_COMM_REGISTER_CLASS & GetScanCommRegister( uint64_t address,
+   Register & GetScanCommRegister( uint64_t address,
                                 uint32_t i_scomLength, TARGETING::TYPE i_type,
-                                SCAN_COMM_REGISTER_CLASS::AccessLevel i_regOp );
+                                Register::AccessLevel i_regOp );
 
   /**
    * @brief  Get a register that bitwise inverts the bitstring of a register
    *         when read or written to
-   * @param  SCAN_COMM_REGISTER_CLASS source
+   * @param  Register source
    * @post   Only one instance of the register with this SCR parameter will
    *         exist
    */
-  SCAN_COMM_REGISTER_CLASS & GetNotRegister(SCAN_COMM_REGISTER_CLASS & i_arg);
+  Register & GetNotRegister(Register & i_arg);
 
   /**
    * @brief  Get a register that bitwise left shift the bitstring of a register
    *         when read or written to
-   * @param  SCAN_COMM_REGISTER_CLASS source
+   * @param  Register source
    * @post   Only one instance of the register with this SCR parameter and
    *         amount will exist
    */
-  SCAN_COMM_REGISTER_CLASS & GetLeftShiftRegister(
-                        SCAN_COMM_REGISTER_CLASS & i_arg, uint16_t i_amount);
+  Register & GetLeftShiftRegister(
+                        Register & i_arg, uint16_t i_amount);
 
   /**
    * @brief Get a register that bitwise right shift the bitstring of a register
    *        when read or written to
-   * @param SCAN_COMM_REGISTER_CLASS source
+   * @param Register source
    * @post  Only one instance of the register with this SCR parameter and amount
    * @      will exist
    */
-  SCAN_COMM_REGISTER_CLASS & GetRightShiftRegister(
-                        SCAN_COMM_REGISTER_CLASS & i_arg, uint16_t i_amount);
+  Register & GetRightShiftRegister(
+                        Register & i_arg, uint16_t i_amount);
 
   /**
    * @brief  Get a register for the summary construct
-   * @param  SCAN_COMM_REGISTER_CLASS source
+   * @param  Register source
    * @param  uint16_t i_bit  bit to set if any attentions found in i_arg
    * @post   Only one instance of the register with this SCR parameter and
    *         amount will exist
    */
-  SCAN_COMM_REGISTER_CLASS & GetSummaryRegister(
-                        SCAN_COMM_REGISTER_CLASS & i_arg, uint16_t i_bit);
+  Register & GetSummaryRegister(
+                        Register & i_arg, uint16_t i_bit);
 
   /**
    * @brief  Get a register that bit-wise ANDs the bitstring of two register
@@ -124,8 +124,8 @@ public:
    * @param  The 2 SCR 's to AND
    * @posrt  Only one instance of the register with these SCRs will exist
    */
-  SCAN_COMM_REGISTER_CLASS & GetAndRegister(SCAN_COMM_REGISTER_CLASS & i_left,
-                                            SCAN_COMM_REGISTER_CLASS & i_right);
+  Register & GetAndRegister(Register & i_left,
+                                            Register & i_right);
 
   /**
    * @brief  Get a register that bitwise ORs the bitstrings of two register when
@@ -133,20 +133,20 @@ public:
    * @param  the 2 SCR's to OR
    * @post   Only one instance of the register with these SCR's will exist
    */
-  SCAN_COMM_REGISTER_CLASS & GetOrRegister(SCAN_COMM_REGISTER_CLASS & i_left,
-                                           SCAN_COMM_REGISTER_CLASS & i_right);
+  Register & GetOrRegister(Register & i_left,
+                                           Register & i_right);
 
   /**
    * @brief  Get a AttnTypeRegister
    * @params 5 pointers to scr Registers
    * @post only one instance of the register with these SCR's will exist
    */
-  SCAN_COMM_REGISTER_CLASS & GetAttnTypeRegister(
-                                    SCAN_COMM_REGISTER_CLASS * i_check,
-                                    SCAN_COMM_REGISTER_CLASS * i_recov,
-                                    SCAN_COMM_REGISTER_CLASS * i_special,
-                                    SCAN_COMM_REGISTER_CLASS * i_proccs,
-                                    SCAN_COMM_REGISTER_CLASS * i_hostattn );
+  Register & GetAttnTypeRegister(
+                                    Register * i_check,
+                                    Register * i_recov,
+                                    Register * i_special,
+                                    Register * i_proccs,
+                                    Register * i_hostattn );
 
   /**
    * @brief Get a PrdfConstantRegister
@@ -154,7 +154,7 @@ public:
    * @post only one instance of the register with this BIT_STRING value will
    * exist.
    */
-  SCAN_COMM_REGISTER_CLASS & GetConstantRegister(const BitStringBuffer & i_val);
+  Register & GetConstantRegister(const BitStringBuffer & i_val);
   /**
    * @brief Get a plugin  register
    * @param Reference to target less flyweight object
@@ -162,8 +162,8 @@ public:
    * @post only one instance of the register with this BIT_STRING value will
    * exist.
    */
-  SCAN_COMM_REGISTER_CLASS & GetPluginRegister(
-                                SCAN_COMM_REGISTER_CLASS & i_flyweight,
+  Register & GetPluginRegister(
+                                Register & i_flyweight,
                                 ExtensibleChip & i_RuleChip );
   /**
    * @brief Delete all the plugin  register

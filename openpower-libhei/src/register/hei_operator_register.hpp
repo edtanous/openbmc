@@ -9,17 +9,17 @@
 namespace libhei
 {
 
-class NotRegister : public SCAN_COMM_REGISTER_CLASS
+class NotRegister : public Register
 {
   public:
     NotRegister() :
-        SCAN_COMM_REGISTER_CLASS( ), iv_child(NULL), iv_iBS(0)
+        Register( ), iv_child(NULL), iv_iBS(0)
     {
         iv_bs = &iv_iBS;
     }
 
-    NotRegister(SCAN_COMM_REGISTER_CLASS & i_arg) :
-        SCAN_COMM_REGISTER_CLASS( ), iv_child(&i_arg),
+    NotRegister(Register & i_arg) :
+        Register( ), iv_child(&i_arg),
         iv_iBS(i_arg.GetBitLength())
     {
         iv_bs = &iv_iBS;
@@ -60,23 +60,23 @@ class NotRegister : public SCAN_COMM_REGISTER_CLASS
     void SetBitString(const BitString *) {}
 
   private:
-    SCAN_COMM_REGISTER_CLASS * iv_child;
+    Register * iv_child;
 
     BitStringBuffer * iv_bs;
     BitStringBuffer iv_iBS;
 };
 
-class SummaryRegister : public SCAN_COMM_REGISTER_CLASS
+class SummaryRegister : public Register
 {
   public:
     SummaryRegister() :
-        SCAN_COMM_REGISTER_CLASS( ), iv_child(NULL), iv_amount(0), iv_iBS(0)
+        Register( ), iv_child(NULL), iv_amount(0), iv_iBS(0)
     {
         iv_bs = &iv_iBS;
     }
 
-    SummaryRegister(SCAN_COMM_REGISTER_CLASS & i_arg, uint16_t i_amount) :
-        SCAN_COMM_REGISTER_CLASS( ), iv_child(&i_arg), iv_amount(i_amount),
+    SummaryRegister(Register & i_arg, uint16_t i_amount) :
+        Register( ), iv_child(&i_arg), iv_amount(i_amount),
         iv_iBS(i_arg.GetBitLength())
     {
         iv_bs = &iv_iBS;
@@ -152,24 +152,24 @@ class SummaryRegister : public SCAN_COMM_REGISTER_CLASS
     void SetBitString(const BitString *) {}
 
   private:
-    SCAN_COMM_REGISTER_CLASS * iv_child;
+    Register * iv_child;
     uint16_t iv_amount;
 
     BitStringBuffer * iv_bs;
     BitStringBuffer iv_iBS;
 };
 
-class LeftShiftRegister : public SCAN_COMM_REGISTER_CLASS
+class LeftShiftRegister : public Register
 {
   public:
     LeftShiftRegister() :
-        SCAN_COMM_REGISTER_CLASS( ), iv_child(NULL), iv_amount(0), iv_iBS(0)
+        Register( ), iv_child(NULL), iv_amount(0), iv_iBS(0)
     {
         iv_bs = &iv_iBS;
     }
 
-    LeftShiftRegister(SCAN_COMM_REGISTER_CLASS & i_arg, uint16_t i_amount) :
-        SCAN_COMM_REGISTER_CLASS( ), iv_child(&i_arg), iv_amount(i_amount),
+    LeftShiftRegister(Register & i_arg, uint16_t i_amount) :
+        Register( ), iv_child(&i_arg), iv_amount(i_amount),
         iv_iBS(i_arg.GetBitLength())
     {
         iv_bs = &iv_iBS;
@@ -219,24 +219,24 @@ class LeftShiftRegister : public SCAN_COMM_REGISTER_CLASS
     void SetBitString(const BitString *) {}
 
   private:
-    SCAN_COMM_REGISTER_CLASS * iv_child;
+    Register * iv_child;
     uint16_t iv_amount;
 
     BitStringBuffer * iv_bs;
     BitStringBuffer iv_iBS;
 };
 
-class RightShiftRegister : public SCAN_COMM_REGISTER_CLASS
+class RightShiftRegister : public Register
 {
   public:
     RightShiftRegister() :
-        SCAN_COMM_REGISTER_CLASS( ), iv_child(NULL), iv_amount(0), iv_iBS(0)
+        Register( ), iv_child(NULL), iv_amount(0), iv_iBS(0)
     {
         iv_bs = &iv_iBS;
     }
 
-    RightShiftRegister(SCAN_COMM_REGISTER_CLASS & i_arg, uint16_t i_amount) :
-        SCAN_COMM_REGISTER_CLASS( ), iv_child(&i_arg), iv_amount(i_amount),
+    RightShiftRegister(Register & i_arg, uint16_t i_amount) :
+        Register( ), iv_child(&i_arg), iv_amount(i_amount),
         iv_iBS(i_arg.GetBitLength())
     {
         iv_bs = &iv_iBS;
@@ -286,7 +286,7 @@ class RightShiftRegister : public SCAN_COMM_REGISTER_CLASS
     void SetBitString(const BitString *) {}
 
   private:
-    SCAN_COMM_REGISTER_CLASS * iv_child;
+    Register * iv_child;
     uint16_t iv_amount;
 
     BitStringBuffer * iv_bs;
@@ -294,18 +294,18 @@ class RightShiftRegister : public SCAN_COMM_REGISTER_CLASS
 };
 
 
-class AndRegister : public SCAN_COMM_REGISTER_CLASS
+class AndRegister : public Register
 {
   public:
     AndRegister() :
-        SCAN_COMM_REGISTER_CLASS( ), iv_left(NULL), iv_right(NULL), iv_iBS(0)
+        Register( ), iv_left(NULL), iv_right(NULL), iv_iBS(0)
     {
         iv_bs = &iv_iBS;
     }
 
-    AndRegister( SCAN_COMM_REGISTER_CLASS & i_left,
-                 SCAN_COMM_REGISTER_CLASS & i_right ) :
-        SCAN_COMM_REGISTER_CLASS( ), iv_left(&i_left), iv_right(&i_right),
+    AndRegister( Register & i_left,
+                 Register & i_right ) :
+        Register( ), iv_left(&i_left), iv_right(&i_right),
         iv_iBS(std::min(i_left.GetBitLength(),
                         i_right.GetBitLength()))
     {
@@ -368,26 +368,26 @@ class AndRegister : public SCAN_COMM_REGISTER_CLASS
     void SetBitString(const BitString *) {}
 
   private:
-    SCAN_COMM_REGISTER_CLASS * iv_left;
-    SCAN_COMM_REGISTER_CLASS * iv_right;
+    Register * iv_left;
+    Register * iv_right;
 
     BitStringBuffer * iv_bs;
     BitStringBuffer iv_iBS;
 };
 
-class OrRegister : public SCAN_COMM_REGISTER_CLASS
+class OrRegister : public Register
 {
   public:
 
     OrRegister() :
-        SCAN_COMM_REGISTER_CLASS( ), iv_left(NULL), iv_right(NULL), iv_iBS(0)
+        Register( ), iv_left(NULL), iv_right(NULL), iv_iBS(0)
     {
         iv_bs = &iv_iBS;
     }
 
-    OrRegister( SCAN_COMM_REGISTER_CLASS & i_left,
-                SCAN_COMM_REGISTER_CLASS & i_right ) :
-        SCAN_COMM_REGISTER_CLASS( ), iv_left(&i_left), iv_right(&i_right),
+    OrRegister( Register & i_left,
+                Register & i_right ) :
+        Register( ), iv_left(&i_left), iv_right(&i_right),
         iv_iBS(std::min(i_left.GetBitLength(),
                         i_right.GetBitLength()))
     {
@@ -451,18 +451,18 @@ class OrRegister : public SCAN_COMM_REGISTER_CLASS
     void SetBitString(const BitString *) {}
 
   private:
-    SCAN_COMM_REGISTER_CLASS * iv_left;
-    SCAN_COMM_REGISTER_CLASS * iv_right;
+    Register * iv_left;
+    Register * iv_right;
 
     BitStringBuffer * iv_bs;
     BitStringBuffer iv_iBS;
 };
 
-class NullRegister : public SCAN_COMM_REGISTER_CLASS
+class NullRegister : public Register
 {
   public:
     NullRegister(int size) :
-        SCAN_COMM_REGISTER_CLASS( ), iv_iBS(size)
+        Register( ), iv_iBS(size)
     {}
 
     NullRegister & operator=(const NullRegister & r)
@@ -494,23 +494,23 @@ class NullRegister : public SCAN_COMM_REGISTER_CLASS
 
 };
 
-class AttnTypeRegister : public SCAN_COMM_REGISTER_CLASS
+class AttnTypeRegister : public Register
 {
   public:
     AttnTypeRegister() :
-        SCAN_COMM_REGISTER_CLASS( ), iv_check(&cv_null), iv_recov(&cv_null),
+        Register( ), iv_check(&cv_null), iv_recov(&cv_null),
         iv_special(&cv_null), iv_proccs(&cv_null), iv_hostattn(&cv_null),
         iv_iBS(0)
     {
         iv_bs = &iv_iBS;
     }
 
-    AttnTypeRegister( SCAN_COMM_REGISTER_CLASS *i_check,
-                      SCAN_COMM_REGISTER_CLASS *i_recov,
-                      SCAN_COMM_REGISTER_CLASS *i_special,
-                      SCAN_COMM_REGISTER_CLASS *i_proccs,
-                      SCAN_COMM_REGISTER_CLASS *i_hostattn ) :
-        SCAN_COMM_REGISTER_CLASS( ),
+    AttnTypeRegister( Register *i_check,
+                      Register *i_recov,
+                      Register *i_special,
+                      Register *i_proccs,
+                      Register *i_hostattn ) :
+        Register( ),
         iv_check(    NULL == i_check    ? &cv_null : i_check),
         iv_recov(    NULL == i_recov    ? &cv_null : i_recov),
         iv_special(  NULL == i_special  ? &cv_null : i_special),
@@ -616,25 +616,25 @@ class AttnTypeRegister : public SCAN_COMM_REGISTER_CLASS
   private:
     static NullRegister cv_null;
 
-    SCAN_COMM_REGISTER_CLASS * iv_check;
-    SCAN_COMM_REGISTER_CLASS * iv_recov;
-    SCAN_COMM_REGISTER_CLASS * iv_special;
-    SCAN_COMM_REGISTER_CLASS * iv_proccs;
-    SCAN_COMM_REGISTER_CLASS * iv_hostattn;
+    Register * iv_check;
+    Register * iv_recov;
+    Register * iv_special;
+    Register * iv_proccs;
+    Register * iv_hostattn;
 
     BitStringBuffer * iv_bs;
     BitStringBuffer iv_iBS;
 };
 
-class ConstantRegister : public SCAN_COMM_REGISTER_CLASS
+class ConstantRegister : public Register
 {
   public:
     ConstantRegister() :
-        SCAN_COMM_REGISTER_CLASS( ), iv_iBS(0)
+        Register( ), iv_iBS(0)
     {}
 
     ConstantRegister( const BitStringBuffer & i_arg ) :
-        SCAN_COMM_REGISTER_CLASS( ), iv_iBS(i_arg)
+        Register( ), iv_iBS(i_arg)
     {}
 
     ConstantRegister & operator=(const ConstantRegister & r)

@@ -60,7 +60,7 @@ class ScomRegisterAccess : public ScomRegister
      * @param     i_Register     Reference to flyweight register
      * @param     i_pchip        RuleChip associated with register
      */
-    ScomRegisterAccess( const SCAN_COMM_REGISTER_CLASS & i_Register,
+    ScomRegisterAccess( const Register & i_Register,
                         ExtensibleChip* i_pchip );
     /**
      * @brief     constructor

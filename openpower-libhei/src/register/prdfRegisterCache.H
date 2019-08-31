@@ -79,7 +79,7 @@ class RegDataCache
      * @return A reference to the data buffer associated with the register.
      */
     BitString & read( ExtensibleChip * i_chip,
-                             const SCAN_COMM_REGISTER_CLASS * i_reg );
+                             const Register * i_reg );
 
     /**
      * @brief Flushes entire contents from cache.
@@ -92,7 +92,7 @@ class RegDataCache
      * @param i_pRegister   points to the register to be flushed from cache.
      */
     void flush( ExtensibleChip* i_pChip,
-                const SCAN_COMM_REGISTER_CLASS * i_pRegister );
+                const Register * i_pRegister );
     /**
      * @brief Queries if a specific entry exist in cache.
      * @param i_pChip       The rulechip  associated with the register.
@@ -100,7 +100,7 @@ class RegDataCache
      * @return pointer to cache entry associated with a given register
      */
      BitString * queryCache( ExtensibleChip* i_pChip,
-                            const SCAN_COMM_REGISTER_CLASS * i_pRegister )const;
+                            const Register * i_pRegister )const;
     /**
      * @brief Queries if a specific entry exist in cache.
      * @param i_scomAccessKey Reference to register to be queried.

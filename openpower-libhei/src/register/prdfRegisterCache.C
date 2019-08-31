@@ -47,7 +47,7 @@ RegDataCache::~RegDataCache()
 //------------------------------------------------------------------------------
 
 BitString & RegDataCache::read( ExtensibleChip * i_chip,
-                                       const SCAN_COMM_REGISTER_CLASS * i_reg )
+                                       const Register * i_reg )
 {
     ScomRegisterAccess l_scomAccessKey ( *i_reg, i_chip );
     BitString * l_pBitString = queryCache( l_scomAccessKey );
@@ -81,7 +81,7 @@ void RegDataCache::flush()
 //------------------------------------------------------------------------------
 
 void RegDataCache::flush( ExtensibleChip* i_pChip,
-                          const SCAN_COMM_REGISTER_CLASS * i_pRegister )
+                          const Register * i_pRegister )
 {
     ScomRegisterAccess l_scomAccessKey ( *i_pRegister,i_pChip );
     // Find the entries associated with the given target in the map
@@ -99,7 +99,7 @@ void RegDataCache::flush( ExtensibleChip* i_pChip,
 
 BitString * RegDataCache::queryCache(
                             ExtensibleChip* i_pChip,
-                            const SCAN_COMM_REGISTER_CLASS * i_pRegister )const
+                            const Register * i_pRegister )const
 {
     ScomRegisterAccess l_scomAccessKey ( *i_pRegister,i_pChip );
     return queryCache( l_scomAccessKey );

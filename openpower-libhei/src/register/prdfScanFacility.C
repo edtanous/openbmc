@@ -70,9 +70,9 @@ ScanFacility & ScanFacility::Access(void)
   return sf;
 }
 //-----------------------------------------------------------------------------
-SCAN_COMM_REGISTER_CLASS & ScanFacility::GetScanCommRegister( uint64_t address,
+Register & ScanFacility::GetScanCommRegister( uint64_t address,
                                 uint32_t i_scomLength, TARGETING::TYPE i_type,
-                                SCAN_COMM_REGISTER_CLASS::AccessLevel i_regOp )
+                                Register::AccessLevel i_regOp )
 {
     /* i_regOp is not used to determine uniqueness of the object for following
       reason -
@@ -91,8 +91,8 @@ SCAN_COMM_REGISTER_CLASS & ScanFacility::GetScanCommRegister( uint64_t address,
 
 //------------------------------------------------------------------------------
 
-SCAN_COMM_REGISTER_CLASS &  ScanFacility::GetNotRegister(
-                                        SCAN_COMM_REGISTER_CLASS & i_arg )
+Register &  ScanFacility::GetNotRegister(
+                                        Register & i_arg )
 {
   NotRegister r(i_arg);
   return iv_notRegFw.get(r);
@@ -100,8 +100,8 @@ SCAN_COMM_REGISTER_CLASS &  ScanFacility::GetNotRegister(
 
 //-----------------------------------------------------------------------------
 
-SCAN_COMM_REGISTER_CLASS &  ScanFacility::GetLeftShiftRegister(
-                                    SCAN_COMM_REGISTER_CLASS & i_arg,
+Register &  ScanFacility::GetLeftShiftRegister(
+                                    Register & i_arg,
                                      uint16_t i_amount )
 {
   LeftShiftRegister r(i_arg, i_amount);
@@ -110,8 +110,8 @@ SCAN_COMM_REGISTER_CLASS &  ScanFacility::GetLeftShiftRegister(
 
 //-----------------------------------------------------------------------------
 
-SCAN_COMM_REGISTER_CLASS &  ScanFacility::GetSummaryRegister(
-                                    SCAN_COMM_REGISTER_CLASS & i_arg,
+Register &  ScanFacility::GetSummaryRegister(
+                                    Register & i_arg,
                                      uint16_t i_bit )
 {
   SummaryRegister r(i_arg, i_bit);
@@ -120,8 +120,8 @@ SCAN_COMM_REGISTER_CLASS &  ScanFacility::GetSummaryRegister(
 
 //------------------------------------------------------------------------------
 
-SCAN_COMM_REGISTER_CLASS &  ScanFacility::GetRightShiftRegister(
-                                SCAN_COMM_REGISTER_CLASS & i_arg,
+Register &  ScanFacility::GetRightShiftRegister(
+                                Register & i_arg,
                                 uint16_t i_amount )
 {
   RightShiftRegister r(i_arg, i_amount);
@@ -131,9 +131,9 @@ SCAN_COMM_REGISTER_CLASS &  ScanFacility::GetRightShiftRegister(
 
 //------------------------------------------------------------------------------
 
-SCAN_COMM_REGISTER_CLASS &  ScanFacility::GetAndRegister(
-                                            SCAN_COMM_REGISTER_CLASS & i_left,
-                                            SCAN_COMM_REGISTER_CLASS & i_right )
+Register &  ScanFacility::GetAndRegister(
+                                            Register & i_left,
+                                            Register & i_right )
 {
   AndRegister r(i_left,i_right);
   return iv_andRegFw.get(r);
@@ -141,9 +141,9 @@ SCAN_COMM_REGISTER_CLASS &  ScanFacility::GetAndRegister(
 
 //------------------------------------------------------------------------------
 
-SCAN_COMM_REGISTER_CLASS &  ScanFacility::GetOrRegister(
-                                            SCAN_COMM_REGISTER_CLASS & i_left,
-                                            SCAN_COMM_REGISTER_CLASS & i_right )
+Register &  ScanFacility::GetOrRegister(
+                                            Register & i_left,
+                                            Register & i_right )
 {
   OrRegister r(i_left,i_right);
   return iv_orRegFw.get(r);
@@ -151,12 +151,12 @@ SCAN_COMM_REGISTER_CLASS &  ScanFacility::GetOrRegister(
 
 //-----------------------------------------------------------------------------
 
-SCAN_COMM_REGISTER_CLASS &  ScanFacility::GetAttnTypeRegister(
-                                        SCAN_COMM_REGISTER_CLASS * i_check,
-                                        SCAN_COMM_REGISTER_CLASS * i_recov,
-                                        SCAN_COMM_REGISTER_CLASS * i_special,
-                                        SCAN_COMM_REGISTER_CLASS * i_proccs,
-                                        SCAN_COMM_REGISTER_CLASS * i_hostattn )
+Register &  ScanFacility::GetAttnTypeRegister(
+                                        Register * i_check,
+                                        Register * i_recov,
+                                        Register * i_special,
+                                        Register * i_proccs,
+                                        Register * i_hostattn )
 {
   AttnTypeRegister r(i_check, i_recov, i_special, i_proccs, i_hostattn);
   return iv_attnRegFw.get(r);
@@ -164,15 +164,15 @@ SCAN_COMM_REGISTER_CLASS &  ScanFacility::GetAttnTypeRegister(
 
 //------------------------------------------------------------------------------
 
-SCAN_COMM_REGISTER_CLASS & ScanFacility::GetConstantRegister(
+Register & ScanFacility::GetConstantRegister(
                                                 const BitStringBuffer & i_val )
 {
   ConstantRegister r(i_val);
   return iv_constRegFw.get(r);
 }
 //------------------------------------------------------------------------------
-SCAN_COMM_REGISTER_CLASS &  ScanFacility::GetPluginRegister(
-                                        SCAN_COMM_REGISTER_CLASS & i_flyweight,
+Register &  ScanFacility::GetPluginRegister(
+                                        Register & i_flyweight,
                                         ExtensibleChip & i_RuleChip )
 {
   ScomRegisterAccess l_regKey ( i_flyweight,&i_RuleChip );

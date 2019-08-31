@@ -113,7 +113,7 @@ namespace PRDF
 {
 
 // Forward Declarations
-class SCAN_COMM_REGISTER_CLASS;
+class Register;
 class ScanCommRegisterAccess;
 class BitString;
 
@@ -194,7 +194,7 @@ public:
    </ul><br>
    */
   void Add( TARGETING::TargetHandle_t i_pchipHandle, int scomId,
-            SCAN_COMM_REGISTER_CLASS & scr, Place place = BACK,
+            Register & scr, Place place = BACK,
             RegType type = PRIMARY);  // @jl04 c. Changed this to add the type to the end of the parms.
   // dg00 end
 
@@ -210,7 +210,7 @@ public:
    <br><b>Notes:     This is the required Add() method for pre-Regatta
    </ul><br>
 
-  void Add(TARGETING::TargetHandle_t chipId, SCAN_COMM_REGISTER_CLASS & scr,
+  void Add(TARGETING::TargetHandle_t chipId, Register & scr,
       Place place = BACK);
 */
 

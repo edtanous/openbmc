@@ -24,7 +24,7 @@ class CHIP_CLASS;
 class MopsRegisterAccess;
 class ExtensibleChip;
 
-class ScomRegister : public SCAN_COMM_REGISTER_CLASS
+class ScomRegister : public Register
 {
   public:
 
@@ -36,7 +36,7 @@ class ScomRegister : public SCAN_COMM_REGISTER_CLASS
      */
     ScomRegister( uint64_t i_address, uint32_t i_bitLength,
                   TARGETING::TYPE i_targetType, AccessLevel i_access ) :
-        SCAN_COMM_REGISTER_CLASS(),
+        Register(),
         iv_bitLength( i_bitLength ),
         iv_chipType( i_targetType ),
         iv_scomAddress( i_address ),
@@ -48,7 +48,7 @@ class ScomRegister : public SCAN_COMM_REGISTER_CLASS
      * @          FlyweightS
      */
     ScomRegister():
-        SCAN_COMM_REGISTER_CLASS(),
+        Register(),
         iv_bitLength( 0 ),
         iv_chipType( TARGETING::TYPE_NA ),
         iv_scomAddress( 0 ),
@@ -154,8 +154,8 @@ class ScomRegister : public SCAN_COMM_REGISTER_CLASS
      * @brief     copy constructor
      * @param     i_scomRegister   scomRegister instance to be copied
      */
-    ScomRegister( const SCAN_COMM_REGISTER_CLASS & i_scomRegister ):
-        SCAN_COMM_REGISTER_CLASS(),
+    ScomRegister( const Register & i_scomRegister ):
+        Register(),
         iv_bitLength(     i_scomRegister.GetBitLength()   ),
         iv_shortId(       i_scomRegister.GetId()          ),
         iv_chipType(      i_scomRegister.getChipType()    ),
