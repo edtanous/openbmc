@@ -14,18 +14,23 @@
 #include <register/hei_register.hpp>
 #include <util/hei_bit_string.hpp>
 
+#if 0
 #include <prdfHomRegisterAccess.H>
+#endif
 
 namespace libhei
 {
 
+#if 0
 // Forward References
 class CHIP_CLASS;
 class MopsRegisterAccess;
 class ExtensibleChip;
+#endif
 
 class HardwareRegister : public Register
 {
+#if 0
   public:
 
     /**
@@ -212,6 +217,7 @@ private: // functions
     uint64_t        iv_scomAddress;   // scom address associated with regiser
     AccessLevel     iv_operationType; // Operation supported (RO, WO, or RW)
 
+#endif
 };
 
 } // end namespace libhei

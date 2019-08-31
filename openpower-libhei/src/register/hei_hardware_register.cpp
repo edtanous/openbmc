@@ -13,6 +13,7 @@
 #include <register/hei_hardware_register.hpp>
 #include <util/hei_bit_string.hpp>
 
+#if 0
 #include <iipchip.h>
 #include <prdfMain.H>
 #include <prdfRasServices.H>
@@ -46,9 +47,12 @@
 //---------------------------------------------------------------------
 
 // --------------------------------------------------------------------
+#endif
+
 namespace libhei
 {
 
+#if 0
 // ---------------------------------------------------------------------
 
 void HardwareRegister::SetBitString( const BitString *bs )
@@ -274,6 +278,7 @@ bool HardwareRegister::operator >= ( const HardwareRegister & i_rightRegister  )
 {
     return !( *this < i_rightRegister );
 }
+#endif
 
 } // end namespace libhei
 
