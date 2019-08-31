@@ -52,7 +52,7 @@
 
 namespace PRDF
 {
-class ScomRegisterAccess : public ScomRegister
+class ScomRegisterAccess : public HardwareRegister
 {
     public :
     /**
@@ -65,7 +65,7 @@ class ScomRegisterAccess : public ScomRegister
     /**
      * @brief     constructor
      */
-    ScomRegisterAccess():ScomRegister( ),iv_containerChip ( NULL ){ };
+    ScomRegisterAccess():HardwareRegister( ),iv_containerChip ( NULL ){ };
 
     /**
      * @brief Destructor

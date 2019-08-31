@@ -81,10 +81,10 @@ Register & ScanFacility::GetScanCommRegister( uint64_t address,
       other both read and write.
       */
 
-    ScomRegister scrKey( address, i_scomLength, i_type, i_regOp );
+    HardwareRegister scrKey( address, i_scomLength, i_type, i_regOp );
     // in case we get a object with different default operation, we shall reset
     // it to what it should be as per rule file.
-    ScomRegister &regCreated = iv_scomRegFw.get(scrKey);
+    HardwareRegister &regCreated = iv_scomRegFw.get(scrKey);
     regCreated.setAccessLevel( i_regOp );
     return regCreated;
 }
@@ -207,7 +207,7 @@ void ScanFacility::reset()
 #ifdef FLYWEIGHT_PROFILING
 void ScanFacility::printStats()
 {
-    PRDF_TRAC("ScomRegister");
+    PRDF_TRAC("HardwareRegister");
     iv_scomRegFw.printStats();
     PRDF_TRAC("Not Register");
     iv_notRegFw.printStats();

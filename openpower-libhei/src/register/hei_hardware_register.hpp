@@ -24,7 +24,7 @@ class CHIP_CLASS;
 class MopsRegisterAccess;
 class ExtensibleChip;
 
-class ScomRegister : public Register
+class HardwareRegister : public Register
 {
   public:
 
@@ -34,7 +34,7 @@ class ScomRegister : public Register
      * @param     i_bitLength      bit length of register
      * @param     i_targetType     target type associated with register
      */
-    ScomRegister( uint64_t i_address, uint32_t i_bitLength,
+    HardwareRegister( uint64_t i_address, uint32_t i_bitLength,
                   TARGETING::TYPE i_targetType, AccessLevel i_access ) :
         Register(),
         iv_bitLength( i_bitLength ),
@@ -47,7 +47,7 @@ class ScomRegister : public Register
      * @brief     constructor .Added this because we save object of this type in
      * @          FlyweightS
      */
-    ScomRegister():
+    HardwareRegister():
         Register(),
         iv_bitLength( 0 ),
         iv_chipType( TARGETING::TYPE_NA ),
@@ -127,20 +127,20 @@ class ScomRegister : public Register
     * @param     i_rightRegister   register to be compared against
     * @return    Returns true if registers are equal false otherwise
     */
-   bool operator == ( const ScomRegister & i_rightRegister ) const ;
+   bool operator == ( const HardwareRegister & i_rightRegister ) const ;
    /**
     * @brief     defines < operation for ScomRegisterAccess
     * @param     i_rightRegister   register to be compared against
     * @return    Returns false if i_rightRegisters is less and true otherwise
     */
-   bool operator < ( const ScomRegister & i_rightRegister  ) const ;
+   bool operator < ( const HardwareRegister & i_rightRegister  ) const ;
    /**
     * @brief     defines >= operation for ScomRegisterAccess
     * @param     i_rightRegister   register to be compared against
     * @return    Returns true if registers is >= i_rightRegister false
     *            otherwise
     */
-   bool operator >= ( const ScomRegister & i_rightRegister  ) const;
+   bool operator >= ( const HardwareRegister & i_rightRegister  ) const;
 
     /** @return The register access level (see enum AccessLevel). */
     virtual AccessLevel getAccessLevel() const { return iv_operationType; }
@@ -154,7 +154,7 @@ class ScomRegister : public Register
      * @brief     copy constructor
      * @param     i_scomRegister   scomRegister instance to be copied
      */
-    ScomRegister( const Register & i_scomRegister ):
+    HardwareRegister( const Register & i_scomRegister ):
         Register(),
         iv_bitLength(     i_scomRegister.GetBitLength()   ),
         iv_shortId(       i_scomRegister.GetId()          ),

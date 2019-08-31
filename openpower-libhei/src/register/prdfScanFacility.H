@@ -65,7 +65,7 @@ public:
   static ScanFacility & Access(void);
 
     /**
-    * @brief     Returns reference to flyweight object of type ScomRegister.
+    * @brief     Returns reference to flyweight object of type HardwareRegister.
     *            An object of given address is first searched in flyweight.
     *            If object exist, reference to existing object is returned
     *            else a new one is created.
@@ -206,7 +206,7 @@ private:  // functions
 
 
 private:  // Data
-  typedef FlyWeightS<ScomRegister,50>           ScanCommRegisters;
+  typedef FlyWeightS<HardwareRegister,50>           ScanCommRegisters;
   //FIXME RTC 64345 Investigate benefit of changing below from FlyWeight to
   //FlyWeightS
   typedef FlyWeight<AttnTypeRegister,50>        AttnTypeRegisters;

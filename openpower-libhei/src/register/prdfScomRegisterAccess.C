@@ -31,7 +31,7 @@ namespace PRDF
 ScomRegisterAccess::ScomRegisterAccess(
                     const Register & i_pRegister,
                     ExtensibleChip * i_pRuleChip ) :
-    ScomRegister( i_pRegister ),
+    HardwareRegister( i_pRegister ),
     iv_containerChip( i_pRuleChip )
 {}
 
