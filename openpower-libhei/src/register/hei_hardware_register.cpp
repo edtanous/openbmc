@@ -208,7 +208,7 @@ ExtensibleChip* HardwareRegister::getChip( )const
     l_pchip = ServiceDataCollector::getChipAnalyzed();
     TARGETING::TYPE l_type = PlatServices::getTargetType(
                                                 l_pchip->GetChipHandle() );
-    PRDF_ASSERT( iv_chipType == l_type )
+    HEI_ASSERT( iv_chipType == l_type )
     return l_pchip;
 }
 
