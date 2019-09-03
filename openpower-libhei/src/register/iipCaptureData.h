@@ -299,10 +299,10 @@ private:
   {
   public:
     // Ctor
-    Data(TARGETING::TargetHandle_t i_pchipHandle= NULL,   // dg01
+    Data(TARGETING::TargetHandle_t i_pchipHandle= nullptr,   // dg01
          uint16_t a = 0,
          uint16_t  dbl = 0,
-         uint8_t * dPtr = NULL)
+         uint8_t * dPtr = nullptr)
     :
     chipHandle(i_pchipHandle),
     address(a),
@@ -312,7 +312,7 @@ private:
 
     ~Data(void)                     // dg05a
     {                               // dg05a
-      if(dataPtr != NULL)           // dg05a
+      if(dataPtr != nullptr)           // dg05a
       {                             // dg05a
         delete [] dataPtr;          // pw01
       }                             // dg05a

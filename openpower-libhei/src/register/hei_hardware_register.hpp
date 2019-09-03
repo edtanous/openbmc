@@ -207,7 +207,7 @@ private: // functions
      * @param     RuleChip pointer associated with register
      * @return    Nil
      */
-    void flushCache( ExtensibleChip *i_pChip = NULL ) const;
+    void flushCache( ExtensibleChip *i_pChip = nullptr ) const;
 
   private: // Data
 

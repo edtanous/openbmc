@@ -204,7 +204,7 @@ uint32_t HardwareRegister::Access( BitString & bs,
 //-----------------------------------------------------------------------------
 ExtensibleChip* HardwareRegister::getChip( )const
 {
-    ExtensibleChip* l_pchip = NULL;
+    ExtensibleChip* l_pchip = nullptr;
     l_pchip = ServiceDataCollector::getChipAnalyzed();
     TARGETING::TYPE l_type = PlatServices::getTargetType(
                                                 l_pchip->GetChipHandle() );
@@ -218,7 +218,7 @@ bool HardwareRegister::queryCache() const
 {
     RegDataCache & cache = RegDataCache::getCachedRegisters();
     BitString * bs = cache.queryCache( getChip(), this );
-    return ( NULL != bs );
+    return ( nullptr != bs );
 }
 
 //------------------------------------------------------------------------------
@@ -234,7 +234,7 @@ BitString & HardwareRegister::readCache() const
 void HardwareRegister::flushCache( ExtensibleChip *i_pChip ) const
 {
      RegDataCache & regDump = RegDataCache::getCachedRegisters();
-    if( NULL == i_pChip )
+    if( nullptr == i_pChip )
     {
         regDump.flush();
     }

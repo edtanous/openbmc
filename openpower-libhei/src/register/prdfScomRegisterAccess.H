@@ -65,7 +65,7 @@ class ScomRegisterAccess : public HardwareRegister
     /**
      * @brief     constructor
      */
-    ScomRegisterAccess():HardwareRegister( ),iv_containerChip ( NULL ){ };
+    ScomRegisterAccess():HardwareRegister( ),iv_containerChip ( nullptr ){ };
 
     /**
      * @brief Destructor

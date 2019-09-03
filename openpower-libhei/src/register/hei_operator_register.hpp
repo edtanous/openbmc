@@ -13,7 +13,7 @@ class NotRegister : public Register
 {
   public:
     NotRegister() :
-        Register( ), iv_child(NULL), iv_iBS(0)
+        Register( ), iv_child(nullptr), iv_iBS(0)
     {
         iv_bs = &iv_iBS;
     }
@@ -70,7 +70,7 @@ class SummaryRegister : public Register
 {
   public:
     SummaryRegister() :
-        Register( ), iv_child(NULL), iv_amount(0), iv_iBS(0)
+        Register( ), iv_child(nullptr), iv_amount(0), iv_iBS(0)
     {
         iv_bs = &iv_iBS;
     }
@@ -163,7 +163,7 @@ class LeftShiftRegister : public Register
 {
   public:
     LeftShiftRegister() :
-        Register( ), iv_child(NULL), iv_amount(0), iv_iBS(0)
+        Register( ), iv_child(nullptr), iv_amount(0), iv_iBS(0)
     {
         iv_bs = &iv_iBS;
     }
@@ -230,7 +230,7 @@ class RightShiftRegister : public Register
 {
   public:
     RightShiftRegister() :
-        Register( ), iv_child(NULL), iv_amount(0), iv_iBS(0)
+        Register( ), iv_child(nullptr), iv_amount(0), iv_iBS(0)
     {
         iv_bs = &iv_iBS;
     }
@@ -298,7 +298,7 @@ class AndRegister : public Register
 {
   public:
     AndRegister() :
-        Register( ), iv_left(NULL), iv_right(NULL), iv_iBS(0)
+        Register( ), iv_left(nullptr), iv_right(nullptr), iv_iBS(0)
     {
         iv_bs = &iv_iBS;
     }
@@ -380,7 +380,7 @@ class OrRegister : public Register
   public:
 
     OrRegister() :
-        Register( ), iv_left(NULL), iv_right(NULL), iv_iBS(0)
+        Register( ), iv_left(nullptr), iv_right(nullptr), iv_iBS(0)
     {
         iv_bs = &iv_iBS;
     }
@@ -511,11 +511,11 @@ class AttnTypeRegister : public Register
                       Register *i_proccs,
                       Register *i_hostattn ) :
         Register( ),
-        iv_check(    NULL == i_check    ? &cv_null : i_check),
-        iv_recov(    NULL == i_recov    ? &cv_null : i_recov),
-        iv_special(  NULL == i_special  ? &cv_null : i_special),
-        iv_proccs(   NULL == i_proccs   ? &cv_null : i_proccs),
-        iv_hostattn( NULL == i_hostattn ? &cv_null : i_hostattn),
+        iv_check(    nullptr == i_check    ? &cv_null : i_check),
+        iv_recov(    nullptr == i_recov    ? &cv_null : i_recov),
+        iv_special(  nullptr == i_special  ? &cv_null : i_special),
+        iv_proccs(   nullptr == i_proccs   ? &cv_null : i_proccs),
+        iv_hostattn( nullptr == i_hostattn ? &cv_null : i_hostattn),
         iv_iBS(0)         // will fully initialize this inside ctor.
     {
         uint32_t l_length = 1024;
