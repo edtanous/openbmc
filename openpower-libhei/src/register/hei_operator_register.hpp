@@ -101,7 +101,7 @@ class SummaryRegister : public Register
             // registers in the list returns an error, but there is another
             // summary register with an active attention, which would be ignored
             // if we return a bad rc.
-            PRDF_INF( "[SummaryRegister::read] SCOM failure on register ID "
+            HEI_INF( "[SummaryRegister::read] SCOM failure on register ID "
                       "0x%04x, ignoring error", iv_child->GetId() );
             rc = SUCCESS;
             iv_child->clearAllBits(); // just in case

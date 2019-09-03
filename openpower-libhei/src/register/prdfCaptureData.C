@@ -168,7 +168,7 @@ bool __bufferFull( uint8_t * i_buf, size_t i_bufSize,
 {
     if ( (i_buf + i_bufSize) < (i_idx + i_idxSize) )
     {
-        PRDF_ERR( "[CaptureData::Copy] Buffer is full. Some data may have "
+        HEI_ERR( "[CaptureData::Copy] Buffer is full. Some data may have "
                   "been lost" );
         return true;
     }

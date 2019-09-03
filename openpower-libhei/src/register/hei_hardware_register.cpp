@@ -129,7 +129,7 @@ uint32_t HardwareRegister::ForceRead() const
         if ( ( ACCESS_NONE == iv_operationType ) &&
                 ( ACCESS_WO == iv_operationType ) )
         {
-            PRDF_ERR( PRDF_FUNC "Write-only register: 0x%08x 0x%016llx",
+            HEI_ERR( PRDF_FUNC "Write-only register: 0x%08x 0x%016llx",
                       getChip()->GetId(), iv_scomAddress );
             break;
         }
@@ -165,7 +165,7 @@ uint32_t HardwareRegister::Write()
         if ( ( ACCESS_NONE == iv_operationType ) &&
                  ( ACCESS_RO == iv_operationType ) )
         {
-            PRDF_ERR( PRDF_FUNC "Read-only register: 0x%08x 0x%016llx",
+            HEI_ERR( PRDF_FUNC "Read-only register: 0x%08x 0x%016llx",
                       getChip()->GetId(), iv_scomAddress );
             break;
         }
@@ -175,7 +175,7 @@ uint32_t HardwareRegister::Write()
         {
             // Something bad happened and there was nothing in the cache to
             // write to hardware.
-            PRDF_ERR( PRDF_FUNC "No entry found in cache: 0x%08x 0x%016llx",
+            HEI_ERR( PRDF_FUNC "No entry found in cache: 0x%08x 0x%016llx",
                       getChip()->GetId(), iv_scomAddress );
             break;
         }

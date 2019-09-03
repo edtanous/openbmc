@@ -183,7 +183,7 @@ uint32_t ScomAccessor::Access(TargetHandle_t i_target,
                                                      scomVal);
                             if( nullptr != err)
                             {
-                                PRDF_ERR("[ScomAccessor::Access()] Error in"
+                                HEI_ERR("[ScomAccessor::Access()] Error in"
                                          " hcode_update");
                                 PRDF_COMMIT_ERRL( err, ERRL_ACTION_REPORT );
                             }
@@ -203,7 +203,7 @@ uint32_t ScomAccessor::Access(TargetHandle_t i_target,
                 break;
 
             default:
-                PRDF_ERR("ScomAccessor::Access() unsuppported scom op: 0x%08X",
+                HEI_ERR("ScomAccessor::Access() unsuppported scom op: 0x%08X",
                           operation);
                 break;
 
