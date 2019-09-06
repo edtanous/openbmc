@@ -38,7 +38,7 @@
 #include <prdfFlyWeightS.C>
 #include <prdfScomRegisterAccess.H>
 
-namespace PRDF
+namespace libhei
 {
 
 //----------------------------------------------------------------------
@@ -231,5 +231,5 @@ void ScanFacility::printStats()
 
 #endif
 
-} // end namespace PRDF
+} // end namespace libhei
 

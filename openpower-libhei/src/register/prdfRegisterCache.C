@@ -27,7 +27,7 @@
 
 #include <prdfRegisterCache.H>
 
-namespace PRDF
+namespace libhei
 {
 
 //------------------------------------------------------------------------------
@@ -121,4 +121,6 @@ BitString * RegDataCache::queryCache(
 }
 
 //------------------------------------------------------------------------------
-}// end namespace  PRDF
+
+} // end namespace libhei
+

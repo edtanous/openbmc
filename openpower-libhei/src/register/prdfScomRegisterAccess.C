@@ -25,7 +25,8 @@
 #include <prdfScanFacility.H>
 #include <prdfRegisterCache.H>
 #include <prdfExtensibleChip.H>
-namespace PRDF
+
+namespace libhei
 {
 
 ScomRegisterAccess::ScomRegisterAccess(
@@ -80,4 +81,6 @@ bool ScomRegisterAccess::operator >= (
 }
 
 //----------------------------------------------------------------------
-}//namespace PRDF ends
+
+} // end namespace libhei
+

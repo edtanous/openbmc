@@ -43,7 +43,7 @@
 //  Forward References
 //--------------------------------------------------------------------
 
-namespace PRDF
+namespace libhei
 {
 
 namespace RegisterAccess
@@ -162,6 +162,6 @@ class ScomService
     ScomAccessor * iv_ScomAccessor;
 };
 
-} // End namespace PRDF
+} // end namespace libhei
 
 #endif /* PRDFHOMREGISTERACCESS_H */

@@ -37,7 +37,7 @@
 #include <prdfScomRegisterAccess.H>
 #include <prdfTargetFwdRef.H>
 
-namespace PRDF
+namespace libhei
 {
 /**
  * @brief Caches the contents of registers used during analysis.
@@ -118,7 +118,7 @@ class RegDataCache
 
 PRDF_DECLARE_SINGLETON(RegDataCache, ReadCache);
 
-} // namespace PRDF
+} // end namespace libhei
 
 #endif // REG_CACHE_H
 

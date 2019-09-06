@@ -50,7 +50,7 @@
  * else.
  */
 
-namespace PRDF
+namespace libhei
 {
 class ScomRegisterAccess : public HardwareRegister
 {
@@ -105,6 +105,7 @@ class ScomRegisterAccess : public HardwareRegister
 
 };
 
-}//namepsace PRDF ends
+} // end namespace libhei
+
 #endif
 

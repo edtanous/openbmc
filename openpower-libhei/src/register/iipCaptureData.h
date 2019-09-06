@@ -109,7 +109,7 @@
 
 #endif
 
-namespace PRDF
+namespace libhei
 {
 
 // Forward Declarations
@@ -399,6 +399,6 @@ public:
 
 };
 
-} // end namespace PRDF
+} // end namespace libhei
 
 #endif

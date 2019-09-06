@@ -42,7 +42,7 @@
 
 using namespace TARGETING;
 
-namespace PRDF
+namespace libhei
 {
 
 //---------------------------------------------------------------------
@@ -401,4 +401,5 @@ CaptureData::Data & CaptureData::Data::operator=(const Data & d)
     return *this;
 }
 
-} // end of namespace PRDF
+} // end namespace libhei
+

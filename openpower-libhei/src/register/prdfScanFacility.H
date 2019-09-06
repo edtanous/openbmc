@@ -45,7 +45,7 @@
 #include <prdfScomRegisterAccess.H>
 #include <prdfPlatServices.H>
 
-namespace PRDF
+namespace libhei
 {
 
 
@@ -232,6 +232,6 @@ private:  // Data
 
 };
 
-} // end namespace PRDF
+} // end namespace libhei
 
 #endif /* PRDFSCANFACILITY_H */

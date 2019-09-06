@@ -48,7 +48,7 @@
 
 using namespace TARGETING;
 
-namespace PRDF
+namespace libhei
 {
 
 //----------------------------------------------------------------------
@@ -220,4 +220,5 @@ uint32_t ScomAccessor::Access(TargetHandle_t i_target,
     return rc;
 }
 
-} // End namespace PRDF
+} // end namespace libhei
+
