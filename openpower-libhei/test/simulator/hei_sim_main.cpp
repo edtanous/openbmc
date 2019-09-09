@@ -2,18 +2,24 @@
 
 int main()
 {
+    using namespace libhei;
+
     void * buffer = nullptr;
     size_t sz_buffer = 0;
 
-    libhei::initialize( buffer, sz_buffer );
+    initialize( buffer, sz_buffer );
 
-    void * chip = nullptr;
-    libhei::ChipType_t chipType = 0;
-    libhei::IsolationData isoData { chip, chipType };
+    Chip c1, c2;
 
-    libhei::isolate( isoData );
+    std::vector<Chip> chipList;
+    chipList.push_back(c1);
+    chipList.push_back(c2);
 
-    libhei::uninitialize();
+    IsolationData isoData;
+
+    isolate( chipList, isoData );
+
+    uninitialize();
 
     return 0;
 }

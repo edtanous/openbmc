@@ -2,7 +2,6 @@
 
 #include <hei_includes.hpp>
 #include <hei_isolation_data.hpp>
-#include <chip_data/hei_chip_data.hpp>
 
 namespace libhei
 {
@@ -15,8 +14,8 @@ namespace libhei
  *  - Create a singleton instance of an Isolator object via getSingleton().
  *  - Use initialize() to input each necessary Chip Data File provided by the
  *    user application.
- *  - Call isolate() each time you want to find all active errors being
- *    reported by a chip.
+ *  - Call isolate() to find all active errors being reported by the given list
+ *    of chips.
  *  - Once isolation is no longer needed, use uninitialize() to free up
  *    internal resources.
  *
@@ -69,7 +68,8 @@ class Isolator
     void uninitialize();
 
     /** @brief See API wrapper description in hei_main.hpp. */
-    ReturnCode isolate( IsolationData & o_isoData ) const;
+    ReturnCode isolate( const std::vector<Chip> & i_chipList,
+                        IsolationData & o_isoData ) const;
 
   private:
 

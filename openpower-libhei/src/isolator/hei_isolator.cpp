@@ -24,7 +24,8 @@ void Isolator::uninitialize()
     // END temporary code
 }
 
-ReturnCode Isolator::isolate( IsolationData & o_isoData ) const
+ReturnCode Isolator::isolate( const std::vector<Chip> & i_chipList,
+                              IsolationData & o_isoData ) const
 {
     ReturnCode rc;
 
@@ -32,8 +33,11 @@ ReturnCode Isolator::isolate( IsolationData & o_isoData ) const
     o_isoData.clear();
 
     // BEGIN temporary code
-    HEI_INF( "Isolator::isolate(%p,%u)", o_isoData.getChip(),
-             o_isoData.getChipType() );
+    for ( auto const & chip : i_chipList )
+    {
+        HEI_INF( "Isolator::isolate(%p,%u)", chip.getChip(),
+                 chip.getType() );
+    }
     // END temporary code
 
     return rc;

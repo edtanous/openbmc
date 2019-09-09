@@ -8,10 +8,13 @@ throughout this library.
 
 // Standard library includes
 #include <stdint.h>
+#include <vector>
 
 // External includes
 #include <hei_user_defines.hpp> // For HEI_ASSERT, HEI_INF, and HEI_ERR
 
 // Internal includes
+#include <hei_chip.hpp>
 #include <hei_return_code.hpp>
+#include <hei_types.hpp>
 

@@ -6,7 +6,7 @@
  *
  *  - Call initialize() for each necessary Chip Data File.
  *
- *  - Call isolate() for each chip that needs error isolation.
+ *  - Call isolate() for all chips that need error isolation.
  *
  *  - Once isolation is no longer needed, call uninitialize() to free up
  *    resources used for isolation.
@@ -80,23 +80,27 @@ inline void uninitialize()
 }
 
 /**
- * @brief Isolates all active hardware errors found on the given chip.
+ * @brief Isolates all active hardware errors found on the given list of chips.
  *
  * This functions requires initialize() to be called with the Chip Data File
- * corresponding to the given chip type.
+ * corresponding to the given chip types.
  *
- * @param o_isoData  This parameter will contain a reference to the target chip
- *                   and its chip type. The rest of the data in the object will
- *                   be flushed and then repopulated with a list of all active
- *                   hardware errors on this chip, the contents of any
- *                   registers associated with the active errors, and any
- *                   other data that can be useful for debug.
+ * @param i_chipList The list of all chips that need to be analyzed. Generally,
+ *                   this would include all processor and memory chips in the
+ *                   system.
+ *
+ * @param o_isoData  Initially, all data in the object will be flushed and then
+ *                   repopulated with a list of all active hardware errors found
+ *                   on the given list of chips, the contents of any registers
+ *                   associated with the active errors, and any other data that
+ *                   can be useful for debug.
  *
  * @return RC_SUCCESS or RC_CHIP_DATA_MISSING
  */
-inline ReturnCode isolate( IsolationData & o_isoData )
+inline ReturnCode isolate( const std::vector<Chip> & i_chipList,
+                           IsolationData & o_isoData )
 {
-    return Isolator::getSingleton().isolate( o_isoData );
+    return Isolator::getSingleton().isolate( i_chipList, o_isoData );
 }
 
 } // end namespace libhei
