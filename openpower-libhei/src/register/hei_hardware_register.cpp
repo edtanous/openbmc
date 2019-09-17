@@ -1,52 +1,7 @@
-// Module Description **************************************************
-//
-// Description: This module provides the implementation for the PRD Scan
-//              Comm Register Chip class.
-//
-// End Module Description **********************************************
-
-//----------------------------------------------------------------------
-//  Includes
-//----------------------------------------------------------------------
-
 #include <hei_includes.hpp>
 #include <hei_user_interface.hpp>
 #include <register/hei_hardware_register.hpp>
 #include <util/hei_bit_string.hpp>
-
-#if 0
-#include <iipchip.h>
-#include <prdfMain.H>
-#include <prdfRasServices.H>
-#include <prdfPlatServices.H>
-#include <prdfExtensibleChip.H>
-
-//----------------------------------------------------------------------
-//  User Types
-//----------------------------------------------------------------------
-
-//----------------------------------------------------------------------
-//  Constants
-//----------------------------------------------------------------------
-
-//----------------------------------------------------------------------
-//  Macros
-//----------------------------------------------------------------------
-
-//----------------------------------------------------------------------
-//  Internal Function Prototypes
-//----------------------------------------------------------------------
-
-//----------------------------------------------------------------------
-//  Global Variables
-//----------------------------------------------------------------------
-
-//---------------------------------------------------------------------
-// Member Function Specifications
-//---------------------------------------------------------------------
-
-// --------------------------------------------------------------------
-#endif
 
 namespace libhei
 {
@@ -58,27 +13,27 @@ HardwareRegister::~HardwareRegister() {}
 //------------------------------------------------------------------------------
 
 #if 0
-void HardwareRegister::SetBitString( const BitString *bs )
+void HardwareRegister::setBitString( const BitString *bs )
 {
-    BitString & l_string  = AccessBitString();
+    BitString & l_string  = accessBitString();
     l_string.setString(*bs);
 }
-
+#endif
 
 //------------------------------------------------------------------------------
 
-const BitString * HardwareRegister::GetBitString(ATTENTION_TYPE i_type) const
+const BitString * HardwareRegister::getBitString() const
 {
-    // Calling Read() will ensure that an entry exists in the cache and the
+    // Calling read() will ensure that an entry exists in the cache and the
     // entry has at been synched with hardware at least once. Note that we
     // cannot read hardware for write-only registers. In this case, an entry
     // will be created in the cache, if it does not exist, when the cache is
     // read below.
 
-    if ( ( ACCESS_NONE != iv_operationType ) &&
-         ( ACCESS_WO   != iv_operationType ) )
+    if ( ( REG_ACCESS_NONE != getAccessLevel() ) &&
+         ( REG_ACCESS_WO   != getAccessLevel() ) )
     {
-        Read();
+        read();
     }
 
     return &( accessCache() );
@@ -86,18 +41,19 @@ const BitString * HardwareRegister::GetBitString(ATTENTION_TYPE i_type) const
 
 //------------------------------------------------------------------------------
 
-BitString & HardwareRegister::AccessBitString()
+#if 0
+BitString & HardwareRegister::accessBitString()
 {
-    // Calling Read() will ensure that an entry exists in the cache and the
+    // Calling read() will ensure that an entry exists in the cache and the
     // entry has at been synched with hardware at least once. Note that we
     // cannot read hardware for write-only registers. In this case, an entry
     // will be created in the cache, if it does not exist, when the cache is
     // read below.
 
-    if ( ( ACCESS_NONE != iv_operationType ) &&
-         ( ACCESS_WO   != iv_operationType ) )
+    if ( ( REG_ACCESS_NONE != getAccessLevel() ) &&
+         ( REG_ACCESS_WO   != getAccessLevel() ) )
     {
-        Read();
+        read();
     }
 
     return accessCache();
@@ -114,10 +70,9 @@ ReturnCode HardwareRegister::read( bool i_force ) const
     // instance does not exist in the cache.
     if ( i_force || !queryCache() )
     {
-#if 0
         // This register must be readable.
-        HEI_ASSERT( ( ACCESS_NONE != iv_operationType ) &&
-                    ( ACCESS_WO   != iv_operationType ) );
+        HEI_ASSERT( ( REG_ACCESS_NONE != getAccessLevel() ) &&
+                    ( REG_ACCESS_WO   != getAccessLevel() ) );
 
         // Get the buffer from the register cache.
         BitString & bs = accessCache();
@@ -128,21 +83,18 @@ ReturnCode HardwareRegister::read( bool i_force ) const
         // Read this register from hardware.
         rc = registerRead( getAccessorChip().getChip(), bs.getBufAddr(),
                            sz_buffer, getRegisterType(), getAddress() );
-#endif
         if ( RC_SUCCESS != rc )
         {
             // The read failed and we can't trust what was put in the register
             // cache. So remove this instance's entry from the cache.
             cv_cache.flush( getAccessorChip(), this );
         }
-#if 0
         else
         {
             // Sanity check. The returned size of the data written to the buffer
             // should match the register size.
             HEI_ASSERT( getSize() == sz_buffer );
         }
-#endif
     }
 
     return rc;
@@ -156,10 +108,9 @@ ReturnCode HardwareRegister::write() const
 {
     ReturnCode rc;
 
-#if 0
     // This register must be writable.
-    HEI_ASSERT( ( ACCESS_NONE != iv_operationType ) &&
-                ( ACCESS_RO   != iv_operationType ) );
+    HEI_ASSERT( ( REG_ACCESS_NONE != getAccessLevel() ) &&
+                ( REG_ACCESS_RO   != getAccessLevel() ) );
 
     // An entry for this register must exist in the cache.
     HEI_ASSERT( queryCache() );
@@ -180,52 +131,11 @@ ReturnCode HardwareRegister::write() const
         // should match the register size.
         HEI_ASSERT( getSize() == sz_buffer );
     }
-#endif
 
     return rc;
 }
 
 #endif // __HEI_READ_ONLY
-
-//------------------------------------------------------------------------------
-
-bool HardwareRegister::operator == ( const HardwareRegister & i_rightRegister ) const
-{
-#if 0
-    if( iv_scomAddress == i_rightRegister.GetAddress() )
-    {
-        return ( iv_chipType == i_rightRegister.getChipType() );
-    }
-    else
-    {
-        return false ;
-    }
-#endif
-    return false;
-}
-
-//-----------------------------------------------------------------------------
-bool HardwareRegister::operator < ( const HardwareRegister & i_rightRegister  ) const
-{
-#if 0
-    if( iv_scomAddress == i_rightRegister.GetAddress() )
-    {
-        return ( iv_chipType < i_rightRegister.getChipType() );
-    }
-    else
-    {
-        return( iv_scomAddress  < i_rightRegister.GetAddress() );
-    }
-#endif
-    return false;
-}
-#if 0
-//-----------------------------------------------------------------------------
-bool HardwareRegister::operator >= ( const HardwareRegister & i_rightRegister  ) const
-{
-    return !( *this < i_rightRegister );
-}
-#endif
 
 //------------------------------------------------------------------------------
 
@@ -265,7 +175,7 @@ BitString & HardwareRegister::Cache::access( const Chip & i_chip,
     // If the entry does not exist, create a new entry.
     if ( !query(i_chip, i_hwReg) )
     {
-        BitString * bs = new BitStringBuffer { i_hwReg->getByteSize() * 8 };
+        BitString * bs = new BitStringBuffer { i_hwReg->getSize() * 8 };
         iv_cache[i_chip][i_hwReg] = bs;
     }
 
