@@ -9,6 +9,7 @@
 // Standard library includes
 #include <stdlib.h>
 #include <stdint.h>
+#include <map>
 #include <vector>
 
 // The user application must define "hei_user_defines.hpp" with the following

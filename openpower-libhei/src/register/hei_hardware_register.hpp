@@ -17,13 +17,6 @@
 namespace libhei
 {
 
-#if 0
-// Forward References
-class CHIP_CLASS;
-class MopsRegisterAccess;
-class ExtensibleChip;
-#endif
-
 /**
  * @brief Stores information (e.g. address, type, length, etc.) for an actual
  *        hardware register.
@@ -40,6 +33,20 @@ class ExtensibleChip;
  *   - Perform all necessary hardware accesses to that chip.
  *   - Call HardwareRegister::clearAccessor() to remove the chip access. This
  *     helps ensure we don't try to access the wrong chip.
+ *
+ * Register cache:
+ *
+ *  In order to save memory space, each instance of this class does not store
+ *  the contents of the target hardware register. Instead, that data is stored
+ *  in a register cache, which a static variable defined in this class. This
+ *  allows us to store only what we need. The cache can also be thought of as a
+ *  snapshot of the registers at the time of isolation, which can be useful if
+ *  the hardware is still running and register values could change.
+ *
+ *  In order to ensure stale data isn't used from the cache, call
+ *  HardwareRegister::flushAll() before beginning isolation on a new attention.
+ *  Also, HardwareRegister::flushAll() should be called when the isolator is
+ *  uninitialized before the rest of the isolation objects are deleted.
  */
 class HardwareRegister : public Register
 {
@@ -95,6 +102,7 @@ class HardwareRegister : public Register
      */
     uint32_t GetBitLength(void) const { return iv_bitLength ;}
 #endif
+    size_t getByteSize() const { return 8; } // TODO
 
     /**
      * @brief  Reads a register from hardware via the user interface APIs.
@@ -196,22 +204,6 @@ private: // functions
 
   friend class CaptureData;
 
-    /** @return TRUE if entry for this register exist in this cache. */
-    bool queryCache() const;
-
-    /**
-     * @brief  Reads register contents from cache.
-     * @return Reference to bit string buffer maintained in cache.
-     */
-    BitString & readCache() const;
-
-    /**
-     * @brief     Deletes one or all entry in the cache
-     * @param     RuleChip pointer associated with register
-     * @return    Nil
-     */
-    void flushCache( ExtensibleChip *i_pChip = nullptr ) const;
-
   private: // Data
 
     uint32_t        iv_bitLength;     // bit length of scom
@@ -304,6 +296,103 @@ private: // functions
 #endif
 
         return cv_accessor->getChip();
+    }
+
+  private: // Register cache class variable
+
+    /**
+     * @brief Caches the contents of registers read from hardware.
+     *
+     * The goal is to create a snapshot of the hardware register contents as
+     * close to the reported attention as possible. This snapshot is then used
+     * for additional analysis/debug when needed.
+     */
+    class Cache
+    {
+      public:
+
+        /** @brief Default constructor. */
+        Cache() = default;
+
+        /** @brief Destructor. */
+        ~Cache() = default;
+
+        /** @brief Copy constructor. */
+        Cache( const Cache & ) = delete;
+
+        /** @brief Assignment operator. */
+        Cache & operator=( const Cache & ) = delete;
+
+        /**
+         * @brief  Queries if a specific entry exists in the cache.
+         * @param  i_chip  The target chip.
+         * @param  i_hwReg The target register.
+         * @return True if the entry exists, false otherwise.
+         */
+        bool query( const Chip & i_chip,
+                    const HardwareRegister * i_hwReg ) const;
+
+        /**
+         * @brief  Returns the data buffer for the given chip and register.
+         * @param  i_chip  The target chip.
+         * @param  i_hwReg The target register.
+         * @return A reference to the BitString containing the register data.
+         * @note   If an entry does not exist in the cache, an entry will be
+         *         created and the BitString will be initialized to 0.
+         */
+        BitString & access( const Chip & i_chip,
+                            const HardwareRegister * i_hwReg );
+
+        /** @brief Flushes entire contents from cache. */
+        void flush();
+
+        /**
+         * @brief Removes a single register from the cache.
+         * @param i_chip  The target chip.
+         * @param i_hwReg The target register.
+         */
+        void flush( const Chip & i_chip, const HardwareRegister * i_hwReg );
+
+      private:
+
+        /**
+         * @brief Stores a BitStringBuffer for each HardwareRegister per Chip.
+         *
+         * The HardwareRegister keys will just be pointers to the isolation
+         * objects created in the main initialize() API. Those should exist
+         * until the main uninitialize() API is called. It is important that the
+         * cache is flushed at the beginning of the uninitialize() API before
+         * the rest of the isolation objects are deleted.
+         *
+         * The Chip keys are copies of the objects passed to the isolator
+         * because the user application is responsible for storage of the
+         * objects passed to the isolator. We don't want to chance a Chip was
+         * created as a local variable that goes out of scope, or other similar
+         * situations.
+         */
+        std::map<Chip, std::map<const HardwareRegister*, BitString*>> iv_cache;
+    };
+
+    /** This allows all HardwareRegister objects access to the cache. */
+    static Cache cv_cache;
+
+  public: // Register cache management functions.
+
+    /** @brief Flushes the entire register cache. */
+    static void flushAll() { cv_cache.flush(); }
+
+  private: // Register cache management functions.
+
+    /** @return True if an entry for this register exist in this cache. */
+    bool queryCache() const
+    {
+        return cv_cache.query( getAccessorChip(), this );
+    }
+
+    /** @return A reference to this register's BitString in cache. */
+    BitString & accessCache() const
+    {
+        return cv_cache.access( getAccessorChip(), this );
     }
 };
 
