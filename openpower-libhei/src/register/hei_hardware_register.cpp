@@ -10,6 +10,7 @@
 //----------------------------------------------------------------------
 
 #include <hei_includes.hpp>
+#include <hei_user_interface.hpp>
 #include <register/hei_hardware_register.hpp>
 #include <util/hei_bit_string.hpp>
 
@@ -18,7 +19,6 @@
 #include <prdfMain.H>
 #include <prdfRasServices.H>
 #include <prdfRegisterCache.H>
-#include <prdfHomRegisterAccess.H>
 #include <prdfPlatServices.H>
 #include <prdfExtensibleChip.H>
 
@@ -96,128 +96,96 @@ BitString & HardwareRegister::AccessBitString()
 
     return readCache();
 }
+#endif
 
 //------------------------------------------------------------------------------
 
-uint32_t HardwareRegister::Read() const
+ReturnCode HardwareRegister::read( bool i_force ) const
 {
-    uint32_t o_rc = SUCCESS;
+    ReturnCode rc;
 
-    // First query the cache for an existing entry.
-    if ( !queryCache() )
+#if 0
+    // Read from hardware only if the read is forced or the entry for this
+    // instance does not exist in the cache.
+    if ( i_force || !queryCache() )
     {
-        // There was not a previous entry in the cache, so do a ForceRead() to
-        // sync the cache with hardware.
-        o_rc = ForceRead();
+        // This register must be readable.
+        HEI_ASSERT( ( ACCESS_NONE != iv_operationType ) &&
+                    ( ACCESS_WO   != iv_operationType ) );
+
+        // Get the buffer from the register cache.
+        BitString & bs = readCache();
+
+        // Get the byte size of the buffer.
+        size_t sz_buffer = BitString::getMinBytes( bs.getBitLen() );
+
+        // Read this register from hardware.
+        rc = registerRead( getAccessorChip().getChip(), bs.getBufAddr(),
+                           sz_buffer, getRegisterType(), getAddress() );
+        if ( RC_SUCCESS != rc )
+        {
+            // The read failed and we can't trust what was put in the register
+            // cache. So remove this instance's entry from the cache.
+            flushCache( getAccessorChip() );
+        }
+        else
+        {
+            // Sanity check. The returned size of the data written to the buffer
+            // should match the register size.
+            HEI_ASSERT( getSize() == sz_buffer );
+        }
     }
+#endif
 
-    return o_rc;
+    return rc;
 }
 
 //------------------------------------------------------------------------------
 
-uint32_t HardwareRegister::ForceRead() const
+#ifndef __HEI_READ_ONLY
+
+ReturnCode HardwareRegister::write() const
 {
-    #define PRDF_FUNC "[HardwareRegister::ForceRead] "
+    ReturnCode rc;
 
-    uint32_t o_rc = FAIL;
+#if 0
+    // This register must be writable.
+    HEI_ASSERT( ( ACCESS_NONE != iv_operationType ) &&
+                ( ACCESS_RO   != iv_operationType ) );
 
-    do
+    // An entry for this register must exist in the cache.
+    HEI_ASSERT( queryCache() );
+
+    // Get the buffer from the register cache.
+    BitString & bs = readCache();
+
+    // Get the byte size of the buffer.
+    size_t sz_buffer = BitString::getMinBytes( bs.getBitLen() );
+
+    // Write to this register to hardware.
+    rc = registerWrite( getAccessorChip().getChip(), bs.getBufAddr(),
+                        sz_buffer, getRegisterType(), getAddress() );
+
+    if ( RC_SUCCESS == rc )
     {
-        // No read allowed if register access attribute is write-only or no
-        // access.
-        if ( ( ACCESS_NONE == iv_operationType ) &&
-                ( ACCESS_WO == iv_operationType ) )
-        {
-            HEI_ERR( PRDF_FUNC "Write-only register: 0x%08x 0x%016llx",
-                      getChip()->GetId(), iv_scomAddress );
-            break;
-        }
+        // Sanity check. The returned size of the data written to the buffer
+        // should match the register size.
+        HEI_ASSERT( getSize() == sz_buffer );
+    }
+#endif
 
-        // Read hardware.
-        o_rc = Access( readCache(), RegisterAccess::READ );
-        if ( SUCCESS != o_rc )
-        {
-            // The read failed. Remove the entry from the cache so a subsequent
-            // Read() will attempt to read from hardware again.
-            flushCache( getChip() );
-        }
-
-    } while (0);
-
-    return o_rc;
-
-    #undef PRDF_FUNC
+    return rc;
 }
 
-//------------------------------------------------------------------------------
+#endif // __HEI_READ_ONLY
 
-uint32_t HardwareRegister::Write()
-{
-    #define PRDF_FUNC "[HardwareRegister::Write] "
-
-    uint32_t o_rc = FAIL;
-
-    do
-    {
-        // No write allowed if register access attribute is read-only or no
-        // access.
-        if ( ( ACCESS_NONE == iv_operationType ) &&
-                 ( ACCESS_RO == iv_operationType ) )
-        {
-            HEI_ERR( PRDF_FUNC "Read-only register: 0x%08x 0x%016llx",
-                      getChip()->GetId(), iv_scomAddress );
-            break;
-        }
-
-        // Query the cache for an existing entry.
-        if ( !queryCache() )
-        {
-            // Something bad happened and there was nothing in the cache to
-            // write to hardware.
-            HEI_ERR( PRDF_FUNC "No entry found in cache: 0x%08x 0x%016llx",
-                      getChip()->GetId(), iv_scomAddress );
-            break;
-        }
-
-        // Write hardware.
-        o_rc = Access( readCache(), RegisterAccess::WRITE );
-
-    } while (0);
-
-    return o_rc;
-
-    #undef PRDF_FUNC
-}
-
-//------------------------------------------------------------------------------
-
-uint32_t HardwareRegister::Access( BitString & bs,
-                               RegisterAccess::Operation op ) const
-{
-    int32_t l_rc = SCR_ACCESS_FAILED;
-    TARGETING::TargetHandle_t i_pchipTarget = getChip()->GetChipHandle();
-    l_rc = getScomService().Access( i_pchipTarget,bs,iv_scomAddress,op );
-
-    return(l_rc);
-}
-//-----------------------------------------------------------------------------
-ExtensibleChip* HardwareRegister::getChip( )const
-{
-    ExtensibleChip* l_pchip = nullptr;
-    l_pchip = ServiceDataCollector::getChipAnalyzed();
-    TARGETING::TYPE l_type = PlatServices::getTargetType(
-                                                l_pchip->GetChipHandle() );
-    HEI_ASSERT( iv_chipType == l_type )
-    return l_pchip;
-}
-
+#if 0
 //------------------------------------------------------------------------------
 
 bool HardwareRegister::queryCache() const
 {
     RegDataCache & cache = RegDataCache::getCachedRegisters();
-    BitString * bs = cache.queryCache( getChip(), this );
+    BitString * bs = cache.queryCache( getAccessorChip(), this );
     return ( nullptr != bs );
 }
 
@@ -226,7 +194,7 @@ bool HardwareRegister::queryCache() const
 BitString & HardwareRegister::readCache() const
 {
     RegDataCache & cache = RegDataCache::getCachedRegisters();
-    return cache.read( getChip(), this );
+    return cache.read( getAccessorChip(), this );
 }
 
 //------------------------------------------------------------------------------
@@ -279,6 +247,12 @@ bool HardwareRegister::operator >= ( const HardwareRegister & i_rightRegister  )
     return !( *this < i_rightRegister );
 }
 #endif
+
+//------------------------------------------------------------------------------
+
+HardwareRegister::Accessor * HardwareRegister::cv_accessor = nullptr;
+
+//------------------------------------------------------------------------------
 
 } // end namespace libhei
 

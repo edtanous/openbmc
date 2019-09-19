@@ -34,7 +34,6 @@
 
 #include <prdfGlobal.H>
 #include <prdfScanFacility.H>
-#include <prdfScomRegisterAccess.H>
 #include <prdfTargetFwdRef.H>
 
 namespace libhei

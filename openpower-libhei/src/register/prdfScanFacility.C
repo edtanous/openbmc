@@ -36,7 +36,6 @@
 #include <prdfScanFacility.H>
 #include <prdfFlyWeight.C>
 #include <prdfFlyWeightS.C>
-#include <prdfScomRegisterAccess.H>
 
 namespace libhei
 {

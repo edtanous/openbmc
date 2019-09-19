@@ -14,10 +14,6 @@
 #include <register/hei_register.hpp>
 #include <util/hei_bit_string.hpp>
 
-#if 0
-#include <prdfHomRegisterAccess.H>
-#endif
-
 namespace libhei
 {
 
@@ -28,11 +24,28 @@ class MopsRegisterAccess;
 class ExtensibleChip;
 #endif
 
+/**
+ * @brief Stores information (e.g. address, type, length, etc.) for an actual
+ *        hardware register.
+ *
+ * Hardware access:
+ *
+ *  Actual hardware access is defined by the user application via the user
+ *  interface APIs. In order to tell the user application which chip to target,
+ *  the user application gives the isolator pointers to its chip objects. As
+ *  each chip needs to be accessed, the isolator must store the chip in a
+ *  static variable defined in this class. The intended use is:
+ *
+ *   - Call HardwareRegister::setAccessor() with the target chip.
+ *   - Perform all necessary hardware accesses to that chip.
+ *   - Call HardwareRegister::clearAccessor() to remove the chip access. This
+ *     helps ensure we don't try to access the wrong chip.
+ */
 class HardwareRegister : public Register
 {
-#if 0
   public:
 
+#if 0
     /**
      * @brief     constructor
      * @param     i_address        address of the register
@@ -81,26 +94,31 @@ class HardwareRegister : public Register
      * @return    length of bit string
      */
     uint32_t GetBitLength(void) const { return iv_bitLength ;}
+#endif
 
     /**
-     * @brief     Directly reads from hardware register
-     * @return    SUCCESS|FAIL
+     * @brief  Reads a register from hardware via the user interface APIs.
+     * @param  i_force When false, this function will only read from hardware if
+     *                 an entry for this instance does not already exist in the
+     *                 register cache. When true, the entry in the register
+     *                 cache is flushed, if it exists. Then this function will
+     *                 read from hardware and update the cache.
+     * @return See the return code from the registerRead() user interface API.
      */
-    virtual uint32_t ForceRead() const;
+    ReturnCode read( bool i_force = false ) const;
+
+    #ifndef __HEI_READ_ONLY
 
     /**
-     * @brief     Returns contents of register.If entry does not exist in cache
-     *            a  fresh entry is created and hardware is read.
-     * @return    SUCCESS|FAIL
-    */
-    virtual uint32_t Read() const;
-
-    /**
-     * @brief     Writes cache contents to register.
-     * @return    SUCCESS|FAIL
+     * @brief  Writes the value stored in the register cache to hardware via the
+     *         user interface APIs.
+     * @return See the return code from the registerWrite() user interface API.
      */
-    virtual uint32_t Write();
+    ReturnCode write() const;
 
+    #endif // __HEI_READ_ONLY
+
+#if 0
     /**
      * @brief     Returns the hash id of register
      * @return    returns  hash id of register
@@ -173,21 +191,6 @@ class HardwareRegister : public Register
     * @return   Refer to function description
    */
     virtual BitString & AccessBitString( );
-    /**
-     * @brief     Gets the register read and write done by calling access
-     *            function of scom  accessor service.
-     * @param     reference to bit string maintained in caller  class
-     * @param     Read or write operation
-     * @return    [SUCCESS|FAIL]
-     */
-    uint32_t Access( BitString & bs,
-                     RegisterAccess::Operation op )const;
-
-    /**
-     * @brief  Returns rulechip pointer associated with the register
-     * @return Refer to function description
-     */
-    virtual ExtensibleChip * getChip() const;
 
 private: // functions
 
@@ -218,6 +221,90 @@ private: // functions
     AccessLevel     iv_operationType; // Operation supported (RO, WO, or RW)
 
 #endif
+
+  private: // Hardware accessor class variable
+
+    /** @brief A simple class that stores the chip used to access hardware. */
+    class Accessor
+    {
+      public:
+
+        /**
+         * @brief Constructor.
+         * @param i_chip The chip used to access hardware.
+         */
+        explicit Accessor( const Chip & i_chip ) :
+            iv_chip( i_chip )
+        {}
+
+        /** @brief Destructor. */
+        ~Accessor() = default;
+
+        /** @brief Copy constructor. */
+        Accessor( const Accessor & ) = delete;
+
+        /** @brief Assignment operator. */
+        Accessor & operator=( const Accessor & ) = delete;
+
+        /** @return The chip used to access hardware. */
+        const Chip & getChip() const { return iv_chip; }
+
+      private:
+
+        /**
+         * A Chip object provided by the user application. The isolator does not
+         * know anything about this object nor how to use it. Its only purpose
+         * is to get passed back to the user application for hardware access
+         * operations.
+         */
+        const Chip iv_chip;
+
+    }; // end class Accessor
+
+    /**
+     * This allows all HardwareRegister objects access to a chip via the user
+     * interface APIs. It is intentially defined as a pointer. It can be set to
+     * nullptr to signify that access is restricted at this time. This is useful
+     * to prevent users from accidentally accessing registers on the wrong chip.
+     * It is recommended to use setAccessor() and clearAccessor() to manage this
+     * variable.
+     */
+    static Accessor * cv_accessor;
+
+  public: // Hardware accessor management functions.
+
+    /**
+     * @brief Initializes a new hardware accessor.
+     * @param i_chip The chip used to access hardware.
+     */
+    static void setAccessor( const Chip & i_chip )
+    {
+        clearAccessor();
+        cv_accessor = new Accessor( i_chip );
+    }
+
+    /** @brief Deletes the current hardware accessor. */
+    static void clearAccessor()
+    {
+        delete cv_accessor;
+        cv_accessor = nullptr;
+    }
+
+  private: // Hardware accessor management functions.
+
+    /** @return The chip stored in cv_accessor. */
+    const Chip & getAccessorChip() const
+    {
+        HEI_ASSERT( nullptr != cv_accessor );
+
+#if 0
+        // Extra sanity check to verify this register belongs on the target
+        // accessor chip.
+        HEI_ASSERT( getChipType() != cv_accessor->getChip().getChipType() );
+#endif
+
+        return cv_accessor->getChip();
+    }
 };
 
 } // end namespace libhei

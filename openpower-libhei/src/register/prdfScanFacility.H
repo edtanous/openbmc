@@ -41,8 +41,6 @@
 #include <prdfFlyWeight.H>
 #include <prdfFlyWeightS.H>
 #include <vector>
-#include <prdfHomRegisterAccess.H>
-#include <prdfScomRegisterAccess.H>
 #include <prdfPlatServices.H>
 
 namespace libhei

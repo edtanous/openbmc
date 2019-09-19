@@ -34,7 +34,6 @@
 #include <register/hei_hardware_register.hpp>
 #include <util/hei_bit_string.hpp>
 
-#include <prdfHomRegisterAccess.H>  // dg06a
 #include <iipchip.h>
 #include <iipCaptureData.h>
 #include <string.h>
