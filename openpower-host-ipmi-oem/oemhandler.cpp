@@ -346,8 +346,12 @@ ipmi_ret_t ipmi_ibm_oem_bmc_factory_reset(ipmi_netfn_t netfn, ipmi_cmd_t cmd,
                                           ipmi_context_t context)
 {
     sdbusplus::bus::bus bus{ipmid_get_sd_bus_connection()};
-    // The timeout for IPMI commands is 5s
-    constexpr auto powerOffWait = std::chrono::seconds(1);
+
+    // Since this is a one way command (i.e. the host is requesting a power
+    // off of itself and a reboot of the BMC) we can exceed the 5 second
+    // IPMI timeout. Testing has shown that the power off can take up to
+    // 10 seconds so give it at least 15
+    constexpr auto powerOffWait = std::chrono::seconds(15);
     constexpr auto setFactoryWait = std::chrono::seconds(3);
 
     // Power Off Chassis
