@@ -37,9 +37,8 @@
 
 #include <register/hei_hardware_register.hpp>
 #include <register/hei_operator_register.hpp>
+#include <util/hei_flyweight.hpp>
 
-#include <prdfFlyWeight.H>
-#include <prdfFlyWeightS.H>
 #include <vector>
 #include <prdfPlatServices.H>
 
@@ -204,18 +203,16 @@ private:  // functions
 
 
 private:  // Data
-  typedef FlyWeightS<HardwareRegister,50>           ScanCommRegisters;
-  //FIXME RTC 64345 Investigate benefit of changing below from FlyWeight to
-  //FlyWeightS
-  typedef FlyWeight<AttnTypeRegister,50>        AttnTypeRegisters;
-  typedef FlyWeightS<AndRegister,50>            AndRegisters;
-  typedef FlyWeightS<OrRegister,10>             OrRegisters;
-  typedef FlyWeightS<NotRegister,50>            NotRegisters;
-  typedef FlyWeightS<LeftShiftRegister,10>      LeftShiftRegisters;
-  typedef FlyWeightS<RightShiftRegister, 10>    RightShiftRegisters;
-  typedef FlyWeightS<SummaryRegister,10>        SummaryRegisters;
-  typedef FlyWeight<ConstantRegister, 10>       ConstantRegisters;
-  typedef FlyWeightS<ScomRegisterAccess, 10>    PluginRegisters;
+  typedef Flyweight<HardwareRegister>           ScanCommRegisters;
+  typedef Flyweight<AttnTypeRegister>        AttnTypeRegisters;
+  typedef Flyweight<AndRegister>            AndRegisters;
+  typedef Flyweight<OrRegister>             OrRegisters;
+  typedef Flyweight<NotRegister>            NotRegisters;
+  typedef Flyweight<LeftShiftRegister>      LeftShiftRegisters;
+  typedef Flyweight<RightShiftRegister>    RightShiftRegisters;
+  typedef Flyweight<SummaryRegister>        SummaryRegisters;
+  typedef Flyweight<ConstantRegister>       ConstantRegisters;
+  typedef Flyweight<ScomRegisterAccess>    PluginRegisters;
 
   ScanCommRegisters     iv_scomRegFw;
   AttnTypeRegisters     iv_attnRegFw;

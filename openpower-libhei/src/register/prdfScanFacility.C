@@ -32,10 +32,9 @@
 //----------------------------------------------------------------------
 
 #include <register/hei_register.hpp>
+#include <util/hei_flyweight.hpp>
 
 #include <prdfScanFacility.H>
-#include <prdfFlyWeight.C>
-#include <prdfFlyWeightS.C>
 
 namespace libhei
 {

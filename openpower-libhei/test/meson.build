@@ -5,7 +5,10 @@ subdir('simulator')
 test_src = ['../src/util/hei_bit_string.cpp']
 
 # build g-test framework unit tests
-gtests = ['bit_string_test']
+gtests = [
+    'bit_string_test',
+    'flyweight_test',
+]
 
 gtest = dependency('gtest', main : true, required : false, method : 'system')
 
