@@ -10,11 +10,9 @@ namespace openpower
 namespace targeting
 {
 
-constexpr auto fsiMasterDevPath =
-    "/sys/devices/platform/gpio-fsi/fsi0/slave@00:00/raw";
+constexpr auto fsiMasterDevPath = "/sys/class/fsi-master/fsi0/slave@00:00/raw";
 
-constexpr auto fsiSlaveBaseDir =
-    "/sys/devices/platform/gpio-fsi/fsi0/slave@00:00/00:00:00:0a/fsi1/";
+constexpr auto fsiSlaveBaseDir = "/sys/class/fsi-master/fsi1/";
 
 /**
  * Represents a specific P9 processor in the system.  Used by

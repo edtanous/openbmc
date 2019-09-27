@@ -29,14 +29,9 @@ using namespace phosphor::logging;
 namespace fs = std::experimental::filesystem;
 namespace fsi_error = sdbusplus::org::open_power::Proc::FSI::Error;
 
-constexpr auto masterScanPath =
-    "/sys/bus/platform/devices/gpio-fsi/fsi0/rescan";
-
-constexpr auto hubScanPath = "/sys/devices/platform/gpio-fsi/fsi0/slave@00:00/"
-                             "00:00:00:0a/fsi1/rescan";
-
-constexpr auto masterCalloutPath =
-    "/sys/devices/platform/gpio-fsi/fsi0/slave@00:00/raw";
+constexpr auto masterScanPath = "/sys/class/fsi-master/fsi0/rescan";
+constexpr auto hubScanPath = "/sys/class/fsi-master/fsi1/rescan";
+constexpr auto masterCalloutPath = "/sys/class/fsi-master/fsi0/slave@00:00/raw";
 
 /**
  * Writes a 1 to the sysfs file passed in to trigger
