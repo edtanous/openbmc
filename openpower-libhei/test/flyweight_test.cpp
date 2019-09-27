@@ -16,12 +16,9 @@ class Foo
     int iv_i = 0;
 };
 
-Flyweight<Foo> factory {};
-
 Foo & addFoo( int i )
 {
-    Foo f { i };
-    return factory.get( f );
+    return Flyweight<Foo>::getSingleton().get( Foo { i } );
 }
 
 TEST( FlyweightTest, TestSet1 )

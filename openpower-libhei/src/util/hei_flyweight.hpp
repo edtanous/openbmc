@@ -11,7 +11,7 @@ namespace libhei
 template <class T>
 class Flyweight
 {
-  public:
+  private: // This class cannot be instantiated. Use getSingleton() instead.
 
     /** @brief Default constructor. */
     Flyweight() = default;
@@ -24,6 +24,15 @@ class Flyweight
 
     /** @brief Default assignment operator. */
     Flyweight & operator=( const Flyweight & ) = delete;
+
+  public:
+
+    /** @brief Provides access to a singleton instance of this object. */
+    static Flyweight & getSingleton()
+    {
+        static Flyweight theFlyweight;
+        return theFlyweight;
+    }
 
     /**
      * @brief  Adds the given entry to the factory, if it does not already

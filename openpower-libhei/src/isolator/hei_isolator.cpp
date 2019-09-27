@@ -1,6 +1,7 @@
 
 #include <isolator/hei_isolator.hpp>
 #include <register/hei_hardware_register.hpp>
+#include <util/hei_flyweight.hpp>
 
 namespace libhei
 {
@@ -27,6 +28,9 @@ void Isolator::uninitialize()
     // BEGIN temporary code
     HEI_INF( "Isolator::uninitialize()" );
     // END temporary code
+
+    // Remove all of the isolation objects stored in the flyweights.
+    Flyweight<HardwareRegister>::getSingleton().clear();
 }
 
 ReturnCode Isolator::isolate( const std::vector<Chip> & i_chipList,
