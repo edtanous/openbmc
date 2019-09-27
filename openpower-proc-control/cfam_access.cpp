@@ -66,7 +66,7 @@ void writeReg(const std::unique_ptr<Target>& target, cfam_address_t address,
                                metadata::PATH(target->getCFAMPath().c_str()));
     }
 
-    data = target->swapEndian(data);
+    data = htobe32(data);
 
     rc = write(target->getCFAMFD(), &data, cfamRegSize);
     if (rc < 0)
@@ -110,7 +110,7 @@ cfam_data_t readReg(const std::unique_ptr<Target>& target,
             metadata::CALLOUT_DEVICE_PATH(target->getCFAMPath().c_str()));
     }
 
-    return target->swapEndian(data);
+    return be32toh(data);
 }
 
 void writeRegWithMask(const std::unique_ptr<Target>& target,

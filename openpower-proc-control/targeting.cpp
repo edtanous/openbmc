@@ -60,22 +60,11 @@ std::unique_ptr<Target>& Targeting::getTarget(size_t pos)
     }
 }
 
-static uint32_t noEndianSwap(uint32_t data)
-{
-    return data;
-}
-
-static uint32_t endianSwap(uint32_t data)
-{
-    return htobe32(data);
-}
-
 Targeting::Targeting(const std::string& fsiMasterDev,
                      const std::string& fsiSlaveDir) :
     fsiMasterPath(fsiMasterDev),
     fsiSlaveBasePath(fsiSlaveDir)
 {
-    swap_endian_t swapper = endianSwap;
     std::regex exp{"fsi1/slave@([0-9]{2}):00", std::regex::extended};
 
     if (!fs::exists(fsiMasterPath))
@@ -86,13 +75,10 @@ Targeting::Targeting(const std::string& fsiMasterDev,
         exp = expOld;
         fsiMasterPath = fsiMasterDevPathOld;
         fsiSlaveBasePath = fsiSlaveBaseDirOld;
-
-        // And don't swap the endianness of CFAM data
-        swapper = noEndianSwap;
     }
 
     // Always create P0, the FSI master.
-    targets.push_back(std::make_unique<Target>(0, fsiMasterPath, swapper));
+    targets.push_back(std::make_unique<Target>(0, fsiMasterPath));
     try
     {
         // Find the the remaining P9s dynamically based on which files show up
@@ -112,7 +98,7 @@ Targeting::Targeting(const std::string& fsiMasterDev,
 
                 path += "/raw";
 
-                targets.push_back(std::make_unique<Target>(pos, path, swapper));
+                targets.push_back(std::make_unique<Target>(pos, path));
             }
         }
     }
