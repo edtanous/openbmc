@@ -63,18 +63,10 @@ ReturnCode Isolator::isolate( const std::vector<Chip> & i_chipList,
     // Analyze active error on each chip.
     for ( auto const & chip : i_chipList )
     {
-        // In order to access hardware, we must tell the HardwareRegisters which
-        // chip to access.
-        HardwareRegister::setAccessor( chip );
-
         // BEGIN temporary code
         HEI_INF( "Isolator::isolate(%p,%u)", chip.getChip(),
                  chip.getType() );
         // END temporary code
-
-        // Clean up the hardware accessor chip to prevent accidental hardware
-        // access.
-        HardwareRegister::clearAccessor();
     }
 
     return rc;

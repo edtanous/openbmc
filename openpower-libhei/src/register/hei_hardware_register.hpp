@@ -15,14 +15,10 @@ namespace libhei
  *
  *  Actual hardware access is defined by the user application via the user
  *  interface APIs. In order to tell the user application which chip to target,
- *  the user application gives the isolator pointers to its chip objects. As
- *  each chip needs to be accessed, the isolator must store the chip in a
- *  static variable defined in this class. The intended use is:
- *
- *   - Call HardwareRegister::setAccessor() with the target chip.
- *   - Perform all necessary hardware accesses to that chip.
- *   - Call HardwareRegister::clearAccessor() to remove the chip access. This
- *     helps ensure we don't try to access the wrong chip.
+ *  the user application will give the isolator a list of pointers to its
+ *  objects. They will then be passed into the public functions of this class
+ *  and eventually given back to the user application when hardware access is
+ *  needed.
  *
  * Register cache:
  *
@@ -106,7 +102,7 @@ class HardwareRegister : public Register
   public:
 
     /** Function overloaded from parent Register class. */
-    virtual const BitString * getBitString() const;
+    virtual const BitString * getBitString( const Chip & i_chip ) const;
 
 #if 0
     /**
@@ -119,6 +115,7 @@ class HardwareRegister : public Register
 
     /**
      * @brief  Reads a register from hardware via the user interface APIs.
+     * @param  i_chip  The target chip in which this register belongs.
      * @param  i_force When false, this function will only read from hardware if
      *                 an entry for this instance does not already exist in the
      *                 register cache. When true, the entry in the register
@@ -126,16 +123,17 @@ class HardwareRegister : public Register
      *                 read from hardware and update the cache.
      * @return See the return code from the registerRead() user interface API.
      */
-    ReturnCode read( bool i_force = false ) const;
+    ReturnCode read( const Chip & i_chip, bool i_force = false ) const;
 
     #ifndef __HEI_READ_ONLY
 
     /**
      * @brief  Writes the value stored in the register cache to hardware via the
      *         user interface APIs.
+     * @param  i_chip  The target chip in which this register belongs.
      * @return See the return code from the registerWrite() user interface API.
      */
-    ReturnCode write() const;
+    ReturnCode write( const Chip & i_chip ) const;
 
     #endif // __HEI_READ_ONLY
 
@@ -143,92 +141,19 @@ class HardwareRegister : public Register
   protected: // Functions
 
     /**
+     * @param  i_chip  The target chip in which this register belongs.
      * @return If iv_operationType indicates a register read is possible
      *         (ACCESS_RO or ACCESS_RW), returns a reference to bit string.
      */
-    virtual BitString & accessBitString();
+    virtual BitString & accessBitString( const Chip & i_chip );
 #endif
-
-  private: // Hardware accessor class variable
-
-    /** @brief A simple class that stores the chip used to access hardware. */
-    class Accessor
-    {
-      public:
-
-        /**
-         * @brief Constructor.
-         * @param i_chip The chip used to access hardware.
-         */
-        explicit Accessor( const Chip & i_chip ) :
-            iv_chip( i_chip )
-        {}
-
-        /** @brief Destructor. */
-        ~Accessor() = default;
-
-        /** @brief Copy constructor. */
-        Accessor( const Accessor & ) = delete;
-
-        /** @brief Assignment operator. */
-        Accessor & operator=( const Accessor & ) = delete;
-
-        /** @return The chip used to access hardware. */
-        const Chip & getChip() const { return iv_chip; }
-
-      private:
-
-        /**
-         * A Chip object provided by the user application. The isolator does not
-         * know anything about this object nor how to use it. Its only purpose
-         * is to get passed back to the user application for hardware access
-         * operations.
-         */
-        const Chip iv_chip;
-
-    }; // end class Accessor
-
-    /**
-     * This allows all HardwareRegister objects access to a chip via the user
-     * interface APIs. It is intentially defined as a pointer. It can be set to
-     * nullptr to signify that access is restricted at this time. This is useful
-     * to prevent users from accidentally accessing registers on the wrong chip.
-     * It is recommended to use setAccessor() and clearAccessor() to manage this
-     * variable.
-     */
-    static Accessor * cv_accessor;
-
-  public: // Hardware accessor management functions.
-
-    /**
-     * @brief Initializes a new hardware accessor.
-     * @param i_chip The chip used to access hardware.
-     */
-    static void setAccessor( const Chip & i_chip )
-    {
-        clearAccessor();
-        cv_accessor = new Accessor( i_chip );
-    }
-
-    /** @brief Deletes the current hardware accessor. */
-    static void clearAccessor()
-    {
-        delete cv_accessor;
-        cv_accessor = nullptr;
-    }
 
   private: // Hardware accessor management functions.
 
-    /** @return The chip stored in cv_accessor. */
-    const Chip & getAccessorChip() const
+    /** @brief Asserts this register belongs on the target accessor chip. */
+    void verifyAccessorChip( const Chip & i_chip ) const
     {
-        HEI_ASSERT( nullptr != cv_accessor );
-
-        // Extra sanity check to verify this register belongs on the target
-        // accessor chip.
-        HEI_ASSERT( getChipType() != cv_accessor->getChip().getType() );
-
-        return cv_accessor->getChip();
+        HEI_ASSERT( getChipType() == i_chip.getType() );
     }
 
   private: // Register cache class variable
@@ -314,18 +239,33 @@ class HardwareRegister : public Register
     /** @brief Flushes the entire register cache. */
     static void flushAll() { cv_cache.flush(); }
 
-  private: // Register cache management functions.
-
-    /** @return True if an entry for this register exist in this cache. */
-    bool queryCache() const
+    /**
+     * @brief Flushes this register from the cache.
+     * @param  i_chip  The target chip in which this register belongs.
+     */
+    void flush( const Chip & i_chip ) const
     {
-        return cv_cache.query( getAccessorChip(), this );
+        cv_cache.flush( i_chip, this );
     }
 
-    /** @return A reference to this register's BitString in cache. */
-    BitString & accessCache() const
+  private: // Register cache management functions.
+
+    /**
+     * @param  i_chip  The target chip in which this register belongs.
+     * @return True if an entry for this register exist in this cache.
+     */
+    bool queryCache( const Chip & i_chip ) const
     {
-        return cv_cache.access( getAccessorChip(), this );
+        return cv_cache.query( i_chip, this );
+    }
+
+    /**
+     * @param  i_chip  The target chip in which this register belongs.
+     * @return A reference to this register's BitString in cache.
+     */
+    BitString & accessCache( const Chip & i_chip ) const
+    {
+        return cv_cache.access( i_chip, this );
     }
 };
 

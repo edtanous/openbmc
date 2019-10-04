@@ -19,7 +19,7 @@ Register * fir = new HardwareRegister(REG_ADDRESS, REG_WIDTH,
                                       CHIP_TYPE, ACCESS_RO);
 Register * mask = new ConstantRegister( 0xffffffff00000000 );
 Register * fir_mask = new AndRegister(fir, mask);
-const BitString * bs = fir_mask->getBitString();
+const BitString * bs = fir_mask->getBitString(chip);
 
 The getBitString function (defined by each register) provides access to
 the BitString that manages each register's data.  In this example bs will
@@ -33,12 +33,11 @@ class Register
     virtual ~Register() = 0;
 
     /**
-    @brief      Provides access to the BitString that manages
-                this register's data.
-    @return     A pointer to a BitString.
-    */
-    virtual const BitString * getBitString() const = 0;
-
+     * @brief  Provides access to the value of this register.
+     * @param  i_chip Indicates which chip to access for this register.
+     * @return A BitString containing the value of this register.
+     */
+    virtual const BitString * getBitString( const Chip & i_chip ) const = 0;
 };
 
 // Pure virtual destructor must be defined.
