@@ -18,8 +18,8 @@ namespace libhei
 {
 
 /**
- * @brief Stores information (e.g. address, type, length, etc.) for an actual
- *        hardware register.
+ * @brief An abstract class containing information (e.g. address, type, length,
+ *        etc.) for an actual hardware register.
  *
  * Hardware access:
  *
@@ -50,6 +50,69 @@ namespace libhei
  */
 class HardwareRegister : public Register
 {
+  public:
+
+    /** @brief Pure virtual destructor. */
+    virtual ~HardwareRegister() = 0;
+
+  protected:
+
+    /**
+     * @brief Constructor from components.
+     * @param i_chipType    Type of chip associated with this register.
+     * @param i_id          Unique ID for this register.
+     * @param i_instance    Instance of this register
+     * @param i_accessLevel Hardware access level for this register.
+     */
+    HardwareRegister( ChipType_t i_chipType, RegisterId_t i_id,
+                      RegisterInstance_t i_instance,
+                      RegisterAccessLevel_t i_accessLevel ) :
+        Register(), iv_chipType( i_chipType ), iv_id( i_id ),
+        iv_instance( i_instance ), iv_accessLevel( i_accessLevel )
+    {}
+
+  private: // Instance variables
+
+    /** The type of chip associated with register. */
+    const ChipType_t iv_chipType;
+
+    /** The unique ID for this register. */
+    const RegisterId_t iv_id;
+
+    /** A register may have multiple instances. All of which will have the same
+     *  ID. This variable is used to distinguish between each instance of the
+     *  register. */
+    const RegisterInstance_t iv_instance;
+
+    /** The hardware access level of this register (read/write, read-only,
+     *  write-only, etc.). */
+    const RegisterAccessLevel_t iv_accessLevel;
+
+  public: // Accessor functions
+
+    /** @return The type of chip associated with this register. */
+    ChipType_t getChipType() const { return iv_chipType; }
+
+    /* @return The unique ID for this register. */
+    RegisterId_t getId() const { return iv_id; }
+
+    /* @return The instance of this register. */
+    RegisterInstance_t getInstance() const { return iv_instance; }
+
+    /** @return The hardware access level of this register. */
+    RegisterAccessLevel_t getAccessLevel() const { return iv_accessLevel; }
+
+    // NOTE: The following are determined by child classes.
+
+    /** @return This register's type. */
+    virtual RegisterType_t getRegisterType() const = 0;
+
+    /** @return The address of this register. */
+    virtual RegisterAddress_t getAddress() const = 0;
+
+    /** @return The size (in bytes) of this register. */
+    virtual size_t getSize() const = 0;
+
   public:
 
 #if 0

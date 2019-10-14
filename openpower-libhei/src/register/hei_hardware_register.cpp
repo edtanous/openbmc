@@ -51,9 +51,13 @@
 namespace libhei
 {
 
-#if 0
-// ---------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
+HardwareRegister::~HardwareRegister() {}
+
+//------------------------------------------------------------------------------
+
+#if 0
 void HardwareRegister::SetBitString( const BitString *bs )
 {
     BitString & l_string  = AccessBitString();
