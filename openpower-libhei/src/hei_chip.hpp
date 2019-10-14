@@ -67,7 +67,7 @@ class Chip
      * type in order to look up the correct information from the Chip Data
      * Files.
      */
-    ChipType_t iv_type = DEFAULT_CHIP_TYPE;
+    ChipType_t iv_type = CHIP_TYPE_INVALID;
 
 }; // end class Chip
 

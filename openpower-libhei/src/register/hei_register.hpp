@@ -17,7 +17,7 @@ creates a place where these registers can be put together like logical
 building blocks.  For example, Register makes this possible:
 
 Register * fir = new HardwareRegister(REG_ADDRESS, REG_WIDTH,
-                                      DEFAULT_CHIP_TYPE, ACCESS_RO);
+                                      CHIP_TYPE, ACCESS_RO);
 Register * mask = new ConstantRegister( 0xffffffff00000000 );
 Register * fir_mask = new AndRegister(fir, mask);
 const BitString * bs = fir_mask->getBitString();
