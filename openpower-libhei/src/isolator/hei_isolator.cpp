@@ -14,6 +14,8 @@ ReturnCode Isolator::initialize( void * i_buffer, size_t i_bufferSize,
     // BEGIN temporary code
     HEI_INF( "Isolator::initialize(%p,%lu,%d)", i_buffer, i_bufferSize,
              i_forceInit );
+
+    Flyweight<HardwareRegister>::getSingleton().get( HardwareRegister {} );
     // END temporary code
 
     return rc;

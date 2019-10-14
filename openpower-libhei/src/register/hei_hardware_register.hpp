@@ -79,15 +79,12 @@ class HardwareRegister : public Register
         iv_scomAddress( 0 ),
         iv_operationType( ACCESS_NONE )
     {}
+#endif
 
-    /**
-     * @brief     Returns the pointer to bit string
-     * @param     i_type               attention type
-     * @return    BitString *   pointer to bit string
-     */
+    /** Function overloaded from parent Register class. */
+    virtual const BitString * getBitString() const { return nullptr; }
 
-    virtual const BitString * GetBitString(ATTENTION_TYPE i_type =
-                                                  INVALID_ATTENTION_TYPE) const;
+#if 0
     /**
      * @brief     Updates bit string contents associated with register
      * @param     i_bs               poiner to bit string
@@ -153,6 +150,7 @@ class HardwareRegister : public Register
     * @return   Refer to function description
     */
    uint64_t GetAddress( ) const {return iv_scomAddress ;};
+#endif
    /**
     * @brief     compares two ScomRegisterAccess register for equality
     * @param     i_rightRegister   register to be compared against
@@ -165,6 +163,7 @@ class HardwareRegister : public Register
     * @return    Returns false if i_rightRegisters is less and true otherwise
     */
    bool operator < ( const HardwareRegister & i_rightRegister  ) const ;
+#if 0
    /**
     * @brief     defines >= operation for ScomRegisterAccess
     * @param     i_rightRegister   register to be compared against

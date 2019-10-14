@@ -183,11 +183,11 @@ ReturnCode HardwareRegister::write() const
 
 #endif // __HEI_READ_ONLY
 
-#if 0
 //------------------------------------------------------------------------------
 
 bool HardwareRegister::operator == ( const HardwareRegister & i_rightRegister ) const
 {
+#if 0
     if( iv_scomAddress == i_rightRegister.GetAddress() )
     {
         return ( iv_chipType == i_rightRegister.getChipType() );
@@ -196,12 +196,14 @@ bool HardwareRegister::operator == ( const HardwareRegister & i_rightRegister ) 
     {
         return false ;
     }
-
+#endif
+    return false;
 }
 
 //-----------------------------------------------------------------------------
 bool HardwareRegister::operator < ( const HardwareRegister & i_rightRegister  ) const
 {
+#if 0
     if( iv_scomAddress == i_rightRegister.GetAddress() )
     {
         return ( iv_chipType < i_rightRegister.getChipType() );
@@ -210,9 +212,10 @@ bool HardwareRegister::operator < ( const HardwareRegister & i_rightRegister  ) 
     {
         return( iv_scomAddress  < i_rightRegister.GetAddress() );
     }
-
-
+#endif
+    return false;
 }
+#if 0
 //-----------------------------------------------------------------------------
 bool HardwareRegister::operator >= ( const HardwareRegister & i_rightRegister  ) const
 {

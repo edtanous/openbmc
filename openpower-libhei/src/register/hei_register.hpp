@@ -1,6 +1,5 @@
 #pragma once
 
-#include <stdio.h>
 #include <hei_includes.hpp>
 #include <util/hei_bit_string.hpp>
 
@@ -8,7 +7,7 @@ namespace libhei
 {
 
 /**
-@brief Description:  The Register class.
+@brief An abstract class for register objects.
 
 Purpose:  Register is an abstract base class for real and virtual registers.
 A few examples of these registers are; HardwareRegister, ConstantRegister,
@@ -30,22 +29,8 @@ class Register
 {
   public:
 
-    /**
-    @brief Default constructor
-    */
-    Register() = default;
-
-    /**
-    @brief Delete copy, assignment, and move operators.  Deleting
-           copy causes the compiler to delete move.
-    */
-    Register(const Register&) = delete;
-    Register& operator=(const Register&) = delete;
-
-    /**
-    @brief Default destructor
-    */
-    virtual ~Register() = default;
+    /** @brief Pure virtual destructor. */
+    virtual ~Register() = 0;
 
     /**
     @brief      Provides access to the BitString that manages
@@ -55,5 +40,8 @@ class Register
     virtual const BitString * getBitString() const = 0;
 
 };
+
+// Pure virtual destructor must be defined.
+inline Register::~Register() {}
 
 }//end namespace libhei
