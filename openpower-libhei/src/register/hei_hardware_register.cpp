@@ -44,7 +44,6 @@ const BitString * HardwareRegister::getBitString( const Chip & i_chip ) const
 
 //------------------------------------------------------------------------------
 
-#if 0
 BitString & HardwareRegister::accessBitString( const Chip & i_chip )
 {
     // Verify this register belongs on i_chip.
@@ -64,7 +63,6 @@ BitString & HardwareRegister::accessBitString( const Chip & i_chip )
 
     return accessCache( i_chip );
 }
-#endif
 
 //------------------------------------------------------------------------------
 
