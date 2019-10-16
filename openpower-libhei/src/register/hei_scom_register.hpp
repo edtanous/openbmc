@@ -1,6 +1,7 @@
 #pragma once
 
 #include <register/hei_hardware_register.hpp>
+#include <util/hei_flyweight.hpp>
 
 namespace libhei
 {
@@ -34,11 +35,16 @@ class ScomRegister : public HardwareRegister
     /** @brief Destructor. */
     ~ScomRegister() = default;
 
+  private:
+
+    // This is needed to allow the flyweights to use the copy constructor, but
+    // not allow it to be used in general.
+    friend class Flyweight<ScomRegister>;
+
     /**
      * @brief Copy constructor.
      *
-     * Would prefer to delete this to prevent implicit copy assignments, but it
-     * is needed by the Flyweight class.
+     * Needed by Flyweight class, but should not be allowed in general.
      */
     ScomRegister( const ScomRegister & ) = default;
 
@@ -127,11 +133,16 @@ class IdScomRegister : public HardwareRegister
     /** @brief Destructor. */
     ~IdScomRegister() = default;
 
+  private:
+
+    // This is needed to allow the flyweights to use the copy constructor, but
+    // not allow it to be used in general.
+    friend class Flyweight<IdScomRegister>;
+
     /**
      * @brief Copy constructor.
      *
-     * Would prefer to delete this to prevent implicit copy assignments, but it
-     * is needed by the Flyweight class.
+     * Needed by Flyweight class, but should not be allowed in general.
      */
     IdScomRegister( const IdScomRegister & ) = default;
 
