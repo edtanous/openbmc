@@ -46,6 +46,28 @@ AS_IF([test "$enable_p9" == "yes"], [CHIPS+=" p9"])
 AC_ARG_ENABLE([openfsi], AS_HELP_STRING([--enable-openfsi], [Support Openfsi]))
 AS_IF([test "$enable_openfsi" == "yes"], [CHIPS+=" openfsi"])
 
+AC_ARG_ENABLE([phal], AS_HELP_STRING([--enable-phal], [Use host processor initialisation procedures from PHAL])])
+
+AS_IF([ test "$enable_phal" == "yes" && test "$enable_p9" == "yes"],
+      [ AC_MSG_ERROR([Internal POWER9 and PHAL-provided procedures conflict, please configure only one])]
+     )
+
+AS_IF([test "$enable_phal" == "yes"],
+      [
+       AX_ABSOLUTE_HEADER([libipl.h])
+       if test x"$gl_cv_absolute_libipl_h" == "x" ; then
+               AC_MSG_ERROR([Cannot find libipl.h path])
+       fi
+
+       AC_CHECK_LIB([ipl], [ipl_init])
+       if test x"$ac_cv_lib_ipl_ipl_init" != "xyes" ; then
+               AC_MSG_ERROR([IPL library not found])
+       fi
+
+       CHIPS+=" phal"
+      ]
+     )
+
 AS_IF([test "x$CHIPS" == "x"], [CHIPS="p9 openfsi"])
 
 AC_CONFIG_FILES([Makefile.generated],
