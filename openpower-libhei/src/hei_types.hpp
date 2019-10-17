@@ -96,6 +96,18 @@ enum RegisterInstance_t : uint8_t
 };
 
 /**
+ * This is used to defined a bit field for a register. It is mainly used in the
+ * Signature class to indicate which bit on a register had an active attention.
+ *
+ * Values:
+ *   The widest supported register is only 64-bits (value 0-63).
+ *
+ * Range:
+ *   Only the minimum 1-byte field is necessary.
+ */
+typedef uint8_t RegisterBit_t;
+
+/**
  * The hardware address of a register (right justified).
  *
  * Values:
@@ -124,6 +136,39 @@ enum RegisterAccessLevel_t : uint8_t
     REG_ACCESS_RO   = 0x1, ///< Read-only access
     REG_ACCESS_WO   = 0x2, ///< Write-only access
     REG_ACCESS_RW   = 0x3, ///< Read/Write access
+};
+
+/**
+ * The Chip Data Files will contain action, rules, etc. based on the supported
+ * attention types listed in this enum. The user application must use the
+ * values defined in this enum in order to maintain consistency across all
+ * chips.
+ *
+ * Values:
+ *   The supported attention types are listed in this enum.
+ *
+ * Range:
+ *   Only the minimum 1-byte field is necessary.
+ */
+enum AttentionType_t : uint8_t
+{
+    /** System checkstop hardware attention. Unrecoverable, fatal error. */
+    ATTN_TYPE_CHECKSTOP   = 1,
+
+    /** Unit checkstop hardware attention. A unit within the system is no longer
+     *  usable but the rest of the system should be able to recover. */
+    ATTN_TYPE_UNIT_CS     = 2,
+
+    /** Recoverable hardware attention. The system should be able to continue
+     *  uninterrupted, possible degraded functionality. */
+    ATTN_TYPE_RECOVERABLE = 3,
+
+    /** Software or hardware event requiring action by the service processor
+     *  firmware. */
+    ATTN_TYPE_SP_ATTN     = 4,
+
+    /** Software or hardware event requiring action by the host firmware. */
+    ATTN_TYPE_HOST_ATTN   = 5,
 };
 
 } // end namespace libhei

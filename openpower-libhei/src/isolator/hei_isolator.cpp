@@ -55,7 +55,7 @@ ReturnCode Isolator::isolate( const std::vector<Chip> & i_chipList,
     ReturnCode rc;
 
     // Flush the isolation data to ensure a clean slate.
-    o_isoData.clear();
+    o_isoData.flush();
 
     // Flush the hardware register cache to avoid using stale data.
     HardwareRegister::flushAll();
