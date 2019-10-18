@@ -114,6 +114,13 @@ class BlobInterface
     virtual void closeBlob(std::uint16_t session) = 0;
 
     /**
+     * Attempt to delete a blobId.
+     *
+     * @param[in] path - the blobId path.
+     */
+    virtual void deleteBlob(const std::string& id) = 0;
+
+    /**
      * Read bytes from a blob.
      *
      * @param[in] session - the session id.

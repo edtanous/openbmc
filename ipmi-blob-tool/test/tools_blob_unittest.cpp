@@ -449,4 +449,32 @@ TEST_F(BlobHandlerTest, readBytesSucceeds)
     EXPECT_EQ(blob.readBytes(0x0001, 0, 4), expectedBytes);
 }
 
+TEST_F(BlobHandlerTest, deleteBlobSucceeds)
+{
+    /* The delete succeeds. */
+    auto ipmi = CreateIpmiMock();
+    IpmiInterfaceMock* ipmiMock =
+        reinterpret_cast<IpmiInterfaceMock*>(ipmi.get());
+    BlobHandler blob(std::move(ipmi));
+
+    std::vector<std::uint8_t> request = {
+        0xcf, 0xc2,
+        0x00, static_cast<std::uint8_t>(BlobOEMCommands::bmcBlobDelete),
+        0x00, 0x00,
+        'a',  'b',
+        'c',  'd',
+        0x00};
+
+    std::vector<std::uint8_t> resp = {0xcf, 0xc2, 0x00};
+    std::vector<std::uint8_t> reqCrc = {'a', 'b', 'c', 'd', 0x00};
+    EXPECT_CALL(crcMock, generateCrc(ContainerEq(reqCrc)))
+        .WillOnce(Return(0x00));
+
+    EXPECT_CALL(*ipmiMock,
+                sendPacket(ipmiOEMNetFn, ipmiOEMBlobCmd, ContainerEq(request)))
+        .WillOnce(Return(resp));
+
+    blob.deleteBlob("abcd");
+}
+
 } // namespace ipmiblob

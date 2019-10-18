@@ -82,6 +82,8 @@ class BlobHandler : public BlobInterface
 
     void closeBlob(std::uint16_t session) override;
 
+    void deleteBlob(const std::string& id) override;
+
     /**
      * @throws BlobException.
      */
