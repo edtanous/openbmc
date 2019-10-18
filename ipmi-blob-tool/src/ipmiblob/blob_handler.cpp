@@ -204,7 +204,7 @@ void BlobHandler::writeGeneric(BlobOEMCommands command, std::uint16_t session,
 
     std::copy(bytes.begin(), bytes.end(), std::back_inserter(payload));
 
-    auto resp = sendIpmiPayload(command, payload);
+    sendIpmiPayload(command, payload);
 }
 
 void BlobHandler::writeMeta(std::uint16_t session, std::uint32_t offset,
