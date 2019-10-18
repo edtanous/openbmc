@@ -71,25 +71,6 @@ class ScomRegister : public HardwareRegister
     /** Function overloaded from parent HardwareRegister class. */
     size_t getSize() const { return 8; }
 
-  public: // Operators
-
-    /** @brief Equals operator. */
-    bool operator==( const ScomRegister & i_r ) const
-    {
-        // Comparing address and chip type should be sufficient.
-        return ( getAddress()  == i_r.getAddress()  ) &&
-               ( getChipType() == i_r.getChipType() );
-    }
-
-    /** @brief Less than operator. */
-    bool operator<( const ScomRegister & i_r ) const
-    {
-        // Comparing address and chip type should be sufficient.
-        return (   getAddress()  <  i_r.getAddress()       ) ||
-               ( ( getAddress()  == i_r.getAddress()  ) &&
-                 ( getChipType() <  i_r.getChipType() )    );
-    }
-
   private: // Instance variables
 
     /** This register's address. */
@@ -168,25 +149,6 @@ class IdScomRegister : public HardwareRegister
 
     /** Function overloaded from parent HardwareRegister class. */
     size_t getSize() const { return 8; } // See note in class documentation.
-
-  public: // Operators
-
-    /** @brief Equals operator. */
-    bool operator==( const IdScomRegister & i_r ) const
-    {
-        // Comparing address and chip type should be sufficient.
-        return ( getAddress()  == i_r.getAddress()  ) &&
-               ( getChipType() == i_r.getChipType() );
-    }
-
-    /** @brief Less than operator. */
-    bool operator<( const IdScomRegister & i_r ) const
-    {
-        // Comparing address and chip type should be sufficient.
-        return (   getAddress()  <  i_r.getAddress()       ) ||
-               ( ( getAddress()  == i_r.getAddress()  ) &&
-                 ( getChipType() <  i_r.getChipType() )    );
-    }
 
   private: // Instance variables
 

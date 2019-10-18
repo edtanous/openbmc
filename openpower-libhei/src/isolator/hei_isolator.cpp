@@ -1,7 +1,11 @@
 
 #include <isolator/hei_isolator.hpp>
-#include <register/hei_scom_register.hpp>
+#include <register/hei_hardware_register.hpp>
 #include <util/hei_flyweight.hpp>
+
+// BEGIN temporary code
+#include <register/hei_scom_register.hpp>
+// END temporary code
 
 namespace libhei
 {

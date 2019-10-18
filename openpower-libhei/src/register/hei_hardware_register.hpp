@@ -99,6 +99,40 @@ class HardwareRegister : public Register
     /** @return The size (in bytes) of this register. */
     virtual size_t getSize() const = 0;
 
+  public: // Operators
+
+    /** @brief Equals operator. */
+    bool operator==( const HardwareRegister & i_r ) const
+    {
+        // Comparing register type, chip type, and address should be sufficient.
+        return ( getRegisterType() == i_r.getRegisterType() ) &&
+               ( getChipType()     == i_r.getChipType()     ) &&
+               ( getAddress()      == i_r.getAddress()      );
+    }
+
+    /** @brief Less than operator. */
+    bool operator<( const HardwareRegister & i_r ) const
+    {
+        // Comparing register type, chip type, and address should be sufficient.
+        if ( getRegisterType() < i_r.getRegisterType() )
+        {
+            return true;
+        }
+        else if ( getRegisterType() == i_r.getRegisterType() )
+        {
+            if ( getChipType() < i_r.getChipType() )
+            {
+                return true;
+            }
+            else if ( getChipType() == i_r.getChipType() )
+            {
+                return ( getAddress() < i_r.getAddress() );
+            }
+        }
+
+        return false;
+    }
+
   public:
 
     /** Function overloaded from parent Register class. */
