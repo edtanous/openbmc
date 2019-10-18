@@ -210,14 +210,13 @@ void BlobHandler::writeGeneric(BlobOEMCommands command, std::uint16_t session,
 void BlobHandler::writeMeta(std::uint16_t session, std::uint32_t offset,
                             const std::vector<std::uint8_t>& bytes)
 {
-    return writeGeneric(BlobOEMCommands::bmcBlobWriteMeta, session, offset,
-                        bytes);
+    writeGeneric(BlobOEMCommands::bmcBlobWriteMeta, session, offset, bytes);
 }
 
 void BlobHandler::writeBytes(std::uint16_t session, std::uint32_t offset,
                              const std::vector<std::uint8_t>& bytes)
 {
-    return writeGeneric(BlobOEMCommands::bmcBlobWrite, session, offset, bytes);
+    writeGeneric(BlobOEMCommands::bmcBlobWrite, session, offset, bytes);
 }
 
 std::vector<std::string> BlobHandler::getBlobList()
@@ -330,8 +329,6 @@ void BlobHandler::closeBlob(std::uint16_t session)
     {
         std::fprintf(stderr, "Received failure on close: %s\n", b.what());
     }
-
-    return;
 }
 
 void BlobHandler::deleteBlob(const std::string& id)
@@ -348,8 +345,6 @@ void BlobHandler::deleteBlob(const std::string& id)
     {
         std::fprintf(stderr, "Received failure on delete: %s\n", b.what());
     }
-
-    return;
 }
 
 std::vector<std::uint8_t> BlobHandler::readBytes(std::uint16_t session,
