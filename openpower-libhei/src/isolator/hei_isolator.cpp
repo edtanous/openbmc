@@ -1,5 +1,6 @@
 
 #include <isolator/hei_isolator.hpp>
+#include <isolator/hei_isolation_node.hpp>
 #include <register/hei_hardware_register.hpp>
 #include <util/hei_flyweight.hpp>
 
@@ -40,15 +41,15 @@ ReturnCode Isolator::initialize( void * i_buffer, size_t i_bufferSize,
 
 void Isolator::uninitialize()
 {
+    // Remove all of the IsolationNode objects stored in the flyweights. This
+    // must be done before removing the HardwareRegister objects
+    Flyweight<IsolationNode>::getSingleton().clear();
+
     // Must flush the hardware register cache before deleting any
     // HardwareRegister objects.
     HardwareRegister::flushAll();
 
-    // BEGIN temporary code
-    HEI_INF( "Isolator::uninitialize()" );
-    // END temporary code
-
-    // Remove all of the isolation objects stored in the flyweights.
+    // Remove all of the HardwareRegister objects stored in the flyweights.
     Flyweight<ScomRegister>::getSingleton().clear();
     Flyweight<IdScomRegister>::getSingleton().clear();
 }
