@@ -63,11 +63,11 @@ namespace libhei
  *
  * @return RC_SUCCESS or RC_CHIP_DATA_INVALID or RC_CHIP_DATA_INITIALIZED
  */
-inline ReturnCode initialize( void * i_buffer, size_t i_bufferSize,
-                              bool i_forceInit = false )
+inline ReturnCode initialize(void * i_buffer, size_t i_bufferSize,
+                             bool i_forceInit = false)
 {
-    return Isolator::getSingleton().initialize( i_buffer, i_bufferSize,
-                                                i_forceInit );
+    return Isolator::getSingleton().initialize(i_buffer, i_bufferSize,
+                                               i_forceInit);
 }
 
 /**
@@ -97,11 +97,10 @@ inline void uninitialize()
  *
  * @return RC_SUCCESS or RC_CHIP_DATA_MISSING
  */
-inline ReturnCode isolate( const std::vector<Chip> & i_chipList,
-                           IsolationData & o_isoData )
+inline ReturnCode isolate(const std::vector<Chip> & i_chipList,
+                          IsolationData & o_isoData)
 {
-    return Isolator::getSingleton().isolate( i_chipList, o_isoData );
+    return Isolator::getSingleton().isolate(i_chipList, o_isoData);
 }
 
 } // end namespace libhei
-

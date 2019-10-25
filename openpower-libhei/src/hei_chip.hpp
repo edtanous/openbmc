@@ -17,16 +17,16 @@ class Chip
 
     ~Chip() = default;
 
-    Chip( const Chip & ) = default;
+    Chip(const Chip &) = default;
 
-    Chip & operator=( const Chip & ) = default;
+    Chip & operator=(const Chip &) = default;
 
     /**
      * @brief Constructor.
      * @param i_chip See description for iv_chip.
      * @param i_type See description for iv_type.
      */
-    Chip( void * i_chip, ChipType_t i_type ) :
+    Chip(void * i_chip, ChipType_t i_type) :
         iv_chip(i_chip), iv_type(i_type)
     {}
 
@@ -38,17 +38,16 @@ class Chip
 
   public: // Operators
 
-    bool operator==( const Chip & r ) const
+    bool operator==(const Chip & r) const
     {
         return (iv_chip == r.iv_chip) &&
                (iv_type == r.iv_type);
     }
 
-    bool operator<( const Chip & r ) const
+    bool operator<(const Chip & r) const
     {
-        return (  iv_chip <  r.iv_chip     ) ||
-               ( (iv_chip == r.iv_chip) &&
-                 (iv_type <  r.iv_type)    );
+        return (iv_chip < r.iv_chip) ||
+               ((iv_chip == r.iv_chip) && (iv_type < r.iv_type));
     }
 
   private:
@@ -72,4 +71,3 @@ class Chip
 }; // end class Chip
 
 } // end namespace libhei
-

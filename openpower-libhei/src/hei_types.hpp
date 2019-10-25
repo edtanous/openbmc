@@ -172,4 +172,3 @@ enum AttentionType_t : uint8_t
 };
 
 } // end namespace libhei
-

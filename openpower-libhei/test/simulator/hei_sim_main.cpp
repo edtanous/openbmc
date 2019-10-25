@@ -7,7 +7,7 @@ int main()
     void * buffer = nullptr;
     size_t sz_buffer = 0;
 
-    initialize( buffer, sz_buffer );
+    initialize(buffer, sz_buffer);
 
     Chip c1, c2;
 
@@ -17,7 +17,7 @@ int main()
 
     IsolationData isoData;
 
-    isolate( chipList, isoData );
+    isolate(chipList, isoData);
 
     uninitialize();
 

@@ -5,4 +5,4 @@
 namespace libhei
 {
 
-} //end namespace libhei
+} // end namespace libhei

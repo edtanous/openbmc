@@ -13,33 +13,33 @@ class ReturnCode
      * @brief Constructor.
      * @param i_rc The error code value.
      */
-    explicit constexpr ReturnCode( uint32_t i_rc = 0 ) :
-        iv_rc( i_rc )
+    explicit constexpr ReturnCode(uint32_t i_rc = 0) :
+        iv_rc(i_rc)
     {}
 
     /** @brief Default copy constructor. */
-    ReturnCode( const ReturnCode & ) = default;
+    ReturnCode(const ReturnCode &) = default;
 
     /** @brief Default assignment operator. */
-    ReturnCode& operator=( const ReturnCode & ) = default;
+    ReturnCode& operator=(const ReturnCode &) = default;
 
     /** @brief Default destructor. */
     ~ReturnCode() = default;
 
-	/** @brief Integral type conversion function. */
+    /** @brief Integral type conversion function. */
     operator uint32_t() const { return iv_rc; }
 
     /** @brief Integral type conversion function. */
     operator uint64_t() const { return iv_rc; }
 
     /** @brief Equals operator. */
-    bool operator==( const ReturnCode & rhs ) const
+    bool operator==(const ReturnCode & rhs) const
     {
         return rhs.iv_rc == iv_rc;
     }
 
     /** @brief Not equals operator. */
-    bool operator!=( const ReturnCode & rhs ) const
+    bool operator!=(const ReturnCode & rhs) const
     {
         return rhs.iv_rc != iv_rc;
     }
@@ -76,4 +76,3 @@ static constexpr ReturnCode RC_CHIP_DATA_MISSING       = ReturnCode(0x00000003);
 static constexpr ReturnCode RC_REG_ACCESS_FAILURE      = ReturnCode(0x00000004);
 
 } // end namespace libhei
-

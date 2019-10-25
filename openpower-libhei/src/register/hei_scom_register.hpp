@@ -25,11 +25,11 @@ class ScomRegister : public HardwareRegister
      * @param i_accessLevel Hardware access level for this register.
      * @param i_address     A 4-byte address for this SCOM register.
      */
-    ScomRegister( ChipType_t i_chipType, RegisterId_t i_id,
-                  RegisterInstance_t i_instance,
-                  RegisterAccessLevel_t i_accessLevel, uint32_t i_address ) :
-        HardwareRegister( i_chipType, i_id, i_instance, i_accessLevel ),
-        iv_address( i_address )
+    ScomRegister(ChipType_t i_chipType, RegisterId_t i_id,
+                 RegisterInstance_t i_instance,
+                 RegisterAccessLevel_t i_accessLevel, uint32_t i_address) :
+        HardwareRegister(i_chipType, i_id, i_instance, i_accessLevel),
+        iv_address(i_address)
     {}
 
     /** @brief Destructor. */
@@ -46,7 +46,7 @@ class ScomRegister : public HardwareRegister
      *
      * Needed by Flyweight class, but should not be allowed in general.
      */
-    ScomRegister( const ScomRegister & ) = default;
+    ScomRegister(const ScomRegister &) = default;
 
     /**
      * @brief Explicitly disables assignment operator.
@@ -55,7 +55,7 @@ class ScomRegister : public HardwareRegister
      * of the constant instance variables, but helps communicate it is not
      * allowed.
      */
-    ScomRegister & operator=( const ScomRegister & ) = delete;
+    ScomRegister & operator=(const ScomRegister &) = delete;
 
   public: // Accessor functions
 
@@ -65,7 +65,7 @@ class ScomRegister : public HardwareRegister
     /** Function overloaded from parent HardwareRegister class. */
     RegisterAddress_t getAddress() const
     {
-        return static_cast<RegisterAddress_t>( iv_address );
+        return static_cast<RegisterAddress_t>(iv_address);
     }
 
     /** Function overloaded from parent HardwareRegister class. */
@@ -104,11 +104,11 @@ class IdScomRegister : public HardwareRegister
      * @param i_accessLevel Hardware access level for this register.
      * @param i_address     An 8-byte address for this Indirect SCOM register.
      */
-    IdScomRegister( ChipType_t i_chipType, RegisterId_t i_id,
-                    RegisterInstance_t i_instance,
-                    RegisterAccessLevel_t i_accessLevel, uint64_t i_address ) :
-        HardwareRegister( i_chipType, i_id, i_instance, i_accessLevel ),
-        iv_address( i_address )
+    IdScomRegister(ChipType_t i_chipType, RegisterId_t i_id,
+                   RegisterInstance_t i_instance,
+                   RegisterAccessLevel_t i_accessLevel, uint64_t i_address) :
+        HardwareRegister(i_chipType, i_id, i_instance, i_accessLevel),
+        iv_address(i_address)
     {}
 
     /** @brief Destructor. */
@@ -125,7 +125,7 @@ class IdScomRegister : public HardwareRegister
      *
      * Needed by Flyweight class, but should not be allowed in general.
      */
-    IdScomRegister( const IdScomRegister & ) = default;
+    IdScomRegister(const IdScomRegister &) = default;
 
     /**
      * @brief Explicitly disables assignment operator.
@@ -134,7 +134,7 @@ class IdScomRegister : public HardwareRegister
      * of the constant instance variables, but helps communicate it is not
      * allowed.
      */
-    IdScomRegister & operator=( const IdScomRegister & ) = delete;
+    IdScomRegister & operator=(const IdScomRegister &) = delete;
 
   public: // Accessor functions
 
@@ -144,7 +144,7 @@ class IdScomRegister : public HardwareRegister
     /** Function overloaded from parent HardwareRegister class. */
     RegisterAddress_t getAddress() const
     {
-        return static_cast<RegisterAddress_t>( iv_address );
+        return static_cast<RegisterAddress_t>(iv_address);
     }
 
     /** Function overloaded from parent HardwareRegister class. */
@@ -158,4 +158,3 @@ class IdScomRegister : public HardwareRegister
 }; // end class IdScomRegister
 
 } // end namespace libhei
-

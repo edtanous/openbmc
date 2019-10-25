@@ -20,10 +20,10 @@ class Flyweight
     ~Flyweight() { clear(); }
 
     /** @brief Default copy constructor. */
-    Flyweight( const Flyweight & ) = delete;
+    Flyweight(const Flyweight &) = delete;
 
     /** @brief Default assignment operator. */
-    Flyweight & operator=( const Flyweight & ) = delete;
+    Flyweight & operator=(const Flyweight &) = delete;
 
   public:
 
@@ -40,20 +40,21 @@ class Flyweight
      * @param  The target entry.
      * @return A reference to this entry in the factory.
      */
-    T & get( const T & i_entry )
+    T & get(const T & i_entry)
     {
         // The index is sorted by the value of the T objects. Check to see if
         // this entry already exists in the factory.
-        auto itr = std::lower_bound( iv_index.begin(), iv_index.end(), &i_entry,
-                             [](const T * a, const T * b) { return *a < *b; } );
+        auto itr =
+            std::lower_bound(iv_index.begin(), iv_index.end(), &i_entry,
+                             [](const T * a, const T * b) { return *a < *b; });
 
         // std::lower_bound() will return the first element that does not
         // compare less than i_entry. So if an entry is found, we must make sure
         // it does not have the same value as i_entry.
-        if ( iv_index.end() == itr || !(i_entry == *(*itr)) )
+        if (iv_index.end() == itr || !(i_entry == *(*itr)))
         {
             // Create a new entry and store the pointer in the sorted index.
-            itr = iv_index.insert( itr, new T { i_entry } );
+            itr = iv_index.insert(itr, new T { i_entry });
         }
 
         // Return a reference to this entry in the factory.
@@ -67,7 +68,7 @@ class Flyweight
      */
     void clear()
     {
-        for ( auto i : iv_index ) { delete i; }
+        for (auto i : iv_index) { delete i; }
         iv_index.clear();
     }
 
@@ -105,4 +106,3 @@ class Flyweight
 };
 
 } // end namespace libhei
-

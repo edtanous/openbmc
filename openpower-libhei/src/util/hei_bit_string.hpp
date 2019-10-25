@@ -33,7 +33,7 @@ class BitStringBuffer;
  *
  *    uint8_t a[2];                       // 16 bits of memory
  *    BitString bs { 16, a };             // init BitString for a
- *    bs.setFieldRight( 0, 16, 0x1122 );  // set all 16 bits to 0x1122
+ *    bs.setFieldRight(0, 16, 0x1122);  // set all 16 bits to 0x1122
  *
  * Results in:
  *
@@ -76,8 +76,7 @@ class BitString
      * @pre   Use getMinBytes() to calulate the minimum number of bytes needed
      *        to allocate sufficient memory space for this bit string.
      */
-    BitString( uint64_t i_bitLen, void * i_bufAddr,
-               uint64_t i_offset = 0 ) :
+    BitString(uint64_t i_bitLen, void * i_bufAddr, uint64_t i_offset = 0) :
         iv_bitLen(i_bitLen), iv_bufAddr(i_bufAddr), iv_offset(i_offset)
     {}
 
@@ -98,9 +97,9 @@ class BitString
      * @return The minimum number of bytes required to allocate sufficient
      *         memory space for a bit string.
      */
-    static uint64_t getMinBytes( uint64_t i_bitLen, uint64_t i_offset = 0 )
+    static uint64_t getMinBytes(uint64_t i_bitLen, uint64_t i_offset = 0)
     {
-        return (i_bitLen + i_offset + UINT8_BIT_LEN-1) / UINT8_BIT_LEN;
+        return (i_bitLen + i_offset + UINT8_BIT_LEN - 1) / UINT8_BIT_LEN;
     }
 
     /**
@@ -114,7 +113,7 @@ class BitString
      * @pre    i_len <= UINT64_BIT_LEN
      * @pre    i_pos + i_len <= getBitLen()
      */
-    uint64_t getFieldLeft( uint64_t i_pos, uint64_t i_len ) const
+    uint64_t getFieldLeft(uint64_t i_pos, uint64_t i_len) const
     {
         return getFieldRight(i_pos, i_len) << (UINT64_BIT_LEN - i_len);
     }
@@ -130,7 +129,7 @@ class BitString
      * @pre    i_len <= UINT64_BIT_LEN
      * @pre    i_pos + i_len <= getBitLen()
      */
-    uint64_t getFieldRight( uint64_t i_pos, uint64_t i_len ) const;
+    uint64_t getFieldRight(uint64_t i_pos, uint64_t i_len) const;
 
     /**
      * @brief  Sets a left-justified value of the given length into the bit
@@ -143,7 +142,7 @@ class BitString
      * @pre   i_len <= UINT64_BIT_LEN
      * @pre   i_pos + i_len <= getBitLen()
      */
-    void setFieldLeft( uint64_t i_pos, uint64_t i_len, uint64_t i_val );
+    void setFieldLeft(uint64_t i_pos, uint64_t i_len, uint64_t i_val);
 
     /**
      * @brief  Sets a right-justified value of the given length into the bit
@@ -156,9 +155,9 @@ class BitString
      * @pre   i_len <= UINT64_BIT_LEN
      * @pre   i_pos + i_len <= getBitLen()
      */
-    void setFieldRight( uint64_t i_pos, uint64_t i_len, uint64_t i_val )
+    void setFieldRight(uint64_t i_pos, uint64_t i_len, uint64_t i_val)
     {
-        setFieldLeft( i_pos, i_len, i_val << (UINT64_BIT_LEN - i_len) );
+        setFieldLeft(i_pos, i_len, i_val << (UINT64_BIT_LEN - i_len));
     }
 
     /**
@@ -166,7 +165,7 @@ class BitString
      * @return True if the bit at the given position is set(1), false otherwise.
      * @pre    i_pos < getBitLen().
      */
-    bool isBitSet( uint64_t i_pos ) const
+    bool isBitSet(uint64_t i_pos) const
     {
         return 0 != getFieldRight(i_pos, 1);
     }
@@ -176,7 +175,7 @@ class BitString
      * @param i_pos The target position.
      * @pre   i_pos < getBitLen().
      */
-    void setBit( uint64_t i_pos ) { setFieldRight( i_pos, 1, 1 ); }
+    void setBit(uint64_t i_pos) { setFieldRight(i_pos, 1, 1); }
 
     /** @brief Sets the entire bit string to 1's. */
     void setAll() { setPattern(UINT64_MAX); }
@@ -186,7 +185,7 @@ class BitString
      * @param i_pos The target position.
      * @pre   i_pos < getBitLen().
      */
-    void clearBit( uint64_t i_pos ) { setFieldRight( i_pos, 1, 0 ); }
+    void clearBit(uint64_t i_pos) { setFieldRight(i_pos, 1, 0); }
 
     /** @brief Sets the entire bit string to 0's. */
     void clearAll() { setPattern(0); }
@@ -212,8 +211,8 @@ class BitString
      *            Old String: 0001001000
      *            New String: 0000110000
      */
-    void setPattern( uint64_t i_sPos, uint64_t i_sLen,
-                     uint64_t i_pattern, uint64_t i_pLen );
+    void setPattern(uint64_t i_sPos, uint64_t i_sLen, uint64_t i_pattern,
+                    uint64_t i_pLen);
 
     /**
      * @brief Sets entire string based on the pattern and length provided.
@@ -223,9 +222,9 @@ class BitString
      * @post  The entire string is filled with the pattern.
      * @post  The pattern is repeated/truncated as needed.
      */
-    void setPattern( uint64_t i_pattern, uint64_t i_pLen )
+    void setPattern(uint64_t i_pattern, uint64_t i_pLen)
     {
-        setPattern( 0, getBitLen(), i_pattern, i_pLen );
+        setPattern(0, getBitLen(), i_pattern, i_pLen);
     }
 
     /**
@@ -235,9 +234,9 @@ class BitString
      * @post  The entire string is filled with the pattern.
      * @post  The pattern is repeated/truncated as needed.
      */
-    void setPattern( uint64_t i_pattern )
+    void setPattern(uint64_t i_pattern)
     {
-        setPattern( i_pattern, sizeof(i_pattern) * 8 );
+        setPattern(i_pattern, sizeof(i_pattern) * 8);
     }
 
     /**
@@ -258,8 +257,8 @@ class BitString
      *        string, then the extra bits in this string are not modified.
      * @note  This string and the source string may specify overlapping memory.
      */
-    void setString( const BitString & i_sStr, uint64_t i_sPos,
-                    uint64_t i_sLen, uint64_t i_dPos = 0 );
+    void setString(const BitString & i_sStr, uint64_t i_sPos, uint64_t i_sLen,
+                   uint64_t i_dPos = 0);
 
     /**
      * @brief Set bits in this string based on the provided string.
@@ -269,9 +268,9 @@ class BitString
      * @note  See the other definition of this function for details and
      *        restrictions.
      */
-    void setString( const BitString & i_sStr )
+    void setString(const BitString & i_sStr)
     {
-        setString( i_sStr, 0, i_sStr.getBitLen() );
+        setString(i_sStr, 0, i_sStr.getBitLen());
     }
 
     /**
@@ -283,7 +282,7 @@ class BitString
      * @note  If the length of the given string is less than the length of this
      *        string, then the extra bits in this string are not modified.
      */
-    void maskString( const BitString & i_mask );
+    void maskString(const BitString & i_mask);
 
     /**
      * @param  i_str The string to compare.
@@ -291,7 +290,7 @@ class BitString
      * @pre    Both strings must be of equal length and have same values to be
      *         equal.
      */
-    bool isEqual( const BitString & i_str ) const;
+    bool isEqual(const BitString & i_str) const;
 
     /** @return True if there are no bit set(1) in this bit string, false
      *          otherwise. */
@@ -304,28 +303,28 @@ class BitString
      * @pre    nullptr != getBufAddr()
      * @pre    i_pos + i_len <= getBitLen()
      */
-    uint64_t getSetCount( uint64_t i_pos, uint64_t i_len ) const;
+    uint64_t getSetCount(uint64_t i_pos, uint64_t i_len) const;
 
     /** @return The number of bits that are set(1) in this string. */
-    uint64_t getSetCount() const { return getSetCount( 0, getBitLen() ); }
+    uint64_t getSetCount() const { return getSetCount(0, getBitLen()); }
 
     /** @brief Comparison operator. */
-    bool operator==( const BitString & i_str ) const { return isEqual(i_str); }
+    bool operator==(const BitString & i_str) const { return isEqual(i_str); }
 
     /** @brief Bitwise NOT operator. */
     BitStringBuffer operator~() const;
 
     /** @brief Bitwise AND operator. */
-    BitStringBuffer operator&( const BitString & i_bs ) const;
+    BitStringBuffer operator&(const BitString & i_bs) const;
 
     /** @brief Bitwise OR operator. */
-    BitStringBuffer operator|( const BitString & i_bs ) const;
+    BitStringBuffer operator|(const BitString & i_bs) const;
 
     /** @brief Right shift operator. */
-    BitStringBuffer operator>>( uint64_t i_shift ) const;
+    BitStringBuffer operator>>(uint64_t i_shift) const;
 
     /** @brief Left shift operator. */
-    BitStringBuffer operator<<( uint64_t i_shift ) const;
+    BitStringBuffer operator<<(uint64_t i_shift) const;
 
     /**
      * @brief Explicitly disables copy from BitString.
@@ -333,7 +332,7 @@ class BitString
      * Prevents assigning a BitString & to a BitString, which would strip
      * polymorphism.
      */
-    BitString( const BitString & i_bs ) = delete;
+    BitString(const BitString & i_bs) = delete;
 
     /**
      * @brief Explicitly disables assignment from BitStringBuffer.
@@ -341,7 +340,7 @@ class BitString
      * Allowing this would be dangerous if the BitStringBuffer goes out of scope
      * because the BitString would point to memory that is no longer in context.
      */
-    BitString & operator=( const BitStringBuffer & i_bsb ) = delete;
+    BitString & operator=(const BitStringBuffer & i_bsb) = delete;
 
     /**
      * @brief Explicitly disables copy from BitStringBuffer.
@@ -349,7 +348,7 @@ class BitString
      * Allowing this would be dangerous if the BitStringBuffer goes out of scope
      * because the BitString would point to memory that is no longer in context.
      */
-    BitString( const BitStringBuffer & i_bsb ) = delete;
+    BitString(const BitStringBuffer & i_bsb) = delete;
 
   protected: // functions
 
@@ -358,10 +357,10 @@ class BitString
      * @pre   Before calling this function, make sure you deallocate the old
      *        buffer to avoid memory leaks.
      */
-    void setBufAddr( void * i_newBufAddr ) { iv_bufAddr = i_newBufAddr; }
+    void setBufAddr(void * i_newBufAddr) { iv_bufAddr = i_newBufAddr; }
 
     /** @param i_newBitLen The new bit length of this bit string buffer. */
-    void setBitLen( uint64_t i_newBitLen ) { iv_bitLen = i_newBitLen; }
+    void setBitLen(uint64_t i_newBitLen) { iv_bitLen = i_newBitLen; }
 
   private: // functions
 
@@ -375,8 +374,8 @@ class BitString
      * @pre    nullptr != getBufAddr()
      * @pre    i_absPos < getBitLen()
      */
-    uint8_t * getRelativePosition( uint64_t & o_relPos,
-                                   uint64_t   i_absPos ) const;
+    uint8_t * getRelativePosition(uint64_t & o_relPos,
+                                  uint64_t   i_absPos) const;
 
   private: // instance variables
 
@@ -402,22 +401,22 @@ class BitStringBuffer : public BitString
      * @brief Constructor
      * @param i_bitLen Number of bits in the string.
      */
-    explicit BitStringBuffer( uint64_t i_bitLen );
+    explicit BitStringBuffer(uint64_t i_bitLen);
 
     /** @brief Destructor */
     ~BitStringBuffer();
 
     /** @brief Copy constructor from BitString */
-    BitStringBuffer( const BitString & i_bs );
+    BitStringBuffer(const BitString & i_bs);
 
     /** @brief Copy constructor from BitStringBuffer */
-    BitStringBuffer( const BitStringBuffer & i_bsb );
+    BitStringBuffer(const BitStringBuffer & i_bsb);
 
     /** @brief Assignment from BitString */
-    BitStringBuffer & operator=( const BitString & i_bs );
+    BitStringBuffer & operator=(const BitString & i_bs);
 
     /** @brief Assignment from BitStringBuffer */
-    BitStringBuffer & operator=( const BitStringBuffer & i_bsb );
+    BitStringBuffer & operator=(const BitStringBuffer & i_bsb);
 
   private: // functions
 
@@ -427,4 +426,3 @@ class BitStringBuffer : public BitString
 };
 
 } // end namespace libhei
-

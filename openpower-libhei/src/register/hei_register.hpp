@@ -17,7 +17,7 @@ building blocks.  For example, Register makes this possible:
 
 Register * fir = new HardwareRegister(REG_ADDRESS, REG_WIDTH,
                                       CHIP_TYPE, ACCESS_RO);
-Register * mask = new ConstantRegister( 0xffffffff00000000 );
+Register * mask = new ConstantRegister(0xffffffff00000000);
 Register * fir_mask = new AndRegister(fir, mask);
 const BitString * bs = fir_mask->getBitString(chip);
 
@@ -37,10 +37,10 @@ class Register
      * @param  i_chip Indicates which chip to access for this register.
      * @return A BitString containing the value of this register.
      */
-    virtual const BitString * getBitString( const Chip & i_chip ) const = 0;
+    virtual const BitString * getBitString(const Chip & i_chip) const = 0;
 };
 
 // Pure virtual destructor must be defined.
 inline Register::~Register() {}
 
-}//end namespace libhei
+} // end namespace libhei

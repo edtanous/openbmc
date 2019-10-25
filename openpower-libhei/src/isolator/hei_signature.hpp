@@ -25,21 +25,21 @@ class Signature
      * @param i_bit      The target bit within this register.
      * @param i_attnType The attention type reported by this bit.
      */
-    Signature( const Chip & i_chip, RegisterId_t i_id,
-               RegisterInstance_t i_instance, RegisterBit_t i_bit,
-               AttentionType_t i_attnType ) :
-        iv_chip( i_chip ), iv_id( i_id ), iv_instance( i_instance ),
-        iv_bit( i_bit ), iv_attnType( i_attnType )
+    Signature(const Chip & i_chip, RegisterId_t i_id,
+              RegisterInstance_t i_instance, RegisterBit_t i_bit,
+              AttentionType_t i_attnType) :
+        iv_chip(i_chip), iv_id(i_id), iv_instance(i_instance),
+        iv_bit(i_bit), iv_attnType(i_attnType)
     {}
 
     /** @brief Destructor. */
     ~Signature() = default;
 
     /** @brief Copy constructor. */
-    Signature( const Signature & ) = default;
+    Signature(const Signature &) = default;
 
     /** @brief Assignment operator. */
-    Signature & operator=( const Signature & ) = default;
+    Signature & operator=(const Signature &) = default;
 
   private: // Instance variables.
 
@@ -68,4 +68,3 @@ class Signature
 };
 
 } // end namespace libhei
-

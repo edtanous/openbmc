@@ -50,11 +50,11 @@ class HardwareRegister : public Register
      * @param i_instance    Instance of this register
      * @param i_accessLevel Hardware access level for this register.
      */
-    HardwareRegister( ChipType_t i_chipType, RegisterId_t i_id,
-                      RegisterInstance_t i_instance,
-                      RegisterAccessLevel_t i_accessLevel ) :
-        Register(), iv_chipType( i_chipType ), iv_id( i_id ),
-        iv_instance( i_instance ), iv_accessLevel( i_accessLevel )
+    HardwareRegister(ChipType_t i_chipType, RegisterId_t i_id,
+                     RegisterInstance_t i_instance,
+                     RegisterAccessLevel_t i_accessLevel) :
+        Register(), iv_chipType(i_chipType), iv_id(i_id),
+        iv_instance(i_instance), iv_accessLevel(i_accessLevel)
     {}
 
   private: // Instance variables
@@ -102,31 +102,31 @@ class HardwareRegister : public Register
   public: // Operators
 
     /** @brief Equals operator. */
-    bool operator==( const HardwareRegister & i_r ) const
+    bool operator==(const HardwareRegister & i_r) const
     {
         // Comparing register type, chip type, and address should be sufficient.
-        return ( getRegisterType() == i_r.getRegisterType() ) &&
-               ( getChipType()     == i_r.getChipType()     ) &&
-               ( getAddress()      == i_r.getAddress()      );
+        return (getRegisterType() == i_r.getRegisterType()) &&
+               (getChipType()     == i_r.getChipType()    ) &&
+               (getAddress()      == i_r.getAddress()     );
     }
 
     /** @brief Less than operator. */
-    bool operator<( const HardwareRegister & i_r ) const
+    bool operator<(const HardwareRegister & i_r) const
     {
         // Comparing register type, chip type, and address should be sufficient.
-        if ( getRegisterType() < i_r.getRegisterType() )
+        if (getRegisterType() < i_r.getRegisterType())
         {
             return true;
         }
-        else if ( getRegisterType() == i_r.getRegisterType() )
+        else if (getRegisterType() == i_r.getRegisterType())
         {
-            if ( getChipType() < i_r.getChipType() )
+            if (getChipType() < i_r.getChipType())
             {
                 return true;
             }
-            else if ( getChipType() == i_r.getChipType() )
+            else if (getChipType() == i_r.getChipType())
             {
-                return ( getAddress() < i_r.getAddress() );
+                return (getAddress() < i_r.getAddress());
             }
         }
 
@@ -136,7 +136,7 @@ class HardwareRegister : public Register
   public:
 
     /** Function overloaded from parent Register class. */
-    const BitString * getBitString( const Chip & i_chip ) const;
+    const BitString * getBitString(const Chip & i_chip) const;
 
 #if 0
     /**
@@ -157,9 +157,9 @@ class HardwareRegister : public Register
      *                 read from hardware and update the cache.
      * @return See the return code from the registerRead() user interface API.
      */
-    ReturnCode read( const Chip & i_chip, bool i_force = false ) const;
+    ReturnCode read(const Chip & i_chip, bool i_force = false) const;
 
-    #ifndef __HEI_READ_ONLY
+#ifndef __HEI_READ_ONLY
 
     /**
      * @brief  Writes the value stored in the register cache to hardware via the
@@ -167,9 +167,9 @@ class HardwareRegister : public Register
      * @param  i_chip  The target chip in which this register belongs.
      * @return See the return code from the registerWrite() user interface API.
      */
-    ReturnCode write( const Chip & i_chip ) const;
+    ReturnCode write(const Chip & i_chip) const;
 
-    #endif // __HEI_READ_ONLY
+#endif // __HEI_READ_ONLY
 
   protected:
 
@@ -182,14 +182,14 @@ class HardwareRegister : public Register
      * @param  i_chip  The target chip in which this register belongs.
      * @return A reference to the BitString.
      */
-    BitString & accessBitString( const Chip & i_chip );
+    BitString & accessBitString(const Chip & i_chip);
 
   private: // Hardware accessor management functions.
 
     /** @brief Asserts this register belongs on the target accessor chip. */
-    void verifyAccessorChip( const Chip & i_chip ) const
+    void verifyAccessorChip(const Chip & i_chip) const
     {
-        HEI_ASSERT( getChipType() == i_chip.getType() );
+        HEI_ASSERT(getChipType() == i_chip.getType());
     }
 
   private: // Register cache class variable
@@ -212,10 +212,10 @@ class HardwareRegister : public Register
         ~Cache() = default;
 
         /** @brief Copy constructor. */
-        Cache( const Cache & ) = delete;
+        Cache(const Cache &) = delete;
 
         /** @brief Assignment operator. */
-        Cache & operator=( const Cache & ) = delete;
+        Cache & operator=(const Cache &) = delete;
 
         /**
          * @brief  Queries if a specific entry exists in the cache.
@@ -223,8 +223,8 @@ class HardwareRegister : public Register
          * @param  i_hwReg The target register.
          * @return True if the entry exists, false otherwise.
          */
-        bool query( const Chip & i_chip,
-                    const HardwareRegister * i_hwReg ) const;
+        bool query(const Chip & i_chip,
+                   const HardwareRegister * i_hwReg) const;
 
         /**
          * @brief  Returns the data buffer for the given chip and register.
@@ -234,8 +234,8 @@ class HardwareRegister : public Register
          * @note   If an entry does not exist in the cache, an entry will be
          *         created and the BitString will be initialized to 0.
          */
-        BitString & access( const Chip & i_chip,
-                            const HardwareRegister * i_hwReg );
+        BitString & access(const Chip & i_chip,
+                           const HardwareRegister * i_hwReg);
 
         /** @brief Flushes entire contents from cache. */
         void flush();
@@ -245,7 +245,7 @@ class HardwareRegister : public Register
          * @param i_chip  The target chip.
          * @param i_hwReg The target register.
          */
-        void flush( const Chip & i_chip, const HardwareRegister * i_hwReg );
+        void flush(const Chip & i_chip, const HardwareRegister * i_hwReg);
 
       private:
 
@@ -279,9 +279,9 @@ class HardwareRegister : public Register
      * @brief Flushes this register from the cache.
      * @param  i_chip  The target chip in which this register belongs.
      */
-    void flush( const Chip & i_chip ) const
+    void flush(const Chip & i_chip) const
     {
-        cv_cache.flush( i_chip, this );
+        cv_cache.flush(i_chip, this);
     }
 
   private: // Register cache management functions.
@@ -290,20 +290,19 @@ class HardwareRegister : public Register
      * @param  i_chip  The target chip in which this register belongs.
      * @return True if an entry for this register exist in this cache.
      */
-    bool queryCache( const Chip & i_chip ) const
+    bool queryCache(const Chip & i_chip) const
     {
-        return cv_cache.query( i_chip, this );
+        return cv_cache.query(i_chip, this);
     }
 
     /**
      * @param  i_chip  The target chip in which this register belongs.
      * @return A reference to this register's BitString in cache.
      */
-    BitString & accessCache( const Chip & i_chip ) const
+    BitString & accessCache(const Chip & i_chip) const
     {
-        return cv_cache.access( i_chip, this );
+        return cv_cache.access(i_chip, this);
     }
 };
 
 } // end namespace libhei
-

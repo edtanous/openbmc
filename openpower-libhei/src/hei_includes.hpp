@@ -16,11 +16,11 @@
 // macros:
 //
 //   Tracing (inputs same as printf() from <cstdio>):
-//      HEI_INF( ... ) // Generic informational trace
-//      HEI_ERR( ... ) // Error path trace
+//      HEI_INF(...) // Generic informational trace
+//      HEI_ERR(...) // Error path trace
 //
 //  Assertion (at a minimum should work like assert() from <cassert>):
-//      HEI_ASSERT( expression )
+//      HEI_ASSERT(expression)
 //
 #include <hei_user_defines.hpp>
 
@@ -28,4 +28,3 @@
 #include <hei_chip.hpp>
 #include <hei_return_code.hpp>
 #include <hei_types.hpp>
-
