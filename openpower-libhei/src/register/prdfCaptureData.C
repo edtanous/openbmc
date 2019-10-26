@@ -1,3 +1,4 @@
+// clang-format off
 /* IBM_PROLOG_BEGIN_TAG                                                   */
 /* This is an automatically generated prolog.                             */
 /*                                                                        */
@@ -401,4 +402,4 @@ CaptureData::Data & CaptureData::Data::operator=(const Data & d)
 }
 
 } // end namespace libhei
-
+// clang-format on

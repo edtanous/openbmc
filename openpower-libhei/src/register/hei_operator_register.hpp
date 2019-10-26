@@ -1,3 +1,4 @@
+// clang-format off
 #pragma once
 
 #include <algorithm>
@@ -437,4 +438,4 @@ class ConstantRegister : public Register
 };
 
 } // end namespace libhei
-
+// clang-format on

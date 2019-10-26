@@ -1,3 +1,4 @@
+// clang-format off
 /* IBM_PROLOG_BEGIN_TAG                                                   */
 /* This is an automatically generated prolog.                             */
 /*                                                                        */
@@ -402,3 +403,4 @@ public:
 } // end namespace libhei
 
 #endif
+// clang-format on
