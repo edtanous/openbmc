@@ -2,8 +2,8 @@
 
 #include <hei_includes.hpp>
 #include <hei_isolation_data.hpp>
-#include <register/hei_register.hpp>
 #include <register/hei_hardware_register.hpp>
+#include <register/hei_register.hpp>
 #include <util/hei_bit_string.hpp>
 #include <util/hei_flyweight.hpp>
 

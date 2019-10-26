@@ -6,8 +6,8 @@
  *        will be used throughout this library.
  */
 
-#include <stdio.h>
 #include <assert.h>
+#include <stdio.h>
 
 #define HEI_INF(...) \
     { \

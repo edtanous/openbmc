@@ -1,6 +1,5 @@
-#include <hei_user_interface.hpp>
-
 #include <hei_includes.hpp>
+#include <hei_user_interface.hpp>
 
 namespace libhei
 {

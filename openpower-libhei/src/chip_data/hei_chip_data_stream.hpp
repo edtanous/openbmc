@@ -20,8 +20,9 @@ Endian issues are taken care of by template specialization.
 **/
 
 #include <endian.h>
-#include <hei_includes.hpp>
 #include <string.h>
+
+#include <hei_includes.hpp>
 
 namespace libhei
 {

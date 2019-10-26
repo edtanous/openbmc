@@ -2,9 +2,8 @@
  *  @brief BitString and BitStringBuffer class definitions
  */
 
-#include <util/hei_bit_string.hpp>
-
 #include <hei_user_defines.hpp>
+#include <util/hei_bit_string.hpp>
 
 #include <algorithm>
 

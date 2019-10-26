@@ -1,6 +1,6 @@
 
-#include <isolator/hei_isolator.hpp>
 #include <isolator/hei_isolation_node.hpp>
+#include <isolator/hei_isolator.hpp>
 #include <register/hei_hardware_register.hpp>
 #include <util/hei_flyweight.hpp>
 

@@ -7,8 +7,9 @@
  */
 
 // Standard library includes
-#include <stdlib.h>
 #include <stdint.h>
+#include <stdlib.h>
+
 #include <map>
 #include <vector>
 
