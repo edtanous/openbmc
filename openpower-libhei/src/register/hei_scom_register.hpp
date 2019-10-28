@@ -46,7 +46,7 @@ class ScomRegister : public HardwareRegister
      *
      * Needed by Flyweight class, but should not be allowed in general.
      */
-    ScomRegister(const ScomRegister &) = default;
+    ScomRegister(const ScomRegister&) = default;
 
     /**
      * @brief Explicitly disables assignment operator.
@@ -55,7 +55,7 @@ class ScomRegister : public HardwareRegister
      * of the constant instance variables, but helps communicate it is not
      * allowed.
      */
-    ScomRegister & operator=(const ScomRegister &) = delete;
+    ScomRegister& operator=(const ScomRegister&) = delete;
 
   public: // Accessor functions
 
@@ -125,7 +125,7 @@ class IdScomRegister : public HardwareRegister
      *
      * Needed by Flyweight class, but should not be allowed in general.
      */
-    IdScomRegister(const IdScomRegister &) = default;
+    IdScomRegister(const IdScomRegister&) = default;
 
     /**
      * @brief Explicitly disables assignment operator.
@@ -134,7 +134,7 @@ class IdScomRegister : public HardwareRegister
      * of the constant instance variables, but helps communicate it is not
      * allowed.
      */
-    IdScomRegister & operator=(const IdScomRegister &) = delete;
+    IdScomRegister& operator=(const IdScomRegister&) = delete;
 
   public: // Accessor functions
 

@@ -21,15 +21,15 @@ class Flyweight
     ~Flyweight() { clear(); }
 
     /** @brief Default copy constructor. */
-    Flyweight(const Flyweight &) = delete;
+    Flyweight(const Flyweight&) = delete;
 
     /** @brief Default assignment operator. */
-    Flyweight & operator=(const Flyweight &) = delete;
+    Flyweight& operator=(const Flyweight&) = delete;
 
   public:
 
     /** @brief Provides access to a singleton instance of this object. */
-    static Flyweight & getSingleton()
+    static Flyweight& getSingleton()
     {
         static Flyweight theFlyweight;
         return theFlyweight;
@@ -41,13 +41,13 @@ class Flyweight
      * @param  The target entry.
      * @return A reference to this entry in the factory.
      */
-    T & get(const T & i_entry)
+    T& get(const T& i_entry)
     {
         // The index is sorted by the value of the T objects. Check to see if
         // this entry already exists in the factory.
         auto itr =
             std::lower_bound(iv_index.begin(), iv_index.end(), &i_entry,
-                             [](const T * a, const T * b) { return *a < *b; });
+                             [](const T* a, const T* b) { return *a < *b; });
 
         // std::lower_bound() will return the first element that does not
         // compare less than i_entry. So if an entry is found, we must make sure

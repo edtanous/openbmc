@@ -23,10 +23,10 @@ class IsolationData
     ~IsolationData() = default;
 
     /** @brief Copy constructor. */
-    IsolationData(const IsolationData &) = default;
+    IsolationData(const IsolationData&) = default;
 
     /** @brief Assignment operator. */
-    IsolationData & operator=(const IsolationData &) = default;
+    IsolationData& operator=(const IsolationData&) = default;
 
   private: // Instance variables
 
@@ -41,13 +41,13 @@ class IsolationData
      * @brief Adds a signature to the signature list.
      * @param i_signature The target signature.
      */
-    void addSignature(const Signature & i_signature)
+    void addSignature(const Signature& i_signature)
     {
         iv_sigLists.push_back(i_signature);
     }
 
     /** @brief Allows access to the signature list. */
-    const std::vector<Signature> & getSignatureList()
+    const std::vector<Signature>& getSignatureList()
     {
         return iv_sigLists;
     }

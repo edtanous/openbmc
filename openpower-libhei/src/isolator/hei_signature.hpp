@@ -25,7 +25,7 @@ class Signature
      * @param i_bit      The target bit within this register.
      * @param i_attnType The attention type reported by this bit.
      */
-    Signature(const Chip & i_chip, RegisterId_t i_id,
+    Signature(const Chip& i_chip, RegisterId_t i_id,
               RegisterInstance_t i_instance, RegisterBit_t i_bit,
               AttentionType_t i_attnType) :
         iv_chip(i_chip), iv_id(i_id), iv_instance(i_instance),
@@ -36,10 +36,10 @@ class Signature
     ~Signature() = default;
 
     /** @brief Copy constructor. */
-    Signature(const Signature &) = default;
+    Signature(const Signature&) = default;
 
     /** @brief Assignment operator. */
-    Signature & operator=(const Signature &) = default;
+    Signature& operator=(const Signature&) = default;
 
   private: // Instance variables.
 
@@ -52,7 +52,7 @@ class Signature
   public: // Member functions
 
     /** @return The chip containing this register. */
-    const Chip & getChip() const { return iv_chip; }
+    const Chip& getChip() const { return iv_chip; }
 
     /** @return The register ID. */
     RegisterId_t getId() const { return iv_id; }

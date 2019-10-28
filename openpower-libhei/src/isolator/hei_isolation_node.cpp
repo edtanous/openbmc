@@ -5,8 +5,8 @@ namespace libhei
 
 //------------------------------------------------------------------------------
 
-bool IsolationNode::analyze(const Chip & i_chip, AttentionType_t i_attnType,
-                            IsolationData & io_isoData) const
+bool IsolationNode::analyze(const Chip& i_chip, AttentionType_t i_attnType,
+                            IsolationData& io_isoData) const
 {
     bool o_activeAttn = false; // Initially, assume no active attentions.
 
@@ -18,7 +18,7 @@ bool IsolationNode::analyze(const Chip & i_chip, AttentionType_t i_attnType,
     HEI_ASSERT(iv_rules.end() != rule_itr);
 
     // Get the returned BitString for this rule.
-    const BitString * bs = rule_itr->second->getBitString(i_chip);
+    const BitString* bs = rule_itr->second->getBitString(i_chip);
 
     // Ensure this BitString is not longer than the maximum bit field.
     HEI_ASSERT(bs->getBitLen() <= sizeof(RegisterBit_t) * 8);
@@ -76,7 +76,7 @@ bool IsolationNode::analyze(const Chip & i_chip, AttentionType_t i_attnType,
 
 //------------------------------------------------------------------------------
 
-void IsolationNode::addRule(AttentionType_t i_attnType, const Register * i_rule)
+void IsolationNode::addRule(AttentionType_t i_attnType, const Register* i_rule)
 {
     // A rule for this attention type should not already exist.
     HEI_ASSERT(iv_rules.end() == iv_rules.find(i_attnType));
@@ -90,7 +90,7 @@ void IsolationNode::addRule(AttentionType_t i_attnType, const Register * i_rule)
 
 //------------------------------------------------------------------------------
 
-void IsolationNode::addChild(uint8_t i_bit, const IsolationNode * i_child)
+void IsolationNode::addChild(uint8_t i_bit, const IsolationNode* i_child)
 {
     // An entry for this bit should not already exist.
     HEI_ASSERT(iv_children.end() == iv_children.find(i_bit));
@@ -104,7 +104,7 @@ void IsolationNode::addChild(uint8_t i_bit, const IsolationNode * i_child)
 
 //------------------------------------------------------------------------------
 
-std::vector<const IsolationNode *> IsolationNode::cv_isolationStack {};
+std::vector<const IsolationNode*> IsolationNode::cv_isolationStack {};
 
 //------------------------------------------------------------------------------
 

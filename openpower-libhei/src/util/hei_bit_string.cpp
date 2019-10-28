@@ -31,7 +31,7 @@ uint64_t BitString::getFieldRight(uint64_t i_pos, uint64_t i_len) const
     // Get the relative address of this byte and the relative starting position
     // within the byte.
     uint64_t relPos = 0;
-    uint8_t * relAddr = getRelativePosition(relPos, i_pos);
+    uint8_t* relAddr = getRelativePosition(relPos, i_pos);
 
     // Get the length of the target bit field within this byte and the length of
     // the bit field for any remaining bits.
@@ -75,7 +75,7 @@ void BitString::setFieldLeft(uint64_t i_pos, uint64_t i_len, uint64_t i_val)
     // Get the relative address of this byte and the relative starting position
     // within the byte.
     uint64_t relPos = 0;
-    uint8_t * relAddr = getRelativePosition(relPos, i_pos);
+    uint8_t* relAddr = getRelativePosition(relPos, i_pos);
 
     // Get the length of the target bit field within this byte and the length of
     // the bit field for any remaining bits.
@@ -132,7 +132,7 @@ void BitString::setPattern(uint64_t i_sPos, uint64_t i_sLen, uint64_t i_pattern,
     // could be used in the constructor of BitStringBuffer, which could causes
     // an infinite loop.
     uint8_t a[sizeof(i_pattern)] = {};
-    BitString bs { sizeof(i_pattern)*8, a };
+    BitString bs { sizeof(i_pattern) * 8, a };
     bs.setFieldRight(0, i_pLen, i_pattern);
 
     // Iterate the range in chunks the size of i_pLen.
@@ -152,7 +152,7 @@ void BitString::setPattern(uint64_t i_sPos, uint64_t i_sLen, uint64_t i_pattern,
 
 //------------------------------------------------------------------------------
 
-void BitString::setString(const BitString & i_sStr, uint64_t i_sPos,
+void BitString::setString(const BitString& i_sStr, uint64_t i_sPos,
                           uint64_t i_sLen, uint64_t i_dPos)
 {
     // Ensure the source parameters are valid.
@@ -171,8 +171,8 @@ void BitString::setString(const BitString & i_sStr, uint64_t i_sPos,
     // The bit strings may be in overlapping memory spaces. So we need to copy
     // the data in the correct direction to prevent overlapping.
     uint64_t sRelOffset = 0, dRelOffset = 0;
-    uint8_t * sRelAddr = i_sStr.getRelativePosition(sRelOffset, i_sPos);
-    uint8_t * dRelAddr =        getRelativePosition(dRelOffset, i_dPos);
+    uint8_t* sRelAddr = i_sStr.getRelativePosition(sRelOffset, i_sPos);
+    uint8_t* dRelAddr =        getRelativePosition(dRelOffset, i_dPos);
 
     // Copy the data.
     if ((dRelAddr == sRelAddr) && (dRelOffset == sRelOffset))
@@ -208,7 +208,7 @@ void BitString::setString(const BitString & i_sStr, uint64_t i_sPos,
 
 //------------------------------------------------------------------------------
 
-void BitString::maskString(const BitString & i_mask)
+void BitString::maskString(const BitString& i_mask)
 {
     // Get the length of the smallest string.
     uint64_t actLen = std::min(getBitLen(), i_mask.getBitLen());
@@ -226,7 +226,7 @@ void BitString::maskString(const BitString & i_mask)
 
 //------------------------------------------------------------------------------
 
-bool BitString::isEqual(const BitString & i_str) const
+bool BitString::isEqual(const BitString& i_str) const
 {
     if (getBitLen() != i_str.getBitLen())
         return false; // size not equal
@@ -295,7 +295,7 @@ BitStringBuffer BitString::operator~() const
 
 //------------------------------------------------------------------------------
 
-BitStringBuffer BitString::operator&(const BitString & i_bs) const
+BitStringBuffer BitString::operator&(const BitString& i_bs) const
 {
     // Get the length of the smallest string.
     uint64_t actLen = std::min(getBitLen(), i_bs.getBitLen());
@@ -317,7 +317,7 @@ BitStringBuffer BitString::operator&(const BitString & i_bs) const
 
 //------------------------------------------------------------------------------
 
-BitStringBuffer BitString::operator|(const BitString & i_bs) const
+BitStringBuffer BitString::operator|(const BitString& i_bs) const
 {
     // Get the length of the smallest string.
     uint64_t actLen = std::min(getBitLen(), i_bs.getBitLen());
@@ -376,15 +376,15 @@ BitStringBuffer BitString::operator<<(uint64_t i_shift) const
 
 //------------------------------------------------------------------------------
 
-uint8_t * BitString::getRelativePosition(uint64_t & o_relPos,
-                                         uint64_t   i_absPos) const
+uint8_t* BitString::getRelativePosition(uint64_t& o_relPos,
+                                        uint64_t  i_absPos) const
 {
     HEI_ASSERT(nullptr != getBufAddr()); // must to have a valid address
     HEI_ASSERT(i_absPos < getBitLen());  // must be a valid position
 
     o_relPos = (i_absPos + iv_offset) % UINT8_BIT_LEN;
 
-    return ((uint8_t *)iv_bufAddr + ((i_absPos + iv_offset) / UINT8_BIT_LEN));
+    return ((uint8_t*)iv_bufAddr + ((i_absPos + iv_offset) / UINT8_BIT_LEN));
 }
 
 //##############################################################################
@@ -401,12 +401,12 @@ BitStringBuffer::BitStringBuffer(uint64_t i_bitLen) :
 
 BitStringBuffer::~BitStringBuffer()
 {
-    delete [] (uint8_t *)getBufAddr();
+    delete [] (uint8_t*)getBufAddr();
 }
 
 //------------------------------------------------------------------------------
 
-BitStringBuffer::BitStringBuffer(const BitString & i_bs) :
+BitStringBuffer::BitStringBuffer(const BitString& i_bs) :
     BitString(i_bs.getBitLen(), nullptr)
 {
     initBuffer();
@@ -415,7 +415,7 @@ BitStringBuffer::BitStringBuffer(const BitString & i_bs) :
 
 //------------------------------------------------------------------------------
 
-BitStringBuffer::BitStringBuffer(const BitStringBuffer & i_bsb) :
+BitStringBuffer::BitStringBuffer(const BitStringBuffer& i_bsb) :
     BitString(i_bsb.getBitLen(), nullptr)
 {
     initBuffer();
@@ -424,11 +424,11 @@ BitStringBuffer::BitStringBuffer(const BitStringBuffer & i_bsb) :
 
 //------------------------------------------------------------------------------
 
-BitStringBuffer & BitStringBuffer::operator=(const BitString & i_bs)
+BitStringBuffer& BitStringBuffer::operator=(const BitString& i_bs)
 {
     // The initBuffer() function will deallocate the buffer as well, however we
     // also need to deallocate the buffer here before we set the length.
-    delete [] (uint8_t *)getBufAddr();
+    delete [] (uint8_t*)getBufAddr();
     setBufAddr(nullptr);
 
     setBitLen(i_bs.getBitLen());
@@ -440,13 +440,13 @@ BitStringBuffer & BitStringBuffer::operator=(const BitString & i_bs)
 
 //------------------------------------------------------------------------------
 
-BitStringBuffer & BitStringBuffer::operator=(const BitStringBuffer & i_bsb)
+BitStringBuffer& BitStringBuffer::operator=(const BitStringBuffer& i_bsb)
 {
     if (this != &i_bsb) // Check for assignment to self
     {
         // The initBuffer() function will deallocate the buffer as well, however
         // we also need to deallocate the buffer here before we set the length.
-        delete [] (uint8_t *)getBufAddr();
+        delete [] (uint8_t*)getBufAddr();
         setBufAddr(nullptr);
 
         setBitLen(i_bsb.getBitLen());
@@ -462,7 +462,7 @@ BitStringBuffer & BitStringBuffer::operator=(const BitStringBuffer & i_bsb)
 void BitStringBuffer::initBuffer()
 {
     // Deallocate the current buffer.
-    delete [] (uint8_t *)getBufAddr();
+    delete [] (uint8_t*)getBufAddr();
 
     // create new buffer, initialized to 0's
     setBufAddr(new uint8_t[ getMinBytes(getBitLen()) ]());

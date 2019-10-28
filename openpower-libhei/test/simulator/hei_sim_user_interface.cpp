@@ -6,7 +6,7 @@ namespace libhei
 
 //------------------------------------------------------------------------------
 
-ReturnCode registerRead(void * i_chip, void * o_buffer, size_t & io_bufSize,
+ReturnCode registerRead(void* i_chip, void* o_buffer, size_t& io_bufSize,
                         uint64_t i_regType, uint64_t i_address)
 {
     ReturnCode rc;
@@ -30,7 +30,7 @@ ReturnCode registerRead(void * i_chip, void * o_buffer, size_t & io_bufSize,
 
 #ifndef __HEI_READ_ONLY
 
-ReturnCode registerWrite(void * i_chip, void * i_buffer, size_t & io_bufSize,
+ReturnCode registerWrite(void* i_chip, void* i_buffer, size_t& io_bufSize,
                          uint64_t i_regType, uint64_t i_address)
 {
     ReturnCode rc;

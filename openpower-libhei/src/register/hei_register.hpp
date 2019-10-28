@@ -37,7 +37,7 @@ class Register
      * @param  i_chip Indicates which chip to access for this register.
      * @return A BitString containing the value of this register.
      */
-    virtual const BitString * getBitString(const Chip & i_chip) const = 0;
+    virtual const BitString* getBitString(const Chip& i_chip) const = 0;
 };
 
 // Pure virtual destructor must be defined.

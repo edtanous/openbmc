@@ -11,7 +11,7 @@
 namespace libhei
 {
 
-ReturnCode Isolator::initialize(void * i_buffer, size_t i_bufferSize,
+ReturnCode Isolator::initialize(void* i_buffer, size_t i_bufferSize,
                                 bool i_forceInit)
 {
     ReturnCode rc;
@@ -20,8 +20,8 @@ ReturnCode Isolator::initialize(void * i_buffer, size_t i_bufferSize,
     HEI_INF("Isolator::initialize(%p,%lu,%d)", i_buffer, i_bufferSize,
             i_forceInit);
 
-    Flyweight<ScomRegister>   & sfw = Flyweight<ScomRegister>::getSingleton();
-    Flyweight<IdScomRegister> & ifw = Flyweight<IdScomRegister>::getSingleton();
+    Flyweight<ScomRegister>&   sfw = Flyweight<ScomRegister>::getSingleton();
+    Flyweight<IdScomRegister>& ifw = Flyweight<IdScomRegister>::getSingleton();
 
     sfw.get(ScomRegister { CHIP_TYPE_INVALID, REG_ID_INVALID,
                            REG_INST_DEFAULT, REG_ACCESS_RW, 0x01234567 });
@@ -54,8 +54,8 @@ void Isolator::uninitialize()
     Flyweight<IdScomRegister>::getSingleton().clear();
 }
 
-ReturnCode Isolator::isolate(const std::vector<Chip> & i_chipList,
-                             IsolationData & o_isoData) const
+ReturnCode Isolator::isolate(const std::vector<Chip>& i_chipList,
+                             IsolationData& o_isoData) const
 {
     ReturnCode rc;
 
@@ -66,7 +66,7 @@ ReturnCode Isolator::isolate(const std::vector<Chip> & i_chipList,
     HardwareRegister::flushAll();
 
     // Analyze active error on each chip.
-    for (auto const & chip : i_chipList)
+    for (const auto& chip : i_chipList)
     {
         // BEGIN temporary code
         HEI_INF("Isolator::isolate(%p,%u)", chip.getChip(), chip.getType());

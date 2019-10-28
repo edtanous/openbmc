@@ -42,7 +42,7 @@ class IsolationNode
      * @param i_hwReg A reference to the HardwareRegister targeted for
      *                isolation.
      */
-    explicit IsolationNode(const HardwareRegister & i_hwReg) :
+    explicit IsolationNode(const HardwareRegister& i_hwReg) :
         iv_hwReg(i_hwReg)
     {}
 
@@ -60,7 +60,7 @@ class IsolationNode
      *
      * Needed by Flyweight class, but should not be allowed in general.
      */
-    IsolationNode(const IsolationNode &) = default;
+    IsolationNode(const IsolationNode&) = default;
 
     /**
      * @brief Explicitly disables assignment operator.
@@ -69,7 +69,7 @@ class IsolationNode
      * of the constant instance variables, but helps communicate it is not
      * allowed.
      */
-    IsolationNode & operator=(const IsolationNode &) = delete;
+    IsolationNode& operator=(const IsolationNode&) = delete;
 
   private: // Instance variables
 
@@ -78,7 +78,7 @@ class IsolationNode
      * this instance of the class. The reference is required to maintain
      * polymorphism.
      */
-    const HardwareRegister & iv_hwReg;
+    const HardwareRegister& iv_hwReg;
 
     /**
      * This register could report multiple types of attentions. We can use a
@@ -87,13 +87,13 @@ class IsolationNode
      * HardwareRegister objects and virtual operator registers (all children
      * of the Register class).
      */
-    std::map<AttentionType_t, const Register *> iv_rules;
+    std::map<AttentionType_t, const Register*> iv_rules;
 
     /**
      * Each bit (key) in this map indicates that an attention was driven from
      * another register (value).
      */
-    std::map<RegisterBit_t, const IsolationNode *> iv_children;
+    std::map<RegisterBit_t, const IsolationNode*> iv_children;
 
   public: // Member functions
 
@@ -111,8 +111,8 @@ class IsolationNode
      * @return True, if any active attentions found on this register.
      *         False, otherwise.
      */
-    bool analyze(const Chip & i_chip, AttentionType_t i_attnType,
-                 IsolationData & io_isoData) const;
+    bool analyze(const Chip& i_chip, AttentionType_t i_attnType,
+                 IsolationData& io_isoData) const;
 
     // TODO: The next two functions are only intended to be used during
     //       initialization of the isolator. Consider, making them private and
@@ -129,7 +129,7 @@ class IsolationNode
      * @param The target attention type.
      * @param The rule for this attention type.
      */
-    void addRule(AttentionType_t i_attnType, const Register * i_rule);
+    void addRule(AttentionType_t i_attnType, const Register* i_rule);
 
     /**
      * @brief Adds a child register to analyze for the given bit in this
@@ -141,19 +141,19 @@ class IsolationNode
      * @param The target bit on this register.
      * @param The child register to analyze for the given bit.
      */
-    void addChild(RegisterBit_t i_bit, const IsolationNode * i_child);
+    void addChild(RegisterBit_t i_bit, const IsolationNode* i_child);
 
   public: // Operators
 
     /** @brief Equals operator. */
-    bool operator==(const IsolationNode & i_r) const
+    bool operator==(const IsolationNode& i_r) const
     {
         // iv_hwReg should be unique per IsolationNode.
         return (iv_hwReg == i_r.iv_hwReg);
     }
 
     /** @brief Less than operator. */
-    bool operator<(const IsolationNode & i_r) const
+    bool operator<(const IsolationNode& i_r) const
     {
         // iv_hwReg should be unique per IsolationNode.
         return (iv_hwReg < i_r.iv_hwReg);
@@ -173,7 +173,7 @@ class IsolationNode
      *  this node can be popped off the top of the stack. Once all the recursive
      *  calls have returned back to the root node the stack should be empty.
      */
-    static std::vector<const IsolationNode *> cv_isolationStack;
+    static std::vector<const IsolationNode*> cv_isolationStack;
 
     /**
      * @brief Pushes this node to the top of the stack. Will assert that this

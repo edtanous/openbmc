@@ -38,7 +38,7 @@ class ChipDataStream
 
     /** iv_buffer points to the first address of the Chip Data File
         buffer.  **/
-    const void * const iv_buffer;
+    const void* const iv_buffer;
     /** iv_bufferSize is the size of the data buffer.  It is
         initialized when the ChipDataStream class is instantiated. **/
     const size_t iv_bufferSize;
@@ -55,13 +55,13 @@ class ChipDataStream
     data buffer containing all the data and its size is passed
     into the class.
     **/
-    ChipDataStream(void * i_buffer, size_t i_bufferSize) :
+    ChipDataStream(void* i_buffer, size_t i_bufferSize) :
         iv_asyncOffset(0), iv_buffer(i_buffer), iv_bufferSize(i_bufferSize)
     {}
 
     /** Eliminate copy and assignment operator constructors **/
-    ChipDataStream(const ChipDataStream &) = delete;
-    ChipDataStream & operator=(const ChipDataStream &) = delete;
+    ChipDataStream(const ChipDataStream&) = delete;
+    ChipDataStream& operator=(const ChipDataStream&) = delete;
 
     /** Destructor **/
 
@@ -76,7 +76,7 @@ class ChipDataStream
      *@return            *this:   A pointer to "this" object
      **/
     template <class D>
-    ChipDataStream & operator>>(D & o_right)
+    ChipDataStream& operator>>(D& o_right)
     {
         read(&o_right, sizeof(D));
         return *this;
@@ -90,12 +90,12 @@ class ChipDataStream
      *@param i_size      the size (in bytes) to copy
      *@return            None\n\n
      **/
-    void read(void * o_buf, size_t i_size)
+    void read(void* o_buf, size_t i_size)
     {
         /* Ensure memory is not accessed outside i_buffer */
         HEI_ASSERT((iv_asyncOffset + i_size) <= iv_bufferSize);
         /* Copy appropriate bytes from i_buffer to o_buff */
-        memcpy(o_buf, (char *)iv_buffer + iv_asyncOffset, i_size);
+        memcpy(o_buf, (char*)iv_buffer + iv_asyncOffset, i_size);
         /* Increment asynchronous offset to next piece of data */
         iv_asyncOffset = iv_asyncOffset + i_size;
     }
@@ -112,7 +112,7 @@ class ChipDataStream
  *   @return            *this:   A pointer to "this" object
  **/
 template <> inline
-ChipDataStream & ChipDataStream::operator>>(uint16_t & o_right)
+ChipDataStream& ChipDataStream::operator>>(uint16_t& o_right)
 {
     read(&o_right, sizeof(o_right));
     be16toh(o_right);
@@ -124,7 +124,7 @@ ChipDataStream & ChipDataStream::operator>>(uint16_t & o_right)
  *  @return            *this:   A pointer to "this" object
  **/
 template <> inline
-ChipDataStream & ChipDataStream::operator>>(int16_t & o_right)
+ChipDataStream& ChipDataStream::operator>>(int16_t& o_right)
 {
     read(&o_right, sizeof(o_right));
     be16toh(o_right);
@@ -136,7 +136,7 @@ ChipDataStream & ChipDataStream::operator>>(int16_t & o_right)
  *  @return            *this:   A pointer to "this" object
  **/
 template <> inline
-ChipDataStream & ChipDataStream::operator>>(uint32_t & o_right)
+ChipDataStream& ChipDataStream::operator>>(uint32_t& o_right)
 {
     read(&o_right, sizeof(o_right));
     be32toh(o_right);
@@ -148,7 +148,7 @@ ChipDataStream & ChipDataStream::operator>>(uint32_t & o_right)
  *  @return            *this:   A pointer to "this" object
  **/
 template <> inline
-ChipDataStream & ChipDataStream::operator>>(int32_t & o_right)
+ChipDataStream& ChipDataStream::operator>>(int32_t& o_right)
 {
     read(&o_right, sizeof(o_right));
     be32toh(o_right);
@@ -160,7 +160,7 @@ ChipDataStream & ChipDataStream::operator>>(int32_t & o_right)
  *  @return            *this:   A pointer to "this" object
  **/
 template <> inline
-ChipDataStream & ChipDataStream::operator>>(uint64_t & o_right)
+ChipDataStream& ChipDataStream::operator>>(uint64_t& o_right)
 {
     read(&o_right, sizeof(o_right));
     be64toh(o_right);
@@ -172,7 +172,7 @@ ChipDataStream & ChipDataStream::operator>>(uint64_t & o_right)
  *  @return            *this:   A pointer to "this" object
  **/
 template <> inline
-ChipDataStream & ChipDataStream::operator>>(int64_t & o_right)
+ChipDataStream& ChipDataStream::operator>>(int64_t& o_right)
 {
     read(&o_right, sizeof(o_right));
     be64toh(o_right);

@@ -76,7 +76,7 @@ class BitString
      * @pre   Use getMinBytes() to calulate the minimum number of bytes needed
      *        to allocate sufficient memory space for this bit string.
      */
-    BitString(uint64_t i_bitLen, void * i_bufAddr, uint64_t i_offset = 0) :
+    BitString(uint64_t i_bitLen, void* i_bufAddr, uint64_t i_offset = 0) :
         iv_bitLen(i_bitLen), iv_bufAddr(i_bufAddr), iv_offset(i_offset)
     {}
 
@@ -88,7 +88,7 @@ class BitString
 
     /** @return The address of the bit string buffer. Note that this may
      *          return nullptr. */
-    void * getBufAddr() const { return iv_bufAddr; }
+    void* getBufAddr() const { return iv_bufAddr; }
 
     /**
      * @param i_bitLen The number of bits for a bit string.
@@ -257,7 +257,7 @@ class BitString
      *        string, then the extra bits in this string are not modified.
      * @note  This string and the source string may specify overlapping memory.
      */
-    void setString(const BitString & i_sStr, uint64_t i_sPos, uint64_t i_sLen,
+    void setString(const BitString& i_sStr, uint64_t i_sPos, uint64_t i_sLen,
                    uint64_t i_dPos = 0);
 
     /**
@@ -268,7 +268,7 @@ class BitString
      * @note  See the other definition of this function for details and
      *        restrictions.
      */
-    void setString(const BitString & i_sStr)
+    void setString(const BitString& i_sStr)
     {
         setString(i_sStr, 0, i_sStr.getBitLen());
     }
@@ -282,7 +282,7 @@ class BitString
      * @note  If the length of the given string is less than the length of this
      *        string, then the extra bits in this string are not modified.
      */
-    void maskString(const BitString & i_mask);
+    void maskString(const BitString& i_mask);
 
     /**
      * @param  i_str The string to compare.
@@ -290,7 +290,7 @@ class BitString
      * @pre    Both strings must be of equal length and have same values to be
      *         equal.
      */
-    bool isEqual(const BitString & i_str) const;
+    bool isEqual(const BitString& i_str) const;
 
     /** @return True if there are no bit set(1) in this bit string, false
      *          otherwise. */
@@ -309,16 +309,16 @@ class BitString
     uint64_t getSetCount() const { return getSetCount(0, getBitLen()); }
 
     /** @brief Comparison operator. */
-    bool operator==(const BitString & i_str) const { return isEqual(i_str); }
+    bool operator==(const BitString& i_str) const { return isEqual(i_str); }
 
     /** @brief Bitwise NOT operator. */
     BitStringBuffer operator~() const;
 
     /** @brief Bitwise AND operator. */
-    BitStringBuffer operator&(const BitString & i_bs) const;
+    BitStringBuffer operator&(const BitString& i_bs) const;
 
     /** @brief Bitwise OR operator. */
-    BitStringBuffer operator|(const BitString & i_bs) const;
+    BitStringBuffer operator|(const BitString& i_bs) const;
 
     /** @brief Right shift operator. */
     BitStringBuffer operator>>(uint64_t i_shift) const;
@@ -329,10 +329,10 @@ class BitString
     /**
      * @brief Explicitly disables copy from BitString.
      *
-     * Prevents assigning a BitString & to a BitString, which would strip
+     * Prevents assigning a BitString& to a BitString, which would strip
      * polymorphism.
      */
-    BitString(const BitString & i_bs) = delete;
+    BitString(const BitString& i_bs) = delete;
 
     /**
      * @brief Explicitly disables assignment from BitStringBuffer.
@@ -340,7 +340,7 @@ class BitString
      * Allowing this would be dangerous if the BitStringBuffer goes out of scope
      * because the BitString would point to memory that is no longer in context.
      */
-    BitString & operator=(const BitStringBuffer & i_bsb) = delete;
+    BitString& operator=(const BitStringBuffer& i_bsb) = delete;
 
     /**
      * @brief Explicitly disables copy from BitStringBuffer.
@@ -348,7 +348,7 @@ class BitString
      * Allowing this would be dangerous if the BitStringBuffer goes out of scope
      * because the BitString would point to memory that is no longer in context.
      */
-    BitString(const BitStringBuffer & i_bsb) = delete;
+    BitString(const BitStringBuffer& i_bsb) = delete;
 
   protected: // functions
 
@@ -357,7 +357,7 @@ class BitString
      * @pre   Before calling this function, make sure you deallocate the old
      *        buffer to avoid memory leaks.
      */
-    void setBufAddr(void * i_newBufAddr) { iv_bufAddr = i_newBufAddr; }
+    void setBufAddr(void* i_newBufAddr) { iv_bufAddr = i_newBufAddr; }
 
     /** @param i_newBitLen The new bit length of this bit string buffer. */
     void setBitLen(uint64_t i_newBitLen) { iv_bitLen = i_newBitLen; }
@@ -374,14 +374,14 @@ class BitString
      * @pre    nullptr != getBufAddr()
      * @pre    i_absPos < getBitLen()
      */
-    uint8_t * getRelativePosition(uint64_t & o_relPos,
-                                  uint64_t   i_absPos) const;
+    uint8_t* getRelativePosition(uint64_t& o_relPos,
+                                 uint64_t  i_absPos) const;
 
   private: // instance variables
 
-    uint64_t   iv_bitLen;  ///< The bit length of this buffer.
-    void     * iv_bufAddr; ///< The beginning address of this buffer.
-    uint64_t   iv_offset;  ///< Start position offset
+    uint64_t iv_bitLen;  ///< The bit length of this buffer.
+    void*    iv_bufAddr; ///< The beginning address of this buffer.
+    uint64_t iv_offset;  ///< Start position offset
 };
 
 //##############################################################################
@@ -407,16 +407,16 @@ class BitStringBuffer : public BitString
     ~BitStringBuffer();
 
     /** @brief Copy constructor from BitString */
-    BitStringBuffer(const BitString & i_bs);
+    BitStringBuffer(const BitString& i_bs);
 
     /** @brief Copy constructor from BitStringBuffer */
-    BitStringBuffer(const BitStringBuffer & i_bsb);
+    BitStringBuffer(const BitStringBuffer& i_bsb);
 
     /** @brief Assignment from BitString */
-    BitStringBuffer & operator=(const BitString & i_bs);
+    BitStringBuffer& operator=(const BitString& i_bs);
 
     /** @brief Assignment from BitStringBuffer */
-    BitStringBuffer & operator=(const BitStringBuffer & i_bsb);
+    BitStringBuffer& operator=(const BitStringBuffer& i_bsb);
 
   private: // functions
 

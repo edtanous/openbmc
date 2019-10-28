@@ -18,10 +18,10 @@ class ReturnCode
     {}
 
     /** @brief Default copy constructor. */
-    ReturnCode(const ReturnCode &) = default;
+    ReturnCode(const ReturnCode&) = default;
 
     /** @brief Default assignment operator. */
-    ReturnCode& operator=(const ReturnCode &) = default;
+    ReturnCode& operator=(const ReturnCode&) = default;
 
     /** @brief Default destructor. */
     ~ReturnCode() = default;
@@ -33,13 +33,13 @@ class ReturnCode
     operator uint64_t() const { return iv_rc; }
 
     /** @brief Equals operator. */
-    bool operator==(const ReturnCode & rhs) const
+    bool operator==(const ReturnCode& rhs) const
     {
         return rhs.iv_rc == iv_rc;
     }
 
     /** @brief Not equals operator. */
-    bool operator!=(const ReturnCode & rhs) const
+    bool operator!=(const ReturnCode& rhs) const
     {
         return rhs.iv_rc != iv_rc;
     }

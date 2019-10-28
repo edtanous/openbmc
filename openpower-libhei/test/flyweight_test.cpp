@@ -10,13 +10,13 @@ class Foo
     Foo() = default;
     explicit Foo(int i) : iv_i(i) {}
     int get() const { return iv_i; }
-    bool operator==(const Foo & i_r) const { return iv_i == i_r.iv_i; }
-    bool operator<(const Foo & i_r) const { return iv_i <  i_r.iv_i; }
+    bool operator==(const Foo& i_r) const { return iv_i == i_r.iv_i; }
+    bool operator<(const Foo& i_r) const { return iv_i <  i_r.iv_i; }
   private:
     int iv_i = 0;
 };
 
-Foo & addFoo(int i)
+Foo& addFoo(int i)
 {
     return Flyweight<Foo>::getSingleton().get(Foo { i });
 }
@@ -25,7 +25,7 @@ TEST(FlyweightTest, TestSet1)
 {
     // Add some unique entries in a random order and keep track of where those
     // enties exist in memory.
-    Foo * a[5];
+    Foo* a[5];
     a[1] = &(addFoo(1));
     a[2] = &(addFoo(2));
     a[0] = &(addFoo(0));

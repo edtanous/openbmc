@@ -15,14 +15,14 @@ HardwareRegister::~HardwareRegister() {}
 #if 0
 void HardwareRegister::setBitString(const BitString *bs)
 {
-    BitString & l_string  = accessBitString();
+    BitString& l_string  = accessBitString();
     l_string.setString(*bs);
 }
 #endif
 
 //------------------------------------------------------------------------------
 
-const BitString * HardwareRegister::getBitString(const Chip & i_chip) const
+const BitString* HardwareRegister::getBitString(const Chip& i_chip) const
 {
     // Verify this register belongs on i_chip.
     verifyAccessorChip(i_chip);
@@ -44,7 +44,7 @@ const BitString * HardwareRegister::getBitString(const Chip & i_chip) const
 
 //------------------------------------------------------------------------------
 
-BitString & HardwareRegister::accessBitString(const Chip & i_chip)
+BitString& HardwareRegister::accessBitString(const Chip& i_chip)
 {
     // Verify this register belongs on i_chip.
     verifyAccessorChip(i_chip);
@@ -66,7 +66,7 @@ BitString & HardwareRegister::accessBitString(const Chip & i_chip)
 
 //------------------------------------------------------------------------------
 
-ReturnCode HardwareRegister::read(const Chip & i_chip, bool i_force) const
+ReturnCode HardwareRegister::read(const Chip& i_chip, bool i_force) const
 {
     ReturnCode rc;
 
@@ -82,7 +82,7 @@ ReturnCode HardwareRegister::read(const Chip & i_chip, bool i_force) const
                    (REG_ACCESS_WO   != getAccessLevel()));
 
         // Get the buffer from the register cache.
-        BitString & bs = accessCache(i_chip);
+        BitString& bs = accessCache(i_chip);
 
         // Get the byte size of the buffer.
         size_t sz_buffer = BitString::getMinBytes(bs.getBitLen());
@@ -111,7 +111,7 @@ ReturnCode HardwareRegister::read(const Chip & i_chip, bool i_force) const
 
 #ifndef __HEI_READ_ONLY
 
-ReturnCode HardwareRegister::write(const Chip & i_chip) const
+ReturnCode HardwareRegister::write(const Chip& i_chip) const
 {
     ReturnCode rc;
 
@@ -126,7 +126,7 @@ ReturnCode HardwareRegister::write(const Chip & i_chip) const
     HEI_ASSERT(queryCache(i_chip));
 
     // Get the buffer from the register cache.
-    BitString & bs = accessCache(i_chip);
+    BitString& bs = accessCache(i_chip);
 
     // Get the byte size of the buffer.
     size_t sz_buffer = BitString::getMinBytes(bs.getBitLen());
@@ -153,14 +153,14 @@ HardwareRegister::Cache HardwareRegister::cv_cache {};
 
 //------------------------------------------------------------------------------
 
-bool HardwareRegister::Cache::query(const Chip & i_chip,
-                                    const HardwareRegister * i_hwReg) const
+bool HardwareRegister::Cache::query(const Chip& i_chip,
+                                    const HardwareRegister* i_hwReg) const
 {
     // Does i_chip exist in the cache?
     auto chipPairItr = iv_cache.find(i_chip);
     if (iv_cache.end() != chipPairItr)
     {
-        auto & hwRegMap = chipPairItr->second; // for ease of use
+        auto& hwRegMap = chipPairItr->second; // for ease of use
 
         // Does i_hwReg exist in the cache?
         auto hwRegPairItr = hwRegMap.find(i_hwReg);
@@ -175,13 +175,13 @@ bool HardwareRegister::Cache::query(const Chip & i_chip,
 
 //------------------------------------------------------------------------------
 
-BitString & HardwareRegister::Cache::access(const Chip & i_chip,
+BitString& HardwareRegister::Cache::access(const Chip& i_chip,
                                             const HardwareRegister * i_hwReg)
 {
     // If the entry does not exist, create a new entry.
     if (!query(i_chip, i_hwReg))
     {
-        BitString * bs = new BitStringBuffer { i_hwReg->getSize() * 8 };
+        BitString* bs = new BitStringBuffer { i_hwReg->getSize() * 8 };
         iv_cache[i_chip][i_hwReg] = bs;
     }
 
@@ -194,9 +194,9 @@ BitString & HardwareRegister::Cache::access(const Chip & i_chip,
 void HardwareRegister::Cache::flush()
 {
     // Delete all of the BitStrings.
-    for (auto & chipPair : iv_cache)
+    for (auto& chipPair : iv_cache)
     {
-        for (auto & hwRegPair : chipPair.second)
+        for (auto& hwRegPair : chipPair.second)
         {
             delete hwRegPair.second;
         }
@@ -211,14 +211,14 @@ void HardwareRegister::Cache::flush()
 
 //------------------------------------------------------------------------------
 
-void HardwareRegister::Cache::flush(const Chip & i_chip,
-                                    const HardwareRegister * i_hwReg)
+void HardwareRegister::Cache::flush(const Chip& i_chip,
+                                    const HardwareRegister* i_hwReg)
 {
     // Does i_chip exist in the cache?
     auto chipPairItr = iv_cache.find(i_chip);
     if (iv_cache.end() != chipPairItr)
     {
-        auto & hwRegMap = chipPairItr->second; // for ease of use
+        auto& hwRegMap = chipPairItr->second; // for ease of use
 
         // Does i_hwReg exist in the cache?
         auto hwRegPairItr = hwRegMap.find(i_hwReg);

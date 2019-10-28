@@ -41,22 +41,22 @@ class Isolator
     }
 
     /** @brief Copy constructor. */
-    Isolator(const Isolator &) = delete;
+    Isolator(const Isolator&) = delete;
 
     /** @brief Assignment operator. */
-    Isolator & operator=(const Isolator &) = delete;
+    Isolator& operator=(const Isolator&) = delete;
 
   public:
 
     /** @brief Provides access to a singleton instance of this object. */
-    static Isolator & getSingleton()
+    static Isolator& getSingleton()
     {
         static Isolator theIsolator;
         return theIsolator;
     }
 
     /** @brief See API wrapper description in hei_main.hpp. */
-    ReturnCode initialize(void * i_buffer, size_t i_bufferSize,
+    ReturnCode initialize(void* i_buffer, size_t i_bufferSize,
                           bool i_forceInit = false);
 
     /**
@@ -68,8 +68,8 @@ class Isolator
     void uninitialize();
 
     /** @brief See API wrapper description in hei_main.hpp. */
-    ReturnCode isolate(const std::vector<Chip> & i_chipList,
-                       IsolationData & o_isoData) const;
+    ReturnCode isolate(const std::vector<Chip>& i_chipList,
+                       IsolationData& o_isoData) const;
 
   private:
 
