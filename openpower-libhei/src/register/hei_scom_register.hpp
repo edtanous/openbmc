@@ -60,7 +60,10 @@ class ScomRegister : public HardwareRegister
   public: // Accessor functions
 
     /** Function overloaded from parent HardwareRegister class. */
-    RegisterType_t getRegisterType() const { return REG_TYPE_SCOM; }
+    RegisterType_t getRegisterType() const
+    {
+        return REG_TYPE_SCOM;
+    }
 
     /** Function overloaded from parent HardwareRegister class. */
     RegisterAddress_t getAddress() const
@@ -69,7 +72,10 @@ class ScomRegister : public HardwareRegister
     }
 
     /** Function overloaded from parent HardwareRegister class. */
-    size_t getSize() const { return 8; }
+    size_t getSize() const
+    {
+        return 8;
+    }
 
   private: // Instance variables
 
@@ -139,7 +145,10 @@ class IdScomRegister : public HardwareRegister
   public: // Accessor functions
 
     /** Function overloaded from parent HardwareRegister class. */
-    RegisterType_t getRegisterType() const { return REG_TYPE_ID_SCOM; }
+    RegisterType_t getRegisterType() const
+    {
+        return REG_TYPE_ID_SCOM;
+    }
 
     /** Function overloaded from parent HardwareRegister class. */
     RegisterAddress_t getAddress() const
@@ -148,7 +157,10 @@ class IdScomRegister : public HardwareRegister
     }
 
     /** Function overloaded from parent HardwareRegister class. */
-    size_t getSize() const { return 8; } // See note in class documentation.
+    size_t getSize() const
+    {
+        return 8; // See note in class documentation.
+    }
 
   private: // Instance variables
 

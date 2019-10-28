@@ -84,11 +84,17 @@ class BitString
     virtual ~BitString() {}
 
     /** @return The number of bits in the bit string buffer. */
-    uint64_t getBitLen() const { return iv_bitLen; }
+    uint64_t getBitLen() const
+    {
+        return iv_bitLen;
+    }
 
     /** @return The address of the bit string buffer. Note that this may
      *          return nullptr. */
-    void* getBufAddr() const { return iv_bufAddr; }
+    void* getBufAddr() const
+    {
+        return iv_bufAddr;
+    }
 
     /**
      * @param i_bitLen The number of bits for a bit string.
@@ -175,20 +181,32 @@ class BitString
      * @param i_pos The target position.
      * @pre   i_pos < getBitLen().
      */
-    void setBit(uint64_t i_pos) { setFieldRight(i_pos, 1, 1); }
+    void setBit(uint64_t i_pos)
+    {
+        setFieldRight(i_pos, 1, 1);
+    }
 
     /** @brief Sets the entire bit string to 1's. */
-    void setAll() { setPattern(UINT64_MAX); }
+    void setAll()
+    {
+        setPattern(UINT64_MAX);
+    }
 
     /**
      * @brief Sets the target position to 0.
      * @param i_pos The target position.
      * @pre   i_pos < getBitLen().
      */
-    void clearBit(uint64_t i_pos) { setFieldRight(i_pos, 1, 0); }
+    void clearBit(uint64_t i_pos)
+    {
+        setFieldRight(i_pos, 1, 0);
+    }
 
     /** @brief Sets the entire bit string to 0's. */
-    void clearAll() { setPattern(0); }
+    void clearAll()
+    {
+        setPattern(0);
+    }
 
     /**
      * @brief Sets a range within the string based on the pattern and length
@@ -306,10 +324,16 @@ class BitString
     uint64_t getSetCount(uint64_t i_pos, uint64_t i_len) const;
 
     /** @return The number of bits that are set(1) in this string. */
-    uint64_t getSetCount() const { return getSetCount(0, getBitLen()); }
+    uint64_t getSetCount() const
+    {
+        return getSetCount(0, getBitLen());
+    }
 
     /** @brief Comparison operator. */
-    bool operator==(const BitString& i_str) const { return isEqual(i_str); }
+    bool operator==(const BitString& i_str) const
+    {
+        return isEqual(i_str);
+    }
 
     /** @brief Bitwise NOT operator. */
     BitStringBuffer operator~() const;
@@ -357,10 +381,16 @@ class BitString
      * @pre   Before calling this function, make sure you deallocate the old
      *        buffer to avoid memory leaks.
      */
-    void setBufAddr(void* i_newBufAddr) { iv_bufAddr = i_newBufAddr; }
+    void setBufAddr(void* i_newBufAddr)
+    {
+        iv_bufAddr = i_newBufAddr;
+    }
 
     /** @param i_newBitLen The new bit length of this bit string buffer. */
-    void setBitLen(uint64_t i_newBitLen) { iv_bitLen = i_newBitLen; }
+    void setBitLen(uint64_t i_newBitLen)
+    {
+        iv_bitLen = i_newBitLen;
+    }
 
   private: // functions
 
@@ -374,8 +404,7 @@ class BitString
      * @pre    nullptr != getBufAddr()
      * @pre    i_absPos < getBitLen()
      */
-    uint8_t* getRelativePosition(uint64_t& o_relPos,
-                                 uint64_t  i_absPos) const;
+    uint8_t* getRelativePosition(uint64_t& o_relPos, uint64_t i_absPos) const;
 
   private: // instance variables
 

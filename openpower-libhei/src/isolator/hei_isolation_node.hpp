@@ -42,8 +42,7 @@ class IsolationNode
      * @param i_hwReg A reference to the HardwareRegister targeted for
      *                isolation.
      */
-    explicit IsolationNode(const HardwareRegister& i_hwReg) :
-        iv_hwReg(i_hwReg)
+    explicit IsolationNode(const HardwareRegister& i_hwReg) : iv_hwReg(i_hwReg)
     {}
 
     /** @brief Destructor. */
@@ -182,8 +181,10 @@ class IsolationNode
     void pushIsolationStack() const;
 
     /** @brief Pops the top node off of cv_isolationStack. */
-    void popIsolationStack() const { cv_isolationStack.pop_back(); }
-
+    void popIsolationStack() const
+    {
+        cv_isolationStack.pop_back();
+    }
 };
 
 } // end namespace libhei

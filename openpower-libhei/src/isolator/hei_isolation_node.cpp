@@ -27,7 +27,8 @@ bool IsolationNode::analyze(const Chip& i_chip, AttentionType_t i_attnType,
     for (RegisterBit_t bit = 0; bit < bs->getBitLen(); bit++)
     {
         // Continue to the next bit if not active.
-        if (!bs->isBitSet(bit)) continue;
+        if (!bs->isBitSet(bit))
+            continue;
 
         // At least one active bit was found.
         o_activeAttn = true;
@@ -39,8 +40,8 @@ bool IsolationNode::analyze(const Chip& i_chip, AttentionType_t i_attnType,
         {
             // This bit was driven from an attention from another register.
             // Continue down the isolation tree to look for more attentions.
-            bool attnFound = child_itr->second->analyze(i_chip, i_attnType,
-                                                        io_isoData);
+            bool attnFound =
+                child_itr->second->analyze(i_chip, i_attnType, io_isoData);
             if (!attnFound)
             {
                 // Something went wrong. There should have been an active
@@ -111,8 +112,8 @@ std::vector<const IsolationNode*> IsolationNode::cv_isolationStack {};
 void IsolationNode::pushIsolationStack() const
 {
     // Ensure this node does not already exist in cv_isolationStack.
-    auto itr = std::find(cv_isolationStack.begin(),
-                         cv_isolationStack.end(), this);
+    auto itr =
+        std::find(cv_isolationStack.begin(), cv_isolationStack.end(), this);
     HEI_ASSERT(cv_isolationStack.end() == itr);
 
     // Push to node to the stack.

@@ -18,7 +18,10 @@ class Flyweight
     Flyweight() = default;
 
     /** @brief Destructor. */
-    ~Flyweight() { clear(); }
+    ~Flyweight()
+    {
+        clear();
+    }
 
     /** @brief Default copy constructor. */
     Flyweight(const Flyweight&) = delete;
@@ -69,7 +72,10 @@ class Flyweight
      */
     void clear()
     {
-        for (auto i : iv_index) { delete i; }
+        for (auto i : iv_index)
+        {
+            delete i;
+        }
         iv_index.clear();
     }
 
@@ -83,7 +89,10 @@ class Flyweight
      * initialization. Afterwards, the extra capacity is not needed. So this
      * function will shrink the capacity to the size of the vector.
      */
-    void compact() { iv_index.shrink_to_fit(); }
+    void compact()
+    {
+        iv_index.shrink_to_fit();
+    }
 
   private:
 

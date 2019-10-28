@@ -28,8 +28,9 @@ class Signature
     Signature(const Chip& i_chip, RegisterId_t i_id,
               RegisterInstance_t i_instance, RegisterBit_t i_bit,
               AttentionType_t i_attnType) :
-        iv_chip(i_chip), iv_id(i_id), iv_instance(i_instance),
-        iv_bit(i_bit), iv_attnType(i_attnType)
+        iv_chip(i_chip),
+        iv_id(i_id), iv_instance(i_instance), iv_bit(i_bit),
+        iv_attnType(i_attnType)
     {}
 
     /** @brief Destructor. */
@@ -52,19 +53,34 @@ class Signature
   public: // Member functions
 
     /** @return The chip containing this register. */
-    const Chip& getChip() const { return iv_chip; }
+    const Chip& getChip() const
+    {
+        return iv_chip;
+    }
 
     /** @return The register ID. */
-    RegisterId_t getId() const { return iv_id; }
+    RegisterId_t getId() const
+    {
+        return iv_id;
+    }
 
     /** @return The instance of this register. */
-    RegisterInstance_t getInstance() const { return iv_instance; }
+    RegisterInstance_t getInstance() const
+    {
+        return iv_instance;
+    }
 
     /** @return The target bit within this register. */
-    RegisterBit_t getBit() const { return iv_bit; }
+    RegisterBit_t getBit() const
+    {
+        return iv_bit;
+    }
 
     /** @return The attention type reported by this bit. */
-    AttentionType_t getAttnType() const { return iv_attnType; }
+    AttentionType_t getAttnType() const
+    {
+        return iv_attnType;
+    }
 };
 
 } // end namespace libhei

@@ -13,9 +13,7 @@ class ReturnCode
      * @brief Constructor.
      * @param i_rc The error code value.
      */
-    explicit constexpr ReturnCode(uint32_t i_rc = 0) :
-        iv_rc(i_rc)
-    {}
+    explicit constexpr ReturnCode(uint32_t i_rc = 0) : iv_rc(i_rc) {}
 
     /** @brief Default copy constructor. */
     ReturnCode(const ReturnCode&) = default;
@@ -27,10 +25,16 @@ class ReturnCode
     ~ReturnCode() = default;
 
     /** @brief Integral type conversion function. */
-    operator uint32_t() const { return iv_rc; }
+    operator uint32_t() const
+    {
+        return iv_rc;
+    }
 
     /** @brief Integral type conversion function. */
-    operator uint64_t() const { return iv_rc; }
+    operator uint64_t() const
+    {
+        return iv_rc;
+    }
 
     /** @brief Equals operator. */
     bool operator==(const ReturnCode& rhs) const
@@ -51,7 +55,10 @@ class ReturnCode
      * some compilers will throw warnings when passing this object into
      * functions with variadic arguments, like printf().
      */
-    uint32_t get() const { return iv_rc; }
+    uint32_t get() const
+    {
+        return iv_rc;
+    }
 
   private:
 

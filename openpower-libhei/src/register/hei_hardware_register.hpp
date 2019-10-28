@@ -53,8 +53,9 @@ class HardwareRegister : public Register
     HardwareRegister(ChipType_t i_chipType, RegisterId_t i_id,
                      RegisterInstance_t i_instance,
                      RegisterAccessLevel_t i_accessLevel) :
-        Register(), iv_chipType(i_chipType), iv_id(i_id),
-        iv_instance(i_instance), iv_accessLevel(i_accessLevel)
+        Register(),
+        iv_chipType(i_chipType), iv_id(i_id), iv_instance(i_instance),
+        iv_accessLevel(i_accessLevel)
     {}
 
   private: // Instance variables
@@ -77,16 +78,28 @@ class HardwareRegister : public Register
   public: // Accessor functions
 
     /** @return The type of chip associated with this register. */
-    ChipType_t getChipType() const { return iv_chipType; }
+    ChipType_t getChipType() const
+    {
+        return iv_chipType;
+    }
 
     /* @return The unique ID for this register. */
-    RegisterId_t getId() const { return iv_id; }
+    RegisterId_t getId() const
+    {
+        return iv_id;
+    }
 
     /* @return The instance of this register. */
-    RegisterInstance_t getInstance() const { return iv_instance; }
+    RegisterInstance_t getInstance() const
+    {
+        return iv_instance;
+    }
 
     /** @return The hardware access level of this register. */
-    RegisterAccessLevel_t getAccessLevel() const { return iv_accessLevel; }
+    RegisterAccessLevel_t getAccessLevel() const
+    {
+        return iv_accessLevel;
+    }
 
     // NOTE: The following are determined by child classes.
 
@@ -223,8 +236,7 @@ class HardwareRegister : public Register
          * @param  i_hwReg The target register.
          * @return True if the entry exists, false otherwise.
          */
-        bool query(const Chip& i_chip,
-                   const HardwareRegister* i_hwReg) const;
+        bool query(const Chip& i_chip, const HardwareRegister* i_hwReg) const;
 
         /**
          * @brief  Returns the data buffer for the given chip and register.
@@ -234,8 +246,7 @@ class HardwareRegister : public Register
          * @note   If an entry does not exist in the cache, an entry will be
          *         created and the BitString will be initialized to 0.
          */
-        BitString& access(const Chip& i_chip,
-                           const HardwareRegister* i_hwReg);
+        BitString& access(const Chip& i_chip, const HardwareRegister* i_hwReg);
 
         /** @brief Flushes entire contents from cache. */
         void flush();
@@ -273,7 +284,10 @@ class HardwareRegister : public Register
   public: // Register cache management functions.
 
     /** @brief Flushes the entire register cache. */
-    static void flushAll() { cv_cache.flush(); }
+    static void flushAll()
+    {
+        cv_cache.flush();
+    }
 
     /**
      * @brief Flushes this register from the cache.

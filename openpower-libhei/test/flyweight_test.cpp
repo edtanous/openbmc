@@ -9,9 +9,22 @@ class Foo
   public:
     Foo() = default;
     explicit Foo(int i) : iv_i(i) {}
-    int get() const { return iv_i; }
-    bool operator==(const Foo& i_r) const { return iv_i == i_r.iv_i; }
-    bool operator<(const Foo& i_r) const { return iv_i <  i_r.iv_i; }
+
+    int get() const
+    {
+        return iv_i;
+    }
+
+    bool operator==(const Foo& i_r) const
+    {
+        return iv_i == i_r.iv_i;
+    }
+
+    bool operator<(const Foo& i_r) const
+    {
+        return iv_i <  i_r.iv_i;
+    }
+
   private:
     int iv_i = 0;
 };

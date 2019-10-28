@@ -111,8 +111,8 @@ class ChipDataStream
  *   @param             o_right: A pointer to where the data is stored
  *   @return            *this:   A pointer to "this" object
  **/
-template <> inline
-ChipDataStream& ChipDataStream::operator>>(uint16_t& o_right)
+template <>
+inline ChipDataStream& ChipDataStream::operator>>(uint16_t& o_right)
 {
     read(&o_right, sizeof(o_right));
     be16toh(o_right);
@@ -123,8 +123,8 @@ ChipDataStream& ChipDataStream::operator>>(uint16_t& o_right)
  *  @param             o_right: A pointer to where the data is stored
  *  @return            *this:   A pointer to "this" object
  **/
-template <> inline
-ChipDataStream& ChipDataStream::operator>>(int16_t& o_right)
+template <>
+inline ChipDataStream& ChipDataStream::operator>>(int16_t& o_right)
 {
     read(&o_right, sizeof(o_right));
     be16toh(o_right);
@@ -135,8 +135,8 @@ ChipDataStream& ChipDataStream::operator>>(int16_t& o_right)
  *  @param             o_right: A pointer to where the data is stored
  *  @return            *this:   A pointer to "this" object
  **/
-template <> inline
-ChipDataStream& ChipDataStream::operator>>(uint32_t& o_right)
+template <>
+inline ChipDataStream& ChipDataStream::operator>>(uint32_t& o_right)
 {
     read(&o_right, sizeof(o_right));
     be32toh(o_right);
@@ -147,8 +147,8 @@ ChipDataStream& ChipDataStream::operator>>(uint32_t& o_right)
  *  @param             o_right: A pointer to where the data is stored
  *  @return            *this:   A pointer to "this" object
  **/
-template <> inline
-ChipDataStream& ChipDataStream::operator>>(int32_t& o_right)
+template <>
+inline ChipDataStream& ChipDataStream::operator>>(int32_t& o_right)
 {
     read(&o_right, sizeof(o_right));
     be32toh(o_right);
@@ -159,8 +159,8 @@ ChipDataStream& ChipDataStream::operator>>(int32_t& o_right)
  *  @param             o_right: A pointer to where the data is stored
  *  @return            *this:   A pointer to "this" object
  **/
-template <> inline
-ChipDataStream& ChipDataStream::operator>>(uint64_t& o_right)
+template <>
+inline ChipDataStream& ChipDataStream::operator>>(uint64_t& o_right)
 {
     read(&o_right, sizeof(o_right));
     be64toh(o_right);
@@ -171,8 +171,8 @@ ChipDataStream& ChipDataStream::operator>>(uint64_t& o_right)
  *  @param             o_right: A pointer to where the data is stored
  *  @return            *this:   A pointer to "this" object
  **/
-template <> inline
-ChipDataStream& ChipDataStream::operator>>(int64_t& o_right)
+template <>
+inline ChipDataStream& ChipDataStream::operator>>(int64_t& o_right)
 {
     read(&o_right, sizeof(o_right));
     be64toh(o_right);

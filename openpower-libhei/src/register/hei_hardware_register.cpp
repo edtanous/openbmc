@@ -132,8 +132,8 @@ ReturnCode HardwareRegister::write(const Chip& i_chip) const
     size_t sz_buffer = BitString::getMinBytes(bs.getBitLen());
 
     // Write to this register to hardware.
-    rc = registerWrite(i_chip.getChip(), bs.getBufAddr(),
-                       sz_buffer, getRegisterType(), getAddress());
+    rc = registerWrite(i_chip.getChip(), bs.getBufAddr(), sz_buffer,
+                       getRegisterType(), getAddress());
 
     if (RC_SUCCESS == rc)
     {
@@ -176,7 +176,7 @@ bool HardwareRegister::Cache::query(const Chip& i_chip,
 //------------------------------------------------------------------------------
 
 BitString& HardwareRegister::Cache::access(const Chip& i_chip,
-                                            const HardwareRegister * i_hwReg)
+                                           const HardwareRegister * i_hwReg)
 {
     // If the entry does not exist, create a new entry.
     if (!query(i_chip, i_hwReg))

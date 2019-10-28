@@ -101,8 +101,12 @@ void BitString::setFieldLeft(uint64_t i_pos, uint64_t i_len, uint64_t i_val)
     // Get the bit fields on either side of the target bit field.
     uint64_t bf_l_shift = UINT8_BIT_LEN - bf_l_len;
     uint64_t bf_r_shift = UINT8_BIT_LEN - bf_r_len;
-    uint8_t bf_l = *relAddr; bf_l >>= bf_l_shift; bf_l <<= bf_l_shift;
-    uint8_t bf_r = *relAddr; bf_r <<= bf_r_shift; bf_r >>= bf_r_shift;
+    uint8_t bf_l = *relAddr;
+    bf_l >>= bf_l_shift;
+    bf_l <<= bf_l_shift;
+    uint8_t bf_r = *relAddr;
+    bf_r <<= bf_r_shift;
+    bf_r >>= bf_r_shift;
 
     // Combine all three parts of the byte and write it out to memory.
     *relAddr = bf_l | bf | bf_r;
@@ -269,7 +273,8 @@ uint64_t BitString::getSetCount(uint64_t i_pos, uint64_t i_len) const
 
     for (uint64_t i = i_pos; i < endPos; i++)
     {
-        if (isBitSet(i)) count++;
+        if (isBitSet(i))
+            count++;
     }
 
     return count;
@@ -410,7 +415,10 @@ BitStringBuffer::BitStringBuffer(const BitString& i_bs) :
     BitString(i_bs.getBitLen(), nullptr)
 {
     initBuffer();
-    if (!i_bs.isZero()) setString(i_bs);
+    if (!i_bs.isZero())
+    {
+        setString(i_bs);
+    }
 }
 
 //------------------------------------------------------------------------------
@@ -419,7 +427,10 @@ BitStringBuffer::BitStringBuffer(const BitStringBuffer& i_bsb) :
     BitString(i_bsb.getBitLen(), nullptr)
 {
     initBuffer();
-    if (!i_bsb.isZero()) setString(i_bsb);
+    if (!i_bsb.isZero())
+    {
+        setString(i_bsb);
+    }
 }
 
 //------------------------------------------------------------------------------
@@ -433,7 +444,10 @@ BitStringBuffer& BitStringBuffer::operator=(const BitString& i_bs)
 
     setBitLen(i_bs.getBitLen());
     initBuffer();
-    if (!i_bs.isZero()) setString(i_bs);
+    if (!i_bs.isZero())
+    {
+        setString(i_bs);
+    }
 
     return *this;
 }
@@ -451,7 +465,10 @@ BitStringBuffer& BitStringBuffer::operator=(const BitStringBuffer& i_bsb)
 
         setBitLen(i_bsb.getBitLen());
         initBuffer();
-        if (!i_bsb.isZero()) setString(i_bsb);
+        if (!i_bsb.isZero())
+        {
+            setString(i_bsb);
+        }
     }
 
     return *this;
