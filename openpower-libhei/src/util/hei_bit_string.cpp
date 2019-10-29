@@ -30,7 +30,7 @@ uint64_t BitString::getFieldRight(uint64_t i_pos, uint64_t i_len) const
 
     // Get the relative address of this byte and the relative starting position
     // within the byte.
-    uint64_t relPos = 0;
+    uint64_t relPos  = 0;
     uint8_t* relAddr = getRelativePosition(relPos, i_pos);
 
     // Get the length of the target bit field within this byte and the length of
@@ -74,7 +74,7 @@ void BitString::setFieldLeft(uint64_t i_pos, uint64_t i_len, uint64_t i_val)
 
     // Get the relative address of this byte and the relative starting position
     // within the byte.
-    uint64_t relPos = 0;
+    uint64_t relPos  = 0;
     uint8_t* relAddr = getRelativePosition(relPos, i_pos);
 
     // Get the length of the target bit field within this byte and the length of
@@ -101,9 +101,11 @@ void BitString::setFieldLeft(uint64_t i_pos, uint64_t i_len, uint64_t i_val)
     // Get the bit fields on either side of the target bit field.
     uint64_t bf_l_shift = UINT8_BIT_LEN - bf_l_len;
     uint64_t bf_r_shift = UINT8_BIT_LEN - bf_r_len;
+
     uint8_t bf_l = *relAddr;
     bf_l >>= bf_l_shift;
     bf_l <<= bf_l_shift;
+
     uint8_t bf_r = *relAddr;
     bf_r <<= bf_r_shift;
     bf_r >>= bf_r_shift;
@@ -176,7 +178,7 @@ void BitString::setString(const BitString& i_sStr, uint64_t i_sPos,
     // the data in the correct direction to prevent overlapping.
     uint64_t sRelOffset = 0, dRelOffset = 0;
     uint8_t* sRelAddr = i_sStr.getRelativePosition(sRelOffset, i_sPos);
-    uint8_t* dRelAddr =        getRelativePosition(dRelOffset, i_dPos);
+    uint8_t* dRelAddr = getRelativePosition(dRelOffset, i_dPos);
 
     // Copy the data.
     if ((dRelAddr == sRelAddr) && (dRelOffset == sRelOffset))
@@ -203,7 +205,7 @@ void BitString::setString(const BitString& i_sStr, uint64_t i_sPos,
         // Start with the last chunk and work backwards.
         for (int32_t pos = lastPos; 0 <= pos; pos -= UINT64_BIT_LEN)
         {
-            uint64_t len = std::min(actLen - pos, UINT64_BIT_LEN);
+            uint64_t len   = std::min(actLen - pos, UINT64_BIT_LEN);
             uint64_t value = i_sStr.getFieldRight(i_sPos + pos, len);
             setFieldRight(i_dPos + pos, len, value);
         }
@@ -221,7 +223,7 @@ void BitString::maskString(const BitString& i_mask)
     {
         uint64_t len = std::min(actLen - pos, UINT64_BIT_LEN);
 
-        uint64_t dVal =        getFieldRight(pos, len);
+        uint64_t dVal = getFieldRight(pos, len);
         uint64_t sVal = i_mask.getFieldRight(pos, len);
 
         setFieldRight(pos, len, dVal & ~sVal);
@@ -311,7 +313,7 @@ BitStringBuffer BitString::operator&(const BitString& i_bs) const
     {
         uint64_t len = std::min(actLen - pos, UINT64_BIT_LEN);
 
-        uint64_t dVal =      getFieldRight(pos, len);
+        uint64_t dVal = getFieldRight(pos, len);
         uint64_t sVal = i_bs.getFieldRight(pos, len);
 
         bsb.setFieldRight(pos, len, dVal & sVal);
@@ -333,7 +335,7 @@ BitStringBuffer BitString::operator|(const BitString& i_bs) const
     {
         uint64_t len = std::min(actLen - pos, UINT64_BIT_LEN);
 
-        uint64_t dVal =      getFieldRight(pos, len);
+        uint64_t dVal = getFieldRight(pos, len);
         uint64_t sVal = i_bs.getFieldRight(pos, len);
 
         bsb.setFieldRight(pos, len, dVal | sVal);
@@ -381,7 +383,7 @@ BitStringBuffer BitString::operator<<(uint64_t i_shift) const
 //------------------------------------------------------------------------------
 
 uint8_t* BitString::getRelativePosition(uint64_t& o_relPos,
-                                        uint64_t  i_absPos) const
+                                        uint64_t i_absPos) const
 {
     HEI_ASSERT(nullptr != getBufAddr()); // must to have a valid address
     HEI_ASSERT(i_absPos < getBitLen());  // must be a valid position

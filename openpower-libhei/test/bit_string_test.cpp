@@ -5,7 +5,7 @@
 
 using namespace libhei;
 
-static constexpr uint32_t UINT8_BIT_LEN = (sizeof(uint8_t) * 8);
+static constexpr uint32_t UINT8_BIT_LEN  = (sizeof(uint8_t) * 8);
 static constexpr uint32_t UINT64_BIT_LEN = (sizeof(uint64_t) * 8);
 
 // setBit()

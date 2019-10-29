@@ -114,8 +114,8 @@ class HardwareRegister : public Register
     {
         // Comparing register type, chip type, and address should be sufficient.
         return (getRegisterType() == i_r.getRegisterType()) &&
-               (getChipType()     == i_r.getChipType()    ) &&
-               (getAddress()      == i_r.getAddress()     );
+               (getChipType() == i_r.getChipType()) &&
+               (getAddress() == i_r.getAddress());
     }
 
     /** @brief Less than operator. */

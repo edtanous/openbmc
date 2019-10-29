@@ -63,6 +63,8 @@ class ReturnCode
     uint32_t iv_rc; ///< return code value
 };
 
+// clang-format off
+
 /** Function returned successfully. */
 static constexpr ReturnCode RC_SUCCESS                 = ReturnCode();
 
@@ -79,5 +81,7 @@ static constexpr ReturnCode RC_CHIP_DATA_MISSING       = ReturnCode(0x00000003);
 /** Generic return code indicating something along the hardware register access
  *  path failed and the returned data is undefined and should not be used. */
 static constexpr ReturnCode RC_REG_ACCESS_FAILURE      = ReturnCode(0x00000004);
+
+// clang-format on
 
 } // end namespace libhei

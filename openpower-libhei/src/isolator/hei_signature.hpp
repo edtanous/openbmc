@@ -41,12 +41,12 @@ class Signature
     /** @brief Assignment operator. */
     Signature& operator=(const Signature&) = default;
 
-  private: // Instance variables.
-    Chip               iv_chip;     ///< Chip containing this register.
-    RegisterId_t       iv_id;       ///< Register ID.
+  private:
+    Chip iv_chip;                   ///< Chip containing this register.
+    RegisterId_t iv_id;             ///< Register ID.
     RegisterInstance_t iv_instance; ///< Instance of this register.
-    RegisterBit_t      iv_bit;      ///< Target bit within this register.
-    AttentionType_t    iv_attnType; ///< Attention type reported by this bit.
+    RegisterBit_t iv_bit;           ///< Target bit within this register.
+    AttentionType_t iv_attnType;    ///< Attention type reported by this bit.
 
   public: // Member functions
     /** @return The chip containing this register. */

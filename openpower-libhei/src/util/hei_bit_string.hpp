@@ -402,10 +402,10 @@ class BitString
      */
     uint8_t* getRelativePosition(uint64_t& o_relPos, uint64_t i_absPos) const;
 
-  private: // instance variables
-    uint64_t iv_bitLen;  ///< The bit length of this buffer.
-    void*    iv_bufAddr; ///< The beginning address of this buffer.
-    uint64_t iv_offset;  ///< Start position offset
+  private:
+    uint64_t iv_bitLen; ///< The bit length of this buffer.
+    void* iv_bufAddr;   ///< The beginning address of this buffer.
+    uint64_t iv_offset; ///< Start position offset
 };
 
 //##############################################################################

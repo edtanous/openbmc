@@ -33,8 +33,8 @@ const BitString* HardwareRegister::getBitString(const Chip& i_chip) const
     // will be created in the cache, if it does not exist, when the cache is
     // accessed below.
 
-    if ((REG_ACCESS_NONE != getAccessLevel()) &&
-        (REG_ACCESS_WO   != getAccessLevel()))
+    auto al = getAccessLevel();
+    if ((REG_ACCESS_NONE != al) && (REG_ACCESS_WO != al))
     {
         read(i_chip);
     }
@@ -55,8 +55,8 @@ BitString& HardwareRegister::accessBitString(const Chip& i_chip)
     // will be created in the cache, if it does not exist, when the cache is
     // accessed below.
 
-    if ((REG_ACCESS_NONE != getAccessLevel()) &&
-        (REG_ACCESS_WO   != getAccessLevel()))
+    auto al = getAccessLevel();
+    if ((REG_ACCESS_NONE != al) && (REG_ACCESS_WO != al))
     {
         read(i_chip);
     }
@@ -78,8 +78,8 @@ ReturnCode HardwareRegister::read(const Chip& i_chip, bool i_force) const
     if (i_force || !queryCache(i_chip))
     {
         // This register must be readable.
-        HEI_ASSERT((REG_ACCESS_NONE != getAccessLevel()) &&
-                   (REG_ACCESS_WO   != getAccessLevel()));
+        auto al = getAccessLevel();
+        HEI_ASSERT((REG_ACCESS_NONE != al) && (REG_ACCESS_WO != al));
 
         // Get the buffer from the register cache.
         BitString& bs = accessCache(i_chip);
@@ -119,8 +119,8 @@ ReturnCode HardwareRegister::write(const Chip& i_chip) const
     verifyAccessorChip(i_chip);
 
     // This register must be writable.
-    HEI_ASSERT((REG_ACCESS_NONE != getAccessLevel()) &&
-               (REG_ACCESS_RO   != getAccessLevel()));
+    auto al = getAccessLevel();
+    HEI_ASSERT((REG_ACCESS_NONE != al) && (REG_ACCESS_RO != al));
 
     // An entry for this register must exist in the cache.
     HEI_ASSERT(queryCache(i_chip));
@@ -182,6 +182,7 @@ BitString& HardwareRegister::Cache::access(const Chip& i_chip,
     if (!query(i_chip, i_hwReg))
     {
         BitString* bs = new BitStringBuffer{i_hwReg->getSize() * 8};
+
         iv_cache[i_chip][i_hwReg] = bs;
     }
 

@@ -152,6 +152,8 @@ enum RegisterAccessLevel_t : uint8_t
  */
 enum AttentionType_t : uint8_t
 {
+    // clang-format off
+
     /** System checkstop hardware attention. Unrecoverable, fatal error. */
     ATTN_TYPE_CHECKSTOP   = 1,
 
@@ -169,6 +171,8 @@ enum AttentionType_t : uint8_t
 
     /** Software or hardware event requiring action by the host firmware. */
     ATTN_TYPE_HOST_ATTN   = 5,
+
+    // clang-format on
 };
 
 } // end namespace libhei

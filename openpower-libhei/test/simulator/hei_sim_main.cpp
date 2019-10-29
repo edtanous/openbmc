@@ -4,7 +4,7 @@ int main()
 {
     using namespace libhei;
 
-    void* buffer = nullptr;
+    void* buffer     = nullptr;
     size_t sz_buffer = 0;
 
     initialize(buffer, sz_buffer);

@@ -20,7 +20,7 @@ ReturnCode Isolator::initialize(void* i_buffer, size_t i_bufferSize,
     HEI_INF("Isolator::initialize(%p,%lu,%d)", i_buffer, i_bufferSize,
             i_forceInit);
 
-    Flyweight<ScomRegister>&   sfw = Flyweight<ScomRegister>::getSingleton();
+    Flyweight<ScomRegister>& sfw   = Flyweight<ScomRegister>::getSingleton();
     Flyweight<IdScomRegister>& ifw = Flyweight<IdScomRegister>::getSingleton();
 
     sfw.get(ScomRegister{CHIP_TYPE_INVALID, REG_ID_INVALID, REG_INST_DEFAULT,
