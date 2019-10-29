@@ -136,7 +136,7 @@ void BitString::setPattern(uint64_t i_sPos, uint64_t i_sLen, uint64_t i_pattern,
     // could be used in the constructor of BitStringBuffer, which could causes
     // an infinite loop.
     uint8_t a[sizeof(i_pattern)] = {};
-    BitString bs { sizeof(i_pattern) * 8, a };
+    BitString bs{sizeof(i_pattern) * 8, a};
     bs.setFieldRight(0, i_pLen, i_pattern);
 
     // Iterate the range in chunks the size of i_pLen.
@@ -351,7 +351,7 @@ BitStringBuffer BitString::operator>>(uint64_t i_shift) const
     if (i_shift < getBitLen())
     {
         // bso overlays bsb, containing the shifted offset.
-        BitString bso (bsb.getBitLen() - i_shift, bsb.getBufAddr(), i_shift);
+        BitString bso(bsb.getBitLen() - i_shift, bsb.getBufAddr(), i_shift);
 
         // Copy this into bso.
         bso.setString(*this);
@@ -369,8 +369,7 @@ BitStringBuffer BitString::operator<<(uint64_t i_shift) const
     if (i_shift < getBitLen())
     {
         // bso overlays *this, containing the shifted offset.
-        BitString bso (this->getBitLen() - i_shift, this->getBufAddr(),
-                        i_shift);
+        BitString bso(this->getBitLen() - i_shift, this->getBufAddr(), i_shift);
 
         // Copy bso into bsb.
         bsb.setString(bso);
@@ -406,7 +405,7 @@ BitStringBuffer::BitStringBuffer(uint64_t i_bitLen) :
 
 BitStringBuffer::~BitStringBuffer()
 {
-    delete [] (uint8_t*)getBufAddr();
+    delete[](uint8_t*) getBufAddr();
 }
 
 //------------------------------------------------------------------------------
@@ -439,7 +438,7 @@ BitStringBuffer& BitStringBuffer::operator=(const BitString& i_bs)
 {
     // The initBuffer() function will deallocate the buffer as well, however we
     // also need to deallocate the buffer here before we set the length.
-    delete [] (uint8_t*)getBufAddr();
+    delete[](uint8_t*) getBufAddr();
     setBufAddr(nullptr);
 
     setBitLen(i_bs.getBitLen());
@@ -460,7 +459,7 @@ BitStringBuffer& BitStringBuffer::operator=(const BitStringBuffer& i_bsb)
     {
         // The initBuffer() function will deallocate the buffer as well, however
         // we also need to deallocate the buffer here before we set the length.
-        delete [] (uint8_t*)getBufAddr();
+        delete[](uint8_t*) getBufAddr();
         setBufAddr(nullptr);
 
         setBitLen(i_bsb.getBitLen());
@@ -479,10 +478,10 @@ BitStringBuffer& BitStringBuffer::operator=(const BitStringBuffer& i_bsb)
 void BitStringBuffer::initBuffer()
 {
     // Deallocate the current buffer.
-    delete [] (uint8_t*)getBufAddr();
+    delete[](uint8_t*) getBufAddr();
 
     // create new buffer, initialized to 0's
-    setBufAddr(new uint8_t[ getMinBytes(getBitLen()) ]());
+    setBufAddr(new uint8_t[getMinBytes(getBitLen())]());
 }
 
 } // end namespace libhei

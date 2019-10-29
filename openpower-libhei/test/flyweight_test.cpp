@@ -22,7 +22,7 @@ class Foo
 
     bool operator<(const Foo& i_r) const
     {
-        return iv_i <  i_r.iv_i;
+        return iv_i < i_r.iv_i;
     }
 
   private:
@@ -31,7 +31,7 @@ class Foo
 
 Foo& addFoo(int i)
 {
-    return Flyweight<Foo>::getSingleton().get(Foo { i });
+    return Flyweight<Foo>::getSingleton().get(Foo{i});
 }
 
 TEST(FlyweightTest, TestSet1)

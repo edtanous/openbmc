@@ -29,7 +29,6 @@ namespace libhei
 class Isolator
 {
   private: // This class cannot be instantiated. Use getSingleton() instead.
-
     /** @brief Default constructor. */
     Isolator() = default;
 
@@ -47,7 +46,6 @@ class Isolator
     Isolator& operator=(const Isolator&) = delete;
 
   public:
-
     /** @brief Provides access to a singleton instance of this object. */
     static Isolator& getSingleton()
     {
@@ -70,9 +68,6 @@ class Isolator
     /** @brief See API wrapper description in hei_main.hpp. */
     ReturnCode isolate(const std::vector<Chip>& i_chipList,
                        IsolationData& o_isoData) const;
-
-  private:
-
 }; // end class Isolator
 
 } // end namespace libhei

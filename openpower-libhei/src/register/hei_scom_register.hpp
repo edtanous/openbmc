@@ -16,7 +16,6 @@ namespace libhei
 class ScomRegister : public HardwareRegister
 {
   public: // Constructor, destructors, assignment, etc.
-
     /**
      * @brief Constructor from components.
      * @param i_chipType    Type of chip associated with this register.
@@ -36,7 +35,6 @@ class ScomRegister : public HardwareRegister
     ~ScomRegister() = default;
 
   private:
-
     // This is needed to allow the flyweights to use the copy constructor, but
     // not allow it to be used in general.
     friend class Flyweight<ScomRegister>;
@@ -58,7 +56,6 @@ class ScomRegister : public HardwareRegister
     ScomRegister& operator=(const ScomRegister&) = delete;
 
   public: // Accessor functions
-
     /** Function overloaded from parent HardwareRegister class. */
     RegisterType_t getRegisterType() const
     {
@@ -78,7 +75,6 @@ class ScomRegister : public HardwareRegister
     }
 
   private: // Instance variables
-
     /** This register's address. */
     const uint32_t iv_address;
 
@@ -101,7 +97,6 @@ class ScomRegister : public HardwareRegister
 class IdScomRegister : public HardwareRegister
 {
   public: // Constructor, destructors, assignment, etc.
-
     /**
      * @brief Constructor from components.
      * @param i_chipType    Type of chip associated with this register.
@@ -121,7 +116,6 @@ class IdScomRegister : public HardwareRegister
     ~IdScomRegister() = default;
 
   private:
-
     // This is needed to allow the flyweights to use the copy constructor, but
     // not allow it to be used in general.
     friend class Flyweight<IdScomRegister>;
@@ -143,7 +137,6 @@ class IdScomRegister : public HardwareRegister
     IdScomRegister& operator=(const IdScomRegister&) = delete;
 
   public: // Accessor functions
-
     /** Function overloaded from parent HardwareRegister class. */
     RegisterType_t getRegisterType() const
     {
@@ -163,7 +156,6 @@ class IdScomRegister : public HardwareRegister
     }
 
   private: // Instance variables
-
     /** This register's address. */
     const uint64_t iv_address;
 

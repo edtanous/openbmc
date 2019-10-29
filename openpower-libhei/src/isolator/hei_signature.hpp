@@ -16,7 +16,6 @@ namespace libhei
 class Signature
 {
   public: // Constructors, destructor, assignment, etc.
-
     /**
      * @brief Constructor from components.
      * @param i_chip     The chip containing this register.
@@ -43,7 +42,6 @@ class Signature
     Signature& operator=(const Signature&) = default;
 
   private: // Instance variables.
-
     Chip               iv_chip;     ///< Chip containing this register.
     RegisterId_t       iv_id;       ///< Register ID.
     RegisterInstance_t iv_instance; ///< Instance of this register.
@@ -51,7 +49,6 @@ class Signature
     AttentionType_t    iv_attnType; ///< Attention type reported by this bit.
 
   public: // Member functions
-
     /** @return The chip containing this register. */
     const Chip& getChip() const
     {

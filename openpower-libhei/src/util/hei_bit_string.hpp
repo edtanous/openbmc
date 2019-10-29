@@ -59,12 +59,10 @@ class BitStringBuffer;
 class BitString
 {
   private: // constants
-
     static const uint64_t UINT64_BIT_LEN;
     static const uint64_t UINT8_BIT_LEN;
 
   public: // functions
-
     /**
      * @brief Constructor
      * @param i_bitLen  The number of bits in the bit string.
@@ -375,7 +373,6 @@ class BitString
     BitString(const BitStringBuffer& i_bsb) = delete;
 
   protected: // functions
-
     /**
      * @param i_newBufAddr The starting address of the new bit string buffer.
      * @pre   Before calling this function, make sure you deallocate the old
@@ -393,7 +390,6 @@ class BitString
     }
 
   private: // functions
-
     /**
      * @brief  Given a bit position within the bit string, this function returns
      *         the address that contains the bit position and the bit position
@@ -407,7 +403,6 @@ class BitString
     uint8_t* getRelativePosition(uint64_t& o_relPos, uint64_t i_absPos) const;
 
   private: // instance variables
-
     uint64_t iv_bitLen;  ///< The bit length of this buffer.
     void*    iv_bufAddr; ///< The beginning address of this buffer.
     uint64_t iv_offset;  ///< Start position offset
@@ -425,7 +420,6 @@ class BitString
 class BitStringBuffer : public BitString
 {
   public: // functions
-
     /**
      * @brief Constructor
      * @param i_bitLen Number of bits in the string.
@@ -448,7 +442,6 @@ class BitStringBuffer : public BitString
     BitStringBuffer& operator=(const BitStringBuffer& i_bsb);
 
   private: // functions
-
     /** @brief Deallocates the old buffer, if needed, and initializes the new
      *         buffer. */
     void initBuffer();

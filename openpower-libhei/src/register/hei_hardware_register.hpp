@@ -37,12 +37,10 @@ namespace libhei
 class HardwareRegister : public Register
 {
   public:
-
     /** @brief Pure virtual destructor. */
     virtual ~HardwareRegister() = 0;
 
   protected:
-
     /**
      * @brief Constructor from components.
      * @param i_chipType    Type of chip associated with this register.
@@ -59,7 +57,6 @@ class HardwareRegister : public Register
     {}
 
   private: // Instance variables
-
     /** The type of chip associated with register. */
     const ChipType_t iv_chipType;
 
@@ -76,7 +73,6 @@ class HardwareRegister : public Register
     const RegisterAccessLevel_t iv_accessLevel;
 
   public: // Accessor functions
-
     /** @return The type of chip associated with this register. */
     ChipType_t getChipType() const
     {
@@ -113,7 +109,6 @@ class HardwareRegister : public Register
     virtual size_t getSize() const = 0;
 
   public: // Operators
-
     /** @brief Equals operator. */
     bool operator==(const HardwareRegister& i_r) const
     {
@@ -147,7 +142,6 @@ class HardwareRegister : public Register
     }
 
   public:
-
     /** Function overloaded from parent Register class. */
     const BitString* getBitString(const Chip& i_chip) const;
 
@@ -185,7 +179,6 @@ class HardwareRegister : public Register
 #endif // __HEI_READ_ONLY
 
   protected:
-
     /**
      * @brief  Provides access to this register's BitString.
      *
@@ -198,7 +191,6 @@ class HardwareRegister : public Register
     BitString& accessBitString(const Chip& i_chip);
 
   private: // Hardware accessor management functions.
-
     /** @brief Asserts this register belongs on the target accessor chip. */
     void verifyAccessorChip(const Chip& i_chip) const
     {
@@ -206,7 +198,6 @@ class HardwareRegister : public Register
     }
 
   private: // Register cache class variable
-
     /**
      * @brief Caches the contents of registers read from hardware.
      *
@@ -217,7 +208,6 @@ class HardwareRegister : public Register
     class Cache
     {
       public:
-
         /** @brief Default constructor. */
         Cache() = default;
 
@@ -259,7 +249,6 @@ class HardwareRegister : public Register
         void flush(const Chip& i_chip, const HardwareRegister* i_hwReg);
 
       private:
-
         /**
          * @brief Stores a BitStringBuffer for each HardwareRegister per Chip.
          *
@@ -282,7 +271,6 @@ class HardwareRegister : public Register
     static Cache cv_cache;
 
   public: // Register cache management functions.
-
     /** @brief Flushes the entire register cache. */
     static void flushAll()
     {
@@ -299,7 +287,6 @@ class HardwareRegister : public Register
     }
 
   private: // Register cache management functions.
-
     /**
      * @param  i_chip  The target chip in which this register belongs.
      * @return True if an entry for this register exist in this cache.

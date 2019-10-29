@@ -149,7 +149,7 @@ ReturnCode HardwareRegister::write(const Chip& i_chip) const
 
 //------------------------------------------------------------------------------
 
-HardwareRegister::Cache HardwareRegister::cv_cache {};
+HardwareRegister::Cache HardwareRegister::cv_cache{};
 
 //------------------------------------------------------------------------------
 
@@ -176,12 +176,12 @@ bool HardwareRegister::Cache::query(const Chip& i_chip,
 //------------------------------------------------------------------------------
 
 BitString& HardwareRegister::Cache::access(const Chip& i_chip,
-                                           const HardwareRegister * i_hwReg)
+                                           const HardwareRegister* i_hwReg)
 {
     // If the entry does not exist, create a new entry.
     if (!query(i_chip, i_hwReg))
     {
-        BitString* bs = new BitStringBuffer { i_hwReg->getSize() * 8 };
+        BitString* bs = new BitStringBuffer{i_hwReg->getSize() * 8};
         iv_cache[i_chip][i_hwReg] = bs;
     }
 

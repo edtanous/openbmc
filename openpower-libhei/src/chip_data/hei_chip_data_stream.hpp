@@ -35,7 +35,6 @@ class ChipDataStream
 {
 
   private:
-
     /** iv_buffer points to the first address of the Chip Data File
         buffer.  **/
     const void* const iv_buffer;
@@ -47,7 +46,6 @@ class ChipDataStream
     size_t iv_asyncOffset;
 
   public:
-
     /* Constructors */
 
     /**
@@ -83,7 +81,6 @@ class ChipDataStream
     }
 
   private:
-
     /**
      *@brief Read does the copy from the buffer
      *@param o_buf       a pointer to the location to copy to

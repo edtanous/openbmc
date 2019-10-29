@@ -15,7 +15,6 @@ namespace libhei
 class IsolationData
 {
   public: // Constructors, destructor, assignment, etc.
-
     /** @brief Default constructor. */
     IsolationData() = default;
 
@@ -29,14 +28,12 @@ class IsolationData
     IsolationData& operator=(const IsolationData&) = default;
 
   private: // Instance variables
-
     /** A list of all signatures found during isolation. */
     std::vector<Signature> iv_sigLists;
 
     // TODO: add register dump.
 
   public: // Member functions
-
     /**
      * @brief Adds a signature to the signature list.
      * @param i_signature The target signature.

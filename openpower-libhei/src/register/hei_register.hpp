@@ -28,7 +28,6 @@ contain the result of fir & mask.
 class Register
 {
   public:
-
     /** @brief Pure virtual destructor. */
     virtual ~Register() = 0;
 

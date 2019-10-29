@@ -13,7 +13,6 @@ template <class T>
 class Flyweight
 {
   private: // This class cannot be instantiated. Use getSingleton() instead.
-
     /** @brief Default constructor. */
     Flyweight() = default;
 
@@ -30,7 +29,6 @@ class Flyweight
     Flyweight& operator=(const Flyweight&) = delete;
 
   public:
-
     /** @brief Provides access to a singleton instance of this object. */
     static Flyweight& getSingleton()
     {
@@ -58,7 +56,7 @@ class Flyweight
         if (iv_index.end() == itr || !(i_entry == *(*itr)))
         {
             // Create a new entry and store the pointer in the sorted index.
-            itr = iv_index.insert(itr, new T { i_entry });
+            itr = iv_index.insert(itr, new T{i_entry});
         }
 
         // Return a reference to this entry in the factory.
@@ -95,7 +93,6 @@ class Flyweight
     }
 
   private:
-
     /**
      * Each new T is allocated on the memory heap and a pointer to each of those
      * objects is stored in this vector. The vector will not contain duplicates

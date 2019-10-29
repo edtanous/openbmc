@@ -8,7 +8,6 @@ namespace libhei
 class ReturnCode
 {
   public:
-
     /**
      * @brief Constructor.
      * @param i_rc The error code value.
@@ -61,7 +60,6 @@ class ReturnCode
     }
 
   private:
-
     uint32_t iv_rc; ///< return code value
 };
 

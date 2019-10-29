@@ -54,18 +54,18 @@ bool IsolationNode::analyze(const Chip& i_chip, AttentionType_t i_attnType,
                 // io_isoData. If there are no other active attentions, the user
                 // application could use this signature to help determine, and
                 // circumvent, the isolation problem.
-                io_isoData.addSignature(Signature { i_chip, iv_hwReg.getId(),
-                                                    iv_hwReg.getInstance(),
-                                                    bit, i_attnType });
+                io_isoData.addSignature(Signature{i_chip, iv_hwReg.getId(),
+                                                  iv_hwReg.getInstance(), bit,
+                                                  i_attnType});
             }
         }
         else
         {
             // We have reached a leaf in the isolation tree. Add this bit's
             // signature to io_isoData.
-            io_isoData.addSignature(Signature { i_chip, iv_hwReg.getId(),
-                                                iv_hwReg.getInstance(),
-                                                bit, i_attnType });
+            io_isoData.addSignature(Signature{i_chip, iv_hwReg.getId(),
+                                              iv_hwReg.getInstance(), bit,
+                                              i_attnType});
         }
     }
 
@@ -105,7 +105,7 @@ void IsolationNode::addChild(uint8_t i_bit, const IsolationNode* i_child)
 
 //------------------------------------------------------------------------------
 
-std::vector<const IsolationNode*> IsolationNode::cv_isolationStack {};
+std::vector<const IsolationNode*> IsolationNode::cv_isolationStack{};
 
 //------------------------------------------------------------------------------
 

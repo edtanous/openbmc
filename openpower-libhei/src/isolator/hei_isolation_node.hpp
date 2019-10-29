@@ -36,7 +36,6 @@ namespace libhei
 class IsolationNode
 {
   public: // Constructors, destructor, assignment
-
     /**
      * @brief Constructor from components.
      * @param i_hwReg A reference to the HardwareRegister targeted for
@@ -49,7 +48,6 @@ class IsolationNode
     ~IsolationNode() = default;
 
   private:
-
     // This is needed to allow the flyweights to use the copy constructor, but
     // not allow it to be used in general.
     friend class Flyweight<IsolationNode>;
@@ -71,7 +69,6 @@ class IsolationNode
     IsolationNode& operator=(const IsolationNode&) = delete;
 
   private: // Instance variables
-
     /**
      * This is a reference to the HardwareRegister targeted for isolation by
      * this instance of the class. The reference is required to maintain
@@ -95,7 +92,6 @@ class IsolationNode
     std::map<RegisterBit_t, const IsolationNode*> iv_children;
 
   public: // Member functions
-
     /**
      * @brief  Finds all active attentions on this register. If an active bit is
      *         a leaf in the isolation tree, the bit's signature is added to the
@@ -143,7 +139,6 @@ class IsolationNode
     void addChild(RegisterBit_t i_bit, const IsolationNode* i_child);
 
   public: // Operators
-
     /** @brief Equals operator. */
     bool operator==(const IsolationNode& i_r) const
     {
@@ -159,7 +154,6 @@ class IsolationNode
     }
 
   private: // Isolation stack and supporting functions.
-
     /** When analyze() is called at the tree root, all recursive calls to
      *  analyze() will target the same chip and attention type. So we only need
      *  to keep track of the nodes that have been analyzed to avoid cyclic

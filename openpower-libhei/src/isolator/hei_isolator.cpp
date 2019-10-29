@@ -23,17 +23,15 @@ ReturnCode Isolator::initialize(void* i_buffer, size_t i_bufferSize,
     Flyweight<ScomRegister>&   sfw = Flyweight<ScomRegister>::getSingleton();
     Flyweight<IdScomRegister>& ifw = Flyweight<IdScomRegister>::getSingleton();
 
-    sfw.get(ScomRegister { CHIP_TYPE_INVALID, REG_ID_INVALID,
-                           REG_INST_DEFAULT, REG_ACCESS_RW, 0x01234567 });
-    sfw.get(ScomRegister { CHIP_TYPE_INVALID, REG_ID_INVALID,
-                           REG_INST_DEFAULT, REG_ACCESS_RW, 0x00112233 });
+    sfw.get(ScomRegister{CHIP_TYPE_INVALID, REG_ID_INVALID, REG_INST_DEFAULT,
+                         REG_ACCESS_RW, 0x01234567});
+    sfw.get(ScomRegister{CHIP_TYPE_INVALID, REG_ID_INVALID, REG_INST_DEFAULT,
+                         REG_ACCESS_RW, 0x00112233});
 
-    ifw.get(IdScomRegister { CHIP_TYPE_INVALID, REG_ID_INVALID,
-                             REG_INST_DEFAULT, REG_ACCESS_RW,
-                             0x0123456789abcdef });
-    ifw.get(IdScomRegister { CHIP_TYPE_INVALID, REG_ID_INVALID,
-                             REG_INST_DEFAULT, REG_ACCESS_RW,
-                             0x0011223344556677 });
+    ifw.get(IdScomRegister{CHIP_TYPE_INVALID, REG_ID_INVALID, REG_INST_DEFAULT,
+                           REG_ACCESS_RW, 0x0123456789abcdef});
+    ifw.get(IdScomRegister{CHIP_TYPE_INVALID, REG_ID_INVALID, REG_INST_DEFAULT,
+                           REG_ACCESS_RW, 0x0011223344556677});
     // END temporary code
 
     return rc;

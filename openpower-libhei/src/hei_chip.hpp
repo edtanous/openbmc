@@ -12,7 +12,6 @@ namespace libhei
 class Chip
 {
   public: // Constructors, destructors, assignment, etc.
-
     Chip() = default;
 
     ~Chip() = default;
@@ -29,7 +28,6 @@ class Chip
     Chip(void* i_chip, ChipType_t i_type) : iv_chip(i_chip), iv_type(i_type) {}
 
   public: // Accessors
-
     void* getChip() const
     {
         return iv_chip;
@@ -41,7 +39,6 @@ class Chip
     }
 
   public: // Operators
-
     bool operator==(const Chip& r) const
     {
         return (iv_chip == r.iv_chip) && (iv_type == r.iv_type);
@@ -54,7 +51,6 @@ class Chip
     }
 
   private:
-
     /**
      * The user application will provide pointers to user application objects
      * that represent chips targeted for analysis. The isolator does not know
