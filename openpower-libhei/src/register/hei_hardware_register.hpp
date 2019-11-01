@@ -145,15 +145,6 @@ class HardwareRegister : public Register
     /** Function overloaded from parent Register class. */
     const BitString* getBitString(const Chip& i_chip) const;
 
-#if 0
-    /**
-     * @brief     Updates bit string contents associated with register
-     * @param     i_bs               poiner to bit string
-     * @return    Nil
-     */
-    virtual void setBitString(const BitString * i_bs) ;
-#endif
-
     /**
      * @brief  Reads a register from hardware via the user interface APIs.
      * @param  i_chip  The target chip in which this register belongs.

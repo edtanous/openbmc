@@ -12,16 +12,6 @@ HardwareRegister::~HardwareRegister() {}
 
 //------------------------------------------------------------------------------
 
-#if 0
-void HardwareRegister::setBitString(const BitString *bs)
-{
-    BitString& l_string  = accessBitString();
-    l_string.setString(*bs);
-}
-#endif
-
-//------------------------------------------------------------------------------
-
 const BitString* HardwareRegister::getBitString(const Chip& i_chip) const
 {
     // Verify this register belongs on i_chip.

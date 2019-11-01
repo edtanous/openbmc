@@ -15,15 +15,14 @@ NotRegister, and AndRegister.  As a base class of register types, Register
 creates a place where these registers can be put together like logical
 building blocks.  For example, Register makes this possible:
 
-Register * fir = new HardwareRegister(REG_ADDRESS, REG_WIDTH,
-                                      CHIP_TYPE, ACCESS_RO);
-Register * mask = new ConstantRegister(0xffffffff00000000);
-Register * fir_mask = new AndRegister(fir, mask);
+Register * mask1 = new ConstantRegister(0xffff000000000000);
+Register * mask2 = new ConstantRegister(0xffffffff00000000);
+Register * fir_mask = new AndRegister(mask1, mask2);
 const BitString * bs = fir_mask->getBitString(chip);
 
 The getBitString function (defined by each register) provides access to
 the BitString that manages each register's data.  In this example bs will
-contain the result of fir & mask.
+contain the result of mask1 & mask2.
 */
 class Register
 {

@@ -2,6 +2,23 @@
 
 #include <register/hei_register.hpp>
 
+/**
+ * @file hei_operator_register.hpp
+ *
+ * A library of useful classes used to perform logical or bitwise math on or
+ * between other registers. The classes implemented here include NotRegister,
+ * LeftShiftRegister, RightShiftRegister, AndRegister, OrRegister, and
+ * ConstantRegister.
+ *
+ * Accompanied with other Register classes and the getBitString() function, it
+ * is possible to perform operations like:
+ *
+ *      AndRegister reg{<register1>,<register2>};
+ *      result = reg.getBitString(<someChip>);
+ *
+ * This example will return a BitString containing the result of the bitwise
+ * AND operation applied to register1 and register2.
+ */
 namespace libhei
 {
 
@@ -44,6 +61,13 @@ class OperatorRegister : public Register
 // Pure virtual destructor must be defined.
 inline OperatorRegister::~OperatorRegister() {}
 
+/**
+ * @brief Using getBitString(), performs a bitwise NOT operation on a register.
+ *
+ * Example:
+ *      NotRegister reg{someRegister};
+ *      result = reg.getBitString(someChip);
+ */
 class NotRegister : public OperatorRegister
 {
   public:
@@ -90,6 +114,13 @@ class NotRegister : public OperatorRegister
     Register* iv_child;
 };
 
+/**
+ * @brief Using getBitString(), performs a left shift operation on a register.
+ *
+ * Example:
+ *      LeftShiftRegister reg{someRegister1, shiftValue};
+ *      result = reg.getBitString(someChip);
+ */
 class LeftShiftRegister : public OperatorRegister
 {
   public:
@@ -140,6 +171,13 @@ class LeftShiftRegister : public OperatorRegister
     uint16_t iv_amount;
 };
 
+/**
+ * @brief Using getBitString(), performs a right shift operation on a register.
+ *
+ * Example:
+ *      RightShiftRegister reg{someRegister1, shiftValue};
+ *      result = reg.getBitString(someChip);
+ */
 class RightShiftRegister : public OperatorRegister
 {
   public:
@@ -190,6 +228,14 @@ class RightShiftRegister : public OperatorRegister
     uint16_t iv_amount;
 };
 
+/**
+ * @brief Using getBitString(), performs a bitwise AND operation on a pair
+ *        of registers.
+ *
+ * Example:
+ *      AndRegister reg{someRegister1, someRegister2};
+ *      result = reg.getBitString(someChip);
+ */
 class AndRegister : public OperatorRegister
 {
   public:
@@ -242,6 +288,14 @@ class AndRegister : public OperatorRegister
     Register* iv_right;
 };
 
+/**
+ * @brief Using getBitString(), performs a bitwise OR operation on a pair
+ *        of registers.
+ *
+ * Example:
+ *      OrRegister reg{someRegister1, someRegister2};
+ *      result = reg.getBitString(someChip);
+ */
 class OrRegister : public OperatorRegister
 {
   public:
@@ -294,6 +348,11 @@ class OrRegister : public OperatorRegister
     Register* iv_right;
 };
 
+/**
+ * @brief Contains a constant value that can be used within any of the other
+ *        register operators. The value can be retrieved using the
+ *        getBitString() function.
+ **/
 class ConstantRegister : public OperatorRegister
 {
   public:
