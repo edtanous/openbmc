@@ -88,8 +88,8 @@ ReturnCode HardwareRegister::read(const Chip& i_chip, bool i_force) const
         size_t sz_buffer = BitString::getMinBytes(bs.getBitLen());
 
         // Read this register from hardware.
-        rc = registerRead(i_chip.getChip(), bs.getBufAddr(), sz_buffer,
-                          getRegisterType(), getAddress());
+        rc = registerRead(i_chip, bs.getBufAddr(), sz_buffer, getRegisterType(),
+                          getAddress());
         if (RC_SUCCESS != rc)
         {
             // The read failed and we can't trust what was put in the register
@@ -132,8 +132,8 @@ ReturnCode HardwareRegister::write(const Chip& i_chip) const
     size_t sz_buffer = BitString::getMinBytes(bs.getBitLen());
 
     // Write to this register to hardware.
-    rc = registerWrite(i_chip.getChip(), bs.getBufAddr(), sz_buffer,
-                       getRegisterType(), getAddress());
+    rc = registerWrite(i_chip, bs.getBufAddr(), sz_buffer, getRegisterType(),
+                       getAddress());
 
     if (RC_SUCCESS == rc)
     {

@@ -78,6 +78,51 @@ class Signature
     {
         return iv_attnType;
     }
+
+  public: // Operators
+    /** @brief Equals operator. */
+    bool operator==(const Signature& i_r) const
+    {
+        return (getChip() == i_r.getChip() && getId() == i_r.getId() &&
+                getInstance() == i_r.getInstance() &&
+                getBit() == i_r.getBit() && getAttnType() == i_r.getAttnType());
+    }
+
+    /** @brief Less than operator. */
+    bool operator<(const Signature& i_r) const
+    {
+        if (getChip() < i_r.getChip())
+        {
+            return true;
+        }
+        else if (getChip() == i_r.getChip())
+        {
+            if (getId() < i_r.getId())
+            {
+                return true;
+            }
+            else if (getId() == i_r.getId())
+            {
+                if (getInstance() < i_r.getInstance())
+                {
+                    return true;
+                }
+                else if (getInstance() == i_r.getInstance())
+                {
+                    if (getBit() < i_r.getBit())
+                    {
+                        return true;
+                    }
+                    else if (getBit() == i_r.getBit())
+                    {
+                        return (getAttnType() < i_r.getAttnType());
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
 };
 
 } // end namespace libhei

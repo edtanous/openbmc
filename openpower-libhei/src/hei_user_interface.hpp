@@ -16,12 +16,9 @@ namespace libhei
 /**
  * @brief Performs a hardware register read operation.
  *
- * @param i_chip     This is a pointer to a user application object that
- *                   represents the target chip. It is provided to the isolator
- *                   by the user application via the isolator main APIs. The
- *                   isolator does not know anything about this object nor how
- *                   to use it. The user application is responsible for knowing
- *                   what to do with this parameter.
+ * @param i_chip     The target chip for the register access. It is provided to
+ *                   the isolator by the user application via the isolator main
+ *                   APIs.
  *
  * @param o_buffer   Allocated memory space for the returned contents of the
  *                   register.
@@ -44,7 +41,7 @@ namespace libhei
  *         failure the user application is responsible for reporting why the
  *         register access failed.
  */
-ReturnCode registerRead(void* i_chip, void* o_buffer, size_t& io_bufSize,
+ReturnCode registerRead(const Chip& i_chip, void* o_buffer, size_t& io_bufSize,
                         uint64_t i_regType, uint64_t i_address);
 
 #ifndef __HEI_READ_ONLY
@@ -52,12 +49,9 @@ ReturnCode registerRead(void* i_chip, void* o_buffer, size_t& io_bufSize,
 /**
  * @brief Performs a hardware register write operation.
  *
- * @param i_chip     This is a pointer to a user application object that
- *                   represents the target chip. It is provided to the isolator
- *                   by the user application via the isolator main APIs. The
- *                   isolator does not know anything about this object nor how
- *                   to use it. The user application is responsible for knowing
- *                   what to do with this parameter.
+ * @param i_chip     The target chip for the register access. It is provided to
+ *                   the isolator by the user application via the isolator main
+ *                   APIs.
  *
  * @param i_buffer   Allocated memory space containing the register contents to
  *                   write to hardware.
@@ -80,7 +74,7 @@ ReturnCode registerRead(void* i_chip, void* o_buffer, size_t& io_bufSize,
  *         failure the user application is responsible for reporting why the
  *         register access failed.
  */
-ReturnCode registerWrite(void* i_chip, void* i_buffer, size_t& io_bufSize,
+ReturnCode registerWrite(const Chip& i_chip, void* i_buffer, size_t& io_bufSize,
                          uint64_t i_regType, uint64_t i_address);
 
 #endif

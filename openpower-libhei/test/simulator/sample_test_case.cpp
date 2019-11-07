@@ -1,0 +1,18 @@
+#include "simulator.hpp"
+
+START_TEST_CASE(SampleTestSet1)
+
+CHIP(proc0, 0xdeadbeef)
+
+START_ITERATION
+
+REG_IDSCOM(proc0, 0x80000000FF000000, 0x8000) // parent FIR bit 48
+
+REG_SCOM(proc0, 0x00FF0000, 0x8800000000000000) // child FIR bits 0 and 4
+
+EXP_SIG(proc0, 0x2222, 0, 0, CHECKSTOP)
+EXP_SIG(proc0, 0x2222, 0, 4, CHECKSTOP)
+
+END_ITERATION
+
+END_TEST_CASE

@@ -2,6 +2,7 @@
 
 #include <hei_includes.hpp>
 #include <hei_isolation_data.hpp>
+#include <isolator/hei_isolation_node.hpp>
 
 namespace libhei
 {
@@ -68,6 +69,18 @@ class Isolator
     /** @brief See API wrapper description in hei_main.hpp. */
     ReturnCode isolate(const std::vector<Chip>& i_chipList,
                        IsolationData& o_isoData) const;
+
+  private:
+    // BEGIN temporary code
+    /**
+     * Provides a list of isolation tree nodes used to start analysis based on
+     * the chip type and attention type.
+     */
+    std::map<ChipType_t,
+             std::vector<std::pair<const IsolationNode*, AttentionType_t>>>
+        iv_isoStart;
+    // END temporary code
+
 }; // end class Isolator
 
 } // end namespace libhei

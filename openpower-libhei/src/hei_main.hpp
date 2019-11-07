@@ -57,7 +57,7 @@ namespace libhei
  *                     this function is called and a chip type has already been
  *                     initialized:
  *                      - false (default), the function will return
- *                        RC_CDF_INITIALIZED and exit.
+ *                        RC_CHIP_DATA_INITIALIZED and exit.
  *                      - true, the function will delete the previous isolation
  *                        objects for this chip type and reinitialize.
  *

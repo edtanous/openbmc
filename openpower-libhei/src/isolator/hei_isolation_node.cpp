@@ -21,7 +21,7 @@ bool IsolationNode::analyze(const Chip& i_chip, AttentionType_t i_attnType,
     const BitString* bs = rule_itr->second->getBitString(i_chip);
 
     // Ensure this BitString is not longer than the maximum bit field.
-    HEI_ASSERT(bs->getBitLen() <= sizeof(RegisterBit_t) * 8);
+    HEI_ASSERT(bs->getBitLen() <= (1 << (sizeof(RegisterBit_t) * 8)));
 
     // Find all active bits for this rule.
     for (RegisterBit_t bit = 0; bit < bs->getBitLen(); bit++)
