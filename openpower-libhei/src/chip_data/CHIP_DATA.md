@@ -114,3 +114,109 @@ register.
 
 **TBD:**
 
+## Appendix
+
+### 1) Expressions
+
+Expressions are used in various locations within a Chip Data File. They can be
+used to characterize operations carried out against registers and/or integer
+constants. For example, `<some_register> & (0xffff << 16)`.
+
+The first byte of every expression is the expression type. The data immediately
+following this field is dependent on the expression type.
+
+#### 1.1) Non-recursive expressions
+
+##### 1.1.1) Register reference expression
+
+This is a special expression that indicates the value of the target register
+should be used in this expression. Generally, this mean reading the register
+value from hardware.
+
+The following is the complete byte definition of the expression:
+
+| Bytes |                    Description/Value                     |
+|:-----:|:--------------------------------------------------------:|
+|     1 | expression type = 0x01                                   |
+|     2 | register ID, see 2.2.1) Register metadata                |
+|     1 | register instance, see 2.2.2) Register Instance metadata |
+
+As you can see, the register ID and instance can be used to find this register's
+metadata (e.g. the address) from the register lists (see section 2).
+
+##### 1.1.2) Integer constant expression
+
+This simply contains an unsigned 64-bit integer constant.
+
+The following is the complete byte definition of the expression:
+
+| Bytes |          Description/Value          |
+|:-----:|:-----------------------------------:|
+|     1 | expression type = 0x02              |
+|     8 | An unsigned 64-bit integer constant |
+
+#### 1.2) Recursive expressions
+
+These expressions will contain other expressions. Each sub-expression will
+always be resolved before handling the containing expression. For example, say
+we need to do something like:
+
+    `REG_1 & ~REG_2 | CONST_1`
+
+Where `REG_*` are register reference expressions and `CONST_*` are integer
+constant expressions. Following standard C++ order of operations, that would be
+evaluate into an expression like:
+
+    `OR( AND( REG_1, NOT(REG_2) ), CONST_1 )`
+
+Where the NOT will be evaluated first, then the AND, then finally the OR.
+
+##### 1.2.1) AND expression
+
+A bitwise AND operation (i.e. `EXPR_1 & EXPR_2`).
+
+| Bytes |   Description/Value    |
+|:-----:|:----------------------:|
+|     1 | expression type = 0x10 |
+|     * | left sub-expression    |
+|     * | right sub-expression   |
+
+##### 1.2.2) OR expression
+
+A bitwise OR operation (i.e. `EXPR_1 | EXPR_2`).
+
+| Bytes |   Description/Value    |
+|:-----:|:----------------------:|
+|     1 | expression type = 0x11 |
+|     * | left sub-expression    |
+|     * | right sub-expression   |
+
+##### 1.2.3) NOT expression
+
+A bitwise NOT operation (i.e. `~EXPR`).
+
+| Bytes |   Description/Value    |
+|:-----:|:----------------------:|
+|     1 | expression type = 0x12 |
+|     * | sub-expression         |
+
+##### 1.2.4) Left shift expression
+
+A left shift operation (i.e. `EXPR << shift_value`).
+
+| Bytes |   Description/Value    |
+|:-----:|:----------------------:|
+|     1 | expression type = 0x13 |
+|     1 | Shift value            |
+|     * | sub-expression         |
+
+##### 1.2.5) Right shift expression
+
+A left shift operation (i.e. `EXPR >> shift_value`).
+
+| Bytes |   Description/Value    |
+|:-----:|:----------------------:|
+|     1 | expression type = 0x14 |
+|     1 | Shift value            |
+|     * | sub-expression         |
+
