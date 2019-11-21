@@ -67,8 +67,8 @@ done
 echo
 
 cat << MAKEFILE
-libopenpower_dbus.cpp: \$(libopenpower_dbus_cpp_SOURCES)
-	cat \$^ > \$@
+libopenpower_dbus.cpp:
+	touch \$@
 
 nobase_include_HEADERS = \$(libopenpower_dbus_hpp_SOURCES)
 
