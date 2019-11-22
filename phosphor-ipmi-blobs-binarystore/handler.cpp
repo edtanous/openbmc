@@ -185,8 +185,7 @@ bool BinaryStoreBlobHandler::stat(uint16_t session, struct BlobMeta* meta)
 
 bool BinaryStoreBlobHandler::expire(uint16_t session)
 {
-    /* Binary store handler doesn't support expire */
-    return false;
+    return close(session);
 }
 
 } // namespace blobs
