@@ -39,6 +39,13 @@ AS_IF([test "x$enable_oe_sdk" == "xyes"],
 
 #CHIPS can be passed in a from a recipe, or it will default to P9 and openfsi
 AC_ARG_VAR(CHIPS, [The list of chips to build the procedures for])
+
+AC_ARG_ENABLE([p9], AS_HELP_STRING([--enable-p9], [Use internal host initialisation procedures for POWER9 processors]))
+AS_IF([test "$enable_p9" == "yes"], [CHIPS+=" p9"])
+
+AC_ARG_ENABLE([openfsi], AS_HELP_STRING([--enable-openfsi], [Support Openfsi]))
+AS_IF([test "$enable_openfsi" == "yes"], [CHIPS+=" openfsi"])
+
 AS_IF([test "x$CHIPS" == "x"], [CHIPS="p9 openfsi"])
 
 AC_CONFIG_FILES([Makefile.generated],
