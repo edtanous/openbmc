@@ -10,22 +10,22 @@ class NotRegister : public Register
   public:
     NotRegister(Register& i_arg) :
         Register(), iv_child(&i_arg), iv_iBS(i_arg.GetBitLength())
-    {
-        iv_bs = &iv_iBS;
-    }
+    {}
 
     NotRegister& operator=(const NotRegister& r)
     {
         iv_child = r.iv_child;
         iv_iBS   = r.iv_iBS;
-        // iv_bs = r.iv_bs; <-- don't do this!
         return *this;
     }
 
     const BitString* getBitString(const Chip& i_chip) const
     {
-        (*iv_bs) = ~(*iv_child->getBitString(i_chip));
-        return iv_bs;
+        const auto* bs = iv_child->getBitString(i_chip);
+
+        (const_cast<NotRegister*>(this))->iv_iBS = ~(*bs);
+
+        return &iv_iBS;
     }
 
     bool operator==(const NotRegister& r) const
@@ -41,7 +41,6 @@ class NotRegister : public Register
   private:
     Register* iv_child;
 
-    BitStringBuffer* iv_bs;
     BitStringBuffer iv_iBS;
 };
 
@@ -51,23 +50,23 @@ class LeftShiftRegister : public Register
     LeftShiftRegister(Register& i_arg, uint16_t i_amount) :
         Register(), iv_child(&i_arg), iv_amount(i_amount),
         iv_iBS(i_arg.GetBitLength())
-    {
-        iv_bs = &iv_iBS;
-    }
+    {}
 
     LeftShiftRegister& operator=(const LeftShiftRegister& r)
     {
         iv_child  = r.iv_child;
         iv_amount = r.iv_amount;
         iv_iBS    = r.iv_iBS;
-        // iv_bs = r.iv_bs; <-- don't do this!
         return *this;
     }
 
     const BitString* getBitString(const Chip& i_chip) const
     {
-        (*iv_bs) = (*iv_child->getBitString(i_chip)) << iv_amount;
-        return iv_bs;
+        const auto* bs = iv_child->getBitString(i_chip);
+
+        (const_cast<LeftShiftRegister*>(this))->iv_iBS = (*bs) << iv_amount;
+
+        return &iv_iBS;
     }
 
     bool operator==(const LeftShiftRegister& r) const
@@ -86,7 +85,6 @@ class LeftShiftRegister : public Register
     Register* iv_child;
     uint16_t iv_amount;
 
-    BitStringBuffer* iv_bs;
     BitStringBuffer iv_iBS;
 };
 
@@ -96,23 +94,23 @@ class RightShiftRegister : public Register
     RightShiftRegister(Register& i_arg, uint16_t i_amount) :
         Register(), iv_child(&i_arg), iv_amount(i_amount),
         iv_iBS(i_arg.GetBitLength())
-    {
-        iv_bs = &iv_iBS;
-    }
+    {}
 
     RightShiftRegister& operator=(const RightShiftRegister& r)
     {
         iv_child  = r.iv_child;
         iv_amount = r.iv_amount;
         iv_iBS    = r.iv_iBS;
-        // iv_bs = r.iv_bs; <-- don't do this!
         return *this;
     }
 
     const BitString* getBitString(const Chip& i_chip) const
     {
-        (*iv_bs) = (*iv_child->getBitString(i_chip)) >> iv_amount;
-        return iv_bs;
+        const auto* bs = iv_child->getBitString(i_chip);
+
+        (const_cast<RightShiftRegister*>(this))->iv_iBS = (*bs) >> iv_amount;
+
+        return &iv_iBS;
     }
 
     bool operator==(const RightShiftRegister& r) const
@@ -131,7 +129,6 @@ class RightShiftRegister : public Register
     Register* iv_child;
     uint16_t iv_amount;
 
-    BitStringBuffer* iv_bs;
     BitStringBuffer iv_iBS;
 };
 
@@ -141,24 +138,24 @@ class AndRegister : public Register
     AndRegister(Register& i_left, Register& i_right) :
         Register(), iv_left(&i_left), iv_right(&i_right),
         iv_iBS(std::min(i_left.GetBitLength(), i_right.GetBitLength()))
-    {
-        iv_bs = &iv_iBS;
-    }
+    {}
 
     AndRegister& operator=(const AndRegister& r)
     {
         iv_left  = r.iv_left;
         iv_right = r.iv_right;
         iv_iBS   = r.iv_iBS;
-        // iv_bs = r.iv_bs; <-- don't do this!
         return *this;
     }
 
     const BitString* getBitString(const Chip& i_chip) const
     {
-        (*iv_bs) = *iv_left->getBitString(i_chip);
-        (*iv_bs) = (*iv_bs) & (*iv_right->getBitString(i_chip));
-        return iv_bs;
+        const auto* l_bs = iv_left->getBitString(i_chip);
+        const auto* r_bs = iv_right->getBitString(i_chip);
+
+        (const_cast<AndRegister*>(this))->iv_iBS = (*l_bs) & (*r_bs);
+
+        return &iv_iBS;
     }
 
     bool operator==(const AndRegister& r) const
@@ -177,7 +174,6 @@ class AndRegister : public Register
     Register* iv_left;
     Register* iv_right;
 
-    BitStringBuffer* iv_bs;
     BitStringBuffer iv_iBS;
 };
 
@@ -187,24 +183,24 @@ class OrRegister : public Register
     OrRegister(Register& i_left, Register& i_right) :
         Register(), iv_left(&i_left), iv_right(&i_right),
         iv_iBS(std::min(i_left.GetBitLength(), i_right.GetBitLength()))
-    {
-        iv_bs = &iv_iBS;
-    }
+    {}
 
     OrRegister& operator=(const OrRegister& r)
     {
         iv_left  = r.iv_left;
         iv_right = r.iv_right;
         iv_iBS   = r.iv_iBS;
-        // iv_bs = r.iv_bs; <-- don't do this!
         return *this;
     }
 
     const BitString* getBitString(const Chip& i_chip) const
     {
-        (*iv_bs) = *iv_left->getBitString(i_chip);
-        (*iv_bs) = (*iv_bs) | (*iv_right->getBitString(i_chip));
-        return iv_bs;
+        const auto* l_bs = iv_left->getBitString(i_chip);
+        const auto* r_bs = iv_right->getBitString(i_chip);
+
+        (const_cast<OrRegister*>(this))->iv_iBS = (*l_bs) | (*r_bs);
+
+        return &iv_iBS;
     }
 
     bool operator==(const OrRegister& r) const
@@ -223,7 +219,6 @@ class OrRegister : public Register
     Register* iv_left;
     Register* iv_right;
 
-    BitStringBuffer* iv_bs;
     BitStringBuffer iv_iBS;
 };
 
