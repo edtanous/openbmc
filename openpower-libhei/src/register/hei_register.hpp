@@ -37,6 +37,9 @@ class Register
      * @return A BitString containing the value of this register.
      */
     virtual const BitString* getBitString(const Chip& i_chip) const = 0;
+
+    /** @return The size (in bytes) of this register. */
+    virtual size_t getSize() const = 0;
 };
 
 // Pure virtual destructor must be defined.

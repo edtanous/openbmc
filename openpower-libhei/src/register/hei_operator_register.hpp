@@ -5,7 +5,46 @@
 namespace libhei
 {
 
-class NotRegister : public Register
+/**
+ * @brief An abstract class for all operator registers.
+ *
+ * Contains member functions and variables that are required for all child
+ * classes.
+ */
+class OperatorRegister : public Register
+{
+  public:
+    /** @brief Pure virtual destructor. */
+    virtual ~OperatorRegister() = 0;
+
+  protected:
+    /**
+     * @brief Constructor from components.
+     * @param i_size Size (in bytes) of this register.
+     */
+    explicit OperatorRegister(size_t i_size) : Register(), iv_result(i_size * 8)
+    {}
+
+  protected: // Instance variables
+    /** When getBitString() is called on an operator, the resulting value of the
+     *  operation will be stored in this instance variable. */
+    BitStringBuffer iv_result;
+
+  public:
+    /** @brief Overloaded from parent class. */
+    virtual const BitString* getBitString(const Chip& i_chip) const = 0;
+
+    /** @brief Overloaded from parent class. */
+    size_t getSize() const
+    {
+        return (BitString::getMinBytes(iv_result.getBitLen()));
+    }
+};
+
+// Pure virtual destructor must be defined.
+inline OperatorRegister::~OperatorRegister() {}
+
+class NotRegister : public OperatorRegister
 {
   public:
     /**
@@ -13,7 +52,7 @@ class NotRegister : public Register
      * @param i_arg Target register for operation.
      */
     explicit NotRegister(Register& i_arg) :
-        Register(), iv_child(&i_arg), iv_iBS(i_arg.GetBitLength())
+        OperatorRegister(i_arg.getSize()), iv_child(&i_arg)
     {}
 
     /** @brief Default destructor. */
@@ -25,13 +64,14 @@ class NotRegister : public Register
     /** @brief Default assignment operator. */
     NotRegister& operator=(const NotRegister& r) = default;
 
+    /** @brief Overloaded from parent class. */
     const BitString* getBitString(const Chip& i_chip) const
     {
         const auto* bs = iv_child->getBitString(i_chip);
 
-        (const_cast<NotRegister*>(this))->iv_iBS = ~(*bs);
+        (const_cast<NotRegister*>(this))->iv_result = ~(*bs);
 
-        return &iv_iBS;
+        return &iv_result;
     }
 
     bool operator==(const NotRegister& r) const
@@ -46,11 +86,9 @@ class NotRegister : public Register
 
   private:
     Register* iv_child;
-
-    BitStringBuffer iv_iBS;
 };
 
-class LeftShiftRegister : public Register
+class LeftShiftRegister : public OperatorRegister
 {
   public:
     /**
@@ -59,8 +97,7 @@ class LeftShiftRegister : public Register
      * @param i_amount The shift value.
      */
     LeftShiftRegister(Register& i_arg, uint16_t i_amount) :
-        Register(), iv_child(&i_arg), iv_amount(i_amount),
-        iv_iBS(i_arg.GetBitLength())
+        OperatorRegister(i_arg.getSize()), iv_child(&i_arg), iv_amount(i_amount)
     {}
 
     /** @brief Default destructor. */
@@ -72,13 +109,14 @@ class LeftShiftRegister : public Register
     /** @brief Default assignment operator. */
     LeftShiftRegister& operator=(const LeftShiftRegister& r) = default;
 
+    /** @brief Overloaded from parent class. */
     const BitString* getBitString(const Chip& i_chip) const
     {
         const auto* bs = iv_child->getBitString(i_chip);
 
-        (const_cast<LeftShiftRegister*>(this))->iv_iBS = (*bs) << iv_amount;
+        (const_cast<LeftShiftRegister*>(this))->iv_result = (*bs) << iv_amount;
 
-        return &iv_iBS;
+        return &iv_result;
     }
 
     bool operator==(const LeftShiftRegister& r) const
@@ -96,11 +134,9 @@ class LeftShiftRegister : public Register
   private:
     Register* iv_child;
     uint16_t iv_amount;
-
-    BitStringBuffer iv_iBS;
 };
 
-class RightShiftRegister : public Register
+class RightShiftRegister : public OperatorRegister
 {
   public:
     /**
@@ -109,8 +145,7 @@ class RightShiftRegister : public Register
      * @param i_amount The shift value.
      */
     RightShiftRegister(Register& i_arg, uint16_t i_amount) :
-        Register(), iv_child(&i_arg), iv_amount(i_amount),
-        iv_iBS(i_arg.GetBitLength())
+        OperatorRegister(i_arg.getSize()), iv_child(&i_arg), iv_amount(i_amount)
     {}
 
     /** @brief Default destructor. */
@@ -122,13 +157,14 @@ class RightShiftRegister : public Register
     /** @brief Default assignment operator. */
     RightShiftRegister& operator=(const RightShiftRegister& r) = default;
 
+    /** @brief Overloaded from parent class. */
     const BitString* getBitString(const Chip& i_chip) const
     {
         const auto* bs = iv_child->getBitString(i_chip);
 
-        (const_cast<RightShiftRegister*>(this))->iv_iBS = (*bs) >> iv_amount;
+        (const_cast<RightShiftRegister*>(this))->iv_result = (*bs) >> iv_amount;
 
-        return &iv_iBS;
+        return &iv_result;
     }
 
     bool operator==(const RightShiftRegister& r) const
@@ -146,11 +182,9 @@ class RightShiftRegister : public Register
   private:
     Register* iv_child;
     uint16_t iv_amount;
-
-    BitStringBuffer iv_iBS;
 };
 
-class AndRegister : public Register
+class AndRegister : public OperatorRegister
 {
   public:
     /**
@@ -159,8 +193,8 @@ class AndRegister : public Register
      * @param i_right Target register for operation.
      */
     AndRegister(Register& i_left, Register& i_right) :
-        Register(), iv_left(&i_left), iv_right(&i_right),
-        iv_iBS(std::min(i_left.GetBitLength(), i_right.GetBitLength()))
+        OperatorRegister(std::min(i_left.getSize(), i_right.getSize())),
+        iv_left(&i_left), iv_right(&i_right)
     {}
 
     /** @brief Default destructor. */
@@ -172,14 +206,15 @@ class AndRegister : public Register
     /** @brief Default assignment operator. */
     AndRegister& operator=(const AndRegister& r) = default;
 
+    /** @brief Overloaded from parent class. */
     const BitString* getBitString(const Chip& i_chip) const
     {
         const auto* l_bs = iv_left->getBitString(i_chip);
         const auto* r_bs = iv_right->getBitString(i_chip);
 
-        (const_cast<AndRegister*>(this))->iv_iBS = (*l_bs) & (*r_bs);
+        (const_cast<AndRegister*>(this))->iv_result = (*l_bs) & (*r_bs);
 
-        return &iv_iBS;
+        return &iv_result;
     }
 
     bool operator==(const AndRegister& r) const
@@ -197,11 +232,9 @@ class AndRegister : public Register
   private:
     Register* iv_left;
     Register* iv_right;
-
-    BitStringBuffer iv_iBS;
 };
 
-class OrRegister : public Register
+class OrRegister : public OperatorRegister
 {
   public:
     /**
@@ -210,8 +243,8 @@ class OrRegister : public Register
      * @param i_right Target register for operation.
      */
     OrRegister(Register& i_left, Register& i_right) :
-        Register(), iv_left(&i_left), iv_right(&i_right),
-        iv_iBS(std::min(i_left.GetBitLength(), i_right.GetBitLength()))
+        OperatorRegister(std::min(i_left.getSize(), i_right.getSize())),
+        iv_left(&i_left), iv_right(&i_right)
     {}
 
     /** @brief Default destructor. */
@@ -223,14 +256,15 @@ class OrRegister : public Register
     /** @brief Default assignment operator. */
     OrRegister& operator=(const OrRegister& r) = default;
 
+    /** @brief Overloaded from parent class. */
     const BitString* getBitString(const Chip& i_chip) const
     {
         const auto* l_bs = iv_left->getBitString(i_chip);
         const auto* r_bs = iv_right->getBitString(i_chip);
 
-        (const_cast<OrRegister*>(this))->iv_iBS = (*l_bs) | (*r_bs);
+        (const_cast<OrRegister*>(this))->iv_result = (*l_bs) | (*r_bs);
 
-        return &iv_iBS;
+        return &iv_result;
     }
 
     bool operator==(const OrRegister& r) const
@@ -248,11 +282,9 @@ class OrRegister : public Register
   private:
     Register* iv_left;
     Register* iv_right;
-
-    BitStringBuffer iv_iBS;
 };
 
-class ConstantRegister : public Register
+class ConstantRegister : public OperatorRegister
 {
   public:
     /**
@@ -260,8 +292,10 @@ class ConstantRegister : public Register
      * @param i_arg A BitStringBuffer containing the constant value.
      */
     explicit ConstantRegister(const BitStringBuffer& i_arg) :
-        Register(), iv_iBS(i_arg)
-    {}
+        OperatorRegister(BitString::getMinBytes(i_arg.getBitLen()))
+    {
+        iv_result = i_arg;
+    }
 
     /** @brief Default destructor. */
     ~ConstantRegister() = default;
@@ -272,18 +306,16 @@ class ConstantRegister : public Register
     /** @brief Default assignment operator. */
     ConstantRegister& operator=(const ConstantRegister& r) = default;
 
+    /** @brief Overloaded from parent class. */
     const BitString* getBitString(const Chip& i_chip) const
     {
-        return &iv_iBS;
+        return &iv_result;
     }
 
     bool operator==(const ConstantRegister& r) const
     {
-        return r.iv_iBS == iv_iBS;
+        return r.iv_result == iv_result;
     }
-
-  private:
-    BitStringBuffer iv_iBS;
 };
 
 } // end namespace libhei

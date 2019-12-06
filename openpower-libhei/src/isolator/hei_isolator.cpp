@@ -6,6 +6,7 @@
 
 // BEGIN temporary code
 #include <isolator/hei_isolation_node.hpp>
+#include <register/hei_operator_register.hpp>
 #include <register/hei_scom_register.hpp>
 // END temporary code
 
