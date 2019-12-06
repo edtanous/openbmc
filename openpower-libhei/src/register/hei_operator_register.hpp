@@ -8,16 +8,22 @@ namespace libhei
 class NotRegister : public Register
 {
   public:
-    NotRegister(Register& i_arg) :
+    /**
+     * @brief Constructor from components.
+     * @param i_arg Target register for operation.
+     */
+    explicit NotRegister(Register& i_arg) :
         Register(), iv_child(&i_arg), iv_iBS(i_arg.GetBitLength())
     {}
 
-    NotRegister& operator=(const NotRegister& r)
-    {
-        iv_child = r.iv_child;
-        iv_iBS   = r.iv_iBS;
-        return *this;
-    }
+    /** @brief Default destructor. */
+    ~NotRegister() = default;
+
+    /** @brief Default copy constructor. */
+    NotRegister(const NotRegister&) = default;
+
+    /** @brief Default assignment operator. */
+    NotRegister& operator=(const NotRegister& r) = default;
 
     const BitString* getBitString(const Chip& i_chip) const
     {
@@ -47,18 +53,24 @@ class NotRegister : public Register
 class LeftShiftRegister : public Register
 {
   public:
+    /**
+     * @brief Constructor from components.
+     * @param i_arg    Target register for operation.
+     * @param i_amount The shift value.
+     */
     LeftShiftRegister(Register& i_arg, uint16_t i_amount) :
         Register(), iv_child(&i_arg), iv_amount(i_amount),
         iv_iBS(i_arg.GetBitLength())
     {}
 
-    LeftShiftRegister& operator=(const LeftShiftRegister& r)
-    {
-        iv_child  = r.iv_child;
-        iv_amount = r.iv_amount;
-        iv_iBS    = r.iv_iBS;
-        return *this;
-    }
+    /** @brief Default destructor. */
+    ~LeftShiftRegister() = default;
+
+    /** @brief Default copy constructor. */
+    LeftShiftRegister(const LeftShiftRegister&) = default;
+
+    /** @brief Default assignment operator. */
+    LeftShiftRegister& operator=(const LeftShiftRegister& r) = default;
 
     const BitString* getBitString(const Chip& i_chip) const
     {
@@ -91,18 +103,24 @@ class LeftShiftRegister : public Register
 class RightShiftRegister : public Register
 {
   public:
+    /**
+     * @brief Constructor from components.
+     * @param i_arg    Target register for operation.
+     * @param i_amount The shift value.
+     */
     RightShiftRegister(Register& i_arg, uint16_t i_amount) :
         Register(), iv_child(&i_arg), iv_amount(i_amount),
         iv_iBS(i_arg.GetBitLength())
     {}
 
-    RightShiftRegister& operator=(const RightShiftRegister& r)
-    {
-        iv_child  = r.iv_child;
-        iv_amount = r.iv_amount;
-        iv_iBS    = r.iv_iBS;
-        return *this;
-    }
+    /** @brief Default destructor. */
+    ~RightShiftRegister() = default;
+
+    /** @brief Default copy constructor. */
+    RightShiftRegister(const RightShiftRegister&) = default;
+
+    /** @brief Default assignment operator. */
+    RightShiftRegister& operator=(const RightShiftRegister& r) = default;
 
     const BitString* getBitString(const Chip& i_chip) const
     {
@@ -135,18 +153,24 @@ class RightShiftRegister : public Register
 class AndRegister : public Register
 {
   public:
+    /**
+     * @brief Constructor from components.
+     * @param i_left  Target register for operation.
+     * @param i_right Target register for operation.
+     */
     AndRegister(Register& i_left, Register& i_right) :
         Register(), iv_left(&i_left), iv_right(&i_right),
         iv_iBS(std::min(i_left.GetBitLength(), i_right.GetBitLength()))
     {}
 
-    AndRegister& operator=(const AndRegister& r)
-    {
-        iv_left  = r.iv_left;
-        iv_right = r.iv_right;
-        iv_iBS   = r.iv_iBS;
-        return *this;
-    }
+    /** @brief Default destructor. */
+    ~AndRegister() = default;
+
+    /** @brief Default copy constructor. */
+    AndRegister(const AndRegister&) = default;
+
+    /** @brief Default assignment operator. */
+    AndRegister& operator=(const AndRegister& r) = default;
 
     const BitString* getBitString(const Chip& i_chip) const
     {
@@ -180,18 +204,24 @@ class AndRegister : public Register
 class OrRegister : public Register
 {
   public:
+    /**
+     * @brief Constructor from components.
+     * @param i_left  Target register for operation.
+     * @param i_right Target register for operation.
+     */
     OrRegister(Register& i_left, Register& i_right) :
         Register(), iv_left(&i_left), iv_right(&i_right),
         iv_iBS(std::min(i_left.GetBitLength(), i_right.GetBitLength()))
     {}
 
-    OrRegister& operator=(const OrRegister& r)
-    {
-        iv_left  = r.iv_left;
-        iv_right = r.iv_right;
-        iv_iBS   = r.iv_iBS;
-        return *this;
-    }
+    /** @brief Default destructor. */
+    ~OrRegister() = default;
+
+    /** @brief Default copy constructor. */
+    OrRegister(const OrRegister&) = default;
+
+    /** @brief Default assignment operator. */
+    OrRegister& operator=(const OrRegister& r) = default;
 
     const BitString* getBitString(const Chip& i_chip) const
     {
@@ -225,14 +255,22 @@ class OrRegister : public Register
 class ConstantRegister : public Register
 {
   public:
-    ConstantRegister(const BitStringBuffer& i_arg) : Register(), iv_iBS(i_arg)
+    /**
+     * @brief Constructor from components.
+     * @param i_arg A BitStringBuffer containing the constant value.
+     */
+    explicit ConstantRegister(const BitStringBuffer& i_arg) :
+        Register(), iv_iBS(i_arg)
     {}
 
-    ConstantRegister& operator=(const ConstantRegister& r)
-    {
-        iv_iBS = r.iv_iBS;
-        return *this;
-    }
+    /** @brief Default destructor. */
+    ~ConstantRegister() = default;
+
+    /** @brief Default copy constructor. */
+    ConstantRegister(const ConstantRegister&) = default;
+
+    /** @brief Default assignment operator. */
+    ConstantRegister& operator=(const ConstantRegister& r) = default;
 
     const BitString* getBitString(const Chip& i_chip) const
     {
