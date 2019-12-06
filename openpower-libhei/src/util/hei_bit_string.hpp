@@ -333,6 +333,9 @@ class BitString
         return isEqual(i_str);
     }
 
+    /** @brief Less-than operator */
+    bool operator<(const BitString& i_str) const;
+
     /** @brief Bitwise NOT operator. */
     BitStringBuffer operator~() const;
 

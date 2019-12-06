@@ -284,6 +284,35 @@ uint64_t BitString::getSetCount(uint64_t i_pos, uint64_t i_len) const
 
 //------------------------------------------------------------------------------
 
+bool BitString::operator<(const BitString& i_str) const
+{
+    // The two bit strings must be the same length. Otherwise, the comparison
+    // undefined (i.e. compare from the left vs. right).
+    HEI_ASSERT(getBitLen() == i_str.getBitLen());
+
+    for (uint64_t pos = 0; pos < getBitLen(); pos += UINT64_BIT_LEN)
+    {
+        uint64_t len = std::min(getBitLen() - pos, UINT64_BIT_LEN);
+
+        auto l_str = getFieldRight(pos, len);
+        auto r_str = i_str.getFieldRight(pos, len);
+
+        if (l_str < r_str)
+        {
+            return true;
+        }
+        // The loop can only continue if the values are equal.
+        else if (l_str > r_str)
+        {
+            return false;
+        }
+    }
+
+    return false;
+}
+
+//------------------------------------------------------------------------------
+
 BitStringBuffer BitString::operator~() const
 {
     BitStringBuffer bsb(getBitLen());

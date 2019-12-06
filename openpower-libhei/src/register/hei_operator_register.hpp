@@ -74,11 +74,13 @@ class NotRegister : public OperatorRegister
         return &iv_result;
     }
 
+    /** @brief Comparison operator. */
     bool operator==(const NotRegister& r) const
     {
-        return r.iv_child == iv_child;
+        return iv_child == r.iv_child;
     }
 
+    /** @brief Less-than operator. */
     bool operator<(const NotRegister& r) const
     {
         return iv_child < r.iv_child;
@@ -119,11 +121,13 @@ class LeftShiftRegister : public OperatorRegister
         return &iv_result;
     }
 
+    /** @brief Comparison operator. */
     bool operator==(const LeftShiftRegister& r) const
     {
-        return (r.iv_child == iv_child) && (r.iv_amount == iv_amount);
+        return (iv_child == r.iv_child) && (iv_amount == r.iv_amount);
     }
 
+    /** @brief Less-than operator. */
     bool operator<(const LeftShiftRegister& r) const
     {
         if (iv_child == r.iv_child)
@@ -167,11 +171,13 @@ class RightShiftRegister : public OperatorRegister
         return &iv_result;
     }
 
+    /** @brief Comparison operator. */
     bool operator==(const RightShiftRegister& r) const
     {
-        return (r.iv_child == iv_child) && (r.iv_amount == iv_amount);
+        return (iv_child == r.iv_child) && (iv_amount == r.iv_amount);
     }
 
+    /** @brief Less-than operator. */
     bool operator<(const RightShiftRegister& r) const
     {
         if (iv_child == r.iv_child)
@@ -217,11 +223,13 @@ class AndRegister : public OperatorRegister
         return &iv_result;
     }
 
+    /** @brief Comparison operator. */
     bool operator==(const AndRegister& r) const
     {
-        return (r.iv_left == iv_left) && (r.iv_right == iv_right);
+        return (iv_left == r.iv_left) && (iv_right == r.iv_right);
     }
 
+    /** @brief Less-than operator. */
     bool operator<(const AndRegister& r) const
     {
         if (iv_left == r.iv_left)
@@ -267,11 +275,13 @@ class OrRegister : public OperatorRegister
         return &iv_result;
     }
 
+    /** @brief Comparison operator. */
     bool operator==(const OrRegister& r) const
     {
-        return (r.iv_left == iv_left) && (r.iv_right == iv_right);
+        return (iv_left == r.iv_left) && (iv_right == r.iv_right);
     }
 
+    /** @brief Less-than operator. */
     bool operator<(const OrRegister& r) const
     {
         if (iv_left == r.iv_left)
@@ -312,9 +322,16 @@ class ConstantRegister : public OperatorRegister
         return &iv_result;
     }
 
+    /** @brief Comparison operator. */
     bool operator==(const ConstantRegister& r) const
     {
-        return r.iv_result == iv_result;
+        return iv_result == r.iv_result;
+    }
+
+    /** @brief Less-than operator. */
+    bool operator<(const ConstantRegister& r) const
+    {
+        return iv_result < r.iv_result;
     }
 };
 
