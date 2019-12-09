@@ -24,13 +24,13 @@ extension `.cdb` (chip data binary).
 
 The following data will be defined at the very beginning of each Chip Data File:
 
-| Bytes |         Desc        |               Value/Example                |
-|:-----:|:-------------------:|:------------------------------------------:|
-|     8 | magic number        | 0x4348495044415441 (ascii for "CHIPDATA")  |
-|     4 | chip model/level    | Unique ID defined by data file owner [^1]  |
-|     1 | file version        | Version 1 => 0x01, Version 2 => 0x02, etc. |
-|     1 | # of register types | 1-255 (0 is invalid) [^2]                  |
-|     2 | reserved            | Initialized to 0                           |
+| Bytes |         Desc         |               Value/Example                |
+|:-----:|:--------------------:|:------------------------------------------:|
+|     8 | magic number         | 0x4348495044415441 (ascii for "CHIPDATA")  |
+|     4 | chip model/level     | Unique ID defined by data file owner [^1]  |
+|     1 | file version         | Version 1 => 0x01, Version 2 => 0x02, etc. |
+|     1 | # of register types  | 1-255 (0 is invalid) [^2]                  |
+|     2 | # of isolation nodes | 1-65535 (0 is invalid) [^3]                |
 
 [^1]: The user application will use this field to determine which Chip Data
       File(s) should be used for the chip(s) that exist in the user
@@ -38,7 +38,9 @@ The following data will be defined at the very beginning of each Chip Data File:
 
 [^2]: A chip can have more than one register type and the properties for each
       type could vary. Therefore, all of the registers described by this file
-      will be grouped by type.
+      will be grouped by type. See section 2) Register Type Lists for details.
+
+[^3]: See section 3) Isolation Nodes for details.
 
 ### 2) Register Type Lists
 
@@ -79,18 +81,18 @@ that metadata.
 
 | Bytes |          Desc          |               Value/Example                |
 |:-----:|:----------------------:|:------------------------------------------:|
-|     2 | register ID            | Unique ID defined by data file owner [^3]  |
-|     1 | # of address instances | 1-255 (0 is invalid) [^4]                  |
-|     1 | attribute flags        | for each bit 0:disabled and 1:enabled [^5] |
+|     2 | register ID            | Unique ID defined by data file owner [^4]  |
+|     1 | # of address instances | 1-255 (0 is invalid) [^5]                  |
+|     1 | attribute flags        | for each bit 0:disabled and 1:enabled [^6] |
 
-[^3]: This ID must be unique for all registers among all register types within a
+[^4]: This ID must be unique for all registers among all register types within a
       Chip Data File. The value will be used as part of the error signature for
       each reported error.
 
-[^4]: A register could have multiple instances within a chip. See the Register
+[^5]: A register could have multiple instances within a chip. See the Register
       Instance Address metadata for details.
 
-[^5]: Supported attributes (bits ordered 0-7, left to right):
+[^6]: Supported attributes (bits ordered 0-7, left to right):
       0:   When enabled, the register is readable.
       1:   When enabled, the register is writable.
       2-7: Reserved (default disabled)
@@ -105,14 +107,66 @@ register.
 
 | Bytes |    Desc    |                     Value/Example                     |
 |:-----:|:----------:|:-----------------------------------------------------:|
-|     1 | instance # | 0-x, where x is one less than the # of instances [^6] |
+|     1 | instance # | 0-x, where x is one less than the # of instances [^7] |
 |     y | address    | The address size y is defined by the register type    |
 
-[^6]: This will be used as part of the error signature for each reported error.
+[^7]: This will be used as part of the error signature for each reported error.
 
-### 3) Isolation Tree
+### 3) Isolation Nodes
 
-**TBD:**
+Hardware errors will be reported via registers organized in a tree-like
+structure. Isolation of these errors will traverse the tree from the root down
+to the actual bit that raise the attention. Each node in the tree will represent
+a register. Each bit in that register will either indicate an active attention
+or that the attention originated from another register.
+
+The number of nodes that exist in this file is stored in the file metadata (see
+section 1).
+
+#### 3.1) Isolation Node metadata
+
+| Bytes |            Desc           |            Value/Example                 |
+|:-----:|:-------------------------:|:----------------------------------------:|
+|     2 | ID of this register       | See 2.2.1 Register metadata              |
+|     1 | Instance of this register | See 2.2.2 Register Instance metadata     |
+|     1 | # of isolation rules      | 1-5, See 3.1.1 Isolation Rules           |
+|     1 | # of child nodes          | 0-255, cannot exceed register bit length |
+
+##### 3.1.1) Isolation Rules
+
+It is possible for a register to report more than one attention type. Therefore,
+there will be a set of rules that will define how to determine a bit is of a
+certain type (e.g. recoverable => REG & ~MASK & CONFIG1 & ~CONFIG2). Each rule
+will have the following format:
+
+| Bytes |      Desc      |               Value/Example                |
+|:-----:|:--------------:|:------------------------------------------:|
+|     1 | attention type | See foot note for supported types. [^8]    |
+|     * | an expression  | See definition of expressions in appendix. |
+
+The number of attention types is indicated in the Isolation Node metadata.
+
+[^8]: Supported attention types:
+      1: System checkstop hardware attention.
+      2: Unit checkstop hardware attention.
+      3: Recoverable hardware attention.
+      4: Software or hardware event requiring action by the service processor
+         firmware.
+      5: Software or hardware event requiring action by the host firmware.
+
+##### 3.1.2) Children Node list
+
+This list indicates which register to analyze if a bit in this register
+indicates the attention originated from another register. Each entry in the list
+will have the following format:
+
+| Bytes |              Desc          |             Value/Example               |
+|:-----:|:--------------------------:|:---------------------------------------:|
+|     1 | This register's bit number | 0-255, cannot exceed register bit length|
+|     2 | ID of child register       | See 2.2.1 Register metadata             |
+|     1 | Instance of child register | See 2.2.2 Register Instance metadata    |
+
+The number of child nodes is indicated in the Isolation Node metadata.
 
 ## Appendix
 
