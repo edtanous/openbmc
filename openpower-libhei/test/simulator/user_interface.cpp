@@ -22,20 +22,29 @@ ReturnCode registerRead(const Chip& i_chip, void* o_buffer, size_t& io_bufSize,
     HEI_ASSERT(nullptr != o_buffer);
     HEI_ASSERT(0 != io_bufSize);
 
+    // Get access to data through the singleton
+    SimulatorData& theSimData = SimulatorData::getSingleton();
+
     switch (i_regType)
     {
-        // BEGIN temporary code
-        // TODO: add cases for REG_TYPE_SCOM and REG_TYPE_ID_SCOM
         case REG_TYPE_SCOM:
         {
-            uint64_t x = htobe64(0x8800000000000000);
-            memcpy(o_buffer, &x, sizeof(x));
+            // Get the register value and change its endianness
+            uint64_t regValue =
+                htobe64(theSimData.getScomReg(i_chip, (uint32_t)i_address));
+            // Get size of register value for calling code and memcopy
+            io_bufSize = sizeof(regValue);
+            memcpy(o_buffer, &regValue, io_bufSize);
             break;
         }
         case REG_TYPE_ID_SCOM:
         {
-            uint64_t x = htobe64(0x8000);
-            memcpy(o_buffer, &x, sizeof(x));
+            // Get the register value and change its endianness
+            uint64_t regValue =
+                htobe64(theSimData.getIdScomReg(i_chip, i_address));
+            // Get size of register value for calling code and memcopy
+            io_bufSize = sizeof(regValue);
+            memcpy(o_buffer, &regValue, io_bufSize);
             break;
         }
         // END temporary code

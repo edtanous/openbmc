@@ -58,6 +58,18 @@ class SimulatorData
      */
     void addChip(const Chip& i_chip);
 
+    /** @brief Retrieve ScomReg from map and return its value */
+    uint64_t getScomReg(const Chip& i_chip, uint32_t i_address)
+    {
+        return iv_scomRegData[i_chip][i_address];
+    }
+
+    /** @breif Retrieve idScomReg from map and return its value */
+    uint64_t getIdScomReg(const Chip& i_chip, uint64_t i_address)
+    {
+        return iv_idScomRegData[i_chip][i_address];
+    }
+
     /** @brief Adds a SCOM register to iv_scomRegData. */
     void addScomReg(const Chip& i_chip, uint32_t i_address, uint64_t i_value)
     {
