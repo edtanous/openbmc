@@ -104,10 +104,9 @@ int main(int argc, char** argv)
         commit<fsi_error::SlaveDetectionFailure>();
         return -1;
     }
-    // TODO ibm-openbmc#1470
-    catch (common_error::InternalFailure& e)
+    catch (std::exception& e)
     {
-        commit<common_error::InternalFailure>();
+        log<level::ERR>("exception raised", entry("EXCEPTION=%s", e.what()));
         return -1;
     }
 

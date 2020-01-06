@@ -46,6 +46,13 @@ openpower_proc_nmi_LDFLAGS = $(PHOSPHOR_LOGGING_LIBS) \
 openpower_proc_nmi_CXXFLAGS = $(PHOSPHOR_LOGGING_CFLAGS) \
                               $(PHOSPHOR_DBUS_INTERFACES_CFLAGS) \
                               $(SDBUSPLUS_CFLAGS)
+if ENABLE_PHAL
+noinst_LTLIBRARIES = libphalerror.la
+libphalerror_la_SOURCES = phalerror/create_pel.cpp \
+            phalerror/phal_error.cpp
+
+openpower_proc_control_LDADD = libphalerror.la
+endif
 
 SUBDIRS = test
 

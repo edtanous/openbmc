@@ -1,10 +1,7 @@
-extern "C" {
-#include <libipl.h>
-}
+#include "phalerror/phal_error.hpp"
 
-#include "xyz/openbmc_project/Common/error.hpp"
+#include <libipl.H>
 
-#include <phosphor-logging/elog-errors.hpp>
 #include <phosphor-logging/log.hpp>
 #include <registration.hpp>
 namespace openpower
@@ -13,7 +10,6 @@ namespace phal
 {
 
 using namespace phosphor::logging;
-using namespace sdbusplus::xyz::openbmc_project::Common::Error;
 
 /**
  * @brief Starts the self boot engine on POWER processor position 0
@@ -22,18 +18,22 @@ using namespace sdbusplus::xyz::openbmc_project::Common::Error;
  */
 void startHost()
 {
+    // add callback methods for debug traces and for boot failures
+    openpower::pel::addBootErrorCallbacks();
+
+    // callback method will be called upon failure which will create the PEL
     if (ipl_init() != 0)
     {
         log<level::ERR>("ipl_init failed");
-        // TODO ibm-openbmc#1470
-        elog<InternalFailure>();
+        throw std::runtime_error("Boot initialization failed");
     }
 
-    if (ipl_run_major(0) > 0)
+    // callback method will be called upon failure which will create the PEL
+    int rc = ipl_run_major(0);
+    if (rc > 0)
     {
         log<level::ERR>("step 0 failed to start the host");
-        // TODO ibm-openbmc#1470
-        elog<InternalFailure>();
+        throw std::runtime_error("Failed to execute host start boot step");
     }
 }
 

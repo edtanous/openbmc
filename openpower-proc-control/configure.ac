@@ -6,6 +6,7 @@ AM_SILENT_RULES([yes])
 
 # Checks for programs
 AC_PROG_CXX
+AM_PROG_AR
 AC_PROG_INSTALL #Checks/sets the install variable to be used
 AC_PROG_MAKE_SET
 
@@ -54,22 +55,30 @@ AS_IF([ test "$enable_phal" == "yes" && test "$enable_p9" == "yes"],
 
 AS_IF([test "$enable_phal" == "yes"],
       [
-       AX_ABSOLUTE_HEADER([libipl.h])
-       if test x"$gl_cv_absolute_libipl_h" == "x" ; then
-               AC_MSG_ERROR([Cannot find libipl.h path])
+       AX_ABSOLUTE_HEADER([libipl.H])
+       if test x"$gl_cv_absolute_libipl_H" == "x" ; then
+               AC_MSG_ERROR([Cannot find libipl.H path])
        fi
-
        AC_CHECK_LIB([ipl], [ipl_init])
        if test x"$ac_cv_lib_ipl_ipl_init" != "xyes" ; then
                AC_MSG_ERROR([IPL library not found])
+       fi
+
+       AX_ABSOLUTE_HEADER([libekb.H])
+       if test x"$gl_cv_absolute_libekb_H" == "x" ; then
+               AC_MSG_ERROR([Cannot find libekb.H path])
+       fi
+       AC_CHECK_LIB([ekb], [libekb_init])
+       if test x"$ac_cv_lib_ekb_libekb_init" != "xyes" ; then
+               AC_MSG_ERROR([EKB library not found])
        fi
 
        CHIPS+=" phal common"
        AC_CONFIG_FILES([set-spi-mux.service])
       ]
      )
-AM_CONDITIONAL([ENABLE_PHAL], [test "$enable_phal" == "yes"])
 
+AM_CONDITIONAL([ENABLE_PHAL], [test "$enable_phal" == "yes"])
 AS_IF([test "x$CHIPS" == "x"], [CHIPS="p9 openfsi common"])
 
 AC_CONFIG_FILES([Makefile.generated],
