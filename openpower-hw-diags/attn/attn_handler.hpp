@@ -1,5 +1,8 @@
 #pragma once
 
+namespace attn
+{
+
 /**
  * @brief The main attention handler logic
  *
@@ -19,3 +22,5 @@
  *            Recoverable: TBD
  */
 void attnHandler();
+
+} // namespace attn
