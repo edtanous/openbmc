@@ -7,6 +7,7 @@ project('openpower-hw-diags', 'cpp',
         ])
 
 subdir('src')
+subdir('attn')
 
 build_tests = get_option('tests')
 
