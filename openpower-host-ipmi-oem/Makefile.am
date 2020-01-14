@@ -16,7 +16,6 @@ liboemhandler_la_LDFLAGS = $(SYSTEMD_LIBS)\
                            $(SDBUSPLUS_LIBS) \
                            $(LIBIPMID_LIBS) \
                            $(LIBIPMID_HOST_LIBS) \
-                           $(OPENPOWER_DBUS_INTERFACES_LIBS) \
                            $(PHOSPHOR_LOGGING_LIBS) \
                            -version-info 0:0:0 -shared
 
@@ -24,7 +23,6 @@ liboemhandler_la_CXXFLAGS = $(SYSTEMD_CFLAGS) \
                             $(SDBUSPLUS_CFLAGS) \
                             $(LIBIPMID_CFLAGS) \
                             $(LIBIPMID_HOST_CFLAGS) \
-                            $(OPENPOWER_DBUS_INTERFACES_CFLAGS) \
                             $(PHOSPHOR_LOGGING_CFLAGS) \
                             $(AM_CXXFLAGS)
 

@@ -18,7 +18,6 @@ PKG_CHECK_MODULES([SYSTEMD], [libsystemd >= 221])
 # Checks for header files.
 AC_CHECK_HEADER(systemd/sd-bus.h, ,[AC_MSG_ERROR([Could not find systemd/sd-bus.h...systemd development package required])])
 PKG_CHECK_MODULES([LIBIPMID], [libipmid])
-PKG_CHECK_MODULES([OPENPOWER_DBUS_INTERFACES], [openpower-dbus-interfaces])
 PKG_CHECK_MODULES([SDBUSPLUS], [sdbusplus])
 PKG_CHECK_MODULES([PHOSPHOR_LOGGING], [phosphor-logging])
 
