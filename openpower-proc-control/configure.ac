@@ -65,8 +65,10 @@ AS_IF([test "$enable_phal" == "yes"],
        fi
 
        CHIPS+=" phal"
+       AC_CONFIG_FILES([set-spi-mux.service])
       ]
      )
+AM_CONDITIONAL([ENABLE_PHAL], [test "$enable_phal" == "yes"])
 
 AS_IF([test "x$CHIPS" == "x"], [CHIPS="p9 openfsi"])
 

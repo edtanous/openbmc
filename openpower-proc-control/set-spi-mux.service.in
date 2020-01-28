@@ -1,0 +1,12 @@
+[Unit]
+Description=Set the SPI mux
+ConditionPathExists=!/run/openbmc/chassis@0-on
+
+[Service]
+ExecStart=@bindir@/openpower-proc-control setSPIMux
+SyslogIdentifier=openpower-proc-control
+Type=oneshot
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target

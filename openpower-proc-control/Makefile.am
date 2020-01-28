@@ -4,6 +4,10 @@ systemdsystemunit_DATA = \
   pcie-poweroff@.service \
   xyz.openbmc_project.Control.Host.NMI.service
 
+if ENABLE_PHAL
+  systemdsystemunit_DATA += set-spi-mux.service
+endif
+
 bin_PROGRAMS = \
 	openpower-proc-control \
 	openpower-proc-nmi
