@@ -83,6 +83,9 @@ void startHost()
     // 0 -> Side 0, 1 -> Side 1
     writeRegWithMask(master, P9_SBE_CTRL_STATUS, sbeSide, 0x00004000);
 
+    // Ensure SBE start bit is 0 to handle warm reboot scenarios
+    writeRegWithMask(master, P9_CBS_CS, 0x00000000, 0x80000000);
+
     // Start the SBE
     writeRegWithMask(master, P9_CBS_CS, 0x80000000, 0x80000000);
 }
