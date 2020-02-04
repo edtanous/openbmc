@@ -9,6 +9,16 @@ project('openpower-libhei', 'cpp',
 
 incdir = [include_directories('src')]
 
+# libhei_dep provides dependencies needed to build with libhei as a subproject
+# rather than a base project.
+libhei_src = ['src/isolator/hei_isolator.cpp',
+              'src/isolator/hei_isolation_node.cpp',
+              'src/register/hei_hardware_register.cpp',
+              'src/util/hei_bit_string.cpp']
+
+libhei_dep = declare_dependency(include_directories : incdir,
+                                sources : libhei_src)
+
 build_tests = get_option('tests')
 
 if not build_tests.disabled()

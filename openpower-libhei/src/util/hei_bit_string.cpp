@@ -15,9 +15,9 @@ namespace libhei
 //##############################################################################
 
 // number of bits in a uint64_t
-constexpr uint64_t BitString::UINT64_BIT_LEN = sizeof(uint64_t) * 8;
+const uint64_t BitString::UINT64_BIT_LEN = sizeof(uint64_t) * 8;
 // number of bits in a uint8_t
-constexpr uint64_t BitString::UINT8_BIT_LEN = sizeof(uint8_t) * 8;
+const uint64_t BitString::UINT8_BIT_LEN = sizeof(uint8_t) * 8;
 
 //------------------------------------------------------------------------------
 

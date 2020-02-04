@@ -50,8 +50,9 @@ ReturnCode registerRead(const Chip& i_chip, void* o_buffer, size_t& io_bufSize,
         // END temporary code
         default:
             rc = RC_REG_ACCESS_FAILURE;
-            HEI_ERR("registerRead(%p,%p,%lx,%lx,%lx)", i_chip.getChip(),
-                    o_buffer, io_bufSize, i_regType, i_address);
+            HEI_ERR("registerRead(%p,%p,%" PRIu64 ",%" PRIx64 ",%" PRIx64 ")",
+                    i_chip.getChip(), o_buffer, (uint64_t)io_bufSize, i_regType,
+                    i_address);
     }
 
     return rc;
@@ -74,8 +75,9 @@ ReturnCode registerWrite(const Chip& i_chip, void* i_buffer, size_t& io_bufSize,
         // TODO: add cases for REG_TYPE_SCOM and REG_TYPE_ID_SCOM
         default:
             rc = RC_REG_ACCESS_FAILURE;
-            HEI_ERR("registerWrite(%p,%p,%lx,%lx,%lx)", i_chip.getChip(),
-                    i_buffer, io_bufSize, i_regType, i_address);
+            HEI_ERR("registerWrite(%p,%p,%" PRIu64 ",%" PRIx64 ",%" PRIx64 ")",
+                    i_chip.getChip(), i_buffer, (uint64_t)io_bufSize, i_regType,
+                    i_address);
     }
 
     return rc;
