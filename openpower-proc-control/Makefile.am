@@ -31,7 +31,8 @@ CLEANFILES = openpower_procedures.cpp
 openpower_proc_control_LDFLAGS = $(PHOSPHOR_LOGGING_LIBS) \
                                  $(PHOSPHOR_DBUS_INTERFACES_LIBS) \
                                  $(SDBUSPLUS_LIBS) \
-                                 -lstdc++fs
+                                 -lstdc++fs \
+                                 -lgpiodcxx
 
 openpower_proc_control_CXXFLAGS = $(PHOSPHOR_LOGGING_CFLAGS) \
                                   $(PHOSPHOR_DBUS_INTERFACES_CFLAGS) \
