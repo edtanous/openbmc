@@ -3,8 +3,12 @@ project('openpower-hw-diags', 'cpp',
         default_options: [
           'warning_level=3',
           'werror=true',
-          'cpp_std=c++17'
+          'cpp_std=c++17',
+          'cpp_args=-Wno-unused-parameter'
         ])
+
+# libhei is available as a subproject
+subproject('libhei')
 
 subdir('src')
 subdir('attn')

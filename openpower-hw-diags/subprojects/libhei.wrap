@@ -1,0 +1,3 @@
+[wrap-git]
+url = https://gerrit.openbmc-project.xyz/openbmc/openpower-libhei
+revision = head
