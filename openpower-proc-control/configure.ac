@@ -41,7 +41,7 @@ AS_IF([test "x$enable_oe_sdk" == "xyes"],
 AC_ARG_VAR(CHIPS, [The list of chips to build the procedures for])
 
 AC_ARG_ENABLE([p9], AS_HELP_STRING([--enable-p9], [Use internal host initialisation procedures for POWER9 processors]))
-AS_IF([test "$enable_p9" == "yes"], [CHIPS+=" p9"])
+AS_IF([test "$enable_p9" == "yes"], [CHIPS+=" p9 common"])
 
 AC_ARG_ENABLE([openfsi], AS_HELP_STRING([--enable-openfsi], [Support Openfsi]))
 AS_IF([test "$enable_openfsi" == "yes"], [CHIPS+=" openfsi"])
@@ -64,13 +64,13 @@ AS_IF([test "$enable_phal" == "yes"],
                AC_MSG_ERROR([IPL library not found])
        fi
 
-       CHIPS+=" phal"
+       CHIPS+=" phal common"
        AC_CONFIG_FILES([set-spi-mux.service])
       ]
      )
 AM_CONDITIONAL([ENABLE_PHAL], [test "$enable_phal" == "yes"])
 
-AS_IF([test "x$CHIPS" == "x"], [CHIPS="p9 openfsi"])
+AS_IF([test "x$CHIPS" == "x"], [CHIPS="p9 openfsi common"])
 
 AC_CONFIG_FILES([Makefile.generated],
     [${srcdir}/gen_makefile.sh ${srcdir} "$myChips" > Makefile.generated],
