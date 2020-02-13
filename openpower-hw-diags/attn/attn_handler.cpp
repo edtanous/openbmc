@@ -41,6 +41,13 @@ int handleSpecial();
 void notifyCronus(uint32_t i_proc, uint32_t i_core, uint32_t i_thread);
 
 /**
+ * @brief Start host diagnostic mode
+ *
+ * Start the host diagnostic mode systemd unit
+ */
+void startHostDiagnosticMode();
+
+/**
  * @brief The main attention handler logic
  */
 void attnHandler()
@@ -171,11 +178,16 @@ int handleSpecial()
     ss << "[ATTN] special" << std::endl;
 
     // Currently we are only handling Cronus breakpoints
-    ss << "[ATTN] breakpoint" << std::endl;
-    log<level::INFO>(ss.str().c_str());
+    // ss << "[ATTN] breakpoint" << std::endl;
+    // log<level::INFO>(ss.str().c_str());
 
     // Cronus will determine proc, core and thread so just notify
-    notifyCronus(0, 0, 0); // proc-0, core-0, thread-0
+    // notifyCronus(0, 0, 0); // proc-0, core-0, thread-0
+
+    // For TI special attention start host diagnostic mode
+    ss << "[ATTN] TI (terminate immediately)" << std::endl;
+    log<level::INFO>(ss.str().c_str());
+    startHostDiagnosticMode();
 
     // TODO recoverable errors?
 
@@ -202,6 +214,33 @@ void notifyCronus(uint32_t i_proc, uint32_t i_core, uint32_t i_thread)
     msg.append(params);
 
     msg.signal_send();
+
+    return;
+}
+
+/**
+ * @brief Start host diagnostic mode
+ * */
+void startHostDiagnosticMode()
+{
+    std::stringstream ss; // log message stream
+
+    // log status info
+    ss << "[ATTN] start host diagnostic mode service" << std::endl;
+    log<level::INFO>(ss.str().c_str());
+
+    // Use the systemd service manager object interface to call the start unit
+    // method with the obmc-host-diagnostic-mode target.
+    auto bus    = sdbusplus::bus::new_system();
+    auto method = bus.new_method_call(
+        "org.freedesktop.systemd1", "/org/freedesktop/systemd1",
+        "org.freedesktop.systemd1.Manager", "StartUnit");
+
+    method.append("obmc-host-diagnostic-mode@0.target"); // unit to activate
+    method.append("replace"); // mode = replace conflicting queued jobs
+    bus.call_noreply(method); // start the service
+
+    return;
 }
 
 } // namespace attn
