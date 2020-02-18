@@ -111,4 +111,6 @@ AC_CONFIG_FILES([pcie-poweroff@.service])
 AC_CONFIG_FILES([xyz.openbmc_project.Control.Host.NMI.service])
 AC_CONFIG_FILES([op-stop-instructions@.service])
 AC_CONFIG_FILES([op-cfam-reset.service])
+AC_CONFIG_FILES([op-continue-mpreboot@.service])
+AC_CONFIG_FILES([op-enter-mpreboot@.service])
 AC_OUTPUT

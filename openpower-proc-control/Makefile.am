@@ -4,7 +4,9 @@ systemdsystemunit_DATA = \
   pcie-poweroff@.service \
   xyz.openbmc_project.Control.Host.NMI.service \
   op-stop-instructions@.service \
-  op-cfam-reset.service
+  op-cfam-reset.service \
+  op-continue-mpreboot@.service \
+  op-enter-mpreboot@.service
 
 if ENABLE_PHAL
   systemdsystemunit_DATA += set-spi-mux.service

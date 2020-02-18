@@ -1,0 +1,14 @@
+[Unit]
+Description=Start memory preserving reboot host%i
+Wants=obmc-host-stop-pre@%i.target
+Before=obmc-host-stop-pre@%i.target
+After=op-stop-instructions@%i.service
+Conflicts=obmc-host-startmin@%i.target
+
+[Service]
+RemainAfterExit=yes
+Type=oneshot
+ExecStart=/usr/bin/openpower-proc-control enterMpReboot
+
+[Install]
+WantedBy=obmc-host-diagnostic-mode@%i.target
