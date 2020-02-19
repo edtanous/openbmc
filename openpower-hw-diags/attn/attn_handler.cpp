@@ -27,9 +27,10 @@ int handleCheckstop();
 /**
  * @brief Handle special attention
  *
+ * @param i_breakpoints true = breakpoint special attn handling enabled
  * @return 0 = success
  */
-int handleSpecial();
+int handleSpecial(bool i_breakpoints);
 
 /**
  * @brief Notify Cronus over dbus interface
@@ -49,8 +50,10 @@ void startHostDiagnosticMode();
 
 /**
  * @brief The main attention handler logic
+ *
+ * @param i_breakpoints true = breakpoint special attn handling enabled
  */
-void attnHandler()
+void attnHandler(bool i_breakpoints)
 {
     uint32_t isr_val, isr_mask;
     uint32_t proc;
@@ -112,7 +115,7 @@ void attnHandler()
                     // bit 0 on "left": bit 2 = special attention
                     if (isr_val & isr_mask & 0x20000000)
                     {
-                        handleSpecial();
+                        handleSpecial(i_breakpoints);
                     }
                 } // cfam 0x100d valid
             }     // cfam 0x1007 valid
@@ -168,8 +171,10 @@ int handleCheckstop()
 
 /**
  * @brief Handle special attention
+ *
+ * @param i_breakpoints true = breakpoint special attn handling enabled
  */
-int handleSpecial()
+int handleSpecial(bool i_breakpoints)
 {
     int rc = 0; // special attention handling supported
 
@@ -177,17 +182,29 @@ int handleSpecial()
 
     ss << "[ATTN] special" << std::endl;
 
-    // Currently we are only handling Cronus breakpoints
-    // ss << "[ATTN] breakpoint" << std::endl;
-    // log<level::INFO>(ss.str().c_str());
+    // Right now we always handle breakpoint special attentions if breakpoint
+    // attn handling is enabled. This will eventually check if breakpoint attn
+    // handing is enabled AND there is a breakpoint pending.
+    if (true == i_breakpoints)
+    {
+        ss << "[ATTN] breakpoint" << std::endl;
+        log<level::INFO>(ss.str().c_str());
 
-    // Cronus will determine proc, core and thread so just notify
-    // notifyCronus(0, 0, 0); // proc-0, core-0, thread-0
+        // Cronus will determine proc, core and thread so just notify
+        notifyCronus(0, 0, 0); // proc-0, core-0, thread-0
+    }
+    // Right now if breakpoint attn handling is not enabled we will treat the
+    // special attention as a TI. This will eventually be changed to check
+    // whether a TI is active and handle it regardless of whether breakpoint
+    // handling is enbaled or not.
+    else
+    {
+        ss << "[ATTN] TI (terminate immediately)" << std::endl;
+        log<level::INFO>(ss.str().c_str());
 
-    // For TI special attention start host diagnostic mode
-    ss << "[ATTN] TI (terminate immediately)" << std::endl;
-    log<level::INFO>(ss.str().c_str());
-    startHostDiagnosticMode();
+        // Start host diagnostic mode
+        startHostDiagnosticMode();
+    }
 
     // TODO recoverable errors?
 

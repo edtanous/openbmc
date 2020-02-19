@@ -20,7 +20,9 @@ namespace attn
  *            TI:          TBD
  *            Corecode:    TBD
  *            Recoverable: TBD
+ *
+ * @param i_breakpoints true = breakpoint special attn handling enabled
  */
-void attnHandler();
+void attnHandler(bool i_breakpoints);
 
 } // namespace attn

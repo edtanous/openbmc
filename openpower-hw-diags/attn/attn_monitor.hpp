@@ -25,11 +25,13 @@ class AttnMonitor
      * @param line     GPIO line handle
      * @param config   configuration of line
      * @param io       io service
+     * @param i_breakpoints true = breakpoint special attn handling enabled
      */
     AttnMonitor(gpiod_line* line, gpiod_line_request_config& config,
-                boost::asio::io_service& io) :
+                boost::asio::io_service& io, bool i_breakpoints) :
         iv_gpioLine(line),
-        iv_gpioConfig(config), iv_gpioEventDescriptor(io)
+        iv_gpioConfig(config), iv_gpioEventDescriptor(io),
+        iv_breakpoints(i_breakpoints)
     {
 
         requestGPIOEvent(); // registers the event handler
@@ -66,6 +68,9 @@ class AttnMonitor
 
     /** @brief register for a gpio event */
     void requestGPIOEvent();
+
+    /** @brief enable breakpoint special attn handling */
+    bool iv_breakpoints;
 };
 
 } // namespace attn

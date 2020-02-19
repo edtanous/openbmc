@@ -52,7 +52,7 @@ void AttnMonitor::handleGPIOEvent()
         {
             // active attention when gpio == 0
             case 0:
-                attnHandler();
+                attnHandler(iv_breakpoints);
                 break;
 
             // gpio == 1, GPIO handler should not be executing
