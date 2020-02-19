@@ -19,6 +19,15 @@ libpdbg = cmplr.find_library('pdbg')
 whole_archive = declare_dependency(link_args : '-Wl,--whole-archive')
 no_whole_archive = declare_dependency(link_args : '-Wl,--no-whole-archive')
 
+# install systemd unit file
+configure_file(
+    input: 'attn_handler.service',
+    output: 'attn_handler.service',
+    copy: true,
+    install_dir:
+        dependency('systemd').get_pkgconfig_variable(
+            'systemdsystemunitdir')
+)
 executable('attn_handler',
            'attn_main.cpp', 'attn_handler.cpp', 'attn_monitor.cpp',
            dependencies : [whole_archive, libpdbg,
