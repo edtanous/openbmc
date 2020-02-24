@@ -5,7 +5,7 @@ After=obmc-mapper.target
 After=mapper-wait@-xyz-openbmc_project-logging.service
 
 [Service]
-ExecStart=/usr/bin/attn_handler
+ExecStart=/usr/bin/openpower-hw-diags --daemon
 Restart=on-failure
 
 [Install]

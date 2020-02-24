@@ -2,8 +2,8 @@
 
 /**
  * @file hei_user_defines.hpp
- * @brief The purpose of this file is to create common defines that
- *        will be used throughout this library.
+ * @brief The purpose of this file is to provide defines that are required by
+ *        the hardware error isolator library (libhei)
  */
 
 #include <assert.h>

@@ -1,5 +1,6 @@
 #include <libpdbg.h>
 
+#include <analyzer/analyzer_main.hpp>
 #include <phosphor-logging/log.hpp>
 #include <sdbusplus/bus.hpp>
 
@@ -157,12 +158,7 @@ int handleCheckstop()
     ss << "[ATTN] checkstop" << std::endl;
     log<level::INFO>(ss.str().c_str());
 
-    if (0 != rc)
-    {
-        std::stringstream ss; // log message stream
-        ss << "[ATTN] checkstop NOT handled" << std::endl;
-        log<level::INFO>(ss.str().c_str());
-    }
+    analyzer::analyzeHardware();
 
     // TODO recoverable errors?
 

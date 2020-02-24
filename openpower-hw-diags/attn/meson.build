@@ -28,8 +28,10 @@ configure_file(
         dependency('systemd').get_pkgconfig_variable(
             'systemdsystemunitdir')
 )
-executable('attn_handler',
+
+attn = static_library('attn_handler',
            'attn_main.cpp', 'attn_handler.cpp', 'attn_monitor.cpp',
+           include_directories : incdir,
            dependencies : [whole_archive, libpdbg,
                            no_whole_archive, sdbusplus, libgpiod],
            cpp_args : boost_args,

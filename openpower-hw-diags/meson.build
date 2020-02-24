@@ -10,8 +10,14 @@ project('openpower-hw-diags', 'cpp',
 # libhei is available as a subproject
 subproject('libhei')
 
-subdir('src')
+incdir = include_directories('.')
+
+subdir('analyzer')
 subdir('attn')
+
+executable('openpower-hw-diags', 'main.cpp',
+            link_with : [analyzer, attn],
+            install : true)
 
 build_tests = get_option('tests')
 
