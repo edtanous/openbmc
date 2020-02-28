@@ -6,7 +6,7 @@ boost_args = ['-DBOOST_ASIO_DISABLE_THREADS',
               '-DBOOST_ERROR_CODE_HEADER_ONLY',
               '-DBOOST_SYSTEM_NO_DEPRECATED']
 
-# dependency to link dbus support
+# dependency to link sdbusplus support
 sdbusplus = dependency('sdbusplus', version : '>=1.0')
 
 # dependency to link gpiod support
@@ -29,10 +29,23 @@ configure_file(
             'systemdsystemunitdir')
 )
 
+# see if phosphor-logging is available, if not use test case logging code
+h = 'phosphor-logging/log.hpp'
+if cmplr.compiles('#include <@0@>'.format(h), name : '#include <@0@>'.format(h))
+    logging_src = 'logging.cpp'
+else
+    logging_src = '../test/end2end/logging.cpp'
+endif
+
+# gather attention sources to be used here and elsewhere if needed
+attn_src = files('attn_main.cpp', 'attn_handler.cpp', 'attn_monitor.cpp',
+                 'bp_handler.cpp', 'ti_handler.cpp', logging_src)
+
+# Create attention handler library
 attn = static_library('attn_handler',
-           'attn_main.cpp', 'attn_handler.cpp', 'attn_monitor.cpp',
-           include_directories : incdir,
-           dependencies : [whole_archive, libpdbg,
-                           no_whole_archive, sdbusplus, libgpiod],
-           cpp_args : boost_args,
-           install : true)
+                      attn_src,
+                      include_directories : incdir,
+                      dependencies : [whole_archive, libpdbg,
+                                      no_whole_archive, sdbusplus, libgpiod],
+                      cpp_args : boost_args,
+                      install : true)

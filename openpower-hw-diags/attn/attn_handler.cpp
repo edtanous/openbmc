@@ -1,12 +1,12 @@
 #include <libpdbg.h>
 
 #include <analyzer/analyzer_main.hpp>
-#include <phosphor-logging/log.hpp>
-#include <sdbusplus/bus.hpp>
+#include <bp_handler.hpp>
+#include <logging.hpp>
+#include <ti_handler.hpp>
 
 #include <iomanip>
-
-using namespace phosphor::logging;
+#include <sstream>
 
 namespace attn
 {
@@ -34,22 +34,6 @@ int handleCheckstop();
 int handleSpecial(bool i_breakpoints);
 
 /**
- * @brief Notify Cronus over dbus interface
- *
- * @param i_proc   Processor number with Special attention
- * @param i_core   Core number with special attention
- * @param i_thread Thread number with special attention
- */
-void notifyCronus(uint32_t i_proc, uint32_t i_core, uint32_t i_thread);
-
-/**
- * @brief Start host diagnostic mode
- *
- * Start the host diagnostic mode systemd unit
- */
-void startHostDiagnosticMode();
-
-/**
  * @brief The main attention handler logic
  *
  * @param i_breakpoints true = breakpoint special attn handling enabled
@@ -68,20 +52,20 @@ void attnHandler(bool i_breakpoints)
             proc = pdbg_target_index(target); // get processor number
 
             std::stringstream ss; // log message stream
-            ss << "[ATTN] checking processor " << proc << std::endl;
+            ss << "checking processor " << proc << std::endl;
             log<level::INFO>(ss.str().c_str());
 
             // get active attentions on processor
             if (0 != fsi_read(target, 0x1007, &isr_val))
             {
                 std::stringstream ss; // log message stream
-                ss << "[ATTN] Error! cfam read 0x1007 FAILED" << std::endl;
+                ss << "Error! cfam read 0x1007 FAILED" << std::endl;
                 log<level::INFO>(ss.str().c_str());
             }
             else
             {
                 std::stringstream ss; // log message stream
-                ss << "[ATTN] cfam 0x1007 = 0x";
+                ss << "cfam 0x1007 = 0x";
                 ss << std::hex << std::setw(8) << std::setfill('0');
                 ss << isr_val << std::endl;
                 log<level::INFO>(ss.str().c_str());
@@ -90,13 +74,13 @@ void attnHandler(bool i_breakpoints)
                 if (0 != fsi_read(target, 0x100d, &isr_mask))
                 {
                     std::stringstream ss; // log message stream
-                    ss << "[ATTN] Error! cfam read 0x100d FAILED" << std::endl;
+                    ss << "Error! cfam read 0x100d FAILED" << std::endl;
                     log<level::INFO>(ss.str().c_str());
                 }
                 else
                 {
                     std::stringstream ss; // log message stream
-                    ss << "[ATTN] cfam 0x100d = 0x";
+                    ss << "cfam 0x100d = 0x";
                     ss << std::hex << std::setw(8) << std::setfill('0');
                     ss << isr_mask << std::endl;
                     log<level::INFO>(ss.str().c_str());
@@ -110,7 +94,10 @@ void attnHandler(bool i_breakpoints)
                     // bit 0 on "left": bit 1 = checkstop
                     if (isr_val & isr_mask & 0x40000000)
                     {
-                        handleCheckstop();
+                        if (0 == handleCheckstop())
+                        {
+                            break;
+                        }
                     }
 
                     // bit 0 on "left": bit 2 = special attention
@@ -134,13 +121,13 @@ int handleVital()
     int rc = 1; // vital attention handling not yet supported
 
     std::stringstream ss; // log message stream
-    ss << "[ATTN] vital" << std::endl;
+    ss << "vital" << std::endl;
     log<level::INFO>(ss.str().c_str());
 
     if (0 != rc)
     {
         std::stringstream ss; // log message stream
-        ss << "[ATTN] vital NOT handled" << std::endl;
+        ss << "vital NOT handled" << std::endl;
         log<level::INFO>(ss.str().c_str());
     }
 
@@ -152,10 +139,10 @@ int handleVital()
  */
 int handleCheckstop()
 {
-    int rc = 1; // checkstop handling not yet supported
+    int rc = 0; // checkstop handling supported
 
     std::stringstream ss; // log message stream
-    ss << "[ATTN] checkstop" << std::endl;
+    ss << "checkstop" << std::endl;
     log<level::INFO>(ss.str().c_str());
 
     analyzer::analyzeHardware();
@@ -176,18 +163,18 @@ int handleSpecial(bool i_breakpoints)
 
     std::stringstream ss; // log message stream
 
-    ss << "[ATTN] special" << std::endl;
+    ss << "special" << std::endl;
 
     // Right now we always handle breakpoint special attentions if breakpoint
     // attn handling is enabled. This will eventually check if breakpoint attn
     // handing is enabled AND there is a breakpoint pending.
     if (true == i_breakpoints)
     {
-        ss << "[ATTN] breakpoint" << std::endl;
+        ss << "breakpoint" << std::endl;
         log<level::INFO>(ss.str().c_str());
 
-        // Cronus will determine proc, core and thread so just notify
-        notifyCronus(0, 0, 0); // proc-0, core-0, thread-0
+        // Call the breakpoint special attention handler
+        bpHandler();
     }
     // Right now if breakpoint attn handling is not enabled we will treat the
     // special attention as a TI. This will eventually be changed to check
@@ -195,65 +182,16 @@ int handleSpecial(bool i_breakpoints)
     // handling is enbaled or not.
     else
     {
-        ss << "[ATTN] TI (terminate immediately)" << std::endl;
+        ss << "TI (terminate immediately)" << std::endl;
         log<level::INFO>(ss.str().c_str());
 
-        // Start host diagnostic mode
-        startHostDiagnosticMode();
+        // Call TI special attention handler
+        tiHandler();
     }
 
     // TODO recoverable errors?
 
     return rc;
-}
-
-/**
- * @brief Notify Cronus over dbus interface
- */
-void notifyCronus(uint32_t i_proc, uint32_t i_core, uint32_t i_thread)
-{
-    std::stringstream ss; // log message stream
-
-    // log status info
-    ss << "[ATTN] notify ";
-    ss << i_proc << ", " << i_core << ", " << i_thread << std::endl;
-    log<level::INFO>(ss.str().c_str());
-
-    // notify Cronus over dbus
-    auto bus = sdbusplus::bus::new_system();
-    auto msg = bus.new_signal("/", "org.openbmc.cronus", "Brkpt");
-
-    std::array<uint32_t, 3> params{i_proc, i_core, i_thread};
-    msg.append(params);
-
-    msg.signal_send();
-
-    return;
-}
-
-/**
- * @brief Start host diagnostic mode
- * */
-void startHostDiagnosticMode()
-{
-    std::stringstream ss; // log message stream
-
-    // log status info
-    ss << "[ATTN] start host diagnostic mode service" << std::endl;
-    log<level::INFO>(ss.str().c_str());
-
-    // Use the systemd service manager object interface to call the start unit
-    // method with the obmc-host-diagnostic-mode target.
-    auto bus    = sdbusplus::bus::new_system();
-    auto method = bus.new_method_call(
-        "org.freedesktop.systemd1", "/org/freedesktop/systemd1",
-        "org.freedesktop.systemd1.Manager", "StartUnit");
-
-    method.append("obmc-host-diagnostic-mode@0.target"); // unit to activate
-    method.append("replace"); // mode = replace conflicting queued jobs
-    bus.call_noreply(method); // start the service
-
-    return;
 }
 
 } // namespace attn

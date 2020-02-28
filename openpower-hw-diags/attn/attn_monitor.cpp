@@ -2,9 +2,7 @@
 
 #include "attn_handler.hpp"
 
-#include <phosphor-logging/log.hpp>
-
-using namespace phosphor::logging;
+#include <logging.hpp>
 
 namespace attn
 {
@@ -12,7 +10,7 @@ namespace attn
 /** @brief Register a callback for gpio event */
 void AttnMonitor::scheduleGPIOEvent()
 {
-    std::string logMessage = "[ATTN] ... waiting for events ...";
+    std::string logMessage = "... waiting for events ...";
     log<level::INFO>(logMessage.c_str());
 
     // Register async callback, note that callback is a
@@ -22,8 +20,8 @@ void AttnMonitor::scheduleGPIOEvent()
         [this](const boost::system::error_code& ec) {
             if (ec)
             {
-                std::string logMessage = "[ATTN] ATTN GPIO Async error: " +
-                                         std::string(ec.message());
+                std::string logMessage =
+                    "GPIO Async wait error: " + std::string(ec.message());
                 log<level::INFO>(logMessage.c_str());
             }
             else
@@ -43,7 +41,7 @@ void AttnMonitor::handleGPIOEvent()
     if (gpiod_line_event_read_fd(iv_gpioEventDescriptor.native_handle(),
                                  &gpioEvent) < 0)
     {
-        logMessage = "[ATTN] ATTN GPIO Failed can't read file descriptor!";
+        logMessage = "GPIO line read failed";
         log<level::INFO>(logMessage.c_str());
     }
     else
@@ -57,13 +55,13 @@ void AttnMonitor::handleGPIOEvent()
 
             // gpio == 1, GPIO handler should not be executing
             case 1:
-                logMessage = "[ATTN] ATTN GPIO sync!";
+                logMessage = "GPIO handler out of sync";
                 log<level::INFO>(logMessage.c_str());
                 break;
 
             // unexpected value
             default:
-                logMessage = "[ATTN] ATTN GPIO read unexpected valuel!";
+                logMessage = "GPIO line unexpected value";
                 log<level::INFO>(logMessage.c_str());
         }
     }
@@ -75,7 +73,7 @@ void AttnMonitor::requestGPIOEvent()
 {
     if (0 != gpiod_line_request(iv_gpioLine, &iv_gpioConfig, 0))
     {
-        std::string logMessage = "[ATTN] failed request for GPIO";
+        std::string logMessage = "failed request for GPIO";
         log<level::INFO>(logMessage.c_str());
     }
     else
@@ -85,7 +83,7 @@ void AttnMonitor::requestGPIOEvent()
         gpioLineFd = gpiod_line_event_get_fd(iv_gpioLine);
         if (gpioLineFd < 0)
         {
-            std::string logMessage = "[ATTN] failed to get file descriptor";
+            std::string logMessage = "failed to get file descriptor";
             log<level::INFO>(logMessage.c_str());
         }
         else

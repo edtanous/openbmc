@@ -4,6 +4,7 @@
 #include <attn/attn_main.hpp>
 
 #include <algorithm>
+#include <string>
 
 /*
  * @brief Search the command line arguments for an option
