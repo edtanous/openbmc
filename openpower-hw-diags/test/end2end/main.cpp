@@ -12,7 +12,7 @@ int main()
     pdbg_targets_init(nullptr);
 
     // exercise attention gpio event path
-    attn::attnHandler(false);
+    attn::attnHandler(false); // false = breakpoint handling disabled
 
     return rc;
 }

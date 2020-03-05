@@ -23,6 +23,6 @@ namespace attn
  *
  * @param i_breakpoints true = breakpoint special attn handling enabled
  */
-void attnHandler(bool i_breakpoints);
+void attnHandler(const bool i_breakpoints);
 
 } // namespace attn
