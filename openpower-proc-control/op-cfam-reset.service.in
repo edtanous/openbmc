@@ -5,6 +5,7 @@ After=obmc-host-stopped@0.target
 After=op-occ-disable@0.service
 Before=obmc-host-startmin@0.target
 Conflicts=obmc-host-startmin@0.target
+ConditionPathExists=!/run/openbmc/mpreboot@0
 
 [Service]
 RemainAfterExit=yes
