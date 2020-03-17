@@ -10,6 +10,7 @@ Conflicts=obmc-host-stop@%i.target
 ConditionPathExists=/run/openbmc/mpreboot@%i
 
 [Service]
+ExecStart=/bin/rm -f /run/openbmc/mpreboot@%i
 ExecStart=/usr/bin/openpower-proc-control startHostMpReboot
 Type=oneshot
 RemainAfterExit=yes

@@ -9,6 +9,8 @@ Conflicts=obmc-host-startmin@%i.target
 RemainAfterExit=yes
 Type=oneshot
 ExecStart=/usr/bin/openpower-proc-control enterMpReboot
+ExecStart=/bin/mkdir -p /run/openbmc/
+ExecStart=/bin/touch /run/openbmc/mpreboot@%i
 
 [Install]
 WantedBy=obmc-host-diagnostic-mode@%i.target
