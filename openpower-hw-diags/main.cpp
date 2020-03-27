@@ -1,8 +1,7 @@
-#include <libpdbg.h>
-
 #include <analyzer/analyzer_main.hpp>
-#include <attn/attn_main.hpp>
+#include <boost/interprocess/ipc/message_queue.hpp>
 #include <cli.hpp>
+#include <listener.hpp>
 
 /**
  * @brief Attention handler application main()
@@ -12,61 +11,110 @@
  * gpio or it will be loaded as an application to analyze hardware and
  * diagnose hadrware error conditions.
  *
- * Command line arguments:
+ *     Usage:
+ *        --analyze:              Analyze the hardware
+ *        --start:                Start the attention handler
+ *        --stop:                 Stop the attention handler
+ *        --all <on|off>:         All attention handling
+ *        --vital <on|off>:       Vital attention handling
+ *        --checkstop <on|off>:   Checkstop attention handling
+ *        --terminate <on|off>:   Terminate Immiediately attention handling
+ *        --breakpoints <on|off>: Breakpoint attention handling
  *
- * commands:
- *
- *   analyze            analyze hardware
- *
- * options:
- *
- *  --daemon            load application as a daemon
- *  --vital off         disable vital attention handling (daemon mode)
- *  --checkstop off     disable checkstop attention handling (daemon mode)
- *  --terminate off     disable TI attention handling (daemon mode)
- *  --breakpoints off   disable breakpoint attention handling (daemon mode)
- *
- *  example:
- *
- *    openpower-hw-diags --daemon --terminate off
+ *     Example: openpower-hw-diags --start --vital off
  *
  * @return 0 = success
  */
 int main(int argc, char* argv[])
 {
-    int rc = 0; // return code
+    int rc = 0; // assume success
 
-    // attention handler configuration flags
-    bool vital_enable     = true;
-    bool checkstop_enable = true;
-    bool ti_enable        = true;
-    bool bp_enable        = true;
+    using namespace boost::interprocess;
 
-    // initialize pdbg targets
-    pdbg_targets_init(nullptr);
-
-    // get configuration options
-    parseConfig(argv, argv + argc, vital_enable, checkstop_enable, ti_enable,
-                bp_enable);
-
-    // check if we are being loaded as a daemon
-    if (true == getCliOption(argv, argv + argc, "--daemon"))
+    if (argc == 1)
     {
-        attn::Config config(vital_enable, checkstop_enable, ti_enable,
-                            bp_enable);
-
-        // Configure and start attention monitor
-        attn::attnDaemon(&config);
+        printf("openpower-hw-diags <options>\n");
+        printf("options:\n");
+        printf("  --analyze:              Analyze the hardware\n");
+        printf("  --start:                Start the attention handler\n");
+        printf("  --stop:                 Stop the attention handler\n");
+        printf("  --all <on|off>:         All attention handling\n");
+        printf("  --vital <on|off>:       Vital attention handling\n");
+        printf("  --checkstop <on|off>:   Checkstop attention handling\n");
+        printf("  --terminate <on|off>:   Terminate Immediately attention "
+               "handling\n");
+        printf("  --breakpoints <on|off>: Breakpoint attention handling\n");
     }
-    // we are being loaded as an application
     else
     {
-        // Request to analyze the hardware for error conditions
-        if (true == getCliOption(argv, argv + argc, "analyze"))
+        // todo usage
+
+        // Either analyze (application mode) or daemon mode
+        if (true == getCliOption(argv, argv + argc, "--analyze"))
         {
             analyzer::analyzeHardware();
         }
-    }
+        // daemon mode
+        else
+        {
+            // assume listener is not running
+            bool listenerStarted = false;
+            bool newListener     = false;
 
+            pthread_t ptidListener; // handle to listener thread
+
+            // see if listener is already started
+            listenerStarted = listenerMqExists();
+
+            // listener is not running so start it
+            if (false == listenerStarted)
+            {
+                // create listener thread
+                if (0 ==
+                    pthread_create(&ptidListener, NULL, &threadListener, NULL))
+                {
+                    listenerStarted = true;
+                    newListener     = true;
+                }
+                else
+                {
+                    rc = 1;
+                }
+            }
+
+            // listener was running or just started
+            if (true == listenerStarted)
+            {
+                // If we created a new listener this instance of
+                // openpower-hw-diags will become our daemon (it will not exit
+                // until stopped).
+                if (true == newListener)
+                {
+                    bool listenerReady = false;
+
+                    // It may take some time for the listener to become ready,
+                    // we will wait until the message queue has been created
+                    // before starting to communicate with our daemon.
+                    while (false == listenerReady)
+                    {
+                        usleep(500);
+                        listenerReady = listenerMqExists();
+                    }
+                }
+
+                // send cmd line to listener thread
+                if (argc != sendCmdLine(argc, argv))
+                {
+                    rc = 1;
+                }
+
+                // if this is a new listener let it run until "stopped"
+                if (true == newListener)
+                {
+                    pthread_join(ptidListener, NULL);
+                }
+            }
+        }
+    }
     return rc;
 }

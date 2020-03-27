@@ -15,7 +15,11 @@ incdir = include_directories('.')
 subdir('analyzer')
 subdir('attn')
 
-executable('openpower-hw-diags', 'main.cpp', 'cli.cpp',
+pthread = declare_dependency(link_args : '-pthread')
+lrt = declare_dependency(link_args : '-lrt')
+
+executable('openpower-hw-diags', 'main.cpp', 'cli.cpp', 'listener.cpp',
+            dependencies : [lrt, pthread],
             link_with : [analyzer, attn],
             install : true)
 
