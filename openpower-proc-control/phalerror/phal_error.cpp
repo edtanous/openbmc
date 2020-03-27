@@ -95,7 +95,7 @@ void addBootErrorCallbacks()
     ipl_set_logfunc(detail::processLogTraceCallback, NULL);
 
     // add callback for ipl failures
-    ipl_set_app_callback_func(detail::processBootErrorCallback);
+    ipl_set_error_callback_func(detail::processBootErrorCallback)
 }
 } // namespace pel
 } // namespace openpower
