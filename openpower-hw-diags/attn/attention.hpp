@@ -2,6 +2,10 @@
 
 #include <libpdbg.h>
 
+#include <attn/attn_config.hpp>
+
+#include <bitset>
+
 namespace attn
 {
 
@@ -34,7 +38,7 @@ class Attention
 
     /** @brief Main constructors */
     Attention(AttentionType i_type, int (*i_handler)(Attention*),
-              pdbg_target* i_target, bool i_breakpoints);
+              pdbg_target* i_target, Config* i_config);
 
     /** @brief Destructor */
     ~Attention() = default;
@@ -42,11 +46,8 @@ class Attention
     /** @brief Get attention priority */
     int getPriority() const;
 
-    /** @brief Get configuration flags */
-    uint32_t getFlags() const;
-
-    /** @brief Set configuration flags */
-    void setFlags(uint32_t i_flags);
+    /* @brief Get config object */
+    Config* getConfig() const;
 
     /* @brief Call attention handler function */
     int handle();
@@ -64,7 +65,7 @@ class Attention
     AttentionType iv_type;         // attention type
     int (*iv_handler)(Attention*); // handler function
     pdbg_target* iv_target;        // handler function target
-    uint32_t iv_flags = 0;         // configuration flags
+    Config* iv_config;             // configuration flags
 };
 
 } // namespace attn

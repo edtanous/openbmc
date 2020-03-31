@@ -14,9 +14,21 @@
  *
  * Command line arguments:
  *
- *  analyze         analyze hardware
- *  --daemon        load application as a daemon
- *  --breakpoints   enable breakpoint special attn handling (in daemon mode)
+ * commands:
+ *
+ *   analyze            analyze hardware
+ *
+ * options:
+ *
+ *  --daemon            load application as a daemon
+ *  --vital off         disable vital attention handling (daemon mode)
+ *  --checkstop off     disable checkstop attention handling (daemon mode)
+ *  --terminate off     disable TI attention handling (daemon mode)
+ *  --breakpoints off   disable breakpoint attention handling (daemon mode)
+ *
+ *  example:
+ *
+ *    openpower-hw-diags --daemon --terminate off
  *
  * @return 0 = success
  */
@@ -24,22 +36,29 @@ int main(int argc, char* argv[])
 {
     int rc = 0; // return code
 
+    // attention handler configuration flags
+    bool vital_enable     = true;
+    bool checkstop_enable = true;
+    bool ti_enable        = true;
+    bool bp_enable        = true;
+
     // initialize pdbg targets
     pdbg_targets_init(nullptr);
 
-    // TODO Handle target init fail
+    // get configuration options
+    parseConfig(argv, argv + argc, vital_enable, checkstop_enable, ti_enable,
+                bp_enable);
 
     // check if we are being loaded as a daemon
     if (true == getCliOption(argv, argv + argc, "--daemon"))
     {
-        // Check command line args for breakpoint handling enable option
-        bool bp_enable = getCliOption(argv, argv + argc, "--breakpoints");
+        attn::Config config(vital_enable, checkstop_enable, ti_enable,
+                            bp_enable);
 
         // Configure and start attention monitor
-        attn::attnDaemon(bp_enable);
+        attn::attnDaemon(&config);
     }
-    // We are being loaded as an application, so parse the command line
-    // arguments to determine what operation is being requested.
+    // we are being loaded as an application
     else
     {
         // Request to analyze the hardware for error conditions

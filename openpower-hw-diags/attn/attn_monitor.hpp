@@ -2,6 +2,7 @@
 
 #include <gpiod.h>
 
+#include <attn/attn_config.hpp>
 #include <boost/asio/io_service.hpp>
 #include <boost/asio/posix/stream_descriptor.hpp>
 
@@ -22,16 +23,16 @@ class AttnMonitor
      * The AttnMonitor constructor will create a new object and start
      * the objects associated GPIO listener.
      *
-     * @param line     GPIO line handle
-     * @param config   configuration of line
-     * @param io       io service
-     * @param i_breakpoints true = breakpoint special attn handling enabled
+     * @param line         GPIO line handle
+     * @param config       configuration of line
+     * @param io           io service
+     * @param i_attnConfig poiner to attention handler configuration object
      */
     AttnMonitor(gpiod_line* line, gpiod_line_request_config& config,
-                boost::asio::io_service& io, bool i_breakpoints) :
+                boost::asio::io_service& io, Config* i_attnConfig) :
         iv_gpioLine(line),
         iv_gpioConfig(config), iv_gpioEventDescriptor(io),
-        iv_breakpoints(i_breakpoints)
+        iv_config(i_attnConfig)
     {
 
         requestGPIOEvent(); // registers the event handler
@@ -59,6 +60,9 @@ class AttnMonitor
     /** @brief GPIO event descriptor */
     boost::asio::posix::stream_descriptor iv_gpioEventDescriptor;
 
+    /** @brief attention handler configuration object pointer */
+    Config* iv_config;
+
   private: // class methods
     /** @brief schedule a gpio event handler */
     void scheduleGPIOEvent();
@@ -68,9 +72,6 @@ class AttnMonitor
 
     /** @brief register for a gpio event */
     void requestGPIOEvent();
-
-    /** @brief enable breakpoint special attn handling */
-    bool iv_breakpoints;
 };
 
 } // namespace attn

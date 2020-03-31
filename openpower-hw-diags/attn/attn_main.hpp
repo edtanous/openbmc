@@ -1,5 +1,7 @@
 #pragma once
 
+#include <attn/attn_config.hpp>
+
 namespace attn
 {
 
@@ -9,10 +11,10 @@ namespace attn
  * Request the attention gpio for monitoring and attach the attention handler
  * as the gpio event handler.
  *
- * @param i_breakpoints     enables breakpoint special attn handling
+ * @param i_config     pointer to attention handler configuration object
  *
  * @return 0 == success
  */
-int attnDaemon(bool i_breakpoints);
+int attnDaemon(Config* i_config);
 
 } // namespace attn

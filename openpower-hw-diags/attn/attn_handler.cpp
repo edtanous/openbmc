@@ -1,5 +1,6 @@
 #include <analyzer/analyzer_main.hpp>
 #include <attention.hpp>
+#include <attn_config.hpp>
 #include <bp_handler.hpp>
 #include <logging.hpp>
 #include <ti_handler.hpp>
@@ -20,7 +21,8 @@ static constexpr int RC_NOT_SUCCESS = 1;
  * @brief Handle SBE vital attention
  *
  * @param i_attention Attention object
- * @return 0 = success
+ * @return 0 indicates that the vital attention was successfully handled
+ *         1 indicates that the vital attention was NOT successfully handled
  */
 int handleVital(Attention* i_attention);
 
@@ -28,7 +30,9 @@ int handleVital(Attention* i_attention);
  * @brief Handle checkstop attention
  *
  * @param i_attention Attention object
- * @return 0 = success
+ * @return 0 indicates that the checkstop attention was successfully handled
+ *         1 indicates that the checkstop attention was NOT successfully
+ *           handled.
  */
 int handleCheckstop(Attention* i_attention);
 
@@ -36,7 +40,8 @@ int handleCheckstop(Attention* i_attention);
  * @brief Handle special attention
  *
  * @param i_attention Attention object
- * @return 0 = success
+ * @return 0 indicates that the special attention was successfully handled
+ *         1 indicates that the special attention was NOT successfully handled
  */
 int handleSpecial(Attention* i_attention);
 
@@ -45,7 +50,7 @@ int handleSpecial(Attention* i_attention);
  *
  * @param i_breakpoints true = breakpoint special attn handling enabled
  */
-void attnHandler(const bool i_breakpoints)
+void attnHandler(Config* i_config)
 {
     // Vector of active attentions to be handled
     std::vector<Attention> active_attentions;
@@ -94,9 +99,8 @@ void attnHandler(const bool i_breakpoints)
                     // bit 0 on "left": bit 30 = SBE vital attention
                     if (isr_val & isr_mask & 0x00000002)
                     {
-                        active_attentions.emplace_back(Attention::Vital,
-                                                       handleVital, target,
-                                                       i_breakpoints);
+                        active_attentions.emplace_back(
+                            Attention::Vital, handleVital, target, i_config);
                     }
 
                     // bit 0 on "left": bit 1 = checkstop
@@ -104,7 +108,7 @@ void attnHandler(const bool i_breakpoints)
                     {
                         active_attentions.emplace_back(Attention::Checkstop,
                                                        handleCheckstop, target,
-                                                       i_breakpoints);
+                                                       i_config);
                     }
 
                     // bit 0 on "left": bit 2 = special attention
@@ -112,7 +116,7 @@ void attnHandler(const bool i_breakpoints)
                     {
                         active_attentions.emplace_back(Attention::Special,
                                                        handleSpecial, target,
-                                                       i_breakpoints);
+                                                       i_config);
                     }
                 } // cfam 0x100d valid
             }     // cfam 0x1007 valid
@@ -144,16 +148,25 @@ void attnHandler(const bool i_breakpoints)
 
 /**
  * @brief Handle SBE vital attention
+ *
+ * @param i_attention Attention object
+ * @return 0 indicates that the vital attention was successfully handled
+ *         1 indicates that the vital attention was NOT successfully handled
  */
 int handleVital(Attention* i_attention)
 {
-    int rc = RC_NOT_SUCCESS; // vital attention handling not yet supported
+    int rc = RC_SUCCESS; // assume vital handled
 
-    log<level::INFO>("vital");
-
-    if (RC_SUCCESS != rc)
+    // if vital handling enabled, handle vital attention
+    if (false == (i_attention->getConfig()->getFlag(enVital)))
+    {
+        log<level::INFO>("vital handling disabled");
+        rc = RC_NOT_SUCCESS;
+    }
+    else
     {
         log<level::INFO>("vital NOT handled");
+        rc = RC_NOT_SUCCESS;
     }
 
     return rc;
@@ -161,50 +174,71 @@ int handleVital(Attention* i_attention)
 
 /**
  * @brief Handle checkstop attention
+ *
+ * @param i_attention Attention object
+ * @return 0 indicates that the checkstop attention was successfully handled
+ *         1 indicates that the checkstop attention was NOT successfully
+ *           handled.
  */
 int handleCheckstop(Attention* i_attention)
 {
-    int rc = RC_SUCCESS; // checkstop handling supported
+    int rc = RC_SUCCESS; // assume checkstop handled
 
-    log<level::INFO>("checkstop");
-
-    analyzer::analyzeHardware();
+    // if checkstop handling enabled, handle checkstop attention
+    if (false == (i_attention->getConfig()->getFlag(enCheckstop)))
+    {
+        log<level::INFO>("Checkstop handling disabled");
+        rc = RC_NOT_SUCCESS;
+    }
+    else
+    {
+        analyzer::analyzeHardware();
+        rc = RC_SUCCESS;
+    }
 
     return rc;
 }
 
 /**
  * @brief Handle special attention
+ *
+ * @param i_attention Attention object
+ * @return 0 indicates that the special attention was successfully handled
+ *         1 indicates that the special attention was NOT successfully handled
  */
 int handleSpecial(Attention* i_attention)
 {
-    int rc = RC_SUCCESS; // special attention handling supported
+    int rc = RC_NOT_SUCCESS; // assume special attention handling disabled
 
-    log<level::INFO>("special");
+    // Until the special attention chipop is availabe we will treat the special
+    // attention as a TI. If TI handling is disabled we will treat the special
+    // attention as a breakpopint.
 
-    // Right now we always handle breakpoint special attentions if breakpoint
-    // attn handling is enabled. This will eventually check if breakpoint attn
-    // handing is enabled AND there is a breakpoint pending.
-    if (0 != (i_attention->getFlags() & enableBreakpoints))
-    {
-        log<level::INFO>("breakpoint");
-
-        // Call the breakpoint special attention handler
-        bpHandler();
-    }
-    // Right now if breakpoint attn handling is not enabled we will treat the
-    // special attention as a TI. This will eventually be changed to check
-    // whether a TI is active and handle it regardless of whether breakpoint
-    // handling is enbaled or not.
-    else
+    // TI attention gets priority over breakpoints, if enabled then handle
+    if (true == (i_attention->getConfig()->getFlag(enTerminate)))
     {
         log<level::INFO>("TI (terminate immediately)");
 
         // Call TI special attention handler
         tiHandler();
+        rc = RC_SUCCESS;
+    }
+    else
+    {
+        if (true == (i_attention->getConfig()->getFlag(enBreakpoints)))
+        {
+            log<level::INFO>("breakpoint");
+
+            // Call the breakpoint special attention handler
+            bpHandler();
+            rc = RC_SUCCESS;
+        }
     }
 
-    // TODO recoverable errors?
+    if (RC_SUCCESS != rc)
+    {
+        log<level::INFO>("Special attn handling disabled");
+    }
 
     return rc;
 }

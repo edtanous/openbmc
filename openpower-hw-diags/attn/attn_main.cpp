@@ -6,7 +6,7 @@ namespace attn
 /**
  * @brief Attention handler application main()
  */
-int attnDaemon(bool i_breakpoints)
+int attnDaemon(Config* i_config)
 {
     int rc = 0; // assume success
 
@@ -31,8 +31,8 @@ int attnDaemon(bool i_breakpoints)
     {
         // Creating a vector of one gpio to monitor
         std::vector<std::unique_ptr<attn::AttnMonitor>> gpios;
-        gpios.push_back(std::make_unique<attn::AttnMonitor>(line, config, io,
-                                                            i_breakpoints));
+        gpios.push_back(
+            std::make_unique<attn::AttnMonitor>(line, config, io, i_config));
 
         io.run(); // start GPIO monitor
     }

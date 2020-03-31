@@ -1,5 +1,7 @@
 #pragma once
 
+#include <attn/attn_config.hpp>
+
 namespace attn
 {
 
@@ -10,19 +12,18 @@ namespace attn
  * System Checkstop (checkstop) and Special Attention (special) and handle
  * each as follows:
  *
- * checkstop: TBD
+ * checkstop: Call hardware error analyzer
  * vital:     TBD
  * special:   Determine if the special attention is a Breakpoint (BP),
  *            Terminate Immediately (TI) or CoreCodeToSp (corecode). For each
  *            special attention type, do the following:
  *
  *            BP:          Notify Cronus
- *            TI:          TBD
+ *            TI:          Start host diagnostics mode systemd unit
  *            Corecode:    TBD
- *            Recoverable: TBD
  *
- * @param i_breakpoints true = breakpoint special attn handling enabled
+ * @param i_config pointer to attention handler configuration object
  */
-void attnHandler(const bool i_breakpoints);
+void attnHandler(Config* i_config);
 
 } // namespace attn
