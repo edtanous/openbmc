@@ -1,7 +1,5 @@
 #include <attn/logging.hpp>
 
-#include <sstream>
-
 namespace attn
 {
 
@@ -9,9 +7,7 @@ namespace attn
 void bpHandler()
 {
     // trace message
-    std::stringstream ss;
-    ss << "breakpoint handler";
-    log<level::INFO>(ss.str().c_str());
+    log<level::INFO>("breakpoint handler");
 }
 
 } // namespace attn

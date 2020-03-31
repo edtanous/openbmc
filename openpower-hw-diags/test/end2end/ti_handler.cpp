@@ -1,7 +1,5 @@
 #include <attn/logging.hpp>
 
-#include <sstream>
-
 namespace attn
 {
 
@@ -9,9 +7,7 @@ namespace attn
 void tiHandler()
 {
     // trace message
-    std::stringstream ss;
-    ss << "TI handler" << std::endl;
-    log<level::INFO>(ss.str().c_str());
+    log<level::INFO>("TI handler");
 }
 
 } // namespace attn

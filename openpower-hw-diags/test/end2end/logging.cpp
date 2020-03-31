@@ -9,7 +9,7 @@ namespace attn
 template <>
 void log<INFO>(const char* i_message)
 {
-    std::cout << i_message;
+    std::cout << i_message << std::endl;
 }
 
 } // namespace attn

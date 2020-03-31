@@ -1,8 +1,6 @@
 #include <logging.hpp>
 #include <sdbusplus/bus.hpp>
 
-#include <sstream>
-
 namespace attn
 {
 
@@ -15,9 +13,7 @@ namespace attn
 void bpHandler()
 {
     // trace message
-    std::stringstream ss;
-    ss << "Notify Cronus" << std::endl;
-    log<level::INFO>(ss.str().c_str());
+    log<level::INFO>("Notify Cronus");
 
     // notify Cronus over dbus
     auto bus = sdbusplus::bus::new_system();
