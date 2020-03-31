@@ -15,7 +15,7 @@ incdir = include_directories('.')
 subdir('analyzer')
 subdir('attn')
 
-executable('openpower-hw-diags', 'main.cpp',
+executable('openpower-hw-diags', 'main.cpp', 'cli.cpp',
             link_with : [analyzer, attn],
             install : true)
 

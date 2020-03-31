@@ -2,42 +2,7 @@
 
 #include <analyzer/analyzer_main.hpp>
 #include <attn/attn_main.hpp>
-
-#include <algorithm>
-#include <string>
-
-/*
- * @brief Search the command line arguments for an option
- *
- * @param i_begin   command line args vector begin
- * @param i_end     command line args vector end
- * @param i_option  configuration option to look for
- *
- * @return true = option found on command line
- */
-bool getCliOption(char** i_begin, char** i_end, const std::string& i_option)
-{
-    return (i_end != std::find(i_begin, i_end, i_option));
-}
-
-/*
- * @brief Search the command line arguments for a setting value
- *
- * @param i_begin   command line args vector begin
- * @param i_end     command line args vectory end
- * @param i_setting configuration setting to look for
- *
- * @return value of the setting or 0 if setting not found or value not given
- */
-char* getCliSetting(char** i_begin, char** i_end, const std::string& i_setting)
-{
-    char** value = std::find(i_begin, i_end, i_setting);
-    if (value != i_end && ++value != i_end)
-    {
-        return *value;
-    }
-    return 0; // nullptr
-}
+#include <cli.hpp>
 
 /**
  * @brief Attention handler application main()
