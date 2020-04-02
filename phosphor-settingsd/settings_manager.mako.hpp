@@ -4,7 +4,7 @@
 <%
 import re
 from collections import defaultdict
-objects = list(settingsDict.viewkeys())
+objects = settingsDict.keys()
 sdbusplus_namespaces = []
 sdbusplus_includes = []
 props = defaultdict(list)
