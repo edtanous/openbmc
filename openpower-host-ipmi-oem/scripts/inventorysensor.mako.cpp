@@ -6,7 +6,7 @@
 #include "oemhandler.hpp"
 
 extern const ObjectIDMap invSensors = {
-% for key in sensorDict.iterkeys():
+% for key in sensorDict.keys():
    % if key:
 {"${key}",
     {
