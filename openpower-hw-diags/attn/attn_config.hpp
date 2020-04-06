@@ -19,20 +19,7 @@ class Config
 {
   public: // methods
     /** @brief Default constructor */
-    Config() = delete;
-
-    /** @brief Crate configuration object
-     *
-     * Create a configuration object to hold the attention handler
-     * configuration data
-     *
-     * @param i_vital       Enable vital attention handling
-     * @param i_checkstop   Enable checkstop attention handling
-     * @param i_terminate   Enable TI attention handling
-     * @param i_+breakpoint Enable breakpoint attention handling
-     */
-    Config(bool i_vital, bool i_checkstop, bool i_terminate,
-           bool i_breakpoints);
+    Config();
 
     /** @brief Default destructor */
     ~Config() = default;
@@ -43,8 +30,14 @@ class Config
     /** @brief Set configuration flag */
     void setFlag(AttentionFlag i_flag);
 
+    /** @brief Set all configuration flags */
+    void setFlagAll();
+
     /** @brief Clear configuration flag */
     void clearFlag(AttentionFlag i_flag);
+
+    /** @brief Clear all configuration flags */
+    void clearFlagAll();
 
     /** @brief Set state of all configuration data */
     void setConfig(bool i_vital, bool i_checkstop, bool i_terminate,

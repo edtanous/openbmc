@@ -39,10 +39,6 @@ void* threadListener(void* i_params)
 {
     using namespace boost::interprocess;
 
-    // convert thread params to main arguments
-    int argc    = static_cast<MainArgs_t*>(i_params)->argc;
-    char** argv = static_cast<MainArgs_t*>(i_params)->argv;
-
     // vector to hold messages sent to listener
     std::vector<std::string> messages;
 
@@ -55,19 +51,8 @@ void* threadListener(void* i_params)
     // status of gpio monitor
     bool gpioMonEnabled = false;
 
-    // Parse command line args to see if any flags were passed, update the
-    // booleans accordingly and pass them to the config object constructor.
-    bool vital_enable     = true;
-    bool checkstop_enable = true;
-    bool ti_enable        = true;
-    bool bp_enable        = true;
-
-    // parse config options
-    parseConfig(argv, argv + argc, vital_enable, checkstop_enable, ti_enable,
-                bp_enable);
-
     // create config
-    attn::Config config(vital_enable, checkstop_enable, ti_enable, bp_enable);
+    attn::Config attnConfig;
 
     // initialize pdbg targets
     pdbg_targets_init(nullptr);
@@ -124,12 +109,7 @@ void* threadListener(void* i_params)
             }
 
             // parse config options
-            parseConfig(argv.data(), argv.data() + argc, vital_enable,
-                        checkstop_enable, ti_enable, bp_enable);
-
-            // set config
-            config.setConfig(vital_enable, checkstop_enable, ti_enable,
-                             bp_enable);
+            parseConfig(argv.data(), argv.data() + argc, &attnConfig);
 
             // start attention handler daemon?
             if (true ==
@@ -138,7 +118,7 @@ void* threadListener(void* i_params)
                 if (false == gpioMonEnabled)
                 {
                     if (0 == pthread_create(&ptidGpio, NULL, &threadGpioMon,
-                                            &config))
+                                            &attnConfig))
                     {
                         gpioMonEnabled = true;
                     }

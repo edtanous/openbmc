@@ -1,5 +1,7 @@
 #pragma once
 
+#include <attn/attn_config.hpp>
+
 #include <string>
 
 /*
@@ -28,12 +30,11 @@ char* getCliSetting(char** i_begin, char** i_end, const std::string& i_setting);
  *
  * @brief Get configuration flags from command line
  *
+ * Parse the command line for configuration options and update the
+ * attention handler configuration object as needed.
+ *
  * @param i_begin       command line args vector begin
  * @param i_end         command line args vector end
- * @param i_vital       vital handler enable option
- * @param i_checkatop   checkstop handler enable option
- * @param i_terminate   TI handler enable option
- * @param i_breakpoints breakpoint handler enable option
+ * @param o_config      pointer to attention handler configuration object
  */
-void parseConfig(char** i_begin, char** i_end, bool& i_vital, bool& i_checkstop,
-                 bool& i_terminate, bool& i_breakpoints);
+void parseConfig(char** i_begin, char** i_end, attn::Config* o_config);

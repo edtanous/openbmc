@@ -4,10 +4,9 @@ namespace attn
 {
 
 /** @brief Main constructor */
-Config::Config(bool i_vital, bool i_checkstop, bool i_terminate,
-               bool i_breakpoints)
+Config::Config()
 {
-    setConfig(i_vital, i_checkstop, i_terminate, i_breakpoints);
+    setFlagAll();
 }
 
 /** @brief Get state of flag */
@@ -22,26 +21,28 @@ void Config::setFlag(AttentionFlag i_flag)
     iv_flags.set(i_flag);
 }
 
+/** @brief Set all configuration flags */
+void Config::setFlagAll()
+{
+    iv_flags.set(enVital);
+    iv_flags.set(enCheckstop);
+    iv_flags.set(enTerminate);
+    iv_flags.set(enBreakpoints);
+}
+
 /** @brief Clear configuration flag */
 void Config::clearFlag(AttentionFlag i_flag)
 {
     iv_flags.reset(i_flag);
 }
 
-/** @brief Set state of all configuration data */
-void Config::setConfig(bool i_vital, bool i_checkstop, bool i_terminate,
-                       bool i_breakpoints)
+/** @brief Clear all configuration flags */
+void Config::clearFlagAll()
 {
-    (true == i_vital) ? iv_flags.set(enVital) : iv_flags.reset(enVital);
-
-    (true == i_checkstop) ? iv_flags.set(enCheckstop)
-                          : iv_flags.reset(enCheckstop);
-
-    (true == i_terminate) ? iv_flags.set(enTerminate)
-                          : iv_flags.reset(enTerminate);
-
-    (true == i_breakpoints) ? iv_flags.set(enBreakpoints)
-                            : iv_flags.reset(enBreakpoints);
+    iv_flags.reset(enVital);
+    iv_flags.reset(enCheckstop);
+    iv_flags.reset(enTerminate);
+    iv_flags.reset(enBreakpoints);
 }
 
 } // namespace attn
