@@ -1,10 +1,13 @@
 [Unit]
 Description=CFAM reset
-Wants=obmc-host-stopped@0.target
-After=obmc-host-stopped@0.target
-After=op-occ-disable@0.service
-Before=obmc-host-startmin@0.target
-Conflicts=obmc-host-startmin@0.target
+Wants=obmc-power-on@0.target
+After=obmc-power-on@0.target
+Wants=obmc-host-start-pre@0.target
+Before=obmc-host-start-pre@0.target
+Before=fsi-scan@0.service
+Before=cfam_override@0.service
+Conflicts=obmc-host-stop@0.target
+Conflicts=obmc-chassis-poweroff@0.target
 ConditionPathExists=!/run/openbmc/mpreboot@0
 
 [Service]
@@ -13,4 +16,4 @@ Type=oneshot
 ExecStart=/usr/bin/openpower-proc-control cfamReset
 
 [Install]
-# Will be installed in appropriate warm reboot targets via bb files
+# Will be installed in appropriate targets via bb files
