@@ -45,3 +45,13 @@ conf_data.set('INVENTORY_MANAGER_IFACE', '"xyz.openbmc_project.Inventory.Manager
 
 configure_file(output : 'config.h',
                configuration : conf_data)
+
+systemd = dependency('systemd')
+conf_data = configuration_data()
+conf_data.set('bindir', get_option('prefix') / get_option('bindir'))
+configure_file(
+  input: 'xyz.openbmc_project.nvme.manager.service.in',
+  output: 'xyz.openbmc_project.nvme.manager.service',
+  configuration: conf_data,
+  install: true,
+  install_dir: systemd.get_pkgconfig_variable('systemdsystemunitdir'))
