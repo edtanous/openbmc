@@ -1,6 +1,9 @@
-#include "phal_error.hpp"
+extern "C" {
+#include <libpdbg.h>
+}
 
 #include "create_pel.hpp"
+#include "phal_error.hpp"
 
 #include <libekb.H>
 #include <libipl.H>
@@ -84,14 +87,23 @@ void reset()
     traceLog.clear();
     counter = 0;
 }
+
+void pDBGLogTraceCallbackHelper(int log_level, const char* fmt, va_list ap)
+{
+    processLogTraceCallback(NULL, fmt, ap);
+}
 } // namespace detail
 
 void addBootErrorCallbacks()
 {
     // set log level to info
+    pdbg_set_loglevel(PDBG_INFO);
+    libekb_set_loglevel(LIBEKB_LOG_INF);
     ipl_set_loglevel(IPL_INFO);
 
     // add callback for debug traces
+    pdbg_set_logfunc(detail::pDBGLogTraceCallbackHelper);
+    libekb_set_logfunc(detail::processLogTraceCallback, NULL);
     ipl_set_logfunc(detail::processLogTraceCallback, NULL);
 
     // add callback for ipl failures
