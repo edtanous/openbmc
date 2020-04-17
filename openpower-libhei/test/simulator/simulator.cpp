@@ -1,25 +1,58 @@
 #include "simulator.hpp"
 
-using namespace libhei;
+#include <fstream> // std::ifstream
+
+namespace libhei
+{
+
+//------------------------------------------------------------------------------
+
+// Paths are relative from the build/ directory
+const std::map<SimulatorData::ChipType, const char*>
+    SimulatorData::cv_chipPath = {
+        {SAMPLE, "../test/simulator/chip_data/sample.cdb"},
+};
 
 //------------------------------------------------------------------------------
 
 void SimulatorData::addChip(const Chip& i_chip)
 {
     // First check if this entry already exists.
-    auto itr = std::find(iv_chipList.begin(), iv_chipList.end(), i_chip);
-    ASSERT_EQ(iv_chipList.end(), itr);
+    auto itr1 = std::find(iv_chipList.begin(), iv_chipList.end(), i_chip);
+    ASSERT_EQ(iv_chipList.end(), itr1);
 
     // Add the new entry.
     iv_chipList.push_back(i_chip);
 
-    // TODO: Find the chip data file based on the chip type from i_chip. Read
-    //       that file in to memory and call initialize.
-    void* buffer     = nullptr;
-    size_t sz_buffer = 0;
+    // Look for the file path
+    auto itr2 = cv_chipPath.find(static_cast<ChipType>(i_chip.getType()));
+    ASSERT_NE(cv_chipPath.end(), itr2);
+    const char* path = itr2->second;
 
+    // Open the Chip Data File
+    std::ifstream cdf{path, std::ifstream::binary};
+    ASSERT_TRUE(cdf.good());
+
+    // Get the length of file
+    cdf.seekg(0, cdf.end);
+    size_t sz_buffer = cdf.tellg();
+    cdf.seekg(0, cdf.beg);
+
+    // Allocate memory
+    char* buffer = new char[sz_buffer];
+
+    // Read data as a block
+    cdf.read(buffer, sz_buffer);
+
+    // Close the Chip Data File
+    cdf.close();
+
+    // Initilize the chip with this Chip Data File.
     ReturnCode rc = initialize(buffer, sz_buffer);
     ASSERT_TRUE(RC_SUCCESS == rc || RC_CHIP_DATA_INITIALIZED == rc);
+
+    // Clean up the buffer
+    delete[] buffer;
 }
 
 //------------------------------------------------------------------------------
@@ -52,3 +85,5 @@ void SimulatorData::endIteration()
     // The iteration is complete so we can flush the data.
     flushIterationData();
 }
+
+} // end namespace libhei

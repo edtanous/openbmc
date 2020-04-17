@@ -2,7 +2,7 @@
 
 START_TEST_CASE(SampleTestSet1)
 
-CHIP(proc0, 0xdeadbeef)
+CHIP(proc0, SAMPLE)
 
 START_ITERATION
 

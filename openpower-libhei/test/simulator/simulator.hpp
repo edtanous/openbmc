@@ -35,7 +35,17 @@ class SimulatorData
         return theSimData;
     }
 
+  public:
+    /** The list of supported chip types for the simulator. */
+    enum ChipType
+    {
+        SAMPLE = 0xdeadbeef,
+    };
+
   private:
+    /** The Chip Data file paths for each support chip type. */
+    static const std::map<ChipType, const char*> cv_chipPath;
+
     /** The list of configured chips used throughout a test case. */
     std::vector<Chip> iv_chipList;
 
@@ -163,7 +173,8 @@ class SimulatorData
     {                                                                          \
         libhei::SimulatorData& simData =                                       \
             libhei::SimulatorData::getSingleton();                             \
-        simData.flushAll();
+        simData.flushAll();                                                    \
+        libhei::ChipType_t chipType;
 
 /**
  * Use this to configure a chip object for the test case. There should be an
@@ -174,7 +185,8 @@ class SimulatorData
  * macros.
  */
 #define CHIP(CHIP, TYPE)                                                       \
-    libhei::Chip CHIP{#CHIP, static_cast<libhei::ChipType_t>(TYPE)};           \
+    chipType = static_cast<libhei::ChipType_t>(libhei::SimulatorData::TYPE);   \
+    libhei::Chip CHIP{#CHIP, chipType};                                        \
     simData.addChip(CHIP);
 
 /**
