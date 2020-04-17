@@ -22,7 +22,7 @@ void startHost()
     openpower::pel::addBootErrorCallbacks();
 
     // callback method will be called upon failure which will create the PEL
-    if (ipl_init(IPL_DEFAULT) != 0)
+    if (ipl_init() != 0)
     {
         log<level::ERR>("ipl_init failed");
         throw std::runtime_error("Boot initialization failed");
