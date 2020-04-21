@@ -119,6 +119,9 @@ class Nvme
 
     void createNVMeInventory();
 
+    /** @brief read and update NVME data to dbus */
+    void readNvmeData(NVMeConfig& config);
+
   private:
     /** @brief sdbusplus bus client connection. */
     sdbusplus::bus::bus& bus;

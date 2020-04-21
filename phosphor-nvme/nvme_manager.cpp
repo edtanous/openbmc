@@ -464,6 +464,44 @@ void Nvme::init()
     createNVMeInventory();
 }
 
+void Nvme::readNvmeData(NVMeConfig& config)
+{
+    std::string inventoryPath = NVME_INVENTORY_PATH + config.index;
+    NVMeData nvmeData;
+
+    // get NVMe information through i2c by busID.
+    auto success = getNVMeInfobyBusID(config.busID, nvmeData);
+    auto iter = nvmes.find(config.index);
+
+    // can not find. create dbus
+    if (iter == nvmes.end())
+    {
+        log<level::INFO>("SSD plug.",
+                         entry("index = %s", config.index.c_str()));
+
+        std::string objPath = NVME_OBJ_PATH + config.index;
+        auto nvmeSSD =
+            std::make_shared<phosphor::nvme::NvmeSSD>(bus, objPath.c_str());
+        nvmes.emplace(config.index, nvmeSSD);
+
+        setNvmeInventoryProperties(true, nvmeData, inventoryPath);
+        nvmeSSD->setSensorValueToDbus(nvmeData.sensorValue);
+        nvmeSSD->setSensorThreshold(config.criticalHigh, config.criticalLow,
+                                    config.maxValue, config.minValue,
+                                    config.warningHigh, config.warningLow);
+
+        nvmeSSD->checkSensorThreshold();
+        setLEDsStatus(config, success, nvmeData);
+    }
+    else
+    {
+        setNvmeInventoryProperties(true, nvmeData, inventoryPath);
+        iter->second->setSensorValueToDbus(nvmeData.sensorValue);
+        iter->second->checkSensorThreshold();
+        setLEDsStatus(config, success, nvmeData);
+    }
+}
+
 /** @brief Monitor NVMe drives every one second  */
 void Nvme::read()
 {
@@ -476,63 +514,22 @@ void Nvme::read()
     for (auto config : configs)
     {
         NVMeData nvmeData;
-        devPresentPath =
-            GPIO_BASE_PATH + std::to_string(config.presentPin) + "/value";
-
-        devPwrGoodPath =
-            GPIO_BASE_PATH + std::to_string(config.pwrGoodPin) + "/value";
 
         inventoryPath = NVME_INVENTORY_PATH + config.index;
 
-        auto iter = nvmes.find(config.index);
-
-        if (getGPIOValueOfNvme(devPresentPath) == IS_PRESENT)
+        if (config.presentPin)
         {
-            // Drive status is good, update value or create d-bus and update
-            // value.
-            if (getGPIOValueOfNvme(devPwrGoodPath) == POWERGD)
+            devPresentPath =
+                GPIO_BASE_PATH + std::to_string(config.presentPin) + "/value";
+
+            if (getGPIOValueOfNvme(devPresentPath) != IS_PRESENT)
             {
-                // get NVMe information through i2c by busID.
-                auto success = getNVMeInfobyBusID(config.busID, nvmeData);
-                // can not find. create dbus
-                if (iter == nvmes.end())
-                {
-                    log<level::INFO>("SSD plug.",
-                                     entry("index = %s", config.index.c_str()));
-
-                    std::string objPath = NVME_OBJ_PATH + config.index;
-                    auto nvmeSSD = std::make_shared<phosphor::nvme::NvmeSSD>(
-                        bus, objPath.c_str());
-                    nvmes.emplace(config.index, nvmeSSD);
-
-                    setNvmeInventoryProperties(true, nvmeData, inventoryPath);
-                    nvmeSSD->setSensorValueToDbus(nvmeData.sensorValue);
-                    nvmeSSD->setSensorThreshold(
-                        config.criticalHigh, config.criticalLow,
-                        config.maxValue, config.minValue, config.warningHigh,
-                        config.warningLow);
-
-                    nvmeSSD->checkSensorThreshold();
-                    setLEDsStatus(config, success, nvmeData);
-                }
-                else
-                {
-                    setNvmeInventoryProperties(true, nvmeData, inventoryPath);
-                    iter->second->setSensorValueToDbus(nvmeData.sensorValue);
-                    iter->second->checkSensorThreshold();
-                    setLEDsStatus(config, success, nvmeData);
-                }
-
-                isErrorPower[config.index] = false;
-            }
-            else
-            {
-                // Present pin is true but power good pin is false
-                // remove nvme d-bus path, clean all properties in inventory
-                // and turn on fault LED
+                // Drive not present, remove nvme d-bus path ,
+                // clean all properties in inventory
+                // and turn off fault and locate LED
 
                 setFaultLED(config.locateLedGroupPath, config.faultLedGroupPath,
-                            true);
+                            false);
                 setLocateLED(config.locateLedGroupPath,
                              config.locateLedControllerBusName,
                              config.locateLedControllerPath, false);
@@ -540,35 +537,50 @@ void Nvme::read()
                 nvmeData = NVMeData();
                 setNvmeInventoryProperties(false, nvmeData, inventoryPath);
                 nvmes.erase(config.index);
+                return;
+            }
+            else if (config.pwrGoodPin)
+            {
+                devPwrGoodPath = GPIO_BASE_PATH +
+                                 std::to_string(config.pwrGoodPin) + "/value";
 
-                if (isErrorPower[config.index] != true)
+                if (getGPIOValueOfNvme(devPwrGoodPath) != POWERGD)
                 {
-                    log<level::ERR>(
-                        "Present pin is true but power good pin is false.",
-                        entry("index = %s", config.index.c_str()));
-                    log<level::ERR>("Erase SSD from map and d-bus.",
-                                    entry("index = %s", config.index.c_str()));
 
-                    isErrorPower[config.index] = true;
+                    // Present pin is true but power good pin is false
+                    // remove nvme d-bus path, clean all properties in inventory
+                    // and turn on fault LED
+
+                    setFaultLED(config.locateLedGroupPath,
+                                config.faultLedGroupPath, true);
+                    setLocateLED(config.locateLedGroupPath,
+                                 config.locateLedControllerBusName,
+                                 config.locateLedControllerPath, false);
+
+                    nvmeData = NVMeData();
+                    setNvmeInventoryProperties(false, nvmeData, inventoryPath);
+                    nvmes.erase(config.index);
+
+                    if (isErrorPower[config.index] != true)
+                    {
+                        log<level::ERR>(
+                            "Present pin is true but power good pin is false.",
+                            entry("index = %s", config.index.c_str()));
+                        log<level::ERR>(
+                            "Erase SSD from map and d-bus.",
+                            entry("index = %s", config.index.c_str()));
+
+                        isErrorPower[config.index] = true;
+                    }
+                    return;
                 }
             }
         }
-        else
-        {
-            // Drive not present, remove nvme d-bus path ,
-            // clean all properties in inventory
-            // and turn off fault and locate LED
+        // Drive status is good, update value or create d-bus and update
+        // value.
+        readNvmeData(config);
 
-            setFaultLED(config.locateLedGroupPath, config.faultLedGroupPath,
-                        false);
-            setLocateLED(config.locateLedGroupPath,
-                         config.locateLedControllerBusName,
-                         config.locateLedControllerPath, false);
-
-            nvmeData = NVMeData();
-            setNvmeInventoryProperties(false, nvmeData, inventoryPath);
-            nvmes.erase(config.index);
-        }
+        isErrorPower[config.index] = false;
     }
 }
 } // namespace nvme
