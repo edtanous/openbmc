@@ -7,14 +7,110 @@ extern "C" {
 #include <libekb.H>
 #include <libipl.H>
 
+#include <ext_interface.hpp>
 #include <phosphor-logging/log.hpp>
 #include <registration.hpp>
+
+#include "attributes_info.H"
 namespace openpower
 {
 namespace phal
 {
 
 using namespace phosphor::logging;
+
+/**
+ *  @brief  Check if master processor or not
+ *
+ *  @return True/False
+ */
+bool isMasterProc(struct pdbg_target* procTarget)
+{
+    ATTR_PROC_MASTER_TYPE_Type type;
+
+    // Get processor type (Master or Alt-master)
+    if (DT_GET_PROP(ATTR_PROC_MASTER_TYPE, procTarget, type))
+    {
+        log<level::ERR>("Attribute [ATTR_PROC_MASTER_TYPE] get failed");
+        throw std::runtime_error(
+            "Attribute [ATTR_PROC_MASTER_TYPE] get failed");
+    }
+
+    /* Attribute value 0 corresponds to master processor */
+    if (type == 0)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+/**
+ *  @brief  Select BOOT SEEPROM and Measurement SEEPROM(PRIMARY/BACKUP) on POWER
+ *          processor position 0/1 depending on boot count before kicking off
+ *          the boot.
+ *
+ *  @return void
+ */
+void selectBootSeeprom()
+{
+    struct pdbg_target* procTarget;
+    ATTR_BACKUP_SEEPROM_SELECT_Enum bkpSeePromSelect;
+    ATTR_BACKUP_MEASUREMENT_SEEPROM_SELECT_Enum bkpMeaSeePromSelect;
+
+    pdbg_for_each_class_target("proc", procTarget)
+    {
+        if (!isMasterProc(procTarget))
+        {
+            continue;
+        }
+
+        // Choose seeprom side to boot from based on boot count
+        if (getBootCount() > 0)
+        {
+            log<level::INFO>("Setting SBE seeprom side to 0",
+                             entry("SBE_SIDE_SELECT=%d",
+                                   ENUM_ATTR_BACKUP_SEEPROM_SELECT_PRIMARY));
+
+            bkpSeePromSelect = ENUM_ATTR_BACKUP_SEEPROM_SELECT_PRIMARY;
+            bkpMeaSeePromSelect =
+                ENUM_ATTR_BACKUP_MEASUREMENT_SEEPROM_SELECT_PRIMARY;
+        }
+        else
+        {
+            log<level::INFO>("Setting SBE seeprom side to 1",
+                             entry("SBE_SIDE_SELECT=%d",
+                                   ENUM_ATTR_BACKUP_SEEPROM_SELECT_SECONDARY));
+            bkpSeePromSelect = ENUM_ATTR_BACKUP_SEEPROM_SELECT_SECONDARY;
+            bkpMeaSeePromSelect =
+                ENUM_ATTR_BACKUP_MEASUREMENT_SEEPROM_SELECT_SECONDARY;
+        }
+
+        // Set the Attribute as per bootcount policy for boot seeprom
+        if (DT_SET_PROP(ATTR_BACKUP_SEEPROM_SELECT, procTarget,
+                        bkpSeePromSelect))
+        {
+            log<level::ERR>(
+                "Attribute [ATTR_BACKUP_SEEPROM_SELECT] set failed");
+            throw std::runtime_error(
+                "Attribute [ATTR_BACKUP_SEEPROM_SELECT] set failed");
+        }
+
+        // Set the Attribute as per bootcount policy for measurement seeprom
+        if (DT_SET_PROP(ATTR_BACKUP_MEASUREMENT_SEEPROM_SELECT, procTarget,
+                        bkpMeaSeePromSelect))
+        {
+            log<level::ERR>(
+                "Attribute [ATTR_BACKUP_MEASUREMENT_SEEPROM_SELECT] set "
+                "failed");
+            throw std::runtime_error(
+                "Attribute [ATTR_BACKUP_MEASUREMENT_SEEPROM_SELECT] set "
+                "failed");
+        }
+    }
+}
 
 /**
  * @brief Starts the self boot engine on POWER processor position 0
@@ -52,6 +148,22 @@ void startHost()
     }
     // To clear trace if success
     openpower::pel::detail::processBootErrorCallback(true);
+
+    // Run select seeprom before poweron
+    try
+    {
+        selectBootSeeprom();
+
+        // To clear trace as it is success
+        openpower::pel::detail::processBootErrorCallback(true);
+    }
+    catch (const std::exception& ex)
+    {
+        // create PEL in failure
+        openpower::pel::detail::processBootErrorCallback(false);
+        log<level::ERR>("SEEPROM selection failed", entry("ERR=%s", ex.what()));
+        throw ex;
+    }
 
     // callback method will be called upon failure which will create the PEL
     int rc = ipl_run_major(0);

@@ -52,7 +52,7 @@ union sbeMsgReg_t
         uint32_t minorStep : 6;
         uint32_t reserved2 : 6;
 #endif
-    } PACKED;
+    } PACK;
 };
 
 // HB mailbox scratch register 5 - cfam 283C
@@ -78,7 +78,7 @@ union MboxScratch5_HB_t
         uint32_t majorStep : 8;    // 16:23
         uint32_t minorStep : 8;    // 24:31
 #endif
-    } PACKED;
+    } PACK;
 };
 
 static constexpr uint8_t HB_MBX5_VALID_FLAG = 0xAA;
@@ -105,8 +105,8 @@ void collectSBEHBData()
             auto msg = reinterpret_cast<const sbeMsgReg_t*>(&readData);
             log<level::INFO>("SBE status register",
                              entry("PROC=%d", proc->getPos()),
-                             entry("SBE_MAJOR_ISTEP=%d", msg->PACKED.majorStep),
-                             entry("SBE_MINOR_ISTEP=%d", msg->PACKED.minorStep),
+                             entry("SBE_MAJOR_ISTEP=%d", msg->PACK.majorStep),
+                             entry("SBE_MINOR_ISTEP=%d", msg->PACK.minorStep),
                              entry("REG_VAL=0x%08X", msg->data32));
         }
         catch (const std::exception& e)
@@ -122,11 +122,11 @@ void collectSBEHBData()
     {
         auto readData = readReg(master, P9_HB_MBX5_REG);
         auto msg = reinterpret_cast<const MboxScratch5_HB_t*>(&readData);
-        if (HB_MBX5_VALID_FLAG == msg->PACKED.magic)
+        if (HB_MBX5_VALID_FLAG == msg->PACK.magic)
         {
             log<level::INFO>("HB MBOX 5 register",
-                             entry("HB_MAJOR_ISTEP=%d", msg->PACKED.majorStep),
-                             entry("HB_MINOR_ISTEP=%d", msg->PACKED.minorStep),
+                             entry("HB_MAJOR_ISTEP=%d", msg->PACK.majorStep),
+                             entry("HB_MINOR_ISTEP=%d", msg->PACK.minorStep),
                              entry("REG_VAL=0x%08X", msg->data32));
         }
     }

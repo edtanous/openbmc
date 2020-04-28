@@ -73,6 +73,10 @@ AS_IF([test "$enable_phal" == "yes"],
                AC_MSG_ERROR([EKB library not found])
        fi
 
+       PKG_CHECK_MODULES([LIBDT_API], [libdt-api])
+       LIBS="$LIBS $LIBDT_API_LIBS"
+       CFLAGS="$CFLAGS $LIBDT_API_CFLAGS"
+
        CHIPS+=" phal common"
        AC_CONFIG_FILES([set-spi-mux.service])
       ]
