@@ -18,6 +18,13 @@
  * Data Files themselves are updated, which would require reinitialization
  * anyway. Of course, leaving the object in memory chews up resources. So, some
  * users may need to weigh performance vs. memory usage.
+ *
+ * If data for a specific chip type changes and needs to be reinitialized, the
+ * user application must reinitialize all chip data as follows:
+ *
+ *  - Call uninitialize() to flush isolation objects for ALL chip types.
+ *
+ *  - Call initialize() for ALL necessary Chip Data Files.
  */
 
 #pragma once
@@ -45,29 +52,21 @@ namespace libhei
  *
  * Details of the Chip Data File format can be found in CHIP_DATA.md.
  *
- * @param i_buffer     A pointer to the buffer containing a single Chip
- *                     Data File.
+ * IMPORTANT:
+ *   This function will build and store objects as it is parsing the Chip Data
+ *   Files. It will assert:
+ *     - Each file is the proper format and contains valid data.
+ *     - No two files can share the same chip model/level.
+ *   This ensures that the isolator does not use a partial (possibly invalid) or
+ *   duplicate set of objects.
+ *
+ * @param i_buffer A pointer to the buffer containing a single Chip Data File.
  *
  * @param i_bufferSize The size (in bytes) of the target Chip Data File.
- *
- * @param i_forceInit  It is possible the user application could call this
- *                     function for a chip type that has already been
- *                     initialized. This is useful if for some reason the Chip
- *                     Data File for a specific chip type has been updated. If
- *                     this function is called and a chip type has already been
- *                     initialized:
- *                      - false (default), the function will return
- *                        RC_CHIP_DATA_INITIALIZED and exit.
- *                      - true, the function will delete the previous isolation
- *                        objects for this chip type and reinitialize.
- *
- * @return RC_SUCCESS or RC_CHIP_DATA_INVALID or RC_CHIP_DATA_INITIALIZED
  */
-inline ReturnCode initialize(void* i_buffer, size_t i_bufferSize,
-                             bool i_forceInit = false)
+inline void initialize(void* i_buffer, size_t i_bufferSize)
 {
-    return Isolator::getSingleton().initialize(i_buffer, i_bufferSize,
-                                               i_forceInit);
+    Isolator::getSingleton().initialize(i_buffer, i_bufferSize);
 }
 
 /**

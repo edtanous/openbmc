@@ -48,8 +48,7 @@ void SimulatorData::addChip(const Chip& i_chip)
     cdf.close();
 
     // Initilize the chip with this Chip Data File.
-    ReturnCode rc = initialize(buffer, sz_buffer);
-    ASSERT_TRUE(RC_SUCCESS == rc || RC_CHIP_DATA_INITIALIZED == rc);
+    initialize(buffer, sz_buffer);
 
     // Clean up the buffer
     delete[] buffer;

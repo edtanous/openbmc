@@ -68,13 +68,6 @@ class ReturnCode
 /** Function returned successfully. */
 static constexpr ReturnCode RC_SUCCESS                 = ReturnCode();
 
-/** The given Chip Data File is malformed or unsupported. */
-static constexpr ReturnCode RC_CHIP_DATA_INVALID       = ReturnCode(0x00000001);
-
-/** The given Chip Data File contains a chip type that has already been
- *  initialized. */
-static constexpr ReturnCode RC_CHIP_DATA_INITIALIZED   = ReturnCode(0x00000002);
-
 /** The given chip type has not been initialized. */
 static constexpr ReturnCode RC_CHIP_DATA_MISSING       = ReturnCode(0x00000003);
 

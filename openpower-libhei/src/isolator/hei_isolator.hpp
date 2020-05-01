@@ -55,8 +55,7 @@ class Isolator
     }
 
     /** @brief See API wrapper description in hei_main.hpp. */
-    ReturnCode initialize(void* i_buffer, size_t i_bufferSize,
-                          bool i_forceInit = false);
+    void initialize(void* i_buffer, size_t i_bufferSize);
 
     /**
      * @brief See API wrapper description in hei_main.hpp.
