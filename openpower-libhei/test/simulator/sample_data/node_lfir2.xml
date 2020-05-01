@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<attn_node model_ec="SAMPLE_10" name="LFIR2" reg_type="SCOM">
+    <local_fir config="W2" name="LFIR2">
+        <instance addr="0x0000f200" reg_inst="0"/>
+        <action attn_type="CS" config="000"/>
+        <action attn_type="RE" config="010"/>
+    </local_fir>
+    <bit pos="0">Attention A</bit>
+    <bit pos="1">Attention B</bit>
+    <bit pos="2">Attention C</bit>
+    <bit pos="3">Attention D</bit>
+</attn_node>

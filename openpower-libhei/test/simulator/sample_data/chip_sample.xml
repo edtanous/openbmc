@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chip model_ec="SAMPLE_10" name="Sample">
+    <attn_tree attn_type="CS" node_inst="0" root_node="GFIR"/>
+    <attn_tree attn_type="RE" node_inst="0" root_node="GFIR"/>
+</chip>

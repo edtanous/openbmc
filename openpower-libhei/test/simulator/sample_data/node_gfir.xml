@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<attn_node model_ec="SAMPLE_10" name="GFIR" reg_type="SCOM">
+    <register name="GFIR_CS">
+        <instance addr="0xf0000000" reg_inst="0"/>
+    </register>
+    <register name="GFIR_RE">
+        <instance addr="0xf0000001" reg_inst="0"/>
+    </register>
+    <capture_group node_inst="0">
+        <capture_register reg_inst="0" reg_name="GFIR_CS"/>
+        <capture_register reg_inst="0" reg_name="GFIR_RE"/>
+    </capture_group>
+    <rule attn_type="CS" node_inst="0">
+        <expr type="reg" value1="GFIR_CS"/>
+    </rule>
+    <rule attn_type="RE" node_inst="0">
+        <expr type="reg" value1="GFIR_RE"/>
+    </rule>
+    <bit child_node="CFIR0" node_inst="0" pos="0">Attention on CFIR0</bit>
+    <bit child_node="CFIR0" node_inst="1" pos="1">Attention on CFIR1</bit>
+    <bit child_node="CFIR1" node_inst="0" pos="2">Attention on CFIR1</bit>
+</attn_node>

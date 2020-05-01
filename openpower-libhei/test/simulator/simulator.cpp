@@ -10,7 +10,7 @@ namespace libhei
 // Paths are relative from the build/ directory
 const std::map<SimulatorData::ChipType, const char*>
     SimulatorData::cv_chipPath = {
-        {SAMPLE, "../test/simulator/chip_data/sample.cdb"},
+        {SAMPLE, "../test/simulator/sample_data/sample.cdb"},
 };
 
 //------------------------------------------------------------------------------

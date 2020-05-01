@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<attn_node model_ec="SAMPLE_10" name="CFIR1" reg_type="SCOM">
+    <register name="CFIR1_CS">
+        <instance addr="0x00f10000" reg_inst="0"/>
+    </register>
+    <register name="CFIR1_RE">
+        <instance addr="0x00f10001" reg_inst="0"/>
+    </register>
+    <register name="CFIR1_MASK">
+        <instance addr="0x00f10002" reg_inst="0"/>
+    </register>
+    <capture_group node_inst="0">
+        <capture_register reg_inst="0" reg_name="CFIR1_CS"/>
+        <capture_register reg_inst="0" reg_name="CFIR1_RE"/>
+        <capture_register reg_inst="0" reg_name="CFIR1_MASK"/>
+    </capture_group>
+    <rule attn_type="CS" node_inst="0">
+        <expr type="and">
+            <expr type="reg" value1="CFIR1_CS"/>
+            <expr type="not">
+                <expr type="reg" value1="CFIR1_MASK"/>
+            </expr>
+            <expr type="int" value1="0x0FFFFFFFFFFFFFFF"/>
+        </expr>
+    </rule>
+    <rule attn_type="RE" node_inst="0">
+        <expr type="and">
+            <expr type="reg" value1="CFIR1_RE"/>
+            <expr type="not">
+                <expr type="reg" value1="CFIR1_MASK"/>
+            </expr>
+            <expr type="int" value1="0x0FFFFFFFFFFFFFFF"/>
+        </expr>
+    </rule>
+    <bit child_node="LFIR1" node_inst="1" pos="4">Attention on LFIR1</bit>
+    <bit child_node="LFIR1" node_inst="4" pos="5">Attention on LFIR1</bit>
+    <bit child_node="LFIR2" node_inst="0" pos="6">Attention on LFIR2</bit>
+</attn_node>
