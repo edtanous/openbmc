@@ -39,43 +39,55 @@ void parseConfig(char** i_begin, char** i_end, attn::Config* o_config)
     else
     {
         setting = getCliSetting(i_begin, i_end, "--vital");
-        if (std::string("off") == setting)
+        if (nullptr != setting)
         {
-            o_config->clearFlag(attn::enVital);
-        }
-        if (std::string("on") == setting)
-        {
-            o_config->setFlag(attn::enVital);
+            if (std::string("off") == setting)
+            {
+                o_config->clearFlag(attn::enVital);
+            }
+            if (std::string("on") == setting)
+            {
+                o_config->setFlag(attn::enVital);
+            }
         }
 
         setting = getCliSetting(i_begin, i_end, "--checkstop");
-        if (std::string("off") == setting)
+        if (nullptr != setting)
         {
-            o_config->clearFlag(attn::enCheckstop);
-        }
-        if (std::string("on") == setting)
-        {
-            o_config->setFlag(attn::enCheckstop);
+            if (std::string("off") == setting)
+            {
+                o_config->clearFlag(attn::enCheckstop);
+            }
+            if (std::string("on") == setting)
+            {
+                o_config->setFlag(attn::enCheckstop);
+            }
         }
 
         setting = getCliSetting(i_begin, i_end, "--terminate");
-        if (std::string("off") == setting)
+        if (nullptr != setting)
         {
-            o_config->clearFlag(attn::enTerminate);
-        }
-        if (std::string("on") == setting)
-        {
-            o_config->setFlag(attn::enTerminate);
+            if (std::string("off") == setting)
+            {
+                o_config->clearFlag(attn::enTerminate);
+            }
+            if (std::string("on") == setting)
+            {
+                o_config->setFlag(attn::enTerminate);
+            }
         }
 
         setting = getCliSetting(i_begin, i_end, "--breakpoints");
-        if (std::string("off") == setting)
+        if (nullptr != setting)
         {
-            o_config->clearFlag(attn::enBreakpoints);
-        }
-        if (std::string("on") == setting)
-        {
-            o_config->setFlag(attn::enBreakpoints);
+            if (std::string("off") == setting)
+            {
+                o_config->clearFlag(attn::enBreakpoints);
+            }
+            if (std::string("on") == setting)
+            {
+                o_config->setFlag(attn::enBreakpoints);
+            }
         }
     }
 }

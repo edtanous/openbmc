@@ -18,10 +18,18 @@ subdir('attn')
 pthread = declare_dependency(link_args : '-pthread')
 lrt = declare_dependency(link_args : '-lrt')
 
-executable('openpower-hw-diags', 'main.cpp', 'cli.cpp', 'listener.cpp',
-            dependencies : [lrt, pthread],
-            link_with : [analyzer, attn],
-            install : true)
+no_listener_mode = get_option('nlmode')
+
+if not no_listener_mode.disabled()
+  executable('openpower-hw-diags', 'main_nl.cpp', 'cli.cpp',
+              link_with : [analyzer, attn],
+              install : true)
+else
+  executable('openpower-hw-diags', 'main.cpp', 'cli.cpp', 'listener.cpp',
+              dependencies : [lrt, pthread],
+              link_with : [analyzer, attn],
+              install : true)
+endif
 
 build_tests = get_option('tests')
 

@@ -39,9 +39,6 @@ void* threadListener(void* i_params)
 {
     using namespace boost::interprocess;
 
-    // vector to hold messages sent to listener
-    std::vector<std::string> messages;
-
     // remove listener message queue if exists (does not throw)
     message_queue::remove(mq_listener);
 
@@ -62,6 +59,8 @@ void* threadListener(void* i_params)
     // originate from here via the message queue.
     do
     {
+        // vector to hold messages sent to listener
+        std::vector<std::string> messages;
         // we will catch any exceptions from thread library
         try
         {

@@ -1,1 +1,2 @@
 option('tests', type: 'feature', description: 'Build tests')
+option('nlmode', type: 'feature', description: 'no run-time control')
