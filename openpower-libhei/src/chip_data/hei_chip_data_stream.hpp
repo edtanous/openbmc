@@ -1,24 +1,5 @@
 #pragma once
 
-/**
-@file hei_chip_data_stream.hpp
-@brief Description:  The ChipDataStream class
-
-ChipDataStream makes it possible to read a buffer of binary data using the
-stream operators, ">>".
-
-Instantiate ChipDataStream class with a pointer to a data buffer
-and its size in bytes as below:
-
-    ChipDataStream cds(streamData,552);
-
-Use the ">>" stream operator then to read the basic integral types
-(bool, char, uint8_t, int8_t, uint16_t, int16_t, uint32_t,
-int32_t, uint64_t, and int64_t).
-
-Endian issues are taken care of by template specialization.
-**/
-
 #include <endian.h>
 #include <string.h>
 
@@ -27,52 +8,43 @@ Endian issues are taken care of by template specialization.
 namespace libhei
 {
 
-/**
- * ChipDataStream
- * ChipDataStream offers convenient stream operator access to binary data.
- **/
+/** @brief A streaming utility to read a Chip Data File buffer. */
 class ChipDataStream
 {
-
-  private:
-    /** iv_buffer points to the first address of the Chip Data File
-        buffer.  **/
-    const void* const iv_buffer;
-    /** iv_bufferSize is the size of the data buffer.  It is
-        initialized when the ChipDataStream class is instantiated. **/
-    const size_t iv_bufferSize;
-    /** iv_asyncOffset keeps an offset into the buffer.  This
-        offset is incremented appropriately as data is read. **/
-    size_t iv_asyncOffset;
-
   public:
-    /* Constructors */
-
     /**
-    When instantiating the ChipDataStream object a pointer to a
-    data buffer containing all the data and its size is passed
-    into the class.
-    **/
+     * @brief Constructor.
+     * @param i_buffer     A pointer to the buffer.
+     * @param i_bufferSize The buffer size.
+     */
     ChipDataStream(void* i_buffer, size_t i_bufferSize) :
-        iv_asyncOffset(0), iv_buffer(i_buffer), iv_bufferSize(i_bufferSize)
-    {}
+        iv_buffer(i_buffer), iv_bufferSize(i_bufferSize)
+    {
+        HEI_ASSERT(nullptr != i_buffer);
+        HEI_ASSERT(0 < i_bufferSize);
+    }
 
-    /** Eliminate copy and assignment operator constructors **/
-    ChipDataStream(const ChipDataStream&) = delete;
-    ChipDataStream& operator=(const ChipDataStream&) = delete;
-
-    /** Destructor **/
-
+    /** @brief Destructor. */
     ~ChipDataStream() = default;
 
-    /** Functions **/
+    /** @brief Copy constructor. */
+    ChipDataStream(const ChipDataStream&) = delete;
 
-    /**
-     *@brief Default case for "operator>>" template.
-     *@param             D:       A type
-     *@param             o_right: A pointer to where the data is stored
-     *@return            *this:   A pointer to "this" object
-     **/
+    /** @brief Assignment operator. */
+    ChipDataStream& operator=(const ChipDataStream&) = delete;
+
+  private:
+    /** Pointer to the first address of the Chip Data File buffer. */
+    const void* const iv_buffer;
+
+    /** The Chip Data File buffer size. */
+    const size_t iv_bufferSize;
+
+    /** Current byte index within the buffer. */
+    size_t iv_currentIndex = 0;
+
+  public:
+    /** @brief Output stream operator. */
     template <class D>
     ChipDataStream& operator>>(D& o_right)
     {
@@ -82,97 +54,75 @@ class ChipDataStream
 
   private:
     /**
-     *@brief Read does the copy from the buffer
-     *@param o_buf       a pointer to the location to copy to
-     *@param i_size      the size (in bytes) to copy
-     *@return            None\n\n
-     **/
+     * @brief Copies the given number of data bytes into the buffer from the
+     *        current index and then increments the index.
+     * @param o_buf  The output buffer.
+     * @param i_size The number of bytes to copy.
+     */
     void read(void* o_buf, size_t i_size)
     {
-        /* Ensure memory is not accessed outside i_buffer */
-        HEI_ASSERT((iv_asyncOffset + i_size) <= iv_bufferSize);
-        /* Copy appropriate bytes from i_buffer to o_buff */
-        memcpy(o_buf, (char*)iv_buffer + iv_asyncOffset, i_size);
-        /* Increment asynchronous offset to next piece of data */
-        iv_asyncOffset = iv_asyncOffset + i_size;
+        // Check for buffer overflow.
+        HEI_ASSERT((iv_currentIndex + i_size) <= iv_bufferSize);
+
+        // Copy the buffer.
+        memcpy(o_buf, (char*)iv_buffer + iv_currentIndex, i_size);
+
+        // Increment the curent index for the next piece of data.
+        iv_currentIndex += i_size;
     }
 };
 
-/*
- *   Note:  The specializations below ensure the big-endian Chip Data File
- *          format is converted into the host format.
- */
-
-/**
- *   @brief This template extracts a uint16_t data type from the data buffer
- *   @param             o_right: A pointer to where the data is stored
- *   @return            *this:   A pointer to "this" object
- **/
+/** @brief Template specialization for uint16_t. */
 template <>
 inline ChipDataStream& ChipDataStream::operator>>(uint16_t& o_right)
 {
     read(&o_right, sizeof(o_right));
-    be16toh(o_right);
+    o_right = be16toh(o_right); // Chip Data is big-endian
     return *this;
 }
 
-/**@brief This template extracts an int16_t type from the data buffer
- *  @param             o_right: A pointer to where the data is stored
- *  @return            *this:   A pointer to "this" object
- **/
+/** @brief Template specialization for int16_t. */
 template <>
 inline ChipDataStream& ChipDataStream::operator>>(int16_t& o_right)
 {
     read(&o_right, sizeof(o_right));
-    be16toh(o_right);
+    o_right = be16toh(o_right); // Chip Data is big-endian
     return *this;
 }
 
-/**@brief This template extracts a uint32_t type from the data buffer
- *  @param             o_right: A pointer to where the data is stored
- *  @return            *this:   A pointer to "this" object
- **/
+/** @brief Template specialization for uint32_t. */
 template <>
 inline ChipDataStream& ChipDataStream::operator>>(uint32_t& o_right)
 {
     read(&o_right, sizeof(o_right));
-    be32toh(o_right);
+    o_right = be32toh(o_right); // Chip Data is big-endian
     return *this;
 }
 
-/**@brief This template extracts an int32_t type from the data buffer
- *  @param             o_right: A pointer to where the data is stored
- *  @return            *this:   A pointer to "this" object
- **/
+/** @brief Template specialization for int32_t. */
 template <>
 inline ChipDataStream& ChipDataStream::operator>>(int32_t& o_right)
 {
     read(&o_right, sizeof(o_right));
-    be32toh(o_right);
+    o_right = be32toh(o_right); // Chip Data is big-endian
     return *this;
 }
 
-/**@brief This template extracts a uint64_t type from the data buffer
- *  @param             o_right: A pointer to where the data is stored
- *  @return            *this:   A pointer to "this" object
- **/
+/** @brief Template specialization for uint64_t. */
 template <>
 inline ChipDataStream& ChipDataStream::operator>>(uint64_t& o_right)
 {
     read(&o_right, sizeof(o_right));
-    be64toh(o_right);
+    o_right = be64toh(o_right); // Chip Data is big-endian
     return *this;
 }
 
-/**@brief This template extracts an int64_t type from the data buffer
- *  @param             o_right: A pointer to where the data is stored
- *  @return            *this:   A pointer to "this" object
- **/
+/** @brief Template specialization for int64_t. */
 template <>
 inline ChipDataStream& ChipDataStream::operator>>(int64_t& o_right)
 {
     read(&o_right, sizeof(o_right));
-    be64toh(o_right);
+    o_right = be64toh(o_right); // Chip Data is big-endian
     return *this;
 }
 
