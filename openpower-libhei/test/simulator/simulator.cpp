@@ -8,7 +8,7 @@ namespace libhei
 //------------------------------------------------------------------------------
 
 // Paths are relative from the build/ directory
-const std::map<SimulatorData::ChipType, const char*>
+const std::map<SimulatorData::SimChipType, const char*>
     SimulatorData::cv_chipPath = {
         {SAMPLE, "../test/simulator/sample_data/sample.cdb"},
 };
@@ -18,14 +18,25 @@ const std::map<SimulatorData::ChipType, const char*>
 void SimulatorData::addChip(const Chip& i_chip)
 {
     // First check if this entry already exists.
-    auto itr1 = std::find(iv_chipList.begin(), iv_chipList.end(), i_chip);
-    ASSERT_EQ(iv_chipList.end(), itr1);
+    auto chip_itr = std::find(iv_chipList.begin(), iv_chipList.end(), i_chip);
+    ASSERT_EQ(iv_chipList.end(), chip_itr);
 
     // Add the new entry.
     iv_chipList.push_back(i_chip);
 
+    // Check if this chip type has been initialized.
+    ChipType_t chipType = i_chip.getType();
+    auto type_itr = std::find(iv_typeList.begin(), iv_typeList.end(), chipType);
+    if (iv_typeList.end() != type_itr)
+    {
+        return; // No need to continue.
+    }
+
+    // Add the new entry.
+    iv_typeList.push_back(chipType);
+
     // Look for the file path
-    auto itr2 = cv_chipPath.find(static_cast<ChipType>(i_chip.getType()));
+    auto itr2 = cv_chipPath.find(static_cast<SimChipType>(chipType));
     ASSERT_NE(cv_chipPath.end(), itr2);
     const char* path = itr2->second;
 

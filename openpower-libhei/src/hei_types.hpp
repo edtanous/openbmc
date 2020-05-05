@@ -23,16 +23,11 @@ namespace libhei
  *   The values are determined by the chip manufacturer. The isolator does not
  *   need to know the possible values because the user application controls
  *   both the Chip Data Files and the input into the isolation function.
- *   Therefore, no values will be listed in this enum except for the default
- *   invalid type.
  *
  * Range:
  *   A 4-byte field should be sufficient.
  */
-enum ChipType_t : uint32_t
-{
-    CHIP_TYPE_INVALID = 0, ///< invalid/unsupported type
-};
+using ChipType_t = uint32_t;
 
 /**
  * Different chips will contain different types of registers. Also, a single

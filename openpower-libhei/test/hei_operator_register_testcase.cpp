@@ -17,7 +17,7 @@ using namespace libhei;
 int main()
 {
 
-    Chip my_chip;
+    Chip my_chip{nullptr, 0};
     size_t constant1 = CONSTANT1;
     size_t constant2 = CONSTANT2;
 

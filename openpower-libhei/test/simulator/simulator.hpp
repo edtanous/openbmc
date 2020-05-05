@@ -37,17 +37,20 @@ class SimulatorData
 
   public:
     /** The list of supported chip types for the simulator. */
-    enum ChipType
+    enum SimChipType
     {
         SAMPLE = 0xdeadbeef,
     };
 
   private:
     /** The Chip Data file paths for each support chip type. */
-    static const std::map<ChipType, const char*> cv_chipPath;
+    static const std::map<SimChipType, const char*> cv_chipPath;
 
     /** The list of configured chips used throughout a test case. */
     std::vector<Chip> iv_chipList;
+
+    /** The list of configured chip types used throughout a test case. */
+    std::vector<ChipType_t> iv_typeList;
 
     /** The contents of all the SCOM registers used for an iteration of
      *  isolation. */

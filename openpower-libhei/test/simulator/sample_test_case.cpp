@@ -3,6 +3,7 @@
 START_TEST_CASE(SampleTestSet1)
 
 CHIP(proc0, SAMPLE)
+CHIP(proc1, SAMPLE)
 
 START_ITERATION
 

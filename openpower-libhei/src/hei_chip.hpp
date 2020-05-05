@@ -12,14 +12,6 @@ namespace libhei
 class Chip
 {
   public: // Constructors, destructors, assignment, etc.
-    Chip() = default;
-
-    ~Chip() = default;
-
-    Chip(const Chip&) = default;
-
-    Chip& operator=(const Chip&) = default;
-
     /**
      * @brief Constructor.
      * @param i_chip See description for iv_chip.
@@ -28,6 +20,12 @@ class Chip
     Chip(const void* i_chip, ChipType_t i_type) :
         iv_chip(i_chip), iv_type(i_type)
     {}
+
+    ~Chip() = default;
+
+    Chip(const Chip&) = default;
+
+    Chip& operator=(const Chip&) = default;
 
   public: // Accessors
     const void* getChip() const
@@ -60,14 +58,14 @@ class Chip
      * purpose is to eventually get passed back to the user application with
      * information associated with each chip.
      */
-    const void* iv_chip = nullptr;
+    const void* iv_chip;
 
     /**
      * When doing analysis on a chip, the isolator will need to know the chip
      * type in order to look up the correct information from the Chip Data
      * Files.
      */
-    ChipType_t iv_type = CHIP_TYPE_INVALID;
+    ChipType_t iv_type;
 
 }; // end class Chip
 
