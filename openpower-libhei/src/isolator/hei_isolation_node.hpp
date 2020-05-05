@@ -181,4 +181,7 @@ class IsolationNode
     }
 };
 
+/** Simple map to ensure only one root IsolationNode per attention type. */
+using RootNodeMap = std::map<AttentionType_t, const IsolationNode*>;
+
 } // end namespace libhei
