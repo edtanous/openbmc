@@ -59,11 +59,9 @@ void Isolator::uninitialize()
     Flyweight<IdScomRegister>::getSingleton().clear();
 }
 
-ReturnCode Isolator::isolate(const std::vector<Chip>& i_chipList,
-                             IsolationData& o_isoData) const
+void Isolator::isolate(const std::vector<Chip>& i_chipList,
+                       IsolationData& o_isoData) const
 {
-    ReturnCode rc;
-
     // Flush the isolation data to ensure a clean slate.
     o_isoData.flush();
 
@@ -94,8 +92,6 @@ ReturnCode Isolator::isolate(const std::vector<Chip>& i_chipList,
         }
         // END temporary code
     }
-
-    return rc;
 }
 
 } // end namespace libhei

@@ -71,14 +71,7 @@ void SimulatorData::endIteration()
 {
     // Start by calling libhei::isolate().
     IsolationData isoData{};
-    ReturnCode rc = isolate(iv_chipList, isoData);
-
-    // It is possible that even in a failure scenario the information in the
-    // returned IsolationData would be useful.
-    // TODO: Figure out where to put the data.
-
-    // Verify if isolation completed successfully.
-    ASSERT_TRUE(RC_SUCCESS == rc);
+    isolate(iv_chipList, isoData);
 
     // Get the list of signatures found in isolation.
     std::vector<Signature> givenSigList = isoData.getSignatureList();

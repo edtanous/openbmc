@@ -81,8 +81,8 @@ inline void uninitialize()
 /**
  * @brief Isolates all active hardware errors found on the given list of chips.
  *
- * This functions requires initialize() to be called with the Chip Data File
- * corresponding to the given chip types.
+ * This functions will assert that initialize() has been called for each Chip
+ * Data File corresponding to the given chip types.
  *
  * @param i_chipList The list of all chips that need to be analyzed. Generally,
  *                   this would include all processor and memory chips in the
@@ -93,13 +93,11 @@ inline void uninitialize()
  *                   on the given list of chips, the contents of any registers
  *                   associated with the active errors, and any other data that
  *                   can be useful for debug.
- *
- * @return RC_SUCCESS or RC_CHIP_DATA_MISSING
  */
-inline ReturnCode isolate(const std::vector<Chip>& i_chipList,
-                          IsolationData& o_isoData)
+inline void isolate(const std::vector<Chip>& i_chipList,
+                    IsolationData& o_isoData)
 {
-    return Isolator::getSingleton().isolate(i_chipList, o_isoData);
+    Isolator::getSingleton().isolate(i_chipList, o_isoData);
 }
 
 } // end namespace libhei

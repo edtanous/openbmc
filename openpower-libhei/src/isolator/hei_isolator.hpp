@@ -66,8 +66,8 @@ class Isolator
     void uninitialize();
 
     /** @brief See API wrapper description in hei_main.hpp. */
-    ReturnCode isolate(const std::vector<Chip>& i_chipList,
-                       IsolationData& o_isoData) const;
+    void isolate(const std::vector<Chip>& i_chipList,
+                 IsolationData& o_isoData) const;
 
   private:
     // BEGIN temporary code
