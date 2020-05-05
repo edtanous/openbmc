@@ -69,17 +69,6 @@ class Isolator
     void isolate(const std::vector<Chip>& i_chipList,
                  IsolationData& o_isoData) const;
 
-  private:
-    // BEGIN temporary code
-    /**
-     * Provides a list of isolation tree nodes used to start analysis based on
-     * the chip type and attention type.
-     */
-    std::map<ChipType_t,
-             std::vector<std::pair<const IsolationNode*, AttentionType_t>>>
-        iv_isoStart;
-    // END temporary code
-
 }; // end class Isolator
 
 } // end namespace libhei

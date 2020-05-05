@@ -47,7 +47,6 @@ ReturnCode registerRead(const Chip& i_chip, void* o_buffer, size_t& io_bufSize,
             memcpy(o_buffer, &regValue, io_bufSize);
             break;
         }
-        // END temporary code
         default:
             rc = RC_REG_ACCESS_FAILURE;
             HEI_ERR("registerRead(%p,%p,%" PRIu64 ",%" PRIx64 ",%" PRIx64 ")",
