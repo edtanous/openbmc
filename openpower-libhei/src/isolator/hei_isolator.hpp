@@ -1,6 +1,6 @@
 #pragma once
 
-#include <hei_includes.hpp>
+#include <chip_data/hei_chip_data.hpp>
 #include <hei_isolation_data.hpp>
 #include <isolator/hei_isolation_node.hpp>
 
@@ -46,6 +46,10 @@ class Isolator
     /** @brief Assignment operator. */
     Isolator& operator=(const Isolator&) = delete;
 
+  private:
+    /** Keeps track of all chip types that have been initialized. */
+    IsolationChipMap iv_isoChips;
+
   public:
     /** @brief Provides access to a singleton instance of this object. */
     static Isolator& getSingleton()
@@ -55,7 +59,10 @@ class Isolator
     }
 
     /** @brief See API wrapper description in hei_main.hpp. */
-    void initialize(void* i_buffer, size_t i_bufferSize);
+    void initialize(void* i_buffer, size_t i_bufferSize)
+    {
+        parseChipDataFile(i_buffer, i_bufferSize, iv_isoChips);
+    }
 
     /**
      * @brief See API wrapper description in hei_main.hpp.

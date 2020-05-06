@@ -30,10 +30,8 @@ namespace libhei
 class IsolationChip
 {
   public: // Constructors, destructor, assignment
-    /** @brief Default constructor. */
-    IsolationChip(ChipType_t i_chipType, const RootNodeMap& i_rootNodes) :
-        iv_chipType(i_chipType), iv_rootNodes(i_rootNodes)
-    {}
+    /** @brief Constructor. */
+    explicit IsolationChip(ChipType_t i_chipType) : iv_chipType(i_chipType) {}
 
     /** @brief Destructor. */
     ~IsolationChip() = default;
@@ -49,7 +47,7 @@ class IsolationChip
     const ChipType_t iv_chipType;
 
     /** Root nodes for this chip type. */
-    const RootNodeMap iv_rootNodes;
+    RootNodeMap iv_rootNodes;
 
   public: // Member functions
     /**
@@ -68,6 +66,22 @@ class IsolationChip
     {
         return iv_chipType;
     }
+
+    /**
+     * @brief Adds a root node to this chip.
+     * @param i_attnType The target attention type. Will assert this type does
+     *                   not already exist in iv_rootNodes.
+     * @param i_node     The target isolation node for this attention type.
+     */
+    void addRootNode(AttentionType_t i_attnType, IsolationNodePtr i_node)
+    {
+        auto ret = iv_rootNodes.emplace(i_attnType, i_node);
+        HEI_ASSERT(ret.second); // Should have not already existed.
+    }
 };
+
+/** A simple map to ensure only one IsolationChip exists per chip type. */
+using IsolationChipMap =
+    std::map<ChipType_t, const std::unique_ptr<const IsolationChip>>;
 
 } // end namespace libhei

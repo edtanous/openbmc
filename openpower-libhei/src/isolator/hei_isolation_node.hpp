@@ -181,7 +181,10 @@ class IsolationNode
     }
 };
 
+/** Pointer management for isolation nodes. */
+using IsolationNodePtr = std::shared_ptr<IsolationNode>;
+
 /** Simple map to ensure only one root IsolationNode per attention type. */
-using RootNodeMap = std::map<AttentionType_t, const IsolationNode*>;
+using RootNodeMap = std::map<AttentionType_t, const IsolationNodePtr>;
 
 } // end namespace libhei

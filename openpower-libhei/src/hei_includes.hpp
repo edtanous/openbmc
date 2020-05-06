@@ -12,6 +12,7 @@
 #include <stdlib.h>
 
 #include <map>
+#include <memory>
 #include <vector>
 
 // Library includes
