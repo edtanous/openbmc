@@ -52,12 +52,6 @@ org.openbmc.settings.Host:
             default: "NTP"
             validation: list
             allowed: ["NTP", "MANUAL"]
-        TimeOwner:
-            name: time_owner
-            type: s
-            default: "BMC"
-            validation: list
-            allowed: ["BMC", "HOST", "SPLIT", "BOTH"]
         UseDhcpNtp:
             name: use_dhcp_ntp
             type: s
