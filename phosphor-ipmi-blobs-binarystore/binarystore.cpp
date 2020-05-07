@@ -245,7 +245,8 @@ bool BinaryStore::commit()
     /* Store as little endian to be platform agnostic. Consistent with read. */
     auto blobData = blob_.SerializeAsString();
     boost::endian::little_uint64_t sizeLE = blobData.size();
-    std::string commitData(sizeLE.data(), sizeof(sizeLE));
+    std::string commitData(reinterpret_cast<const char*>(sizeLE.data()),
+                           sizeof(sizeLE));
     commitData += blobData;
 
     try
