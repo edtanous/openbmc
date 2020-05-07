@@ -32,6 +32,7 @@
 //  Includes
 //----------------------------------------------------------------------
 
+#include <hei_macros.hpp>
 #include <register/hei_hardware_register.hpp>
 #include <util/hei_bit_string.hpp>
 

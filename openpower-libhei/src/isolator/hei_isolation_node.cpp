@@ -1,3 +1,4 @@
+#include <hei_macros.hpp>
 #include <isolator/hei_isolation_node.hpp>
 
 namespace libhei

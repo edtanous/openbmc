@@ -1,28 +1,22 @@
 # Simulator sources
-sim_src = [
+sim_libhei = [
     'simulator.cpp',
-    'user_interface.cpp',
-]
-
-# Isolator sources
-iso_src = [
-    '../../src/isolator/hei_isolator.cpp',
-    '../../src/isolator/hei_isolation_chip.cpp',
-    '../../src/isolator/hei_isolation_node.cpp',
-    '../../src/register/hei_hardware_register.cpp',
-    '../../src/util/hei_bit_string.cpp',
+    'hei_user_interface.cpp',
+    '../hei_user_defines.cpp'
 ]
 
 # Test cases
-test_src = [
+test_libhei = [
     'sample_test_case.cpp',
 ]
 
 gtest = dependency('gtest', main : true, required : false, method : 'system')
 
+# Build simulator linked locally
 if gtest.found()
-    test('simulator', \
-         executable('simulator', sim_src, iso_src, test_src, \
-                    dependencies : gtest, include_directories: incdir))
+    test('simulator',
+         executable('simulator', sim_libhei, test_libhei,
+                    dependencies : gtest,
+                    link_with : libhei_static,
+                    include_directories: incdir))
 endif
-

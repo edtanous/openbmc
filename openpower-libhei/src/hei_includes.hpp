@@ -23,7 +23,6 @@
 //  Assertion (at a minimum should work like assert() from <cassert>):
 //      HEI_ASSERT(expression)
 //
-#include <hei_user_defines.hpp>
 
 // Internal includes
 #include <hei_chip.hpp>

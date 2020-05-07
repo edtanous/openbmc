@@ -6,6 +6,41 @@
  * The method for actions like hardware register access will vary per user
  * application. Therefore, the user application must define all of the APIs
  * listed below.
+ *
+ *  1.  ReturnCode libhei::registerRead(const Chip& i_chip, void* o_buffer,
+ *                      size_t& io_bufSize, uint64_t i_regType,
+ *                      uint64_t i_address);
+ *
+ *  2.  ReturnCode libhei::registerWrite(const Chip& i_chip, void* i_buffer,
+ *                            size_t& io_bufSize, uint64_t i_regType,
+ *                            uint64_t i_address);
+ *
+ *  3. void libhei::hei_inf(...)
+ *  4. void libhei::hei_err(...)
+ *
+ *  Example user application implementation of hei_inf(...) and hei_err(...)
+ *
+ *  void hei_inf(char* format, ...)
+ *  {
+ *      va_list args;
+ *
+ *      printf("I> ");
+ *      va_start(args, format);
+ *      vprintf(format, args);
+ *      va_end(args);
+ *      printf("\n");
+ *  }
+ *
+ *  void hei_err(char* format, ...)
+ *  {
+ *      va_list args;
+ *
+ *      printf("E> ");
+ *      va_start(args, format);
+ *      vprintf(format, args);
+ *      va_end(args);
+ *      printf("\n");
+ *  }
  */
 
 #include <hei_includes.hpp>
@@ -76,6 +111,12 @@ ReturnCode registerRead(const Chip& i_chip, void* o_buffer, size_t& io_bufSize,
  */
 ReturnCode registerWrite(const Chip& i_chip, void* i_buffer, size_t& io_bufSize,
                          uint64_t i_regType, uint64_t i_address);
+
+// used by HEI_INF macro in this library
+void hei_inf(char* format, ...); // implemented in user application
+
+// used by HEI_ERR macro in this library
+void hei_err(char* format, ...); // implemented in user application
 
 #endif
 
