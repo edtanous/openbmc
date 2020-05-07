@@ -54,8 +54,8 @@ Environment configuration
 Development Notes
 -----------------
 
- * The Hostboot and FSP environments only support up to **C++11**. Therefore,
-   this library cannot use anything newer at this time.
+ * The Hostboot environment only support up to **C++14**. Therefore, this
+   library cannot use anything newer at this time.
  * Hostboot has a very limited environment. It does not include libc or
    libstdc++. However, Hostboot has implemented select functions from those
    libraries as needed. For details, you can reference `src/include/` in the

@@ -3,7 +3,7 @@ project('openpower-libhei', 'cpp',
         default_options: [
             'warning_level=3',
             'werror=true',
-            'cpp_std=c++11',
+            'cpp_std=c++14',
             'cpp_args=-Wno-unused-parameter'
        ])
 
