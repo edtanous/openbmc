@@ -28,7 +28,6 @@ install_headers('src/hei_chip.hpp',
                 'src/hei_isolation_data.hpp',
                 'src/hei_macros.hpp',
                 'src/hei_main.hpp',
-                'src/hei_return_code.hpp',
                 'src/hei_types.hpp',
                 'src/hei_user_interface.hpp',
                 subdir : 'libhei')

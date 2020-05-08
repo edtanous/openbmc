@@ -56,9 +56,9 @@ BitString& HardwareRegister::accessBitString(const Chip& i_chip)
 
 //------------------------------------------------------------------------------
 
-ReturnCode HardwareRegister::read(const Chip& i_chip, bool i_force) const
+bool HardwareRegister::read(const Chip& i_chip, bool i_force) const
 {
-    ReturnCode rc;
+    bool accessFailure = false;
 
     // Verify this register belongs on i_chip.
     verifyAccessorChip(i_chip);
@@ -78,9 +78,9 @@ ReturnCode HardwareRegister::read(const Chip& i_chip, bool i_force) const
         size_t sz_buffer = BitString::getMinBytes(bs.getBitLen());
 
         // Read this register from hardware.
-        rc = registerRead(i_chip, bs.getBufAddr(), sz_buffer, getRegisterType(),
-                          getAddress());
-        if (RC_SUCCESS != rc)
+        accessFailure = registerRead(i_chip, bs.getBufAddr(), sz_buffer,
+                                     getRegisterType(), getAddress());
+        if (accessFailure)
         {
             // The read failed and we can't trust what was put in the register
             // cache. So remove this instance's entry from the cache.
@@ -94,16 +94,16 @@ ReturnCode HardwareRegister::read(const Chip& i_chip, bool i_force) const
         }
     }
 
-    return rc;
+    return accessFailure;
 }
 
 //------------------------------------------------------------------------------
 
 #ifndef __HEI_READ_ONLY
 
-ReturnCode HardwareRegister::write(const Chip& i_chip) const
+bool HardwareRegister::write(const Chip& i_chip) const
 {
-    ReturnCode rc;
+    bool accessFailure = false;
 
     // Verify this register belongs on i_chip.
     verifyAccessorChip(i_chip);
@@ -122,17 +122,17 @@ ReturnCode HardwareRegister::write(const Chip& i_chip) const
     size_t sz_buffer = BitString::getMinBytes(bs.getBitLen());
 
     // Write to this register to hardware.
-    rc = registerWrite(i_chip, bs.getBufAddr(), sz_buffer, getRegisterType(),
-                       getAddress());
+    accessFailure = registerWrite(i_chip, bs.getBufAddr(), sz_buffer,
+                                  getRegisterType(), getAddress());
 
-    if (RC_SUCCESS == rc)
+    if (accessFailure)
     {
         // Sanity check. The returned size of the data written to the buffer
         // should match the register size.
         HEI_ASSERT(getSize() == sz_buffer);
     }
 
-    return rc;
+    return accessFailure;
 }
 
 #endif // __HEI_READ_ONLY

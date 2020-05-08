@@ -15,10 +15,10 @@ namespace libhei
 
 //------------------------------------------------------------------------------
 
-ReturnCode registerRead(const Chip& i_chip, void* o_buffer, size_t& io_bufSize,
-                        uint64_t i_regType, uint64_t i_address)
+bool registerRead(const Chip& i_chip, void* o_buffer, size_t& io_bufSize,
+                  uint64_t i_regType, uint64_t i_address)
 {
-    ReturnCode rc{};
+    bool accessFailure = false;
 
     HEI_ASSERT(nullptr != o_buffer);
     HEI_ASSERT(0 != io_bufSize);
@@ -49,23 +49,23 @@ ReturnCode registerRead(const Chip& i_chip, void* o_buffer, size_t& io_bufSize,
             break;
         }
         default:
-            rc = RC_REG_ACCESS_FAILURE;
+            accessFailure = true;
             HEI_ERR("registerRead(%p,%p,%" PRIu64 ",%" PRIx64 ",%" PRIx64 ")",
                     i_chip.getChip(), o_buffer, (uint64_t)io_bufSize, i_regType,
                     i_address);
     }
 
-    return rc;
+    return accessFailure;
 }
 
 //------------------------------------------------------------------------------
 
 #ifndef __HEI_READ_ONLY
 
-ReturnCode registerWrite(const Chip& i_chip, void* i_buffer, size_t& io_bufSize,
-                         uint64_t i_regType, uint64_t i_address)
+bool registerWrite(const Chip& i_chip, void* i_buffer, size_t& io_bufSize,
+                   uint64_t i_regType, uint64_t i_address)
 {
-    ReturnCode rc{};
+    bool accessFailure = false;
 
     HEI_ASSERT(nullptr != i_buffer);
     HEI_ASSERT(0 != io_bufSize);
@@ -74,13 +74,13 @@ ReturnCode registerWrite(const Chip& i_chip, void* i_buffer, size_t& io_bufSize,
     {
         // TODO: add cases for REG_TYPE_SCOM and REG_TYPE_ID_SCOM
         default:
-            rc = RC_REG_ACCESS_FAILURE;
+            accessFailure = true;
             HEI_ERR("registerWrite(%p,%p,%" PRIu64 ",%" PRIx64 ",%" PRIx64 ")",
                     i_chip.getChip(), i_buffer, (uint64_t)io_bufSize, i_regType,
                     i_address);
     }
 
-    return rc;
+    return accessFailure;
 }
 
 #endif

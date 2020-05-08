@@ -156,7 +156,7 @@ class HardwareRegister : public Register
      *                 read from hardware and update the cache.
      * @return See the return code from the registerRead() user interface API.
      */
-    ReturnCode read(const Chip& i_chip, bool i_force = false) const;
+    bool read(const Chip& i_chip, bool i_force = false) const;
 
 #ifndef __HEI_READ_ONLY
 
@@ -166,7 +166,7 @@ class HardwareRegister : public Register
      * @param  i_chip  The target chip in which this register belongs.
      * @return See the return code from the registerWrite() user interface API.
      */
-    ReturnCode write(const Chip& i_chip) const;
+    bool write(const Chip& i_chip) const;
 
 #endif // __HEI_READ_ONLY
 

@@ -72,12 +72,13 @@ namespace libhei
  *                   address (right justified), which is provided to the
  *                   isolator by the user application via the Chip Data Files.
  *
- * @return RC_SUCCESS or RC_REG_ACCESS_FAILURE. Note that in the case of a
- *         failure the user application is responsible for reporting why the
- *         register access failed.
+ * @return false => register access was successful
+ *         true  => hardware access failure
+ *         Note that in the case of a failure, the user application is
+ *         responsible for reporting why the register access failed.
  */
-ReturnCode registerRead(const Chip& i_chip, void* o_buffer, size_t& io_bufSize,
-                        uint64_t i_regType, uint64_t i_address);
+bool registerRead(const Chip& i_chip, void* o_buffer, size_t& io_bufSize,
+                  uint64_t i_regType, uint64_t i_address);
 
 #ifndef __HEI_READ_ONLY
 
@@ -105,12 +106,13 @@ ReturnCode registerRead(const Chip& i_chip, void* o_buffer, size_t& io_bufSize,
  *                   address (right justified), which is provided to the
  *                   isolator by the user application via the Chip Data Files.
  *
- * @return RC_SUCCESS or RC_REG_ACCESS_FAILURE. Note that in the case of a
- *         failure the user application is responsible for reporting why the
- *         register access failed.
+ * @return false => register access was successful
+ *         true  => hardware access failure
+ *         Note that in the case of a failure, the user application is
+ *         responsible for reporting why the register access failed.
  */
-ReturnCode registerWrite(const Chip& i_chip, void* i_buffer, size_t& io_bufSize,
-                         uint64_t i_regType, uint64_t i_address);
+bool registerWrite(const Chip& i_chip, void* i_buffer, size_t& io_bufSize,
+                   uint64_t i_regType, uint64_t i_address);
 
 // used by HEI_INF macro in this library
 void hei_inf(char* format, ...); // implemented in user application

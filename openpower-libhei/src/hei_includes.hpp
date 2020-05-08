@@ -26,5 +26,4 @@
 
 // Internal includes
 #include <hei_chip.hpp>
-#include <hei_return_code.hpp>
 #include <hei_types.hpp>
