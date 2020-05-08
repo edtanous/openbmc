@@ -89,7 +89,7 @@ class IsolationNode
      * Each bit (key) in this map indicates that an attention was driven from
      * another register (value).
      */
-    std::map<RegisterBit_t, const IsolationNode*> iv_children;
+    std::map<BitPosition_t, const IsolationNode*> iv_children;
 
   public: // Member functions
     /**
@@ -136,7 +136,7 @@ class IsolationNode
      * @param The target bit on this register.
      * @param The child register to analyze for the given bit.
      */
-    void addChild(RegisterBit_t i_bit, const IsolationNode* i_child);
+    void addChild(BitPosition_t i_bit, const IsolationNode* i_child);
 
   public: // Operators
     /** @brief Equals operator. */

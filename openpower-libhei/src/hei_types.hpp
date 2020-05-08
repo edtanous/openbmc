@@ -25,7 +25,7 @@ namespace libhei
  *   both the Chip Data Files and the input into the isolation function.
  *
  * Range:
- *   A 4-byte field should be sufficient.
+ *   This is defined as a 4-byte field in the Chip Data Files.
  */
 using ChipType_t = uint32_t;
 
@@ -39,68 +39,58 @@ using ChipType_t = uint32_t;
  *   The supported register types are listed in this enum.
  *
  * Range:
- *   Power Systems only have a couple different types that would be accessed by
- *   the isolator. The minimum 1-byte field should be sufficient.
+ *   This is defined as the minimum 1-byte field in the Chip Data Files.
  */
 enum RegisterType_t : uint8_t
 {
-    REG_TYPE_INVALID = 0, ///< invalid/unsupported type
-    REG_TYPE_SCOM    = 1, ///< Power Systems SCOM register.
-    REG_TYPE_ID_SCOM = 2, ///< Power Systems Indirect SCOM register.
+    REG_TYPE_SCOM    = 0x01, ///< Power Systems SCOM register.
+    REG_TYPE_ID_SCOM = 0x02, ///< Power Systems Indirect SCOM register.
 };
 
 /**
  * Each register within a chip must have a unique ID. These IDs (combined with
  * other information) will be passed back to the user application to identify
- * all of the active errors reported by this chip. Note that some registers will
- * have multiple instances within a chip. An ID will be used for all instances
- * of a register. See enum RegisterInstance_t for details on the register
- * instance value.
+ * register contents captured for debugging purposes. Note that some registers
+ * will have multiple instances within a chip. An ID will be used for all
+ * instances of a register. See Instance_t for details on the register instance
+ * value.
  *
  * Values:
  *   The isolator does not need to know the possible values because the values
- *   are passed from the Chip Data Files to the user application. Therefore, no
- *   values will be listed in this enum except for the default invalid type.
+ *   are passed from the Chip Data Files to the user application.
  *
  * Range:
- *   A 2-byte field should be sufficient to support up to 65535 registers on a
- *   chip.
+ *   This is defined as a 3-byte field in the Chip Data Files, which should be
+ *   sufficient to support all the registers on a typical chip.
  */
-enum RegisterId_t : uint16_t
-{
-    REG_ID_INVALID = 0, ///< invalid/unsupported type
-};
+using RegisterId_t = uint32_t; // IMPORTANT: see range note above.
 
 /**
- * A chip could contain more than one instance of a register. For example, a
- * register could exist for each instance of a core on a processor chip.
- * This field will be used to differeniate multiple instances of a register in
- * order to avoid repeating common information for every instance.
+ * A chip could contain more than one instance of a register or node. For
+ * example, a register could exist for each instance of a core on a processor
+ * chip. This field will be used to differeniate multiple instances of a
+ * register in order to avoid repeating common information for every instance.
  *
  * Values:
- *   Not all registers will have multiple instances. So the default instance
- *   value is 0, which always indicates the first (or only) logical instance.
- *   Then a value of 1-255 can be used for each subsequent instance.
+ *   Not all registers or nodes will have multiple instances. So the default
+ *   instance value is 0, which always indicates the first (or only) logical
+ *   instance. Then a value of 1-255 can be used for each subsequent instance.
  *
  * Range:
- *   The 1-byte field should be sufficient.
+ *   This is defined as a 1-byte field in the Chip Data Files.
  */
-enum RegisterInstance_t : uint8_t
-{
-    REG_INST_DEFAULT = 0, ///< indicates the first (or only) logical instance
-};
+using Instance_t = uint8_t;
 
 /**
- * This is used to defined a bit field for a register. It is mainly used in the
- * Signature class to indicate which bit on a register had an active attention.
+ * This is used to defined a bit field for a register or node.
  *
  * Values:
- *   The widest supported register is only 64-bits (value 0-63).
+ *   The widest supported register type is only 64-bits (value 0-63).
  *
  * Range:
- *   Only the minimum 1-byte field is necessary.
+ *   This is defined as a 1-byte field in the Chip Data Files.
  */
-typedef uint8_t RegisterBit_t;
+using BitPosition_t = uint8_t;
 
 /**
  * The hardware address of a register (right justified).
@@ -111,10 +101,7 @@ typedef uint8_t RegisterBit_t;
  * Range:
  *   The maximum supported address requires an 8-byte field.
  */
-enum RegisterAddress_t : uint64_t
-{
-    REG_ADDR_INVALID = 0, ///< invalid/unsupported address
-};
+using RegisterAddress_t = uint64_t;
 
 /**
  * The hardware access level of a register.
@@ -123,7 +110,7 @@ enum RegisterAddress_t : uint64_t
  *   The supported access levels are listed in this enum.
  *
  * Range:
- *   Only the minimum 1-byte field is necessary.
+ *   This is defined as a 1-byte field in the Chip Data Files.
  */
 enum RegisterAccessLevel_t : uint8_t
 {
@@ -143,7 +130,7 @@ enum RegisterAccessLevel_t : uint8_t
  *   The supported attention types are listed in this enum.
  *
  * Range:
- *   Only the minimum 1-byte field is necessary.
+ *   This is defined as a 1-byte field in the Chip Data Files.
  */
 enum AttentionType_t : uint8_t
 {

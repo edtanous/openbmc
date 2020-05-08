@@ -49,7 +49,7 @@ class HardwareRegister : public Register
      * @param i_accessLevel Hardware access level for this register.
      */
     HardwareRegister(ChipType_t i_chipType, RegisterId_t i_id,
-                     RegisterInstance_t i_instance,
+                     Instance_t i_instance,
                      RegisterAccessLevel_t i_accessLevel) :
         Register(),
         iv_chipType(i_chipType), iv_id(i_id), iv_instance(i_instance),
@@ -66,7 +66,7 @@ class HardwareRegister : public Register
     /** A register may have multiple instances. All of which will have the same
      *  ID. This variable is used to distinguish between each instance of the
      *  register. */
-    const RegisterInstance_t iv_instance;
+    const Instance_t iv_instance;
 
     /** The hardware access level of this register (read/write, read-only,
      *  write-only, etc.). */
@@ -86,7 +86,7 @@ class HardwareRegister : public Register
     }
 
     /* @return The instance of this register. */
-    RegisterInstance_t getInstance() const
+    Instance_t getInstance() const
     {
         return iv_instance;
     }

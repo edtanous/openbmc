@@ -25,9 +25,8 @@ class Signature
      * @param i_bit      The target bit within this register.
      * @param i_attnType The attention type reported by this bit.
      */
-    Signature(const Chip& i_chip, RegisterId_t i_id,
-              RegisterInstance_t i_instance, RegisterBit_t i_bit,
-              AttentionType_t i_attnType) :
+    Signature(const Chip& i_chip, RegisterId_t i_id, Instance_t i_instance,
+              BitPosition_t i_bit, AttentionType_t i_attnType) :
         iv_chip(i_chip),
         iv_id(i_id), iv_instance(i_instance), iv_bit(i_bit),
         iv_attnType(i_attnType)
@@ -43,11 +42,11 @@ class Signature
     Signature& operator=(const Signature&) = default;
 
   private:
-    Chip iv_chip;                   ///< Chip containing this register.
-    RegisterId_t iv_id;             ///< Register ID.
-    RegisterInstance_t iv_instance; ///< Instance of this register.
-    RegisterBit_t iv_bit;           ///< Target bit within this register.
-    AttentionType_t iv_attnType;    ///< Attention type reported by this bit.
+    Chip iv_chip;                ///< Chip containing this register.
+    RegisterId_t iv_id;          ///< Register ID.
+    Instance_t iv_instance;      ///< Instance of this register.
+    BitPosition_t iv_bit;        ///< Target bit within this register.
+    AttentionType_t iv_attnType; ///< Attention type reported by this bit.
 
   public: // Member functions
     /** @return The chip containing this register. */
@@ -63,13 +62,13 @@ class Signature
     }
 
     /** @return The instance of this register. */
-    RegisterInstance_t getInstance() const
+    Instance_t getInstance() const
     {
         return iv_instance;
     }
 
     /** @return The target bit within this register. */
-    RegisterBit_t getBit() const
+    BitPosition_t getBit() const
     {
         return iv_bit;
     }

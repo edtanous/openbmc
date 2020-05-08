@@ -25,8 +25,8 @@ class ScomRegister : public HardwareRegister
      * @param i_address     A 4-byte address for this SCOM register.
      */
     ScomRegister(ChipType_t i_chipType, RegisterId_t i_id,
-                 RegisterInstance_t i_instance,
-                 RegisterAccessLevel_t i_accessLevel, uint32_t i_address) :
+                 Instance_t i_instance, RegisterAccessLevel_t i_accessLevel,
+                 uint32_t i_address) :
         HardwareRegister(i_chipType, i_id, i_instance, i_accessLevel),
         iv_address(i_address)
     {}
@@ -106,8 +106,8 @@ class IdScomRegister : public HardwareRegister
      * @param i_address     An 8-byte address for this Indirect SCOM register.
      */
     IdScomRegister(ChipType_t i_chipType, RegisterId_t i_id,
-                   RegisterInstance_t i_instance,
-                   RegisterAccessLevel_t i_accessLevel, uint64_t i_address) :
+                   Instance_t i_instance, RegisterAccessLevel_t i_accessLevel,
+                   uint64_t i_address) :
         HardwareRegister(i_chipType, i_id, i_instance, i_accessLevel),
         iv_address(i_address)
     {}

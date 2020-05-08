@@ -221,8 +221,8 @@ class SimulatorData
 #define EXP_SIG(CHIP, ID, INST, BIT, TYPE)                                     \
     simData.addSignature(libhei::Signature{                                    \
         CHIP, static_cast<libhei::RegisterId_t>(ID),                           \
-        static_cast<libhei::RegisterInstance_t>(INST),                         \
-        static_cast<libhei::RegisterBit_t>(BIT), libhei::ATTN_TYPE_##TYPE});
+        static_cast<libhei::Instance_t>(INST),                                 \
+        static_cast<libhei::BitPosition_t>(BIT), libhei::ATTN_TYPE_##TYPE});
 
 /**
  * This is the end of an iteration that began with START_ITERATION. All of the
