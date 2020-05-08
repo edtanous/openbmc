@@ -28,7 +28,7 @@ configure_file(
 # see if phosphor-logging is available, if not use test case logging code
 h = 'phosphor-logging/log.hpp'
 if cmplr.compiles('#include <@0@>'.format(h), name : '#include <@0@>'.format(h))
-    logging_src = 'logging.cpp'
+    logging_src = 'attn_logging.cpp'
 else
     logging_src = '../test/end2end/logging.cpp'
 endif

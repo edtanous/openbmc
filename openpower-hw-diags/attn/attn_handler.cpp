@@ -1,12 +1,13 @@
 #include <analyzer/analyzer_main.hpp>
 #include <attention.hpp>
 #include <attn_config.hpp>
+#include <attn_logging.hpp>
 #include <bp_handler.hpp>
-#include <logging.hpp>
 #include <ti_handler.hpp>
 
 #include <algorithm>
 #include <iomanip>
+#include <map>
 #include <sstream>
 #include <vector>
 
@@ -14,8 +15,13 @@ namespace attn
 {
 
 /** @brief Return codes */
-static constexpr int RC_SUCCESS     = 0;
-static constexpr int RC_NOT_SUCCESS = 1;
+enum ReturnCodes
+{
+    RC_SUCCESS = 0,
+    RC_NOT_HANDLED,
+    RC_ANALYZER_ERROR,
+    RC_CFAM_ERROR
+};
 
 /**
  * @brief Handle SBE vital attention
@@ -59,24 +65,28 @@ void attnHandler(Config* i_config)
     uint32_t proc;
 
     // loop through processors looking for active attentions
-    log<level::INFO>("Attention handler started");
+    trace<level::INFO>("Attention handler started");
 
     pdbg_target* target;
     pdbg_for_each_class_target("fsi", target)
     {
-        log<level::INFO>("iterating targets");
+        trace<level::INFO>("iterating targets");
         if (PDBG_TARGET_ENABLED == pdbg_target_probe(target))
         {
             proc = pdbg_target_index(target); // get processor number
 
             std::stringstream ss; // log message stream
             ss << "checking processor " << proc;
-            log<level::INFO>(ss.str().c_str());
+            trace<level::INFO>(ss.str().c_str());
 
             // get active attentions on processor
             if (RC_SUCCESS != fsi_read(target, 0x1007, &isr_val))
             {
-                log<level::INFO>("Error! cfam read 0x1007 FAILED");
+                // event
+                eventAttentionFail(RC_CFAM_ERROR);
+
+                // trace
+                trace<level::INFO>("Error! cfam read 0x1007 FAILED");
             }
             else
             {
@@ -84,12 +94,16 @@ void attnHandler(Config* i_config)
                 ss << "cfam 0x1007 = 0x";
                 ss << std::hex << std::setw(8) << std::setfill('0');
                 ss << isr_val;
-                log<level::INFO>(ss.str().c_str());
+                trace<level::INFO>(ss.str().c_str());
 
                 // get interrupt enabled special attentions mask
                 if (RC_SUCCESS != fsi_read(target, 0x100d, &isr_mask))
                 {
-                    log<level::INFO>("Error! cfam read 0x100d FAILED");
+                    // event
+                    eventAttentionFail(RC_CFAM_ERROR);
+
+                    // trace
+                    trace<level::INFO>("Error! cfam read 0x100d FAILED");
                 }
                 else
                 {
@@ -97,7 +111,7 @@ void attnHandler(Config* i_config)
                     ss << "cfam 0x100d = 0x";
                     ss << std::hex << std::setw(8) << std::setfill('0');
                     ss << isr_mask;
-                    log<level::INFO>(ss.str().c_str());
+                    trace<level::INFO>(ss.str().c_str());
 
                     // bit 0 on "left": bit 30 = SBE vital attention
                     if (isr_val & isr_mask & 0x00000002)
@@ -138,6 +152,7 @@ void attnHandler(Config* i_config)
         // handle highest priority attention, done if successful
         if (RC_SUCCESS == active_attentions.front().handle())
         {
+            // an attention was handled so we are done
             break;
         }
 
@@ -160,16 +175,28 @@ int handleVital(Attention* i_attention)
 {
     int rc = RC_SUCCESS; // assume vital handled
 
+    trace<level::INFO>("vital handler started");
+
     // if vital handling enabled, handle vital attention
     if (false == (i_attention->getConfig()->getFlag(enVital)))
     {
-        log<level::INFO>("vital handling disabled");
-        rc = RC_NOT_SUCCESS;
+        trace<level::INFO>("vital handling disabled");
     }
     else
     {
-        log<level::INFO>("vital NOT handled");
-        rc = RC_NOT_SUCCESS;
+        // TODO need vital attention handling
+
+        // FIXME TEMP CODE - begin
+        if (0)
+        {
+            eventVital();
+        }
+        else
+        {
+            trace<level::INFO>("vital NOT handled"); // enabled but not handled
+            rc = RC_NOT_HANDLED;
+        }
+        // FIXME TEMP CODE -end
     }
 
     return rc;
@@ -187,16 +214,33 @@ int handleCheckstop(Attention* i_attention)
 {
     int rc = RC_SUCCESS; // assume checkstop handled
 
+    trace<level::INFO>("checkstop handler started");
+
     // if checkstop handling enabled, handle checkstop attention
     if (false == (i_attention->getConfig()->getFlag(enCheckstop)))
     {
-        log<level::INFO>("Checkstop handling disabled");
-        rc = RC_NOT_SUCCESS;
+        trace<level::INFO>("Checkstop handling disabled");
     }
     else
     {
-        analyzer::analyzeHardware();
-        rc = RC_SUCCESS;
+        // errors that were isolated
+        std::map<std::string, std::string> errors;
+
+        rc = analyzer::analyzeHardware(errors); // analyze hardware
+
+        if (RC_SUCCESS != rc)
+        {
+            rc = RC_ANALYZER_ERROR;
+        }
+        else
+        {
+            std::stringstream ss;
+            ss << "Analyzer isolated " << errors.size() << " error(s)";
+            trace<level::INFO>(ss.str().c_str());
+
+            // add checkstop event to log
+            eventCheckstop(errors);
+        }
     }
 
     return rc;
@@ -211,8 +255,11 @@ int handleCheckstop(Attention* i_attention)
  */
 int handleSpecial(Attention* i_attention)
 {
-    int rc = RC_NOT_SUCCESS; // assume special attention handling disabled
+    int rc = RC_SUCCESS; // assume special attention handled
 
+    trace<level::INFO>("special attention handler started");
+
+    // TODO
     // Until the special attention chipop is availabe we will treat the special
     // attention as a TI. If TI handling is disabled we will treat the special
     // attention as a breakpopint.
@@ -220,27 +267,28 @@ int handleSpecial(Attention* i_attention)
     // TI attention gets priority over breakpoints, if enabled then handle
     if (true == (i_attention->getConfig()->getFlag(enTerminate)))
     {
-        log<level::INFO>("TI (terminate immediately)");
+        trace<level::INFO>("TI (terminate immediately)");
 
         // Call TI special attention handler
         tiHandler();
-        rc = RC_SUCCESS;
+
+        // generate log event
+        eventTerminate();
     }
     else
     {
         if (true == (i_attention->getConfig()->getFlag(enBreakpoints)))
         {
-            log<level::INFO>("breakpoint");
+            trace<level::INFO>("breakpoint");
 
             // Call the breakpoint special attention handler
             bpHandler();
-            rc = RC_SUCCESS;
         }
     }
 
     if (RC_SUCCESS != rc)
     {
-        log<level::INFO>("Special attn handling disabled");
+        trace<level::INFO>("Special attn handling disabled");
     }
 
     return rc;

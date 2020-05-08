@@ -27,7 +27,7 @@
  */
 int main(int argc, char* argv[])
 {
-    int rc = 0; // assume success
+    int rc = RC_SUCCESS; // assume success
 
     using namespace boost::interprocess;
 
@@ -52,7 +52,20 @@ int main(int argc, char* argv[])
         // Either analyze (application mode) or daemon mode
         if (true == getCliOption(argv, argv + argc, "--analyze"))
         {
-            analyzer::analyzeHardware();
+            // errors that were isolated
+            std::map<std::string, std::string> errors;
+
+            rc = analyzer::analyzeHardware(errors); // analyze hardware
+            if (RC_SUCCESS == rc)
+            {
+                // TODO - add error processing/display
+
+                printf("analyzer isolated %i errors", (int)errors.size());
+            }
+            else
+            {
+                printf("analyzer/isolator error encountered\n");
+            }
         }
         // daemon mode
         else

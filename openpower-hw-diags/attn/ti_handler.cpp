@@ -1,4 +1,4 @@
-#include <logging.hpp>
+#include <attn_logging.hpp>
 #include <sdbusplus/bus.hpp>
 
 namespace attn
@@ -8,7 +8,7 @@ namespace attn
 void tiHandler()
 {
     // trace message
-    log<level::INFO>("start host diagnostic mode service");
+    trace<level::INFO>("start host diagnostic mode service");
 
     // Use the systemd service manager object interface to call the start unit
     // method with the obmc-host-diagnostic-mode target.

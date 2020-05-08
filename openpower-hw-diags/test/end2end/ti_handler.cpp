@@ -1,4 +1,4 @@
-#include <attn/logging.hpp>
+#include <attn/attn_logging.hpp>
 
 namespace attn
 {
@@ -7,7 +7,7 @@ namespace attn
 void tiHandler()
 {
     // trace message
-    log<level::INFO>("TI handler");
+    trace<level::INFO>("TI handler");
 }
 
 } // namespace attn

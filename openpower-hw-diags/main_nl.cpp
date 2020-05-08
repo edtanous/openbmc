@@ -1,10 +1,22 @@
 #include <libpdbg.h>
 
 #include <analyzer/analyzer_main.hpp>
+#include <attn/attention.hpp>
 #include <attn/attn_config.hpp>
+#include <attn/attn_handler.hpp>
 #include <attn/attn_main.hpp>
 #include <cli.hpp>
 
+// FIXME TEMP CODE - begin
+
+namespace attn
+{
+int handleCheckstop(Attention* i_attention);
+} // namespace attn
+
+// FIXME TEMP CODE - end
+
+//
 /**
  * @brief Attention handler application main()
  *
@@ -35,7 +47,12 @@ int main(int argc, char* argv[])
         // Either analyze (application mode) or daemon mode
         if (true == getCliOption(argv, argv + argc, "--analyze"))
         {
-            analyzer::analyzeHardware();
+            // errors that were isolated
+            std::map<std::string, std::string> errors;
+
+            rc = analyzer::analyzeHardware(errors); // analyze hardware
+
+            printf("analyzer isolated %i errors", (int)errors.size());
         }
         // daemon mode
         else
