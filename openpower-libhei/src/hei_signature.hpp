@@ -1,6 +1,7 @@
 #pragma once
 
-#include <hei_includes.hpp>
+#include <hei_chip.hpp>
+#include <hei_types.hpp>
 
 namespace libhei
 {

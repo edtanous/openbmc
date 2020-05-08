@@ -1,4 +1,5 @@
 
+#include <hei_includes.hpp>
 #include <isolator/hei_isolation_node.hpp>
 #include <isolator/hei_isolator.hpp>
 #include <register/hei_hardware_register.hpp>
@@ -12,6 +13,27 @@
 
 namespace libhei
 {
+
+//------------------------------------------------------------------------------
+
+// Definitions for the interfaces defined in hei_main.hpp.
+
+void initialize(void* i_buffer, size_t i_bufferSize)
+{
+    Isolator::getSingleton().initialize(i_buffer, i_bufferSize);
+}
+
+void uninitialize()
+{
+    Isolator::getSingleton().uninitialize();
+}
+
+void isolate(const std::vector<Chip>& i_chipList, IsolationData& o_isoData)
+{
+    Isolator::getSingleton().isolate(i_chipList, o_isoData);
+}
+
+//------------------------------------------------------------------------------
 
 void Isolator::initialize(void* i_buffer, size_t i_bufferSize)
 {

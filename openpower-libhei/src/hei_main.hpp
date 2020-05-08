@@ -29,9 +29,10 @@
 
 #pragma once
 
-#include <hei_includes.hpp>
+#include <hei_chip.hpp>
 #include <hei_isolation_data.hpp>
-#include <isolator/hei_isolator.hpp>
+
+#include <vector>
 
 namespace libhei
 {
@@ -64,19 +65,13 @@ namespace libhei
  *
  * @param i_bufferSize The size (in bytes) of the target Chip Data File.
  */
-inline void initialize(void* i_buffer, size_t i_bufferSize)
-{
-    Isolator::getSingleton().initialize(i_buffer, i_bufferSize);
-}
+void initialize(void* i_buffer, size_t i_bufferSize);
 
 /**
  * @brief Deletes all internal isolation objects that were created by
  *        initialize().
  */
-inline void uninitialize()
-{
-    Isolator::getSingleton().uninitialize();
-}
+void uninitialize();
 
 /**
  * @brief Isolates all active hardware errors found on the given list of chips.
@@ -94,10 +89,6 @@ inline void uninitialize()
  *                   associated with the active errors, and any other data that
  *                   can be useful for debug.
  */
-inline void isolate(const std::vector<Chip>& i_chipList,
-                    IsolationData& o_isoData)
-{
-    Isolator::getSingleton().isolate(i_chipList, o_isoData);
-}
+void isolate(const std::vector<Chip>& i_chipList, IsolationData& o_isoData);
 
 } // end namespace libhei

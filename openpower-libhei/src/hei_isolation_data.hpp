@@ -1,7 +1,8 @@
 #pragma once
 
-#include <hei_includes.hpp>
-#include <isolator/hei_signature.hpp>
+#include <hei_signature.hpp>
+
+#include <vector>
 
 namespace libhei
 {

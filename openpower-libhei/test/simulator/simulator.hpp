@@ -2,6 +2,10 @@
 
 #include <hei_main.hpp>
 
+#include <algorithm>
+#include <map>
+#include <vector>
+
 #include "gtest/gtest.h"
 
 namespace libhei

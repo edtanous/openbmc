@@ -43,7 +43,9 @@
  *  }
  */
 
-#include <hei_includes.hpp>
+#include <stdlib.h>
+
+#include <hei_chip.hpp>
 
 namespace libhei
 {
