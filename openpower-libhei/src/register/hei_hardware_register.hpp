@@ -1,7 +1,6 @@
 #pragma once
 
 #include <hei_includes.hpp>
-#include <hei_macros.hpp>
 #include <register/hei_register.hpp>
 #include <util/hei_bit_string.hpp>
 

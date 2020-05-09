@@ -1,4 +1,3 @@
-#include <hei_macros.hpp>
 #include <util/hei_bit_string.hpp>
 
 #include "gtest/gtest.h"

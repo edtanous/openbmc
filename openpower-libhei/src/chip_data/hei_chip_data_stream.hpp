@@ -4,7 +4,6 @@
 #include <string.h>
 
 #include <hei_includes.hpp>
-#include <hei_macros.hpp>
 
 namespace libhei
 {
