@@ -3,44 +3,9 @@
 /**
  * @file hei_user_interface.hpp
  *
- * The method for actions like hardware register access will vary per user
+ * The process for actions like hardware register access will vary per user
  * application. Therefore, the user application must define all of the APIs
- * listed below.
- *
- *  1.  ReturnCode libhei::registerRead(const Chip& i_chip, void* o_buffer,
- *                      size_t& io_bufSize, uint64_t i_regType,
- *                      uint64_t i_address);
- *
- *  2.  ReturnCode libhei::registerWrite(const Chip& i_chip, void* i_buffer,
- *                            size_t& io_bufSize, uint64_t i_regType,
- *                            uint64_t i_address);
- *
- *  3. void libhei::hei_inf(...)
- *  4. void libhei::hei_err(...)
- *
- *  Example user application implementation of hei_inf(...) and hei_err(...)
- *
- *  void hei_inf(char* format, ...)
- *  {
- *      va_list args;
- *
- *      printf("I> ");
- *      va_start(args, format);
- *      vprintf(format, args);
- *      va_end(args);
- *      printf("\n");
- *  }
- *
- *  void hei_err(char* format, ...)
- *  {
- *      va_list args;
- *
- *      printf("E> ");
- *      va_start(args, format);
- *      vprintf(format, args);
- *      va_end(args);
- *      printf("\n");
- *  }
+ * declared in this header file.
  */
 
 #include <stdlib.h>
@@ -116,12 +81,42 @@ bool registerRead(const Chip& i_chip, void* o_buffer, size_t& io_bufSize,
 bool registerWrite(const Chip& i_chip, void* i_buffer, size_t& io_bufSize,
                    uint64_t i_regType, uint64_t i_address);
 
-// used by HEI_INF macro in this library
-void hei_inf(char* format, ...); // implemented in user application
-
-// used by HEI_ERR macro in this library
-void hei_err(char* format, ...); // implemented in user application
-
 #endif
+
+/**
+ * @brief Prints an informational trace/log.
+ *
+ * This is similar to printing a single line of text to stdout. Example
+ * implementation:
+ *     void hei_inf(char* format, ...)
+ *     {
+ *         va_list args;
+ *         va_start(args, format);
+ *         vfprintf(stdout, format, args);
+ *         va_end(args);
+ *         fprintf(stdout, "\n");
+ *     }
+ *
+ * @param i_format The string format and variatic arguments.
+ */
+void hei_inf(char* i_format, ...);
+
+/**
+ * @brief Prints an error trace/log.
+ *
+ * This is similar to printing a single line of text to stderr. Example
+ * implementation:
+ *     void hei_inf(char* format, ...)
+ *     {
+ *         va_list args;
+ *         va_start(args, format);
+ *         vfprintf(stderr, format, args);
+ *         va_end(args);
+ *         fprintf(stderr, "\n");
+ *     }
+ *
+ * @param i_format The string format and variatic arguments.
+ */
+void hei_err(char* i_format, ...);
 
 } // end namespace libhei

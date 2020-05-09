@@ -3,7 +3,7 @@ subdir('simulator')
 
 # supporting files that need compiled/linked
 test_src = ['../src/util/hei_bit_string.cpp',
-               'hei_user_defines.cpp']
+            'sim_tracing.cpp']
 
 # build g-test framework unit tests
 gtests = [

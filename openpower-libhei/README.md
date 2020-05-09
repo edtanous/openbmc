@@ -17,30 +17,21 @@ See the [primary API definitions][] for details on how to use this library.
 Integration
 -----------
 
-This library is intended to be integrated into containing user applications as a
-set of source files (either imported, or as a git subtree/submodule).
-
-Details TBD.
+This library can be integrated into a user application's source (either
+imported, or as a git subtree/submodule) or built as static library.
 
 User Application Requirements and APIs
 --------------------------------------
 
- * The method to access hardware register data will vary per user application.
+ * The process to access hardware register data will vary per user application.
    Therefore, this library will declare the hardware access [user APIs][], but
-   each containing user application must implement the APIs for their own
-   environment.
+   each user application must implement the APIs for their own environment.
  * This library will not contain data regarding hardware specific information.
    Instead, that information will be provided by the user application in the
    form of the [Chip Data Files][].
- * Tracing, or logging, methods will vary per user application. Specifically,
-   FSP and Hostboot firmware utilize specialized macros as a mechanism to save
-   code image space. Therefore, the user application will need to provide a
-   specific header file that defines these macros. Details are in the
-   [common includes header][].
- * Methods to assert programming bugs will vary per user application. Therefore,
-   much like tracing, the user application will need to provide a specific
-   header file that defines macros for assertion. Details are included in the
-   [common includes header][].
+ * Tracing, or logging, methods will vary per user application. Therefore, this
+   library will declare the tracing/logging [user APIs][], but each user
+   application must implement the APIs for their own environment.
 
 Environment configuration
 -------------------------
@@ -54,17 +45,32 @@ Environment configuration
 Development Notes
 -----------------
 
- * The Hostboot environment only support up to **C++14**. Therefore, this
+ * The Hostboot environment only supports up to **C++14**. Therefore, this
    library cannot use anything newer at this time.
  * Hostboot has a very limited environment. It does not include libc or
    libstdc++. However, Hostboot has implemented select functions from those
    libraries as needed. For details, you can reference `src/include/` in the
    [POWER Systems Hostboot firmware][].
 
+Building
+--------
+
+For a standard OpenBMC release build, you want something like:
+```
+meson setup -Dtests=disabled <build_dir>
+ninja -C <build_dir>
+ninja -C <build_dir> install
+```
+
+For a test / debug build, a typical configuration is:
+```
+meson setup -Dtests=enabled <build_dir>
+meson test -C <build_dir>
+```
+
 [OpenBMC Hardware Diagnostics]: https://github.com/openbmc/openpower-hw-diags
 [POWER Systems Hostboot firmware]: https://github.com/open-power/hostboot
 [primary API definitions]: src/hei_main.hpp
 [user APIs]: src/hei_user_interface.hpp
-[common includes header]: src/hei_includes.hpp
 [Chip Data Files]: src/chip_data/CHIP_DATA.md
 

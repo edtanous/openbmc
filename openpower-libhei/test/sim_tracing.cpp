@@ -1,30 +1,29 @@
-#include <assert.h>
 #include <stdarg.h>
 #include <stdio.h>
 
 namespace libhei
 {
 
+// prints a single line to stdout
 void hei_inf(char* format, ...)
 {
     va_list args;
-
-    printf("I> ");
+    fprintf(stdout, "I> ");
     va_start(args, format);
-    vprintf(format, args);
+    vfprintf(stdout, format, args);
     va_end(args);
-    printf("\n");
+    fprintf(stdout, "\n");
 }
 
+// prints a single line to stderr
 void hei_err(char* format, ...)
 {
     va_list args;
-
-    printf("E> ");
+    fprintf(stderr, "E> ");
     va_start(args, format);
-    vprintf(format, args);
+    vfprintf(stderr, format, args);
     va_end(args);
-    printf("\n");
+    fprintf(stderr, "\n");
 }
 
 } // namespace libhei
