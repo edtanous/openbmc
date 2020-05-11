@@ -171,6 +171,7 @@ bool BinaryStore::openOrCreateBlob(const std::string& blobId, uint16_t flags)
     currentBlob_ = blob_.add_blobs();
     currentBlob_->set_blob_id(blobId);
 
+    commitState_ = CommitState::Dirty;
     log<level::NOTICE>("Created new blob", entry("BLOB_ID=%s", blobId.c_str()));
     return true;
 }
@@ -231,6 +232,7 @@ bool BinaryStore::write(uint32_t offset, const std::vector<uint8_t>& data)
         return false;
     }
 
+    commitState_ = CommitState::Dirty;
     /* Copy (overwrite) the data */
     if (offset + data.size() > dataPtr->size())
     {
@@ -273,9 +275,58 @@ bool BinaryStore::close()
     return true;
 }
 
-bool BinaryStore::stat()
+/*
+ * Sets |meta| with size and state of the blob. Returns |blobState| with
+ * standard definition from phosphor-ipmi-blobs header blob.hpp, plus OEM
+ * flag bits BinaryStore::CommitState.
+
+enum StateFlags
 {
-    return false;
+    open_read = (1 << 0),
+    open_write = (1 << 1),
+    committing = (1 << 2),
+    committed = (1 << 3),
+    commit_error = (1 << 4),
+};
+
+enum CommitState
+{
+    Dirty = (1 << 8), // In-memory data might not match persisted data
+    Clean = (1 << 9), // In-memory data matches persisted data
+    Uninitialized = (1 << 10), // Cannot find persisted data
+    CommitError = (1 << 11)    // Error happened during committing
+};
+
+*/
+bool BinaryStore::stat(blobs::BlobMeta* meta)
+{
+    uint16_t blobState = blobs::StateFlags::open_read;
+    if (writable_)
+    {
+        blobState |= blobs::StateFlags::open_write;
+    }
+
+    if (commitState_ == CommitState::Clean)
+    {
+        blobState |= blobs::StateFlags::committed;
+    }
+    else if (commitState_ == CommitState::CommitError)
+    {
+        blobState |= blobs::StateFlags::commit_error;
+    }
+    blobState |= commitState_;
+
+    if (currentBlob_)
+    {
+        meta->size = currentBlob_->data().size();
+    }
+    else
+    {
+        meta->size = 0;
+    }
+    meta->blobState = blobState;
+
+    return true;
 }
 
 } // namespace binstore

@@ -33,6 +33,8 @@ class MockBinaryStore : public BinaryStoreInterface
             .WillByDefault(Invoke(&real_store_, &BinaryStore::write));
         ON_CALL(*this, commit)
             .WillByDefault(Invoke(&real_store_, &BinaryStore::commit));
+        ON_CALL(*this, stat)
+            .WillByDefault(Invoke(&real_store_, &BinaryStore::stat));
     }
     MOCK_CONST_METHOD0(getBaseBlobId, std::string());
     MOCK_CONST_METHOD0(getBlobIds, std::vector<std::string>());
@@ -42,7 +44,7 @@ class MockBinaryStore : public BinaryStoreInterface
     MOCK_METHOD2(write, bool(uint32_t, const std::vector<uint8_t>&));
     MOCK_METHOD0(commit, bool());
     MOCK_METHOD0(close, bool());
-    MOCK_METHOD0(stat, bool());
+    MOCK_METHOD1(stat, bool(blobs::BlobMeta* meta));
 
   private:
     BinaryStore real_store_;

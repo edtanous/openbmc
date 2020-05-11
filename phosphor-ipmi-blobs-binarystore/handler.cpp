@@ -81,8 +81,13 @@ bool BinaryStoreBlobHandler::deleteBlob(const std::string& path)
 bool BinaryStoreBlobHandler::stat(const std::string& path,
                                   struct BlobMeta* meta)
 {
-    // TODO: implement
-    return false;
+    auto it = stores_.find(internal::getBaseFromId(path));
+    if (it == stores_.end())
+    {
+        return false;
+    }
+
+    return it->second->stat(meta);
 }
 
 bool BinaryStoreBlobHandler::open(uint16_t session, uint16_t flags,
@@ -179,8 +184,13 @@ bool BinaryStoreBlobHandler::close(uint16_t session)
 
 bool BinaryStoreBlobHandler::stat(uint16_t session, struct BlobMeta* meta)
 {
-    // TODO: implement
-    return false;
+    auto it = sessions_.find(session);
+    if (it == sessions_.end())
+    {
+        return false;
+    }
+
+    return it->second->stat(meta);
 }
 
 bool BinaryStoreBlobHandler::expire(uint16_t session)

@@ -4,6 +4,7 @@
 
 #include <unistd.h>
 
+#include <blobs-ipmid/blobs.hpp>
 #include <cstdint>
 #include <memory>
 #include <string>
@@ -87,9 +88,11 @@ class BinaryStoreInterface
     virtual bool close() = 0;
 
     /**
-     * TODO
+     * Returns blob stat flags.
+     * @param meta: output stat flags.
+     * @returns True if able to get the stat flags and write to *meta
      */
-    virtual bool stat() = 0;
+    virtual bool stat(blobs::BlobMeta* meta) = 0;
 };
 
 /**
@@ -100,6 +103,17 @@ class BinaryStoreInterface
 class BinaryStore : public BinaryStoreInterface
 {
   public:
+    /* |CommitState| differs slightly with |StateFlags| in blob.hpp,
+     * and thus is defined in the OEM space (bit 8 - 15). User can call stat()
+     * to query the |CommitState| of the blob path. */
+    enum CommitState
+    {
+        Dirty = (1 << 8), // In-memory data might not match persisted data
+        Clean = (1 << 9), // In-memory data matches persisted data
+        Uninitialized = (1 << 10), // Cannot find persisted data
+        CommitError = (1 << 11)    // Error happened during committing
+    };
+
     BinaryStore() = delete;
     BinaryStore(const std::string& baseBlobId, std::unique_ptr<SysFile> file,
                 uint32_t maxSize) :
@@ -124,7 +138,7 @@ class BinaryStore : public BinaryStoreInterface
     bool write(uint32_t offset, const std::vector<uint8_t>& data) override;
     bool commit() override;
     bool close() override;
-    bool stat() override;
+    bool stat(blobs::BlobMeta* meta) override;
 
     /**
      * Helper factory method to create a BinaryStore instance
@@ -140,14 +154,6 @@ class BinaryStore : public BinaryStoreInterface
                          std::unique_ptr<SysFile> file, uint32_t maxSize);
 
   private:
-    enum class CommitState
-    {
-        Dirty,         // In-memory data might not match persisted data
-        Clean,         // In-memory data matches persisted data
-        Uninitialized, // Cannot find persisted data
-        CommitError    // Error happened during committing
-    };
-
     /* Load the serialized data from sysfile if commit state is dirty.
      * Returns False if encountered error when loading */
     bool loadSerializedData();

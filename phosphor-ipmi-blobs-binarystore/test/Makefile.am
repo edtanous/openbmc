@@ -16,6 +16,7 @@ check_PROGRAMS = \
 	parse_config_unittest \
 	sys_file_unittest \
 	handler_commit_unittest \
+	handler_stat_unittest \
 	handler_open_unittest \
 	handler_readwrite_unittest \
 	handler_unittest
@@ -43,6 +44,15 @@ handler_commit_unittest_LDADD = $(PHOSPHOR_LOGGING_LIBS) \
 	$(top_builddir)/libbinarystore_la-binaryblob.pb.o \
 	-lprotobuf
 handler_commit_unittest_CXXFLAGS = $(PHOSPHOR_LOGGING_CFLAGS)
+
+handler_stat_unittest_SOURCES = handler_stat_unittest.cpp
+handler_stat_unittest_LDADD = $(PHOSPHOR_LOGGING_LIBS) \
+	$(top_builddir)/handler.o \
+	$(top_builddir)/binarystore.o \
+	$(top_builddir)/sys_file.o \
+	$(top_builddir)/libbinarystore_la-binaryblob.pb.o \
+	-lprotobuf
+handler_stat_unittest_CXXFLAGS = $(PHOSPHOR_LOGGING_CFLAGS)
 
 handler_open_unittest_SOURCES = handler_open_unittest.cpp
 handler_open_unittest_LDADD = $(PHOSPHOR_LOGGING_LIBS) \
