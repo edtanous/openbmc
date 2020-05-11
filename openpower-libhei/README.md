@@ -36,11 +36,10 @@ User Application Requirements and APIs
 Environment configuration
 -------------------------
 
- * `__HEI_READ_ONLY`: When defined, it will ensure any hardware write support
-   is disabled. Note that the Chip Data Files will contain rules for clearing
-   and masking register bits. Both of which will require modifying hardware
-   registers, which is not allowed by user applications like OpenBMC or FSP
-   firmware.
+ * `__HEI_ENABLE_HW_WRITE`: When defined, it will allow hardware write support.
+   Note that the Chip Data Files will contain rules for clearing and masking
+   register bits. Both of which will require modifying hardware registers,
+   which is not allowed by user applications like OpenBMC or FSP firmware.
 
 Development Notes
 -----------------

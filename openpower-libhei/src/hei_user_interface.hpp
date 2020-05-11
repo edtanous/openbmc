@@ -47,7 +47,7 @@ namespace libhei
 bool registerRead(const Chip& i_chip, void* o_buffer, size_t& io_bufSize,
                   uint64_t i_regType, uint64_t i_address);
 
-#ifndef __HEI_READ_ONLY
+#ifdef __HEI_ENABLE_HW_WRITE
 
 /**
  * @brief Performs a hardware register write operation.
@@ -81,7 +81,7 @@ bool registerRead(const Chip& i_chip, void* o_buffer, size_t& io_bufSize,
 bool registerWrite(const Chip& i_chip, void* i_buffer, size_t& io_bufSize,
                    uint64_t i_regType, uint64_t i_address);
 
-#endif
+#endif // __HEI_ENABLE_HW_WRITE
 
 /**
  * @brief Prints an informational trace/log.

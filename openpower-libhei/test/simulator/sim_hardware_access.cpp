@@ -60,7 +60,7 @@ bool registerRead(const Chip& i_chip, void* o_buffer, size_t& io_bufSize,
 
 //------------------------------------------------------------------------------
 
-#ifndef __HEI_READ_ONLY
+#ifdef __HEI_ENABLE_HW_WRITE
 
 bool registerWrite(const Chip& i_chip, void* i_buffer, size_t& io_bufSize,
                    uint64_t i_regType, uint64_t i_address)
@@ -83,7 +83,7 @@ bool registerWrite(const Chip& i_chip, void* i_buffer, size_t& io_bufSize,
     return accessFailure;
 }
 
-#endif
+#endif // __HEI_ENABLE_HW_WRITE
 
 //------------------------------------------------------------------------------
 

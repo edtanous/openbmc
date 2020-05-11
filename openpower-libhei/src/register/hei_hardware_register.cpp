@@ -99,7 +99,7 @@ bool HardwareRegister::read(const Chip& i_chip, bool i_force) const
 
 //------------------------------------------------------------------------------
 
-#ifndef __HEI_READ_ONLY
+#ifdef __HEI_ENABLE_HW_WRITE
 
 bool HardwareRegister::write(const Chip& i_chip) const
 {
@@ -135,7 +135,7 @@ bool HardwareRegister::write(const Chip& i_chip) const
     return accessFailure;
 }
 
-#endif // __HEI_READ_ONLY
+#endif // __HEI_ENABLE_HW_WRITE
 
 //------------------------------------------------------------------------------
 

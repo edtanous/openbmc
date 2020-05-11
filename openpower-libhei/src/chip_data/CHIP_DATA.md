@@ -7,8 +7,8 @@ information includes:
  * A definition of how errors propagate from register to register.
  * A list of top level registers to use as a starting point for isolation.
  * A list of additional registers to capture for each register bit (for debug).
- * Rules defining how to clear and mask register bits (not available if
-   `__HEI_READ_ONLY` is defined).
+ * Rules defining how to clear and mask register bits (only applicable if
+   `__HEI_ENABLE_HW_WRITE` is defined).
 
 File extensions are not required, but it is recommended to use the
 extension `.cdb` (chip data binary).
