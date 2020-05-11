@@ -7,13 +7,7 @@ using namespace libhei;
 class Foo
 {
   public:
-    Foo() = default;
     explicit Foo(int i) : iv_i(i) {}
-
-    int get() const
-    {
-        return iv_i;
-    }
 
     bool operator==(const Foo& i_r) const
     {
@@ -29,31 +23,16 @@ class Foo
     int iv_i = 0;
 };
 
-Foo& addFoo(int i)
-{
-    return Flyweight<Foo>::getSingleton().get(Foo{i});
-}
-
 TEST(FlyweightTest, TestSet1)
 {
-    // Add some unique entries in a random order and keep track of where those
-    // enties exist in memory.
-    Foo* a[5];
-    a[1] = &(addFoo(1));
-    a[2] = &(addFoo(2));
-    a[0] = &(addFoo(0));
-    a[4] = &(addFoo(4));
-    a[3] = &(addFoo(3));
+    auto& foo_factory = Flyweight<Foo>::getSingleton();
 
-    // Now add more entries and verify the 'new' entries match the same
-    // addresses as the previously added entries.
-    for (int i = 4; i >= 0; i--)
-    {
-        ASSERT_EQ(a[i], &(addFoo(i)));
-    }
+    auto f1 = foo_factory.get(1);
+    auto f2 = foo_factory.get(2);
+    auto f3 = foo_factory.get(1); // same as f1
 
-    // At this point, we have proven that duplicate entries will return
-    // references to the original unique entries. There is probably more we can
-    // do here, but this is enough to prove the Flyweight class follows the
-    // flyweight design pattern.
+    ASSERT_NE(f1, f2); // Pointing to different objects
+    ASSERT_EQ(f1, f3); // Pointing to the same object
+
+    ASSERT_EQ(2, foo_factory.size()); // Only two entries in the flyweight
 }

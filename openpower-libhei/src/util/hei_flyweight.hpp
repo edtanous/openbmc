@@ -3,6 +3,7 @@
 #include <stdint.h>
 
 #include <algorithm>
+#include <memory>
 #include <vector>
 
 namespace libhei
@@ -17,10 +18,7 @@ class Flyweight
     Flyweight() = default;
 
     /** @brief Destructor. */
-    ~Flyweight()
-    {
-        clear();
-    }
+    ~Flyweight() = default;
 
     /** @brief Default copy constructor. */
     Flyweight(const Flyweight&) = delete;
@@ -37,30 +35,42 @@ class Flyweight
     }
 
     /**
-     * @brief  Adds the given entry to the factory, if it does not already
-     *         exist. Then returns a reference to that entry in the factory.
-     * @param  The target entry.
-     * @return A reference to this entry in the factory.
+     * @brief  Does an emplace add of a new entry to the factory, if the entry
+     *         does not already exist, and returns a pointer to the entry in the
+     *         factory.
+     * @param  An variable argument list that would be passed to a contructor of
+     *         class T.
+     * @return A pointer to this entry in the factory.
      */
-    T& get(const T& i_entry)
+    template <class... Args>
+    std::shared_ptr<T> get(Args&&... i_args)
     {
+        // Create a new instance with the given arguments.
+        std::shared_ptr<T> newEntry = std::make_shared<T>(i_args...);
+
         // The index is sorted by the value of the T objects. Check to see if
-        // this entry already exists in the factory.
-        auto itr =
-            std::lower_bound(iv_index.begin(), iv_index.end(), &i_entry,
-                             [](const T* a, const T* b) { return *a < *b; });
+        // newEntry already exists in the factory.
+        auto itr = std::lower_bound(
+            iv_index.begin(), iv_index.end(), newEntry,
+            [](const std::shared_ptr<T> a, const std::shared_ptr<T> b) {
+                return *a < *b;
+            });
 
         // std::lower_bound() will return the first element that does not
-        // compare less than i_entry. So if an entry is found, we must make sure
-        // it does not have the same value as i_entry.
-        if (iv_index.end() == itr || !(i_entry == *(*itr)))
+        // compare less than newEntry. So if an element is found, we must make
+        // sure it does not have the same value as newEntry.
+        if (iv_index.end() == itr || !(*newEntry == *(*itr)))
         {
-            // Create a new entry and store the pointer in the sorted index.
-            itr = iv_index.insert(itr, new T{i_entry});
+            // Store the new enty in the sorted index.
+            itr = iv_index.insert(itr, newEntry);
         }
 
-        // Return a reference to this entry in the factory.
-        return *(*itr);
+        // It is important to note that if newEntry was not inserted into the
+        // index above because a duplicate already existed, it will be deleted
+        // as soon as it goes out of scope.
+
+        // Return a pointer to the this entry in the factory.
+        return *itr;
     }
 
     /**
@@ -70,10 +80,6 @@ class Flyweight
      */
     void clear()
     {
-        for (auto i : iv_index)
-        {
-            delete i;
-        }
         iv_index.clear();
     }
 
@@ -90,6 +96,12 @@ class Flyweight
     void compact()
     {
         iv_index.shrink_to_fit();
+    }
+
+    /** @return The number of entries in this flyweight factory. */
+    size_t size()
+    {
+        return iv_index.size();
     }
 
   private:
@@ -109,7 +121,7 @@ class Flyweight
      * the structure. Also, the Hostboot user application does not support
      * std::set at this time.
      */
-    std::vector<T*> iv_index;
+    std::vector<std::shared_ptr<T>> iv_index;
 };
 
 } // end namespace libhei
