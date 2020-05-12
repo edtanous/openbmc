@@ -126,4 +126,16 @@ inline ChipDataStream& ChipDataStream::operator>>(int64_t& o_right)
     return *this;
 }
 
+/** @brief Template specialization for RegisterId_t. */
+template <>
+inline ChipDataStream& ChipDataStream::operator>>(RegisterId_t& o_right)
+{
+    // A register ID is only 3 bytes, but there isn't a 24-bit integer type. So
+    // extract 3 bytes to a uint32_t and drop the unused byte.
+    uint32_t tmp = 0;
+    read(&tmp, 3);
+    o_right = static_cast<RegisterId_t>(be32toh(tmp) >> 8);
+    return *this;
+}
+
 } // namespace libhei

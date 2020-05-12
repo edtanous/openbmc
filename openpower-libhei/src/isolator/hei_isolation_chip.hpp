@@ -119,6 +119,9 @@ class IsolationChip
                                       Instance_t i_nodeInst) const;
 };
 
+/** Pointer management for isolation chips. */
+using IsolationChipPtr = std::unique_ptr<IsolationChip>;
+
 /** A simple map to ensure only one IsolationChip exists per chip type. */
 using IsolationChipMap =
     std::map<ChipType_t, const std::unique_ptr<const IsolationChip>>;

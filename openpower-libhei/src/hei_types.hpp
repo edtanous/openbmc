@@ -81,7 +81,10 @@ enum RegisterType_t : uint8_t
  *   This is defined as a 3-byte field in the Chip Data Files, which should be
  *   sufficient to support all the registers on a typical chip.
  */
-using RegisterId_t = uint32_t; // IMPORTANT: see range note above.
+// IMPORTANT: typedef or using only creates an alias which is not a new type.
+// Need to defined this as an enum so that template specialization will detect a
+// new variable type. See note aboved for details.
+enum RegisterId_t : uint32_t;
 
 /**
  * A chip could contain more than one instance of a register or node. For

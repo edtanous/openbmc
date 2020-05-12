@@ -41,7 +41,7 @@ registers referenced by the isolation nodes for this chip starting with:
 
 | Bytes | Desc             | Value/Example                 |
 |:-----:|:-----------------|:------------------------------|
-|     4 | register keyword | 0x43484950 (ascii for "REGS") |
+|     4 | register keyword | 0x52454753 (ascii for "REGS") |
 |     3 | # of registers   | 0 is invalid                  |
 
 Then, each register will start with:
