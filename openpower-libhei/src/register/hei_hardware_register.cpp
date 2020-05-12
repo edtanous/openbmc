@@ -23,8 +23,7 @@ const BitString* HardwareRegister::getBitString(const Chip& i_chip) const
     // will be created in the cache, if it does not exist, when the cache is
     // accessed below.
 
-    auto al = getAccessLevel();
-    if ((REG_ACCESS_NONE != al) && (REG_ACCESS_WO != al))
+    if (queryAttrFlag(REG_ATTR_ACCESS_READ))
     {
         read(i_chip);
     }
@@ -45,8 +44,7 @@ BitString& HardwareRegister::accessBitString(const Chip& i_chip)
     // will be created in the cache, if it does not exist, when the cache is
     // accessed below.
 
-    auto al = getAccessLevel();
-    if ((REG_ACCESS_NONE != al) && (REG_ACCESS_WO != al))
+    if (queryAttrFlag(REG_ATTR_ACCESS_READ))
     {
         read(i_chip);
     }
@@ -68,8 +66,7 @@ bool HardwareRegister::read(const Chip& i_chip, bool i_force) const
     if (i_force || !queryCache(i_chip))
     {
         // This register must be readable.
-        auto al = getAccessLevel();
-        HEI_ASSERT((REG_ACCESS_NONE != al) && (REG_ACCESS_WO != al));
+        HEI_ASSERT(queryAttrFlag(REG_ATTR_ACCESS_READ));
 
         // Get the buffer from the register cache.
         BitString& bs = accessCache(i_chip);
@@ -109,8 +106,7 @@ bool HardwareRegister::write(const Chip& i_chip) const
     verifyAccessorChip(i_chip);
 
     // This register must be writable.
-    auto al = getAccessLevel();
-    HEI_ASSERT((REG_ACCESS_NONE != al) && (REG_ACCESS_RO != al));
+    HEI_ASSERT(queryAttrFlag(REG_ATTR_ACCESS_WRITE));
 
     // An entry for this register must exist in the cache.
     HEI_ASSERT(queryCache(i_chip));

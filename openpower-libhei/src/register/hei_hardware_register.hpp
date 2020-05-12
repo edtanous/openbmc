@@ -43,17 +43,16 @@ class HardwareRegister : public Register
   protected:
     /**
      * @brief Constructor from components.
-     * @param i_chipType    Type of chip associated with this register.
-     * @param i_id          Unique ID for this register.
-     * @param i_instance    Instance of this register
-     * @param i_accessLevel Hardware access level for this register.
+     * @param i_chipType Type of chip associated with this register.
+     * @param i_id       Unique ID for this register.
+     * @param i_instance Instance of this register
+     * @param i_flags    Attribute flags for this register.
      */
     HardwareRegister(ChipType_t i_chipType, RegisterId_t i_id,
-                     Instance_t i_instance,
-                     RegisterAccessLevel_t i_accessLevel) :
+                     Instance_t i_instance, RegisterAttributeFlags_t i_flags) :
         Register(),
         iv_chipType(i_chipType), iv_id(i_id), iv_instance(i_instance),
-        iv_accessLevel(i_accessLevel)
+        iv_flags(i_flags)
     {}
 
   private: // Instance variables
@@ -70,7 +69,7 @@ class HardwareRegister : public Register
 
     /** The hardware access level of this register (read/write, read-only,
      *  write-only, etc.). */
-    const RegisterAccessLevel_t iv_accessLevel;
+    const RegisterAttributeFlags_t iv_flags;
 
   public: // Accessor functions
     /** @return The type of chip associated with this register. */
@@ -91,10 +90,10 @@ class HardwareRegister : public Register
         return iv_instance;
     }
 
-    /** @return The hardware access level of this register. */
-    RegisterAccessLevel_t getAccessLevel() const
+    /** @return True if given flag is enabled, false if disabled. */
+    bool queryAttrFlag(RegisterAttributeFlags_t i_flag) const
     {
-        return iv_accessLevel;
+        return (0 != (iv_flags & i_flag));
     }
 
     // NOTE: The following are determined by child classes.

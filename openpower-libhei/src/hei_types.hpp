@@ -104,20 +104,20 @@ using BitPosition_t = uint8_t;
 using RegisterAddress_t = uint64_t;
 
 /**
- * The hardware access level of a register.
+ * The hardware register attribute flags.
  *
  * Values:
- *   The supported access levels are listed in this enum.
+ *   Each bit within this field represents an attribute flag. If the bit is 0,
+ *   the flag is disabled. If the bit is 1, the flag is enabled.
  *
  * Range:
  *   This is defined as a 1-byte field in the Chip Data Files.
  */
-enum RegisterAccessLevel_t : uint8_t
+enum RegisterAttributeFlags_t : uint8_t
 {
-    REG_ACCESS_NONE = 0x0, ///< No access
-    REG_ACCESS_RO   = 0x1, ///< Read-only access
-    REG_ACCESS_WO   = 0x2, ///< Write-only access
-    REG_ACCESS_RW   = 0x3, ///< Read/Write access
+    REG_ATTR_ACCESS_READ  = 0x80, ///< Register read access access
+    REG_ATTR_ACCESS_WRITE = 0x40, ///< Register write access access
+    REG_ATTR_RESERVED     = 0x3f, ///< Reserved/unused bits
 };
 
 /**
