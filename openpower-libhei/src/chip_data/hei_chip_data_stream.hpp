@@ -52,6 +52,12 @@ class ChipDataStream
         return *this;
     }
 
+    /** @return True, if the stream is currently at the end of the file. */
+    bool eof()
+    {
+        return iv_currentIndex == iv_bufferSize;
+    }
+
   private:
     /**
      * @brief Copies the given number of data bytes into the buffer from the

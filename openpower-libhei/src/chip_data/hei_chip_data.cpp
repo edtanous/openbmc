@@ -35,7 +35,7 @@ void __readRegister(ChipDataStream& io_stream, IsolationChipPtr& io_isoChip)
     // Must have at least one instance.
     HEI_ASSERT(0 != numInsts);
 
-    for (Instance_t i = 0; i < numInsts; i++)
+    for (unsigned int i = 0; i < numInsts; i++)
     {
         // Read the register instance metadata.
         Instance_t inst;
@@ -75,6 +75,132 @@ void __readRegister(ChipDataStream& io_stream, IsolationChipPtr& io_isoChip)
 
 //------------------------------------------------------------------------------
 
+void __readExpr(ChipDataStream& io_stream, RegisterType_t i_regType)
+{
+    uint8_t exprType;
+    io_stream >> exprType;
+    switch (exprType)
+    {
+        case 0x01: // register reference
+        {
+            RegisterId_t regId;
+            Instance_t regInst;
+            io_stream >> regId >> regInst;
+            break;
+        }
+        case 0x02: // integer constant
+        {
+            if (REG_TYPE_SCOM == i_regType || REG_TYPE_ID_SCOM == i_regType)
+            {
+                uint64_t constant; // 8-byte value
+                io_stream >> constant;
+            }
+            else
+            {
+                HEI_ASSERT(false); // register type unsupported
+            }
+            break;
+        }
+        case 0x10: // AND operation
+        {
+            uint8_t numSubExpr;
+            io_stream >> numSubExpr;
+            for (uint8_t i = 0; i < numSubExpr; i++)
+            {
+                __readExpr(io_stream, i_regType);
+            }
+            break;
+        }
+        case 0x11: // OR operation
+        {
+            uint8_t numSubExpr;
+            io_stream >> numSubExpr;
+            for (uint8_t i = 0; i < numSubExpr; i++)
+            {
+                __readExpr(io_stream, i_regType);
+            }
+            break;
+        }
+        case 0x12: // NOT operation
+        {
+            __readExpr(io_stream, i_regType);
+            break;
+        }
+        case 0x13: // left shift operation
+        {
+            uint8_t shiftValue;
+            io_stream >> shiftValue;
+            __readExpr(io_stream, i_regType);
+            break;
+        }
+        case 0x14: // right shift operation
+        {
+            uint8_t shiftValue;
+            io_stream >> shiftValue;
+            __readExpr(io_stream, i_regType);
+            break;
+        }
+        default:
+            HEI_ASSERT(false); // unsupported expression type
+    }
+}
+
+//------------------------------------------------------------------------------
+
+void __readNode(ChipDataStream& io_stream, IsolationChipPtr& io_isoChip)
+{
+    // Read the node metadata.
+    NodeId_t nodeId;
+    RegisterType_t regType;
+    Instance_t numInsts;
+    io_stream >> nodeId >> regType >> numInsts;
+
+    for (unsigned int i = 0; i < numInsts; i++)
+    {
+        // Read the node instance metadata.
+        Instance_t nodeInst;
+        uint8_t numCapRegs, numIsoRules, numChildNodes;
+        io_stream >> nodeInst >> numCapRegs >> numIsoRules >> numChildNodes;
+
+        // Add capture registers.
+        for (unsigned int j = 0; j < numCapRegs; j++)
+        {
+            RegisterId_t regId;
+            Instance_t regInst;
+            io_stream >> regId >> regInst;
+        }
+
+        // Add isolation rules.
+        for (unsigned int j = 0; j < numIsoRules; j++)
+        {
+            AttentionType_t attnType;
+            io_stream >> attnType;
+            __readExpr(io_stream, regType);
+        }
+
+        // Add child nodes.
+        for (unsigned int j = 0; j < numChildNodes; j++)
+        {
+            BitPosition_t bit;
+            NodeId_t nodeId;
+            Instance_t nodeInst;
+            io_stream >> bit >> nodeId >> nodeInst;
+        }
+    }
+}
+
+//------------------------------------------------------------------------------
+
+void __readRoot(ChipDataStream& io_stream, IsolationChipPtr& io_isoChip)
+{
+    AttentionType_t attnType;
+    NodeId_t id;
+    Instance_t inst;
+    io_stream >> attnType >> id >> inst;
+}
+
+//------------------------------------------------------------------------------
+
 void parseChipDataFile(void* i_buffer, size_t i_bufferSize,
                        IsolationChipMap& io_isoChips)
 {
@@ -109,10 +235,46 @@ void parseChipDataFile(void* i_buffer, size_t i_bufferSize,
     // There must be at least one register defined.
     HEI_ASSERT(0 != numRegs);
 
-    for (uint32_t i = 0; i < numRegs; i++)
+    for (unsigned int i = 0; i < numRegs; i++)
     {
         __readRegister(stream, isoChip);
     }
+
+    // Read the node list metadata.
+    SectionKeyword_t nodeKeyword;
+    NodeId_t numNodes;
+    stream >> nodeKeyword >> numNodes;
+
+    // Check the node keyword.
+    HEI_ASSERT(KW_NODE == nodeKeyword);
+
+    // There must be at least one node defined.
+    HEI_ASSERT(0 != numNodes);
+
+    for (unsigned int i = 0; i < numNodes; i++)
+    {
+        __readNode(stream, isoChip);
+    }
+
+    // Read the root node list metadata.
+    SectionKeyword_t rootKeyword;
+    AttentionType_t numRoots;
+    stream >> rootKeyword >> numRoots;
+
+    // Check the root node keyword.
+    HEI_ASSERT(KW_ROOT == rootKeyword);
+
+    // There must be at least one register defined.
+    HEI_ASSERT(0 != numRoots);
+
+    for (unsigned int i = 0; i < numRoots; i++)
+    {
+        __readRoot(stream, isoChip);
+    }
+
+    // At this point, the stream is done and it should be at the end of the
+    // file.
+    HEI_ASSERT(stream.eof());
 
     // Add this isolation chip to the collective list of isolation chips.
     auto ret = io_isoChips.emplace(chipType, std::move(isoChip));
