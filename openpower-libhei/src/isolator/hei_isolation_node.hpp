@@ -48,24 +48,10 @@ class IsolationNode
     ~IsolationNode() = default;
 
   private:
-    // This is needed to allow the flyweights to use the copy constructor, but
-    // not allow it to be used in general.
-    friend class Flyweight<IsolationNode>;
+    /** @brief Copy constructor. */
+    IsolationNode(const IsolationNode&) = delete;
 
-    /**
-     * @brief Copy constructor.
-     *
-     * Needed by Flyweight class, but should not be allowed in general.
-     */
-    IsolationNode(const IsolationNode&) = default;
-
-    /**
-     * @brief Explicitly disables assignment operator.
-     *
-     * This is redundant since the compilier will implicitly delete this because
-     * of the constant instance variables, but helps communicate it is not
-     * allowed.
-     */
+    /** @brief Assignment operator. */
     IsolationNode& operator=(const IsolationNode&) = delete;
 
   private: // Instance variables

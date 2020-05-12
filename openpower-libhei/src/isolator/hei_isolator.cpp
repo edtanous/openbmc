@@ -37,15 +37,15 @@ void Isolator::uninitialize()
 
     // Remove all of the IsolationNode objects stored in the flyweights. This
     // must be done before removing the HardwareRegister objects
-    Flyweight<IsolationNode>::getSingleton().clear();
+    Flyweight<const IsolationNode>::getSingleton().clear();
 
     // Must flush the hardware register cache before deleting any
     // HardwareRegister objects.
     HardwareRegister::flushAll();
 
     // Remove all of the HardwareRegister objects stored in the flyweights.
-    Flyweight<ScomRegister>::getSingleton().clear();
-    Flyweight<IdScomRegister>::getSingleton().clear();
+    Flyweight<const ScomRegister>::getSingleton().clear();
+    Flyweight<const IdScomRegister>::getSingleton().clear();
 }
 
 void Isolator::isolate(const std::vector<Chip>& i_chipList,

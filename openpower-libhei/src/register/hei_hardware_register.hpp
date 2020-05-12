@@ -100,22 +100,45 @@ class HardwareRegister : public Register
     /** @brief Equals operator. */
     bool operator==(const HardwareRegister& i_r) const
     {
-        // Comparing register type and address should be sufficient.
-        return (getAddress() == i_r.getAddress()) &&
+        // In general, comparing the ID and instance should be enough. However,
+        // no error will be thrown when adding the register to the flyweights
+        // and any other field differs. Therfore all fields will be used and
+        // invalid duplicates will be found when adding the register pointers
+        // to the IsolationChip objects.
+        return (getAddress() == i_r.getAddress()) && (getId() == i_r.getId()) &&
+               (getInstance() == i_r.getInstance()) &&
                (getType() == i_r.getType());
     }
 
     /** @brief Less than operator. */
     bool operator<(const HardwareRegister& i_r) const
     {
-        // Comparing register type and address should be sufficient.
+        // In general, comparing the ID and instance should be enough. However,
+        // no error will be thrown when adding the register to the flyweights
+        // and any other field differs. Therfore all fields will be used and
+        // invalid duplicates will be found when adding the register pointers
+        // to the IsolationChip objects.
         if (getAddress() < i_r.getAddress())
         {
             return true;
         }
         else if (getAddress() == i_r.getAddress())
         {
-            return (getType() < i_r.getType());
+            if (getId() < i_r.getId())
+            {
+                return true;
+            }
+            else if (getId() == i_r.getId())
+            {
+                if (getInstance() < i_r.getInstance())
+                {
+                    return true;
+                }
+                else if (getInstance() == i_r.getInstance())
+                {
+                    return (getType() < i_r.getType());
+                }
+            }
         }
 
         return false;

@@ -33,24 +33,10 @@ class ScomRegister : public HardwareRegister
     ~ScomRegister() = default;
 
   private:
-    // This is needed to allow the flyweights to use the copy constructor, but
-    // not allow it to be used in general.
-    friend class Flyweight<ScomRegister>;
+    /** @brief Copy constructor. */
+    ScomRegister(const ScomRegister&) = delete;
 
-    /**
-     * @brief Copy constructor.
-     *
-     * Needed by Flyweight class, but should not be allowed in general.
-     */
-    ScomRegister(const ScomRegister&) = default;
-
-    /**
-     * @brief Explicitly disables assignment operator.
-     *
-     * This is redundant since the compilier will implicitly delete this because
-     * of the constant instance variables, but helps communicate it is not
-     * allowed.
-     */
+    /** @brief Assignment operator. */
     ScomRegister& operator=(const ScomRegister&) = delete;
 
   public: // Accessor functions
@@ -112,24 +98,10 @@ class IdScomRegister : public HardwareRegister
     ~IdScomRegister() = default;
 
   private:
-    // This is needed to allow the flyweights to use the copy constructor, but
-    // not allow it to be used in general.
-    friend class Flyweight<IdScomRegister>;
+    /** @brief Copy constructor. */
+    IdScomRegister(const IdScomRegister&) = delete;
 
-    /**
-     * @brief Copy constructor.
-     *
-     * Needed by Flyweight class, but should not be allowed in general.
-     */
-    IdScomRegister(const IdScomRegister&) = default;
-
-    /**
-     * @brief Explicitly disables assignment operator.
-     *
-     * This is redundant since the compilier will implicitly delete this because
-     * of the constant instance variables, but helps communicate it is not
-     * allowed.
-     */
+    /** @brief Assignment operator. */
     IdScomRegister& operator=(const IdScomRegister&) = delete;
 
   public: // Accessor functions
