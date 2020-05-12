@@ -14,9 +14,6 @@ HardwareRegister::~HardwareRegister() {}
 
 const BitString* HardwareRegister::getBitString(const Chip& i_chip) const
 {
-    // Verify this register belongs on i_chip.
-    verifyAccessorChip(i_chip);
-
     // Calling read() will ensure that an entry exists in the cache and the
     // entry has at been synched with hardware at least once. Note that we
     // cannot read hardware for write-only registers. In this case, an entry
@@ -35,9 +32,6 @@ const BitString* HardwareRegister::getBitString(const Chip& i_chip) const
 
 BitString& HardwareRegister::accessBitString(const Chip& i_chip)
 {
-    // Verify this register belongs on i_chip.
-    verifyAccessorChip(i_chip);
-
     // Calling read() will ensure that an entry exists in the cache and the
     // entry has at been synched with hardware at least once. Note that we
     // cannot read hardware for write-only registers. In this case, an entry
@@ -58,9 +52,6 @@ bool HardwareRegister::read(const Chip& i_chip, bool i_force) const
 {
     bool accessFailure = false;
 
-    // Verify this register belongs on i_chip.
-    verifyAccessorChip(i_chip);
-
     // Read from hardware only if the read is forced or the entry for this
     // instance does not exist in the cache.
     if (i_force || !queryCache(i_chip))
@@ -76,7 +67,7 @@ bool HardwareRegister::read(const Chip& i_chip, bool i_force) const
 
         // Read this register from hardware.
         accessFailure = registerRead(i_chip, bs.getBufAddr(), sz_buffer,
-                                     getRegisterType(), getAddress());
+                                     getType(), getAddress());
         if (accessFailure)
         {
             // The read failed and we can't trust what was put in the register
@@ -102,9 +93,6 @@ bool HardwareRegister::write(const Chip& i_chip) const
 {
     bool accessFailure = false;
 
-    // Verify this register belongs on i_chip.
-    verifyAccessorChip(i_chip);
-
     // This register must be writable.
     HEI_ASSERT(queryAttrFlag(REG_ATTR_ACCESS_WRITE));
 
@@ -118,8 +106,8 @@ bool HardwareRegister::write(const Chip& i_chip) const
     size_t sz_buffer = BitString::getMinBytes(bs.getBitLen());
 
     // Write to this register to hardware.
-    accessFailure = registerWrite(i_chip, bs.getBufAddr(), sz_buffer,
-                                  getRegisterType(), getAddress());
+    accessFailure = registerWrite(i_chip, bs.getBufAddr(), sz_buffer, getType(),
+                                  getAddress());
 
     if (accessFailure)
     {

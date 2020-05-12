@@ -43,22 +43,17 @@ class HardwareRegister : public Register
   protected:
     /**
      * @brief Constructor from components.
-     * @param i_chipType Type of chip associated with this register.
      * @param i_id       Unique ID for this register.
      * @param i_instance Instance of this register
      * @param i_flags    Attribute flags for this register.
      */
-    HardwareRegister(ChipType_t i_chipType, RegisterId_t i_id,
-                     Instance_t i_instance, RegisterAttributeFlags_t i_flags) :
+    HardwareRegister(RegisterId_t i_id, Instance_t i_instance,
+                     RegisterAttributeFlags_t i_flags) :
         Register(),
-        iv_chipType(i_chipType), iv_id(i_id), iv_instance(i_instance),
-        iv_flags(i_flags)
+        iv_id(i_id), iv_instance(i_instance), iv_flags(i_flags)
     {}
 
   private: // Instance variables
-    /** The type of chip associated with register. */
-    const ChipType_t iv_chipType;
-
     /** The unique ID for this register. */
     const RegisterId_t iv_id;
 
@@ -72,12 +67,6 @@ class HardwareRegister : public Register
     const RegisterAttributeFlags_t iv_flags;
 
   public: // Accessor functions
-    /** @return The type of chip associated with this register. */
-    ChipType_t getChipType() const
-    {
-        return iv_chipType;
-    }
-
     /* @return The unique ID for this register. */
     RegisterId_t getId() const
     {
@@ -99,7 +88,7 @@ class HardwareRegister : public Register
     // NOTE: The following are determined by child classes.
 
     /** @return This register's type. */
-    virtual RegisterType_t getRegisterType() const = 0;
+    virtual RegisterType_t getType() const = 0;
 
     /** @return The address of this register. */
     virtual RegisterAddress_t getAddress() const = 0;
@@ -111,30 +100,22 @@ class HardwareRegister : public Register
     /** @brief Equals operator. */
     bool operator==(const HardwareRegister& i_r) const
     {
-        // Comparing register type, chip type, and address should be sufficient.
-        return (getRegisterType() == i_r.getRegisterType()) &&
-               (getChipType() == i_r.getChipType()) &&
-               (getAddress() == i_r.getAddress());
+        // Comparing register type and address should be sufficient.
+        return (getAddress() == i_r.getAddress()) &&
+               (getType() == i_r.getType());
     }
 
     /** @brief Less than operator. */
     bool operator<(const HardwareRegister& i_r) const
     {
-        // Comparing register type, chip type, and address should be sufficient.
-        if (getRegisterType() < i_r.getRegisterType())
+        // Comparing register type and address should be sufficient.
+        if (getAddress() < i_r.getAddress())
         {
             return true;
         }
-        else if (getRegisterType() == i_r.getRegisterType())
+        else if (getAddress() == i_r.getAddress())
         {
-            if (getChipType() < i_r.getChipType())
-            {
-                return true;
-            }
-            else if (getChipType() == i_r.getChipType())
-            {
-                return (getAddress() < i_r.getAddress());
-            }
+            return (getType() < i_r.getType());
         }
 
         return false;
@@ -179,13 +160,6 @@ class HardwareRegister : public Register
      * @return A reference to the BitString.
      */
     BitString& accessBitString(const Chip& i_chip);
-
-  private: // Hardware accessor management functions.
-    /** @brief Asserts this register belongs on the target accessor chip. */
-    void verifyAccessorChip(const Chip& i_chip) const
-    {
-        HEI_ASSERT(getChipType() == i_chip.getType());
-    }
 
   private: // Register cache class variable
     /**

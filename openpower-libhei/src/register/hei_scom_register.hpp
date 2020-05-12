@@ -18,16 +18,14 @@ class ScomRegister : public HardwareRegister
   public: // Constructor, destructors, assignment, etc.
     /**
      * @brief Constructor from components.
-     * @param i_chipType Type of chip associated with this register.
      * @param i_id       Unique ID for this register.
      * @param i_instance Instance of this register
      * @param i_flags    Attribute flags for this register.
      * @param i_address  A 4-byte address for this SCOM register.
      */
-    ScomRegister(ChipType_t i_chipType, RegisterId_t i_id,
-                 Instance_t i_instance, RegisterAttributeFlags_t i_flags,
-                 uint32_t i_address) :
-        HardwareRegister(i_chipType, i_id, i_instance, i_flags),
+    ScomRegister(RegisterId_t i_id, Instance_t i_instance,
+                 RegisterAttributeFlags_t i_flags, uint32_t i_address) :
+        HardwareRegister(i_id, i_instance, i_flags),
         iv_address(i_address)
     {}
 
@@ -57,7 +55,7 @@ class ScomRegister : public HardwareRegister
 
   public: // Accessor functions
     /** Function overloaded from parent HardwareRegister class. */
-    RegisterType_t getRegisterType() const
+    RegisterType_t getType() const
     {
         return REG_TYPE_SCOM;
     }
@@ -99,16 +97,14 @@ class IdScomRegister : public HardwareRegister
   public: // Constructor, destructors, assignment, etc.
     /**
      * @brief Constructor from components.
-     * @param i_chipType Type of chip associated with this register.
      * @param i_id       Unique ID for this register.
      * @param i_instance Instance of this register
      * @param i_flags    Attribute flags for this register.
      * @param i_address  An 8-byte address for this Indirect SCOM register.
      */
-    IdScomRegister(ChipType_t i_chipType, RegisterId_t i_id,
-                   Instance_t i_instance, RegisterAttributeFlags_t i_flags,
-                   uint64_t i_address) :
-        HardwareRegister(i_chipType, i_id, i_instance, i_flags),
+    IdScomRegister(RegisterId_t i_id, Instance_t i_instance,
+                   RegisterAttributeFlags_t i_flags, uint64_t i_address) :
+        HardwareRegister(i_id, i_instance, i_flags),
         iv_address(i_address)
     {}
 
@@ -138,7 +134,7 @@ class IdScomRegister : public HardwareRegister
 
   public: // Accessor functions
     /** Function overloaded from parent HardwareRegister class. */
-    RegisterType_t getRegisterType() const
+    RegisterType_t getType() const
     {
         return REG_TYPE_ID_SCOM;
     }
