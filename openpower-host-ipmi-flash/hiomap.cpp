@@ -342,7 +342,7 @@ static int hiomap_handle_property_update(struct hiomap* ctx,
 {
     using namespace phosphor::logging;
 
-    std::map<std::string, sdbusplus::message::variant<bool>> msgData;
+    std::map<std::string, std::variant<bool>> msgData;
 
     sigtermResponse = SignalResponse::breakExecution;
     if (!active_event_updates)
