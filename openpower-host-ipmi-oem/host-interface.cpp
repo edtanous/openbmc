@@ -26,8 +26,7 @@ static const std::map<OEMCmd, Host::Command> intfCommand = {
     {IPMI_CMD_OCC_RESET, Base::Host::Command::OCCReset}};
 
 // Called at user request
-void Host::execute(Base::Host::Command command,
-                   sdbusplus::message::variant<uint8_t> data)
+void Host::execute(Base::Host::Command command, std::variant<uint8_t> data)
 {
     using namespace phosphor::logging;
 

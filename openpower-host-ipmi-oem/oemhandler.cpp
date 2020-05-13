@@ -360,7 +360,7 @@ ipmi_ret_t ipmi_ibm_oem_bmc_factory_reset(ipmi_netfn_t netfn, ipmi_cmd_t cmd,
     {
         return IPMI_CC_UNSPECIFIED_ERROR;
     }
-    sdbusplus::message::variant<std::string> off =
+    std::variant<std::string> off =
         "xyz.openbmc_project.State.Chassis.Transition.Off";
     auto method = bus.new_method_call(service.c_str(), stateChassisPath,
                                       propertiesIntf, "Set");
@@ -406,7 +406,7 @@ ipmi_ret_t ipmi_ibm_oem_bmc_factory_reset(ipmi_netfn_t netfn, ipmi_cmd_t cmd,
                           "the factory reset.");
         return IPMI_CC_UNSPECIFIED_ERROR;
     }
-    sdbusplus::message::variant<std::string> reboot =
+    std::variant<std::string> reboot =
         "xyz.openbmc_project.State.BMC.Transition.Reboot";
     method = bus.new_method_call(service.c_str(), stateBmcPath, propertiesIntf,
                                  "Set");

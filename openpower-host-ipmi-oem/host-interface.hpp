@@ -39,8 +39,7 @@ class Host : public sdbusplus::server::object::object<Base::Host>
      *  @param[in] command - Input command to execute
      *  @param[in] data    - Data associated with the command
      */
-    void execute(Command command,
-                 sdbusplus::message::variant<uint8_t> data) override;
+    void execute(Command command, std::variant<uint8_t> data) override;
 
   private:
     /** @brief sdbusplus DBus bus connection. */
