@@ -25,7 +25,7 @@ class SDBusPlus
                     const std::string& objPath, const std::string& interface,
                     const std::string& property, const T& value)
     {
-        sdbusplus::message::variant<T> data = value;
+        std::variant<T> data = value;
 
         try
         {
@@ -59,7 +59,7 @@ class SDBusPlus
         methodCall.append(interface.c_str());
         methodCall.append(property);
 
-        sdbusplus::message::variant<Property> value;
+        std::variant<Property> value;
 
         try
         {

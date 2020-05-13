@@ -439,8 +439,7 @@ std::string Nvme::getGPIOValueOfNvme(const std::string& fullPath)
 
 void Nvme::createNVMeInventory()
 {
-    using Properties =
-        std::map<std::string, sdbusplus::message::variant<std::string, bool>>;
+    using Properties = std::map<std::string, std::variant<std::string, bool>>;
     using Interfaces = std::map<std::string, Properties>;
 
     std::string inventoryPath;
