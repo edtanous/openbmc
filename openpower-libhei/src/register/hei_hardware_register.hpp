@@ -293,4 +293,7 @@ class HardwareRegister : public Register
     }
 };
 
+/** Pointer management for hardware registers. */
+using HardwareRegisterPtr = std::shared_ptr<const HardwareRegister>;
+
 } // end namespace libhei
