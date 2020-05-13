@@ -74,7 +74,7 @@ class SDBusPlus
             return false;
         }
 
-        return sdbusplus::message::variant_ns::get<Property>(value);
+        return std::get<Property>(value);
     }
 
     template <typename... Args>
