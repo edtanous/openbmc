@@ -1,4 +1,5 @@
 #include <isolator/hei_isolation_node.hpp>
+#include <util/hei_bit_string.hpp>
 
 namespace libhei
 {
@@ -54,18 +55,16 @@ bool IsolationNode::analyze(const Chip& i_chip, AttentionType_t i_attnType,
                 // io_isoData. If there are no other active attentions, the user
                 // application could use this signature to help determine, and
                 // circumvent, the isolation problem.
-                io_isoData.addSignature(Signature{i_chip, iv_hwReg.getId(),
-                                                  iv_hwReg.getInstance(), bit,
-                                                  i_attnType});
+                io_isoData.addSignature(
+                    Signature{i_chip, iv_id, iv_instance, bit, i_attnType});
             }
         }
         else
         {
             // We have reached a leaf in the isolation tree. Add this bit's
             // signature to io_isoData.
-            io_isoData.addSignature(Signature{i_chip, iv_hwReg.getId(),
-                                              iv_hwReg.getInstance(), bit,
-                                              i_attnType});
+            io_isoData.addSignature(
+                Signature{i_chip, iv_id, iv_instance, bit, i_attnType});
         }
     }
 
@@ -77,47 +76,43 @@ bool IsolationNode::analyze(const Chip& i_chip, AttentionType_t i_attnType,
 
 //------------------------------------------------------------------------------
 
-void IsolationNode::addRule(AttentionType_t i_attnType, const Register* i_rule)
+void IsolationNode::addRule(AttentionType_t i_attnType, RegisterPtr i_rule)
 {
-    // A rule for this attention type should not already exist.
-    HEI_ASSERT(iv_rules.end() == iv_rules.find(i_attnType));
+    HEI_ASSERT(i_rule); // should not be null
 
-    // The rule should not be null.
-    HEI_ASSERT(nullptr != i_rule);
+    auto ret = iv_rules.emplace(i_attnType, i_rule);
 
-    // Add the new rule.
-    iv_rules[i_attnType] = i_rule;
+    // If an entry already existed, it must point to the same object.
+    HEI_ASSERT(ret.second || (ret.first->second == i_rule));
 }
 
 //------------------------------------------------------------------------------
 
-void IsolationNode::addChild(uint8_t i_bit, const IsolationNode* i_child)
+void IsolationNode::addChild(uint8_t i_bit, IsolationNodePtr i_child)
 {
-    // An entry for this bit should not already exist.
-    HEI_ASSERT(iv_children.end() == iv_children.find(i_bit));
+    HEI_ASSERT(i_child); // should not be null
 
-    // The child register should not be null.
-    HEI_ASSERT(nullptr != i_child);
+    auto ret = iv_children.emplace(i_bit, i_child);
 
-    // Add the new rule.
-    iv_children[i_bit] = i_child;
+    // If an entry already existed, it must point to the same object.
+    HEI_ASSERT(ret.second || (ret.first->second == i_child));
 }
 
 //------------------------------------------------------------------------------
 
-std::vector<const IsolationNode*> IsolationNode::cv_isolationStack{};
+std::vector<IsolationNodePtr> IsolationNode::cv_isolationStack{};
 
 //------------------------------------------------------------------------------
 
 void IsolationNode::pushIsolationStack() const
 {
     // Ensure this node does not already exist in cv_isolationStack.
-    auto itr =
-        std::find(cv_isolationStack.begin(), cv_isolationStack.end(), this);
+    auto itr = std::find(cv_isolationStack.begin(), cv_isolationStack.end(),
+                         IsolationNodePtr(this));
     HEI_ASSERT(cv_isolationStack.end() == itr);
 
     // Push to node to the stack.
-    cv_isolationStack.push_back(this);
+    cv_isolationStack.push_back(IsolationNodePtr(this));
 }
 
 //------------------------------------------------------------------------------

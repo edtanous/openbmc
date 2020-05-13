@@ -2,46 +2,45 @@
 
 #include <hei_includes.hpp>
 #include <hei_isolation_data.hpp>
-#include <register/hei_hardware_register.hpp>
 #include <register/hei_register.hpp>
-#include <util/hei_bit_string.hpp>
-#include <util/hei_flyweight.hpp>
 
 namespace libhei
 {
 
 /**
- * @brief This class contains the isolation rules and bit definition of a
- *        HardwareRegister used for error isolation.
+ * @brief This class contains the isolation rules and bit definition for a node
+ *        in a chip's error reporting structure.
  *
- * These objects are linked together as a tree. Any active bits in the
- * associated register will either be a true active attention (leaf node) or
- * indicate one or more active attentions occurred in a child node.
+ * These objects are linked together to form a tree with a single root node. Any
+ * active bits found in a node will either indicate an active attention or that
+ * the attention originated in a child node.
  *
  * The primary function of this class is analyze(), which will do a depth-first
- * search of the tree to find all leaves and add their signatures to the
- * returned isolation data.
+ * search of the tree to find all active attentions and add their signatures to
+ * the returned isolation data.
  *
  * The tree structure is built from information in the Chip Data Files. It is
  * possible that the tree could be built with loop in the isolation. This would
  * be bug in the Chip Data Files. This class will keep track of all nodes that
  * have been analyzed to prevent cyclic isolation (an infinite loop).
  *
- * Each isolation register will have a rule for each supported attention type.
- * These rules are a combination of HardwareRegisters and operator registers to
- * define rules like "REG & ~MASK & CNFG", which reads "return all bits in REG
- * that are not in MASK and set in CNFG". See the definition of the Register
- * class for details on how this works.
+ * Each node instance will represent a register, or set of registers, that can
+ * be configured to represent one or more attention types. These configuration
+ * rules are a combination of hardware register objects and operator registers
+ * objects to define rules like "REG & ~MASK & CNFG", which reads "return all
+ * bits in REG that are not in MASK and set in CNFG". See the definition of the
+ * Register class for details on how this works.
  */
 class IsolationNode
 {
   public: // Constructors, destructor, assignment
     /**
      * @brief Constructor from components.
-     * @param i_hwReg A reference to the HardwareRegister targeted for
-     *                isolation.
+     * @param i_id       Unique ID for all instances of this node.
+     * @param i_instance Instance of this node.
      */
-    explicit IsolationNode(const HardwareRegister& i_hwReg) : iv_hwReg(i_hwReg)
+    IsolationNode(NodeId_t i_id, Instance_t i_instance) :
+        iv_id(i_id), iv_instance(i_instance)
     {}
 
     /** @brief Destructor. */
@@ -55,12 +54,14 @@ class IsolationNode
     IsolationNode& operator=(const IsolationNode&) = delete;
 
   private: // Instance variables
+    /** The unique ID for all instances of this node. */
+    const NodeId_t iv_id;
+
     /**
-     * This is a reference to the HardwareRegister targeted for isolation by
-     * this instance of the class. The reference is required to maintain
-     * polymorphism.
+     * A node may have multiple instances. All of which will have the same ID.
+     * This variable is used to distinguish between each instance of the node.
      */
-    const HardwareRegister& iv_hwReg;
+    const Instance_t iv_instance;
 
     /**
      * This register could report multiple types of attentions. We can use a
@@ -69,21 +70,22 @@ class IsolationNode
      * HardwareRegister objects and virtual operator registers (all children
      * of the Register class).
      */
-    std::map<AttentionType_t, const Register*> iv_rules;
+    std::map<AttentionType_t, const RegisterPtr> iv_rules;
 
     /**
      * Each bit (key) in this map indicates that an attention was driven from
      * another register (value).
      */
-    std::map<BitPosition_t, const IsolationNode*> iv_children;
+    std::map<BitPosition_t, const std::shared_ptr<const IsolationNode>>
+        iv_children;
 
   public: // Member functions
     /**
-     * @brief  Finds all active attentions on this register. If an active bit is
-     *         a leaf in the isolation tree, the bit's signature is added to the
+     * @brief  Finds all active attentions on this node. If an active bit is a
+     *         leaf in the isolation tree, the bit's signature is added to the
      *         isolation data. Otherwise, this function is recursively called
-     *         to analyze the child register that is driving the attention in
-     *         this register.
+     *         to analyze the child node that is driving the attention in this
+     *         node.
      * @param  i_chip     The target chip for isolation.
      * @param  i_attnType The target attention type to analyze on this register.
      *                    Will assert a rule must exist for this attention type.
@@ -95,48 +97,63 @@ class IsolationNode
     bool analyze(const Chip& i_chip, AttentionType_t i_attnType,
                  IsolationData& io_isoData) const;
 
-    // TODO: The next two functions are only intended to be used during
-    //       initialization of the isolator. Consider, making them private and
-    //       make the Chip Data File code friends of this class. So that it has
-    //       access to these init functions.
-
     /**
      * @brief Adds a register rule for the given attention type. See iv_rules
      *        for details.
      *
      * This is only intended to be used during initialization of the isolator.
-     * Will assert that nothing has already been defined for this rule.
+     * Will assert that a rule has not already been defined for this type.
      *
      * @param The target attention type.
      * @param The rule for this attention type.
      */
-    void addRule(AttentionType_t i_attnType, const Register* i_rule);
+    void addRule(AttentionType_t i_attnType, RegisterPtr i_rule);
 
     /**
-     * @brief Adds a child register to analyze for the given bit in this
-     *        register. See iv_children for details.
+     * @brief Adds a child node to analyze for the given bit position in this
+     *        node. See iv_children for details.
      *
      * This is only intended to be used during initialization of the isolator.
      * Will assert that nothing has already been defined for this bit.
      *
-     * @param The target bit on this register.
-     * @param The child register to analyze for the given bit.
+     * @param The target bit on this node.
+     * @param The child node to analyze for the given bit.
      */
-    void addChild(BitPosition_t i_bit, const IsolationNode* i_child);
+    void addChild(BitPosition_t i_bit,
+                  std::shared_ptr<const IsolationNode> i_child);
+
+    /** @return The node ID. */
+    NodeId_t getId() const
+    {
+        return iv_id;
+    }
+
+    /** @return The node instance. */
+    Instance_t getInstance() const
+    {
+        return iv_instance;
+    }
 
   public: // Operators
     /** @brief Equals operator. */
     bool operator==(const IsolationNode& i_r) const
     {
-        // iv_hwReg should be unique per IsolationNode.
-        return (iv_hwReg == i_r.iv_hwReg);
+        return (iv_id == i_r.iv_id) && (iv_instance == i_r.iv_instance);
     }
 
     /** @brief Less than operator. */
     bool operator<(const IsolationNode& i_r) const
     {
-        // iv_hwReg should be unique per IsolationNode.
-        return (iv_hwReg < i_r.iv_hwReg);
+        if (iv_id < i_r.iv_id)
+        {
+            return true;
+        }
+        else if (iv_id == i_r.iv_id)
+        {
+            return (iv_instance < i_r.iv_instance);
+        }
+
+        return false;
     }
 
   private: // Isolation stack and supporting functions.
@@ -152,7 +169,7 @@ class IsolationNode
      *  this node can be popped off the top of the stack. Once all the recursive
      *  calls have returned back to the root node the stack should be empty.
      */
-    static std::vector<const IsolationNode*> cv_isolationStack;
+    static std::vector<std::shared_ptr<const IsolationNode>> cv_isolationStack;
 
     /**
      * @brief Pushes this node to the top of the stack. Will assert that this
@@ -167,10 +184,7 @@ class IsolationNode
     }
 };
 
-/** Pointer management for isolation nodes. */
-using IsolationNodePtr = std::shared_ptr<IsolationNode>;
-
-/** Simple map to ensure only one root IsolationNode per attention type. */
-using RootNodeMap = std::map<AttentionType_t, const IsolationNodePtr>;
+/** Pointer management for IsolationNode objects. */
+using IsolationNodePtr = std::shared_ptr<const IsolationNode>;
 
 } // end namespace libhei

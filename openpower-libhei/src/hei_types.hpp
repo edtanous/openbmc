@@ -30,6 +30,24 @@ namespace libhei
 using ChipType_t = uint32_t;
 
 /**
+ * Each isolation node within a chip must have a unique ID. These IDs (combined
+ * with other information) will be passed back to the user application to
+ * identify all of the active errors reported by this chip. Note that some
+ * isolation nodes will have multiple instances within a chip. An ID will be
+ * used for all instances of a node. See enum Instance_t for details on the
+ * instance value.
+ *
+ * Values:
+ *   The isolator does not need to know the possible values because the values
+ *   are passed from the Chip Data Files to the user application.
+ *
+ * Range:
+ *   This is a 2-byte field, which should be sufficient to support all the
+ *   isolation nodes on a typical chip.
+ */
+using NodeId_t = uint16_t;
+
+/**
  * Different chips will contain different types of registers. Also, a single
  * chip may also support multiple types of registers. These enum values are
  * used to communicate to the user application which type of register access is

@@ -47,7 +47,7 @@ class IsolationChip
     const ChipType_t iv_chipType;
 
     /** Root nodes for this chip type. */
-    RootNodeMap iv_rootNodes;
+    std::map<AttentionType_t, const IsolationNodePtr> iv_rootNodes;
 
   public: // Member functions
     /**

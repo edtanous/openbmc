@@ -11,6 +11,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 
+#include <algorithm>
 #include <map>
 #include <memory>
 #include <vector>
@@ -21,7 +22,7 @@
 #include <hei_user_interface.hpp>
 
 // Common macros used throughout this library
-#define HEI_ASSERT(expression) assert(expression);
+#define HEI_ASSERT(expression) assert(expression)
 
 #define HEI_ERR(...)                                                           \
     {                                                                          \

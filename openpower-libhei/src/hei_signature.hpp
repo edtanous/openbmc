@@ -7,8 +7,8 @@ namespace libhei
 {
 
 /**
- * @brief A signature represents an active attention from a single bit on a
- *        register within a chip.
+ * @brief A signature represents an active attention from a single bit position
+ *        from an isolation node within a chip.
  *
  * The isolator will gather a list of all active attentions on a chip and return
  * a list of signatures to the user application. The user application should be
@@ -20,12 +20,12 @@ class Signature
     /**
      * @brief Constructor from components.
      * @param i_chip     The chip containing this register.
-     * @param i_id       The register ID.
+     * @param i_id       The node ID.
      * @param i_instance The instance of this register.
      * @param i_bit      The target bit within this register.
      * @param i_attnType The attention type reported by this bit.
      */
-    Signature(const Chip& i_chip, RegisterId_t i_id, Instance_t i_instance,
+    Signature(const Chip& i_chip, NodeId_t i_id, Instance_t i_instance,
               BitPosition_t i_bit, AttentionType_t i_attnType) :
         iv_chip(i_chip),
         iv_id(i_id), iv_instance(i_instance), iv_bit(i_bit),
@@ -43,7 +43,7 @@ class Signature
 
   private:
     Chip iv_chip;                ///< Chip containing this register.
-    RegisterId_t iv_id;          ///< Register ID.
+    NodeId_t iv_id;              ///< Node ID.
     Instance_t iv_instance;      ///< Instance of this register.
     BitPosition_t iv_bit;        ///< Target bit within this register.
     AttentionType_t iv_attnType; ///< Attention type reported by this bit.
@@ -56,7 +56,7 @@ class Signature
     }
 
     /** @return The register ID. */
-    RegisterId_t getId() const
+    NodeId_t getId() const
     {
         return iv_id;
     }

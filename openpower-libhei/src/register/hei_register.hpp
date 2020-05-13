@@ -44,4 +44,7 @@ class Register
 // Pure virtual destructor must be defined.
 inline Register::~Register() {}
 
+/** Pointer management for Register objects. */
+using RegisterPtr = std::shared_ptr<const Register>;
+
 } // end namespace libhei
