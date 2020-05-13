@@ -75,7 +75,7 @@ uint32_t getBootCount()
         // TODO openbmc/openbmc#851 - Once available, throw returned error
         throw std::runtime_error("ERROR in reading BOOTCOUNT");
     }
-    sdbusplus::message::variant<uint32_t> rebootCount;
+    std::variant<uint32_t> rebootCount;
     reply.read(rebootCount);
 
     return std::get<uint32_t>(rebootCount);
