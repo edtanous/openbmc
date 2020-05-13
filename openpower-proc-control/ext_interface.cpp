@@ -78,5 +78,5 @@ uint32_t getBootCount()
     sdbusplus::message::variant<uint32_t> rebootCount;
     reply.read(rebootCount);
 
-    return sdbusplus::message::variant_ns::get<uint32_t>(rebootCount);
+    return std::get<uint32_t>(rebootCount);
 }
