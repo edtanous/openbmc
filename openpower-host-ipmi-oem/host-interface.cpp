@@ -39,7 +39,7 @@ void Host::execute(Base::Host::Command command,
     // This is the only command that is being used now.
     if (command == Base::Host::Command::OCCReset)
     {
-        auto sensorID = sdbusplus::message::variant_ns::get<uint8_t>(data);
+        auto sensorID = std::get<uint8_t>(data);
 
         auto cmd = std::make_tuple(std::make_pair(IPMI_CMD_OCC_RESET, sensorID),
                                    std::bind(&Host::commandStatusHandler, this,
