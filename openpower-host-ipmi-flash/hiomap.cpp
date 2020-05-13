@@ -364,7 +364,7 @@ static int hiomap_handle_property_update(struct hiomap* ctx,
         }
 
         uint8_t mask = ctx->event_lookup[x.first];
-        auto value = sdbusplus::message::variant_ns::get<bool>(x.second);
+        auto value = std::get<bool>(x.second);
 
         if (value)
         {
