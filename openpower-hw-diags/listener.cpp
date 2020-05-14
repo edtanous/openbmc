@@ -51,9 +51,6 @@ void* threadListener(void* i_params)
     // create config
     attn::Config attnConfig;
 
-    // initialize pdbg targets
-    pdbg_targets_init(nullptr);
-
     // This is the main listener loop. All the above code will be executed
     // only once. All other communtication with the attention handler will
     // originate from here via the message queue.

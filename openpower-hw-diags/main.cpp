@@ -1,3 +1,5 @@
+#include <libpdbg.h>
+
 #include <analyzer/analyzer_main.hpp>
 #include <boost/interprocess/ipc/message_queue.hpp>
 #include <cli.hpp>
@@ -47,7 +49,13 @@ int main(int argc, char* argv[])
     }
     else
     {
-        // todo usage
+        // Pdbg targets should only be initialized once according to
+        // libpdbg documentation. Initializing them here will make sure
+        // they are initialized for the attention handler, invocation of
+        // the analyzer via attention handler and direct invocation of
+        // the analyzer via command line (--analyze).
+
+        pdbg_targets_init(nullptr); // nullptr == use default fdt
 
         // Either analyze (application mode) or daemon mode
         if (true == getCliOption(argv, argv + argc, "--analyze"))
@@ -60,7 +68,7 @@ int main(int argc, char* argv[])
             {
                 // TODO - add error processing/display
 
-                printf("analyzer isolated %i errors", (int)errors.size());
+                printf("analyzer isolated %i error(s)\n", (int)errors.size());
             }
             else
             {
