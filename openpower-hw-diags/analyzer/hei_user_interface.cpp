@@ -4,6 +4,8 @@
  */
 
 #include <assert.h>
+#include <inttypes.h>
+#include <libpdbg.h>
 #include <stdarg.h>
 #include <stdio.h>
 
@@ -14,39 +16,34 @@ namespace libhei
 
 //------------------------------------------------------------------------------
 
-bool registerRead(const Chip& i_chip, void* o_buffer, size_t& io_bufSize,
-                  uint64_t i_regType, uint64_t i_address)
+bool registerRead(const Chip& i_chip, RegisterType_t i_regType,
+                  uint64_t i_address, uint64_t& o_value)
 {
     bool accessFailure = false;
 
-    assert(nullptr != o_buffer);
-    assert(0 != io_bufSize);
+    switch (i_regType)
+    {
+        case REG_TYPE_SCOM:
+        case REG_TYPE_ID_SCOM:
+            // Read the 64-bit SCOM register.
+            accessFailure = (0 != pib_read((pdbg_target*)i_chip.getChip(),
+                                           i_address, &o_value));
+            break;
 
-    // TODO need real register read code
-    printf("registerRead not implemented\n");
+        default:
+            assert(0); // an unsupported register type
+    }
 
-    return accessFailure;
-}
-
-//------------------------------------------------------------------------------
-
-#ifndef __HEI_READ_ONLY
-
-bool registerWrite(const Chip& i_chip, void* i_buffer, size_t& io_bufSize,
-                   uint64_t i_regType, uint64_t i_address)
-{
-    bool accessFailure = false;
-
-    assert(nullptr != i_buffer);
-    assert(0 != io_bufSize);
-
-    // TODO need real register write code
-    printf("registerWrite not implemented\n");
+    if (accessFailure)
+    {
+        printf("Register read failed: chip=%p type=0x%0" PRIx8
+               "addr=0x%0" PRIx64 "\n",
+               i_chip.getChip(), i_regType, i_address);
+        o_value = 0; // just in case
+    }
 
     return accessFailure;
 }
-
-#endif
 
 //------------------------------------------------------------------------------
 
