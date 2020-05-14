@@ -39,6 +39,12 @@ namespace libhei
  */
 class IsolationNode
 {
+  public: // Aliases
+    using Ptr      = std::shared_ptr<IsolationNode>;
+    using ConstPtr = std::shared_ptr<const IsolationNode>;
+
+    using Key = std::pair<NodeId_t, Instance_t>;
+
   public: // Constructors, destructor, assignment
     /**
      * @brief Constructor from components.
@@ -52,7 +58,6 @@ class IsolationNode
     /** @brief Destructor. */
     ~IsolationNode() = default;
 
-  private:
     /** @brief Copy constructor. */
     IsolationNode(const IsolationNode&) = delete;
 
@@ -76,14 +81,13 @@ class IsolationNode
      * HardwareRegister objects and virtual operator registers (all children
      * of the Register class).
      */
-    std::map<AttentionType_t, const RegisterPtr> iv_rules;
+    std::map<AttentionType_t, const Register::ConstPtr> iv_rules;
 
     /**
      * Each bit (key) in this map indicates that an attention was driven from
      * another register (value).
      */
-    std::map<BitPosition_t, const std::shared_ptr<const IsolationNode>>
-        iv_children;
+    std::map<BitPosition_t, const ConstPtr> iv_children;
 
   public: // Member functions
     /**
@@ -113,7 +117,7 @@ class IsolationNode
      * @param The target attention type.
      * @param The rule for this attention type.
      */
-    void addRule(AttentionType_t i_attnType, RegisterPtr i_rule);
+    void addRule(AttentionType_t i_attnType, Register::ConstPtr i_rule);
 
     /**
      * @brief Adds a child node to analyze for the given bit position in this
@@ -125,8 +129,7 @@ class IsolationNode
      * @param The target bit on this node.
      * @param The child node to analyze for the given bit.
      */
-    void addChild(BitPosition_t i_bit,
-                  std::shared_ptr<const IsolationNode> i_child);
+    void addChild(BitPosition_t i_bit, ConstPtr i_child);
 
     /** @return The node ID. */
     NodeId_t getId() const
@@ -138,6 +141,12 @@ class IsolationNode
     Instance_t getInstance() const
     {
         return iv_instance;
+    }
+
+    /** @return The node/instance key. */
+    Key getKey() const
+    {
+        return {iv_id, iv_instance};
     }
 
   private: // Isolation stack and supporting functions.
@@ -153,7 +162,7 @@ class IsolationNode
      *  this node can be popped off the top of the stack. Once all the recursive
      *  calls have returned back to the root node the stack should be empty.
      */
-    static std::vector<std::shared_ptr<const IsolationNode>> cv_isolationStack;
+    static std::vector<ConstPtr> cv_isolationStack;
 
     /**
      * @brief Pushes this node to the top of the stack. Will assert that this
@@ -167,8 +176,5 @@ class IsolationNode
         cv_isolationStack.pop_back();
     }
 };
-
-/** Pointer management for IsolationNode objects. */
-using IsolationNodePtr = std::shared_ptr<const IsolationNode>;
 
 } // end namespace libhei

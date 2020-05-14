@@ -26,6 +26,10 @@ contain the result of mask1 & mask2.
 */
 class Register
 {
+  public: // Aliases
+    using Ptr      = std::shared_ptr<Register>;
+    using ConstPtr = std::shared_ptr<const Register>;
+
   public:
     /** @brief Pure virtual destructor. */
     virtual ~Register() = 0;
@@ -43,8 +47,5 @@ class Register
 
 // Pure virtual destructor must be defined.
 inline Register::~Register() {}
-
-/** Pointer management for Register objects. */
-using RegisterPtr = std::shared_ptr<const Register>;
 
 } // end namespace libhei

@@ -48,7 +48,7 @@ class Isolator
 
   private:
     /** Keeps track of all chip types that have been initialized. */
-    IsolationChipMap iv_isoChips;
+    IsolationChip::Map iv_isoChips;
 
   public:
     /** @brief Provides access to a singleton instance of this object. */

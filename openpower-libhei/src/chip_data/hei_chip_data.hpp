@@ -20,6 +20,6 @@ namespace libhei
  *                     for each of the user applications chip types.
  */
 void parseChipDataFile(void* i_buffer, size_t i_bufferSize,
-                       IsolationChipMap& io_isoChips);
+                       IsolationChip::Map& io_isoChips);
 
 } // end namespace libhei

@@ -30,6 +30,12 @@ namespace libhei
  */
 class IsolationChip
 {
+  public: // Aliases
+    using Ptr      = std::unique_ptr<IsolationChip>;
+    using ConstPtr = std::unique_ptr<const IsolationChip>;
+
+    using Map = std::map<ChipType_t, const ConstPtr>;
+
   public: // Constructors, destructor, assignment
     /** @brief Constructor. */
     explicit IsolationChip(ChipType_t i_chipType) : iv_chipType(i_chipType) {}
@@ -48,15 +54,13 @@ class IsolationChip
     const ChipType_t iv_chipType;
 
     /** All hardware registers for this chip type. */
-    using RegisterKey_t = std::pair<RegisterId_t, Instance_t>;
-    std::map<RegisterKey_t, const HardwareRegisterPtr> iv_regs;
+    std::map<HardwareRegister::Key, const HardwareRegister::ConstPtr> iv_regs;
 
     /** All isolation nodes for this chip type. */
-    using NodeKey_t = std::pair<NodeId_t, Instance_t>;
-    std::map<NodeKey_t, const IsolationNodePtr> iv_nodes;
+    std::map<IsolationNode::Key, const IsolationNode::ConstPtr> iv_nodes;
 
     /** Root nodes for this chip type. */
-    std::map<AttentionType_t, const IsolationNodePtr> iv_rootNodes;
+    std::map<AttentionType_t, const IsolationNode::ConstPtr> iv_rootNodes;
 
   public: // Member functions
     /**
@@ -81,14 +85,14 @@ class IsolationChip
      * @param i_hwReg The target hardware register. Will assert that a different
      *                register with the same ID and instance does not exist.
      */
-    void addHardwareRegister(HardwareRegisterPtr i_hwReg);
+    void addHardwareRegister(HardwareRegister::ConstPtr i_hwReg);
 
     /**
      * @brief Adds an isolation node to this chip.
      * @param i_isoNode The target isolation node. Will assert that a different
      *                  node with the same ID and instance does not exist.
      */
-    void addIsolationNode(IsolationNodePtr i_isoNode);
+    void addIsolationNode(IsolationNode::ConstPtr i_isoNode);
 
     /**
      * @brief Adds a root node to this chip.
@@ -96,34 +100,25 @@ class IsolationChip
      *                   not already exist in iv_rootNodes.
      * @param i_rootNode The target isolation node for this attention type.
      */
-    void addRootNode(AttentionType_t i_attnType, IsolationNodePtr i_rootNode);
+    void addRootNode(AttentionType_t i_attnType,
+                     IsolationNode::ConstPtr i_rootNode);
 
     /**
      * @brief  Retrieves a hardware register from this chip, if it exists.
-     * @param  i_regId   The register ID.
-     * @param  i_regInst The register instance.
+     * @param  i_key The register key.
      * @return The target hardware register. Will assert that the target
      *         register exists in iv_regs.
      */
-    HardwareRegisterPtr getHardwareRegister(RegisterId_t i_regId,
-                                            Instance_t i_regInst) const;
+    HardwareRegister::ConstPtr
+        getHardwareRegister(HardwareRegister::Key i_key) const;
 
     /**
      * @brief  Retrieves an isolation node from this chip, if it exists.
-     * @param  i_nodeId   The node ID.
-     * @param  i_nodeInst The node instance.
+     * @param  i_key The node key.
      * @return The target isolation node. Will assert that the target node
      *         exists in iv_nodes.
      */
-    IsolationNodePtr getIsolationNode(NodeId_t i_nodeId,
-                                      Instance_t i_nodeInst) const;
+    IsolationNode::ConstPtr getIsolationNode(IsolationNode::Key i_key) const;
 };
-
-/** Pointer management for isolation chips. */
-using IsolationChipPtr = std::unique_ptr<IsolationChip>;
-
-/** A simple map to ensure only one IsolationChip exists per chip type. */
-using IsolationChipMap =
-    std::map<ChipType_t, const std::unique_ptr<const IsolationChip>>;
 
 } // end namespace libhei

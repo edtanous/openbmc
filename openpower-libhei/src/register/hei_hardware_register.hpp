@@ -36,6 +36,12 @@ namespace libhei
  */
 class HardwareRegister : public Register
 {
+  public: // Aliases
+    using Ptr      = std::shared_ptr<HardwareRegister>;
+    using ConstPtr = std::shared_ptr<const HardwareRegister>;
+
+    using Key = std::pair<RegisterId_t, Instance_t>;
+
   public:
     /** @brief Pure virtual destructor. */
     virtual ~HardwareRegister() = 0;
@@ -79,6 +85,12 @@ class HardwareRegister : public Register
         return iv_instance;
     }
 
+    /** @return The register/instance key. */
+    Key getKey() const
+    {
+        return {iv_id, iv_instance};
+    }
+
     /** @return True if given flag is enabled, false if disabled. */
     bool queryAttrFlag(RegisterAttributeFlags_t i_flag) const
     {
@@ -102,12 +114,12 @@ class HardwareRegister : public Register
     {
         // In general, comparing the ID and instance should be enough. However,
         // no error will be thrown when adding the register to the flyweights
-        // and any other field differs. Therfore all fields will be used and
+        // and any other field differs. Therefore, all fields will be used and
         // invalid duplicates will be found when adding the register pointers
         // to the IsolationChip objects.
         return (getAddress() == i_r.getAddress()) && (getId() == i_r.getId()) &&
                (getInstance() == i_r.getInstance()) &&
-               (getType() == i_r.getType());
+               (getType() == i_r.getType()) && (iv_flags == i_r.iv_flags);
     }
 
     /** @brief Less than operator. */
@@ -115,7 +127,7 @@ class HardwareRegister : public Register
     {
         // In general, comparing the ID and instance should be enough. However,
         // no error will be thrown when adding the register to the flyweights
-        // and any other field differs. Therfore all fields will be used and
+        // and any other field differs. Therefore, all fields will be used and
         // invalid duplicates will be found when adding the register pointers
         // to the IsolationChip objects.
         if (getAddress() < i_r.getAddress())
@@ -136,7 +148,14 @@ class HardwareRegister : public Register
                 }
                 else if (getInstance() == i_r.getInstance())
                 {
-                    return (getType() < i_r.getType());
+                    if (getType() < i_r.getType())
+                    {
+                        return true;
+                    }
+                    else if (getType() == i_r.getType())
+                    {
+                        return (iv_flags < i_r.iv_flags);
+                    }
                 }
             }
         }
@@ -292,8 +311,5 @@ class HardwareRegister : public Register
         return cv_cache.access(i_chip, this);
     }
 };
-
-/** Pointer management for hardware registers. */
-using HardwareRegisterPtr = std::shared_ptr<const HardwareRegister>;
 
 } // end namespace libhei

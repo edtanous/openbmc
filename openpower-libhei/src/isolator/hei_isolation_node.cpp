@@ -76,7 +76,8 @@ bool IsolationNode::analyze(const Chip& i_chip, AttentionType_t i_attnType,
 
 //------------------------------------------------------------------------------
 
-void IsolationNode::addRule(AttentionType_t i_attnType, RegisterPtr i_rule)
+void IsolationNode::addRule(AttentionType_t i_attnType,
+                            Register::ConstPtr i_rule)
 {
     HEI_ASSERT(i_rule); // should not be null
 
@@ -88,7 +89,7 @@ void IsolationNode::addRule(AttentionType_t i_attnType, RegisterPtr i_rule)
 
 //------------------------------------------------------------------------------
 
-void IsolationNode::addChild(uint8_t i_bit, IsolationNodePtr i_child)
+void IsolationNode::addChild(uint8_t i_bit, ConstPtr i_child)
 {
     HEI_ASSERT(i_child); // should not be null
 
@@ -100,7 +101,7 @@ void IsolationNode::addChild(uint8_t i_bit, IsolationNodePtr i_child)
 
 //------------------------------------------------------------------------------
 
-std::vector<IsolationNodePtr> IsolationNode::cv_isolationStack{};
+std::vector<IsolationNode::ConstPtr> IsolationNode::cv_isolationStack{};
 
 //------------------------------------------------------------------------------
 
@@ -108,11 +109,11 @@ void IsolationNode::pushIsolationStack() const
 {
     // Ensure this node does not already exist in cv_isolationStack.
     auto itr = std::find(cv_isolationStack.begin(), cv_isolationStack.end(),
-                         IsolationNodePtr(this));
+                         ConstPtr(this));
     HEI_ASSERT(cv_isolationStack.end() == itr);
 
     // Push to node to the stack.
-    cv_isolationStack.push_back(IsolationNodePtr(this));
+    cv_isolationStack.push_back(ConstPtr(this));
 }
 
 //------------------------------------------------------------------------------

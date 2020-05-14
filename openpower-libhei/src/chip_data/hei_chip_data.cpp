@@ -23,7 +23,7 @@ constexpr Version_t VERSION_1 = 0x01;
 
 //------------------------------------------------------------------------------
 
-void __readRegister(ChipDataStream& io_stream, IsolationChipPtr& io_isoChip)
+void __readRegister(ChipDataStream& io_stream, IsolationChip::Ptr& io_isoChip)
 {
     // Read the register metadata.
     RegisterId_t id;
@@ -49,7 +49,7 @@ void __readRegister(ChipDataStream& io_stream, IsolationChipPtr& io_isoChip)
 
             // Get this register from the flyweight factory.
             auto& factory = Flyweight<const ScomRegister>::getSingleton();
-            HardwareRegisterPtr hwReg = factory.get(id, inst, attr, addr);
+            auto hwReg    = factory.get(id, inst, attr, addr);
 
             // Add this register to the isolation chip.
             io_isoChip->addHardwareRegister(hwReg);
@@ -61,7 +61,7 @@ void __readRegister(ChipDataStream& io_stream, IsolationChipPtr& io_isoChip)
 
             // Get this register from the flyweight factory.
             auto& factory = Flyweight<const IdScomRegister>::getSingleton();
-            HardwareRegisterPtr hwReg = factory.get(id, inst, attr, addr);
+            auto hwReg    = factory.get(id, inst, attr, addr);
 
             // Add this register to the isolation chip.
             io_isoChip->addHardwareRegister(hwReg);
@@ -147,7 +147,7 @@ void __readExpr(ChipDataStream& io_stream, RegisterType_t i_regType)
 
 //------------------------------------------------------------------------------
 
-void __readNode(ChipDataStream& io_stream, IsolationChipPtr& io_isoChip)
+void __readNode(ChipDataStream& io_stream, IsolationChip::Ptr& io_isoChip)
 {
     // Read the node metadata.
     NodeId_t nodeId;
@@ -191,7 +191,7 @@ void __readNode(ChipDataStream& io_stream, IsolationChipPtr& io_isoChip)
 
 //------------------------------------------------------------------------------
 
-void __readRoot(ChipDataStream& io_stream, IsolationChipPtr& io_isoChip)
+void __readRoot(ChipDataStream& io_stream, IsolationChip::Ptr& io_isoChip)
 {
     AttentionType_t attnType;
     NodeId_t id;
@@ -202,7 +202,7 @@ void __readRoot(ChipDataStream& io_stream, IsolationChipPtr& io_isoChip)
 //------------------------------------------------------------------------------
 
 void parseChipDataFile(void* i_buffer, size_t i_bufferSize,
-                       IsolationChipMap& io_isoChips)
+                       IsolationChip::Map& io_isoChips)
 {
     ChipDataStream stream{i_buffer, i_bufferSize};
 

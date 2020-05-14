@@ -27,13 +27,11 @@ bool IsolationChip::analyze(const Chip& i_chip, IsolationData& io_isoData) const
 
 //------------------------------------------------------------------------------
 
-void IsolationChip::addHardwareRegister(HardwareRegisterPtr i_hwReg)
+void IsolationChip::addHardwareRegister(HardwareRegister::ConstPtr i_hwReg)
 {
     HEI_ASSERT(i_hwReg); // should not be null
 
-    RegisterKey_t key = {i_hwReg->getId(), i_hwReg->getInstance()};
-
-    auto ret = iv_regs.emplace(key, i_hwReg);
+    auto ret = iv_regs.emplace(i_hwReg->getKey(), i_hwReg);
 
     // If an entry already exists, it should point to the same object.
     HEI_ASSERT(ret.second || (ret.first->second == i_hwReg));
@@ -41,13 +39,11 @@ void IsolationChip::addHardwareRegister(HardwareRegisterPtr i_hwReg)
 
 //------------------------------------------------------------------------------
 
-void IsolationChip::addIsolationNode(IsolationNodePtr i_isoNode)
+void IsolationChip::addIsolationNode(IsolationNode::ConstPtr i_isoNode)
 {
     HEI_ASSERT(i_isoNode); // should not be null
 
-    NodeKey_t key = {i_isoNode->getId(), i_isoNode->getInstance()};
-
-    auto ret = iv_nodes.emplace(key, i_isoNode);
+    auto ret = iv_nodes.emplace(i_isoNode->getKey(), i_isoNode);
 
     // If an entry already exists, it should point to the same object.
     HEI_ASSERT(ret.second || (ret.first->second == i_isoNode));
@@ -56,7 +52,7 @@ void IsolationChip::addIsolationNode(IsolationNodePtr i_isoNode)
 //------------------------------------------------------------------------------
 
 void IsolationChip::addRootNode(AttentionType_t i_attnType,
-                                IsolationNodePtr i_rootNode)
+                                IsolationNode::ConstPtr i_rootNode)
 {
     HEI_ASSERT(i_rootNode); // should not be null
 
@@ -68,13 +64,10 @@ void IsolationChip::addRootNode(AttentionType_t i_attnType,
 
 //------------------------------------------------------------------------------
 
-HardwareRegisterPtr
-    IsolationChip::getHardwareRegister(RegisterId_t i_regId,
-                                       Instance_t i_regInst) const
+HardwareRegister::ConstPtr
+    IsolationChip::getHardwareRegister(HardwareRegister::Key i_key) const
 {
-    RegisterKey_t key = {i_regId, i_regInst};
-
-    auto itr = iv_regs.find(key);
+    auto itr = iv_regs.find(i_key);
     HEI_ASSERT(iv_regs.end() != itr); // The register should exist.
 
     return itr->second;
@@ -82,12 +75,10 @@ HardwareRegisterPtr
 
 //------------------------------------------------------------------------------
 
-IsolationNodePtr IsolationChip::getIsolationNode(NodeId_t i_nodeId,
-                                                 Instance_t i_nodeInst) const
+IsolationNode::ConstPtr
+    IsolationChip::getIsolationNode(IsolationNode::Key i_key) const
 {
-    NodeKey_t key = {i_nodeId, i_nodeInst};
-
-    auto itr = iv_nodes.find(key);
+    auto itr = iv_nodes.find(i_key);
     HEI_ASSERT(iv_nodes.end() != itr); // The node should exist.
 
     return itr->second;
