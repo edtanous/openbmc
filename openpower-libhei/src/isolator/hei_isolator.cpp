@@ -32,12 +32,8 @@ void isolate(const std::vector<Chip>& i_chipList, IsolationData& o_isoData)
 
 void Isolator::uninitialize()
 {
-    // Clear all of the IsolationChip objects.
+    // Clear all of the isolation objects.
     iv_isoChips.clear();
-
-    // Remove all of the IsolationNode objects stored in the flyweights. This
-    // must be done before removing the HardwareRegister objects
-    Flyweight<const IsolationNode>::getSingleton().clear();
 
     // Must flush the hardware register cache before deleting any
     // HardwareRegister objects.

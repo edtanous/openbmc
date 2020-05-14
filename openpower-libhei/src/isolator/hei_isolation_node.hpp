@@ -30,6 +30,12 @@ namespace libhei
  * objects to define rules like "REG & ~MASK & CNFG", which reads "return all
  * bits in REG that are not in MASK and set in CNFG". See the definition of the
  * Register class for details on how this works.
+ *
+ * This class cannot be added to the flyweights. There is no way to easily
+ * distinguish differences between nodes on different chips without comparing
+ * all of the capture registers, rules, and child nodes. Instead, the shared
+ * pointers will be stored in the isolation chip, which will ensure there isn't
+ * an attempt to add two nodes with the same ID and instance.
  */
 class IsolationNode
 {
@@ -132,28 +138,6 @@ class IsolationNode
     Instance_t getInstance() const
     {
         return iv_instance;
-    }
-
-  public: // Operators
-    /** @brief Equals operator. */
-    bool operator==(const IsolationNode& i_r) const
-    {
-        return (iv_id == i_r.iv_id) && (iv_instance == i_r.iv_instance);
-    }
-
-    /** @brief Less than operator. */
-    bool operator<(const IsolationNode& i_r) const
-    {
-        if (iv_id < i_r.iv_id)
-        {
-            return true;
-        }
-        else if (iv_id == i_r.iv_id)
-        {
-            return (iv_instance < i_r.iv_instance);
-        }
-
-        return false;
     }
 
   private: // Isolation stack and supporting functions.
