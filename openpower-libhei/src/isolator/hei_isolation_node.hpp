@@ -2,7 +2,7 @@
 
 #include <hei_includes.hpp>
 #include <hei_isolation_data.hpp>
-#include <register/hei_register.hpp>
+#include <register/hei_hardware_register.hpp>
 
 namespace libhei
 {
@@ -75,6 +75,12 @@ class IsolationNode
     const Instance_t iv_instance;
 
     /**
+     * The list of register to capture and add to the log for additional
+     * debugging.
+     */
+    std::vector<HardwareRegister::ConstPtr> iv_capRegs;
+
+    /**
      * This register could report multiple types of attentions. We can use a
      * register 'rule' (value) to find any active attentions for each attention
      * type (key). A 'rule', like "register & ~mask", is a combination of
@@ -106,6 +112,17 @@ class IsolationNode
      */
     bool analyze(const Chip& i_chip, AttentionType_t i_attnType,
                  IsolationData& io_isoData) const;
+
+    /**
+     * @brief Adds a hardware register to the list of registers that will be
+     *        captured for additional debugging. See iv_capRegs for details.
+     *
+     * This is only intended to be used during initialization of the isolator.
+     * Duplicate registers will be ignored.
+     *
+     * @param The target hardware register.
+     */
+    void addCaptureRegister(HardwareRegister::ConstPtr i_hwReg);
 
     /**
      * @brief Adds a register rule for the given attention type. See iv_rules

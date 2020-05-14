@@ -14,6 +14,27 @@ bool IsolationNode::analyze(const Chip& i_chip, AttentionType_t i_attnType,
     // Keep track of nodes that have been analyzed to avoid cyclic isolation.
     pushIsolationStack();
 
+    // Capture all registers for this node.
+    for (const auto& hwReg : iv_capRegs)
+    {
+        // Read the register (adds BitString to register cache).
+        if (hwReg->read(i_chip))
+        {
+            // TODO: Would be nice to add SCOM errors to the log just in case
+            //       traces are not available.
+            HEI_ERR("register read failed on chip type=0x%0" PRIx32
+                    "address=0x%0" PRIx64,
+                    i_chip.getType(), hwReg->getAddress());
+        }
+
+        // TODO: Add this register to io_isoData.
+        // TODO: getBitString() does read hardware if read() has not been called
+        //       and there is nothing in the register cache. However, it does
+        //       not does not indicate if the read was successful. Not sure if
+        //       this is intentional. Will need to investigate.
+        // auto bs = hwReg->getBitString();
+    }
+
     // A rule for i_attnType must exist.
     auto rule_itr = iv_rules.find(i_attnType);
     HEI_ASSERT(iv_rules.end() != rule_itr);
@@ -72,6 +93,20 @@ bool IsolationNode::analyze(const Chip& i_chip, AttentionType_t i_attnType,
     popIsolationStack();
 
     return o_activeAttn;
+}
+
+//------------------------------------------------------------------------------
+
+void IsolationNode::addCaptureRegister(HardwareRegister::ConstPtr i_hwReg)
+{
+    HEI_ASSERT(i_hwReg); // should not be null
+
+    // If the register already exists, ignore it. Otherwise, add it to the list.
+    auto itr = std::find(iv_capRegs.begin(), iv_capRegs.end(), i_hwReg);
+    if (iv_capRegs.end() == itr)
+    {
+        iv_capRegs.push_back(i_hwReg);
+    }
 }
 
 //------------------------------------------------------------------------------
