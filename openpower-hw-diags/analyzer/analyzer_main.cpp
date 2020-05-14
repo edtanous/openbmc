@@ -7,7 +7,7 @@ namespace analyzer
 {
 
 /** Analyze error condition using the hardware error isolator */
-int analyzeHardware(std::map<std::string, std::string>& i_errors)
+bool analyzeHardware(std::map<std::string, std::string>& i_errors)
 {
     using namespace libhei;
 
@@ -37,7 +37,7 @@ int analyzeHardware(std::map<std::string, std::string>& i_errors)
 
     // FIXME TEMP CODE - end
 
-    return 0; // FIXME - error/success from isolator or isolation data
+    return true; // FIXME - error/success from isolator or isolation data
 }
 
 } // namespace analyzer

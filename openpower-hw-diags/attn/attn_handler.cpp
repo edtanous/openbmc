@@ -1,6 +1,7 @@
 #include <analyzer/analyzer_main.hpp>
 #include <attention.hpp>
 #include <attn_config.hpp>
+#include <attn_handler.hpp>
 #include <attn_logging.hpp>
 #include <bp_handler.hpp>
 #include <ti_handler.hpp>
@@ -13,15 +14,6 @@
 
 namespace attn
 {
-
-/** @brief Return codes */
-enum ReturnCodes
-{
-    RC_SUCCESS = 0,
-    RC_NOT_HANDLED,
-    RC_ANALYZER_ERROR,
-    RC_CFAM_ERROR
-};
 
 /**
  * @brief Handle SBE vital attention
@@ -226,9 +218,8 @@ int handleCheckstop(Attention* i_attention)
         // errors that were isolated
         std::map<std::string, std::string> errors;
 
-        rc = analyzer::analyzeHardware(errors); // analyze hardware
-
-        if (RC_SUCCESS != rc)
+        // analyze errors
+        if (true != analyzer::analyzeHardware(errors))
         {
             rc = RC_ANALYZER_ERROR;
         }

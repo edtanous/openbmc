@@ -5,6 +5,15 @@
 namespace attn
 {
 
+/** @brief Attention handler return codes */
+enum ReturnCodes
+{
+    RC_SUCCESS = 0,
+    RC_NOT_HANDLED,
+    RC_ANALYZER_ERROR,
+    RC_CFAM_ERROR
+};
+
 /**
  * @brief The main attention handler logic
  *

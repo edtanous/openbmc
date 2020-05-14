@@ -13,6 +13,6 @@ namespace analyzer
  * component that caused the error(s).
  */
 
-int analyzeHardware(std::map<std::string, std::string>& i_errors);
+bool analyzeHardware(std::map<std::string, std::string>& i_errors);
 
 } // namespace analyzer
