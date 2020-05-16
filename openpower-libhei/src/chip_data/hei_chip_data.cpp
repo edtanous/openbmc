@@ -182,9 +182,9 @@ void __readNode(ChipDataStream& io_stream, IsolationChip::Ptr& io_isoChip)
         for (unsigned int j = 0; j < numChildNodes; j++)
         {
             BitPosition_t bit;
-            NodeId_t nodeId;
-            Instance_t nodeInst;
-            io_stream >> bit >> nodeId >> nodeInst;
+            NodeId_t childId;
+            Instance_t childInst;
+            io_stream >> bit >> childId >> childInst;
         }
     }
 }

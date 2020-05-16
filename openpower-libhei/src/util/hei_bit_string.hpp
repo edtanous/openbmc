@@ -433,7 +433,7 @@ class BitStringBuffer : public BitString
     ~BitStringBuffer();
 
     /** @brief Copy constructor from BitString */
-    BitStringBuffer(const BitString& i_bs);
+    explicit BitStringBuffer(const BitString& i_bs);
 
     /** @brief Copy constructor from BitStringBuffer */
     BitStringBuffer(const BitStringBuffer& i_bsb);

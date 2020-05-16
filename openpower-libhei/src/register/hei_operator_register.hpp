@@ -49,10 +49,7 @@ class OperatorRegister : public Register
 
   public:
     /** @brief Overloaded from parent class. */
-    virtual const BitString* getBitString(const Chip& i_chip) const = 0;
-
-    /** @brief Overloaded from parent class. */
-    size_t getSize() const
+    size_t getSize() const override
     {
         return (BitString::getMinBytes(iv_result.getBitLen()));
     }
@@ -89,7 +86,7 @@ class NotRegister : public OperatorRegister
     NotRegister& operator=(const NotRegister& r) = default;
 
     /** @brief Overloaded from parent class. */
-    const BitString* getBitString(const Chip& i_chip) const
+    const BitString* getBitString(const Chip& i_chip) const override
     {
         const auto* bs = iv_child->getBitString(i_chip);
 
@@ -143,7 +140,7 @@ class LeftShiftRegister : public OperatorRegister
     LeftShiftRegister& operator=(const LeftShiftRegister& r) = default;
 
     /** @brief Overloaded from parent class. */
-    const BitString* getBitString(const Chip& i_chip) const
+    const BitString* getBitString(const Chip& i_chip) const override
     {
         const auto* bs = iv_child->getBitString(i_chip);
 
@@ -200,7 +197,7 @@ class RightShiftRegister : public OperatorRegister
     RightShiftRegister& operator=(const RightShiftRegister& r) = default;
 
     /** @brief Overloaded from parent class. */
-    const BitString* getBitString(const Chip& i_chip) const
+    const BitString* getBitString(const Chip& i_chip) const override
     {
         const auto* bs = iv_child->getBitString(i_chip);
 
@@ -259,7 +256,7 @@ class AndRegister : public OperatorRegister
     AndRegister& operator=(const AndRegister& r) = default;
 
     /** @brief Overloaded from parent class. */
-    const BitString* getBitString(const Chip& i_chip) const
+    const BitString* getBitString(const Chip& i_chip) const override
     {
         const auto* l_bs = iv_left->getBitString(i_chip);
         const auto* r_bs = iv_right->getBitString(i_chip);
@@ -319,7 +316,7 @@ class OrRegister : public OperatorRegister
     OrRegister& operator=(const OrRegister& r) = default;
 
     /** @brief Overloaded from parent class. */
-    const BitString* getBitString(const Chip& i_chip) const
+    const BitString* getBitString(const Chip& i_chip) const override
     {
         const auto* l_bs = iv_left->getBitString(i_chip);
         const auto* r_bs = iv_right->getBitString(i_chip);
@@ -376,7 +373,7 @@ class ConstantRegister : public OperatorRegister
     ConstantRegister& operator=(const ConstantRegister& r) = default;
 
     /** @brief Overloaded from parent class. */
-    const BitString* getBitString(const Chip& i_chip) const
+    const BitString* getBitString(const Chip& i_chip) const override
     {
         return &iv_result;
     }
