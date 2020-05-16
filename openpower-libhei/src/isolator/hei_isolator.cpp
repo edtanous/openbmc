@@ -39,6 +39,14 @@ void Isolator::uninitialize()
     // HardwareRegister objects.
     HardwareRegister::flushAll();
 
+    // Clear the operator register flyweights.
+    Flyweight<const ConstantRegister>::getSingleton().clear();
+    Flyweight<const AndRegister>::getSingleton().clear();
+    Flyweight<const OrRegister>::getSingleton().clear();
+    Flyweight<const NotRegister>::getSingleton().clear();
+    Flyweight<const LeftShiftRegister>::getSingleton().clear();
+    Flyweight<const RightShiftRegister>::getSingleton().clear();
+
     // Remove all of the HardwareRegister objects stored in the flyweights.
     Flyweight<const ScomRegister>::getSingleton().clear();
     Flyweight<const IdScomRegister>::getSingleton().clear();

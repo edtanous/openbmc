@@ -1,5 +1,6 @@
 #include <chip_data/hei_chip_data.hpp>
 #include <chip_data/hei_chip_data_stream.hpp>
+#include <register/hei_operator_register.hpp>
 #include <register/hei_scom_register.hpp>
 
 namespace libhei
@@ -75,9 +76,12 @@ void __readRegister(ChipDataStream& io_stream, IsolationChip::Ptr& io_isoChip)
 
 //------------------------------------------------------------------------------
 
-void __readExpr(ChipDataStream& io_stream, const IsolationChip::Ptr& i_isoChip,
-                IsolationNode::Ptr& io_isoNode)
+Register::ConstPtr __readExpr(ChipDataStream& io_stream,
+                              const IsolationChip::Ptr& i_isoChip,
+                              IsolationNode::Ptr& io_isoNode)
 {
+    Register::ConstPtr expr{};
+
     uint8_t exprType;
     io_stream >> exprType;
     switch (exprType)
@@ -98,64 +102,141 @@ void __readExpr(ChipDataStream& io_stream, const IsolationChip::Ptr& i_isoChip,
             // Add the register to the isolation node.
             io_isoNode->addCaptureRegister(hwReg);
 
+            // Simply return this register.
+            expr = hwReg;
+
             break;
         }
         case 0x02: // integer constant
         {
+            auto& factory = Flyweight<const ConstantRegister>::getSingleton();
+
             if (REG_TYPE_SCOM == io_isoNode->getRegisterType() ||
                 REG_TYPE_ID_SCOM == io_isoNode->getRegisterType())
             {
                 uint64_t constant; // 8-byte value
                 io_stream >> constant;
+
+                // Create the constant register and put it in the flyweights.
+                expr = factory.get(constant);
             }
             else
             {
                 HEI_ASSERT(false); // register type unsupported
             }
+
             break;
         }
         case 0x10: // AND operation
         {
+            auto& factory = Flyweight<const AndRegister>::getSingleton();
+
             uint8_t numSubExpr;
             io_stream >> numSubExpr;
-            for (uint8_t i = 0; i < numSubExpr; i++)
+
+            HEI_ASSERT(2 <= numSubExpr); // must be at least two
+
+            // Read the first two sub-expressions.
+            auto e1 = __readExpr(io_stream, i_isoChip, io_isoNode);
+            auto e2 = __readExpr(io_stream, i_isoChip, io_isoNode);
+            HEI_ASSERT(e1 && e2); // Cannot be null
+
+            // Create the AND register and put it in the flyweights.
+            expr = factory.get(e1, e2);
+
+            // Iterate any remaining expressions.
+            for (uint8_t i = 2; i < numSubExpr; i++)
             {
-                __readExpr(io_stream, i_isoChip, io_isoNode);
+                // Read the next sub-expressions.
+                e2 = __readExpr(io_stream, i_isoChip, io_isoNode);
+                HEI_ASSERT(e2); // Cannot be null
+
+                // Create the AND register and put it in the flyweights.
+                expr = factory.get(expr, e2);
             }
+
             break;
         }
         case 0x11: // OR operation
         {
+            auto& factory = Flyweight<const OrRegister>::getSingleton();
+
             uint8_t numSubExpr;
             io_stream >> numSubExpr;
-            for (uint8_t i = 0; i < numSubExpr; i++)
+
+            HEI_ASSERT(2 <= numSubExpr); // must be at least two
+
+            // Read the first two sub-expressions.
+            auto e1 = __readExpr(io_stream, i_isoChip, io_isoNode);
+            auto e2 = __readExpr(io_stream, i_isoChip, io_isoNode);
+            HEI_ASSERT(e1 && e2); // Cannot be null
+
+            // Create the OR register and put it in the flyweights.
+            expr = factory.get(e1, e2);
+
+            // Iterate any remaining expressions.
+            for (uint8_t i = 2; i < numSubExpr; i++)
             {
-                __readExpr(io_stream, i_isoChip, io_isoNode);
+                // Read the next sub-expressions.
+                e2 = __readExpr(io_stream, i_isoChip, io_isoNode);
+                HEI_ASSERT(e2); // Cannot be null
+
+                // Create the OR register and put it in the flyweights.
+                expr = factory.get(expr, e2);
             }
+
             break;
         }
         case 0x12: // NOT operation
         {
-            __readExpr(io_stream, i_isoChip, io_isoNode);
+            auto& factory = Flyweight<const NotRegister>::getSingleton();
+
+            // Read the sub-expression
+            auto e = __readExpr(io_stream, i_isoChip, io_isoNode);
+            HEI_ASSERT(e); // Cannot be null
+
+            // Create the NOT register and put it in the flyweights.
+            expr = factory.get(e);
+
             break;
         }
         case 0x13: // left shift operation
         {
+            auto& factory = Flyweight<const LeftShiftRegister>::getSingleton();
+
             uint8_t shiftValue;
             io_stream >> shiftValue;
-            __readExpr(io_stream, i_isoChip, io_isoNode);
+
+            // Read the sub-expression
+            auto e = __readExpr(io_stream, i_isoChip, io_isoNode);
+            HEI_ASSERT(e); // Cannot be null
+
+            // Create the left shift register and put it in the flyweights.
+            expr = factory.get(e, shiftValue);
+
             break;
         }
         case 0x14: // right shift operation
         {
+            auto& factory = Flyweight<const RightShiftRegister>::getSingleton();
+
             uint8_t shiftValue;
             io_stream >> shiftValue;
-            __readExpr(io_stream, i_isoChip, io_isoNode);
+
+            // Read the sub-expression
+            auto e = __readExpr(io_stream, i_isoChip, io_isoNode);
+            HEI_ASSERT(e); // Cannot be null
+
+            // Create the right shift register and put it in the flyweights.
+            expr = factory.get(e, shiftValue);
+
             break;
         }
         default:
             HEI_ASSERT(false); // unsupported expression type
     }
+
+    return expr;
 }
 
 //------------------------------------------------------------------------------
@@ -205,7 +286,13 @@ void __readNode(ChipDataStream& io_stream, IsolationChip::Ptr& io_isoChip)
             // Read the rule metadata.
             AttentionType_t attnType;
             io_stream >> attnType;
-            __readExpr(io_stream, io_isoChip, isoNode);
+
+            // Read out the rule for this attention type.
+            auto rule = __readExpr(io_stream, io_isoChip, isoNode);
+            HEI_ASSERT(rule); // Cannot be null
+
+            // Add the rule to the isolation node.
+            isoNode->addRule(attnType, rule);
         }
 
         // Add child nodes.
