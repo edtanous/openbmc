@@ -8,7 +8,8 @@ test_src = ['../src/util/hei_bit_string.cpp',
 # build g-test framework unit tests
 gtests = [
     'bit_string_test',
-    'flyweight_test'
+    'flyweight_test',
+    'operator_register_test',
 ]
 
 gtest = dependency('gtest', main : true, required : false, method : 'system')
@@ -21,10 +22,3 @@ if gtest.found()
   endforeach
 endif
 
-# build unit-test framework
-tests = ['hei_operator_register_testcase']
-
-foreach t : tests
-        test(t, executable(t.underscorify(), t + '.cpp', test_src, \
-                            include_directories : incdir))
-endforeach

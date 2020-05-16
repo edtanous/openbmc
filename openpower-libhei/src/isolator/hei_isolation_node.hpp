@@ -51,8 +51,10 @@ class IsolationNode
      * @param i_id       Unique ID for all instances of this node.
      * @param i_instance Instance of this node.
      */
-    IsolationNode(NodeId_t i_id, Instance_t i_instance) :
-        iv_id(i_id), iv_instance(i_instance)
+    IsolationNode(NodeId_t i_id, Instance_t i_instance,
+                  RegisterType_t i_regType) :
+        iv_id(i_id),
+        iv_instance(i_instance), iv_regType(i_regType)
     {}
 
     /** @brief Destructor. */
@@ -75,6 +77,14 @@ class IsolationNode
     const Instance_t iv_instance;
 
     /**
+     * A registers referenced by this node's rules must be of this type. No
+     * mixing of register types is allowed because comparing different sized
+     * registers is undefined behavior. Note that it is possible to have capture
+     * registers of mixed types.
+     */
+    const RegisterType_t iv_regType;
+
+    /**
      * The list of register to capture and add to the log for additional
      * debugging.
      */
@@ -85,7 +95,8 @@ class IsolationNode
      * register 'rule' (value) to find any active attentions for each attention
      * type (key). A 'rule', like "register & ~mask", is a combination of
      * HardwareRegister objects and virtual operator registers (all children
-     * of the Register class).
+     * of the Register class). Note that all registers referenced by these rules
+     * must be the same type as iv_regType.
      */
     std::map<AttentionType_t, const Register::ConstPtr> iv_rules;
 
@@ -164,6 +175,12 @@ class IsolationNode
     Key getKey() const
     {
         return {iv_id, iv_instance};
+    }
+
+    /** @return This node's register type.. */
+    RegisterType_t getRegisterType() const
+    {
+        return iv_regType;
     }
 
   private: // Isolation stack and supporting functions.

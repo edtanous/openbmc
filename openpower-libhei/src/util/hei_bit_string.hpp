@@ -333,7 +333,15 @@ class BitString
         return isEqual(i_str);
     }
 
-    /** @brief Less-than operator */
+    /**
+     * @brief Less-than operator.
+     *
+     * IMPORTANT:
+     * The purpose of this function is primarily for sorting these objects in
+     * data structures like map and vector. It does not guarantee a less than
+     * comparison of the bit strings because bit strings can vary in length and
+     * it is difficult to define that kind of comparison.
+     */
     bool operator<(const BitString& i_str) const;
 
     /** @brief Bitwise NOT operator. */

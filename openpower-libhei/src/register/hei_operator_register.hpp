@@ -72,18 +72,18 @@ class NotRegister : public OperatorRegister
      * @brief Constructor from components.
      * @param i_arg Target register for operation.
      */
-    explicit NotRegister(Register& i_arg) :
-        OperatorRegister(i_arg.getSize()), iv_child(&i_arg)
+    explicit NotRegister(Register::ConstPtr i_arg) :
+        OperatorRegister(i_arg->getSize()), iv_child(i_arg)
     {}
 
-    /** @brief Default destructor. */
+    /** @brief Destructor. */
     ~NotRegister() = default;
 
-    /** @brief Default copy constructor. */
-    NotRegister(const NotRegister&) = default;
+    /** @brief Copy constructor. */
+    NotRegister(const NotRegister&) = delete;
 
-    /** @brief Default assignment operator. */
-    NotRegister& operator=(const NotRegister& r) = default;
+    /** @brief Assignment operator. */
+    NotRegister& operator=(const NotRegister& r) = delete;
 
     /** @brief Overloaded from parent class. */
     const BitString* getBitString(const Chip& i_chip) const override
@@ -108,7 +108,7 @@ class NotRegister : public OperatorRegister
     }
 
   private:
-    Register* iv_child;
+    const Register::ConstPtr iv_child;
 };
 
 /**
@@ -126,18 +126,18 @@ class LeftShiftRegister : public OperatorRegister
      * @param i_arg    Target register for operation.
      * @param i_amount The shift value.
      */
-    LeftShiftRegister(Register& i_arg, uint16_t i_amount) :
-        OperatorRegister(i_arg.getSize()), iv_child(&i_arg), iv_amount(i_amount)
+    LeftShiftRegister(Register::ConstPtr i_arg, size_t i_amount) :
+        OperatorRegister(i_arg->getSize()), iv_child(i_arg), iv_amount(i_amount)
     {}
 
-    /** @brief Default destructor. */
+    /** @brief Destructor. */
     ~LeftShiftRegister() = default;
 
-    /** @brief Default copy constructor. */
-    LeftShiftRegister(const LeftShiftRegister&) = default;
+    /** @brief Copy constructor. */
+    LeftShiftRegister(const LeftShiftRegister&) = delete;
 
-    /** @brief Default assignment operator. */
-    LeftShiftRegister& operator=(const LeftShiftRegister& r) = default;
+    /** @brief Assignment operator. */
+    LeftShiftRegister& operator=(const LeftShiftRegister& r) = delete;
 
     /** @brief Overloaded from parent class. */
     const BitString* getBitString(const Chip& i_chip) const override
@@ -164,8 +164,8 @@ class LeftShiftRegister : public OperatorRegister
     }
 
   private:
-    Register* iv_child;
-    uint16_t iv_amount;
+    const Register::ConstPtr iv_child;
+    const size_t iv_amount;
 };
 
 /**
@@ -183,18 +183,18 @@ class RightShiftRegister : public OperatorRegister
      * @param i_arg    Target register for operation.
      * @param i_amount The shift value.
      */
-    RightShiftRegister(Register& i_arg, uint16_t i_amount) :
-        OperatorRegister(i_arg.getSize()), iv_child(&i_arg), iv_amount(i_amount)
+    RightShiftRegister(Register::ConstPtr i_arg, size_t i_amount) :
+        OperatorRegister(i_arg->getSize()), iv_child(i_arg), iv_amount(i_amount)
     {}
 
-    /** @brief Default destructor. */
+    /** @brief Destructor. */
     ~RightShiftRegister() = default;
 
-    /** @brief Default copy constructor. */
-    RightShiftRegister(const RightShiftRegister&) = default;
+    /** @brief Copy constructor. */
+    RightShiftRegister(const RightShiftRegister&) = delete;
 
-    /** @brief Default assignment operator. */
-    RightShiftRegister& operator=(const RightShiftRegister& r) = default;
+    /** @brief Assignment operator. */
+    RightShiftRegister& operator=(const RightShiftRegister& r) = delete;
 
     /** @brief Overloaded from parent class. */
     const BitString* getBitString(const Chip& i_chip) const override
@@ -221,8 +221,8 @@ class RightShiftRegister : public OperatorRegister
     }
 
   private:
-    Register* iv_child;
-    uint16_t iv_amount;
+    const Register::ConstPtr iv_child;
+    const size_t iv_amount;
 };
 
 /**
@@ -241,19 +241,22 @@ class AndRegister : public OperatorRegister
      * @param i_left  Target register for operation.
      * @param i_right Target register for operation.
      */
-    AndRegister(Register& i_left, Register& i_right) :
-        OperatorRegister(std::min(i_left.getSize(), i_right.getSize())),
-        iv_left(&i_left), iv_right(&i_right)
-    {}
+    AndRegister(Register::ConstPtr i_left, Register::ConstPtr i_right) :
+        OperatorRegister(i_left->getSize()), iv_left(i_left), iv_right(i_right)
+    {
+        // The two registers must be the same sizes or it makes for some weird
+        // results.
+        HEI_ASSERT(iv_left->getSize() == iv_right->getSize());
+    }
 
-    /** @brief Default destructor. */
+    /** @brief Destructor. */
     ~AndRegister() = default;
 
-    /** @brief Default copy constructor. */
-    AndRegister(const AndRegister&) = default;
+    /** @brief Copy constructor. */
+    AndRegister(const AndRegister&) = delete;
 
-    /** @brief Default assignment operator. */
-    AndRegister& operator=(const AndRegister& r) = default;
+    /** @brief Assignment operator. */
+    AndRegister& operator=(const AndRegister& r) = delete;
 
     /** @brief Overloaded from parent class. */
     const BitString* getBitString(const Chip& i_chip) const override
@@ -281,8 +284,8 @@ class AndRegister : public OperatorRegister
     }
 
   private:
-    Register* iv_left;
-    Register* iv_right;
+    const Register::ConstPtr iv_left;
+    const Register::ConstPtr iv_right;
 };
 
 /**
@@ -301,19 +304,22 @@ class OrRegister : public OperatorRegister
      * @param i_left  Target register for operation.
      * @param i_right Target register for operation.
      */
-    OrRegister(Register& i_left, Register& i_right) :
-        OperatorRegister(std::min(i_left.getSize(), i_right.getSize())),
-        iv_left(&i_left), iv_right(&i_right)
-    {}
+    OrRegister(Register::ConstPtr i_left, Register::ConstPtr i_right) :
+        OperatorRegister(i_left->getSize()), iv_left(i_left), iv_right(i_right)
+    {
+        // The two registers must be the same sizes or it makes for some weird
+        // results.
+        HEI_ASSERT(iv_left->getSize() == iv_right->getSize());
+    }
 
-    /** @brief Default destructor. */
+    /** @brief Destructor. */
     ~OrRegister() = default;
 
-    /** @brief Default copy constructor. */
-    OrRegister(const OrRegister&) = default;
+    /** @brief Copy constructor. */
+    OrRegister(const OrRegister&) = delete;
 
-    /** @brief Default assignment operator. */
-    OrRegister& operator=(const OrRegister& r) = default;
+    /** @brief Assignment operator. */
+    OrRegister& operator=(const OrRegister& r) = delete;
 
     /** @brief Overloaded from parent class. */
     const BitString* getBitString(const Chip& i_chip) const override
@@ -341,36 +347,38 @@ class OrRegister : public OperatorRegister
     }
 
   private:
-    Register* iv_left;
-    Register* iv_right;
+    const Register::ConstPtr iv_left;
+    const Register::ConstPtr iv_right;
 };
 
 /**
  * @brief Contains a constant value that can be used within any of the other
  *        register operators. The value can be retrieved using the
  *        getBitString() function.
- **/
+ */
 class ConstantRegister : public OperatorRegister
 {
   public:
     /**
      * @brief Constructor from components.
-     * @param i_arg A BitStringBuffer containing the constant value.
+     * @param i_val An unsigned integer value. iv_result will be initialized to
+     *              the size of type T and this value will be copied into that
+     *              buffer.
      */
-    explicit ConstantRegister(const BitStringBuffer& i_arg) :
-        OperatorRegister(BitString::getMinBytes(i_arg.getBitLen()))
+    template <class T>
+    explicit ConstantRegister(T i_val) : OperatorRegister(sizeof(i_val))
     {
-        iv_result = i_arg;
+        iv_result.setFieldRight(0, iv_result.getBitLen(), i_val);
     }
 
-    /** @brief Default destructor. */
+    /** @brief Destructor. */
     ~ConstantRegister() = default;
 
-    /** @brief Default copy constructor. */
-    ConstantRegister(const ConstantRegister&) = default;
+    /** @brief Copy constructor. */
+    ConstantRegister(const ConstantRegister&) = delete;
 
-    /** @brief Default assignment operator. */
-    ConstantRegister& operator=(const ConstantRegister& r) = default;
+    /** @brief Assignment operator. */
+    ConstantRegister& operator=(const ConstantRegister& r) = delete;
 
     /** @brief Overloaded from parent class. */
     const BitString* getBitString(const Chip& i_chip) const override

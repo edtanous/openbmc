@@ -75,7 +75,8 @@ void __readRegister(ChipDataStream& io_stream, IsolationChip::Ptr& io_isoChip)
 
 //------------------------------------------------------------------------------
 
-void __readExpr(ChipDataStream& io_stream, RegisterType_t i_regType)
+void __readExpr(ChipDataStream& io_stream, const IsolationChip::Ptr& i_isoChip,
+                IsolationNode::Ptr& io_isoNode)
 {
     uint8_t exprType;
     io_stream >> exprType;
@@ -86,11 +87,23 @@ void __readExpr(ChipDataStream& io_stream, RegisterType_t i_regType)
             RegisterId_t regId;
             Instance_t regInst;
             io_stream >> regId >> regInst;
+
+            // Find the hardware register that is stored in this isolation chip
+            // and add it to the list of capture registers. This ensures all
+            // registers referenced in the rules are are captured by default.
+            // Note that this will assert that the target register must exist in
+            // the isolation chip.
+            auto hwReg = i_isoChip->getHardwareRegister({regId, regInst});
+
+            // Add the register to the isolation node.
+            io_isoNode->addCaptureRegister(hwReg);
+
             break;
         }
         case 0x02: // integer constant
         {
-            if (REG_TYPE_SCOM == i_regType || REG_TYPE_ID_SCOM == i_regType)
+            if (REG_TYPE_SCOM == io_isoNode->getRegisterType() ||
+                REG_TYPE_ID_SCOM == io_isoNode->getRegisterType())
             {
                 uint64_t constant; // 8-byte value
                 io_stream >> constant;
@@ -107,7 +120,7 @@ void __readExpr(ChipDataStream& io_stream, RegisterType_t i_regType)
             io_stream >> numSubExpr;
             for (uint8_t i = 0; i < numSubExpr; i++)
             {
-                __readExpr(io_stream, i_regType);
+                __readExpr(io_stream, i_isoChip, io_isoNode);
             }
             break;
         }
@@ -117,27 +130,27 @@ void __readExpr(ChipDataStream& io_stream, RegisterType_t i_regType)
             io_stream >> numSubExpr;
             for (uint8_t i = 0; i < numSubExpr; i++)
             {
-                __readExpr(io_stream, i_regType);
+                __readExpr(io_stream, i_isoChip, io_isoNode);
             }
             break;
         }
         case 0x12: // NOT operation
         {
-            __readExpr(io_stream, i_regType);
+            __readExpr(io_stream, i_isoChip, io_isoNode);
             break;
         }
         case 0x13: // left shift operation
         {
             uint8_t shiftValue;
             io_stream >> shiftValue;
-            __readExpr(io_stream, i_regType);
+            __readExpr(io_stream, i_isoChip, io_isoNode);
             break;
         }
         case 0x14: // right shift operation
         {
             uint8_t shiftValue;
             io_stream >> shiftValue;
-            __readExpr(io_stream, i_regType);
+            __readExpr(io_stream, i_isoChip, io_isoNode);
             break;
         }
         default:
@@ -162,30 +175,51 @@ void __readNode(ChipDataStream& io_stream, IsolationChip::Ptr& io_isoChip)
         uint8_t numCapRegs, numIsoRules, numChildNodes;
         io_stream >> nodeInst >> numCapRegs >> numIsoRules >> numChildNodes;
 
+        // There must be at least one isolation rule defined.
+        HEI_ASSERT(0 != numIsoRules);
+
+        // Allocate memory for this isolation node.
+        auto isoNode =
+            std::make_shared<IsolationNode>(nodeId, nodeInst, regType);
+
         // Add capture registers.
         for (unsigned int j = 0; j < numCapRegs; j++)
         {
+            // Read the capture register metadata.
             RegisterId_t regId;
             Instance_t regInst;
             io_stream >> regId >> regInst;
+
+            // Find the hardware register that is stored in this isolation chip
+            // and add it to the list of capture registers. Note that this will
+            // assert that the target register must exist in the isolation chip.
+            auto hwReg = io_isoChip->getHardwareRegister({regId, regInst});
+
+            // Add the register to the isolation node.
+            isoNode->addCaptureRegister(hwReg);
         }
 
         // Add isolation rules.
         for (unsigned int j = 0; j < numIsoRules; j++)
         {
+            // Read the rule metadata.
             AttentionType_t attnType;
             io_stream >> attnType;
-            __readExpr(io_stream, regType);
+            __readExpr(io_stream, io_isoChip, isoNode);
         }
 
         // Add child nodes.
         for (unsigned int j = 0; j < numChildNodes; j++)
         {
+            // Read the child node metadata.
             BitPosition_t bit;
             NodeId_t childId;
             Instance_t childInst;
             io_stream >> bit >> childId >> childInst;
         }
+
+        // Add this node to the isolation chip.
+        io_isoChip->addIsolationNode(isoNode);
     }
 }
 
