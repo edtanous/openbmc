@@ -241,7 +241,12 @@ Register::ConstPtr __readExpr(ChipDataStream& io_stream,
 
 //------------------------------------------------------------------------------
 
-void __readNode(ChipDataStream& io_stream, IsolationChip::Ptr& io_isoChip)
+using TmpChildNodeMap = std::map<BitPosition_t, IsolationNode::Key>;
+using TmpNodeData     = std::pair<IsolationNode::Ptr, TmpChildNodeMap>;
+using TmpNodeMap      = std::map<IsolationNode::Key, TmpNodeData>;
+
+void __readNode(ChipDataStream& io_stream, const IsolationChip::Ptr& i_isoChip,
+                TmpNodeMap& io_tmpNodeMap)
 {
     // Read the node metadata.
     NodeId_t nodeId;
@@ -274,7 +279,7 @@ void __readNode(ChipDataStream& io_stream, IsolationChip::Ptr& io_isoChip)
             // Find the hardware register that is stored in this isolation chip
             // and add it to the list of capture registers. Note that this will
             // assert that the target register must exist in the isolation chip.
-            auto hwReg = io_isoChip->getHardwareRegister({regId, regInst});
+            auto hwReg = i_isoChip->getHardwareRegister({regId, regInst});
 
             // Add the register to the isolation node.
             isoNode->addCaptureRegister(hwReg);
@@ -288,14 +293,20 @@ void __readNode(ChipDataStream& io_stream, IsolationChip::Ptr& io_isoChip)
             io_stream >> attnType;
 
             // Read out the rule for this attention type.
-            auto rule = __readExpr(io_stream, io_isoChip, isoNode);
+            auto rule = __readExpr(io_stream, i_isoChip, isoNode);
             HEI_ASSERT(rule); // Cannot be null
 
             // Add the rule to the isolation node.
             isoNode->addRule(attnType, rule);
         }
 
-        // Add child nodes.
+        // At this point, we will need to read out the child node metadata.
+        // However, we can't look up the child nodes and add them to this
+        // isolation node yet because we are still in the process of parsing
+        // them out of the Chip Data File. Therefore, we'll save a temporary map
+        // containing the child node information which will be used to look up
+        // the actual node objects later.
+        TmpChildNodeMap cMap{};
         for (unsigned int j = 0; j < numChildNodes; j++)
         {
             // Read the child node metadata.
@@ -303,10 +314,47 @@ void __readNode(ChipDataStream& io_stream, IsolationChip::Ptr& io_isoChip)
             NodeId_t childId;
             Instance_t childInst;
             io_stream >> bit >> childId >> childInst;
+
+            auto ret =
+                cMap.emplace(bit, IsolationNode::Key{childId, childInst});
+            HEI_ASSERT(ret.second); // Should not have duplicate entries
+        }
+
+        // Add this isolation node with the temporary child node map to the
+        // returned map of nodes.
+        auto ret = io_tmpNodeMap.emplace(IsolationNode::Key{nodeId, nodeInst},
+                                         TmpNodeData{isoNode, cMap});
+        HEI_ASSERT(ret.second); // Should not have duplicate entries
+    }
+}
+
+//------------------------------------------------------------------------------
+
+void __insertNodes(IsolationChip::Ptr& io_isoChip,
+                   const TmpNodeMap& i_tmpNodeMap)
+{
+    for (const auto& n : i_tmpNodeMap)
+    {
+        const IsolationNode::Ptr& node  = n.second.first;
+        const TmpChildNodeMap& childMap = n.second.second;
+
+        // Link the child nodes, if they exist.
+        for (const auto& c : childMap)
+        {
+            const BitPosition_t& bit           = c.first;
+            const IsolationNode::Key& childKey = c.second;
+
+            // Find the child node in the temporary map.
+            auto itr = i_tmpNodeMap.find(childKey);
+            HEI_ASSERT(i_tmpNodeMap.end() != itr); // Child node must exist.
+
+            const IsolationNode::Ptr& child = itr->second.first;
+
+            node->addChild(bit, child);
         }
 
         // Add this node to the isolation chip.
-        io_isoChip->addIsolationNode(isoNode);
+        io_isoChip->addIsolationNode(node);
     }
 }
 
@@ -372,10 +420,13 @@ void parseChipDataFile(void* i_buffer, size_t i_bufferSize,
     // There must be at least one node defined.
     HEI_ASSERT(0 != numNodes);
 
+    TmpNodeMap tmpNodeMap; // Stores all nodes with child node map.
     for (unsigned int i = 0; i < numNodes; i++)
     {
-        __readNode(stream, isoChip);
+        __readNode(stream, isoChip, tmpNodeMap);
     }
+    // Link all nodes with their child nodes. Then add them to isoChip.
+    __insertNodes(isoChip, tmpNodeMap);
 
     // Read the root node list metadata.
     SectionKeyword_t rootKeyword;
