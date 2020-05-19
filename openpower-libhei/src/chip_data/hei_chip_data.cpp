@@ -362,10 +362,14 @@ void __insertNodes(IsolationChip::Ptr& io_isoChip,
 
 void __readRoot(ChipDataStream& io_stream, IsolationChip::Ptr& io_isoChip)
 {
+    // Read the root node metadata.
     AttentionType_t attnType;
     NodeId_t id;
     Instance_t inst;
     io_stream >> attnType >> id >> inst;
+
+    // Add the root node.
+    io_isoChip->addRootNode(attnType, io_isoChip->getIsolationNode({id, inst}));
 }
 
 //------------------------------------------------------------------------------

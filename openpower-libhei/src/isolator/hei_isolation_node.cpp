@@ -136,19 +136,19 @@ void IsolationNode::addChild(uint8_t i_bit, ConstPtr i_child)
 
 //------------------------------------------------------------------------------
 
-std::vector<IsolationNode::ConstPtr> IsolationNode::cv_isolationStack{};
+std::vector<const IsolationNode*> IsolationNode::cv_isolationStack{};
 
 //------------------------------------------------------------------------------
 
 void IsolationNode::pushIsolationStack() const
 {
     // Ensure this node does not already exist in cv_isolationStack.
-    auto itr = std::find(cv_isolationStack.begin(), cv_isolationStack.end(),
-                         ConstPtr(this));
+    auto itr =
+        std::find(cv_isolationStack.begin(), cv_isolationStack.end(), this);
     HEI_ASSERT(cv_isolationStack.end() == itr);
 
     // Push to node to the stack.
-    cv_isolationStack.push_back(ConstPtr(this));
+    cv_isolationStack.push_back(this);
 }
 
 //------------------------------------------------------------------------------

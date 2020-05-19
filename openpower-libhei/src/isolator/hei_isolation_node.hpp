@@ -196,7 +196,7 @@ class IsolationNode
      *  this node can be popped off the top of the stack. Once all the recursive
      *  calls have returned back to the root node the stack should be empty.
      */
-    static std::vector<ConstPtr> cv_isolationStack;
+    static std::vector<const IsolationNode*> cv_isolationStack;
 
     /**
      * @brief Pushes this node to the top of the stack. Will assert that this
