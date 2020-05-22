@@ -1,3 +1,5 @@
+#include <libpdbg.h>
+
 #include <analyzer/analyzer_main.hpp>
 #include <attn/attn_config.hpp>
 #include <attn/attn_main.hpp>
@@ -41,6 +43,8 @@ int main(int argc, char* argv[])
             if (true == getCliOption(argv, argv + argc, "--daemon"))
             {
                 attn::Config attnConfig; // default config
+
+                pdbg_targets_init(nullptr); // initialize pdbg targets
 
                 attn::attnDaemon(&attnConfig); // start daemon
             }

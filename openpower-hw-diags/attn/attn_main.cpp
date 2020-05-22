@@ -21,7 +21,7 @@ int attnDaemon(Config* i_config)
     };
 
     // get handle to attention GPIO line
-    line = gpiod_line_get("gpiochip0", 74);
+    line = gpiod_line_find("checkstop");
 
     if (nullptr == line)
     {
@@ -35,6 +35,9 @@ int attnDaemon(Config* i_config)
             std::make_unique<attn::AttnMonitor>(line, config, io, i_config));
 
         io.run(); // start GPIO monitor
+
+        // done with line, manually close chip (per gpiod api comments)
+        gpiod_line_close_chip(line);
     }
 
     return rc;

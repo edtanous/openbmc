@@ -59,9 +59,12 @@ void attnHandler(Config* i_config)
     uint32_t proc;
 
     // loop through processors looking for active attentions
+    log<level::INFO>("Attention handler started");
+
     pdbg_target* target;
     pdbg_for_each_class_target("fsi", target)
     {
+        log<level::INFO>("iterating targets");
         if (PDBG_TARGET_ENABLED == pdbg_target_probe(target))
         {
             proc = pdbg_target_index(target); // get processor number
