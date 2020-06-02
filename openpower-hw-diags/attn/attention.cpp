@@ -30,6 +30,12 @@ int Attention::handle()
     return iv_handler(this);
 }
 
+/* @brief Get attention handler target */
+pdbg_target* Attention::getTarget() const
+{
+    return iv_target;
+}
+
 /** @brief less than operator, for heap creation */
 bool Attention::operator<(const Attention& right) const
 {

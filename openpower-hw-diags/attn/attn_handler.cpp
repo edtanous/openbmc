@@ -1,3 +1,5 @@
+#include <libpdbg.h>
+
 #include <analyzer/analyzer_main.hpp>
 #include <attention.hpp>
 #include <attn_config.hpp>
@@ -62,7 +64,6 @@ void attnHandler(Config* i_config)
     pdbg_target* target;
     pdbg_for_each_class_target("fsi", target)
     {
-        trace<level::INFO>("iterating targets");
         if (PDBG_TARGET_ENABLED == pdbg_target_probe(target))
         {
             proc = pdbg_target_index(target); // get processor number
@@ -173,22 +174,11 @@ int handleVital(Attention* i_attention)
     if (false == (i_attention->getConfig()->getFlag(enVital)))
     {
         trace<level::INFO>("vital handling disabled");
+        rc = RC_NOT_HANDLED;
     }
     else
     {
-        // TODO need vital attention handling
-
-        // FIXME TEMP CODE - begin
-        if (0)
-        {
-            eventVital();
-        }
-        else
-        {
-            trace<level::INFO>("vital NOT handled"); // enabled but not handled
-            rc = RC_NOT_HANDLED;
-        }
-        // FIXME TEMP CODE -end
+        eventVital();
     }
 
     return rc;
@@ -248,24 +238,41 @@ int handleSpecial(Attention* i_attention)
 {
     int rc = RC_SUCCESS; // assume special attention handled
 
-    trace<level::INFO>("special attention handler started");
+    // The TI infor chipop will give us a pointer to the TI info data
+    uint8_t* tiInfo           = nullptr; // ptr to TI info data
+    uint32_t tiInfoLen        = 0;       // length of TI info data
+    pdbg_target* tiInfoTarget = i_attention->getTarget(); // get TI info target
 
-    // TODO
-    // Until the special attention chipop is availabe we will treat the special
-    // attention as a TI. If TI handling is disabled we will treat the special
-    // attention as a breakpopint.
+    // Get length and location of TI info data
+    sbe_mpipl_get_ti_info(tiInfoTarget, &tiInfo, &tiInfoLen);
 
-    // TI attention gets priority over breakpoints, if enabled then handle
-    if (true == (i_attention->getConfig()->getFlag(enTerminate)))
+    // Note: If we want to support running this application on architectures
+    // of different endian-ness we need to handler that here. The TI data
+    // will always be written in big-endian order.
+
+    // If TI area exists and is marked valid we can assume TI occurred
+    if ((nullptr != tiInfo) && (0 != tiInfo[0]))
     {
-        trace<level::INFO>("TI (terminate immediately)");
+        TiDataArea* tiDataArea = (TiDataArea*)tiInfo;
 
-        // Call TI special attention handler
-        tiHandler();
+        // trace a few known TI data area values
+        std::stringstream ss; // log message stream
+        ss << "TI data command = " << tiDataArea->command;
+        trace<level::INFO>(ss.str().c_str());
+        ss << "TI data SRC format = " << tiDataArea->srcFormat;
+        trace<level::INFO>(ss.str().c_str());
+        ss << "TI data hb_terminate_type = " << tiDataArea->hbTerminateType;
+        trace<level::INFO>(ss.str().c_str());
 
-        // generate log event
-        eventTerminate();
+        if (true == (i_attention->getConfig()->getFlag(enTerminate)))
+        {
+            trace<level::INFO>("TI (terminate immediately)");
+
+            // Call TI special attention handler
+            rc = tiHandler(tiDataArea);
+        }
     }
+    // TI area not valid, assume breakpoint
     else
     {
         if (true == (i_attention->getConfig()->getFlag(enBreakpoints)))
@@ -277,9 +284,15 @@ int handleSpecial(Attention* i_attention)
         }
     }
 
+    // release TI data buffer
+    if (nullptr != tiInfo)
+    {
+        free(tiInfo);
+    }
+
     if (RC_SUCCESS != rc)
     {
-        trace<level::INFO>("Special attn handling disabled");
+        trace<level::INFO>("Special attn not handled");
     }
 
     return rc;

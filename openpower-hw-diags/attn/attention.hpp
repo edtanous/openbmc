@@ -52,6 +52,9 @@ class Attention
     /* @brief Call attention handler function */
     int handle();
 
+    /* @brief Get attention handler target */
+    pdbg_target* getTarget() const;
+
     /** @brief Copy constructor. */
     Attention(const Attention&) = default;
 
