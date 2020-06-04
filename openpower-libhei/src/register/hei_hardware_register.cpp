@@ -52,33 +52,23 @@ bool HardwareRegister::read(const Chip& i_chip, bool i_force) const
 {
     bool accessFailure = false;
 
+    // This register must be readable.
+    HEI_ASSERT(queryAttrFlag(REG_ATTR_ACCESS_READ));
+
     // Read from hardware only if the read is forced or the entry for this
     // instance does not exist in the cache.
     if (i_force || !queryCache(i_chip))
     {
-        // This register must be readable.
-        HEI_ASSERT(queryAttrFlag(REG_ATTR_ACCESS_READ));
-
-        // Get the buffer from the register cache.
-        BitString& bs = accessCache(i_chip);
-
-        // Get the byte size of the buffer.
-        size_t sz_buffer = BitString::getMinBytes(bs.getBitLen());
-
         // Read this register from hardware.
-        accessFailure = registerRead(i_chip, bs.getBufAddr(), sz_buffer,
-                                     getType(), getAddress());
-        if (accessFailure)
+        uint64_t val  = 0;
+        accessFailure = registerRead(i_chip, getType(), getAddress(), val);
+        if (!accessFailure)
         {
-            // The read failed and we can't trust what was put in the register
-            // cache. So remove this instance's entry from the cache.
-            flush(i_chip);
-        }
-        else
-        {
-            // Sanity check. The returned size of the data written to the buffer
-            // should match the register size.
-            HEI_ASSERT(getSize() == sz_buffer);
+            // Get the buffer from the register cache.
+            BitString& bs = accessCache(i_chip);
+
+            // Set this value in the bit string buffer.
+            bs.setFieldRight(0, bs.getBitLen(), val);
         }
     }
 
@@ -91,8 +81,6 @@ bool HardwareRegister::read(const Chip& i_chip, bool i_force) const
 
 bool HardwareRegister::write(const Chip& i_chip) const
 {
-    bool accessFailure = false;
-
     // This register must be writable.
     HEI_ASSERT(queryAttrFlag(REG_ATTR_ACCESS_WRITE));
 
@@ -102,21 +90,11 @@ bool HardwareRegister::write(const Chip& i_chip) const
     // Get the buffer from the register cache.
     BitString& bs = accessCache(i_chip);
 
-    // Get the byte size of the buffer.
-    size_t sz_buffer = BitString::getMinBytes(bs.getBitLen());
+    // Set this value from the bit string buffer.
+    uint64_t val = bs.getFieldRight(0, bs.getBitLen());
 
     // Write to this register to hardware.
-    accessFailure = registerWrite(i_chip, bs.getBufAddr(), sz_buffer, getType(),
-                                  getAddress());
-
-    if (accessFailure)
-    {
-        // Sanity check. The returned size of the data written to the buffer
-        // should match the register size.
-        HEI_ASSERT(getSize() == sz_buffer);
-    }
-
-    return accessFailure;
+    return registerWrite(i_chip, getType(), getAddress(), val);
 }
 
 #endif // __HEI_ENABLE_HW_WRITE

@@ -11,6 +11,7 @@
 #include <stdlib.h>
 
 #include <hei_chip.hpp>
+#include <hei_types.hpp>
 
 namespace libhei
 {
@@ -22,30 +23,27 @@ namespace libhei
  *                   the isolator by the user application via the isolator main
  *                   APIs.
  *
- * @param o_buffer   Allocated memory space for the returned contents of the
- *                   register.
- *
- * @param io_bufSize The input parameter is the maximum size of the allocated
- *                   o_buffer. The return value is the number of bytes actually
- *                   written to the buffer.
- *
  * @param i_regType  The user application may support different types of
  *                   registers. This value is provided to the isolator by the
  *                   user application via the Chip Data Files. The user
  *                   application is responsible for knowing what to do with this
  *                   parameter.
  *
- * @param i_address  The register address. The values is a 1, 2, 4, or 8 byte
- *                   address (right justified), which is provided to the
- *                   isolator by the user application via the Chip Data Files.
+ * @param i_address  The register address, which is provided to the isolator by
+ *                   the user application via the Chip Data Files. This is a 1,
+ *                   2, 4, or 8 byte value (right justified) as defined by the
+ *                   register type.
+ *
+ * @param o_value    The returned register value. This is a 1, 2, 4, or 8 byte
+ *                   value (right justified) as defined by the register type.
  *
  * @return false => register access was successful
  *         true  => hardware access failure
  *         Note that in the case of a failure, the user application is
  *         responsible for reporting why the register access failed.
  */
-bool registerRead(const Chip& i_chip, void* o_buffer, size_t& io_bufSize,
-                  uint64_t i_regType, uint64_t i_address);
+bool registerRead(const Chip& i_chip, RegisterType_t i_regType,
+                  uint64_t i_address, uint64_t& o_value);
 
 #ifdef __HEI_ENABLE_HW_WRITE
 
@@ -56,30 +54,27 @@ bool registerRead(const Chip& i_chip, void* o_buffer, size_t& io_bufSize,
  *                   the isolator by the user application via the isolator main
  *                   APIs.
  *
- * @param i_buffer   Allocated memory space containing the register contents to
- *                   write to hardware.
- *
- * @param io_bufSize The input parameter is the number of byte from i_buffer to
- *                   write to the hardware register. The return value is the
- *                   actual number of bytes written to the hardware register.
- *
  * @param i_regType  The user application may support different types of
  *                   registers. This value is provided to the isolator by the
  *                   user application via the Chip Data Files. The user
  *                   application is responsible for knowing what to do with this
  *                   parameter.
  *
- * @param i_address  The register address. The values is a 1, 2, 4, or 8 byte
- *                   address (right justified), which is provided to the
- *                   isolator by the user application via the Chip Data Files.
+ * @param i_address  The register address, which is provided to the isolator by
+ *                   the user application via the Chip Data Files. This is a 1,
+ *                   2, 4, or 8 byte value (right justified) as defined by the
+ *                   register type.
+ *
+ * @param i_value    The register value to write. This is a 1, 2, 4, or 8 byte
+ *                   value (right justified) as defined by the register type.
  *
  * @return false => register access was successful
  *         true  => hardware access failure
  *         Note that in the case of a failure, the user application is
  *         responsible for reporting why the register access failed.
  */
-bool registerWrite(const Chip& i_chip, void* i_buffer, size_t& io_bufSize,
-                   uint64_t i_regType, uint64_t i_address);
+bool registerWrite(const Chip& i_chip, RegisterType_t i_regType,
+                   uint64_t i_address, uint64_t i_value);
 
 #endif // __HEI_ENABLE_HW_WRITE
 

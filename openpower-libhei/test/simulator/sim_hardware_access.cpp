@@ -15,44 +15,26 @@ namespace libhei
 
 //------------------------------------------------------------------------------
 
-bool registerRead(const Chip& i_chip, void* o_buffer, size_t& io_bufSize,
-                  uint64_t i_regType, uint64_t i_address)
+bool registerRead(const Chip& i_chip, RegisterType_t i_regType,
+                  uint64_t i_address, uint64_t& o_value)
 {
     bool accessFailure = false;
 
-    HEI_ASSERT(nullptr != o_buffer);
-    HEI_ASSERT(0 != io_bufSize);
-
-    // Get access to data through the singleton
+    // Get access to data through the singleton.
     SimulatorData& theSimData = SimulatorData::getSingleton();
 
     switch (i_regType)
     {
         case REG_TYPE_SCOM:
-        {
-            // Get the register value and change its endianness
-            uint64_t regValue =
-                htobe64(theSimData.getScomReg(i_chip, (uint32_t)i_address));
-            // Get size of register value for calling code and memcopy
-            io_bufSize = sizeof(regValue);
-            memcpy(o_buffer, &regValue, io_bufSize);
+            o_value = theSimData.getScomReg(i_chip, (uint32_t)i_address);
             break;
-        }
         case REG_TYPE_ID_SCOM:
-        {
-            // Get the register value and change its endianness
-            uint64_t regValue =
-                htobe64(theSimData.getIdScomReg(i_chip, i_address));
-            // Get size of register value for calling code and memcopy
-            io_bufSize = sizeof(regValue);
-            memcpy(o_buffer, &regValue, io_bufSize);
+            o_value = theSimData.getIdScomReg(i_chip, i_address);
             break;
-        }
         default:
             accessFailure = true;
-            HEI_ERR("registerRead(%p,%p,%" PRIu64 ",%" PRIx64 ",%" PRIx64 ")",
-                    i_chip.getChip(), o_buffer, (uint64_t)io_bufSize, i_regType,
-                    i_address);
+            HEI_ERR("registerRead(%p,%" PRIu8 ",%" PRIx64 ")", i_chip.getChip(),
+                    i_regType, i_address);
     }
 
     return accessFailure;
@@ -62,22 +44,18 @@ bool registerRead(const Chip& i_chip, void* o_buffer, size_t& io_bufSize,
 
 #ifdef __HEI_ENABLE_HW_WRITE
 
-bool registerWrite(const Chip& i_chip, void* i_buffer, size_t& io_bufSize,
-                   uint64_t i_regType, uint64_t i_address)
+bool registerWrite(const Chip& i_chip, RegisterType_t i_regType,
+                   uint64_t i_address, uint64_t i_value)
 {
     bool accessFailure = false;
-
-    HEI_ASSERT(nullptr != i_buffer);
-    HEI_ASSERT(0 != io_bufSize);
 
     switch (i_regType)
     {
         // TODO: add cases for REG_TYPE_SCOM and REG_TYPE_ID_SCOM
         default:
             accessFailure = true;
-            HEI_ERR("registerWrite(%p,%p,%" PRIu64 ",%" PRIx64 ",%" PRIx64 ")",
-                    i_chip.getChip(), i_buffer, (uint64_t)io_bufSize, i_regType,
-                    i_address);
+            HEI_ERR("registerWrite(%p,%" PRIu8 ",%" PRIx64 ",%" PRIx64 ")",
+                    i_chip.getChip(), i_regType, i_address, i_value);
     }
 
     return accessFailure;
