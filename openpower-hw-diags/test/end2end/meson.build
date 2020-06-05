@@ -5,6 +5,7 @@ end2end = executable('openpower-hw-diags-test',
             link_with : [analyzer, attn],
             include_directories : incdir,
             dependencies : libhei_dep,
+            cpp_args : test_arg,
             install : false)
 
 #test('openpower-hw-diags-test', end2end)

@@ -5,5 +5,6 @@ analyzer_src = files('analyzer_main.cpp',
 # Create hardware error analyzer library
 analyzer = static_library('analyzer',
                           analyzer_src,
+                          include_directories : incdir,
                           dependencies : libhei_dep,
                           install : false)

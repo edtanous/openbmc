@@ -10,6 +10,7 @@
 #include <stdio.h>
 
 #include <hei_user_interface.hpp>
+#include <util/trace.hpp>
 
 namespace libhei
 {
@@ -36,9 +37,9 @@ bool registerRead(const Chip& i_chip, RegisterType_t i_regType,
 
     if (accessFailure)
     {
-        printf("Register read failed: chip=%p type=0x%0" PRIx8
-               "addr=0x%0" PRIx64 "\n",
-               i_chip.getChip(), i_regType, i_address);
+        trace::err("Register read failed: chip=%p type=0x%0" PRIx8
+                   "addr=0x%0" PRIx64 "\n",
+                   i_chip.getChip(), i_regType, i_address);
         o_value = 0; // just in case
     }
 
@@ -51,11 +52,9 @@ bool registerRead(const Chip& i_chip, RegisterType_t i_regType,
 void hei_inf(char* format, ...)
 {
     va_list args;
-    fprintf(stdout, "I> ");
     va_start(args, format);
-    vfprintf(stdout, format, args);
+    trace::inf(format, args);
     va_end(args);
-    fprintf(stdout, "\n");
 }
 
 //------------------------------------------------------------------------------
@@ -64,11 +63,9 @@ void hei_inf(char* format, ...)
 void hei_err(char* format, ...)
 {
     va_list args;
-    fprintf(stderr, "E> ");
     va_start(args, format);
-    vfprintf(stderr, format, args);
+    trace::err(format, args);
     va_end(args);
-    fprintf(stderr, "\n");
 }
 
 } // namespace libhei
