@@ -171,24 +171,42 @@ void __initializeIsolator(const std::vector<libhei::ChipType_t>& i_types)
 
 //------------------------------------------------------------------------------
 
-/**
- * @brief Analyze using the hardware error isolator
- *
- * Query the hardware for each active chip that is a valid candidate for
- * error analyses. Based on the list of active chips initialize the
- * isolator with the associated chip data files. Finally request analyses
- * from the hardware error isolator and log the results.
- *
- * @param o_errors A map for storing information about erros that were
- *                 detected by the hardware error isolator.
- *
- * @return True if hardware error analyses was successful, false otherwise
- */
+// Takes a signature list that will be filtered and sorted. The first entry in
+// the returned list will be the root cause. If the returned list is empty,
+// analysis failed.
+void __filterRootCause(std::vector<libhei::Signature>& io_list)
+{
+    // Special and host attentions are not supported by this user application.
+    auto newEndItr =
+        std::remove_if(io_list.begin(), io_list.end(), [&](const auto& t) {
+            return (libhei::ATTN_TYPE_SP_ATTN == t.getAttnType() ||
+                    libhei::ATTN_TYPE_HOST_ATTN == t.getAttnType());
+        });
+
+    // Shrink the vector, if needed.
+    io_list.resize(std::distance(io_list.begin(), newEndItr));
+
+    // START WORKAROUND
+    // TODO: Filtering should be determined by the RAS Data Files provided by
+    //       the host firmware via the PNOR (similar to the Chip Data Files).
+    //       Until that support is available, use a rudimentary filter that
+    //       first looks for any recoverable attention, then any unit checkstop,
+    //       and then any system checkstop. This is built on the premise that
+    //       recoverable errors could be the root cause of an system checkstop
+    //       attentions. Fortunately, we just need to sort the list by the
+    //       greater attention type value.
+    std::sort(io_list.begin(), io_list.end(),
+              [&](const auto& a, const auto& b) {
+                  return a.getAttnType() > b.getAttnType();
+              });
+    // END WORKAROUND
+}
+
+//------------------------------------------------------------------------------
+
 bool analyzeHardware(std::map<std::string, std::string>& o_errors)
 {
-    using namespace libhei;
-
-    bool rc = true;
+    bool attnFound = false;
 
     // Get the active chips to be analyzed and their types.
     std::vector<libhei::Chip> chipList;
@@ -198,27 +216,38 @@ bool analyzeHardware(std::map<std::string, std::string>& o_errors)
     // Initialize the isolator for all chip types.
     __initializeIsolator(chipTypes);
 
-    IsolationData isoData{}; // data from isolato
+    // Isolate attentions.
+    libhei::IsolationData isoData{};
+    libhei::isolate(chipList, isoData);
 
-    do
+    // Filter signatures to determine root cause.
+    std::vector<libhei::Signature> sigList{isoData.getSignatureList()};
+    __filterRootCause(sigList);
+
+    if (sigList.empty())
     {
-        // hei isolate
-        isolate(chipList, isoData);
+        // Don't throw an error here because it could happen for during TI
+        // analysis. Attention Handler will need to determine if this is an
+        // actual problem.
+        trace::inf("No active attentions found");
+    }
+    else
+    {
+        attnFound = true;
+        trace::inf("Active attentions found: %d", sigList.size());
 
-        if (!(isoData.getSignatureList().empty()))
-        {
-            // TODO parse signature list
-            int numErrors = isoData.getSignatureList().size();
+        libhei::Signature root = sigList.front();
+        trace::inf("Root cause attention: %p 0x%04x%02x%02x %d",
+                   root.getChip().getChip(), root.getId(), root.getInstance(),
+                   root.getBit(), root.getAttnType());
 
-            std::cout << "isolated: " << numErrors << std::endl;
-        }
+        // TODO: generate log information
+    }
 
-        // hei uninitialize
-        uninitialize();
+    // All done, clean up the isolator.
+    libhei::uninitialize();
 
-    } while (0);
-
-    return rc;
+    return attnFound;
 }
 
 } // namespace analyzer

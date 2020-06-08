@@ -7,12 +7,24 @@ namespace analyzer
 {
 
 /**
- * @brief Analyze and isolate hardware errors
+ * @brief  Queries the host hardware for all attentions reported by each active
+ *         chip. Then it performs all approriate RAS actions based on the active
+ *         attentions.
  *
- * If any error conditions are found on the host isolate the hardware
- * component that caused the error(s).
+ * @param  o_errors A map for storing information about errors that were
+ *                  detected by the hardware error isolator.
+ *
+ * @return True if an active attenion was successfully analyzed, false
+ *         otherwise.
+ *         For system checkstop handling:
+ *            If analysis fails, there likely is a defect in the design because
+ *            an active attention is required to trigger the interrupt.
+ *         For TI handling:
+ *            It is possible that a recoverable attention could cause a TI,
+ *            however, it is not required. Therefore, it is expected that
+ *            analysis could fail to find an attention and it should not be
+ *            treated as a defect.
  */
-
 bool analyzeHardware(std::map<std::string, std::string>& i_errors);
 
 } // namespace analyzer
