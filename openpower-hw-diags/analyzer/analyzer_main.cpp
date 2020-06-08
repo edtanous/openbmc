@@ -1,7 +1,10 @@
+#include <assert.h>
 #include <libpdbg.h>
 
 #include <hei_main.hpp>
+#include <util/trace.hpp>
 
+#include <algorithm>
 #include <fstream>
 #include <iostream>
 #include <map>
@@ -64,6 +67,84 @@ bool initWithFile(const char* i_filePath)
     return rc;
 }
 
+//------------------------------------------------------------------------------
+
+// Returns the chip model/level of the given target. Also, adds the chip
+// model/level to the list of type types needed to initialize the isolator.
+libhei::ChipType_t __getChipType(pdbg_target* i_trgt,
+                                 std::vector<libhei::ChipType_t>& o_types)
+{
+    libhei::ChipType_t type;
+
+    // START WORKAROUND
+    // TODO: Will need to grab the model/level from the target attributes when
+    //       they are available. For now, use ATTR_TYPE to determine which
+    //       currently supported value to use supported.
+    char* attrType = new char[1];
+
+    pdbg_target_get_attribute(i_trgt, "ATTR_TYPE", 1, 1, attrType);
+
+    switch (attrType[0])
+    {
+        case 0x05: // PROC
+            type = 0x120DA049;
+            break;
+
+        case 0x4b: // OCMB_CHIP
+            type = 0x160D2000;
+            break;
+
+        default:
+            trace::err("Unsupported ATTR_TYPE value: 0x%02x", attrType[0]);
+            assert(0);
+    }
+
+    delete[] attrType;
+    // END WORKAROUND
+
+    o_types.push_back(type);
+
+    return type;
+}
+
+//------------------------------------------------------------------------------
+
+// Gathers list of active chips to analyze. Also, returns the list of chip types
+// needed to initialize the isolator.
+void __getActiveChips(std::vector<libhei::Chip>& o_chips,
+                      std::vector<libhei::ChipType_t>& o_types)
+{
+    // Iterate each processor.
+    pdbg_target* procTrgt;
+    pdbg_for_each_class_target("proc", procTrgt)
+    {
+        // Active processors only.
+        if (PDBG_TARGET_ENABLED != pdbg_target_probe(procTrgt))
+            continue;
+
+        // Add the processor to the list.
+        o_chips.emplace_back(procTrgt, __getChipType(procTrgt, o_types));
+
+        // Iterate the connected OCMBs, if they exist.
+        pdbg_target* ocmbTrgt;
+        pdbg_for_each_target("ocmb_chip", procTrgt, ocmbTrgt)
+        {
+            // Active OCMBs only.
+            if (PDBG_TARGET_ENABLED != pdbg_target_probe(ocmbTrgt))
+                continue;
+
+            // Add the OCMB to the list.
+            o_chips.emplace_back(ocmbTrgt, __getChipType(ocmbTrgt, o_types));
+        }
+    }
+
+    // Make sure the model/level list is of unique values only.
+    auto itr = std::unique(o_types.begin(), o_types.end());
+    o_types.resize(std::distance(o_types.begin(), itr));
+}
+
+//------------------------------------------------------------------------------
+
 /**
  * @brief Analyze using the hardware error isolator
  *
@@ -83,31 +164,12 @@ bool analyzeHardware(std::map<std::string, std::string>& o_errors)
 
     bool rc = true;
 
-    std::vector<Chip> chipList; // chips that need to be analyzed
+    // Get the active chips to be analyzed and their types.
+    std::vector<libhei::Chip> chipList;
+    std::vector<libhei::ChipType_t> chipTypes;
+    __getActiveChips(chipList, chipTypes);
 
     IsolationData isoData{}; // data from isolato
-
-    pdbg_target *targetProc, *targetOcmb; // P10 and explorer targets
-
-    /** @brief gather list of chips to analyze */
-    pdbg_for_each_class_target("proc", targetProc)
-    {
-        if (PDBG_TARGET_ENABLED == pdbg_target_probe(targetProc))
-        {
-            // add each processor chip to the chip list
-            chipList.emplace_back(Chip(targetProc, *(uint32_t*)chipTypeProc));
-
-            pdbg_for_each_target("ocmb_chip", targetProc, targetOcmb)
-            {
-                if (PDBG_TARGET_ENABLED == pdbg_target_probe(targetOcmb))
-                {
-                    // add each explorer chip (ocmb) to the chip list
-                    chipList.emplace_back(
-                        Chip(targetOcmb, *(uint32_t*)chipTypeOcmb));
-                }
-            }
-        }
-    }
 
     // TODO select chip data files based on chip types detected
     do
