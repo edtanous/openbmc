@@ -29,23 +29,20 @@ static constexpr uint8_t chipTypeProc[4] = {0x49, 0xa0, 0x0d, 0x12};
  *         a single chip data file. Returns false otherwise.
  *
  */
-bool initWithFile(const char* i_filePath)
+void initWithFile(const char* i_filePath)
 {
-    using namespace libhei;
-
-    bool rc = true; // assume success
-
     // open the file and seek to the end to get length
     std::ifstream fileStream(i_filePath, std::ios::binary | std::ios::ate);
 
-    if (!fileStream)
+    if (!fileStream.good())
     {
-        std::cout << "could not open file" << std::endl;
-        rc = false;
+        trace::err("Unable to open file: %s", i_filePath);
+        assert(0);
     }
     else
     {
         // get file size based on seek position
+        fileStream.seekg(0, std::ios::end);
         std::ifstream::pos_type fileSize = fileStream.tellg();
 
         // create a buffer large enough to hold the entire file
@@ -60,11 +57,9 @@ bool initWithFile(const char* i_filePath)
         // done with the file
         fileStream.close();
 
-        // intialize the isolator with the chip data
-        initialize(fileBuffer.data(), fileSize); // hei initialize
+        // initialize the isolator with the chip data
+        libhei::initialize(fileBuffer.data(), fileSize);
     }
-
-    return rc;
 }
 
 //------------------------------------------------------------------------------
@@ -145,6 +140,37 @@ void __getActiveChips(std::vector<libhei::Chip>& o_chips,
 
 //------------------------------------------------------------------------------
 
+// Initializes the isolator for each specified chip type.
+void __initializeIsolator(const std::vector<libhei::ChipType_t>& i_types)
+{
+    // START WORKAROUND
+    // TODO: The chip data will eventually come from the CHIPDATA section of the
+    //       PNOR. Until that support is available, we'll use temporary chip
+    //       data files.
+    for (const auto& type : i_types)
+    {
+        switch (type)
+        {
+            case 0x120DA049: // PROC
+                initWithFile(
+                    "/usr/share/openpower-hw-diags/chip_data_proc.cdb");
+                break;
+
+            case 0x160D2000: // OCMB_CHIP
+                initWithFile(
+                    "/usr/share/openpower-hw-diags/chip_data_ocmb.cdb");
+                break;
+
+            default:
+                trace::err("Unsupported ChipType_t value: 0x%0" PRIx32, type);
+                assert(0);
+        }
+    }
+    // END WORKAROUND
+}
+
+//------------------------------------------------------------------------------
+
 /**
  * @brief Analyze using the hardware error isolator
  *
@@ -169,29 +195,13 @@ bool analyzeHardware(std::map<std::string, std::string>& o_errors)
     std::vector<libhei::ChipType_t> chipTypes;
     __getActiveChips(chipList, chipTypes);
 
+    // Initialize the isolator for all chip types.
+    __initializeIsolator(chipTypes);
+
     IsolationData isoData{}; // data from isolato
 
-    // TODO select chip data files based on chip types detected
     do
     {
-        // TODO for now chip data files are local
-        // hei initialize
-        if (false ==
-            initWithFile("/usr/share/openpower-hw-diags/chip_data_ocmb.cdb"))
-        {
-            rc = false;
-            break;
-        }
-
-        // TODO for now chip data files are local
-        // hei initialize
-        if (false ==
-            initWithFile("/usr/share/openpower-hw-diags/chip_data_proc.cdb"))
-        {
-            rc = false;
-            break;
-        }
-
         // hei isolate
         isolate(chipList, isoData);
 
