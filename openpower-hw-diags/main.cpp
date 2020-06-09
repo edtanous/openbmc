@@ -78,6 +78,10 @@ int main(int argc, char* argv[])
         // daemon mode
         else
         {
+            // Handle pending attentions
+            attn::Config attnConfig;
+            attn::attnHandler(&attnConfig);
+
             // assume listener is not running
             bool listenerStarted = false;
             bool newListener     = false;

@@ -7,16 +7,6 @@
 #include <attn/attn_main.hpp>
 #include <cli.hpp>
 
-// FIXME TEMP CODE - begin
-
-namespace attn
-{
-int handleCheckstop(Attention* i_attention);
-} // namespace attn
-
-// FIXME TEMP CODE - end
-
-//
 /**
  * @brief Attention handler application main()
  *
@@ -69,7 +59,7 @@ int main(int argc, char* argv[])
             {
                 attn::Config attnConfig; // default config
 
-                pdbg_targets_init(nullptr); // initialize pdbg targets
+                attn::attnHandler(&attnConfig); // handle pending attentions
 
                 attn::attnDaemon(&attnConfig); // start daemon
             }
