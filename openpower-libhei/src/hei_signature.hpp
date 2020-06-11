@@ -17,6 +17,9 @@ namespace libhei
 class Signature
 {
   public: // Constructors, destructor, assignment, etc.
+    /** @brief Default constructor. */
+    Signature() = default;
+
     /**
      * @brief Constructor from components.
      * @param i_chip     The chip containing this register.

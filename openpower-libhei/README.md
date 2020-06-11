@@ -56,15 +56,15 @@ Building
 
 For a standard OpenBMC release build, you want something like:
 ```
-meson setup -Dtests=disabled <build_dir>
+meson -Dtests=disabled <build_dir>
 ninja -C <build_dir>
 ninja -C <build_dir> install
 ```
 
 For a test / debug build, a typical configuration is:
 ```
-meson setup -Dtests=enabled <build_dir>
-meson test -C <build_dir>
+meson -Dtests=enabled <build_dir>
+ninja -C <build_dir> test
 ```
 
 [OpenBMC Hardware Diagnostics]: https://github.com/openbmc/openpower-hw-diags
