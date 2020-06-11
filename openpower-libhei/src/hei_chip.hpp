@@ -13,6 +13,14 @@ class Chip
 {
   public: // Constructors, destructors, assignment, etc.
     /**
+     * @brief Default contructor.
+     *
+     * In general the default constructor should not be used, but it is needed
+     * for some STL functions.
+     */
+    Chip() = default;
+
+    /**
      * @brief Constructor.
      * @param i_chip See description for iv_chip.
      * @param i_type See description for iv_type.

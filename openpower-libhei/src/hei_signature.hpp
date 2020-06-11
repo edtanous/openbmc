@@ -17,7 +17,12 @@ namespace libhei
 class Signature
 {
   public: // Constructors, destructor, assignment, etc.
-    /** @brief Default constructor. */
+    /**
+     * @brief Default contructor.
+     *
+     * In general the default constructor should not be used, but it is needed
+     * for some STL functions.
+     */
     Signature() = default;
 
     /**
