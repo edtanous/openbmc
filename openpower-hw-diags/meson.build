@@ -1,3 +1,4 @@
+# See README.md for details.
 project('openpower-hw-diags', 'cpp',
         version: '0.1', meson_version: '>=0.49.0',
         default_options: [
@@ -7,7 +8,9 @@ project('openpower-hw-diags', 'cpp',
           'cpp_args=-Wno-unused-parameter'
         ])
 
-libhei_dep = dependency('hei', required : true)
+# First, look if the libhei library has already been built and installed. If
+# not, default to the subproject.
+libhei_dep = dependency('hei', fallback : ['libhei', 'libhei_dep'])
 
 incdir = include_directories('.')
 
