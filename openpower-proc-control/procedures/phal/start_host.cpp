@@ -117,7 +117,7 @@ void selectBootSeeprom()
  *        to kick off a boot.
  * @return void
  */
-void startHost()
+void startHost(enum ipl_type iplType = IPL_TYPE_NORMAL)
 {
     // add callback methods for debug traces and for boot failures
     openpower::pel::addBootErrorCallbacks();
@@ -146,6 +146,9 @@ void startHost()
         openpower::pel::detail::processBootErrorCallback(false);
         throw std::runtime_error("Boot initialization failed");
     }
+
+    ipl_set_type(iplType);
+
     // To clear trace if success
     openpower::pel::detail::processBootErrorCallback(true);
 
@@ -174,7 +177,27 @@ void startHost()
     }
 }
 
-REGISTER_PROCEDURE("startHost", startHost);
+/**
+ * @brief Starts the reboot with type memory preserving reboot.
+ * @return void
+ */
+void startHostMpReboot()
+{
+    // set ipl type as mpipl
+    startHost(IPL_TYPE_MPIPL);
+}
+
+/**
+ * @brief Starts the normal boot type.
+ * @return void
+ */
+void startHostNormal()
+{
+    startHost();
+}
+
+REGISTER_PROCEDURE("startHost", startHostNormal);
+REGISTER_PROCEDURE("startHostMpReboot", startHostMpReboot);
 
 } // namespace phal
 } // namespace openpower
