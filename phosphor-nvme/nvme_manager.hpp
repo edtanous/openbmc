@@ -51,8 +51,8 @@ class Nvme
         std::string index;
         uint8_t busID;
         std::string faultLedGroupPath;
-        uint8_t presentPin;
-        uint8_t pwrGoodPin;
+        uint16_t presentPin;
+        uint16_t pwrGoodPin;
         std::string locateLedControllerBusName;
         std::string locateLedControllerPath;
         std::string locateLedGroupPath;

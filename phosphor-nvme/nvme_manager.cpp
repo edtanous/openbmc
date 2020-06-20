@@ -368,8 +368,8 @@ std::vector<phosphor::nvme::Nvme::NVMeConfig> Nvme::getNvmeConfig()
                     instance.value("NVMeDriveFaultLEDGroupPath", "");
                 std::string locateLedGroupPath =
                     instance.value("NVMeDriveLocateLEDGroupPath", "");
-                uint8_t presentPin = instance.value("NVMeDrivePresentPin", 0);
-                uint8_t pwrGoodPin = instance.value("NVMeDrivePwrGoodPin", 0);
+                uint16_t presentPin = instance.value("NVMeDrivePresentPin", 0);
+                uint16_t pwrGoodPin = instance.value("NVMeDrivePwrGoodPin", 0);
                 std::string locateLedControllerBusName =
                     instance.value("NVMeDriveLocateLEDControllerBusName", "");
                 std::string locateLedControllerPath =
