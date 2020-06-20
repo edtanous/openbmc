@@ -536,7 +536,7 @@ void Nvme::read()
                 nvmeData = NVMeData();
                 setNvmeInventoryProperties(false, nvmeData, inventoryPath);
                 nvmes.erase(config.index);
-                return;
+                continue;
             }
             else if (config.pwrGoodPin)
             {
@@ -571,7 +571,7 @@ void Nvme::read()
 
                         isErrorPower[config.index] = true;
                     }
-                    return;
+                    continue;
                 }
             }
         }
