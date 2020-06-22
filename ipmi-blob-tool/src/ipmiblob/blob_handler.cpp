@@ -241,6 +241,11 @@ StatResponse BlobHandler::statGeneric(BlobOEMCommands command,
                                       const std::vector<std::uint8_t>& request)
 {
     StatResponse meta;
+    static constexpr std::size_t blobStateSize = sizeof(meta.blob_state);
+    static constexpr std::size_t metaSize = sizeof(meta.size);
+    static constexpr std::size_t metaOffset = blobStateSize + metaSize;
+    static constexpr std::size_t minRespSize =
+        metaOffset + sizeof(std::uint8_t);
     std::vector<std::uint8_t> resp;
 
     try
@@ -252,14 +257,35 @@ StatResponse BlobHandler::statGeneric(BlobOEMCommands command,
         throw;
     }
 
-    std::memcpy(&meta.blob_state, &resp[0], sizeof(meta.blob_state));
-    std::memcpy(&meta.size, &resp[sizeof(meta.blob_state)], sizeof(meta.size));
-    int offset = sizeof(meta.blob_state) + sizeof(meta.size);
-    std::uint8_t len = resp[offset];
+    // Avoid out of bounds memcpy below
+    if (resp.size() < minRespSize)
+    {
+        std::fprintf(stderr,
+                     "Invalid response length, Got %li which is less than "
+                     "minRespSize %li\n",
+                     resp.size(), minRespSize);
+        throw BlobException("Invalid response length");
+    }
+
+    std::memcpy(&meta.blob_state, &resp[0], blobStateSize);
+    std::memcpy(&meta.size, &resp[blobStateSize], metaSize);
+    std::uint8_t len = resp[metaOffset];
+
+    auto metaDataLength = resp.size() - minRespSize;
+    if (metaDataLength != len)
+    {
+        std::fprintf(stderr,
+                     "Metadata length did not match actual length, Got %li "
+                     "which does not equal expected length %i\n",
+                     metaDataLength, len);
+        throw BlobException("Metadata length did not match actual length");
+    }
+
     if (len > 0)
     {
-        std::copy(resp.begin() + offset + sizeof(len), resp.end(),
-                  std::back_inserter(meta.metadata));
+        meta.metadata.resize(len);
+        std::copy(resp.begin() + minRespSize, resp.end(),
+                  meta.metadata.begin());
     }
 
     return meta;
