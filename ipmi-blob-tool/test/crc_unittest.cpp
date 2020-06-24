@@ -1,5 +1,6 @@
-#include <cstdint>
 #include <ipmiblob/crc.hpp>
+
+#include <cstdint>
 #include <string>
 #include <vector>
 

@@ -36,12 +36,10 @@ class IpmiException : public std::exception
      * thrown, we'll know it was an error on the host-side.
      */
     explicit IpmiException(const std::string& message) : _message(message)
-    {
-    }
+    {}
 
     explicit IpmiException(int cc) : IpmiException(messageFromIpmi(cc), cc)
-    {
-    }
+    {}
 
     virtual const char* what() const noexcept override
     {
