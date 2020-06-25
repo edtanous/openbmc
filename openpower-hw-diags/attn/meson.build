@@ -1,6 +1,3 @@
-# needed to find external libraries not registered with package manager
-cmplr = meson.get_compiler('cpp')
-
 # async gpio monitor needs boost library
 boost_args = ['-DBOOST_ASIO_DISABLE_THREADS',
               '-DBOOST_ERROR_CODE_HEADER_ONLY',
@@ -26,8 +23,7 @@ configure_file(
 )
 
 # see if phosphor-logging is available, if not use test case logging code
-h = 'phosphor-logging/log.hpp'
-if cmplr.compiles('#include <@0@>'.format(h), name : '#include <@0@>'.format(h))
+if (true == phosphor_logging)
     logging_src = 'attn_logging.cpp'
 else
     logging_src = '../test/end2end/logging.cpp'
@@ -43,5 +39,5 @@ attn = static_library('attn_handler',
                       attn_src,
                       include_directories : incdir,
                       dependencies : [libpdbg, sdbusplus, libgpiod],
-                      cpp_args : boost_args,
+                      cpp_args : [boost_args, test_arg],
                       install : true)

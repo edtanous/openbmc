@@ -14,6 +14,20 @@ libhei_dep = dependency('hei', fallback : ['libhei', 'libhei_dep'])
 
 incdir = include_directories('.')
 
+# See if phosphor-logging is available, if not use test case logging code. This
+# allows for local builds outside of CI test sandbox.
+h = 'phosphor-logging/log.hpp'
+cmplr = meson.get_compiler('cpp')
+if cmplr.compiles('#include <@0@>'.format(h), name : '#include <@0@>'.format(h))
+    test_arg = []
+    phosphor_logging = true
+else
+    test_arg = [
+        '-DTEST_TRACE',
+    ]
+    phosphor_logging = false
+endif
+
 subdir('analyzer')
 subdir('attn')
 
@@ -30,6 +44,7 @@ else
   executable('openpower-hw-diags', 'main.cpp', 'cli.cpp', 'listener.cpp',
               dependencies : [lrt, pthread],
               link_with : [analyzer, attn],
+              cpp_args : test_arg,
               install : true)
 endif
 
