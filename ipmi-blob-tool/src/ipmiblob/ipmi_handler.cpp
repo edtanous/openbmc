@@ -80,7 +80,7 @@ std::vector<std::uint8_t>
     constexpr int ipmiOk = 0;
 
     /* We have a handle to the IPMI device. */
-    std::array<std::uint8_t, ipmiResponseBufferLen> responseBuffer;
+    std::array<std::uint8_t, ipmiResponseBufferLen> responseBuffer = {};
 
     /* Build address. */
     ipmi_system_interface_addr systemAddress{};
