@@ -1,5 +1,5 @@
-#include <attention.hpp>
-#include <attn_config.hpp>
+#include <attn/attention.hpp>
+#include <attn/attn_config.hpp>
 
 namespace attn
 {

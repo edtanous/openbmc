@@ -1,7 +1,7 @@
-#include <attn_handler.hpp>
-#include <attn_logging.hpp>
+#include <attn/attn_handler.hpp>
+#include <attn/attn_logging.hpp>
+#include <attn/ti_handler.hpp>
 #include <sdbusplus/bus.hpp>
-#include <ti_handler.hpp>
 
 namespace attn
 {

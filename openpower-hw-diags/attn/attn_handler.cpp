@@ -1,12 +1,12 @@
 #include <libpdbg.h>
 
 #include <analyzer/analyzer_main.hpp>
-#include <attention.hpp>
-#include <attn_config.hpp>
-#include <attn_handler.hpp>
-#include <attn_logging.hpp>
-#include <bp_handler.hpp>
-#include <ti_handler.hpp>
+#include <attn/attention.hpp>
+#include <attn/attn_config.hpp>
+#include <attn/attn_handler.hpp>
+#include <attn/attn_logging.hpp>
+#include <attn/bp_handler.hpp>
+#include <attn/ti_handler.hpp>
 
 #include <algorithm>
 #include <iomanip>

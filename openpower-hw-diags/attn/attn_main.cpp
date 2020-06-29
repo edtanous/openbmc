@@ -1,4 +1,4 @@
-#include <../attn/attn_monitor.hpp>
+#include <attn/attn_monitor.hpp>
 
 namespace attn
 {

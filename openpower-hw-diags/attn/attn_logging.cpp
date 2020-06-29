@@ -1,6 +1,6 @@
 #include <unistd.h>
 
-#include <attn_logging.hpp>
+#include <attn/attn_logging.hpp>
 #include <phosphor-logging/log.hpp>
 
 namespace attn
