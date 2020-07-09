@@ -1,7 +1,12 @@
 #pragma once
 
 #include "binarystore.hpp"
+#include "binarystore_interface.hpp"
 #include "sys_file.hpp"
+
+#include <memory>
+#include <string>
+#include <vector>
 
 #include <gmock/gmock.h>
 

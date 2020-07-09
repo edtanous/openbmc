@@ -17,7 +17,7 @@ libbinarystore_la_SOURCES = main.cpp \
 			    binaryblob.pb.cc \
 			    binarystore.cpp \
 			    sys.cpp \
-			    sys_file.cpp \
+			    sys_file_impl.cpp \
 			    handler.cpp
 
 libbinarystore_la_LDFLAGS = $(PHOSPHOR_LOGGING_LIBS) \

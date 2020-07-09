@@ -1,6 +1,6 @@
 #include "handler.hpp"
 #include "parse_config.hpp"
-#include "sys_file.hpp"
+#include "sys_file_impl.hpp"
 
 #include <blobs-ipmid/blobs.hpp>
 #include <exception>
