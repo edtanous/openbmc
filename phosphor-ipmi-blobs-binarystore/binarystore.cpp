@@ -29,8 +29,7 @@ using namespace phosphor::logging;
 
 std::unique_ptr<BinaryStoreInterface>
     BinaryStore::createFromConfig(const std::string& baseBlobId,
-                                  std::unique_ptr<SysFile> file,
-                                  uint32_t maxSize)
+                                  std::unique_ptr<SysFile> file)
 {
     if (baseBlobId.empty() || !file)
     {
@@ -39,8 +38,7 @@ std::unique_ptr<BinaryStoreInterface>
         return nullptr;
     }
 
-    auto store =
-        std::make_unique<BinaryStore>(baseBlobId, std::move(file), maxSize);
+    auto store = std::make_unique<BinaryStore>(baseBlobId, std::move(file));
 
     if (!store->loadSerializedData())
     {

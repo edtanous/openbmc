@@ -176,7 +176,7 @@ TEST_F(BinaryStoreBlobHandlerBasicTest, StaleDataIsClearedDuringCreation)
     std::vector<std::string> expectedIdList = {basicTestBaseId};
 
     handler.addNewBinaryStore(BinaryStore::createFromConfig(
-        basicTestBaseId, std::make_unique<FakeSysFile>(commitData), 0));
+        basicTestBaseId, std::make_unique<FakeSysFile>(commitData)));
     EXPECT_FALSE(handler.canHandleBlob(staleBlobId));
     EXPECT_EQ(handler.getBlobIds(), expectedIdList);
 }
@@ -185,7 +185,7 @@ TEST_F(BinaryStoreBlobHandlerBasicTest, CreatingFromEmptySysfile)
 {
     const std::string emptyData;
     EXPECT_NO_THROW(handler.addNewBinaryStore(BinaryStore::createFromConfig(
-        basicTestBaseId, std::make_unique<FakeSysFile>(emptyData), 0)));
+        basicTestBaseId, std::make_unique<FakeSysFile>(emptyData))));
     EXPECT_TRUE(handler.canHandleBlob(basicTestBlobId));
 }
 
@@ -197,8 +197,8 @@ TEST_F(BinaryStoreBlobHandlerBasicTest, CreatingFromJunkData)
     EXPECT_GE(tooLarge, junkDataWithLargeSize.max_size());
 
     EXPECT_NO_THROW(handler.addNewBinaryStore(BinaryStore::createFromConfig(
-        basicTestBaseId, std::make_unique<FakeSysFile>(junkDataWithLargeSize),
-        0)));
+        basicTestBaseId,
+        std::make_unique<FakeSysFile>(junkDataWithLargeSize))));
 
     EXPECT_TRUE(handler.canHandleBlob(basicTestBlobId));
 }

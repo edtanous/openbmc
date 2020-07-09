@@ -27,7 +27,7 @@ class BinaryStoreBlobHandlerTest : public ::testing::Test
     std::unique_ptr<MockBinaryStore> defaultMockStore(const std::string& baseId)
     {
         return std::make_unique<MockBinaryStore>(
-            baseId, std::make_unique<FakeSysFile>(), 0);
+            baseId, std::make_unique<FakeSysFile>());
     }
 
     void addDefaultStore(const std::string& baseId)

@@ -42,10 +42,8 @@ class BinaryStore : public BinaryStoreInterface
     };
 
     BinaryStore() = delete;
-    BinaryStore(const std::string& baseBlobId, std::unique_ptr<SysFile> file,
-                uint32_t maxSize) :
-        baseBlobId_(baseBlobId),
-        file_(std::move(file)), maxSize_(maxSize)
+    BinaryStore(const std::string& baseBlobId, std::unique_ptr<SysFile> file) :
+        baseBlobId_(baseBlobId), file_(std::move(file))
     {
         blob_.set_blob_base_id(baseBlobId_);
     }
@@ -71,14 +69,12 @@ class BinaryStore : public BinaryStoreInterface
      * Helper factory method to create a BinaryStore instance
      * @param baseBlobId: base id for the created instance
      * @param sysFile: system file object for storing binary
-     * @param maxSize: max size in bytes that this BinaryStore can expand to.
-     *     Writing data more than allowed size will return failure.
      * @returns unique_ptr to constructed BinaryStore. Caller should take
      *     ownership of the instance.
      */
     static std::unique_ptr<BinaryStoreInterface>
         createFromConfig(const std::string& baseBlobId,
-                         std::unique_ptr<SysFile> file, uint32_t maxSize);
+                         std::unique_ptr<SysFile> file);
 
   private:
     /* Load the serialized data from sysfile if commit state is dirty.
@@ -90,7 +86,6 @@ class BinaryStore : public BinaryStoreInterface
     binaryblobproto::BinaryBlob* currentBlob_ = nullptr;
     bool writable_ = false;
     std::unique_ptr<SysFile> file_ = nullptr;
-    uint32_t maxSize_;
     CommitState commitState_ = CommitState::Dirty;
 };
 

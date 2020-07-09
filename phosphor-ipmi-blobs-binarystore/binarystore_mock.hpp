@@ -19,8 +19,8 @@ class MockBinaryStore : public BinaryStoreInterface
 {
   public:
     MockBinaryStore(const std::string& baseBlobId,
-                    std::unique_ptr<SysFile> file, uint32_t maxSize) :
-        real_store_(baseBlobId, std::move(file), maxSize)
+                    std::unique_ptr<SysFile> file) :
+        real_store_(baseBlobId, std::move(file))
     {
         // Implemented calls in BinaryStore will be directed to the real object.
         ON_CALL(*this, getBaseBlobId)
