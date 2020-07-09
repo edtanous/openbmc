@@ -169,7 +169,8 @@ TEST_F(BinaryStoreBlobHandlerBasicTest, StaleDataIsClearedDuringCreation)
     // Serialize to string stored in the fakeSysFile
     auto staleBlobData = staleBlob.SerializeAsString();
     boost::endian::little_uint64_t sizeLE = staleBlobData.size();
-    std::string commitData(sizeLE.data(), sizeof(sizeLE));
+    std::string commitData(reinterpret_cast<const char*>(sizeLE.data()),
+                           sizeof(sizeLE));
     commitData += staleBlobData;
 
     std::vector<std::string> expectedIdList = {basicTestBaseId};
@@ -191,7 +192,8 @@ TEST_F(BinaryStoreBlobHandlerBasicTest, CreatingFromEmptySysfile)
 TEST_F(BinaryStoreBlobHandlerBasicTest, CreatingFromJunkData)
 {
     boost::endian::little_uint64_t tooLarge = 0xffffffffffffffffull;
-    const std::string junkDataWithLargeSize(tooLarge.data(), sizeof(tooLarge));
+    const std::string junkDataWithLargeSize(
+        reinterpret_cast<const char*>(tooLarge.data()), sizeof(tooLarge));
     EXPECT_GE(tooLarge, junkDataWithLargeSize.max_size());
 
     EXPECT_NO_THROW(handler.addNewBinaryStore(BinaryStore::createFromConfig(
