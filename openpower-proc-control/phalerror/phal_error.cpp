@@ -31,17 +31,12 @@ void processLogTraceCallback(void* private_data, const char* fmt, va_list ap)
 {
     va_list vap;
     va_copy(vap, ap);
-    std::vector<char> log(1 + std::vsnprintf(nullptr, 0, fmt, ap));
-    std::vsnprintf(log.data(), log.size(), fmt, vap);
+    std::vector<char> logData(1 + std::vsnprintf(nullptr, 0, fmt, ap));
+    std::vsnprintf(logData.data(), logData.size(), fmt, vap);
     va_end(vap);
-    std::string logstr(log.begin(), log.end());
+    std::string logstr(logData.begin(), logData.end());
 
-    // ignore stray characters in log traces coming from ekb
-    // example: "\n", which are good for print to screen
-    if (logstr.length() < 5)
-    {
-        return;
-    }
+    log<level::INFO>(logstr.c_str());
 
     char timeBuf[80];
     time_t t = time(0);
