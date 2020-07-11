@@ -22,13 +22,14 @@ bool registerRead(const Chip& i_chip, RegisterType_t i_regType,
 {
     bool accessFailure = false;
 
+    auto trgt = (pdbg_target*)(i_chip.getChip());
+
     switch (i_regType)
     {
         case REG_TYPE_SCOM:
         case REG_TYPE_ID_SCOM:
             // Read the 64-bit SCOM register.
-            accessFailure = (0 != pib_read((pdbg_target*)i_chip.getChip(),
-                                           i_address, &o_value));
+            accessFailure = (0 != pib_read(trgt, i_address, &o_value));
             break;
 
         default:
@@ -37,9 +38,9 @@ bool registerRead(const Chip& i_chip, RegisterType_t i_regType,
 
     if (accessFailure)
     {
-        trace::err("Register read failed: chip=%p type=0x%0" PRIx8
-                   "addr=0x%0" PRIx64 "\n",
-                   i_chip.getChip(), i_regType, i_address);
+        trace::err("Register read failed: chip=%s type=0x%0" PRIx8
+                   "addr=0x%0" PRIx64,
+                   pdbg_target_path(trgt), i_regType, i_address);
         o_value = 0; // just in case
     }
 
