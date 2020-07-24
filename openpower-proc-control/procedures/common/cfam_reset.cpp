@@ -1,6 +1,7 @@
 #include <unistd.h>
 
 #include <chrono>
+#include <fstream>
 #include <gpiod.hpp>
 #include <phosphor-logging/log.hpp>
 #include <registration.hpp>
@@ -12,6 +13,8 @@ namespace openpower
 namespace misc
 {
 
+constexpr auto cfamResetPath = "/sys/class/fsi-master/fsi0/device/cfam_reset";
+
 using namespace phosphor::logging;
 
 /**
@@ -20,6 +23,26 @@ using namespace phosphor::logging;
  */
 void cfamReset()
 {
+
+    // First look if system supports kernel sysfs based cfam reset
+    // If it does then write a 1 and let the kernel handle the reset
+    std::ofstream file;
+    file.open(cfamResetPath);
+    if (!file)
+    {
+        log<level::DEBUG>("system does not support kernel cfam reset, default "
+                          "to using libgpiod");
+    }
+    else
+    {
+        // Write a 1 to have kernel toggle the reset
+        file << "1";
+        file.close();
+        log<level::DEBUG>("cfam reset via sysfs complete");
+        return;
+    }
+
+    // No kernel support so toggle gpio from userspace
     const std::string cfamReset = {"cfam-reset"};
     auto line = gpiod::find_line(cfamReset);
     if (!line)
