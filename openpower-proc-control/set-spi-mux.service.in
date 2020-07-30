@@ -3,7 +3,10 @@ Description=Set the SPI mux
 ConditionPathExists=!/run/openbmc/chassis@0-on
 
 [Service]
+ExecStartPre=@bindir@/openpower-proc-control cfamReset
+ExecStartPre=@bindir@/openpower-proc-control scanFSI
 ExecStart=@bindir@/openpower-proc-control setSPIMux
+ExecStartPost=@bindir@/openpower-proc-control scanFSI
 SyslogIdentifier=openpower-proc-control
 Type=oneshot
 RemainAfterExit=yes
