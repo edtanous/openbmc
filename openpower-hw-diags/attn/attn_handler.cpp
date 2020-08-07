@@ -244,12 +244,20 @@ int handleSpecial(Attention* i_attention)
     int rc = RC_SUCCESS; // assume special attention handled
 
     // The TI infor chipop will give us a pointer to the TI info data
-    uint8_t* tiInfo           = nullptr; // ptr to TI info data
-    uint32_t tiInfoLen        = 0;       // length of TI info data
-    pdbg_target* tiInfoTarget = i_attention->getTarget(); // get TI info target
+    uint8_t* tiInfo    = nullptr; // ptr to TI info data
+    uint32_t tiInfoLen = 0;       // length of TI info data
+    pdbg_target *tiInfoTarget, *attnProc;
 
-    // Get length and location of TI info data
-    sbe_mpipl_get_ti_info(tiInfoTarget, &tiInfo, &tiInfoLen);
+    attnProc = i_attention->getTarget();
+
+    pdbg_for_each_target("pib", attnProc, tiInfoTarget)
+    {
+        if (PDBG_TARGET_ENABLED == pdbg_target_probe(tiInfoTarget))
+        {
+            sbe_mpipl_get_ti_info(tiInfoTarget, &tiInfo, &tiInfoLen);
+            break;
+        }
+    }
 
     // Note: If we want to support running this application on architectures
     // of different endian-ness we need to handler that here. The TI data
