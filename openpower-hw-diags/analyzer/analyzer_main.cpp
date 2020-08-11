@@ -156,7 +156,13 @@ libhei::ChipType_t __getChipType(pdbg_target* i_trgt,
     }
     // END WORKAROUND
 
-    o_types.push_back(type);
+    // Make sure the model/level list contains unique values only.
+    // This is O(n*n), but the list size will likely be very low, probably
+    // maxing around a half dozen. So, opting for simplicity.
+    if (o_types.end() == std::find(o_types.begin(), o_types.end(), type))
+    {
+        o_types.push_back(type);
+    }
 
     return type;
 }
@@ -181,7 +187,7 @@ void __getActiveChips(std::vector<libhei::Chip>& o_chips,
 
         // Iterate the connected OCMBs, if they exist.
         pdbg_target* ocmbTrgt;
-        pdbg_for_each_target("ocmb_chip", procTrgt, ocmbTrgt)
+        pdbg_for_each_target("ocmb", procTrgt, ocmbTrgt)
         {
             // Active OCMBs only.
             if (PDBG_TARGET_ENABLED != pdbg_target_probe(ocmbTrgt))
@@ -197,10 +203,6 @@ void __getActiveChips(std::vector<libhei::Chip>& o_chips,
     {
         trace::inf("chip:%s type:0x%0" PRIx32, __path(chip), chip.getType());
     }
-
-    // Make sure the model/level list contains unique values only.
-    auto itr = std::unique(o_types.begin(), o_types.end());
-    o_types.resize(std::distance(o_types.begin(), itr));
 }
 
 //------------------------------------------------------------------------------
