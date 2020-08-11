@@ -22,9 +22,13 @@ bool IsolationNode::analyze(const Chip& i_chip, AttentionType_t i_attnType,
         {
             // TODO: Would be nice to add SCOM errors to the log just in case
             //       traces are not available.
-            HEI_ERR("register read failed on chip type=0x%0" PRIx32
-                    "address=0x%0" PRIx64,
-                    i_chip.getType(), hwReg->getAddress());
+            // TODO: This trace could be redundant with the user application,
+            //       which will have more information on the actual chip that
+            //       failed anyway. Leaving it commented out for now until the
+            //       SCOM errors are added to the log.
+            // HEI_ERR("register read failed on chip type=0x%0" PRIx32
+            //         "address=0x%0" PRIx64,
+            //         i_chip.getType(), hwReg->getAddress());
         }
 
         // TODO: Add this register to io_isoData.
