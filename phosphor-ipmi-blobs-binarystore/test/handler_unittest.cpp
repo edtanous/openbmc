@@ -33,11 +33,11 @@ namespace blobs
 class BinaryStoreBlobHandlerBasicTest : public BinaryStoreBlobHandlerTest
 {
   protected:
-    static inline std::string basicTestBaseId = "/test/"s;
-    static inline std::string basicTestBlobId = "/test/blob0"s;
+    static inline char basicTestBaseId[] = "/test/";
+    static inline char basicTestBlobId[] = "/test/blob0";
 
     static const std::vector<std::string> basicTestBaseIdList;
-    static inline std::string basicTestInvalidBlobId = "/invalid/blob0"s;
+    static inline char basicTestInvalidBlobId[] = "/invalid/blob0";
 
     void addAllBaseIds()
     {
