@@ -6,6 +6,7 @@ After=op-stop-instructions@%i.service
 Conflicts=obmc-host-startmin@%i.target
 
 [Service]
+@ENABLE_PHAL_TRUE@Environment="PDBG_DTB=/var/lib/phosphor-software-manager/pnor/rw/DEVTREE"
 RemainAfterExit=yes
 Type=oneshot
 ExecStart=/usr/bin/openpower-proc-control enterMpReboot
