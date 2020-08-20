@@ -39,6 +39,9 @@ static constexpr int SERIALNUMBER_END_INDEX = 23;
 
 static constexpr const int TEMPERATURE_SENSOR_FAILURE = 0x81;
 
+static std::map<std::string, std::string> map_vendor = {{"80 86", "Intel"},
+                                                        {"14 4d", "Samsung"}};
+
 namespace fs = std::filesystem;
 
 namespace phosphor
@@ -268,10 +271,21 @@ bool getNVMeInfobyBusID(int busID, phosphor::nvme::Nvme::NVMeData& nvmeData)
     nvmeData.vendor =
         intToHex(rsp_data_command_8[1]) + " " + intToHex(rsp_data_command_8[2]);
 
+    for (auto iter = map_vendor.begin(); iter != map_vendor.end(); iter++)
+    {
+        if (iter->first == nvmeData.vendor)
+        {
+            nvmeData.vendor = iter->second;
+            break;
+        }
+    }
+
     for (int offset = SERIALNUMBER_START_INDEX; offset < SERIALNUMBER_END_INDEX;
          offset++)
     {
-        nvmeData.serialNumber += static_cast<char>(rsp_data_command_8[offset]);
+        if (rsp_data_command_8[offset] != ' ')
+            nvmeData.serialNumber +=
+                static_cast<char>(rsp_data_command_8[offset]);
     }
 
     nvmeData.statusFlags = intToHex(rsp_data_command_0[1]);
