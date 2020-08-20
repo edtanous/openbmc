@@ -8,8 +8,8 @@ namespace attn
 /** @brief Register a callback for gpio event */
 void AttnMonitor::scheduleGPIOEvent()
 {
-    std::string logMessage = "... waiting for events ...";
-    trace<level::INFO>(logMessage.c_str());
+    //    std::string logMessage = "... waiting for events ...";
+    //    trace<level::INFO>(logMessage.c_str());
 
     // Register async callback, note that callback is a
     // lambda function with "this" pointer captured
