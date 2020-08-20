@@ -244,18 +244,28 @@ int handleSpecial(Attention* i_attention)
     int rc = RC_SUCCESS; // assume special attention handled
 
     // The TI infor chipop will give us a pointer to the TI info data
-    uint8_t* tiInfo    = nullptr; // ptr to TI info data
-    uint32_t tiInfoLen = 0;       // length of TI info data
-    pdbg_target *tiInfoTarget, *attnProc;
+    uint8_t* tiInfo       = nullptr;                  // ptr to TI info data
+    uint32_t tiInfoLen    = 0;                        // length of TI info data
+    pdbg_target* attnProc = i_attention->getTarget(); // proc with attention
 
-    attnProc = i_attention->getTarget();
-
-    pdbg_for_each_target("pib", attnProc, tiInfoTarget)
+    if (attnProc != nullptr)
     {
-        if (PDBG_TARGET_ENABLED == pdbg_target_probe(tiInfoTarget))
+        // The processor PIB target is required for get TI info chipop
+        char path[16];
+        sprintf(path, "/proc%d/pib", pdbg_target_index(attnProc));
+        pdbg_target* tiInfoTarget = pdbg_target_from_path(nullptr, path);
+
+        if (nullptr != tiInfoTarget)
         {
-            sbe_mpipl_get_ti_info(tiInfoTarget, &tiInfo, &tiInfoLen);
-            break;
+            if (PDBG_TARGET_ENABLED == pdbg_target_probe(tiInfoTarget))
+            {
+                trace<level::INFO>("calling sbe_mpipl_get_ti_info");
+                sbe_mpipl_get_ti_info(tiInfoTarget, &tiInfo, &tiInfoLen);
+                if (tiInfo == nullptr)
+                {
+                    trace<level::INFO>("TI info data ptr is null after call");
+                }
+            }
         }
     }
 
@@ -266,6 +276,8 @@ int handleSpecial(Attention* i_attention)
     // If TI area exists and is marked valid we can assume TI occurred
     if ((nullptr != tiInfo) && (0 != tiInfo[0]))
     {
+        trace<level::INFO>("TI info data present and valid");
+
         TiDataArea* tiDataArea = (TiDataArea*)tiInfo;
 
         // trace a few known TI data area values
@@ -288,6 +300,8 @@ int handleSpecial(Attention* i_attention)
     // TI area not valid, assume breakpoint
     else
     {
+        trace<level::INFO>("TI info NOT available, assume breakpoint");
+
         if (true == (i_attention->getConfig()->getFlag(enBreakpoints)))
         {
             trace<level::INFO>("breakpoint");
