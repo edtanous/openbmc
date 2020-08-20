@@ -3,10 +3,13 @@ Description=The Attention Handler service
 Wants=obmc-mapper.target
 After=obmc-mapper.target
 After=mapper-wait@-xyz-openbmc_project-logging.service
+After=fsi-scan@0.service
+After=op-cfam-reset.service
+Conflicts=obmc-host-stop@0.target
 
 [Service]
 ExecStart=/usr/bin/openpower-hw-diags --daemon
 Restart=on-failure
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=obmc-host-startmin@0.target
