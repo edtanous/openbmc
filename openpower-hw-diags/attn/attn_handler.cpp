@@ -62,7 +62,7 @@ void attnHandler(Config* i_config)
     trace<level::INFO>("Attention handler started");
 
     pdbg_target* target;
-    pdbg_for_each_class_target("fsi", target)
+    pdbg_for_each_class_target("proc", target)
     {
         if (PDBG_TARGET_ENABLED == pdbg_target_probe(target))
         {
@@ -72,71 +72,81 @@ void attnHandler(Config* i_config)
             ss << "checking processor " << proc;
             trace<level::INFO>(ss.str().c_str());
 
-            // get active attentions on processor
-            if (RC_SUCCESS != fsi_read(target, 0x1007, &isr_val))
-            {
-                // event
-                eventAttentionFail(RC_CFAM_ERROR);
+            // The processor FSI target is required for CFAM read
+            char path[16];
+            sprintf(path, "/proc%d/fsi", proc);
+            pdbg_target* attnTarget = pdbg_target_from_path(nullptr, path);
 
-                // trace
-                trace<level::INFO>("Error! cfam read 0x1007 FAILED");
-            }
-            else
+            if (PDBG_TARGET_ENABLED == pdbg_target_probe(attnTarget))
             {
-                std::stringstream ss; // log message stream
-                ss << "cfam 0x1007 = 0x";
-                ss << std::hex << std::setw(8) << std::setfill('0');
-                ss << isr_val;
-                trace<level::INFO>(ss.str().c_str());
-
-                // get interrupt enabled special attentions mask
-                if (RC_SUCCESS != fsi_read(target, 0x100d, &isr_mask))
+                // get active attentions on processor
+                if (RC_SUCCESS != fsi_read(attnTarget, 0x1007, &isr_val))
                 {
                     // event
                     eventAttentionFail(RC_CFAM_ERROR);
 
                     // trace
-                    trace<level::INFO>("Error! cfam read 0x100d FAILED");
+                    trace<level::INFO>("Error! cfam read 0x1007 FAILED");
                 }
                 else
                 {
-                    // CFAM 0x100d is expected to have bits set corresponding
-                    // to attentions that can generate an attention interrupt.
-                    // We will trace this register value to help debug cases
-                    // where the attention handler was invoked unexpectedly.
-
                     std::stringstream ss; // log message stream
-                    ss << "cfam 0x100d = 0x";
+                    ss << "cfam 0x1007 = 0x";
                     ss << std::hex << std::setw(8) << std::setfill('0');
-                    ss << isr_mask;
+                    ss << isr_val;
                     trace<level::INFO>(ss.str().c_str());
 
-                    // bit 0 on "left": bit 30 = SBE vital attention
-                    if (isr_val & 0x00000002)
+                    // get interrupt enabled special attentions mask
+                    if (RC_SUCCESS != fsi_read(attnTarget, 0x100d, &isr_mask))
                     {
-                        active_attentions.emplace_back(
-                            Attention::Vital, handleVital, target, i_config);
-                    }
+                        // event
+                        eventAttentionFail(RC_CFAM_ERROR);
 
-                    // bit 0 on "left": bit 1 = checkstop
-                    if (isr_val & 0x40000000)
-                    {
-                        active_attentions.emplace_back(Attention::Checkstop,
-                                                       handleCheckstop, target,
-                                                       i_config);
+                        // trace
+                        trace<level::INFO>("Error! cfam read 0x100d FAILED");
                     }
+                    else
+                    {
+                        // CFAM 0x100d is expected to have bits set
+                        // corresponding to attentions that can generate an
+                        // attention interrupt. We will trace this register
+                        // value to help debug cases where the attention handler
+                        // was invoked unexpectedly.
 
-                    // bit 0 on "left": bit 2 = special attention
-                    if (isr_val & 0x20000000)
-                    {
-                        active_attentions.emplace_back(Attention::Special,
-                                                       handleSpecial, target,
-                                                       i_config);
-                    }
-                } // cfam 0x100d valid
-            }     // cfam 0x1007 valid
-        }         // fsi target enabled
-    }             // next processor
+                        std::stringstream ss; // log message stream
+                        ss << "cfam 0x100d = 0x";
+                        ss << std::hex << std::setw(8) << std::setfill('0');
+                        ss << isr_mask;
+                        trace<level::INFO>(ss.str().c_str());
+
+                        // bit 0 on "left": bit 30 = SBE vital attention
+                        if (isr_val & 0x00000002)
+                        {
+                            active_attentions.emplace_back(Attention::Vital,
+                                                           handleVital, target,
+                                                           i_config);
+                        }
+
+                        // bit 0 on "left": bit 1 = checkstop
+                        if (isr_val & 0x40000000)
+                        {
+                            active_attentions.emplace_back(Attention::Checkstop,
+                                                           handleCheckstop,
+                                                           target, i_config);
+                        }
+
+                        // bit 0 on "left": bit 2 = special attention
+                        if (isr_val & 0x20000000)
+                        {
+                            active_attentions.emplace_back(Attention::Special,
+                                                           handleSpecial,
+                                                           target, i_config);
+                        }
+                    } // cfam 0x100d valid
+                }     // cfam 0x1007 valid
+            }         // proc target enabled
+        }             // fsi target enabled
+    }                 // next processor
 
     // convert to heap, highest priority is at front
     if (!std::is_heap(active_attentions.begin(), active_attentions.end()))
