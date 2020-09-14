@@ -72,6 +72,7 @@ class Nvme
         bool present;              /* Whether or not the nvme is present  */
         std::string vendor;        /* The nvme manufacturer  */
         std::string serialNumber;  /* The nvme serial number  */
+        std::string modelNumber;   /* The nvme model number   */
         std::string smartWarnings; /* Indicates smart warnings for the state  */
         std::string statusFlags;   /* Indicates the status of the drives  */
         std::string

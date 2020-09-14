@@ -15,6 +15,7 @@
 #include "i2c.h"
 #define MONITOR_INTERVAL_SECONDS 1
 #define NVME_SSD_SLAVE_ADDRESS 0x6a
+#define NVME_SSD_VPD_SLAVE_ADDRESS 0x53
 #define GPIO_BASE_PATH "/sys/class/gpio/gpio"
 #define IS_PRESENT "0"
 #define POWERGD "1"
@@ -26,6 +27,8 @@ using Json = nlohmann::json;
 
 static constexpr const uint8_t COMMAND_CODE_0 = 0;
 static constexpr const uint8_t COMMAND_CODE_8 = 8;
+static constexpr const uint8_t CODE_0_LENGTH = 8;
+static constexpr const uint8_t CODE_8_LENGTH = 23;
 
 static constexpr int CapacityFaultMask = 1;
 static constexpr int temperatureFaultMask = 1 << 1;
@@ -36,6 +39,8 @@ static constexpr int NOWARNING = 255;
 
 static constexpr int SERIALNUMBER_START_INDEX = 3;
 static constexpr int SERIALNUMBER_END_INDEX = 23;
+static constexpr int MODELNUMBER_START_INDEX = 46;
+static constexpr int MODELNUMBER_END_INDEX = 85;
 
 static constexpr const int TEMPERATURE_SENSOR_FAILURE = 0x81;
 
@@ -63,6 +68,8 @@ void Nvme::setNvmeInventoryProperties(
     util::SDBusPlus::setProperty(bus, INVENTORY_BUSNAME, inventoryPath,
                                  ASSET_IFACE, "SerialNumber",
                                  nvmeData.serialNumber);
+    util::SDBusPlus::setProperty(bus, INVENTORY_BUSNAME, inventoryPath,
+                                 ASSET_IFACE, "Model", nvmeData.modelNumber);
     util::SDBusPlus::setProperty(bus, INVENTORY_BUSNAME, inventoryPath,
                                  NVME_STATUS_IFACE, "SmartWarnings",
                                  nvmeData.smartWarnings);
@@ -232,9 +239,9 @@ bool getNVMeInfobyBusID(int busID, phosphor::nvme::Nvme::NVMeData& nvmeData)
         return nvmeData.present;
     }
 
-    auto res_int =
-        smbus.SendSmbusRWBlockCmdRAW(busID, NVME_SSD_SLAVE_ADDRESS, &tx_data,
-                                     sizeof(tx_data), rsp_data_command_0);
+    auto res_int = smbus.SendSmbusRWCmdRAW(busID, NVME_SSD_SLAVE_ADDRESS,
+                                           &tx_data, sizeof(tx_data),
+                                           rsp_data_command_0, CODE_0_LENGTH);
 
     if (res_int < 0)
     {
@@ -249,11 +256,16 @@ bool getNVMeInfobyBusID(int busID, phosphor::nvme::Nvme::NVMeData& nvmeData)
         return nvmeData.present;
     }
 
+    nvmeData.statusFlags = intToHex(rsp_data_command_0[1]);
+    nvmeData.smartWarnings = intToHex(rsp_data_command_0[2]);
+    nvmeData.driveLifeUsed = intToHex(rsp_data_command_0[4]);
+    nvmeData.sensorValue = (int8_t)rsp_data_command_0[3];
+
     tx_data = COMMAND_CODE_8;
 
-    res_int =
-        smbus.SendSmbusRWBlockCmdRAW(busID, NVME_SSD_SLAVE_ADDRESS, &tx_data,
-                                     sizeof(tx_data), rsp_data_command_8);
+    res_int = smbus.SendSmbusRWCmdRAW(busID, NVME_SSD_SLAVE_ADDRESS, &tx_data,
+                                      sizeof(tx_data), rsp_data_command_8,
+                                      CODE_8_LENGTH);
 
     if (res_int < 0)
     {
@@ -288,10 +300,38 @@ bool getNVMeInfobyBusID(int busID, phosphor::nvme::Nvme::NVMeData& nvmeData)
                 static_cast<char>(rsp_data_command_8[offset]);
     }
 
-    nvmeData.statusFlags = intToHex(rsp_data_command_0[1]);
-    nvmeData.smartWarnings = intToHex(rsp_data_command_0[2]);
-    nvmeData.driveLifeUsed = intToHex(rsp_data_command_0[4]);
-    nvmeData.sensorValue = (int8_t)rsp_data_command_0[3];
+    if (nvmeData.vendor == "Samsung")
+    {
+        unsigned char rsp_data_vpd[I2C_DATA_MAX] = {0};
+        const int rx_len = (MODELNUMBER_END_INDEX - MODELNUMBER_START_INDEX);
+        tx_data = MODELNUMBER_START_INDEX;
+
+        auto res_int =
+            smbus.SendSmbusRWCmdRAW(busID, NVME_SSD_VPD_SLAVE_ADDRESS, &tx_data,
+                                    sizeof(tx_data), rsp_data_vpd, rx_len);
+
+        if (res_int < 0)
+        {
+            if (isErrorSmbus[busID] != true)
+            {
+                log<level::ERR>("Send command read VPD fail!");
+                isErrorSmbus[busID] = true;
+            }
+
+            smbus.smbusClose(busID);
+            nvmeData.present = false;
+            return nvmeData.present;
+        }
+
+        for (int i = 0; i < rx_len; i++)
+        {
+            if (rsp_data_vpd[i] != ' ')
+                nvmeData.modelNumber += static_cast<char>(rsp_data_vpd[i]);
+        }
+
+        if (nvmeData.modelNumber.substr(0, nvmeData.vendor.size()) == "SAMSUNG")
+            nvmeData.modelNumber.erase(0, nvmeData.vendor.size());
+    }
 
     smbus.smbusClose(busID);
 

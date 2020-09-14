@@ -18,7 +18,7 @@ static inline __s32 i2c_read_after_write(int file, __u8 slave_addr, __u8 tx_len,
     msg[0].len = tx_len;
 
     msg[1].addr = slave_addr & 0xFF;
-    msg[1].flags = I2C_M_RD | I2C_M_RECV_LEN;
+    msg[1].flags = I2C_M_RD;
     msg[1].buf = (__u8*)rx_buf;
     msg[1].len = rx_len;
 

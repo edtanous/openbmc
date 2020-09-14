@@ -94,26 +94,22 @@ void phosphor::smbus::Smbus::smbusClose(int smbus_num)
     close(fd[smbus_num]);
 }
 
-int phosphor::smbus::Smbus::SendSmbusRWBlockCmdRAW(int smbus_num,
-                                                   int8_t device_addr,
-                                                   uint8_t* tx_data,
-                                                   uint8_t tx_len,
-                                                   uint8_t* rsp_data)
+int phosphor::smbus::Smbus::SendSmbusRWCmdRAW(int smbus_num, int8_t device_addr,
+                                              uint8_t* tx_data, uint8_t tx_len,
+                                              uint8_t* rsp_data, uint8_t rx_len)
 {
     int res, res_len;
     unsigned char Rx_buf[I2C_DATA_MAX] = {0};
 
-    Rx_buf[0] = 1;
-
     gMutex.lock();
 
     res = i2c_read_after_write(fd[smbus_num], device_addr, tx_len,
-                               (unsigned char*)tx_data, I2C_DATA_MAX,
+                               (unsigned char*)tx_data, rx_len,
                                (unsigned char*)Rx_buf);
 
     if (res < 0)
     {
-        fprintf(stderr, "Error: SendSmbusRWBlockCmdRAW failed\n");
+        fprintf(stderr, "Error: SendSmbusRWCmdRAW failed\n");
     }
 
     res_len = Rx_buf[0] + 1;

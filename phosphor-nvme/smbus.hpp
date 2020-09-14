@@ -25,9 +25,8 @@ class Smbus
 
     void smbusClose(int smbus_num);
 
-    int SendSmbusRWBlockCmdRAW(int smbus_num, int8_t device_addr,
-                               uint8_t* tx_data, uint8_t tx_len,
-                               uint8_t* rsp_data);
+    int SendSmbusRWCmdRAW(int smbus_num, int8_t device_addr, uint8_t* tx_data,
+                          uint8_t tx_len, uint8_t* rsp_data, uint8_t rx_len);
 };
 
 } // namespace smbus
