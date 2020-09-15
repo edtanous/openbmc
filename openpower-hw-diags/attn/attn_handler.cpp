@@ -210,22 +210,11 @@ int handleCheckstop(Attention* i_attention)
     }
     else
     {
-        // errors that were isolated
-        std::map<std::string, std::string> errors;
-
-        // analyze errors
-        if (true != analyzer::analyzeHardware(errors))
+        // Look for any attentions found in hardware. This will generate and
+        // comment a PEL if any errors are found.
+        if (true != analyzer::analyzeHardware())
         {
             rc = RC_ANALYZER_ERROR;
-        }
-        else
-        {
-            std::stringstream ss;
-            ss << "Analyzer isolated " << errors.size() << " error(s)";
-            trace<level::INFO>(ss.str().c_str());
-
-            // add checkstop event to log
-            eventCheckstop(errors);
         }
     }
 

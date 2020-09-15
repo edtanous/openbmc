@@ -11,9 +11,6 @@ namespace analyzer
  *         chip. Then it performs all approriate RAS actions based on the active
  *         attentions.
  *
- * @param  o_errors A map for storing information about errors that were
- *                  detected by the hardware error isolator.
- *
  * @return True if an active attenion was successfully analyzed, false
  *         otherwise.
  *         For system checkstop handling:
@@ -25,6 +22,6 @@ namespace analyzer
  *            analysis could fail to find an attention and it should not be
  *            treated as a defect.
  */
-bool analyzeHardware(std::map<std::string, std::string>& i_errors);
+bool analyzeHardware();
 
 } // namespace analyzer
