@@ -1,0 +1,12 @@
+[Unit]
+Description=Reinit POWER CEC system device tree
+Before=start_host@0.service
+ConditionPathExists=!/run/openbmc/host@0-on
+
+[Service]
+Type=oneshot
+RemainAfterExit=no
+ExecStart=/bin/rm -f /var/lib/phal/genesisboot
+
+[Install]
+RequiredBy=obmc-host-start@0.target

@@ -9,7 +9,8 @@ systemdsystemunit_DATA = \
   op-enter-mpreboot@.service
 
 if ENABLE_PHAL
-  systemdsystemunit_DATA += set-spi-mux.service
+  systemdsystemunit_DATA += set-spi-mux.service \
+                            phal-reinit-devtree.service
 endif
 
 bin_PROGRAMS = \
