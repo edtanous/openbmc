@@ -12,7 +12,7 @@ AC_PROG_MAKE_SET
 
 # Checks for typedefs, structures, and compiler characteristics.
 AX_CXX_COMPILE_STDCXX_17([noext])
-AX_APPEND_COMPILE_FLAGS([-Wall -Werror], [CXXFLAGS])
+AX_APPEND_COMPILE_FLAGS([-Wall -Werror -Wno-psabi], [CXXFLAGS])
 
 # Checks for library functions
 LT_INIT
@@ -76,6 +76,9 @@ AS_IF([test "$enable_phal" == "yes"],
        PKG_CHECK_MODULES([LIBDT_API], [libdt-api])
        LIBS="$LIBS $LIBDT_API_LIBS"
        CFLAGS="$CFLAGS $LIBDT_API_CFLAGS"
+
+       PKG_CHECK_MODULES([FMT], [fmt])
+       LIBS="$LIBS $FMT_LIBS"
 
        CHIPS+=" phal common"
        AC_CONFIG_FILES([set-spi-mux.service])
