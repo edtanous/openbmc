@@ -53,4 +53,11 @@ struct TiDataArea
 
 int tiHandler(TiDataArea* i_tiDataArea);
 
+/**
+ * @brief Read autoreboot property
+ *
+ * Read the autoreboot property via dbus. This status will be used to
+ * determine whether to either mpipl or quiesce the host on TI condition.
+ */
+bool autoRebootEnabled();
 } // namespace attn
