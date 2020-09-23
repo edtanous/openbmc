@@ -31,10 +31,18 @@ void eventAttentionFail(int i_error)
     std::cout << "event: attention fail" << i_error << std::endl;
 }
 
-void eventTerminate()
+void eventTerminate(std::map<std::string, std::string> i_additionalData)
 {
     std::cout << "event: terminate" << std::endl;
+
+    std::map<std::string, std::string>::iterator itr;
+    for (itr = i_additionalData.begin(); itr != i_additionalData.end(); ++itr)
+    {
+        std::cout << '\t' << itr->first << '\t' << itr->second << '\n';
+    }
+    std::cout << std::endl;
 }
+
 void eventVital()
 {
     std::cout << "event: vital" << std::endl;

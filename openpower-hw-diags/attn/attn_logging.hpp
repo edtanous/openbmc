@@ -34,7 +34,7 @@ void trace(const char* i_message);
 void eventCheckstop(std::map<std::string, std::string>& i_errors);
 
 /** @brief commit special attention TI event to log */
-void eventTerminate();
+void eventTerminate(std::map<std::string, std::string> i_additionalData);
 
 /** @brief commit SBE vital event to log */
 void eventVital();

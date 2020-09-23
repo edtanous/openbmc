@@ -54,10 +54,35 @@ struct TiDataArea
 int tiHandler(TiDataArea* i_tiDataArea);
 
 /**
+ * @brief Parse TI info data as raw 32-bit fields
+ *
+ * Read the TI data in as 32-bit fields and place into map.
+ */
+void parseRawTiInfo(std::map<std::string, std::string>& i_map,
+                    TiDataArea* i_buffer);
+
+/**
+ * @brief Parse TI info data as PHYP/OPAL data
+ *
+ * Read the TI data, parse as PHYP/OPAL data and place into map.
+ */
+void parsePhypOpalTiInfo(std::map<std::string, std::string>& i_map,
+                         TiDataArea* i_tiDataArea);
+
+/**
+ * @brief Parse TI info data as hostboot data
+ *
+ * Read the TI data, parse as hostboot data and place into map.
+ */
+void parseHbTiInfo(std::map<std::string, std::string>& i_map,
+                   TiDataArea* i_tiDataArea);
+
+/**
  * @brief Read autoreboot property
  *
  * Read the autoreboot property via dbus. This status will be used to
  * determine whether to either mpipl or quiesce the host on TI condition.
  */
 bool autoRebootEnabled();
+
 } // namespace attn

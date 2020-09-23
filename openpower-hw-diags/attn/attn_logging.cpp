@@ -93,13 +93,9 @@ void eventCheckstop(std::map<std::string, std::string>& i_errors)
 }
 
 /** @brief commit special attention TI event to log */
-void eventTerminate()
+void eventTerminate(std::map<std::string, std::string> i_additionalData)
 {
-    std::map<std::string, std::string> additionalData;
-
-    additionalData["_PID"] = std::to_string(getpid());
-
-    event(EventType::Terminate, additionalData);
+    event(EventType::Terminate, i_additionalData);
 }
 
 /** @brief commit SBE vital event to log */
