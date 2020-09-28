@@ -35,3 +35,12 @@ conf_data.set('sysfsEDACReportPath', '"/sys/module/edac_core/parameters/edac_rep
 configure_file(output : 'config.h',
                configuration : conf_data)
 
+systemd = dependency('systemd')
+conf_data = configuration_data()
+conf_data.set('bindir', get_option('prefix') / get_option('bindir'))
+configure_file(
+  input: 'phosphor-ecc.service.in',
+  output: 'phosphor-ecc.service',
+  configuration: conf_data,
+  install: true,
+  install_dir: systemd.get_pkgconfig_variable('systemdsystemunitdir'))
