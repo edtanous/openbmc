@@ -185,7 +185,7 @@ void Nvme::setLEDsStatus(const phosphor::nvme::Nvme::NVMeConfig& config,
         {
             // Drive is present but can not get data, turn on fault LED.
             log<level::ERR>("Drive status is good but can not get data.",
-                            entry("objPath = %s", config.index.c_str()));
+                            entry("OBJ_PATH=%s", config.index.c_str()));
             isError[config.index] = true;
         }
 
@@ -352,8 +352,7 @@ void Nvme::run()
     }
     catch (const std::exception& e)
     {
-        log<level::ERR>("Error in polling loop. "),
-            entry("ERROR = %s", e.what());
+        log<level::ERR>("Error in polling loop. "), entry("ERROR=%s", e.what());
     }
 }
 
@@ -454,7 +453,7 @@ std::vector<phosphor::nvme::Nvme::NVMeConfig> Nvme::getNvmeConfig()
     }
     catch (const Json::exception& e)
     {
-        log<level::ERR>("Json Exception caught."), entry("MSG: %s", e.what());
+        log<level::ERR>("Json Exception caught."), entry("MSG=%s", e.what());
     }
 
     return nvmeConfigs;
@@ -481,7 +480,7 @@ std::string Nvme::getGPIOValueOfNvme(const std::string& fullPath)
             --retries;
             std::this_thread::sleep_for(delay);
             log<level::ERR>("Can not open gpio path.",
-                            entry("MSG: %s", e.what()));
+                            entry("MSG=%s", e.what()));
             continue;
         }
         break;
@@ -529,8 +528,7 @@ void Nvme::readNvmeData(NVMeConfig& config)
     // can not find. create dbus
     if (iter == nvmes.end())
     {
-        log<level::INFO>("SSD plug.",
-                         entry("index = %s", config.index.c_str()));
+        log<level::INFO>("SSD plug.", entry("INDEX=%s", config.index.c_str()));
 
         std::string objPath = NVME_OBJ_PATH + config.index;
         auto nvmeSSD =
@@ -618,10 +616,10 @@ void Nvme::read()
                     {
                         log<level::ERR>(
                             "Present pin is true but power good pin is false.",
-                            entry("index = %s", config.index.c_str()));
+                            entry("INDEX=%s", config.index.c_str()));
                         log<level::ERR>(
                             "Erase SSD from map and d-bus.",
-                            entry("index = %s", config.index.c_str()));
+                            entry("INDEX=%s", config.index.c_str()));
 
                         isErrorPower[config.index] = true;
                     }
