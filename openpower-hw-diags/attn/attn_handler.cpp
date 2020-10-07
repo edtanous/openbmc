@@ -109,9 +109,7 @@ void attnHandler(Config* i_config)
                     {
                         // CFAM 0x100d is expected to have bits set
                         // corresponding to attentions that can generate an
-                        // attention interrupt. We will trace this register
-                        // value to help debug cases where the attention handler
-                        // was invoked unexpectedly.
+                        // attention interrupt.
 
                         std::stringstream ss; // log message stream
                         ss << "cfam 0x100d = 0x";
@@ -120,7 +118,7 @@ void attnHandler(Config* i_config)
                         trace<level::INFO>(ss.str().c_str());
 
                         // bit 0 on "left": bit 30 = SBE vital attention
-                        if (isr_val & 0x00000002)
+                        if (isr_val & isr_mask & 0x00000002)
                         {
                             active_attentions.emplace_back(Attention::Vital,
                                                            handleVital, target,
@@ -128,7 +126,7 @@ void attnHandler(Config* i_config)
                         }
 
                         // bit 0 on "left": bit 1 = checkstop
-                        if (isr_val & 0x40000000)
+                        if (isr_val & isr_mask & 0x40000000)
                         {
                             active_attentions.emplace_back(Attention::Checkstop,
                                                            handleCheckstop,
@@ -136,7 +134,7 @@ void attnHandler(Config* i_config)
                         }
 
                         // bit 0 on "left": bit 2 = special attention
-                        if (isr_val & 0x20000000)
+                        if (isr_val & isr_mask & 0x20000000)
                         {
                             active_attentions.emplace_back(Attention::Special,
                                                            handleSpecial,
