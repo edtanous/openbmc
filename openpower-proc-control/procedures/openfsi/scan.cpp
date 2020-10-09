@@ -15,7 +15,7 @@
  */
 #include "registration.hpp"
 
-#include <experimental/filesystem>
+#include <filesystem>
 #include <fstream>
 #include <org/open_power/Proc/FSI/error.hpp>
 #include <phosphor-logging/elog-errors.hpp>
@@ -27,7 +27,6 @@ namespace openfsi
 {
 
 using namespace phosphor::logging;
-namespace fs = std::experimental::filesystem;
 namespace fsi_error = sdbusplus::org::open_power::Proc::FSI::Error;
 
 constexpr auto masterScanPath = "/sys/class/fsi-master/fsi0/rescan";
@@ -89,7 +88,7 @@ void scan()
             metadata::CALLOUT_DEVICE_PATH(masterCalloutPath));
     }
 
-    if (!fs::exists(hubScanPath))
+    if (!std::filesystem::exists(hubScanPath))
     {
         log<level::ERR>("The FSI master scan did not create a hub scan file");
 

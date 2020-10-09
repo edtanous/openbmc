@@ -18,14 +18,13 @@
 
 #include <stdlib.h>
 
-#include <experimental/filesystem>
+#include <filesystem>
 #include <fstream>
 
 #include <gtest/gtest.h>
 
 using namespace openpower::util;
 using namespace openpower::targeting;
-namespace fs = std::experimental::filesystem;
 
 ProcedureMap Registration::procedures;
 
@@ -46,17 +45,17 @@ class TargetingTest : public ::testing::Test
         _slaveBaseDir = path;
 
         _slaveDir = _slaveBaseDir / "fsi1";
-        fs::create_directory(_slaveDir);
+        std::filesystem::create_directory(_slaveDir);
     }
 
     virtual void TearDown()
     {
-        fs::remove_all(_slaveDir);
-        fs::remove_all(_slaveBaseDir);
+        std::filesystem::remove_all(_slaveDir);
+        std::filesystem::remove_all(_slaveBaseDir);
     }
 
-    fs::path _slaveBaseDir;
-    fs::path _slaveDir;
+    std::filesystem::path _slaveBaseDir;
+    std::filesystem::path _slaveDir;
 };
 
 TEST_F(TargetingTest, CreateTargets)
@@ -89,7 +88,7 @@ TEST_F(TargetingTest, CreateTargets)
 
         for (const auto& t : targets)
         {
-            fs::path path;
+            std::filesystem::path path;
 
             ASSERT_EQ(t->getPos(), i);
 

@@ -18,7 +18,7 @@
 
 #include <endian.h>
 
-#include <experimental/filesystem>
+#include <filesystem>
 #include <phosphor-logging/elog-errors.hpp>
 #include <phosphor-logging/elog.hpp>
 #include <phosphor-logging/log.hpp>
@@ -31,7 +31,6 @@ namespace targeting
 {
 
 using namespace phosphor::logging;
-namespace fs = std::experimental::filesystem;
 namespace file_error = sdbusplus::xyz::openbmc_project::Common::File::Error;
 
 int Target::getCFAMFD()
@@ -72,7 +71,7 @@ Targeting::Targeting(const std::string& fsiMasterDev,
     try
     {
         // Find the the remaining P9s dynamically based on which files show up
-        for (auto& file : fs::directory_iterator(fsiSlaveBasePath))
+        for (auto& file : std::filesystem::directory_iterator(fsiSlaveBasePath))
         {
             std::smatch match;
             std::string path = file.path();
@@ -92,7 +91,7 @@ Targeting::Targeting(const std::string& fsiMasterDev,
             }
         }
     }
-    catch (fs::filesystem_error& e)
+    catch (std::filesystem::filesystem_error& e)
     {
         using metadata = xyz::openbmc_project::Common::File::Open;
 
