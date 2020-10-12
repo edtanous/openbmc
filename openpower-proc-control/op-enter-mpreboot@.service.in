@@ -2,7 +2,7 @@
 Description=Start memory preserving reboot host%i
 Wants=obmc-host-stopped@%i.target
 After=obmc-host-stopped@%i.target
-After=op-stop-instructions@%i.service
+Before=op-stop-instructions@%i.service
 After=phosphor-reset-sensor-states@%i.service
 Before=phosphor-reboot-host@%i.service
 Conflicts=obmc-host-startmin@%i.target

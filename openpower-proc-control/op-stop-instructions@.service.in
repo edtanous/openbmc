@@ -6,6 +6,7 @@ After=op-occ-disable@%i.service
 After=xyz.openbmc_project.Ipmi.Internal.SoftPowerOff.service
 Conflicts=obmc-host-startmin@%i.target
 ConditionPathExists=/sys/class/fsi-master/fsi0/slave@00:00/cfam_id
+ConditionPathExists=!/run/openbmc/mpreboot@%i
 
 [Service]
 RemainAfterExit=yes
