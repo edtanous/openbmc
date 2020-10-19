@@ -7,6 +7,7 @@ namespace attn
 Config::Config()
 {
     setFlagAll();
+    iv_flags.reset(dfltBreakpoint); // default value is clear
 }
 
 /** @brief Get state of flag */

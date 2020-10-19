@@ -13,21 +13,37 @@ namespace attn
 /** @brief Start host diagnostic mode or quiesce host on TI */
 int tiHandler(TiDataArea* i_tiDataArea)
 {
-    int rc = RC_NOT_HANDLED; // assume TI not handled
+    int rc = RC_SUCCESS;
 
-    // PHYP TI
-    if (0xa1 == i_tiDataArea->command)
+    std::map<std::string, std::string> tiAdditionalData;
+
+    // If TI Info is available we can add it to the PEL
+    if (nullptr != i_tiDataArea)
     {
-        // Generate PEL with TI info
-        std::map<std::string, std::string> i_tiDataAreaMap;
-        parsePhypOpalTiInfo(i_tiDataAreaMap, i_tiDataArea); // human readable
-        parseRawTiInfo(i_tiDataAreaMap, i_tiDataArea);      // hex dump
-        eventTerminate(i_tiDataAreaMap);                    // generate PEL
+        if (0xa1 == i_tiDataArea->command)
+        {
+            parsePhypOpalTiInfo(tiAdditionalData, i_tiDataArea);
+        }
+        else
+        {
+            parseHbTiInfo(tiAdditionalData, i_tiDataArea);
+        }
+        parseRawTiInfo(tiAdditionalData, i_tiDataArea);
+    }
 
-        auto bus    = sdbusplus::bus::new_system();
-        auto method = bus.new_method_call(
-            "org.freedesktop.systemd1", "/org/freedesktop/systemd1",
-            "org.freedesktop.systemd1.Manager", "StartUnit");
+    eventTerminate(tiAdditionalData); // generate PEL
+
+    // Transition host by starting appropriate dbus target
+    auto bus    = sdbusplus::bus::new_system();
+    auto method = bus.new_method_call(
+        "org.freedesktop.systemd1", "/org/freedesktop/systemd1",
+        "org.freedesktop.systemd1.Manager", "StartUnit");
+
+    // If TI info is not available we are going to assume PHYP TI for now
+    // (as opposed to HB TI - we have already decided it is not a breakpoint).
+    if ((nullptr == i_tiDataArea) || (0xa1 == i_tiDataArea->command))
+    {
+        trace<level::INFO>("PHYP TI");
 
         if (autoRebootEnabled())
         {
@@ -38,25 +54,21 @@ int tiHandler(TiDataArea* i_tiDataArea)
         }
         else
         {
-            // If autoreboot is disabled we will start the host quiesce target
+            // If autoreboot is disabled we will quiesce the host
             trace<level::INFO>("start obmc-host-quiesce target");
             method.append("obmc-host-quiesce@0.target");
         }
-
-        method.append("replace"); // mode = replace conflicting queued jobs
-        bus.call_noreply(method); // start the service
-
-        rc = RC_SUCCESS;
     }
-    // HB TI
     else
     {
-        // Generate PEL with TI info
-        std::map<std::string, std::string> i_tiDataAreaMap;
-        parseHbTiInfo(i_tiDataAreaMap, i_tiDataArea);  // human readable
-        parseRawTiInfo(i_tiDataAreaMap, i_tiDataArea); // hex dump
-        eventTerminate(i_tiDataAreaMap);               // generate PEL
+        // For now we are just going to just quiesce host on HB TI
+        trace<level::INFO>("HB TI");
+        trace<level::INFO>("start obmc-host-quiesce target");
+        method.append("obmc-host-quiesce@0.target");
     }
+
+    method.append("replace"); // mode = replace conflicting queued jobs
+    bus.call_noreply(method); // start the service
 
     return rc;
 }

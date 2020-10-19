@@ -297,17 +297,36 @@ int handleSpecial(Attention* i_attention)
             rc = tiHandler(tiDataArea);
         }
     }
-    // TI area not valid, assume breakpoint
+    // TI area not valid or not available
     else
     {
-        trace<level::INFO>("TI info NOT available, assume breakpoint");
+        trace<level::INFO>("TI info NOT available");
 
-        if (true == (i_attention->getConfig()->getFlag(enBreakpoints)))
+        // if configured to handle breakpoint as default special attention
+        if (i_attention->getConfig()->getFlag(dfltBreakpoint))
         {
-            trace<level::INFO>("breakpoint");
+            trace<level::INFO>("assuming breakpoint");
 
-            // Call the breakpoint special attention handler
-            bpHandler();
+            if (true == (i_attention->getConfig()->getFlag(enBreakpoints)))
+            {
+                trace<level::INFO>("breakpoint");
+
+                // Call the breakpoint special attention handler
+                bpHandler();
+            }
+        }
+        // if configured to handle TI as default special attention
+        else
+        {
+            trace<level::INFO>("assuming TI");
+
+            if (true == (i_attention->getConfig()->getFlag(enTerminate)))
+            {
+                trace<level::INFO>("TI (terminate immediately)");
+
+                // Call TI special attention handler
+                rc = tiHandler(nullptr);
+            }
         }
     }
 

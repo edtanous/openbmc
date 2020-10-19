@@ -54,6 +54,9 @@ int main(int argc, char* argv[])
             {
                 attn::Config attnConfig; // default config
 
+                // convert remaining cmd line args to config values
+                parseConfig(argv, argv + argc, &attnConfig);
+
                 attn::attnHandler(&attnConfig); // handle pending attentions
 
                 attn::attnDaemon(&attnConfig); // start daemon
