@@ -121,8 +121,8 @@ void func2()
     std::cout << "World\n";
 }
 
-REGISTER_PROCEDURE("hello", func1);
-REGISTER_PROCEDURE("world", func2);
+REGISTER_PROCEDURE("hello", func1)
+REGISTER_PROCEDURE("world", func2)
 
 TEST(RegistrationTest, TestReg)
 {

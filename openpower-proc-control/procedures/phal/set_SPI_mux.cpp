@@ -42,7 +42,7 @@ void setSPIMux()
     }
 }
 
-REGISTER_PROCEDURE("setSPIMux", setSPIMux);
+REGISTER_PROCEDURE("setSPIMux", setSPIMux)
 
 } // namespace p10
 } // namespace openpower

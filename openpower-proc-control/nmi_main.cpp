@@ -20,7 +20,7 @@
 
 #include <sdbusplus/bus.hpp>
 
-int main(int argc, char* argv[])
+int main(int, char*[])
 {
 
     constexpr auto BUSPATH_NMI = "/xyz/openbmc_project/control/host0/nmi";

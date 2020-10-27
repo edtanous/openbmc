@@ -14,11 +14,14 @@
  * limitations under the License.
  */
 
+#include "registration.hpp"
+
 #include <libpdbg.h>
 #include <sys/wait.h>
 #include <unistd.h>
 
 #include <phosphor-logging/log.hpp>
+#include <system_error>
 #include <vector>
 
 namespace openpower
@@ -98,7 +101,7 @@ void enterMpReboot()
     }
 }
 
-REGISTER_PROCEDURE("enterMpReboot", enterMpReboot);
+REGISTER_PROCEDURE("enterMpReboot", enterMpReboot)
 
 } // namespace misc
 } // namespace openpower

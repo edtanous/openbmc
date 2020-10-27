@@ -196,8 +196,8 @@ void startHostNormal()
     startHost();
 }
 
-REGISTER_PROCEDURE("startHost", startHostNormal);
-REGISTER_PROCEDURE("startHostMpReboot", startHostMpReboot);
+REGISTER_PROCEDURE("startHost", startHostNormal)
+REGISTER_PROCEDURE("startHostMpReboot", startHostMpReboot)
 
 } // namespace phal
 } // namespace openpower

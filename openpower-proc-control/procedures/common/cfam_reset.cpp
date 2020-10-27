@@ -68,7 +68,7 @@ void cfamReset()
     line.set_value(1);
 }
 
-REGISTER_PROCEDURE("cfamReset", cfamReset);
+REGISTER_PROCEDURE("cfamReset", cfamReset)
 
 } // namespace misc
 } // namespace openpower

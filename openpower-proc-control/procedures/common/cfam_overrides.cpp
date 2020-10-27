@@ -27,7 +27,7 @@ using namespace openpower::util;
 
 void CFAMOverride()
 {
-    int pos = 0;
+    size_t pos = 0;
     cfam_address_t address = 0;
     cfam_data_t data = 0;
     cfam_mask_t mask = 0;
@@ -48,7 +48,7 @@ void CFAMOverride()
                 if (!line.empty() && line.at(0) != '#')
                 {
                     mask = 0xFFFFFFFF;
-                    if (sscanf(line.c_str(), "%x %hx %x %x", &pos, &address,
+                    if (sscanf(line.c_str(), "%zu %hx %x %x", &pos, &address,
                                &data, &mask) >= 3)
                     {
                         const auto& target = targets.getTarget(pos);
@@ -74,7 +74,7 @@ void CFAMOverride()
     return;
 }
 
-REGISTER_PROCEDURE("CFAMOverride", CFAMOverride);
+REGISTER_PROCEDURE("CFAMOverride", CFAMOverride)
 
 } // namespace p9
 } // namespace openpower

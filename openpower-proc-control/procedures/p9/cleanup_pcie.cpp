@@ -65,7 +65,7 @@ void cleanupPcie()
     }
 }
 
-REGISTER_PROCEDURE("cleanupPcie", cleanupPcie);
+REGISTER_PROCEDURE("cleanupPcie", cleanupPcie)
 
 } // namespace p9
 } // namespace openpower

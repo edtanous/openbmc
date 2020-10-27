@@ -137,7 +137,7 @@ void collectSBEHBData()
     }
 }
 
-REGISTER_PROCEDURE("collectSBEHBData", collectSBEHBData);
+REGISTER_PROCEDURE("collectSBEHBData", collectSBEHBData)
 
 } // namespace debug
 } // namespace p9

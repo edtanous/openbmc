@@ -39,7 +39,7 @@ void setSynchronousFSIClock()
     writeRegWithMask(master, P9_LL_MODE_REG, 0x00000000, 0x00000001);
 }
 
-REGISTER_PROCEDURE("setSyncFSIClock", setSynchronousFSIClock);
+REGISTER_PROCEDURE("setSyncFSIClock", setSynchronousFSIClock)
 
 } // namespace p9
 } // namespace openpower

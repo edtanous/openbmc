@@ -90,7 +90,7 @@ void startHost()
     writeRegWithMask(master, P9_CBS_CS, 0x80000000, 0x80000000);
 }
 
-REGISTER_PROCEDURE("startHost", startHost);
+REGISTER_PROCEDURE("startHost", startHost)
 
 } // namespace p9
 } // namespace openpower

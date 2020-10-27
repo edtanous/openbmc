@@ -106,7 +106,7 @@ void startHostMpReboot()
     }
 }
 
-REGISTER_PROCEDURE("startHostMpReboot", startHostMpReboot);
+REGISTER_PROCEDURE("startHostMpReboot", startHostMpReboot)
 
 } // namespace p9
 } // namespace openpower

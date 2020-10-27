@@ -196,7 +196,7 @@ static int counter = 0;
 // list of debug traces
 static std::vector<std::pair<std::string, std::string>> traceLog;
 
-void processLogTraceCallback(void* private_data, const char* fmt, va_list ap)
+void processLogTraceCallback(void*, const char* fmt, va_list ap)
 {
     va_list vap;
     va_copy(vap, ap);
@@ -482,7 +482,7 @@ void reset()
     counter = 0;
 }
 
-void pDBGLogTraceCallbackHelper(int log_level, const char* fmt, va_list ap)
+void pDBGLogTraceCallbackHelper(int, const char* fmt, va_list ap)
 {
     processLogTraceCallback(NULL, fmt, ap);
 }

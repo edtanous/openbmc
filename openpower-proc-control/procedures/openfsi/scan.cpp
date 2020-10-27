@@ -120,7 +120,7 @@ void scan()
     }
 }
 
-REGISTER_PROCEDURE("scanFSI", scan);
+REGISTER_PROCEDURE("scanFSI", scan)
 
 } // namespace openfsi
 } // namespace openpower
