@@ -3,12 +3,13 @@
 #include "registration.hpp"
 #include "targeting.hpp"
 
-#include <fstream>
-#include <iostream>
 #include <phosphor-logging/elog-errors.hpp>
 #include <phosphor-logging/elog.hpp>
-#include <sstream>
 #include <xyz/openbmc_project/Common/error.hpp>
+
+#include <fstream>
+#include <iostream>
+#include <sstream>
 
 /* File /var/lib/obmc/cfam_overrides requires whitespace-separated parameters
 Pos Address Data Mask with one register write per line. For example:

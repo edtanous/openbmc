@@ -15,9 +15,6 @@
  */
 #include "registration.hpp"
 
-#include <algorithm>
-#include <functional>
-#include <iostream>
 #include <org/open_power/Proc/FSI/error.hpp>
 #include <phosphor-logging/elog-errors.hpp>
 #include <phosphor-logging/elog.hpp>
@@ -25,6 +22,10 @@
 #include <xyz/openbmc_project/Common/Device/error.hpp>
 #include <xyz/openbmc_project/Common/File/error.hpp>
 #include <xyz/openbmc_project/Common/error.hpp>
+
+#include <algorithm>
+#include <functional>
+#include <iostream>
 
 using namespace openpower::util;
 

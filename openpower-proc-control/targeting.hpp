@@ -29,8 +29,7 @@ class Target
      */
     Target(size_t position, const std::string& devPath) :
         pos(position), cfamPath(devPath)
-    {
-    }
+    {}
 
     Target() = delete;
     ~Target() = default;
@@ -92,8 +91,7 @@ class Targeting
     Targeting(const std::string& fsiMasterDev, const std::string& fsiSlaveDir);
 
     Targeting() : Targeting(fsiMasterDevPath, fsiSlaveBaseDir)
-    {
-    }
+    {}
 
     ~Targeting() = default;
     Targeting(const Targeting&) = default;

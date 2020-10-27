@@ -1,4 +1,5 @@
-extern "C" {
+extern "C"
+{
 #include <libpdbg.h>
 }
 
@@ -10,14 +11,15 @@ extern "C" {
 #include <libekb.H>
 #include <libipl.H>
 
+#include <nlohmann/json.hpp>
+#include <phosphor-logging/elog.hpp>
+
 #include <algorithm>
 #include <cstdlib>
 #include <cstring>
 #include <iomanip>
 #include <list>
 #include <map>
-#include <nlohmann/json.hpp>
-#include <phosphor-logging/elog.hpp>
 #include <sstream>
 #include <string>
 

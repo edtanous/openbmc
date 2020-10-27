@@ -19,8 +19,9 @@
 
 #include <phosphor-logging/elog-errors.hpp>
 #include <phosphor-logging/elog.hpp>
-#include <stdexcept>
 #include <xyz/openbmc_project/Common/File/error.hpp>
+
+#include <stdexcept>
 
 namespace openpower
 {

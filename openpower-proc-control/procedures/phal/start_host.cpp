@@ -1,6 +1,9 @@
-extern "C" {
+extern "C"
+{
 #include <libpdbg.h>
 }
+
+#include "attributes_info.H"
 
 #include "phalerror/phal_error.hpp"
 
@@ -10,8 +13,6 @@ extern "C" {
 #include <ext_interface.hpp>
 #include <phosphor-logging/log.hpp>
 #include <registration.hpp>
-
-#include "attributes_info.H"
 namespace openpower
 {
 namespace phal

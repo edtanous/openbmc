@@ -1,10 +1,11 @@
 #include <unistd.h>
 
-#include <chrono>
-#include <fstream>
 #include <gpiod.hpp>
 #include <phosphor-logging/log.hpp>
 #include <registration.hpp>
+
+#include <chrono>
+#include <fstream>
 #include <system_error>
 #include <thread>
 

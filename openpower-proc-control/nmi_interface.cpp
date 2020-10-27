@@ -29,8 +29,7 @@ namespace proc
 
 NMI::NMI(sdbusplus::bus::bus& bus, const char* path) :
     Interface(bus, path), bus(bus), objectPath(path)
-{
-}
+{}
 
 void NMI::nMI()
 {

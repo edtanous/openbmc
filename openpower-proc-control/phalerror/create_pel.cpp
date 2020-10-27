@@ -5,18 +5,19 @@
 #include <libekb.H>
 #include <unistd.h>
 
+#include <phosphor-logging/elog.hpp>
+#include <xyz/openbmc_project/Logging/Create/server.hpp>
+#include <xyz/openbmc_project/Logging/Entry/server.hpp>
+
 #include <cerrno>
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
 #include <map>
-#include <phosphor-logging/elog.hpp>
 #include <stdexcept>
 #include <string>
 #include <tuple>
 #include <vector>
-#include <xyz/openbmc_project/Logging/Create/server.hpp>
-#include <xyz/openbmc_project/Logging/Entry/server.hpp>
 
 namespace openpower
 {
