@@ -1,0 +1,4 @@
+option('tests', type: 'feature', description: 'Build tests.')
+option('p9', type: 'feature', description: 'Enable support for POWER9')
+option('openfsi', type: 'feature', description: 'Enable support for OpenFSI')
+option('phal', type: 'feature', description: 'Enable support for PHAL')
