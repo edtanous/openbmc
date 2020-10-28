@@ -274,9 +274,15 @@ int handleSpecial(Attention* i_attention)
         TiDataArea* tiDataArea = (TiDataArea*)tiInfo;
 
         // trace a few known TI data area values
-        std::stringstream ss; // log message stream
+        std::stringstream ss;
+        ss << std::hex << std::showbase;
 
         ss << "TI data command = " << (int)tiDataArea->command;
+        trace<level::INFO>(ss.str().c_str());
+        ss.str(std::string());
+
+        ss << "TI data hb_terminate_type = "
+           << (int)tiDataArea->hbTerminateType;
         trace<level::INFO>(ss.str().c_str());
         ss.str(std::string());
 
@@ -284,8 +290,7 @@ int handleSpecial(Attention* i_attention)
         trace<level::INFO>(ss.str().c_str());
         ss.str(std::string());
 
-        ss << "TI data hb_terminate_type = "
-           << (int)tiDataArea->hbTerminateType;
+        ss << "TI data source = " << (int)tiDataArea->source;
         trace<level::INFO>(ss.str().c_str());
         ss.str(std::string());
 

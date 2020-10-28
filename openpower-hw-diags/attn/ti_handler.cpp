@@ -10,67 +10,233 @@
 namespace attn
 {
 
-/** @brief Start host diagnostic mode or quiesce host on TI */
+/**
+ * @brief Determine if this is a HB or PHYP TI event
+ *
+ * Use the TI info data area to determine if this is either a HB or a PHYP
+ * TI event then handle the event.
+ *
+ * @param i_tiDataArea pointer to the TI infor data
+ */
 int tiHandler(TiDataArea* i_tiDataArea)
 {
     int rc = RC_SUCCESS;
 
-    std::map<std::string, std::string> tiAdditionalData;
-
-    // If TI Info is available we can add it to the PEL
+    // check TI data area if it is available
     if (nullptr != i_tiDataArea)
     {
-        if (0xa1 == i_tiDataArea->command)
+        // HB v. PHYP TI logic: Only hosboot will fill in hbTerminateType
+        // and it will be non-zero. Only hostboot will fill out source and it
+        // it will be non-zero. Only PHYP will fill in srcFormat and it will
+        // be non-zero.
+        // source and only PHYP will fill in srcFormat.
+        if ((0 == i_tiDataArea->hbTerminateType) &&
+            (0 == i_tiDataArea->source) && (0 != i_tiDataArea->srcFormat))
         {
-            parsePhypOpalTiInfo(tiAdditionalData, i_tiDataArea);
+            handlePhypTi(i_tiDataArea);
         }
         else
         {
-            parseHbTiInfo(tiAdditionalData, i_tiDataArea);
+            handleHbTi(i_tiDataArea);
         }
-        parseRawTiInfo(tiAdditionalData, i_tiDataArea);
+    }
+    else
+    {
+        // TI data was not available, assume PHYP TI for now. When a host state
+        // management interface becomes availabe we may be able to make a more
+        // informed decision here.
+        handlePhypTi(i_tiDataArea);
     }
 
-    eventTerminate(tiAdditionalData); // generate PEL
+    return rc;
+}
 
-    // Transition host by starting appropriate dbus target
+/**
+ * @brief Transition the host state
+ *
+ * We will transition the host state by starting the appropriate dbus target.
+ *
+ * @param i_target the dbus target to start
+ */
+void transitionHost(const char* i_target)
+{
+    // We will be transitioning host by starting appropriate dbus target
     auto bus    = sdbusplus::bus::new_system();
     auto method = bus.new_method_call(
         "org.freedesktop.systemd1", "/org/freedesktop/systemd1",
         "org.freedesktop.systemd1.Manager", "StartUnit");
 
-    // If TI info is not available we are going to assume PHYP TI for now
-    // (as opposed to HB TI - we have already decided it is not a breakpoint).
-    if ((nullptr == i_tiDataArea) || (0xa1 == i_tiDataArea->command))
-    {
-        trace<level::INFO>("PHYP TI");
+    method.append(i_target);  // target unit to start
+    method.append("replace"); // mode = replace conflicting queued jobs
 
-        if (autoRebootEnabled())
-        {
-            // If autoreboot is enabled we will start diagnostic mode target
-            // which will ultimately mpipl the host.
-            trace<level::INFO>("start obmc-host-diagnostic-mode target");
-            method.append("obmc-host-diagnostic-mode@0.target");
-        }
-        else
-        {
-            // If autoreboot is disabled we will quiesce the host
-            trace<level::INFO>("start obmc-host-quiesce target");
-            method.append("obmc-host-quiesce@0.target");
-        }
+    trace<level::INFO>("transitioning host");
+    trace<level::INFO>(i_target);
+
+    bus.call_noreply(method); // start the service
+}
+
+/**
+ * @brief Handle a PHYP terminate immediate special attention
+ *
+ * The TI info data area will contain information pertaining to the TI
+ * condition. We will wither quiesce the host or initiate a MPIPL depending
+ * depending on the auto reboot configuration. We will also create a PEL which
+ * will contain the TI info data and FFDC data captured in the system journal.
+ *
+ * @param i_tiDataArea pointer to TI information filled in by hostboot
+ */
+void handlePhypTi(TiDataArea* i_tiDataArea)
+{
+    trace<level::INFO>("PHYP TI");
+
+    if (autoRebootEnabled())
+    {
+        // If autoreboot is enabled we will start diagnostic mode target
+        // which will ultimately mpipl the host.
+        transitionHost("obmc-host-diagnostic-mode@0.target");
     }
     else
     {
-        // For now we are just going to just quiesce host on HB TI
-        trace<level::INFO>("HB TI");
-        trace<level::INFO>("start obmc-host-quiesce target");
-        method.append("obmc-host-quiesce@0.target");
+        // If autoreboot is disabled we will quiesce the host
+        transitionHost("obmc-host-quiesce@0.target");
     }
 
-    method.append("replace"); // mode = replace conflicting queued jobs
-    bus.call_noreply(method); // start the service
+    // gather additional data for PEL
+    std::map<std::string, std::string> tiAdditionalData;
 
-    return rc;
+    if (nullptr != i_tiDataArea)
+    {
+        parsePhypOpalTiInfo(tiAdditionalData, i_tiDataArea);
+        parseRawTiInfo(tiAdditionalData, i_tiDataArea);
+    }
+
+    eventTerminate(tiAdditionalData); // generate PEL
+}
+
+/**
+ * @brief Handle a hostboot terminate immediate special attention
+ *
+ * The TI info data area will contain information pertaining to the TI
+ * condition. The course of action to take regarding the host state will
+ * depend on the contents of the TI info data area. We will also create a
+ * PEL containing the TI info data and FFDC data captured in the system
+ * journal.
+ *
+ * @param i_tiDataArea pointer to TI information filled in by hostboot
+ */
+void handleHbTi(TiDataArea* i_tiDataArea)
+{
+    trace<level::INFO>("HB TI");
+
+    bool hbDumpRequested = true; // HB dump is common case
+    bool generatePel     = true; // assume PEL will be created
+    bool terminateHost   = true; // transition host state
+
+    // handle specific hostboot reason codes
+    if (nullptr != i_tiDataArea)
+    {
+        std::stringstream ss;
+        ss << std::hex << std::showbase;
+
+        switch (i_tiDataArea->hbTerminateType)
+        {
+            case TI_WITH_PLID:
+            case TI_WITH_EID:
+                ss << "TI with PLID/EID: " << be32toh(i_tiDataArea->asciiData1);
+                trace<level::INFO>(ss.str().c_str());
+                if (0 == i_tiDataArea->hbDumpFlag)
+                {
+                    hbDumpRequested = false; // no HB dump requested
+                }
+                break;
+            case TI_WITH_SRC:
+                // SRC is byte 2 and 3 of 4 byte srcWord12HbWord0
+                uint16_t hbSrc = be32toh(i_tiDataArea->srcWord12HbWord0);
+
+                // trace some info
+                ss << "TI with SRC: " << (int)hbSrc;
+                trace<level::INFO>(ss.str().c_str());
+                ss.str(std::string()); // clear stream
+
+                switch (hbSrc)
+                {
+                    case HB_SRC_SHUTDOWN_REQUEST:
+                        trace<level::INFO>("shutdown request");
+                        generatePel = false;
+                        break;
+                    case HB_SRC_KEY_TRANSITION:
+                        trace<level::INFO>("key transition");
+                        terminateHost = false;
+                        break;
+                    case HB_SRC_INSUFFICIENT_HW:
+                        trace<level::INFO>("insufficient hardware");
+                        break;
+                    case HB_SRC_TPM_FAIL:
+                        trace<level::INFO>("TPM fail");
+                        break;
+                    case HB_SRC_ROM_VERIFY:
+                        trace<level::INFO>("ROM verify");
+                        break;
+                    case HB_SRC_EXT_MISMATCH:
+                        trace<level::INFO>("EXT mismatch");
+                        break;
+                    case HB_SRC_ECC_UE:
+                        trace<level::INFO>("ECC UE");
+                        break;
+                    case HB_SRC_UNSUPPORTED_MODE:
+                        trace<level::INFO>("unsupported mode");
+                        break;
+                    case HB_SRC_UNSUPPORTED_SFCRANGE:
+                        trace<level::INFO>("unsupported SFC range");
+                        break;
+                    case HB_SRC_PARTITION_TABLE:
+                        trace<level::INFO>("partition table invalid");
+                        break;
+                    case HB_SRC_UNSUPPORTED_HARDWARE:
+                        trace<level::INFO>("unsupported hardware");
+                        break;
+                    case HB_SRC_PNOR_CORRUPTION:
+                        trace<level::INFO>("PNOR corruption");
+                        break;
+                    default:
+                        trace<level::INFO>("reason: other");
+                }
+
+                break;
+        }
+    }
+
+    if (true == terminateHost)
+    {
+        // if hostboot dump is requested initiate dump
+        if (hbDumpRequested)
+        {
+            // Until HB dump support available just quiesce the host - once
+            // dump support is available the dump component will transition
+            // (ipl/halt) the host.
+            transitionHost("obmc-host-quiesce@0.target");
+        }
+        else
+        {
+            // Quiese the host - when the host is quiesced it will either
+            // "halt" or IPL depending on autoreboot setting.
+            transitionHost("obmc-host-quiesce@0.target");
+        }
+    }
+
+    // gather additional data for PEL
+    std::map<std::string, std::string> tiAdditionalData;
+
+    if (nullptr != i_tiDataArea)
+    {
+        parseHbTiInfo(tiAdditionalData, i_tiDataArea);
+        parseRawTiInfo(tiAdditionalData, i_tiDataArea);
+    }
+
+    if (true == generatePel)
+    {
+        eventTerminate(tiAdditionalData); // generate PEL
+    }
 }
 
 /** @brief Parse the TI info data area into map as raw 32-bit fields */
@@ -193,32 +359,24 @@ bool autoRebootEnabled()
     method.append("xyz.openbmc_project.Control.Boot.RebootPolicy",
                   "AutoReboot");
 
+    bool autoReboot = false; // assume autoreboot attribute not available
+
     try
     {
         auto reply = bus.call(method);
 
         std::variant<bool> result;
         reply.read(result);
-        auto autoReboot = std::get<bool>(result);
-
-        if (autoReboot)
-        {
-            trace<level::INFO>("Auto reboot enabled");
-            return true;
-        }
-        else
-        {
-            trace<level::INFO>("Auto reboot disabled.");
-            return false;
-        }
+        autoReboot = std::get<bool>(result);
     }
     catch (const sdbusplus::exception::SdBusError& ec)
     {
         std::string traceMessage =
             "Error in AutoReboot Get: " + std::string(ec.what());
         trace<level::INFO>(traceMessage.c_str());
-        return false; // assume autoreboot disabled
     }
+
+    return autoReboot;
 }
 
 } // namespace attn

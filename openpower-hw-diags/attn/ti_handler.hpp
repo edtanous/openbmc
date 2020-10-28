@@ -51,7 +51,62 @@ struct TiDataArea
 };
 #pragma pack(pop)
 
+// miscellaneous defines
+constexpr uint8_t TI_WITH_PLID = 0x01;
+constexpr uint8_t TI_WITH_SRC  = 0x02;
+constexpr uint8_t TI_WITH_EID  = 0x03;
+
+// component ID's
+constexpr uint16_t INITSVC_COMP_ID = 0x0500;
+constexpr uint16_t PNOR_COMP_ID    = 0x0600;
+constexpr uint16_t HWAS_COMP_ID    = 0x0C00;
+constexpr uint16_t SECURE_COMP_ID  = 0x1E00;
+constexpr uint16_t TRBOOT_COMP_ID  = 0x2B00;
+
+// HBFW::INITSERVICE::SHUTDOWNPREQUESTED_BY_FSP
+constexpr uint16_t HB_SRC_SHUTDOWN_REQUEST = INITSVC_COMP_ID | 0x0b;
+
+// SHUTDOWN_KEY_TRANSITION
+constexpr uint16_t HB_SRC_KEY_TRANSITION = INITSVC_COMP_ID | 0x15;
+
+// HBFW::HWAS::RC_SYSAVAIL_INSUFFICIENT_HW
+constexpr uint16_t HB_SRC_INSUFFICIENT_HW = HWAS_COMP_ID | 0x04;
+
+// HBFW::TRUSTDBOOT::RC_TPM_NOFUNCTIONALTPM_FAIL
+constexpr uint16_t HB_SRC_TPM_FAIL = TRBOOT_COMP_ID | 0xAD;
+
+// HBFW::SECUREBOOT::RC_ROM_VERIFY
+constexpr uint16_t HB_SRC_ROM_VERIFY = SECURE_COMP_ID | 0x07;
+
+// HBFW::PNOR::RC_BASE_EXT_MISMATCH
+constexpr uint16_t HB_SRC_EXT_MISMATCH = PNOR_COMP_ID | 0x2F;
+
+// HBFW::PNOR:RC_ECC_UE
+constexpr uint16_t HB_SRC_ECC_UE = PNOR_COMP_ID | 0x0F;
+
+// HBFW::PNOR:RC_UNSUPPORTED_MODE
+constexpr uint16_t HB_SRC_UNSUPPORTED_MODE = PNOR_COMP_ID | 0x0D;
+
+// HBFW::PNOR:RC_UNSUPPORTED_SFCRANGE
+constexpr uint16_t HB_SRC_UNSUPPORTED_SFCRANGE = PNOR_COMP_ID | 0x0E;
+
+// HBFW::PNOR:RC_PARTITION_TABLE_INVALID
+constexpr uint16_t HB_SRC_PARTITION_TABLE = PNOR_COMP_ID | 0x0C;
+
+// HBFW::PNOR:RC_UNSUPPORTED_HARDWARE
+constexpr uint16_t HB_SRC_UNSUPPORTED_HARDWARE = PNOR_COMP_ID | 0x0A;
+
+// HBFW::PNOR:RC_PNOR_CORRUPTION
+constexpr uint16_t HB_SRC_PNOR_CORRUPTION = PNOR_COMP_ID | 0x99;
+
+/** @brief Handle terminate immediate special attentions */
 int tiHandler(TiDataArea* i_tiDataArea);
+
+/** @brief Handle phyp terminate immediately special attention */
+void handlePhypTi(TiDataArea* i_tiDataArea);
+
+/** @brief Handle hostboot terminate immediately special attention */
+void handleHbTi(TiDataArea* i_tiDataArea);
 
 /**
  * @brief Parse TI info data as raw 32-bit fields
