@@ -1,9 +1,10 @@
 [Unit]
 Description=Stop instructions for host%i
 Wants=obmc-host-stop-pre@%i.target
-Before=obmc-host-stop-pre@%i.target
+After=obmc-host-stop-pre@%i.target
+Wants=obmc-host-stopping@%i.target
+Before=obmc-host-stopping@%i.target
 After=op-occ-disable@%i.service
-After=xyz.openbmc_project.Ipmi.Internal.SoftPowerOff.service
 Conflicts=obmc-host-startmin@%i.target
 ConditionPathExists=/sys/class/fsi-master/fsi0/slave@00:00/cfam_id
 ConditionPathExists=!/run/openbmc/mpreboot@%i
