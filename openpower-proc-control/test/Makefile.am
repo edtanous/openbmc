@@ -15,8 +15,7 @@ utest_LDFLAGS = -lgtest_main -lgtest \
 				$(PTHREAD_LIBS) \
 				$(OESDK_TESTCASE_FLAGS) \
 				$(PHOSPHOR_LOGGING_LIBS) \
-				$(PHOSPHOR_DBUS_INTERFACES_LIBS) \
-				-lstdc++fs
+				$(PHOSPHOR_DBUS_INTERFACES_LIBS)
 
 utest_SOURCES = utest.cpp
 utest_LDADD = $(top_srcdir)/targeting.cpp $(top_srcdir)/filedescriptor.cpp
