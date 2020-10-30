@@ -1,11 +1,28 @@
+# Source files specific to end2end test.
+end2end_src = [
+    'bp_handler.cpp',
+    'logging.cpp',
+    'main.cpp',
+    'ti_handler.cpp',
+]
+
+# Additional source files needed for test.
+additional_src = [
+    '../../cli.cpp',
+]
+
+# Link with the analyzer and attention handler static libraries.
+end2end_libs = [
+    analyzer,
+    attn,
+]
+
 # create openpower-hw-diags executable for local testing
 end2end = executable('openpower-hw-diags-test',
-            'main.cpp', 'logging.cpp', 'bp_handler.cpp', 'ti_handler.cpp',
-            '../../analyzer/analyzer_main.cpp', '../../cli.cpp',
-            link_with : [analyzer, attn],
+            end2end_src, additional_src,
+            link_with : end2end_libs,
             include_directories : incdir,
-            dependencies : libhei_dep,
             cpp_args : test_arg,
             install : false)
 
-#test('openpower-hw-diags-test', end2end)
+test('openpower-hw-diags-test', end2end)

@@ -3,9 +3,6 @@ boost_args = ['-DBOOST_ASIO_DISABLE_THREADS',
               '-DBOOST_ERROR_CODE_HEADER_ONLY',
               '-DBOOST_SYSTEM_NO_DEPRECATED']
 
-# dependency to link sdbusplus support
-sdbusplus = dependency('sdbusplus', version : '>=1.0')
-
 # dependency to link gpiod support
 libgpiod = dependency('libgpiod', version : '>=1.4.1')
 
@@ -38,6 +35,6 @@ attn_src = files('attn_main.cpp', 'attn_handler.cpp', 'attn_monitor.cpp',
 attn = static_library('attn_handler',
                       attn_src,
                       include_directories : incdir,
-                      dependencies : [libpdbg, sdbusplus, libgpiod],
+                      dependencies : [libpdbg, sdbusplus_dep, libgpiod],
                       cpp_args : [boost_args, test_arg],
                       install : true)

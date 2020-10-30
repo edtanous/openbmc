@@ -12,6 +12,9 @@ project('openpower-hw-diags', 'cpp',
 # not, default to the subproject.
 libhei_dep = dependency('hei', fallback : ['libhei', 'libhei_dep'])
 
+sdbusplus_dep       = dependency('sdbusplus', version : '>=1.0')
+dbus_interfaces_dep = dependency('phosphor-dbus-interfaces')
+
 incdir = include_directories('.')
 
 # See if phosphor-logging is available, if not use test case logging code. This

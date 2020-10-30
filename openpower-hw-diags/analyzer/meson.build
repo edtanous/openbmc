@@ -1,6 +1,3 @@
-# dependency to link sdbusplus support
-sdbusplus = dependency('sdbusplus', version : '>=1.0')
-
 # gather analyzer sources to be used here and elsewhere if needed
 analyzer_src = files(
     'analyzer_main.cpp',
@@ -9,10 +6,17 @@ analyzer_src = files(
     '../util/temporary_file.cpp',
 )
 
+# Library dependencies.
+analyzer_deps = [
+    dbus_interfaces_dep,
+    libhei_dep,
+    sdbusplus_dep,
+]
+
 # Create hardware error analyzer library
 analyzer = static_library('analyzer',
                           analyzer_src,
                           include_directories : incdir,
-                          dependencies : [ libhei_dep, sdbusplus ],
+                          dependencies : analyzer_deps,
                           cpp_args : test_arg,
                           install : false)
