@@ -63,46 +63,32 @@ const char* __attn(libhei::AttentionType_t i_attnType)
     return str;
 }
 
-uint32_t __trgt(const libhei::Signature& i_sig)
-{
-    uint8_t type = util::pdbg::getTrgtType(i_sig.getChip());
-    uint32_t pos = util::pdbg::getChipPos(i_sig.getChip());
-
-    // Technically, the FapiPos attribute is 32-bit, but not likely to ever go
-    // over 24-bit.
-
-    return type << 24 | (pos & 0xffffff);
-}
-
-uint32_t __sig(const libhei::Signature& i_sig)
-{
-    return i_sig.getId() << 16 | i_sig.getInstance() << 8 | i_sig.getBit();
-}
-
 //------------------------------------------------------------------------------
 
-// Takes a signature list that will be filtered and sorted. The first entry in
-// the returned list will be the root cause. If the returned list is empty,
-// analysis failed.
-void __filterRootCause(std::vector<libhei::Signature>& io_list)
+bool __filterRootCause(const libhei::IsolationData& i_isoData,
+                       libhei::Signature& o_signature)
 {
+    // We'll need to make a copy of the list so that the original list is
+    // maintained for the log.
+    std::vector<libhei::Signature> sigList{i_isoData.getSignatureList()};
+
     // For debug, trace out the original list of signatures before filtering.
-    for (const auto& sig : io_list)
+    for (const auto& sig : sigList)
     {
         trace::inf("Signature: %s 0x%0" PRIx32 " %s",
-                   util::pdbg::getPath(sig.getChip()), __sig(sig),
+                   util::pdbg::getPath(sig.getChip()), sig.toUint32(),
                    __attn(sig.getAttnType()));
     }
 
     // Special and host attentions are not supported by this user application.
     auto newEndItr =
-        std::remove_if(io_list.begin(), io_list.end(), [&](const auto& t) {
+        std::remove_if(sigList.begin(), sigList.end(), [&](const auto& t) {
             return (libhei::ATTN_TYPE_SP_ATTN == t.getAttnType() ||
                     libhei::ATTN_TYPE_HOST_ATTN == t.getAttnType());
         });
 
     // Shrink the vector, if needed.
-    io_list.resize(std::distance(io_list.begin(), newEndItr));
+    sigList.resize(std::distance(sigList.begin(), newEndItr));
 
     // START WORKAROUND
     // TODO: Filtering should be determined by the RAS Data Files provided by
@@ -113,37 +99,50 @@ void __filterRootCause(std::vector<libhei::Signature>& io_list)
     //       recoverable errors could be the root cause of an system checkstop
     //       attentions. Fortunately, we just need to sort the list by the
     //       greater attention type value.
-    std::sort(io_list.begin(), io_list.end(),
+    std::sort(sigList.begin(), sigList.end(),
               [&](const auto& a, const auto& b) {
                   return a.getAttnType() > b.getAttnType();
               });
     // END WORKAROUND
+
+    // Check if a root cause attention was found.
+    if (!sigList.empty())
+    {
+        // The entry at the front of the list will be the root cause.
+        o_signature = sigList.front();
+        return true;
+    }
+
+    return false; // default, no active attentions found.
 }
 
 //------------------------------------------------------------------------------
 
-bool __logError(const std::vector<libhei::Signature>& i_sigList,
-                const libhei::IsolationData& i_isoData)
+bool __analyze(const libhei::IsolationData& i_isoData)
 {
     bool attnFound = false;
 
-    if (i_sigList.empty())
+    libhei::Signature rootCause{};
+    attnFound = __filterRootCause(i_isoData, rootCause);
+
+    if (!attnFound)
     {
+        // NOTE: It is possible for TI handling that there will not be an active
+        //       attention. In which case, we will not do anything and let the
+        //       caller of this function determine if this is the expected
+        //       behavior.
         trace::inf("No active attentions found");
     }
     else
     {
-        attnFound = true;
-
-        // The root cause attention is the first in the filtered list.
-        libhei::Signature root = i_sigList.front();
-
         trace::inf("Root cause attention: %s 0x%0" PRIx32 " %s",
-                   util::pdbg::getPath(root.getChip()), root.toUint32(),
-                   __attn(root.getAttnType()));
+                   util::pdbg::getPath(rootCause.getChip()),
+                   rootCause.toUint32(), __attn(rootCause.getAttnType()));
+
+        // TODO: Perform service actions based on the root cause.
 
         // Create and commit a PEL.
-        createPel(root, i_isoData);
+        createPel(rootCause, i_isoData);
     }
 
     return attnFound;
@@ -169,13 +168,8 @@ bool analyzeHardware()
         libhei::IsolationData isoData{};
         libhei::isolate(chips, isoData);
 
-        // Filter signatures to determine root cause. We'll need to make a copy
-        // of the list so that the original list is maintained for the log.
-        std::vector<libhei::Signature> sigList{isoData.getSignatureList()};
-        __filterRootCause(sigList);
-
-        // Create and commit a log.
-        attnFound = __logError(sigList, isoData);
+        // Analyze the isolation data and perform service actions if needed.
+        attnFound = __analyze(isoData);
 
         // All done, clean up the isolator.
         trace::inf("Uninitializing isolator...");
