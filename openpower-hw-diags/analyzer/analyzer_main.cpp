@@ -4,6 +4,7 @@
 
 #include <hei_main.hpp>
 #include <phosphor-logging/log.hpp>
+#include <util/pdbg.hpp>
 #include <util/trace.hpp>
 
 #include <algorithm>
@@ -15,50 +16,11 @@
 namespace analyzer
 {
 
-/**
- * @brief send chip data file to isolator
- *
- * Read a chip data file into memory and then send it to the isolator via
- * the initialize interface.
- *
- * @param i_filePath The file path and name to read into memory
- *
- * @return Returns true if the isolator was successfully initialized with
- *         a single chip data file. Returns false otherwise.
- *
- */
-void initWithFile(const char* i_filePath)
-{
-    // open the file and seek to the end to get length
-    std::ifstream fileStream(i_filePath, std::ios::binary | std::ios::ate);
+//------------------------------------------------------------------------------
 
-    if (!fileStream.good())
-    {
-        trace::err("Unable to open file: %s", i_filePath);
-        assert(0);
-    }
-    else
-    {
-        // get file size based on seek position
-        fileStream.seekg(0, std::ios::end);
-        std::ifstream::pos_type fileSize = fileStream.tellg();
+// Forward references for externally defined functions.
 
-        // create a buffer large enough to hold the entire file
-        std::vector<char> fileBuffer(fileSize);
-
-        // seek to the beginning of the file
-        fileStream.seekg(0, std::ios::beg);
-
-        // read the entire file into the buffer
-        fileStream.read(fileBuffer.data(), fileSize);
-
-        // done with the file
-        fileStream.close();
-
-        // initialize the isolator with the chip data
-        libhei::initialize(fileBuffer.data(), fileSize);
-    }
-}
+void initializeIsolator(const std::vector<libhei::Chip>& i_chips);
 
 //------------------------------------------------------------------------------
 
@@ -77,11 +39,6 @@ uint32_t __attrFapiPos(pdbg_target* i_trgt)
 }
 
 //------------------------------------------------------------------------------
-
-const char* __path(const libhei::Chip& i_chip)
-{
-    return pdbg_target_path((pdbg_target*)i_chip.getChip());
-}
 
 const char* __attn(libhei::AttentionType_t i_attnType)
 {
@@ -130,10 +87,8 @@ uint32_t __sig(const libhei::Signature& i_sig)
 
 //------------------------------------------------------------------------------
 
-// Returns the chip model/level of the given target. Also, adds the chip
-// model/level to the list of type types needed to initialize the isolator.
-libhei::ChipType_t __getChipType(pdbg_target* i_trgt,
-                                 std::vector<libhei::ChipType_t>& o_types)
+// Returns the chip model/level of the given target.
+libhei::ChipType_t __getChipType(pdbg_target* i_trgt)
 {
     libhei::ChipType_t type;
 
@@ -158,23 +113,13 @@ libhei::ChipType_t __getChipType(pdbg_target* i_trgt,
     }
     // END WORKAROUND
 
-    // Make sure the model/level list contains unique values only.
-    // This is O(n*n), but the list size will likely be very low, probably
-    // maxing around a half dozen. So, opting for simplicity.
-    if (o_types.end() == std::find(o_types.begin(), o_types.end(), type))
-    {
-        o_types.push_back(type);
-    }
-
     return type;
 }
 
 //------------------------------------------------------------------------------
 
-// Gathers list of active chips to analyze. Also, returns the list of chip types
-// needed to initialize the isolator.
-void __getActiveChips(std::vector<libhei::Chip>& o_chips,
-                      std::vector<libhei::ChipType_t>& o_types)
+// Gathers list of active chips to analyze.
+void __getActiveChips(std::vector<libhei::Chip>& o_chips)
 {
     // Iterate each processor.
     pdbg_target* procTrgt;
@@ -185,7 +130,7 @@ void __getActiveChips(std::vector<libhei::Chip>& o_chips,
             continue;
 
         // Add the processor to the list.
-        o_chips.emplace_back(procTrgt, __getChipType(procTrgt, o_types));
+        o_chips.emplace_back(procTrgt, __getChipType(procTrgt));
 
         // Iterate the connected OCMBs, if they exist.
         pdbg_target* ocmbTrgt;
@@ -196,46 +141,9 @@ void __getActiveChips(std::vector<libhei::Chip>& o_chips,
                 continue;
 
             // Add the OCMB to the list.
-            o_chips.emplace_back(ocmbTrgt, __getChipType(ocmbTrgt, o_types));
+            o_chips.emplace_back(ocmbTrgt, __getChipType(ocmbTrgt));
         }
     }
-
-    // For debug, trace out all of the chips found.
-    for (const auto& chip : o_chips)
-    {
-        trace::inf("chip:%s type:0x%0" PRIx32, __path(chip), chip.getType());
-    }
-}
-
-//------------------------------------------------------------------------------
-
-// Initializes the isolator for each specified chip type.
-void __initializeIsolator(const std::vector<libhei::ChipType_t>& i_types)
-{
-    // START WORKAROUND
-    // TODO: The chip data will eventually come from the CHIPDATA section of the
-    //       PNOR. Until that support is available, we'll use temporary chip
-    //       data files.
-    for (const auto& type : i_types)
-    {
-        switch (type)
-        {
-            case 0x120DA049: // PROC
-                initWithFile(
-                    "/usr/share/openpower-hw-diags/chip_data_proc.cdb");
-                break;
-
-            case 0x160D2000: // OCMB_CHIP
-                initWithFile(
-                    "/usr/share/openpower-hw-diags/chip_data_ocmb.cdb");
-                break;
-
-            default:
-                trace::err("Unsupported ChipType_t value: 0x%0" PRIx32, type);
-                assert(0);
-        }
-    }
-    // END WORKAROUND
 }
 
 //------------------------------------------------------------------------------
@@ -248,8 +156,9 @@ void __filterRootCause(std::vector<libhei::Signature>& io_list)
     // For debug, trace out the original list of signatures before filtering.
     for (const auto& sig : io_list)
     {
-        trace::inf("Signature: %s 0x%0" PRIx32 " %s", __path(sig.getChip()),
-                   __sig(sig), __attn(sig.getAttnType()));
+        trace::inf("Signature: %s 0x%0" PRIx32 " %s",
+                   util::pdbg::getPath(sig.getChip()), __sig(sig),
+                   __attn(sig.getAttnType()));
     }
 
     // Special and host attentions are not supported by this user application.
@@ -309,7 +218,8 @@ bool __logError(const std::vector<libhei::Signature>& i_sigList,
         word8 = __sig(root);
 
         trace::inf("Root cause attention: %s 0x%0" PRIx32 " %s",
-                   __path(root.getChip()), word8, __attn(root.getAttnType()));
+                   util::pdbg::getPath(root.getChip()), word8,
+                   __attn(root.getAttnType()));
     }
 
     // Get the log data.
@@ -345,19 +255,18 @@ bool analyzeHardware()
 
     trace::inf(">>> enter analyzeHardware()");
 
-    // Get the active chips to be analyzed and their types.
-    std::vector<libhei::Chip> chipList;
-    std::vector<libhei::ChipType_t> chipTypes;
-    __getActiveChips(chipList, chipTypes);
+    // Get the active chips to be analyzed.
+    std::vector<libhei::Chip> chips;
+    __getActiveChips(chips);
 
-    // Initialize the isolator for all chip types.
-    trace::inf("Initializing isolator: # of types=%u", chipTypes.size());
-    __initializeIsolator(chipTypes);
+    // Initialize the isolator for all chips.
+    trace::inf("Initializing the isolator...");
+    initializeIsolator(chips);
 
     // Isolate attentions.
-    trace::inf("Isolating errors: # of chips=%u", chipList.size());
+    trace::inf("Isolating errors: # of chips=%u", chips.size());
     libhei::IsolationData isoData{};
-    libhei::isolate(chipList, isoData);
+    libhei::isolate(chips, isoData);
 
     // Filter signatures to determine root cause. We'll need to make a copy of
     // the list so that the original list is maintained for the log.
@@ -368,7 +277,7 @@ bool analyzeHardware()
     attnFound = __logError(sigList, isoData);
 
     // All done, clean up the isolator.
-    trace::inf("Uninitializing isolator");
+    trace::inf("Uninitializing isolator...");
     libhei::uninitialize();
 
     trace::inf("<<< exit analyzeHardware()");

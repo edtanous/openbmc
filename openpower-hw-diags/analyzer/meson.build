@@ -2,7 +2,9 @@
 analyzer_src = files(
     'analyzer_main.cpp',
     'hei_user_interface.cpp',
+    'initialize_isolator.cpp',
     '../util/ffdc_file.cpp',
+    '../util/pdbg.cpp',
     '../util/temporary_file.cpp',
 )
 
