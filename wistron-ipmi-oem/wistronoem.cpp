@@ -24,6 +24,7 @@
 #define RISERF_SLAVE_ADDRESS 16  /* Hexadecimal value:0x10 */
 
 void register_detect_riserf() __attribute__((constructor));
+void register_switch_image() __attribute__((constructor));
 
 ipmi_ret_t ipmi_wistron_detect_riserf(ipmi_netfn_t netfn, ipmi_cmd_t cmd,
                                       ipmi_request_t request,
@@ -86,9 +87,47 @@ ipmi_ret_t ipmi_wistron_detect_riserf(ipmi_netfn_t netfn, ipmi_cmd_t cmd,
 
     return IPMI_CC_OK;
 }
+ipmi_ret_t ipmi_wistron_switch_image(ipmi_netfn_t netfn, ipmi_cmd_t cmd,
+                                      ipmi_request_t request,
+                                      ipmi_response_t response,
+                                      ipmi_data_len_t data_len,
+                                      ipmi_context_t context)
+{
+    int rc = 0;
+    uint8_t *reqptr = (uint8_t *) request;
+
+    // Switch to backup flash.
+    if (reqptr[0] == 0)
+    {
+        system("gpioset gpiochip1 1=0");
+    }
+
+    // Switch to default flash.
+    else if (reqptr[0] == 1)
+    {
+        system("gpioset gpiochip1 1=1");
+    }
+
+    else
+    {
+        rc = -1;
+    }
+
+    if(rc != 0)
+    {
+        return IPMI_CC_PARM_OUT_OF_RANGE;
+    }
+
+    return IPMI_CC_OK;
+}
 
 void register_detect_riserf()
 {
     ipmi_register_callback(NETFUN_OEM, IPMI_CMD_DETECT_RISERF, NULL,
                            ipmi_wistron_detect_riserf, SYSTEM_INTERFACE);
+}
+void register_switch_image()
+{
+    ipmi_register_callback(NETFUN_OEM, IPMI_CMD_SWITCH_BITTWARE_IMAGE, NULL,
+                           ipmi_wistron_switch_image, SYSTEM_INTERFACE);
 }

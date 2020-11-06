@@ -10,6 +10,7 @@
 enum ipmi_netfn_oem_cmds
 {
     IPMI_CMD_DETECT_RISERF = 0x01,
+    IPMI_CMD_SWITCH_BITTWARE_IMAGE = 0x02,
 };
 
 constexpr int initError = -1;        /* The parameter of definition error */
@@ -24,6 +25,12 @@ constexpr unsigned char d[] = {
     0x01, 0x01}; /* The response data : CPU0 & CPU1 are present */
 
 ipmi_ret_t ipmi_wistron_detect_riserf(ipmi_netfn_t netfn, ipmi_cmd_t cmd,
+                                      ipmi_request_t request,
+                                      ipmi_response_t response,
+                                      ipmi_data_len_t data_len,
+                                      ipmi_context_t context);
+
+ipmi_ret_t ipmi_wistron_switch_image(ipmi_netfn_t netfn, ipmi_cmd_t cmd,
                                       ipmi_request_t request,
                                       ipmi_response_t response,
                                       ipmi_data_len_t data_len,
