@@ -69,7 +69,6 @@ void transitionHost(const char* i_target)
     method.append(i_target);  // target unit to start
     method.append("replace"); // mode = replace conflicting queued jobs
 
-    trace<level::INFO>("transitioning host");
     trace<level::INFO>(i_target);
 
     bus.call_noreply(method); // start the service

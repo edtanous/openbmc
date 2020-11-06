@@ -24,8 +24,6 @@ void AttnMonitor::scheduleGPIOEvent()
             }
             else
             {
-                trace<level::INFO>(
-                    "Attention monitor detected active attention");
                 handleGPIOEvent(); // gpio trigger detected
             }
             return;
@@ -50,8 +48,6 @@ void AttnMonitor::handleGPIOEvent()
         {
             // active attention when gpio == 0
             case 0:
-                logMessage = "Attention monitor calling attention handler";
-                trace<level::INFO>(logMessage.c_str());
                 attnHandler(iv_config);
                 break;
 
