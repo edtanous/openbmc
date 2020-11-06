@@ -45,7 +45,7 @@ class IsolationData
     }
 
     /** @brief Allows access to the signature list. */
-    const std::vector<Signature>& getSignatureList()
+    const std::vector<Signature>& getSignatureList() const
     {
         return iv_sigLists;
     }

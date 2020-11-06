@@ -178,4 +178,12 @@ enum AttentionType_t : uint8_t
     // clang-format on
 };
 
+/**
+ * Each Chip Data File will begin with a keyword signafying it is a Chip Data
+ * File.
+ */
+using FileKeyword_t = uint64_t;
+
+constexpr FileKeyword_t KW_CHIPDATA = 0x4348495044415441; // "CHIPDATA" ASCII
+
 } // end namespace libhei

@@ -8,10 +8,6 @@ namespace libhei
 
 //------------------------------------------------------------------------------
 
-using FileKeyword_t = uint64_t;
-
-constexpr FileKeyword_t KW_CHIPDATA = 0x4348495044415441; // "CHIPDATA" ASCII
-
 using SectionKeyword_t = uint32_t;
 
 constexpr SectionKeyword_t KW_REGS = 0x52454753; // "REGS" ASCII
