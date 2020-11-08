@@ -131,15 +131,6 @@ foreach u : unit_files
 endforeach
 
 if not get_option('tests').disabled()
-    gtest = dependency('gtest', main: true, disabler: true, required: false)
-    if not gtest.found() and build_tests.enabled()
-        cmake = import('cmake')
-        gtest_subproject = cmake.subproject('gtest')
-        cm_gtest = gtest_subproject.dependency('gtest')
-        cm_gtest_main = gtest_subproject.dependency('gtest_main')
-        gtest = declare_dependency(dependencies: [cm_gtest, cm_gtest_main, threads])
-    endif
-
     test(
         'utest',
         executable(
@@ -148,7 +139,7 @@ if not get_option('tests').disabled()
             'targeting.cpp',
             'filedescriptor.cpp',
             dependencies: [
-                gtest,
+                dependency('gtest', main: true),
                 dependency('phosphor-logging'),
             ],
             implicit_include_directories: false,
