@@ -18,8 +18,8 @@ extra_dependencies = []
 extra_unit_files = []
 
 unit_subs = configuration_data()
-unit_subs.set('bindir', get_option('bindir'))
-unit_subs.set('ENABLE_PHAL_TRUE', '')
+unit_subs.set('bindir', join_paths(get_option('prefix'), get_option('bindir')))
+unit_subs.set('ENABLE_PHAL_TRUE', '#')
 
 if get_option('phal').enabled() and get_option('p9').enabled()
     error('phal and p9 cannot be selected at the same time')
@@ -67,7 +67,7 @@ if build_phal
         'set-spi-mux.service',
         'phal-reinit-devtree.service',
     ]
-    unit_subs.set('ENABLE_PHAL_TRUE', '#')
+    unit_subs.set('ENABLE_PHAL_TRUE', '')
 endif
 
 executable(
