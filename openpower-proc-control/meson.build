@@ -91,7 +91,8 @@ executable(
         dependency('phosphor-logging'),
         dependency('sdbusplus'),
         dependency('threads'),
-    ] + extra_dependencies
+    ] + extra_dependencies,
+    install: true
 )
 
 executable(
@@ -105,7 +106,8 @@ executable(
         dependency('phosphor-dbus-interfaces'),
         dependency('phosphor-logging'),
         dependency('sdbusplus'),
-   ]
+   ],
+   install: true
 )
 
 unit_files = [
