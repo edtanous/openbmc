@@ -243,6 +243,10 @@ void handleHbTi(TiDataArea* i_tiDataArea)
 void parseRawTiInfo(std::map<std::string, std::string>& i_map,
                     TiDataArea* i_buffer)
 {
+    if (nullptr == i_buffer)
+    {
+        return;
+    }
 
     uint32_t* tiDataArea = (uint32_t*)i_buffer;
     std::stringstream ss;
@@ -269,6 +273,11 @@ void parseRawTiInfo(std::map<std::string, std::string>& i_map,
 void parsePhypOpalTiInfo(std::map<std::string, std::string>& i_map,
                          TiDataArea* i_tiDataArea)
 {
+    if (nullptr == i_tiDataArea)
+    {
+        return;
+    }
+
     std::stringstream ss;
 
     ss << std::hex << std::showbase;
@@ -317,6 +326,11 @@ void parsePhypOpalTiInfo(std::map<std::string, std::string>& i_map,
 void parseHbTiInfo(std::map<std::string, std::string>& i_map,
                    TiDataArea* i_tiDataArea)
 {
+    if (nullptr == i_tiDataArea)
+    {
+        return;
+    }
+
     std::stringstream ss;
 
     ss << std::hex << std::showbase;

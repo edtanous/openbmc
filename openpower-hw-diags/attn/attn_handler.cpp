@@ -74,7 +74,7 @@ void attnHandler(Config* i_config)
 
             // The processor FSI target is required for CFAM read
             char path[16];
-            sprintf(path, "/proc%d/fsi", proc);
+            sprintf(path, "/proc%d/fsi", (int)proc);
             pdbg_target* attnTarget = pdbg_target_from_path(nullptr, path);
 
             if (PDBG_TARGET_ENABLED == pdbg_target_probe(attnTarget))
@@ -90,7 +90,7 @@ void attnHandler(Config* i_config)
                 }
                 else
                 {
-                    std::stringstream ss; // log message stream
+                    ss.str(std::string()); // clear stream
                     ss << "cfam 0x1007 = 0x";
                     ss << std::hex << std::setw(8) << std::setfill('0');
                     ss << isr_val;
@@ -111,7 +111,7 @@ void attnHandler(Config* i_config)
                         // corresponding to attentions that can generate an
                         // attention interrupt.
 
-                        std::stringstream ss; // log message stream
+                        ss.str(std::string()); // clear stream
                         ss << "cfam 0x100d = 0x";
                         ss << std::hex << std::setw(8) << std::setfill('0');
                         ss << isr_mask;

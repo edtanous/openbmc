@@ -14,13 +14,6 @@ static constexpr int max_command_len = 25;
 /** @brief end of command line args message */
 static const char* msg_send_end = "999999999999999";
 
-/** @brief structure for holding main args (for threads) */
-typedef struct
-{
-    int argc;
-    char** argv;
-} MainArgs_t;
-
 /**
  * @brief Start a thread to monitor the attention GPIO
  *
@@ -89,10 +82,8 @@ void* threadListener(void* i_params)
             // convert messages to command line arguments
             std::vector<char*> argv;
 
-            for (const auto& arg : messages)
-            {
-                argv.push_back((char*)arg.data());
-            }
+            std::transform(messages.begin(), messages.end(),
+                           std::back_inserter(argv), (char*)data());
 
             int argc = argv.size();
             argv.push_back(nullptr);
