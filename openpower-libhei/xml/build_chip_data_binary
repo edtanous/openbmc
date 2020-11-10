@@ -28,8 +28,9 @@ my $FILE_VERSION =
 # This is a map of all currently supported models/ECs and their IDs.
 my $SUPPORTED_MODEL_EC =
 {
-    EXPLORER_10 => 0x160D2000, # Explorer Chip DD1.0
-    P10_10      => 0x120DA049, # P10 Chip DD1.0
+    EXPLORER_11 => 0x60D20011, # Explorer Chip DD1.0
+    EXPLORER_20 => 0x60D20020, # Explorer Chip DD1.0
+    P10_10      => 0x20DA0010, # P10 Chip DD1.0
 };
 
 # All models/ECs that may exist in the XML, but no longer needs to be built.
@@ -362,18 +363,22 @@ sub __normalizeRegister($$)
         # Each register will keep track of its type.
         $r->{reg_type} = $node->{reg_type};
 
-        if ( defined $regs->{$r->{name}} )
+        for my $model_ec ( __expandModelEc($node->{model_ec}) )
         {
-            # This register already exists so check the contents for accuracy
-            unless ( __dirtyCompare($r, $regs->{$r->{name}}) )
+            if ( defined $regs->{$model_ec}->{$r->{name}} )
             {
-                FAIL("Duplicate register: $r->{name}");
+                # This register already exists so check the contents for
+                # accuracy
+                unless ( __dirtyCompare($r, $regs->{$model_ec}->{$r->{name}}) )
+                {
+                    FAIL("Duplicate register: $r->{name}");
+                }
             }
-        }
-        else
-        {
-            # Add this node's register to the master register list.
-            $regs->{$r->{name}} = $r;
+            else
+            {
+                # Add this node's register to the master register list.
+                $regs->{$model_ec}->{$r->{name}} = $r;
+            }
         }
     }
 
@@ -633,15 +638,19 @@ sub __normalizeBit($$$)
                 # currently is no comment for some bits.
                 $b->{content} = "" unless ( defined $b->{content} );
 
-                # Check if this signature already exists.
-                if ( defined $sigs->{$n}->{$ni}->{$p} and
-                     $b->{content} ne $sigs->{$n}->{$ni}->{$p} )
+                for my $model_ec ( __expandModelEc($node->{model_ec}) )
                 {
-                    FAIL("Duplicate signature for $n $ni $p");
-                }
+                    # Check if this signature already exists.
+                    if ( defined $sigs->{$model_ec}->{$n}->{$ni}->{$p} and
+                        $b->{content} ne $sigs->{$model_ec}->{$n}->{$ni}->{$p} )
+                    {
+                        FAIL("Duplicate signature for $n $ni $p");
+                    }
 
-                # Get the signatures for each node, instance, and bit position.
-                $sigs->{$n}->{$ni}->{$p} = $b->{content};
+                    # Get the signatures for each node, instance, and bit
+                    # position.
+                    $sigs->{$model_ec}->{$n}->{$ni}->{$p} = $b->{content};
+                }
 
                 # Move onto the next instance unless a child node exists.
                 next unless ( defined $b->{child_node} );
@@ -753,15 +762,22 @@ sub normalizeXML($)
                 $node_dups->{$model_ec}->{$node->{name}} = 1;
             }
 
-            # Some nodes contain the <local_fir> shorthand element. <register>
-            # elements will need to be extracted for a master register list.
-            # Also, some minor data checking, etc.
+            # Initialize the master list of registers and signatures of this
+            # model/EC, if necessary.
 
-            $regs->{$model_ec} = {} unless ( defined $regs->{ $model_ec} );
-            $sigs->{$model_ec} = {} unless ( defined $sigs->{ $model_ec} );
+            $regs->{$model_ec} = {} unless ( defined $regs->{$model_ec} );
+            $sigs->{$model_ec} = {} unless ( defined $sigs->{$model_ec} );
+        }
 
-            __normalizeNode( $node, $regs->{$model_ec}, $sigs->{$model_ec} );
+        # The same node content will be used for each model/EC characterized by
+        # this node. There is some normalization that needs to happen because of
+        # shorthand elements, like <local_fir>, and some error checking. This
+        # only needs to be done once per node, not per model/EC.
+        __normalizeNode( $node, $regs, $sigs );
 
+        # Push the node data for each model/EC.
+        for my $model_ec ( __expandModelEc($node->{model_ec}) )
+        {
             push @{$data->{$model_ec}->{node}}, $node;
         }
     }

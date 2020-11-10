@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<chip name="Explorer" model_ec="EXPLORER_10">
+<chip name="Explorer" model_ec="EXPLORER_11,EXPLORER_20">
 
     <attn_tree attn_type="UCS" root_node="CHIPLET_OCMB_FIR"     node_inst="0" />
     <attn_tree attn_type="RE"  root_node="CHIPLET_OCMB_FIR"     node_inst="0" />

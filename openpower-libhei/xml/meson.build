@@ -19,7 +19,8 @@ cdb_files = {
 
     'explorer' :
     [
-        'chip_data_explorer_10.cdb',
+        'chip_data_explorer_11.cdb',
+        'chip_data_explorer_20.cdb',
     ],
 }
 

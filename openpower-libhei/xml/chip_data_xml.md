@@ -412,7 +412,8 @@ are:
 
 | Value         | Description          |
 |---------------|----------------------|
-| `EXPLORER_10` | Explorer chip EC 1.0 |
+| `EXPLORER_11` | Explorer chip EC 1.1 |
+| `EXPLORER_20` | Explorer chip EC 2.0 |
 | `P10_10`      | P10 chip EC 1.0      |
 
 ### 3.4) Supported Attention Types

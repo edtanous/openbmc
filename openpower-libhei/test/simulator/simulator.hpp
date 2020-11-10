@@ -43,7 +43,10 @@ class SimulatorData
     /** The list of supported chip types for the simulator. */
     enum SimChipType
     {
-        SAMPLE = 0xdeadbeef,
+        SAMPLE      = 0xdeadbeef,
+        EXPLORER_11 = 0x60d20011,
+        EXPLORER_20 = 0x60d20020,
+        P10_10      = 0x20da0010,
     };
 
   private:

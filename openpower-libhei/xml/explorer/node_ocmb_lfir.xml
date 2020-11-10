@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<attn_node name="OCMB_LFIR" model_ec="EXPLORER_10" reg_type="SCOM">
+<attn_node name="OCMB_LFIR" model_ec="EXPLORER_11,EXPLORER_20" reg_type="SCOM">
 
     <local_fir name="OCMB_LFIR" config="">
         <instance reg_inst="0" addr="0x0804000a" />
