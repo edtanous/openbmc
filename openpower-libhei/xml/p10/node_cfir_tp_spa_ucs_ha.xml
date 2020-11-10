@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<attn_node model_ec="P10_10" name="CFIR_TP_SPA_UCS_HA" reg_type="SCOM">
+    <register name="CFIR_TP_SPATTN">
+        <instance addr="0x01040002" reg_inst="0"/>
+    </register>
+    <register name="CFIR_TP_SPATTN_MASK">
+        <instance addr="0x01040042" reg_inst="0"/>
+    </register>
+    <register name="CFIR_TP_LOCAL_XSTOP">
+        <instance addr="0x01040003" reg_inst="0"/>
+    </register>
+    <register name="CFIR_TP_LOCAL_XSTOP_MASK">
+        <instance addr="0x01040043" reg_inst="0"/>
+    </register>
+    <register name="CFIR_TP_HOSTATTN">
+        <instance addr="0x01040004" reg_inst="0"/>
+    </register>
+    <register name="CFIR_TP_HOSTATTN_MASK">
+        <instance addr="0x01040044" reg_inst="0"/>
+    </register>
+    <rule attn_type="SPA" node_inst="0">
+        <expr type="and">
+            <expr type="reg" value1="CFIR_TP_SPATTN"/>
+            <expr type="not">
+                <expr type="reg" value1="CFIR_TP_SPATTN_MASK"/>
+            </expr>
+            <expr type="int" value1="0x0FFFFFFFFFFFFFFF"/>
+        </expr>
+    </rule>
+    <rule attn_type="UCS" node_inst="0">
+        <expr type="and">
+            <expr type="reg" value1="CFIR_TP_LOCAL_XSTOP"/>
+            <expr type="not">
+                <expr type="reg" value1="CFIR_TP_LOCAL_XSTOP_MASK"/>
+            </expr>
+            <expr type="int" value1="0x0FFFFFFFFFFFFFFF"/>
+        </expr>
+    </rule>
+    <rule attn_type="HA" node_inst="0">
+        <expr type="and">
+            <expr type="reg" value1="CFIR_TP_HOSTATTN"/>
+            <expr type="not">
+                <expr type="reg" value1="CFIR_TP_HOSTATTN_MASK"/>
+            </expr>
+            <expr type="int" value1="0x0FFFFFFFFFFFFFFF"/>
+        </expr>
+    </rule>
+    <bit child_node="TP_LOCAL_FIR" node_inst="0" pos="4">Local FIR</bit>
+</attn_node>

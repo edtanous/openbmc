@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<attn_node name="CHIPLET_OCMB_SPA_FIR" model_ec="EXPLORER_10" reg_type="SCOM">
+
+    <register name="CHIPLET_OCMB_SPA_FIR">
+        <instance reg_inst="0" addr="0x08040004" />
+    </register>
+
+    <register name="CHIPLET_OCMB_SPA_FIR_MASK">
+        <instance reg_inst="0" addr="0x08040007" />
+    </register>
+
+    <rule attn_type="HA" node_inst="0">
+        <!-- FIR & ~MASK -->
+        <expr type="and">
+            <expr type="reg" value1="CHIPLET_OCMB_SPA_FIR" />
+            <expr type="not">
+                <expr type="reg" value1="CHIPLET_OCMB_SPA_FIR_MASK" />
+            </expr>
+        </expr>
+    </rule>
+
+    <bit pos="1" child_node="MMIOFIR"  >Attention from MMIOFIR</bit>
+    <bit pos="4" child_node="SRQFIR"   >Attention from SRQFIR</bit>
+    <bit pos="5" child_node="MCBISTFIR">Attention from MCBISTFIR</bit>
+    <bit pos="6" child_node="RDFFIR"   >Attention from RDFFIR</bit>
+    <bit pos="8" child_node="TLXFIR"   >Attention from TLXFIR</bit>
+    <bit pos="9" child_node="OMIDLFIR" >Attention from OMIDLFIR</bit>
+
+</attn_node>

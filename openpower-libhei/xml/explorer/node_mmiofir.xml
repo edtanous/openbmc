@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<attn_node name="MMIOFIR" model_ec="EXPLORER_10" reg_type="SCOM">
+
+    <local_fir name="MMIOFIR" config="W">
+        <instance reg_inst="0" addr="0x08010870" />
+        <action attn_type="UCS" config="00" />
+        <action attn_type="RE"  config="01" />
+        <action attn_type="HA"  config="10" />
+    </local_fir>
+
+    <bit pos= "0">AFU desc unimp</bit>
+    <bit pos= "1">MMIO err</bit>
+    <bit pos= "2">SCOM err</bit>
+    <bit pos= "3">FSM perr</bit>
+    <bit pos= "4">FIFO overflow</bit>
+    <bit pos= "5">Ctl reg parity err</bit>
+    <bit pos= "6">Info reg parity error</bit>
+    <bit pos= "7">SNSC both starts err</bit>
+    <bit pos= "8">SNSC mult seq parity err</bit>
+    <bit pos= "9">SNSC FSM parity err</bit>
+    <bit pos="10">SNSC reg parity err</bit>
+    <bit pos="11">acTAG PASID cfg err</bit>
+
+</attn_node>

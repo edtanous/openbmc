@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<attn_node model_ec="P10_10" name="CFIR_N0_SPA" reg_type="SCOM">
+    <register name="CFIR_N0_SPATTN">
+        <instance addr="0x02040002" reg_inst="0"/>
+    </register>
+    <register name="CFIR_N0_SPATTN_MASK">
+        <instance addr="0x02040042" reg_inst="0"/>
+    </register>
+    <rule attn_type="SPA" node_inst="0">
+        <expr type="and">
+            <expr type="reg" value1="CFIR_N0_SPATTN"/>
+            <expr type="not">
+                <expr type="reg" value1="CFIR_N0_SPATTN_MASK"/>
+            </expr>
+            <expr type="int" value1="0x0FFFFFFFFFFFFFFF"/>
+        </expr>
+    </rule>
+    <bit child_node="N0_LOCAL_FIR" node_inst="0" pos="4">Local FIR</bit>
+    <bit child_node="INT_CQ_FIR" node_inst="0" pos="7">Primary Error Register for INT_CQ.  This contains all of the individual errors detected by INT_CQ, plus summary error indicators from VC and PC (see bits 43:63).</bit>
+</attn_node>

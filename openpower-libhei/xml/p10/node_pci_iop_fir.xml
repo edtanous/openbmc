@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<attn_node model_ec="P10_10" name="PCI_IOP_FIR" reg_type="SCOM">
+    <local_fir config="" name="PCI_IOP_FIR">
+        <instance addr="0x08011100" reg_inst="0"/>
+        <instance addr="0x08011500" reg_inst="1"/>
+        <instance addr="0x09011100" reg_inst="2"/>
+        <instance addr="0x09011500" reg_inst="3"/>
+        <action attn_type="CS" config="00"/>
+        <action attn_type="RE" config="01"/>
+        <action attn_type="UCS" config="11"/>
+    </local_fir>
+    <bit pos="0">Correctable error in PH0 arrays</bit>
+    <bit pos="1">Uncorrectable error in PH0 arrays</bit>
+    <bit pos="2">Correctable error in PH1 arrays</bit>
+    <bit pos="3">Uncorrectable error in PH1 arrays</bit>
+    <bit pos="4">Correctable error from SCOM in WRAP0</bit>
+    <bit pos="5">Uncorrectable error from SCOM in WRAP0</bit>
+    <bit pos="6">Correctable error from SCOM in WRAP1</bit>
+    <bit pos="7">Uncorrectable error from SCOM in WRAP1</bit>
+    <bit pos="8">Correctable error from SCRUB in WRAP0</bit>
+    <bit pos="9">Uncorrectable error from SCRUB in WRAP0</bit>
+    <bit pos="10">Correctable error from SCRUB in WRAP1</bit>
+    <bit pos="11">Uncorrectable error from SCRUB in WRAP1</bit>
+</attn_node>

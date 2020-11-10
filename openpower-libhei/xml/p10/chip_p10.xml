@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chip model_ec="P10_10" name="P10">
+    <attn_tree attn_type="CS" node_inst="0" root_node="GFIR_CS"/>
+    <attn_tree attn_type="RE" node_inst="0" root_node="GFIR_RE"/>
+    <attn_tree attn_type="SPA" node_inst="0" root_node="GFIR_SPA"/>
+    <attn_tree attn_type="UCS" node_inst="0" root_node="GFIR_UCS"/>
+    <attn_tree attn_type="HA" node_inst="0" root_node="GFIR_HA"/>
+</chip>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<attn_node name="SRQFIR" model_ec="EXPLORER_10" reg_type="SCOM">
+
+    <local_fir name="SRQFIR" config="W">
+        <instance reg_inst="0" addr="0x08011400" />
+        <action attn_type="UCS" config="00" />
+        <action attn_type="RE"  config="01" />
+        <action attn_type="HA"  config="10" />
+    </local_fir>
+
+    <bit pos= "0">SRQ recoverable error</bit>
+    <bit pos= "1">SRQ nonrecoverable error</bit>
+    <bit pos= "2">Refresh overrun</bit>
+    <bit pos= "3">WAT error</bit>
+    <bit pos= "4">RCD parity error</bit>
+    <bit pos= "5">MCB logic error</bit>
+    <bit pos= "6">Emergency throttle</bit>
+    <bit pos= "7">NCF MCB parity error</bit>
+    <bit pos= "8">DDR MBA event n</bit>
+    <bit pos= "9">WRQ RRQ hang err</bit>
+    <bit pos="10">SM one hot error</bit>
+    <bit pos="11">Reg parity error</bit>
+    <bit pos="12">Cmd parity error</bit>
+    <bit pos="13">Port fail</bit>
+    <bit pos="14">informational register parity error bit</bit>
+    <bit pos="15">Debug parity error</bit>
+    <bit pos="16">WDF unrecoverable mainline error</bit>
+    <bit pos="17">WDF mmio error</bit>
+    <bit pos="18">WDF array UE on mainline operations (SUE put in mem)</bit>
+    <bit pos="19">WDF mainline dataflow error (SUE not reliably put in mem)</bit>
+    <bit pos="20">WDF scom register parity err, affecting mainline config</bit>
+    <bit pos="21">WDF scom register parity err, affecting scom ops only</bit>
+    <bit pos="22">WDF SCOM fsm parity error</bit>
+    <bit pos="23">WDF write buffer array CE</bit>
+    <bit pos="24">NCF UE</bit>
+    <bit pos="25">TBD</bit>
+    <bit pos="26">NCF logic error</bit>
+    <bit pos="27">NCF parity error</bit>
+    <bit pos="28">NCF correctable error</bit>
+    <bit pos="29">Internal scom error</bit>
+    <bit pos="30">Internal scom error copy</bit>
+
+</attn_node>

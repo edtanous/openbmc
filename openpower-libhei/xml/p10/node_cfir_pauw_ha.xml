@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<attn_node model_ec="P10_10" name="CFIR_PAUW_HA" reg_type="SCOM">
+    <register name="CFIR_PAUW_HOSTATTN">
+        <instance addr="0x12040004" reg_inst="0"/>
+        <instance addr="0x13040004" reg_inst="1"/>
+    </register>
+    <register name="CFIR_PAUW_HOSTATTN_MASK">
+        <instance addr="0x12040044" reg_inst="0"/>
+        <instance addr="0x13040044" reg_inst="1"/>
+    </register>
+    <rule attn_type="HA" node_inst="0:1">
+        <expr type="and">
+            <expr type="reg" value1="CFIR_PAUW_HOSTATTN"/>
+            <expr type="not">
+                <expr type="reg" value1="CFIR_PAUW_HOSTATTN_MASK"/>
+            </expr>
+            <expr type="int" value1="0x0FFFFFFFFFFFFFFF"/>
+        </expr>
+    </rule>
+    <bit child_node="PAU_LOCAL_FIR" node_inst="2,3" pos="4">Local FIR</bit>
+</attn_node>

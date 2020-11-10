@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<attn_node model_ec="P10_10" name="PB_EXT_FIR" reg_type="SCOM">
+    <local_fir config="" name="PB_EXT_FIR">
+        <instance addr="0x030113AE" reg_inst="0"/>
+        <action attn_type="CS" config="00"/>
+    </local_fir>
+    <bit pos="0">pb_x0_fir_err</bit>
+    <bit pos="1">pb_x1_fir_err</bit>
+    <bit pos="2">pb_x2_fir_err</bit>
+    <bit pos="3">pb_x3_fir_err</bit>
+    <bit pos="4">pb_x4_fir_err</bit>
+    <bit pos="5">pb_x5_fir_err</bit>
+    <bit pos="6">pb_x6_fir_err</bit>
+    <bit pos="7">pb_x7_fir_err</bit>
+</attn_node>

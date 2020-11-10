@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chip name="Explorer" model_ec="EXPLORER_10">
+
+    <attn_tree attn_type="UCS" root_node="CHIPLET_OCMB_FIR"     node_inst="0" />
+    <attn_tree attn_type="RE"  root_node="CHIPLET_OCMB_FIR"     node_inst="0" />
+    <attn_tree attn_type="HA"  root_node="CHIPLET_OCMB_SPA_FIR" node_inst="0" />
+
+</chip>
