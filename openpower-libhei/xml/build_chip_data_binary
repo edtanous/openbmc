@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/env perl
 
 use warnings;
 use strict;
@@ -28,7 +28,6 @@ my $FILE_VERSION =
 # This is a map of all currently supported models/ECs and their IDs.
 my $SUPPORTED_MODEL_EC =
 {
-    SAMPLE_10   => 0xdeadbeef, # Sample binary for libhei
     EXPLORER_10 => 0x160D2000, # Explorer Chip DD1.0
     P10_10      => 0x120DA049, # P10 Chip DD1.0
 };

@@ -1,3 +1,4 @@
+# OpenBMC openpower-libhei project, see README.md for details.
 project('openpower-libhei', 'cpp',
         version: '0.1', meson_version: '>=0.50.0',
         default_options: [
@@ -6,6 +7,10 @@ project('openpower-libhei', 'cpp',
             'cpp_std=c++14',
             'cpp_args=-Wno-unused-parameter'
        ])
+
+#-------------------------------------------------------------------------------
+# libhei library
+#-------------------------------------------------------------------------------
 
 incdir = include_directories('src')
 
@@ -46,8 +51,19 @@ pkg_mod.generate(libraries : libhei_static,
                  filebase : 'hei',
                  description : 'Openpower Hardware Error Isolator')
 
+#-------------------------------------------------------------------------------
+# Chip Data Files
+#-------------------------------------------------------------------------------
+
+subdir('xml')
+
+#-------------------------------------------------------------------------------
+# Test
+#-------------------------------------------------------------------------------
+
 build_tests = get_option('tests')
 
 if not build_tests.disabled()
   subdir('test')
 endif
+
