@@ -105,8 +105,11 @@ void __initialize(const fs::path& i_path)
 
 //------------------------------------------------------------------------------
 
-void initializeIsolator(const std::vector<libhei::Chip>& i_chips)
+void initializeIsolator(std::vector<libhei::Chip>& o_chips)
 {
+    // Get all of the active chips to be analyzed.
+    util::pdbg::getActiveChips(o_chips);
+
     // Find all of the existing chip data files.
     std::map<libhei::ChipType_t, fs::path> files;
     __getChipDataFiles(files);
@@ -114,24 +117,9 @@ void initializeIsolator(const std::vector<libhei::Chip>& i_chips)
     // Keep track of models/levels that have already been initialized.
     std::map<libhei::ChipType_t, unsigned int> initTypes;
 
-    for (const auto& chip : i_chips)
+    for (const auto& chip : o_chips)
     {
         auto chipType = chip.getType();
-
-        // Trace each chip for debug.
-        trace::inf("Chip found: type=0x%0" PRIx32 " chip=%s", chipType,
-                   util::pdbg::getPath(chip));
-
-        if (0 == chipType)
-        {
-            // This is a special case. It means the model/level attributes have
-            // not been initialized in the devtree. This is possible on the
-            // epoch IPL where an attention occurs before Hostboot is able to
-            // update the devtree information on the BMC.
-
-            // TODO: Consider logging a PEL. Just skip for now.
-            continue;
-        }
 
         // Mark this chip type as initialized (or will be if it hasn't been).
         auto ret = initTypes.emplace(chipType, 1);

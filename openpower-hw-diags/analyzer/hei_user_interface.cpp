@@ -43,10 +43,7 @@ bool __readProc(pdbg_target* i_procTrgt, RegisterType_t i_regType,
     bool accessFailure = false;
 
     // The processor PIB target is required for SCOM access.
-    char path[16];
-    sprintf(path, "/proc%d/pib", pdbg_target_index(i_procTrgt));
-    pdbg_target* scomTrgt = pdbg_target_from_path(nullptr, path);
-    assert(nullptr != scomTrgt);
+    pdbg_target* scomTrgt = util::pdbg::getPibTrgt(i_procTrgt);
 
     switch (i_regType)
     {

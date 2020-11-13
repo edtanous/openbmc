@@ -31,6 +31,19 @@ uint8_t getTrgtType(pdbg_target* i_trgt);
 /** @return The target type of the given chip. */
 uint8_t getTrgtType(const libhei::Chip& i_chip);
 
+/**
+ * @return The pib target associated with the given proc target.
+ * @note   Will assert the given target is a proc target.
+ * @note   Will assert the returned pib target it not nullptr.
+ */
+pdbg_target* getPibTrgt(pdbg_target* i_procTrgt);
+
+/**
+ * @brief Returns the list of all active chips in the system.
+ * @param o_chips The returned list of chips.
+ */
+void getActiveChips(std::vector<libhei::Chip>& o_chips);
+
 } // namespace pdbg
 
 } // namespace util

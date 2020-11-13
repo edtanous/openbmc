@@ -20,7 +20,7 @@ namespace analyzer
 
 // Forward references for externally defined functions.
 
-void initializeIsolator(const std::vector<libhei::Chip>& i_chips);
+void initializeIsolator(std::vector<libhei::Chip>& o_chips);
 
 //------------------------------------------------------------------------------
 
@@ -65,67 +65,6 @@ uint32_t __trgt(const libhei::Signature& i_sig)
 uint32_t __sig(const libhei::Signature& i_sig)
 {
     return i_sig.getId() << 16 | i_sig.getInstance() << 8 | i_sig.getBit();
-}
-
-//------------------------------------------------------------------------------
-
-// Returns the chip model/level of the given target.
-libhei::ChipType_t __getChipType(pdbg_target* i_trgt)
-{
-    libhei::ChipType_t type;
-
-    // START WORKAROUND
-    // TODO: Will need to grab the model/level from the target attributes when
-    //       they are available. For now, use ATTR_TYPE to determine which
-    //       currently supported value to use supported.
-    uint8_t attrType = util::pdbg::getTrgtType(i_trgt);
-    switch (attrType)
-    {
-        case 0x05: // PROC
-            type = 0x120DA049;
-            break;
-
-        case 0x4b: // OCMB_CHIP
-            type = 0x160D2000;
-            break;
-
-        default:
-            trace::err("Unsupported ATTR_TYPE value: 0x%02x", attrType);
-            assert(0);
-    }
-    // END WORKAROUND
-
-    return type;
-}
-
-//------------------------------------------------------------------------------
-
-// Gathers list of active chips to analyze.
-void __getActiveChips(std::vector<libhei::Chip>& o_chips)
-{
-    // Iterate each processor.
-    pdbg_target* procTrgt;
-    pdbg_for_each_class_target("proc", procTrgt)
-    {
-        // Active processors only.
-        if (PDBG_TARGET_ENABLED != pdbg_target_probe(procTrgt))
-            continue;
-
-        // Add the processor to the list.
-        o_chips.emplace_back(procTrgt, __getChipType(procTrgt));
-
-        // Iterate the connected OCMBs, if they exist.
-        pdbg_target* ocmbTrgt;
-        pdbg_for_each_target("ocmb", procTrgt, ocmbTrgt)
-        {
-            // Active OCMBs only.
-            if (PDBG_TARGET_ENABLED != pdbg_target_probe(ocmbTrgt))
-                continue;
-
-            // Add the OCMB to the list.
-            o_chips.emplace_back(ocmbTrgt, __getChipType(ocmbTrgt));
-        }
-    }
 }
 
 //------------------------------------------------------------------------------
@@ -237,12 +176,9 @@ bool analyzeHardware()
 
     trace::inf(">>> enter analyzeHardware()");
 
-    // Get the active chips to be analyzed.
-    std::vector<libhei::Chip> chips;
-    __getActiveChips(chips);
-
-    // Initialize the isolator for all chips.
+    // Initialize the isolator and get all of the chips to be analyzed.
     trace::inf("Initializing the isolator...");
+    std::vector<libhei::Chip> chips;
     initializeIsolator(chips);
 
     // Isolate attentions.
