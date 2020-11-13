@@ -63,7 +63,7 @@ class Signature
         return iv_chip;
     }
 
-    /** @return The register ID. */
+    /** @return The node ID. */
     NodeId_t getId() const
     {
         return iv_id;
@@ -85,6 +85,13 @@ class Signature
     AttentionType_t getAttnType() const
     {
         return iv_attnType;
+    }
+
+    /** @return A 32-bit integer containing the node ID, instance, and bit. This
+     *          should be helpful for consistent logging and tracing. */
+    uint32_t toUint32() const
+    {
+        return getId() << 16 | getInstance() << 8 | getBit();
     }
 
   public: // Operators
