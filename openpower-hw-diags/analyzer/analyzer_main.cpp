@@ -24,22 +24,6 @@ void initializeIsolator(const std::vector<libhei::Chip>& i_chips);
 
 //------------------------------------------------------------------------------
 
-uint8_t __attrType(pdbg_target* i_trgt)
-{
-    uint8_t attr = 0;
-    pdbg_target_get_attribute(i_trgt, "ATTR_TYPE", 1, 1, &attr);
-    return attr;
-}
-
-uint32_t __attrFapiPos(pdbg_target* i_trgt)
-{
-    uint32_t attr = 0;
-    pdbg_target_get_attribute(i_trgt, "ATTR_FAPI_POS", 4, 1, &attr);
-    return attr;
-}
-
-//------------------------------------------------------------------------------
-
 const char* __attn(libhei::AttentionType_t i_attnType)
 {
     const char* str = "";
@@ -69,10 +53,8 @@ const char* __attn(libhei::AttentionType_t i_attnType)
 
 uint32_t __trgt(const libhei::Signature& i_sig)
 {
-    auto trgt = (pdbg_target*)i_sig.getChip().getChip();
-
-    uint8_t type = __attrType(trgt);
-    uint32_t pos = __attrFapiPos(trgt);
+    uint8_t type = util::pdbg::getTrgtType(i_sig.getChip());
+    uint32_t pos = util::pdbg::getChipPos(i_sig.getChip());
 
     // Technically, the FapiPos attribute is 32-bit, but not likely to ever go
     // over 24-bit.
@@ -96,7 +78,7 @@ libhei::ChipType_t __getChipType(pdbg_target* i_trgt)
     // TODO: Will need to grab the model/level from the target attributes when
     //       they are available. For now, use ATTR_TYPE to determine which
     //       currently supported value to use supported.
-    uint8_t attrType = __attrType(i_trgt);
+    uint8_t attrType = util::pdbg::getTrgtType(i_trgt);
     switch (attrType)
     {
         case 0x05: // PROC

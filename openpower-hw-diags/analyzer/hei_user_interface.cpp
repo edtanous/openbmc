@@ -10,6 +10,7 @@
 #include <stdio.h>
 
 #include <hei_user_interface.hpp>
+#include <util/pdbg.hpp>
 #include <util/trace.hpp>
 
 namespace libhei
@@ -58,7 +59,7 @@ bool __readProc(pdbg_target* i_procTrgt, RegisterType_t i_regType,
         default:
             trace::err("Unsupported register type: trgt=%s regType=0x%02x "
                        "addr=0x%0" PRIx64,
-                       pdbg_target_path(i_procTrgt), i_regType, i_address);
+                       util::pdbg::getPath(i_procTrgt), i_regType, i_address);
             assert(0); // an unsupported register type
     }
 
@@ -87,7 +88,7 @@ bool __readOcmb(pdbg_target* i_obmcTrgt, RegisterType_t i_regType,
         default:
             trace::err("Unsupported register type: trgt=%s regType=0x%02x "
                        "addr=0x%0" PRIx64,
-                       pdbg_target_path(i_obmcTrgt), i_regType, i_address);
+                       util::pdbg::getPath(i_obmcTrgt), i_regType, i_address);
             assert(0);
     }
     */
@@ -102,10 +103,9 @@ bool registerRead(const Chip& i_chip, RegisterType_t i_regType,
 {
     bool accessFailure = false;
 
-    auto trgt = (pdbg_target*)(i_chip.getChip());
+    auto trgt = util::pdbg::getTrgt(i_chip);
 
-    uint8_t trgtType = 0;
-    pdbg_target_get_attribute(trgt, "ATTR_TYPE", 1, 1, &trgtType);
+    uint8_t trgtType = util::pdbg::getTrgtType(trgt);
 
     switch (trgtType)
     {
@@ -119,14 +119,14 @@ bool registerRead(const Chip& i_chip, RegisterType_t i_regType,
 
         default:
             trace::err("Unsupported target type: trgt=%s trgtType=0x%02x",
-                       pdbg_target_path(trgt), trgtType);
+                       util::pdbg::getPath(trgt), trgtType);
             assert(0);
     }
 
     if (accessFailure)
     {
         trace::err("%s failure: trgt=%s addr=0x%0" PRIx64, __regType(i_regType),
-                   pdbg_target_path(trgt), i_address);
+                   util::pdbg::getPath(trgt), i_address);
         o_value = 0; // just in case
     }
 
