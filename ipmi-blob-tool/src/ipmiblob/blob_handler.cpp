@@ -50,7 +50,7 @@ std::vector<std::uint8_t>
               std::back_inserter(request));
     request.push_back(static_cast<std::uint8_t>(command));
 
-    if (payload.size() > 0)
+    if (!payload.empty())
     {
         /* Grow the vector to hold the bytes. */
         request.reserve(request.size() + sizeof(std::uint16_t));
@@ -77,7 +77,7 @@ std::vector<std::uint8_t>
     /* IPMI_CC was OK, and it returned no bytes, so let's be happy with that for
      * now.
      */
-    if (reply.size() == 0)
+    if (reply.empty())
     {
         return reply;
     }
@@ -154,8 +154,8 @@ std::string BlobHandler::enumerateBlob(std::uint32_t index)
     try
     {
         auto resp = sendIpmiPayload(BlobOEMCommands::bmcBlobEnumerate, payload);
-        return (resp.size() > 0) ? std::string(&resp[0], &resp[resp.size() - 1])
-                                 : "";
+        return (resp.empty()) ? ""
+                              : std::string(&resp[0], &resp[resp.size() - 1]);
     }
     catch (const BlobException& b)
     {
