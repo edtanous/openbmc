@@ -65,7 +65,7 @@ class FFDCFile
      *
      * @return file descriptor
      */
-    int getFileDescriptor()
+    int getFileDescriptor() const
     {
         // Return the integer file descriptor within the FileDescriptor object
         return descriptor();
@@ -152,5 +152,22 @@ class FFDCFile
      */
     FileDescriptor descriptor{};
 };
+
+using FFDCTuple =
+    std::tuple<FFDCFormat, uint8_t, uint8_t, sdbusplus::message::unix_fd>;
+
+/** Transforms a list of FFDC files to a list of FFDC tuples. */
+inline void transformFFDC(const std::vector<FFDCFile>& i_files,
+                          std::vector<FFDCTuple>& o_tuples)
+{
+    o_tuples.clear();
+
+    std::transform(i_files.begin(), i_files.end(), o_tuples.begin(),
+                   [](const auto& e) {
+                       return FFDCTuple(
+                           e.getFormat(), e.getSubType(), e.getVersion(),
+                           sdbusplus::message::unix_fd(e.getFileDescriptor()));
+                   });
+}
 
 } // namespace util

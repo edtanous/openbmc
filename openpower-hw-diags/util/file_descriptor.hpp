@@ -77,7 +77,7 @@ class FileDescriptor
      * @return File descriptor.  Returns -1 if this object does not contain an
      *         open file descriptor.
      */
-    int operator()()
+    int operator()() const
     {
         return fd;
     }
