@@ -1,6 +1,7 @@
 # gather analyzer sources to be used here and elsewhere if needed
 analyzer_src = files(
     'analyzer_main.cpp',
+    'create_pel.cpp',
     'hei_user_interface.cpp',
     'initialize_isolator.cpp',
     '../util/ffdc_file.cpp',

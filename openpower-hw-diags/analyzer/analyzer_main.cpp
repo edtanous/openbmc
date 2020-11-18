@@ -20,7 +20,19 @@ namespace analyzer
 
 // Forward references for externally defined functions.
 
+/**
+ * @brief Will get the list of active chip and initialize the isolator.
+ * @param o_chips The returned list of active chips.
+ */
 void initializeIsolator(std::vector<libhei::Chip>& o_chips);
+
+/**
+ * @brief Will create and submit a PEL using the given data.
+ * @param i_rootCause A signature defining the attention root cause.
+ * @param i_isoData   The data gathered during isolation (for FFDC).
+ */
+void createPel(const libhei::Signature& i_rootCause,
+               const libhei::IsolationData& i_isoData);
 
 //------------------------------------------------------------------------------
 
@@ -115,15 +127,6 @@ bool __logError(const std::vector<libhei::Signature>& i_sigList,
 {
     bool attnFound = false;
 
-    // Get numerical values for the root cause.
-    uint32_t word6 = 0; // [ 0: 7]: chip target type
-                        // [ 8:31]: chip FAPI position
-                        //    uint32_t word7 = 0; // TODO: chip target info
-    uint32_t word8 = 0; // [ 0:15]: node ID
-                        // [16:23]: node instance
-                        // [24:31]: bit position
-                        //    uint32_t word9 = 0; // [ 0: 7]: attention type
-
     if (i_sigList.empty())
     {
         trace::inf("No active attentions found");
@@ -135,35 +138,13 @@ bool __logError(const std::vector<libhei::Signature>& i_sigList,
         // The root cause attention is the first in the filtered list.
         libhei::Signature root = i_sigList.front();
 
-        word6 = __trgt(root);
-        word8 = __sig(root);
-
         trace::inf("Root cause attention: %s 0x%0" PRIx32 " %s",
-                   util::pdbg::getPath(root.getChip()), word8,
+                   util::pdbg::getPath(root.getChip()), root.toUint32(),
                    __attn(root.getAttnType()));
+
+        // Create and commit a PEL.
+        createPel(root, i_isoData);
     }
-
-    // Get the log data.
-    std::map<std::string, std::string> logData;
-    logData["_PID"]      = std::to_string(getpid());
-    logData["CHIP_ID"]   = std::to_string(word6);
-    logData["SIGNATURE"] = std::to_string(word8);
-
-    // Get access to logging interface and method for creating log.
-    auto bus = sdbusplus::bus::new_default_system();
-
-    // Using direct create method (for additional data)
-    auto method = bus.new_method_call(
-        "xyz.openbmc_project.Logging", "/xyz/openbmc_project/logging",
-        "xyz.openbmc_project.Logging.Create", "Create");
-
-    // Attach additional data
-    method.append("org.open_power.HwDiags.Error.Checkstop",
-                  "xyz.openbmc_project.Logging.Entry.Level.Error", logData);
-
-    // Log the event.
-    // TODO: Should the reply be handled?
-    bus.call(method);
 
     return attnFound;
 }
