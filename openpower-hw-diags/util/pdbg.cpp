@@ -76,6 +76,24 @@ pdbg_target* getPibTrgt(pdbg_target* i_procTrgt)
 
 //------------------------------------------------------------------------------
 
+pdbg_target* getFsiTrgt(pdbg_target* i_procTrgt)
+{
+    // The input target must be a processor.
+    assert(0x05 == getTrgtType(i_procTrgt));
+
+    // Get the fsi path.
+    char path[16];
+    sprintf(path, "/proc%d/fsi", pdbg_target_index(i_procTrgt));
+
+    // Return the fsi target.
+    pdbg_target* fsiTrgt = pdbg_target_from_path(nullptr, path);
+    assert(nullptr != fsiTrgt);
+
+    return fsiTrgt;
+}
+
+//------------------------------------------------------------------------------
+
 uint32_t __getChipId(pdbg_target* i_trgt)
 {
     uint32_t attr = 0;

@@ -39,6 +39,13 @@ uint8_t getTrgtType(const libhei::Chip& i_chip);
 pdbg_target* getPibTrgt(pdbg_target* i_procTrgt);
 
 /**
+ * @return The fsi target associated with the given proc target.
+ * @note   Will assert the given target is a proc target.
+ * @note   Will assert the returned fsi target it not nullptr.
+ */
+pdbg_target* getFsiTrgt(pdbg_target* i_procTrgt);
+
+/**
  * @brief Returns the list of all active chips in the system.
  * @param o_chips The returned list of chips.
  */
