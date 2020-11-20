@@ -60,8 +60,7 @@ void event(EventType i_event, std::map<std::string, std::string>& i_additional)
         std::vector<util::FFDCFile> files{createFFDCFiles()};
 
         // Create FFDC tuples used to pass FFDC files to D-Bus method
-        std::vector<util::FFDCTuple> ffdcTuples{};
-        util::transformFFDC(files, ffdcTuples);
+        std::vector<FFDCTuple> ffdcTuples{createFFDCTuples(files)};
 
         // attach additional data
         method.append(eventName,
@@ -287,6 +286,19 @@ std::vector<util::FFDCFile> createFFDCFiles()
     }
 
     return files;
+}
+
+/** create tuples of FFDC files */
+std::vector<FFDCTuple> createFFDCTuples(std::vector<util::FFDCFile>& files)
+{
+    std::vector<FFDCTuple> ffdcTuples{};
+    for (util::FFDCFile& file : files)
+    {
+        ffdcTuples.emplace_back(
+            file.getFormat(), file.getSubType(), file.getVersion(),
+            sdbusplus::message::unix_fd(file.getFileDescriptor()));
+    }
+    return ffdcTuples;
 }
 
 } // namespace attn
