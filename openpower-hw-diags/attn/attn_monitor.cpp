@@ -24,6 +24,7 @@ void AttnMonitor::scheduleGPIOEvent()
             }
             else
             {
+                trace<level::INFO>("Attention GPIO active");
                 handleGPIOEvent(); // gpio trigger detected
             }
             return;

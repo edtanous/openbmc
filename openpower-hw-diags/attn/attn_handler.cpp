@@ -46,8 +46,7 @@ int handleCheckstop(Attention* i_attention);
 int handleSpecial(Attention* i_attention);
 
 /** @brief Determine if attention is active and not masked */
-bool activeAttn(uint32_t i_val, uint32_t i_mask, uint32_t i_attn,
-                uint32_t i_proc);
+bool activeAttn(uint32_t i_val, uint32_t i_mask, uint32_t i_attn);
 
 /**
  * @brief The main attention handler logic
@@ -61,6 +60,8 @@ void attnHandler(Config* i_config)
 
     uint32_t isr_val, isr_mask;
     uint32_t proc;
+
+    std::stringstream ss; // for trace messages
 
     // loop through processors looking for active attentions
     trace<level::INFO>("Attention handler started");
@@ -79,6 +80,11 @@ void attnHandler(Config* i_config)
 
             if (PDBG_TARGET_ENABLED == pdbg_target_probe(attnTarget))
             {
+                // trace fsi path
+                ss.str(std::string()); // clear stream
+                ss << "target - " << path;
+                trace<level::INFO>(ss.str().c_str());
+
                 // get active attentions on processor
                 if (RC_SUCCESS != fsi_read(attnTarget, 0x1007, &isr_val))
                 {
@@ -88,6 +94,13 @@ void attnHandler(Config* i_config)
                 }
                 else
                 {
+                    // trace isr
+                    ss.str(std::string());           // clear stream
+                    ss << std::hex << std::showbase; // trace as hex vals
+                    ss << "cfam 0x1007 = " << std::setw(8) << std::setfill('0')
+                       << isr_val;
+                    trace<level::INFO>(ss.str().c_str());
+
                     // get interrupt enabled special attentions mask
                     if (RC_SUCCESS != fsi_read(attnTarget, 0x100d, &isr_mask))
                     {
@@ -97,9 +110,15 @@ void attnHandler(Config* i_config)
                     }
                     else
                     {
+                        // trace true-mask
+                        ss.str(std::string());           // clear stream
+                        ss << std::hex << std::showbase; // trace as hex vals
+                        ss << "cfam 0x100d = " << std::setw(8)
+                           << std::setfill('0') << isr_mask;
+                        trace<level::INFO>(ss.str().c_str());
+
                         // SBE vital attention active and not masked?
-                        if (true ==
-                            activeAttn(isr_val, isr_mask, SBE_ATTN, proc))
+                        if (true == activeAttn(isr_val, isr_mask, SBE_ATTN))
                         {
                             active_attentions.emplace_back(Attention::Vital,
                                                            handleVital, target,
@@ -108,7 +127,7 @@ void attnHandler(Config* i_config)
 
                         // Checkstop attention active and not masked?
                         if (true ==
-                            activeAttn(isr_val, isr_mask, CHECKSTOP_ATTN, proc))
+                            activeAttn(isr_val, isr_mask, CHECKSTOP_ATTN))
                         {
                             active_attentions.emplace_back(Attention::Checkstop,
                                                            handleCheckstop,
@@ -116,8 +135,7 @@ void attnHandler(Config* i_config)
                         }
 
                         // Special attention active and not masked?
-                        if (true ==
-                            activeAttn(isr_val, isr_mask, SPECIAL_ATTN, proc))
+                        if (true == activeAttn(isr_val, isr_mask, SPECIAL_ATTN))
                         {
                             active_attentions.emplace_back(Attention::Special,
                                                            handleSpecial,
@@ -334,8 +352,7 @@ int handleSpecial(Attention* i_attention)
  *
  * @return true if attention is active and not masked, otherwise false
  */
-bool activeAttn(uint32_t i_val, uint32_t i_mask, uint32_t i_attn,
-                uint32_t i_proc)
+bool activeAttn(uint32_t i_val, uint32_t i_mask, uint32_t i_attn)
 {
     bool rc        = false; // assume attn masked and/or inactive
     bool validAttn = true;  // known attention type
@@ -343,24 +360,7 @@ bool activeAttn(uint32_t i_val, uint32_t i_mask, uint32_t i_attn,
     // if attention active
     if (0 != (i_val & i_attn))
     {
-        // trace proc with attn
         std::stringstream ss;
-        ss << "Attn: proc " << i_proc;
-        trace<level::INFO>(ss.str().c_str());
-
-        // trace isr
-        ss.str(std::string());           // clear stream
-        ss << std::hex << std::showbase; // trace as hex vals
-        ss << "cfam 0x1007 = " << std::setw(8) << std::setfill('0') << i_val;
-        trace<level::INFO>(ss.str().c_str());
-
-        // trace true-mask
-        ss.str(std::string());           // clear stream
-        ss << std::hex << std::showbase; // trace as hex vals
-        ss << "cfam 0x100d = " << std::setw(8) << std::setfill('0') << i_mask;
-        trace<level::INFO>(ss.str().c_str());
-
-        ss.str(std::string()); // clear stream
 
         switch (i_attn)
         {
