@@ -270,10 +270,8 @@ void processBootErrorCallback(bool status)
         FFDC ffdc;
         libekb_get_ffdc(ffdc);
 
-        log<level::INFO>(fmt::format("Collected pHAL FFDC. "
-                                     "MSG: {}",
-                                     ffdc.message)
-                             .c_str());
+        log<level::INFO>(
+            fmt::format("PHAL FFDC: Return Message[{}]", ffdc.message).c_str());
 
         // To store callouts details in json format as per pel expectation.
         json jsonCalloutDataList;
@@ -424,7 +422,7 @@ void processBootErrorCallback(bool status)
                          jsonCalloutDataList.emplace_back(jsonCalloutData);
                      });
         }
-        else if ((ffdc.ffdc_type != FFDC_TYPE_NONE) ||
+        else if ((ffdc.ffdc_type != FFDC_TYPE_NONE) &&
                  (ffdc.ffdc_type != FFDC_TYPE_UNSUPPORTED))
         {
             log<level::ERR>(
