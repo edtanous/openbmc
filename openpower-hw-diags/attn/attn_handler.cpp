@@ -103,12 +103,19 @@ void attnHandler(Config* i_config)
                 ss << "target - " << path;
                 trace<level::INFO>(ss.str().c_str());
 
+                isr_val = 0xffffffff; // invalid isr value
+
                 // get active attentions on processor
                 if (RC_SUCCESS != fsi_read(attnTarget, 0x1007, &isr_val))
                 {
                     // log cfam read error
                     trace<level::INFO>("Error! cfam read 0x1007 FAILED");
                     eventAttentionFail(RC_CFAM_ERROR);
+                }
+                else if (0xffffffff == isr_val)
+                {
+                    trace<level::INFO>("Error! cfam read 0x1007 INVALID");
+                    continue;
                 }
                 else
                 {
@@ -119,12 +126,19 @@ void attnHandler(Config* i_config)
                        << isr_val;
                     trace<level::INFO>(ss.str().c_str());
 
+                    isr_mask = 0xffffffff; // invalid isr mask
+
                     // get interrupt enabled special attentions mask
                     if (RC_SUCCESS != fsi_read(attnTarget, 0x100d, &isr_mask))
                     {
                         // log cfam read error
                         trace<level::INFO>("Error! cfam read 0x100d FAILED");
                         eventAttentionFail(RC_CFAM_ERROR);
+                    }
+                    else if (0xffffffff == isr_mask)
+                    {
+                        trace<level::INFO>("Error! cfam read 0x100d INVALID");
+                        continue;
                     }
                     else
                     {
