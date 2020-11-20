@@ -73,13 +73,31 @@ void attnHandler(Config* i_config)
         {
             proc = pdbg_target_index(target); // get processor number
 
-            // The processor FSI target is required for CFAM read
+            // Use PIB target to determine if a processor is enabled
             char path[16];
-            sprintf(path, "/proc%d/fsi", proc);
+            sprintf(path, "/proc%d/pib", proc);
             pdbg_target* attnTarget = pdbg_target_from_path(nullptr, path);
+
+            // sanity check
+            if (nullptr == attnTarget)
+            {
+                trace<level::INFO>("pib path or target not found");
+                continue;
+            }
 
             if (PDBG_TARGET_ENABLED == pdbg_target_probe(attnTarget))
             {
+                // The processor FSI target is required for CFAM read
+                sprintf(path, "/proc%d/fsi", proc);
+                attnTarget = pdbg_target_from_path(nullptr, path);
+
+                // sanity check
+                if (nullptr == attnTarget)
+                {
+                    trace<level::INFO>("fsi path or target not found");
+                    continue;
+                }
+
                 // trace fsi path
                 ss.str(std::string()); // clear stream
                 ss << "target - " << path;
