@@ -1,3 +1,4 @@
+#include <attn/attn_common.hpp>
 #include <attn/attn_handler.hpp>
 #include <attn/attn_logging.hpp>
 #include <attn/ti_handler.hpp>
@@ -52,29 +53,6 @@ int tiHandler(TiDataArea* i_tiDataArea)
 }
 
 /**
- * @brief Transition the host state
- *
- * We will transition the host state by starting the appropriate dbus target.
- *
- * @param i_target the dbus target to start
- */
-void transitionHost(const char* i_target)
-{
-    // We will be transitioning host by starting appropriate dbus target
-    auto bus    = sdbusplus::bus::new_system();
-    auto method = bus.new_method_call(
-        "org.freedesktop.systemd1", "/org/freedesktop/systemd1",
-        "org.freedesktop.systemd1.Manager", "StartUnit");
-
-    method.append(i_target);  // target unit to start
-    method.append("replace"); // mode = replace conflicting queued jobs
-
-    trace<level::INFO>(i_target);
-
-    bus.call_noreply(method); // start the service
-}
-
-/**
  * @brief Handle a PHYP terminate immediate special attention
  *
  * The TI info data area will contain information pertaining to the TI
@@ -92,12 +70,12 @@ void handlePhypTi(TiDataArea* i_tiDataArea)
     {
         // If autoreboot is enabled we will start diagnostic mode target
         // which will ultimately mpipl the host.
-        transitionHost("obmc-host-diagnostic-mode@0.target");
+        transitionHost(HostState::Diagnostic);
     }
     else
     {
         // If autoreboot is disabled we will quiesce the host
-        transitionHost("obmc-host-quiesce@0.target");
+        transitionHost(HostState::Quiesce);
     }
 
     // gather additional data for PEL
@@ -213,13 +191,13 @@ void handleHbTi(TiDataArea* i_tiDataArea)
             // Until HB dump support available just quiesce the host - once
             // dump support is available the dump component will transition
             // (ipl/halt) the host.
-            transitionHost("obmc-host-quiesce@0.target");
+            transitionHost(HostState::Quiesce);
         }
         else
         {
             // Quiese the host - when the host is quiesced it will either
             // "halt" or IPL depending on autoreboot setting.
-            transitionHost("obmc-host-quiesce@0.target");
+            transitionHost(HostState::Quiesce);
         }
     }
 

@@ -25,6 +25,7 @@ endif
 
 # Source files.
 attn_src = files(
+    'attn_common.cpp',
     'attn_config.cpp',
     'attention.cpp',
     'attn_handler.cpp',
@@ -33,6 +34,7 @@ attn_src = files(
     'bp_handler.cpp',
     logging_src,
     'ti_handler.cpp',
+    'vital_handler.cpp',
 )
 
 # Library dependencies.
@@ -51,4 +53,3 @@ attn_lib = static_library(
     cpp_args : [boost_args, test_arg],
     install : false,
 )
-

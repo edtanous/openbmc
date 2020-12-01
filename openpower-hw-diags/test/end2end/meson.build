@@ -4,6 +4,7 @@ end2end_src = [
     'logging.cpp',
     'main.cpp',
     'ti_handler.cpp',
+    'vital_handler.cpp'
 ]
 
 # Additional source files needed for test.

@@ -2,11 +2,13 @@
 
 #include <analyzer/analyzer_main.hpp>
 #include <attn/attention.hpp>
+#include <attn/attn_common.hpp>
 #include <attn/attn_config.hpp>
 #include <attn/attn_handler.hpp>
 #include <attn/attn_logging.hpp>
 #include <attn/bp_handler.hpp>
 #include <attn/ti_handler.hpp>
+#include <attn/vital_handler.hpp>
 
 #include <algorithm>
 #include <iomanip>
@@ -16,15 +18,6 @@
 
 namespace attn
 {
-
-/**
- * @brief Handle SBE vital attention
- *
- * @param i_attention Attention object
- * @return 0 indicates that the vital attention was successfully handled
- *         1 indicates that the vital attention was NOT successfully handled
- */
-int handleVital(Attention* i_attention);
 
 /**
  * @brief Handle checkstop attention
@@ -201,33 +194,6 @@ void attnHandler(Config* i_config)
         // remove attention from vector
         active_attentions.pop_back();
     }
-}
-
-/**
- * @brief Handle SBE vital attention
- *
- * @param i_attention Attention object
- * @return 0 indicates that the vital attention was successfully handled
- *         1 indicates that the vital attention was NOT successfully handled
- */
-int handleVital(Attention* i_attention)
-{
-    int rc = RC_SUCCESS; // assume vital handled
-
-    trace<level::INFO>("vital handler started");
-
-    // if vital handling enabled, handle vital attention
-    if (false == (i_attention->getConfig()->getFlag(enVital)))
-    {
-        trace<level::INFO>("vital handling disabled");
-        rc = RC_NOT_HANDLED;
-    }
-    else
-    {
-        eventVital();
-    }
-
-    return rc;
 }
 
 /**
