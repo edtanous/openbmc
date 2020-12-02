@@ -1,7 +1,7 @@
 [Unit]
 Description=CFAM reset
-Wants=obmc-power-on@0.target
-After=obmc-power-on@0.target
+Wants=obmc-power-start-pre@0.target
+Before=obmc-power-start-pre@0.target
 Wants=obmc-host-start-pre@0.target
 Before=obmc-host-start-pre@0.target
 Before=fsi-scan@0.service
