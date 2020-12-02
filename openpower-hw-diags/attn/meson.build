@@ -23,15 +23,32 @@ else
     logging_src = '../test/end2end/logging.cpp'
 endif
 
-# gather attention sources to be used here and elsewhere if needed
-attn_src = files('attn_main.cpp', 'attn_handler.cpp', 'attn_monitor.cpp',
-                 'bp_handler.cpp', 'ti_handler.cpp', logging_src,
-                 'attention.cpp', 'attn_config.cpp')
+# Source files.
+attn_src = files(
+    'attn_config.cpp',
+    'attention.cpp',
+    'attn_handler.cpp',
+    'attn_main.cpp',
+    'attn_monitor.cpp',
+    'bp_handler.cpp',
+    logging_src,
+    'ti_handler.cpp',
+)
 
-# Create attention handler library
-attn = static_library('attn_handler',
-                      attn_src,
-                      include_directories : incdir,
-                      dependencies : [libpdbg_dep, sdbusplus_dep, libgpiod],
-                      cpp_args : [boost_args, test_arg],
-                      install : true)
+# Library dependencies.
+attn_deps = [
+    libgpiod,
+    libpdbg_dep,
+    sdbusplus_dep,
+]
+
+# Create static library.
+attn_lib = static_library(
+    'attn_lib',
+    attn_src,
+    include_directories : incdir,
+    dependencies : attn_deps,
+    cpp_args : [boost_args, test_arg],
+    install : false,
+)
+

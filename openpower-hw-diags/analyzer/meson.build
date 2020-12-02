@@ -1,4 +1,4 @@
-# gather analyzer sources to be used here and elsewhere if needed
+# Source files.
 analyzer_src = files(
     'analyzer_main.cpp',
     'create_pel.cpp',
@@ -13,10 +13,13 @@ analyzer_deps = [
     sdbusplus_dep,
 ]
 
-# Create hardware error analyzer library
-analyzer = static_library('analyzer',
-                          analyzer_src,
-                          include_directories : incdir,
-                          dependencies : analyzer_deps,
-                          cpp_args : test_arg,
-                          install : false)
+# Create static library.
+analyzer_lib = static_library(
+    'analyzer_lib',
+    analyzer_src,
+    include_directories : incdir,
+    dependencies : analyzer_deps,
+    cpp_args : test_arg,
+    install : false,
+)
+

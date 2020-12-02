@@ -11,17 +11,10 @@ additional_src = [
     '../../cli.cpp',
 ]
 
-# Link with the analyzer and attention handler static libraries.
-end2end_libs = [
-    analyzer,
-    attn,
-    util_lib,
-]
-
 # create openpower-hw-diags executable for local testing
 end2end = executable('openpower-hw-diags-test',
             end2end_src, additional_src,
-            link_with : end2end_libs,
+            link_with : hwdiags_libs,
             include_directories : incdir,
             cpp_args : test_arg,
             install : false)
