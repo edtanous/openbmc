@@ -8,18 +8,32 @@ project('openpower-hw-diags', 'cpp',
           'cpp_args=-Wno-unused-parameter'
         ])
 
+#-------------------------------------------------------------------------------
+# Compiler
+#-------------------------------------------------------------------------------
+
 cmplr = meson.get_compiler('cpp')
 
-# First, look if the libhei library has already been built and installed. If
-# not, default to the subproject.
+#-------------------------------------------------------------------------------
+# Include directories
+#-------------------------------------------------------------------------------
+
+# Only using the base directory. All header includes should provide the full
+# path from the base directory.
+incdir = include_directories('.')
+
+#-------------------------------------------------------------------------------
+# External library dependencies
+#-------------------------------------------------------------------------------
+
+# Look if the libhei library has already been built and installed. If not,
+# default to the subproject.
 libhei_dep = dependency('hei', fallback : ['libhei', 'libhei_dep'])
 
 sdbusplus_dep       = dependency('sdbusplus', version : '>=1.0')
 dbus_interfaces_dep = dependency('phosphor-dbus-interfaces')
 
 libpdbg_dep = cmplr.find_library('pdbg')
-
-incdir = include_directories('.')
 
 # See if phosphor-logging is available, if not use test case logging code. This
 # allows for local builds outside of CI test sandbox.
@@ -38,7 +52,7 @@ pthread = declare_dependency(link_args : '-pthread')
 lrt = declare_dependency(link_args : '-lrt')
 
 #-------------------------------------------------------------------------------
-# Build the static libraries
+# Build the local static libraries
 #-------------------------------------------------------------------------------
 
 subdir('analyzer')
