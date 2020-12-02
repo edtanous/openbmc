@@ -6,9 +6,6 @@ boost_args = ['-DBOOST_ASIO_DISABLE_THREADS',
 # dependency to link gpiod support
 libgpiod = dependency('libgpiod', version : '>=1.4.1')
 
-# dependency to link libpdbg support
-libpdbg = cmplr.find_library('pdbg')
-
 # install systemd unit file
 configure_file(
     input: 'attn_handler.service',
@@ -35,6 +32,6 @@ attn_src = files('attn_main.cpp', 'attn_handler.cpp', 'attn_monitor.cpp',
 attn = static_library('attn_handler',
                       attn_src,
                       include_directories : incdir,
-                      dependencies : [libpdbg, sdbusplus_dep, libgpiod],
+                      dependencies : [libpdbg_dep, sdbusplus_dep, libgpiod],
                       cpp_args : [boost_args, test_arg],
                       install : true)

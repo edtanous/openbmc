@@ -15,6 +15,7 @@ additional_src = [
 end2end_libs = [
     analyzer,
     attn,
+    util_lib,
 ]
 
 # create openpower-hw-diags executable for local testing

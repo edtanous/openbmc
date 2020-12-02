@@ -8,6 +8,8 @@ project('openpower-hw-diags', 'cpp',
           'cpp_args=-Wno-unused-parameter'
         ])
 
+cmplr = meson.get_compiler('cpp')
+
 # First, look if the libhei library has already been built and installed. If
 # not, default to the subproject.
 libhei_dep = dependency('hei', fallback : ['libhei', 'libhei_dep'])
@@ -15,12 +17,13 @@ libhei_dep = dependency('hei', fallback : ['libhei', 'libhei_dep'])
 sdbusplus_dep       = dependency('sdbusplus', version : '>=1.0')
 dbus_interfaces_dep = dependency('phosphor-dbus-interfaces')
 
+libpdbg_dep = cmplr.find_library('pdbg')
+
 incdir = include_directories('.')
 
 # See if phosphor-logging is available, if not use test case logging code. This
 # allows for local builds outside of CI test sandbox.
 h = 'phosphor-logging/log.hpp'
-cmplr = meson.get_compiler('cpp')
 if cmplr.compiles('#include <@0@>'.format(h), name : '#include <@0@>'.format(h))
     test_arg = []
     phosphor_logging = true
@@ -33,6 +36,7 @@ endif
 
 subdir('analyzer')
 subdir('attn')
+subdir('util')
 
 pthread = declare_dependency(link_args : '-pthread')
 lrt = declare_dependency(link_args : '-lrt')
@@ -41,12 +45,12 @@ no_listener_mode = get_option('nlmode')
 
 if not no_listener_mode.disabled()
   executable('openpower-hw-diags', 'main_nl.cpp', 'cli.cpp',
-              link_with : [analyzer, attn],
+              link_with : [analyzer, attn, util_lib],
               install : true)
 else
   executable('openpower-hw-diags', 'main.cpp', 'cli.cpp', 'listener.cpp',
               dependencies : [lrt, pthread],
-              link_with : [analyzer, attn],
+              link_with : [analyzer, attn, util_lib],
               cpp_args : test_arg,
               install : true)
 endif

@@ -4,9 +4,6 @@ analyzer_src = files(
     'create_pel.cpp',
     'hei_user_interface.cpp',
     'initialize_isolator.cpp',
-    '../util/ffdc_file.cpp',
-    '../util/pdbg.cpp',
-    '../util/temporary_file.cpp',
 )
 
 # Library dependencies.
