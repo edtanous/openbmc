@@ -162,7 +162,7 @@ inline void transformFFDC(const std::vector<FFDCFile>& i_files,
 {
     o_tuples.clear();
 
-    std::transform(i_files.begin(), i_files.end(), o_tuples.begin(),
+    std::transform(i_files.begin(), i_files.end(), std::back_inserter(o_tuples),
                    [](const auto& e) {
                        return FFDCTuple(
                            e.getFormat(), e.getSubType(), e.getVersion(),
