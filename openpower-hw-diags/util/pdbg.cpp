@@ -62,7 +62,7 @@ uint8_t getTrgtType(const libhei::Chip& i_chip)
 pdbg_target* getPibTrgt(pdbg_target* i_procTrgt)
 {
     // The input target must be a processor.
-    assert(0x05 == getTrgtType(i_procTrgt));
+    assert(TYPE_PROC == getTrgtType(i_procTrgt));
 
     // Get the pib path.
     char path[16];
@@ -80,7 +80,7 @@ pdbg_target* getPibTrgt(pdbg_target* i_procTrgt)
 pdbg_target* getFsiTrgt(pdbg_target* i_procTrgt)
 {
     // The input target must be a processor.
-    assert(0x05 == getTrgtType(i_procTrgt));
+    assert(TYPE_PROC == getTrgtType(i_procTrgt));
 
     // Get the fsi path.
     char path[16];
@@ -95,6 +95,30 @@ pdbg_target* getFsiTrgt(pdbg_target* i_procTrgt)
 
 //------------------------------------------------------------------------------
 
+int getCfam(pdbg_target* i_trgt, uint32_t i_addr, uint32_t& o_val)
+{
+    // Only processor targets are supported.
+    assert(TYPE_PROC == getTrgtType(i_trgt));
+
+    auto fsiTrgt = util::pdbg::getFsiTrgt(i_trgt);
+
+    int rc = fsi_read(fsiTrgt, i_addr, &o_val);
+
+    if (0 != rc)
+    {
+        trace::err("fsi_read failure: trgt=%s addr=0x%08x",
+                   util::pdbg::getPath(fsiTrgt), i_addr);
+    }
+
+    return rc;
+}
+
+//------------------------------------------------------------------------------
+
+// IMPORTANT:
+// The ATTR_CHIP_ID attribute will be synced from Hostboot to the BMC at some
+// point during the IPL. It is possible that this information is needed before
+// the sync occurs, in which case the value will return 0.
 uint32_t __getChipId(pdbg_target* i_trgt)
 {
     uint32_t attr = 0;
@@ -102,6 +126,10 @@ uint32_t __getChipId(pdbg_target* i_trgt)
     return attr;
 }
 
+// IMPORTANT:
+// The ATTR_EC attribute will be synced from Hostboot to the BMC at some point
+// during the IPL. It is possible that this information is needed before the
+// sync occurs, in which case the value will return 0.
 uint8_t __getChipEc(pdbg_target* i_trgt)
 {
     uint8_t attr = 0;
@@ -111,7 +139,27 @@ uint8_t __getChipEc(pdbg_target* i_trgt)
 
 uint32_t __getChipIdEc(pdbg_target* i_trgt)
 {
-    return ((__getChipId(i_trgt) & 0xffff) << 16) | __getChipEc(i_trgt);
+    auto chipId = __getChipId(i_trgt);
+    auto chipEc = __getChipEc(i_trgt);
+
+    if (((0 == chipId) || (0 == chipEc)) && (TYPE_PROC == getTrgtType(i_trgt)))
+    {
+        // There is a special case where the model/level attributes have not
+        // been initialized in the devtree. This is possible on the epoch IPL
+        // where an attention occurs before Hostboot is able to update the
+        // devtree information on the BMC. It may is still possible to get this
+        // information from chips with CFAM access (i.e. a processor) via the
+        // CFAM chip ID register.
+
+        uint32_t val = 0;
+        if (0 == getCfam(i_trgt, 0x100a, val))
+        {
+            chipId = ((val & 0x0F0FF000) >> 12);
+            chipEc = ((val & 0xF0000000) >> 24) | ((val & 0x00F00000) >> 20);
+        }
+    }
+
+    return ((chipId & 0xffff) << 16) | (chipEc & 0xff);
 }
 
 void __addChip(std::vector<libhei::Chip>& o_chips, pdbg_target* i_trgt,
@@ -124,10 +172,9 @@ void __addChip(std::vector<libhei::Chip>& o_chips, pdbg_target* i_trgt,
 
     if (0 == i_type)
     {
-        // There is a special case where the model/level attributes have not
-        // been initialized in the devtree. This is possible on the epoch IPL
-        // where an attention occurs before Hostboot is able to update the
-        // devtree information on the BMC. For now, just ignore the chip.
+        // This is a special case. See the details in __getChipIdEC(). There is
+        // nothing more we can do with this chip since we don't know what it is.
+        // So ignore the chip for now.
     }
     else
     {
