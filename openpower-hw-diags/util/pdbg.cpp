@@ -1,5 +1,6 @@
 #include <assert.h>
 
+#include <hei_main.hpp>
 #include <util/pdbg.hpp>
 #include <util/trace.hpp>
 
@@ -166,6 +167,14 @@ void getActiveChips(std::vector<libhei::Chip>& o_chips)
             __addChip(o_chips, ocmbTrgt, __getChipIdEc(ocmbTrgt));
         }
     }
+}
+
+//------------------------------------------------------------------------------
+
+bool queryHardwareAnalysisSupported()
+{
+    // Hardware analysis is only supported on P10 systems and up.
+    return (PDBG_PROC_P10 <= pdbg_get_proc());
 }
 
 //------------------------------------------------------------------------------

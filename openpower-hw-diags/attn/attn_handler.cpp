@@ -202,7 +202,7 @@ int handleCheckstop(Attention* i_attention)
     else
     {
         // Look for any attentions found in hardware. This will generate and
-        // comment a PEL if any errors are found.
+        // commit a PEL if any errors are found.
         if (true != analyzer::analyzeHardware())
         {
             rc = RC_ANALYZER_ERROR;

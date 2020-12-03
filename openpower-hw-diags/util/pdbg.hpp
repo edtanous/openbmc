@@ -2,7 +2,14 @@
 
 #include <libpdbg.h>
 
-#include <hei_main.hpp>
+#include <vector>
+
+// Forward reference to avoid pulling the libhei library into everything that
+// includes this header.
+namespace libhei
+{
+class Chip;
+}
 
 namespace util
 {
@@ -50,6 +57,14 @@ pdbg_target* getFsiTrgt(pdbg_target* i_procTrgt);
  * @param o_chips The returned list of chips.
  */
 void getActiveChips(std::vector<libhei::Chip>& o_chips);
+
+/**
+ * @return True, if hardware analysis is supported on this system. False,
+ *         otherwise.
+ * @note   Support for hardware analysis from the BMC started with P10 systems
+ *         and is not supported on any older chip generations.
+ */
+bool queryHardwareAnalysisSupported();
 
 } // namespace pdbg
 

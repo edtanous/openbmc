@@ -157,27 +157,34 @@ bool analyzeHardware()
 
     trace::inf(">>> enter analyzeHardware()");
 
-    // Initialize the isolator and get all of the chips to be analyzed.
-    trace::inf("Initializing the isolator...");
-    std::vector<libhei::Chip> chips;
-    initializeIsolator(chips);
+    if (util::pdbg::queryHardwareAnalysisSupported())
+    {
+        // Initialize the isolator and get all of the chips to be analyzed.
+        trace::inf("Initializing the isolator...");
+        std::vector<libhei::Chip> chips;
+        initializeIsolator(chips);
 
-    // Isolate attentions.
-    trace::inf("Isolating errors: # of chips=%u", chips.size());
-    libhei::IsolationData isoData{};
-    libhei::isolate(chips, isoData);
+        // Isolate attentions.
+        trace::inf("Isolating errors: # of chips=%u", chips.size());
+        libhei::IsolationData isoData{};
+        libhei::isolate(chips, isoData);
 
-    // Filter signatures to determine root cause. We'll need to make a copy of
-    // the list so that the original list is maintained for the log.
-    std::vector<libhei::Signature> sigList{isoData.getSignatureList()};
-    __filterRootCause(sigList);
+        // Filter signatures to determine root cause. We'll need to make a copy
+        // of the list so that the original list is maintained for the log.
+        std::vector<libhei::Signature> sigList{isoData.getSignatureList()};
+        __filterRootCause(sigList);
 
-    // Create and commit a log.
-    attnFound = __logError(sigList, isoData);
+        // Create and commit a log.
+        attnFound = __logError(sigList, isoData);
 
-    // All done, clean up the isolator.
-    trace::inf("Uninitializing isolator...");
-    libhei::uninitialize();
+        // All done, clean up the isolator.
+        trace::inf("Uninitializing isolator...");
+        libhei::uninitialize();
+    }
+    else
+    {
+        trace::err("Hardware error analysis is not supported on this system");
+    }
 
     trace::inf("<<< exit analyzeHardware()");
 
