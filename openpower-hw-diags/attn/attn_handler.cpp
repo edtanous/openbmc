@@ -298,6 +298,8 @@ int handleSpecial(Attention* i_attention)
         }
     }
 
+    bool tiInfoValid = false; // TI area data not valid or not available
+
     // If TI area exists and is marked valid we can assume TI occurred
     if ((nullptr != tiInfo) && (0 != tiInfo[0]))
     {
@@ -311,27 +313,36 @@ int handleSpecial(Attention* i_attention)
         trace<level::INFO>(ss.str().c_str());
         ss.str(std::string());
 
-        ss << "TI data hb_terminate_type = "
-           << (int)tiDataArea->hbTerminateType;
-        trace<level::INFO>(ss.str().c_str());
-        ss.str(std::string());
-
-        ss << "TI data SRC format = " << (int)tiDataArea->srcFormat;
-        trace<level::INFO>(ss.str().c_str());
-        ss.str(std::string());
-
-        ss << "TI data source = " << (int)tiDataArea->source;
-        trace<level::INFO>(ss.str().c_str());
-        ss.str(std::string());
-
-        if (true == (i_attention->getConfig()->getFlag(enTerminate)))
+        // Another check for valid TI Info since it has been seen that
+        // tiInfo[0] != 0 but TI info is not valid
+        if (0xa1 == tiDataArea->command)
         {
-            // Call TI special attention handler
-            rc = tiHandler(tiDataArea);
+            tiInfoValid = true;
+
+            // trace some more data since TI info appears valid
+            ss << "TI data hb_terminate_type = "
+               << (int)tiDataArea->hbTerminateType;
+            trace<level::INFO>(ss.str().c_str());
+            ss.str(std::string());
+
+            ss << "TI data SRC format = " << (int)tiDataArea->srcFormat;
+            trace<level::INFO>(ss.str().c_str());
+            ss.str(std::string());
+
+            ss << "TI data source = " << (int)tiDataArea->source;
+            trace<level::INFO>(ss.str().c_str());
+            ss.str(std::string());
+
+            if (true == (i_attention->getConfig()->getFlag(enTerminate)))
+            {
+                // Call TI special attention handler
+                rc = tiHandler(tiDataArea);
+            }
         }
     }
-    // TI area not valid or not available
-    else
+
+    // If TI area not valid or not available
+    if (false == tiInfoValid)
     {
         trace<level::INFO>("TI info NOT available");
 
