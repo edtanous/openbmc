@@ -83,6 +83,7 @@ AS_IF([test "$enable_phal" == "yes"],
        CHIPS+=" phal common"
        AC_CONFIG_FILES([set-spi-mux.service])
        AC_CONFIG_FILES([phal-reinit-devtree.service])
+       AC_CONFIG_FILES([proc-pre-poweroff@.service])
       ]
      )
 

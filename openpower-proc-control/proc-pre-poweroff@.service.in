@@ -1,0 +1,15 @@
+[Unit]
+Description=Preparation to poweroff host%i
+Wants=op-cfam-reset.service
+Before=op-cfam-reset.service
+Wants=obmc-power-stop-pre@%i.target
+Before=obmc-power-stop-pre@%i.target
+Conflicts=obmc-chassis-poweron@%i.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=no
+ExecStart=/usr/bin/openpower-proc-control prePoweroff
+
+[Install]
+WantedBy=obmc-power-stop-pre@%i.target

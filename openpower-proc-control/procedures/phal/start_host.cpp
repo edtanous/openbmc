@@ -6,9 +6,9 @@ extern "C"
 #include "attributes_info.H"
 
 #include "phalerror/phal_error.hpp"
+#include "procedures/phal/common_utils.hpp"
 
 #include <libekb.H>
-#include <libipl.H>
 
 #include <ext_interface.hpp>
 #include <phosphor-logging/log.hpp>
@@ -120,35 +120,18 @@ void selectBootSeeprom()
  */
 void startHost(enum ipl_type iplType = IPL_TYPE_NORMAL)
 {
-    // add callback methods for debug traces and for boot failures
-    openpower::pel::addBootErrorCallbacks();
-
-    if (!pdbg_targets_init(NULL))
+    try
     {
-        log<level::ERR>("pdbg_targets_init failed");
-        openpower::pel::detail::processBootErrorCallback(false);
-        throw std::runtime_error("pdbg target initialization failed");
+        phal_init();
+        ipl_set_type(iplType);
     }
-    // To clear trace if success
-    openpower::pel::detail::processBootErrorCallback(true);
-
-    if (libekb_init())
+    catch (std::exception& ex)
     {
-        log<level::ERR>("libekb_init failed");
+        log<level::ERR>("Exception raised during init PHAL",
+                        entry("EXCEPTION=%s", ex.what()));
         openpower::pel::detail::processBootErrorCallback(false);
-        throw std::runtime_error("libekb initialization failed");
+        throw std::runtime_error("PHAL initialization failed");
     }
-    // To clear trace if success
-    openpower::pel::detail::processBootErrorCallback(true);
-
-    if (ipl_init(IPL_AUTOBOOT) != 0)
-    {
-        log<level::ERR>("ipl_init failed");
-        openpower::pel::detail::processBootErrorCallback(false);
-        throw std::runtime_error("Boot initialization failed");
-    }
-
-    ipl_set_type(iplType);
 
     // To clear trace if success
     openpower::pel::detail::processBootErrorCallback(true);

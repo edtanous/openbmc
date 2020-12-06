@@ -64,6 +64,8 @@ if build_phal
     extra_sources += [
         'procedures/phal/start_host.cpp',
         'procedures/phal/set_SPI_mux.cpp',
+        'procedures/phal/proc_pre_poweroff.cpp',
+        'procedures/phal/common_utils.cpp',
         'phalerror/create_pel.cpp',
         'phalerror/phal_error.cpp',
     ]
@@ -76,6 +78,7 @@ if build_phal
     extra_unit_files = [
         'set-spi-mux.service',
         'phal-reinit-devtree.service',
+        'proc-pre-poweroff@.service',
     ]
     unit_subs.set('ENABLE_PHAL_TRUE', '')
 endif
