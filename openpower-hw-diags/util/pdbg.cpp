@@ -174,7 +174,7 @@ void getActiveChips(std::vector<libhei::Chip>& o_chips)
 bool queryHardwareAnalysisSupported()
 {
     // Hardware analysis is only supported on P10 systems and up.
-    return (PDBG_PROC_P10 <= pdbg_get_proc());
+    return (PDBG_PROC_P9 < pdbg_get_proc());
 }
 
 //------------------------------------------------------------------------------
