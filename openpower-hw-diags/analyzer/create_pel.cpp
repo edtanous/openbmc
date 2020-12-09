@@ -9,10 +9,32 @@
 #include <xyz/openbmc_project/Logging/Create/server.hpp>
 #include <xyz/openbmc_project/Logging/Entry/server.hpp>
 
+#include <fstream>
+#include <memory>
+
 namespace LogSvr = sdbusplus::xyz::openbmc_project::Logging::server;
 
 namespace analyzer
 {
+
+//------------------------------------------------------------------------------
+
+enum FfdcSubType_t : uint8_t
+{
+    FFDC_SIGNATURES   = 0x01,
+    FFDC_CAPTURE_DATA = 0x02,
+
+    // For the callout section, the value of '0xCA' is required per the
+    // phosphor-logging openpower-pel extention spec.
+    FFDC_CALLOUTS = 0xCA,
+};
+
+enum FfdcVersion_t : uint8_t
+{
+    FFDC_VERSION1 = 0x01,
+};
+
+//------------------------------------------------------------------------------
 
 bool __isCheckstop(const libhei::IsolationData& i_isoData)
 {
@@ -27,28 +49,37 @@ bool __isCheckstop(const libhei::IsolationData& i_isoData)
 
 //------------------------------------------------------------------------------
 
-void __setSrc(const libhei::Signature& i_rootCause,
-              std::map<std::string, std::string>& io_logData)
+void __getSrc(const libhei::Signature& i_signature, uint32_t& o_word6,
+              uint32_t& o_word7, uint32_t& o_word8)
 {
     // [ 0:15] chip model
     // [16:23] reserved space in chip ID
     // [24:31] chip EC level
-    uint32_t word6 = i_rootCause.getChip().getType();
+    o_word6 = i_signature.getChip().getType();
 
     // [ 0:15] chip position
     // [16:23] unused
     // [24:31] signature attention type
-    auto pos  = util::pdbg::getChipPos(i_rootCause.getChip());
-    auto attn = i_rootCause.getAttnType();
+    auto pos  = util::pdbg::getChipPos(i_signature.getChip());
+    auto attn = i_signature.getAttnType();
 
-    uint32_t word7 = (pos & 0xffff) << 16 | (attn & 0xff);
+    o_word7 = (pos & 0xffff) << 16 | (attn & 0xff);
 
     // [ 0:15] signature ID
     // [16:23] signature instance
     // [24:31] signature bit position
-    uint32_t word8 = i_rootCause.toUint32();
+    o_word8 = i_signature.toUint32();
 
     // Word 9 is currently unused
+}
+
+//------------------------------------------------------------------------------
+
+void __setSrc(const libhei::Signature& i_rootCause,
+              std::map<std::string, std::string>& io_logData)
+{
+    uint32_t word6 = 0, word7 = 0, word8 = 0;
+    __getSrc(i_rootCause, word6, word7, word8);
 
     io_logData["SRC6"] = std::to_string(word6);
     io_logData["SRC7"] = std::to_string(word7);
@@ -60,8 +91,63 @@ void __setSrc(const libhei::Signature& i_rootCause,
 void __captureSignatureList(const libhei::IsolationData& i_isoData,
                             std::vector<util::FFDCFile>& io_userDataFiles)
 {
-    // TODO: Create a user data section that contains the complete list of
-    //       signatures found during isolation.
+    // Create a new entry for this user data section regardless if there are any
+    // signatures in the list.
+    io_userDataFiles.emplace_back(util::FFDCFormat::Custom, FFDC_SIGNATURES,
+                                  FFDC_VERSION1);
+
+    auto list = i_isoData.getSignatureList();
+
+    // The first entry in the buffer will be the number of signatures in the
+    // list.
+    uint32_t numSigs  = list.size();
+    size_t sz_numSigs = sizeof(numSigs);
+
+    // Each signature in the buffer use the same format as the SRC.
+    uint32_t word6 = 0, word7 = 0, word8 = 0;
+    size_t sz_word = sizeof(uint32_t);
+
+    // Allocate the buffer.
+    size_t sz_buffer = sz_numSigs + (numSigs * (3 * sz_word));
+    std::unique_ptr<char[]> buffer{new char[sz_buffer]};
+
+    // Insert the number of signatures.
+    numSigs = htobe32(numSigs);
+    memcpy(&buffer[0], &numSigs, sz_numSigs);
+
+    // Insert each signature.
+    size_t idx = sz_numSigs;
+    for (const auto& sig : list)
+    {
+        __getSrc(sig, word6, word7, word8);
+
+        word6 = htobe32(word6);
+        word7 = htobe32(word7);
+        word8 = htobe32(word8);
+
+        // clang-format off
+        memcpy(&buffer[idx], &word6, sz_word); idx += sz_word;
+        memcpy(&buffer[idx], &word7, sz_word); idx += sz_word;
+        memcpy(&buffer[idx], &word8, sz_word); idx += sz_word;
+        // clang-format on
+    }
+
+    // Open the file for writing.
+    auto path = io_userDataFiles.back().getPath();
+    std::ofstream file{path, std::ios::binary};
+    if (!file.good())
+    {
+        trace::err("Unable to open file: %s", path.string().c_str());
+    }
+    else
+    {
+        // Write the buffer to file.
+        file.write(buffer.get(), sz_buffer);
+        if (!file.good())
+        {
+            trace::err("Unable to write file: %s", path.string().c_str());
+        }
+    }
 }
 
 //------------------------------------------------------------------------------
