@@ -4,6 +4,8 @@ Wants=op-cfam-reset.service
 Before=op-cfam-reset.service
 Wants=obmc-power-stop-pre@%i.target
 Before=obmc-power-stop-pre@%i.target
+Wants=obmc-host-stopped@%i.target
+After=obmc-host-stopped@%i.target
 Conflicts=obmc-chassis-poweron@%i.target
 
 [Service]
