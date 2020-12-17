@@ -11,7 +11,8 @@ namespace attn
 /** @brief Transition the host state */
 void transitionHost(const HostState i_hostState)
 {
-    thread_stop_all(); // in libpdbg
+    // The host quiesce code will handle the instruction-stop task(s)
+    // thread_stop_all(); // in libpdbg
 
     // We will be transitioning host by starting appropriate dbus target
     std::string target = "obmc-host-quiesce@0.target"; // quiesce is default
