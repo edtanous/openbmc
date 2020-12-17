@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<attn_node model_ec="P10_10" name="PAU_FIR_2" reg_type="SCOM">
+<attn_node model_ec="P10_10,P10_20" name="PAU_FIR_2" reg_type="SCOM">
     <local_fir config="" name="PAU_FIR_2">
         <instance addr="0x10010C80" reg_inst="0"/>
         <instance addr="0x11010C80" reg_inst="3"/>
@@ -36,7 +36,7 @@
     <bit pos="22">RXO Internal Errors.</bit>
     <bit pos="23">OTL RXI fifo overrun.</bit>
     <bit pos="24">OTL RXI control flit data run length invalid.</bit>
-    <bit pos="25">OTL RXI opcode utilizing dLength specifies dL=0b00.</bit>
+    <bit pos="25">OTL RXI opcode utilizing dLength specifies dL=0b00 or other invalid dL.</bit>
     <bit pos="26">OTL RXI bad data received vc2.</bit>
     <bit pos="27">OTL RXI dcp2 fifo overrun.</bit>
     <bit pos="28">OTL RXI vc1 fifo overrun.</bit>

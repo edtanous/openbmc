@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<attn_node model_ec="P10_10" name="EQ_CORE_THREAD_STATE" reg_type="SCOM">
+<attn_node model_ec="P10_10,P10_20" name="EQ_CORE_THREAD_STATE" reg_type="SCOM">
     <register name="CORE_THREAD_STATE">
         <instance addr="0x20028412" reg_inst="0"/>
         <instance addr="0x20024412" reg_inst="1"/>

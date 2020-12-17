@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<attn_node model_ec="P10_10" name="MC_DSTL_FIR" reg_type="SCOM">
+<attn_node model_ec="P10_20" name="MC_DSTL_FIR" reg_type="SCOM">
     <local_fir config="W2" name="MC_DSTL_FIR">
         <instance addr="0x0C010D00" reg_inst="0"/>
         <instance addr="0x0C010D40" reg_inst="1"/>
@@ -54,4 +54,6 @@
     <bit pos="36">A parity error local to Subchhanel B occurred.</bit>
     <bit pos="37">Spare FIR bit 37.</bit>
     <bit pos="38">Spare FIR bit 38.</bit>
+    <bit pos="39">Indicates that this subchannel has significant traffic flow.</bit>
+    <bit pos="40">Indicates that this subchannel has significant traffic flow.</bit>
 </attn_node>

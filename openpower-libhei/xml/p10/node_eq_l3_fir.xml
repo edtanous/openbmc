@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<attn_node model_ec="P10_10" name="EQ_L3_FIR" reg_type="SCOM">
+<attn_node model_ec="P10_10,P10_20" name="EQ_L3_FIR" reg_type="SCOM">
     <local_fir config="" name="EQ_L3_FIR">
         <instance addr="0x20018600" reg_inst="0"/>
         <instance addr="0x20014600" reg_inst="1"/>
@@ -55,7 +55,7 @@
     <bit pos="16">Received addr_error cresp on Snoop Machine or Castout Operation</bit>
     <bit pos="17">Received addr_error cresp for Prefetch Operation</bit>
     <bit pos="18">Asserts when the L3 returns presp_rty_other to a PowerBus hang.poll or hang.check RCMD. This is typically masked, but provides an indication that an operation hang has been detected and signalled.</bit>
-    <bit pos="19">lru invalid count error. Violation of requirement that, when not in dmap or fixed-member mode, each group must have a member with lru_cnt=0 for 1st class and a member with lru_cnt=0 for 2nd class if there is a 2nd class member. Will not assert when an lru_cnt=0 is found for a member that is disabled. This error (missing lru_cnt=0) is recoverable - the L3 fails dispatch and then goes into random-victim- selection mode until it succeeds. On an L2-read or snoop, an LRU array is read, but errors aren't corrected because no LRU array write occurs. Thus, repeated reads to the location with the error may cause this bit to repeated assert. This bit may assert despite no error if the group and config have changed since the last time the CGC was accessed.</bit>
+    <bit pos="19">lru invalid count error. Violation of requirement that, when not in dmap or fixed-member mode, each group must have a member with lru_cnt=0 for 1st class and a member with lru_cnt=0 for 2nd class if there is a 2nd class member. Will not assert when an lru_cnt=0 is found for a member that is disabled. This error is typically masked because l3_lru_vic_sel_error is the true check for LRU errors. This is only a partial check (it doesn't check for multiple lru_cnt=0) and it can assert even when the LRU array contents are not used (error is in a class that isn't used) This error (missing lru_cnt=0) is recoverable - the L3 fails dispatch and then goes into random-victim- selection mode until it succeeds. This bit may assert despite no error if the group and config have changed since the last time the CGC was accessed.</bit>
     <bit pos="20">spare20</bit>
     <bit pos="21">spare21</bit>
     <bit pos="22">spare22</bit>
@@ -64,7 +64,7 @@
     <bit pos="25">Cache Inhibited operation was hit in the L3 directory. This is usually a software bug.</bit>
     <bit pos="26">Snoop Machine or Read machine has performed a line delete from a cache read</bit>
     <bit pos="27">Indicates that this l3 has snooped an incoming lco and in which the source (rcmdx_source) is not proxime. This is likely due to a programming error and could result in multiple owners of a line</bit>
-    <bit pos="28">Indicates the LRU intended to victimize a line, but failed to select exactly one member for victimization. This asserts due to a LRU array bit error (lru_inval_cnt_err also asserts) or an algorithm or implementation error in the logic that generates the selection. The lru_inval_cnt_err, and thus this bit, may assert despite no error if the group and config have changed since the last time the CGC was accessed. This error is recoverable - the L3 fails dispatch and then goes into random-victim- selection mode until it succeeds. On an l2-read or snoop, an LRU array is read, but errors aren't corrected because there is no LRU array write. Thus, repeated reads to the location with the error may cause this bit to repeated assert.</bit>
+    <bit pos="28">Indicates the L3 is inserting a line and thus a victimization might be needed (if there are no invalid line in the CGC), but the L3 failed to select exactly one member for (possible) victimization. This asserts due to a LRU array bit error (lru_inval_cnt_err may also asserts). This may assert despite no error if the group and config have changed since the last time the CGC was accessed. This error is recoverable - the L3 fails dispatch and then goes into random-victim- selection mode until it succeeds, at which time (sometimes prior to this) the error is overwritten. On an L2-read or snoop, an LRU array is read, but errors aren't checked or corrected because there is no LRU array write.</bit>
     <bit pos="29">All members are either column or line deleted in some CGC class</bit>
     <bit pos="30">Indicates that this l3 has snooped an incoming lco and we are the target however, our lco target id (set via SCOM in mode_reg1) does not match the chiplet id set by pb through input pins pb_ex_chiplet_id_dc Note that in chip-contained mode, the LCOs ID are often set to values that dont match the pb_ex_chiplet_id, thus this error is masked in that mode.</bit>
     <bit pos="31">Received ack_dead or ed_ack_dead cresp on CO, SN operation (pb write)</bit>

@@ -47,6 +47,7 @@ class SimulatorData
         EXPLORER_11 = 0x60d20011,
         EXPLORER_20 = 0x60d20020,
         P10_10      = 0x20da0010,
+        P10_20      = 0x20da0020,
     };
 
   private:

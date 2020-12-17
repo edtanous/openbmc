@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<attn_node model_ec="P10_10" name="NMMU_FIR" reg_type="SCOM">
+<attn_node model_ec="P10_10,P10_20" name="NMMU_FIR" reg_type="SCOM">
     <local_fir config="W" name="NMMU_FIR">
         <instance addr="0x02010C40" reg_inst="0"/>
         <instance addr="0x03010C40" reg_inst="1"/>

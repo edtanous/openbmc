@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<attn_node model_ec="P10_10" name="CFIR_EQ_UCS" reg_type="SCOM">
+<attn_node model_ec="P10_10,P10_20" name="CFIR_EQ_UCS" reg_type="SCOM">
     <register name="CFIR_EQ_LOCAL_XSTOP">
         <instance addr="0x20040003" reg_inst="0"/>
         <instance addr="0x21040003" reg_inst="1"/>

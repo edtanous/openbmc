@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<attn_node model_ec="P10_10" name="CFIR_PAUE_SPA" reg_type="SCOM">
+    <register name="CFIR_PAUE_SPATTN">
+        <instance addr="0x10040002" reg_inst="0"/>
+        <instance addr="0x11040002" reg_inst="1"/>
+    </register>
+    <register name="CFIR_PAUE_SPATTN_MASK">
+        <instance addr="0x10040042" reg_inst="0"/>
+        <instance addr="0x11040042" reg_inst="1"/>
+    </register>
+    <rule attn_type="SPA" node_inst="0:1">
+        <expr type="and">
+            <expr type="reg" value1="CFIR_PAUE_SPATTN"/>
+            <expr type="not">
+                <expr type="reg" value1="CFIR_PAUE_SPATTN_MASK"/>
+            </expr>
+            <expr type="int" value1="0x0FFFFFFFFFFFFFFF"/>
+        </expr>
+    </rule>
+    <bit child_node="PAU_LOCAL_FIR" node_inst="0,1" pos="4">Local FIR</bit>
+    <bit child_node="PAU_PHY_FIR" node_inst="0,1" pos="13">Local FIR register for the chip pervasive logic</bit>
+    <bit child_node="PAU_DL_FIR" node_inst="0,1" pos="14">Local FIR register for the chip pervasive logic</bit>
+    <bit child_node="PAU_PTL_FIR" node_inst="0,1" pos="16"/>
+</attn_node>

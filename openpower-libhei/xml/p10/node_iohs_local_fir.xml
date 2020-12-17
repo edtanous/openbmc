@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<attn_node model_ec="P10_10" name="IOHS_LOCAL_FIR" reg_type="SCOM">
+<attn_node model_ec="P10_10,P10_20" name="IOHS_LOCAL_FIR" reg_type="SCOM">
     <local_fir config="W2" name="IOHS_LOCAL_FIR">
         <instance addr="0x18040100" reg_inst="0"/>
         <instance addr="0x19040100" reg_inst="1"/>
@@ -17,11 +17,11 @@
     </local_fir>
     <bit pos="0">CFIR - Parity or PCB access error</bit>
     <bit pos="1">CPLT_CTRL - PCB access error</bit>
-    <bit pos="2">CC - PCB access error - read and clear nn03000F</bit>
-    <bit pos="3">CC - Clock Control Error - read and clear nn03000F</bit>
-    <bit pos="4">PSC - PSCOM access error - read and clear nn01001</bit>
-    <bit pos="5">PSC - internal or ring interface error - read and clear nn01001</bit>
-    <bit pos="6">THERM - pwr_comp_err, skitter_comp_err, scan_init_version_reg_parity_err_out , count_state_err_out check ERR_STATUS_REG 0xnn050013</bit>
+    <bit pos="2">CC - PCB access error</bit>
+    <bit pos="3">CC - Clock Control Error</bit>
+    <bit pos="4">PSC - PSCOM access error</bit>
+    <bit pos="5">PSC - internal or ring interface error</bit>
+    <bit pos="6">THERM - pwr_comp_err, skitter_comp_err, scan_init_version_reg_parity_err_out , count_state_err_out</bit>
     <bit pos="7">THERM - pcb error</bit>
     <bit pos="8">THERMTRIP - Critical temperature indicator</bit>
     <bit pos="9">THERMTRIP - Fatal temperature indicator</bit>

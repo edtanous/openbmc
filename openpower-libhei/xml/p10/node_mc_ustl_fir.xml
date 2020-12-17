@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<attn_node model_ec="P10_10" name="MC_USTL_FIR" reg_type="SCOM">
+<attn_node model_ec="P10_20" name="MC_USTL_FIR" reg_type="SCOM">
     <local_fir config="W2" name="MC_USTL_FIR">
         <instance addr="0x0C010E00" reg_inst="0"/>
         <instance addr="0x0C010E40" reg_inst="1"/>
@@ -54,7 +54,7 @@
     <bit pos="36">flit data pariry error from dl for chanb</bit>
     <bit pos="37">internal fifo parity error for chana</bit>
     <bit pos="38">internal fifo parity error for chanb</bit>
-    <bit pos="39">Bad response detected from chana. See cerrrpts and USTLBADRESP reg for more info</bit>
+    <bit pos="39">Bad response detected from chana. See cerrrpts and USTLBADRESP reg for more info.</bit>
     <bit pos="40">Bad response detected from chanb. See cerrrpts and USTLBADRESP reg for more info</bit>
     <bit pos="41">Bad data set for data that is not valid chana</bit>
     <bit pos="42">Bad data set for data that is not valid chanb</bit>
@@ -76,5 +76,5 @@
     <bit pos="58">recov register parity error</bit>
     <bit pos="59">A chana response with an invalid combination of dlength and/or dpart received</bit>
     <bit pos="60">A chanb response with an invalid combination of dlength and/or dpart received</bit>
-    <bit pos="61">USTL spare FIR bits</bit>
+    <bit pos="61">Parity error on command bus between DSTL-USTL used for chan fail command tracking</bit>
 </attn_node>

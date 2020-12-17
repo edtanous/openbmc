@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<attn_node model_ec="P10_10,P10_20" name="PB_STATION_FIR_ES4" reg_type="SCOM">
+    <local_fir config="" name="PB_STATION_FIR_ES4">
+        <instance addr="0x030113C0" reg_inst="0"/>
+        <action attn_type="CS" config="00"/>
+        <action attn_type="RE" config="01"/>
+        <action attn_type="SPA" config="10"/>
+    </local_fir>
+    <bit pos="0">protocol_error</bit>
+    <bit pos="1">overflow_error</bit>
+    <bit pos="2">hw_parity_error</bit>
+    <bit pos="3">fir_spare_3</bit>
+    <bit pos="4">coherency_error</bit>
+    <bit pos="5">cresp_addr_error</bit>
+    <bit pos="6">cresp_error</bit>
+    <bit pos="7">hang_recovery_limit_error</bit>
+    <bit pos="8">fir_spare_8</bit>
+    <bit pos="9">hang_recovery_gte_level1</bit>
+    <bit pos="10">force_mp_ipl</bit>
+    <bit pos="11">pb_cmd_snooper_error</bit>
+    <bit pos="12">data_overflow_error</bit>
+    <bit pos="13">data_protocol_error</bit>
+    <bit pos="14">data_route_error</bit>
+    <bit pos="15">fir_compab_trigger</bit>
+    <bit pos="16">link0_protocol_error</bit>
+    <bit pos="17">link0_overflow_error</bit>
+    <bit pos="18">link0_hw_parity_error</bit>
+    <bit pos="19">link1_protocol_error</bit>
+    <bit pos="20">link1_overflow_error</bit>
+    <bit pos="21">link1_hw_parity_error</bit>
+</attn_node>

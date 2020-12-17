@@ -31,6 +31,7 @@ my $SUPPORTED_MODEL_EC =
     EXPLORER_11 => 0x60D20011, # Explorer Chip DD1.0
     EXPLORER_20 => 0x60D20020, # Explorer Chip DD1.0
     P10_10      => 0x20DA0010, # P10 Chip DD1.0
+    P10_20      => 0x20DA0020, # P10 Chip DD2.0
 };
 
 # All models/ECs that may exist in the XML, but no longer needs to be built.

@@ -14,6 +14,7 @@ const std::map<SimulatorData::SimChipType, const char*>
         {EXPLORER_11, "chip_data_explorer_11.cdb"},
         {EXPLORER_20, "chip_data_explorer_20.cdb"},
         {P10_10, "chip_data_p10_10.cdb"},
+        {P10_20, "chip_data_p10_20.cdb"},
 };
 
 //------------------------------------------------------------------------------

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<attn_node model_ec="P10_10" name="CFIR_PAUW_UCS" reg_type="SCOM">
+<attn_node model_ec="P10_20" name="CFIR_PAUW_UCS" reg_type="SCOM">
     <register name="CFIR_PAUW_LOCAL_XSTOP">
         <instance addr="0x12040003" reg_inst="0"/>
         <instance addr="0x13040003" reg_inst="1"/>
@@ -25,5 +25,4 @@
     <bit child_node="PAU_FIR_1" node_inst="5,7" pos="10">Local FIR register for the PAU (2 of 3)</bit>
     <bit child_node="PAU_FIR_2" node_inst="5,7" pos="11">Local FIR register for the PAU (3 of 3)</bit>
     <bit child_node="PAU_PHY_FIR" node_inst="2,3" pos="13">Local FIR register for the chip pervasive logic</bit>
-    <bit child_node="PAU_DL_FIR" node_inst="2,3" pos="14">Local FIR register for the chip pervasive logic</bit>
 </attn_node>

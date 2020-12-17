@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<attn_node model_ec="P10_10" name="PAU_PHY_FIR" reg_type="SCOM">
+<attn_node model_ec="P10_20" name="PAU_PHY_FIR" reg_type="SCOM">
     <local_fir config="W" name="PAU_PHY_FIR">
         <instance addr="0x10012C00" reg_inst="0"/>
         <instance addr="0x11012C00" reg_inst="1"/>
@@ -36,4 +36,5 @@
     <bit pos="23">FIR Register - A PPE Code Thread Locked has occurred.</bit>
     <bit pos="24">FIR Register - A PPE Code FIR 6 has occurred.</bit>
     <bit pos="25">FIR Register - A PPE Code FIR 7 has occurred.</bit>
+    <bit pos="26">FIR Register- A SCOM FSM or FIR register parity error has occurred.</bit>
 </attn_node>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<attn_node model_ec="P10_10" name="LPC_FIR" reg_type="SCOM">
+<attn_node model_ec="P10_10,P10_20" name="LPC_FIR" reg_type="SCOM">
     <local_fir config="W" name="LPC_FIR">
         <instance addr="0x03012000" reg_inst="0"/>
         <action attn_type="CS" config="00"/>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<attn_node model_ec="P10_10" name="IOHS_DLP_FIR" reg_type="SCOM">
+<attn_node model_ec="P10_10,P10_20" name="IOHS_DLP_FIR" reg_type="SCOM">
     <local_fir config="W" name="IOHS_DLP_FIR">
         <instance addr="0x18011000" reg_inst="0"/>
         <instance addr="0x19011000" reg_inst="1"/>

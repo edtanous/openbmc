@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<attn_node model_ec="P10_10" name="PSIHB_FIR" reg_type="SCOM">
+<attn_node model_ec="P10_20" name="PSIHB_FIR" reg_type="SCOM">
     <local_fir config="" name="PSIHB_FIR">
         <instance addr="0x03011D00" reg_inst="0"/>
         <action attn_type="CS" config="00"/>
@@ -19,13 +19,13 @@
     <bit pos="11">PB parity error</bit>
     <bit pos="12">FSP tried access to trusted space</bit>
     <bit pos="13">Unexpected PB CRESP or DATA</bit>
-    <bit pos="14">Interrupt register change while interrupt still pending</bit>
-    <bit pos="15">PSI Interrupt address Error</bit>
-    <bit pos="16">OCC Interrupt address Error</bit>
-    <bit pos="17">FSI Interrupt address Error</bit>
-    <bit pos="18">LPC Interrupt address Error</bit>
-    <bit pos="19">LOCAL ERROR Interrupt address Error</bit>
-    <bit pos="20">HOST ERROR Interrupt address Error</bit>
+    <bit pos="14">Spare firs tied to zero</bit>
+    <bit pos="15">Spare firs tied to zero</bit>
+    <bit pos="16">Spare firs tied to zero</bit>
+    <bit pos="17">Spare firs tied to zero</bit>
+    <bit pos="18">Spare firs tied to zero</bit>
+    <bit pos="19">Spare firs tied to zero</bit>
+    <bit pos="20">Spare firs tied to zero</bit>
     <bit pos="21">PSI global error bit 0</bit>
     <bit pos="22">PSI global error bit 1</bit>
     <bit pos="23">Upstream error</bit>

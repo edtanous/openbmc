@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<attn_node model_ec="P10_10" name="PAU_PTL_FIR" reg_type="SCOM">
+<attn_node model_ec="P10_10,P10_20" name="PAU_PTL_FIR" reg_type="SCOM">
     <local_fir config="W" name="PAU_PTL_FIR">
         <instance addr="0x10011800" reg_inst="0"/>
         <instance addr="0x11011800" reg_inst="1"/>

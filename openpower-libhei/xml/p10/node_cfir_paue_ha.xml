@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<attn_node model_ec="P10_10" name="CFIR_PAUE_HA" reg_type="SCOM">
+<attn_node model_ec="P10_10,P10_20" name="CFIR_PAUE_HA" reg_type="SCOM">
     <register name="CFIR_PAUE_HOSTATTN">
         <instance addr="0x10040004" reg_inst="0"/>
         <instance addr="0x11040004" reg_inst="1"/>

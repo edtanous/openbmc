@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<attn_node model_ec="P10_10" name="MC_FIR" reg_type="SCOM">
+<attn_node model_ec="P10_20" name="MC_FIR" reg_type="SCOM">
     <local_fir config="W2" name="MC_FIR">
         <instance addr="0x0C010C00" reg_inst="0"/>
         <instance addr="0x0D010C00" reg_inst="1"/>
@@ -29,8 +29,8 @@
     <bit pos="15">Plus One Prefetch generated command did not hit any BARs</bit>
     <bit pos="16">Plus One Prefetch generated command hit config or mmio BAR</bit>
     <bit pos="17">Parity Error in WAT/Debug config register.</bit>
-    <bit pos="18">Reserved[18].</bit>
-    <bit pos="19">Reserved[19].</bit>
+    <bit pos="18">PBI received overcommit signal from READ0</bit>
+    <bit pos="19">PBI received ocercommit signal from READ1</bit>
     <bit pos="20">Incoming Powerbus Command hit multiple valid configured topology IDs</bit>
     <bit pos="21">Reserved[21].</bit>
     <bit pos="22">Access to secure memory facility failed. Improper access privilege by originating thread.</bit>
