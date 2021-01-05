@@ -37,6 +37,14 @@ attn_src = files(
     'vital_handler.cpp',
 )
 
+# for custom/raw PEL creation
+pel_src = files(
+    'pel/pel_minimal.cpp',
+    'pel/private_header.cpp',
+    'pel/primary_src.cpp',
+    'pel/user_header.cpp',
+)
+
 # Library dependencies.
 attn_deps = [
     libgpiod,
@@ -48,6 +56,7 @@ attn_deps = [
 attn_lib = static_library(
     'attn_lib',
     attn_src,
+    pel_src,
     include_directories : incdir,
     dependencies : attn_deps,
     cpp_args : [boost_args, test_arg],

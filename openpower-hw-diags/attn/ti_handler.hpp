@@ -109,14 +109,6 @@ void handlePhypTi(TiDataArea* i_tiDataArea);
 void handleHbTi(TiDataArea* i_tiDataArea);
 
 /**
- * @brief Parse TI info data as raw 32-bit fields
- *
- * Read the TI data in as 32-bit fields and place into map.
- */
-void parseRawTiInfo(std::map<std::string, std::string>& i_map,
-                    TiDataArea* i_buffer);
-
-/**
  * @brief Parse TI info data as PHYP/OPAL data
  *
  * Read the TI data, parse as PHYP/OPAL data and place into map.

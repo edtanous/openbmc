@@ -31,7 +31,8 @@ void eventAttentionFail(int i_error)
     std::cout << "event: attention fail" << i_error << std::endl;
 }
 
-void eventTerminate(std::map<std::string, std::string> i_additionalData)
+void eventTerminate(std::map<std::string, std::string> i_additionalData,
+                    char* i_tiInfoData)
 {
     std::cout << "event: terminate" << std::endl;
 
@@ -41,6 +42,11 @@ void eventTerminate(std::map<std::string, std::string> i_additionalData)
         std::cout << '\t' << itr->first << '\t' << itr->second << '\n';
     }
     std::cout << std::endl;
+
+    if (nullptr != i_tiInfoData)
+    {
+        std::cout << "TI data present" << std::endl;
+    }
 }
 
 void eventVital()

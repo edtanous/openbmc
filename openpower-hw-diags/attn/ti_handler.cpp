@@ -1,6 +1,7 @@
 #include <attn/attn_common.hpp>
 #include <attn/attn_handler.hpp>
 #include <attn/attn_logging.hpp>
+#include <attn/pel/pel_common.hpp>
 #include <attn/ti_handler.hpp>
 #include <sdbusplus/bus.hpp>
 #include <sdbusplus/exception.hpp>
@@ -17,7 +18,7 @@ namespace attn
  * Use the TI info data area to determine if this is either a HB or a PHYP
  * TI event then handle the event.
  *
- * @param i_tiDataArea pointer to the TI infor data
+ * @param i_tiDataArea pointer to the TI info data
  */
 int tiHandler(TiDataArea* i_tiDataArea)
 {
@@ -84,10 +85,17 @@ void handlePhypTi(TiDataArea* i_tiDataArea)
     if (nullptr != i_tiDataArea)
     {
         parsePhypOpalTiInfo(tiAdditionalData, i_tiDataArea);
-        parseRawTiInfo(tiAdditionalData, i_tiDataArea);
     }
 
-    eventTerminate(tiAdditionalData); // generate PEL
+    tiAdditionalData["Subsystem"] =
+        std::to_string(static_cast<uint8_t>(pel::SubsystemID::hypervisor));
+
+    char srcChar[8];
+    memcpy(srcChar, &(i_tiDataArea->asciiData0), 4);
+    memcpy(&srcChar[4], &(i_tiDataArea->asciiData1), 4);
+    tiAdditionalData["SrcAscii"] = std::string{srcChar};
+
+    eventTerminate(tiAdditionalData, (char*)i_tiDataArea);
 }
 
 /**
@@ -207,42 +215,19 @@ void handleHbTi(TiDataArea* i_tiDataArea)
     if (nullptr != i_tiDataArea)
     {
         parseHbTiInfo(tiAdditionalData, i_tiDataArea);
-        parseRawTiInfo(tiAdditionalData, i_tiDataArea);
     }
 
     if (true == generatePel)
     {
-        eventTerminate(tiAdditionalData); // generate PEL
-    }
-}
+        tiAdditionalData["Subsystem"] =
+            std::to_string(static_cast<uint8_t>(pel::SubsystemID::hostboot));
 
-/** @brief Parse the TI info data area into map as raw 32-bit fields */
-void parseRawTiInfo(std::map<std::string, std::string>& i_map,
-                    TiDataArea* i_buffer)
-{
-    if (nullptr == i_buffer)
-    {
-        return;
-    }
+        char srcChar[8];
+        memcpy(srcChar, &(i_tiDataArea->srcWord12HbWord0), 4);
+        memcpy(&srcChar[4], &(i_tiDataArea->asciiData1), 4);
+        tiAdditionalData["SrcAscii"] = std::string{srcChar};
 
-    uint32_t* tiDataArea = (uint32_t*)i_buffer;
-    std::stringstream ss;
-
-    ss << std::hex << std::setfill('0');
-    ss << "raw:";
-    while (tiDataArea <= (uint32_t*)((char*)i_buffer + sizeof(TiDataArea)))
-    {
-        ss << std::setw(8) << std::endl << be32toh(*tiDataArea);
-        tiDataArea++;
-    }
-
-    std::string key, value;
-    char delim = ':';
-
-    while (std::getline(ss, key, delim))
-    {
-        std::getline(ss, value, delim);
-        i_map[key] = value;
+        eventTerminate(tiAdditionalData, (char*)i_tiDataArea);
     }
 }
 
