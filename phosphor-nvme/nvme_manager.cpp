@@ -259,7 +259,8 @@ bool getNVMeInfobyBusID(int busID, phosphor::nvme::Nvme::NVMeData& nvmeData)
     nvmeData.statusFlags = intToHex(rsp_data_command_0[1]);
     nvmeData.smartWarnings = intToHex(rsp_data_command_0[2]);
     nvmeData.driveLifeUsed = intToHex(rsp_data_command_0[4]);
-    nvmeData.sensorValue = (int8_t)rsp_data_command_0[3];
+    nvmeData.sensorValue = static_cast<int8_t>(rsp_data_command_0[3]);
+    nvmeData.wcTemp = static_cast<int8_t>(rsp_data_command_0[5]);
 
     tx_data = COMMAND_CODE_8;
 
@@ -537,6 +538,11 @@ void Nvme::readNvmeData(NVMeConfig& config)
 
         setNvmeInventoryProperties(true, nvmeData, inventoryPath);
         nvmeSSD->setSensorValueToDbus(nvmeData.sensorValue);
+        if (nvmeData.wcTemp != 0)
+        {
+            config.criticalHigh = nvmeData.wcTemp;
+            config.warningHigh = nvmeData.wcTemp;
+        }
         nvmeSSD->setSensorThreshold(config.criticalHigh, config.criticalLow,
                                     config.maxValue, config.minValue,
                                     config.warningHigh, config.warningLow);

@@ -80,6 +80,10 @@ class Nvme
         int8_t sensorValue; /* Sensor value, if sensor value didn't be
                                   update, means sensor failure, default set to
                                   129(0x81) accroding to NVMe-MI SPEC*/
+        int8_t wcTemp;      /* Indicates over temperature warning threshold.
+                               This is intended to initially match the temperature
+                               reported in the WCTEMP field in the NVMe Identify
+                               Controller data structure */
     };
 
     /** @brief Setup polling timer in a sd event loop and attach to D-Bus
