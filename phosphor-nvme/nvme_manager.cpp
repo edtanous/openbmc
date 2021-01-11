@@ -597,10 +597,10 @@ void Nvme::read()
 
                 if (getGPIOValueOfNvme(devPwrGoodPath) != POWERGD)
                 {
-
-                    // Present pin is true but power good pin is false
-                    // remove nvme d-bus path, clean all properties in inventory
-                    // and turn on fault LED
+                    // IFDET should be used to provide the final say
+                    // in SSD's presence - IFDET showing SSD is present
+                    // but the power is off (if the drive is plugged in)
+                    // is a valid state.
 
                     setFaultLED(config.locateLedGroupPath,
                                 config.faultLedGroupPath, true);
@@ -609,8 +609,7 @@ void Nvme::read()
                                  config.locateLedControllerPath, false);
 
                     nvmeData = NVMeData();
-                    setNvmeInventoryProperties(false, nvmeData, inventoryPath);
-                    nvmes.erase(config.index);
+                    setNvmeInventoryProperties(true, nvmeData, inventoryPath);
 
                     if (isErrorPower[config.index] != true)
                     {
@@ -623,6 +622,11 @@ void Nvme::read()
 
                         isErrorPower[config.index] = true;
                     }
+
+                    // Keep reading to report the invalid temperature
+                    // (To make thermal loop know that the sensor reading
+                    //  is invalid).
+                    readNvmeData(config);
                     continue;
                 }
             }
