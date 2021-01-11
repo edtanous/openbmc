@@ -5,7 +5,6 @@ project('openpower-libhei', 'cpp',
             'warning_level=3',
             'werror=true',
             'cpp_std=c++14',
-            'cpp_args=-Wno-unused-parameter'
        ])
 
 #-------------------------------------------------------------------------------

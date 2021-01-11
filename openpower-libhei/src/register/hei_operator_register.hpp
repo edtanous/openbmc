@@ -381,7 +381,7 @@ class ConstantRegister : public OperatorRegister
     ConstantRegister& operator=(const ConstantRegister& r) = delete;
 
     /** @brief Overloaded from parent class. */
-    const BitString* getBitString(const Chip& i_chip) const override
+    const BitString* getBitString(const Chip&) const override
     {
         return &iv_result;
     }
