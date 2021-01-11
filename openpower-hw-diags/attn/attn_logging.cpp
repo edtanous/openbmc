@@ -484,9 +484,30 @@ void event(EventType i_event, std::map<std::string, std::string>& i_additional,
 void eventTerminate(std::map<std::string, std::string> i_additionalData,
                     char* i_tiInfoData)
 {
-    // Create log event with aodditional data and FFDC data
+    uint32_t tiInfoSize = 56; // assume not hypervisor TI
+
+    uint8_t subsystem = std::stoi(i_additionalData["Subsystem"]);
+
+    // If hypervisor
+    if (static_cast<uint8_t>(pel::SubsystemID::hypervisor) == subsystem)
+    {
+        tiInfoSize = 1024; // assume hypervisor max
+
+        // hypervisor may just want some of the data
+        if (0 == (*(i_tiInfoData + 0x09) & 0x01))
+        {
+            uint32_t* additionalLength = (uint32_t*)(i_tiInfoData + 0x50);
+            uint32_t tiAdditional      = be32toh(*additionalLength);
+
+            tiInfoSize = std::min(tiInfoSize, (84 + tiAdditional));
+        }
+    }
+
+    std::string traceMsg = "TI info size = " + std::to_string(tiInfoSize);
+    trace<level::INFO>(traceMsg.c_str());
+
     event(EventType::Terminate, i_additionalData,
-          createFFDCFiles(i_tiInfoData, 0x53));
+          createFFDCFiles(i_tiInfoData, tiInfoSize));
 }
 
 /** @brief Commit SBE vital event to log */
