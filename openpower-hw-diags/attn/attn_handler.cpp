@@ -52,7 +52,6 @@ void attnHandler(Config* i_config)
     std::vector<Attention> active_attentions;
 
     uint32_t isr_val, isr_mask;
-    uint32_t proc;
 
     std::stringstream ss; // for trace messages
 
@@ -64,7 +63,7 @@ void attnHandler(Config* i_config)
     {
         if (PDBG_TARGET_ENABLED == pdbg_target_probe(target))
         {
-            proc = pdbg_target_index(target); // get processor number
+            auto proc = pdbg_target_index(target); // get processor number
 
             // Use PIB target to determine if a processor is enabled
             char path[16];

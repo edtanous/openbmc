@@ -36,12 +36,7 @@ std::vector<FFDCTuple>
     createFFDCTuples(const std::vector<util::FFDCFile>& files)
 {
     std::vector<FFDCTuple> ffdcTuples{};
-    for (const util::FFDCFile& file : files)
-    {
-        ffdcTuples.emplace_back(
-            file.getFormat(), file.getSubType(), file.getVersion(),
-            sdbusplus::message::unix_fd(file.getFileDescriptor()));
-    }
+    util::transformFFDC(files, ffdcTuples);
 
     return ffdcTuples;
 }
