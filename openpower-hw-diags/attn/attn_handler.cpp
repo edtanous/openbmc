@@ -363,13 +363,14 @@ int handleSpecial(Attention* i_attention)
  */
 bool activeAttn(uint32_t i_val, uint32_t i_mask, uint32_t i_attn)
 {
-    bool rc        = false; // assume attn masked and/or inactive
-    bool validAttn = true;  // known attention type
+    bool rc = false; // assume attn masked and/or inactive
 
     // if attention active
     if (0 != (i_val & i_attn))
     {
         std::stringstream ss;
+
+        bool validAttn = true; // known attention type
 
         switch (i_attn)
         {

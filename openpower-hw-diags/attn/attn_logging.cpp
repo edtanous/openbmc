@@ -476,16 +476,6 @@ void event(EventType i_event, std::map<std::string, std::string>& i_additional,
     }
 }
 
-/** @brief Commit checkstop event to log */
-void eventCheckstop(std::map<std::string, std::string>& i_errors)
-{
-    // Additional data for log
-    std::map<std::string, std::string> additionalData;
-
-    // Create log event with additional data and FFDC data
-    event(EventType::Checkstop, additionalData, createFFDCFiles(nullptr, 0));
-}
-
 /**
  * Commit special attention TI event to log
  *
@@ -511,23 +501,6 @@ void eventVital()
 
     // Create log event with additional data and FFDC data
     event(EventType::Vital, additionalData, createFFDCFiles(nullptr, 0));
-}
-
-/**
- * Commit analyzer failure event to log
- *
- * Create an event log containing the specified error code.
- *
- * @param i_error - Error code
- */
-void eventHwDiagsFail(int i_error)
-{
-    // Additiona data for log
-    std::map<std::string, std::string> additionalData;
-    additionalData["ERROR_CODE"] = std::to_string(i_error);
-
-    // Create log event with additional data and FFDC data
-    event(EventType::HwDiagsFail, additionalData, createFFDCFiles(nullptr, 0));
 }
 
 /**
@@ -562,11 +535,12 @@ std::string sdjGetFieldValue(sd_journal* journal, const char* field)
 {
     const char* data{nullptr};
     size_t length{0};
-    size_t prefix{0};
 
     // get field value
     if (0 == sd_journal_get_data(journal, field, (const void**)&data, &length))
     {
+        size_t prefix{0};
+
         // The data returned  by sd_journal_get_data will be prefixed with the
         // field name and "="
         const void* eq = memchr(data, '=', length);

@@ -65,8 +65,7 @@ bool __readProc(pdbg_target* i_procTrgt, RegisterType_t i_regType,
 
 //------------------------------------------------------------------------------
 
-bool __readOcmb(pdbg_target* i_obmcTrgt, RegisterType_t i_regType,
-                uint64_t i_address, uint64_t& o_value)
+bool __readOcmb(pdbg_target*, RegisterType_t, uint64_t, uint64_t&)
 {
     bool accessFailure = false;
 

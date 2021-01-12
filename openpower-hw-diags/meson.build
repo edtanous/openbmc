@@ -5,7 +5,6 @@ project('openpower-hw-diags', 'cpp',
           'warning_level=3',
           'werror=true',
           'cpp_std=c++17',
-          'cpp_args=-Wno-unused-parameter'
         ])
 
 #-------------------------------------------------------------------------------
