@@ -69,9 +69,8 @@ void handlePhypTi(TiDataArea* i_tiDataArea)
 
     if (autoRebootEnabled())
     {
-        // If autoreboot is enabled we will start diagnostic mode target
-        // which will ultimately mpipl the host.
-        transitionHost(HostState::Diagnostic);
+        // If autoreboot is enabled we will start crash (mpipl) mode target
+        transitionHost(HostState::Crash);
     }
     else
     {

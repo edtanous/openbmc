@@ -6,7 +6,8 @@ namespace attn
 enum class HostState
 {
     Quiesce,
-    Diagnostic
+    Diagnostic,
+    Crash
 };
 
 /**

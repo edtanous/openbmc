@@ -17,10 +17,10 @@ void transitionHost(const HostState i_hostState)
     // We will be transitioning host by starting appropriate dbus target
     std::string target = "obmc-host-quiesce@0.target"; // quiesce is default
 
-    // diagnostic mode state requested
-    if (HostState::Diagnostic == i_hostState)
+    // crash (mpipl) mode state requested
+    if (HostState::Crash == i_hostState)
     {
-        target = "obmc-host-diagnostic-mode@0.target";
+        target = "obmc-host-crash@0.target";
     }
 
     auto bus    = sdbusplus::bus::new_system();
