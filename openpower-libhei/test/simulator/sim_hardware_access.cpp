@@ -7,8 +7,8 @@
 
 #include <endian.h>
 
-#include <hei_includes.hpp>
 #include <hei_user_interface.hpp>
+#include <util/hei_includes.hpp>
 
 namespace libhei
 {

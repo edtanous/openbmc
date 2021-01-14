@@ -1,8 +1,8 @@
 #pragma once
 
-#include <hei_includes.hpp>
 #include <hei_isolation_data.hpp>
 #include <register/hei_hardware_register.hpp>
+#include <util/hei_includes.hpp>
 
 namespace libhei
 {

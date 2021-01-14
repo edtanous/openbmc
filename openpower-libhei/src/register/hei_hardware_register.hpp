@@ -1,8 +1,8 @@
 #pragma once
 
 #include <hei_bit_string.hpp>
-#include <hei_includes.hpp>
 #include <register/hei_register.hpp>
+#include <util/hei_includes.hpp>
 
 namespace libhei
 {

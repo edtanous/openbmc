@@ -3,7 +3,7 @@
 #include <endian.h>
 #include <string.h>
 
-#include <hei_includes.hpp>
+#include <util/hei_includes.hpp>
 
 namespace libhei
 {

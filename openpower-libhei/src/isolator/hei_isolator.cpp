@@ -1,10 +1,10 @@
 
-#include <hei_includes.hpp>
 #include <isolator/hei_isolation_node.hpp>
 #include <isolator/hei_isolator.hpp>
 #include <register/hei_operator_register.hpp>
 #include <register/hei_scom_register.hpp>
 #include <util/hei_flyweight.hpp>
+#include <util/hei_includes.hpp>
 
 namespace libhei
 {
