@@ -175,15 +175,15 @@ int getPelFd(uint32_t i_pelId)
     // GetPEL returns file descriptor (int)
     int fd = -1;
 
-    // Sdbus call specifics
-    constexpr auto service   = "xyz.openbmc_project.Logging";
-    constexpr auto path      = "/xyz/openbmc_project/logging";
-    constexpr auto interface = "org.open_power.Logging.PEL";
-    constexpr auto function  = "GetPEL";
-
     // Get the PEL file descriptor
     try
     {
+        // Sdbus call specifics
+        constexpr auto service   = "xyz.openbmc_project.Logging";
+        constexpr auto path      = "/xyz/openbmc_project/logging";
+        constexpr auto interface = "org.open_power.Logging.PEL";
+        constexpr auto function  = "GetPEL";
+
         auto bus    = sdbusplus::bus::new_default_system();
         auto method = bus.new_method_call(service, path, interface, function);
         method.append(i_pelId);
@@ -225,19 +225,19 @@ uint32_t createPel(std::string i_event,
     // CreatePELWithFFDCFiles returns log-id and platform log-id
     std::tuple<uint32_t, uint32_t> pelResp = {0, 0};
 
-    // Sdbus call specifics
-    constexpr auto level     = "xyz.openbmc_project.Logging.Entry.Level.Error";
-    constexpr auto service   = "xyz.openbmc_project.Logging";
-    constexpr auto path      = "/xyz/openbmc_project/logging";
-    constexpr auto interface = "org.open_power.Logging.PEL";
-    constexpr auto function  = "CreatePELWithFFDCFiles";
-
     // Need to provide pid when using create or create-with-ffdc methods
     i_additional.emplace("_PID", std::to_string(getpid()));
 
     // Create the PEL
     try
     {
+        // Sdbus call specifics
+        constexpr auto level = "xyz.openbmc_project.Logging.Entry.Level.Error";
+        constexpr auto service   = "xyz.openbmc_project.Logging";
+        constexpr auto path      = "/xyz/openbmc_project/logging";
+        constexpr auto interface = "org.open_power.Logging.PEL";
+        constexpr auto function  = "CreatePELWithFFDCFiles";
+
         auto bus    = sdbusplus::bus::new_default_system();
         auto method = bus.new_method_call(service, path, interface, function);
         method.append(i_event, level, i_additional, i_ffdc);
@@ -266,14 +266,6 @@ uint32_t createPel(std::string i_event,
  */
 void createPelRaw(std::vector<uint8_t>& i_buffer)
 {
-    // Sdbus call specifics
-    constexpr auto event     = "xyz.open_power.Attn.Error.Terminate";
-    constexpr auto level     = "xyz.openbmc_project.Logging.Entry.Level.Error";
-    constexpr auto service   = "xyz.openbmc_project.Logging";
-    constexpr auto path      = "/xyz/openbmc_project/logging";
-    constexpr auto interface = "xyz.openbmc_project.Logging.Create";
-    constexpr auto function  = "Create";
-
     // Create FFDC file from buffer data
     util::FFDCFile pelFile{util::FFDCFormat::Text};
     auto fd = pelFile.getFileDescriptor();
@@ -291,9 +283,18 @@ void createPelRaw(std::vector<uint8_t>& i_buffer)
     // Create the PEL
     try
     {
+        // Sdbus call specifics
+        constexpr auto pelEvent = "xyz.open_power.Attn.Error.Terminate";
+        constexpr auto level = "xyz.openbmc_project.Logging.Entry.Level.Error";
+        constexpr auto service   = "xyz.openbmc_project.Logging";
+        constexpr auto path      = "/xyz/openbmc_project/logging";
+        constexpr auto interface = "xyz.openbmc_project.Logging.Create";
+        constexpr auto function  = "Create";
+
         auto bus    = sdbusplus::bus::new_default_system();
         auto method = bus.new_method_call(service, path, interface, function);
-        method.append(event, level, additional);
+        method.append(pelEvent, level, additional);
+
         bus.call_noreply(method);
     }
     catch (const sdbusplus::exception::SdBusError& e)

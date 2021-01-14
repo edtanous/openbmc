@@ -46,7 +46,7 @@ class PelMinimal
      *
      * @param[in] pelBuffer - buffer containing a raw PEL
      */
-    PelMinimal(std::vector<uint8_t>& data);
+    explicit PelMinimal(std::vector<uint8_t>& data);
 
     /**
      * @brief Stream raw PEL data to buffer

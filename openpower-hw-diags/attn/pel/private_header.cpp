@@ -34,25 +34,5 @@ void PrivateHeader::setSectionCount(uint8_t sectionCount)
     _sectionCount = sectionCount;
 }
 
-/*
-Stream& operator<<(Stream& s, const CreatorVersion& cv)
-{
-    for (size_t i = 0; i < sizeof(CreatorVersion); i++)
-    {
-        s << cv.version[i];
-    }
-    return s;
-}
-
-Stream& operator>>(Stream& s, CreatorVersion& cv)
-{
-    for (size_t i = 0; i < sizeof(CreatorVersion); i++)
-    {
-        s >> cv.version[i];
-    }
-    return s;
-}
-*/
-
 } // namespace pel
 } // namespace attn

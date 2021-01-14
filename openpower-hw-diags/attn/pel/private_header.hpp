@@ -1,6 +1,5 @@
 #pragma once
 
-//#include "bcd_time.hpp"
 #include "pel_common.hpp"
 #include "pel_section.hpp"
 #include "stream.hpp"
@@ -9,17 +8,6 @@ namespace attn
 {
 namespace pel
 {
-
-// creator version field type, init to null terminated
-// struct CreatorVersion
-//{
-//    uint8_t version[8];
-
-//    CreatorVersion()
-//    {
-//        memset(version, '\0', sizeof(version));
-//    }
-//};
 
 /**
  * @class PrivateHeader
@@ -121,13 +109,11 @@ class PrivateHeader : public Section
      * @brief The creation time timestamp
      */
     uint64_t _createTimestamp;
-    // BCDTime _createTimestamp;
 
     /**
      * @brief The commit time timestamp
      */
     uint64_t _commitTimestamp;
-    // BCDTime _commitTimestamp;
 
     /**
      * @brief The creator ID field
@@ -170,22 +156,6 @@ class PrivateHeader : public Section
      */
     uint32_t _id = 0;
 };
-
-/**
- * @brief Stream insertion operator for the CreatorVersion
- *
- * @param[out] s - the stream
- * @param[in] cv - the CreatorVersion object
- */
-// Stream& operator<<(Stream& s, const CreatorVersion& cv);
-
-/**
- * @brief Stream extraction operator for the CreatorVersion
- *
- * @param[in] s - the stream
- * @param[out] cv - the CreatorVersion object
- */
-// Stream& operator>>(Stream& s, CreatorVersion& cv);
 
 } // namespace pel
 } // namespace attn
