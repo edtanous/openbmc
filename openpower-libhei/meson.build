@@ -32,6 +32,7 @@ libhei_static = static_library('hei',
                                 install: true)
 
 install_headers(
+    'src/hei_bit_string.hpp',
     'src/hei_chip.hpp',
     'src/hei_isolation_data.hpp',
     'src/hei_main.hpp',

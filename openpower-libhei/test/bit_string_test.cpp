@@ -1,4 +1,4 @@
-#include <util/hei_bit_string.hpp>
+#include <hei_bit_string.hpp>
 
 #include "gtest/gtest.h"
 
