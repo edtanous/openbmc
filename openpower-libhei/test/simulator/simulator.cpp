@@ -1,5 +1,7 @@
 #include "simulator.hpp"
 
+#include <util/hei_includes.hpp>
+
 #include <fstream> // std::ifstream
 
 namespace libhei
@@ -76,6 +78,20 @@ void SimulatorData::endIteration()
     // Start by calling libhei::isolate().
     IsolationData isoData{};
     isolate(iv_chipList, isoData);
+
+    /* TODO: Currently used for debug. Eventually, we want this and the
+     *       signature list written to file.
+    for (const auto& e : isoData.getRegisterDump())
+    {
+        HEI_INF("Chip: %s", (const char*)e.first.getChip());
+
+        for (const auto& r : e.second)
+        {
+            HEI_INF("  Reg: 0x%06x  %d  0x%016" PRIx64, r.regId, r.regInst,
+                    r.data->getFieldRight(0, 64));
+        }
+    }
+    */
 
     // Get the list of signatures found in isolation.
     std::vector<Signature> givenSigList = isoData.getSignatureList();

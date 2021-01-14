@@ -20,6 +20,7 @@ bool IsolationNode::analyze(const Chip& i_chip, AttentionType_t i_attnType,
         // Read the register (adds BitString to register cache).
         if (hwReg->read(i_chip))
         {
+            // The register read failed.
             // TODO: Would be nice to add SCOM errors to the log just in case
             //       traces are not available.
             // TODO: This trace could be redundant with the user application,
@@ -30,13 +31,12 @@ bool IsolationNode::analyze(const Chip& i_chip, AttentionType_t i_attnType,
             //         "address=0x%0" PRIx64,
             //         i_chip.getType(), hwReg->getAddress());
         }
-
-        // TODO: Add this register to io_isoData.
-        // TODO: getBitString() does read hardware if read() has not been called
-        //       and there is nothing in the register cache. However, it does
-        //       not does not indicate if the read was successful. Not sure if
-        //       this is intentional. Will need to investigate.
-        // auto bs = hwReg->getBitString();
+        else
+        {
+            // Add to the FFDC.
+            io_isoData.addRegister(i_chip, hwReg->getId(), hwReg->getInstance(),
+                                   hwReg->getBitString(i_chip));
+        }
     }
 
     // A rule for i_attnType must exist.
