@@ -3,6 +3,7 @@
 #include <endian.h>
 #include <string.h>
 
+#include <filesystem>
 #include <fstream>
 
 namespace util
@@ -19,7 +20,9 @@ class BinFileReader
      * @brief Constructor.
      * @param f The name of the target file.
      */
-    explicit BinFileReader(const char* f) : iv_stream(f, std::ios::binary) {}
+    explicit BinFileReader(const std::filesystem::path& p) :
+        iv_stream(p, std::ios::binary)
+    {}
 
     /** @brief Destructor. */
     ~BinFileReader() = default;
@@ -114,7 +117,9 @@ class BinFileWriter
      * @brief Constructor.
      * @param f The name of the target file.
      */
-    explicit BinFileWriter(const char* f) : iv_stream(f, std::ios::binary) {}
+    explicit BinFileWriter(const std::filesystem::path& p) :
+        iv_stream(p, std::ios::binary)
+    {}
 
     /** @brief Destructor. */
     ~BinFileWriter() = default;

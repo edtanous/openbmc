@@ -3,6 +3,7 @@
 #include <hei_main.hpp>
 #include <phosphor-logging/elog.hpp>
 #include <sdbusplus/bus.hpp>
+#include <util/bin_stream.hpp>
 #include <util/ffdc_file.hpp>
 #include <util/pdbg.hpp>
 #include <util/trace.hpp>
@@ -96,57 +97,32 @@ void __captureSignatureList(const libhei::IsolationData& i_isoData,
     io_userDataFiles.emplace_back(util::FFDCFormat::Custom, FFDC_SIGNATURES,
                                   FFDC_VERSION1);
 
+    // Create a streamer for easy writing to the FFDC file.
+    auto path = io_userDataFiles.back().getPath();
+    util::BinFileWriter stream{path};
+
+    // The first 4 bytes in the FFDC contains the number of signatures in the
+    // list. Then, the list of signatures will follow.
+
     auto list = i_isoData.getSignatureList();
 
-    // The first entry in the buffer will be the number of signatures in the
-    // list.
-    uint32_t numSigs  = list.size();
-    size_t sz_numSigs = sizeof(numSigs);
+    uint32_t numSigs = list.size();
+    stream << numSigs;
 
-    // Each signature in the buffer use the same format as the SRC.
-    uint32_t word6 = 0, word7 = 0, word8 = 0;
-    size_t sz_word = sizeof(uint32_t);
-
-    // Allocate the buffer.
-    size_t sz_buffer = sz_numSigs + (numSigs * (3 * sz_word));
-    std::unique_ptr<char[]> buffer{new char[sz_buffer]};
-
-    // Insert the number of signatures.
-    numSigs = htobe32(numSigs);
-    memcpy(&buffer[0], &numSigs, sz_numSigs);
-
-    // Insert each signature.
-    size_t idx = sz_numSigs;
     for (const auto& sig : list)
     {
+        // Each signature will use the same format as the SRC (12 bytes each).
+        uint32_t word6 = 0, word7 = 0, word8 = 0;
         __getSrc(sig, word6, word7, word8);
-
-        word6 = htobe32(word6);
-        word7 = htobe32(word7);
-        word8 = htobe32(word8);
-
-        // clang-format off
-        memcpy(&buffer[idx], &word6, sz_word); idx += sz_word;
-        memcpy(&buffer[idx], &word7, sz_word); idx += sz_word;
-        memcpy(&buffer[idx], &word8, sz_word); idx += sz_word;
-        // clang-format on
+        stream << word6 << word7 << word8;
     }
 
-    // Open the file for writing.
-    auto path = io_userDataFiles.back().getPath();
-    std::ofstream file{path, std::ios::binary};
-    if (!file.good())
+    // If the stream failed for any reason, remove the FFDC file.
+    if (!stream.good())
     {
-        trace::err("Unable to open file: %s", path.string().c_str());
-    }
-    else
-    {
-        // Write the buffer to file.
-        file.write(buffer.get(), sz_buffer);
-        if (!file.good())
-        {
-            trace::err("Unable to write file: %s", path.string().c_str());
-        }
+        trace::err("Unable to write signature list FFDC file: %s",
+                   path.string().c_str());
+        io_userDataFiles.pop_back();
     }
 }
 
