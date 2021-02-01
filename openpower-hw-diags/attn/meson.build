@@ -25,9 +25,10 @@ endif
 
 # Source files.
 attn_src = files(
+    'attention.cpp',
     'attn_common.cpp',
     'attn_config.cpp',
-    'attention.cpp',
+    'attn_dbus.cpp',
     'attn_handler.cpp',
     'attn_main.cpp',
     'attn_monitor.cpp',

@@ -1,5 +1,6 @@
 #include <unistd.h>
 
+#include <attn/attn_dbus.hpp>
 #include <attn/attn_logging.hpp>
 #include <attn/pel/pel_minimal.hpp>
 #include <phosphor-logging/log.hpp>
@@ -162,150 +163,6 @@ std::vector<util::FFDCFile> createFFDCFiles(char* i_buffer = nullptr,
 }
 
 /**
- * Get file descriptor of exisitng PEL
- *
- * The backend logging code will search for a PEL having the provided PEL ID
- * and return a file descriptor to a file containing this PEL's  raw PEL data.
- *
- * @param  i_pelid - the PEL ID
- * @return file descriptor of file containing the raw PEL data
- */
-int getPelFd(uint32_t i_pelId)
-{
-    // GetPEL returns file descriptor (int)
-    int fd = -1;
-
-    // Get the PEL file descriptor
-    try
-    {
-        // Sdbus call specifics
-        constexpr auto service   = "xyz.openbmc_project.Logging";
-        constexpr auto path      = "/xyz/openbmc_project/logging";
-        constexpr auto interface = "org.open_power.Logging.PEL";
-        constexpr auto function  = "GetPEL";
-
-        auto bus    = sdbusplus::bus::new_default_system();
-        auto method = bus.new_method_call(service, path, interface, function);
-        method.append(i_pelId);
-
-        auto resp = bus.call(method);
-
-        sdbusplus::message::unix_fd msgFd;
-        resp.read(msgFd);
-        fd = dup(msgFd); // -1 if not found
-    }
-    catch (const sdbusplus::exception::SdBusError& e)
-    {
-        std::stringstream ss;
-        ss << "getPelFd: " << e.what();
-        trace<level::INFO>(ss.str().c_str());
-    }
-
-    // File descriptor or -1 if not found or call failed
-    return fd;
-}
-
-/**
- * Create a PEL for the specified event type
- *
- * The additional data provided in the map will be placed in a user data
- * section of the PEL and may additionally contain key words to trigger
- * certain behaviors by the backend logging code. Each set of data described
- * in the vector of ffdc data will be placed in additional user data sections.
- *
- * @param  i_event - the event type
- * @param  i_additional - map of additional data
- * @param  9_ffdc - vector of ffdc data
- * @return The created PEL's platform log-id
- */
-uint32_t createPel(std::string i_event,
-                   std::map<std::string, std::string> i_additional,
-                   std::vector<util::FFDCTuple> i_ffdc)
-{
-    // CreatePELWithFFDCFiles returns log-id and platform log-id
-    std::tuple<uint32_t, uint32_t> pelResp = {0, 0};
-
-    // Need to provide pid when using create or create-with-ffdc methods
-    i_additional.emplace("_PID", std::to_string(getpid()));
-
-    // Create the PEL
-    try
-    {
-        // Sdbus call specifics
-        constexpr auto level = "xyz.openbmc_project.Logging.Entry.Level.Error";
-        constexpr auto service   = "xyz.openbmc_project.Logging";
-        constexpr auto path      = "/xyz/openbmc_project/logging";
-        constexpr auto interface = "org.open_power.Logging.PEL";
-        constexpr auto function  = "CreatePELWithFFDCFiles";
-
-        auto bus    = sdbusplus::bus::new_default_system();
-        auto method = bus.new_method_call(service, path, interface, function);
-        method.append(i_event, level, i_additional, i_ffdc);
-
-        auto resp = bus.call(method);
-
-        resp.read(pelResp);
-    }
-    catch (const sdbusplus::exception::SdBusError& e)
-    {
-        std::stringstream ss;
-        ss << "createPel: " << e.what();
-        trace<level::INFO>(ss.str().c_str());
-    }
-
-    // pelResp<0> == log-id, pelResp<1> = platform log-id
-    return std::get<1>(pelResp);
-}
-
-/*
- * Create a PEL from raw PEL data
- *
- * The backend logging code will create a PEL based on the specified PEL data.
- *
- * @param   i_buffer - buffer containing a raw PEL
- */
-void createPelRaw(std::vector<uint8_t>& i_buffer)
-{
-    // Create FFDC file from buffer data
-    util::FFDCFile pelFile{util::FFDCFormat::Text};
-    auto fd = pelFile.getFileDescriptor();
-
-    write(fd, i_buffer.data(), i_buffer.size());
-    lseek(fd, 0, SEEK_SET);
-
-    auto filePath = pelFile.getPath();
-
-    // Additional data for log
-    std::map<std::string, std::string> additional;
-    additional.emplace("RAWPEL", filePath.string());
-    additional.emplace("_PID", std::to_string(getpid()));
-
-    // Create the PEL
-    try
-    {
-        // Sdbus call specifics
-        constexpr auto pelEvent = "xyz.open_power.Attn.Error.Terminate";
-        constexpr auto level = "xyz.openbmc_project.Logging.Entry.Level.Error";
-        constexpr auto service   = "xyz.openbmc_project.Logging";
-        constexpr auto path      = "/xyz/openbmc_project/logging";
-        constexpr auto interface = "xyz.openbmc_project.Logging.Create";
-        constexpr auto function  = "Create";
-
-        auto bus    = sdbusplus::bus::new_default_system();
-        auto method = bus.new_method_call(service, path, interface, function);
-        method.append(pelEvent, level, additional);
-
-        bus.call_noreply(method);
-    }
-    catch (const sdbusplus::exception::SdBusError& e)
-    {
-        std::stringstream ss;
-        ss << "createPelRaw: " << e.what();
-        trace<level::INFO>(ss.str().c_str());
-    }
-}
-
-/**
  * Create a PEL from an existing PEL
  *
  * Create a new PEL based on the specified raw PEL and submit the new PEL
@@ -452,7 +309,7 @@ void event(EventType i_event, std::map<std::string, std::string>& i_additional,
         if (true == tiEvent)
         {
             // get file descriptor and size of information PEL
-            int pelFd = getPelFd(pelId);
+            int pelFd = getPel(pelId);
 
             // if PEL found, read into buffer
             if (-1 != pelFd)

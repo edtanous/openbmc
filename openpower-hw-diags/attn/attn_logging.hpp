@@ -10,6 +10,10 @@
 namespace attn
 {
 
+constexpr auto pathLogging   = "/xyz/openbmc_project/logging";
+constexpr auto levelPelError = "xyz.openbmc_project.Logging.Entry.Level.Error";
+constexpr auto eventPelTerminate = "xyz.open_power.Attn.Error.Terminate";
+
 /** @brief Logging level types */
 enum level
 {
