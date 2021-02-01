@@ -1,5 +1,6 @@
 #include <unistd.h>
 
+#include <analyzer/util.hpp>
 #include <hei_main.hpp>
 #include <phosphor-logging/elog.hpp>
 #include <sdbusplus/bus.hpp>
@@ -22,8 +23,8 @@ namespace analyzer
 
 enum FfdcSubType_t : uint8_t
 {
-    FFDC_SIGNATURES   = 0x01,
-    FFDC_CAPTURE_DATA = 0x02,
+    FFDC_SIGNATURES    = 0x01,
+    FFDC_REGISTER_DUMP = 0x02,
 
     // For the callout section, the value of '0xCA' is required per the
     // phosphor-logging openpower-pel extention spec.
@@ -128,6 +129,80 @@ void __captureSignatureList(const libhei::IsolationData& i_isoData,
 
 //------------------------------------------------------------------------------
 
+void __captureRegisterDump(const libhei::IsolationData& i_isoData,
+                           std::vector<util::FFDCFile>& io_userDataFiles)
+{
+    // Create a new entry for this user data section regardless if there are any
+    // registers in the dump.
+    io_userDataFiles.emplace_back(util::FFDCFormat::Custom, FFDC_REGISTER_DUMP,
+                                  FFDC_VERSION1);
+
+    // Create a streamer for easy writing to the FFDC file.
+    auto path = io_userDataFiles.back().getPath();
+    util::BinFileWriter stream{path};
+
+    // The first 4 bytes in the FFDC contains the number of chips with register
+    // data. Then the data for each chip will follow.
+
+    auto dump = i_isoData.getRegisterDump();
+
+    uint32_t numChips = dump.size();
+    stream << numChips;
+
+    for (const auto& entry : dump)
+    {
+        auto chip    = entry.first;
+        auto regList = entry.second;
+
+        // Each chip will have the following information:
+        //   4 byte chip model/EC
+        //   2 byte chip position
+        //   4 byte number of registers
+        // Then the data for each register will follow.
+
+        uint32_t chipType = chip.getType();
+        uint16_t chipPos  = util::pdbg::getChipPos(chip);
+        uint32_t numRegs  = regList.size();
+        stream << chipType << chipPos << numRegs;
+
+        for (const auto& reg : regList)
+        {
+            // Each register will have the following information:
+            //   3 byte register ID
+            //   1 byte register instance
+            //   1 byte data size
+            //   * byte data buffer (* depends on value of data size)
+
+            libhei::RegisterId_t regId = reg.regId;   // 3 byte
+            libhei::Instance_t regInst = reg.regInst; // 1 byte
+
+            auto tmp = libhei::BitString::getMinBytes(reg.data->getBitLen());
+            if (255 < tmp)
+            {
+                trace::inf("Register data execeeded 255 and was truncated: "
+                           "regId=0x%06x regInst=%u",
+                           regId, regInst);
+                tmp = 255;
+            }
+            uint8_t dataSize = tmp;
+
+            stream << regId << regInst << dataSize;
+
+            stream.write(reg.data->getBufAddr(), dataSize);
+        }
+    }
+
+    // If the stream failed for any reason, remove the FFDC file.
+    if (!stream.good())
+    {
+        trace::err("Unable to write register dump FFDC file: %s",
+                   path.string().c_str());
+        io_userDataFiles.pop_back();
+    }
+}
+
+//------------------------------------------------------------------------------
+
 std::string __getMessageRegistry(bool i_isCheckstop)
 {
     // For now, there are only two choices:
@@ -182,6 +257,9 @@ void createPel(const libhei::Signature& i_rootCause,
 
     // Capture the complete signature list.
     __captureSignatureList(i_isoData, userDataFiles);
+
+    // Capture the complete signature list.
+    __captureRegisterDump(i_isoData, userDataFiles);
 
     // Now, that all of the user data files have been created, transform the
     // data into the proper format for the PEL.
