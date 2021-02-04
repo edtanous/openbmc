@@ -67,7 +67,5 @@ int SysImpl::poll(struct pollfd* fds, nfds_t nfds, int timeout) const
     return ::poll(fds, nfds, timeout);
 }
 
-SysImpl sys_impl;
-
 } // namespace internal
 } // namespace ipmiblob

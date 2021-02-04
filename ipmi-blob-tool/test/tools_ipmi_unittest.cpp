@@ -12,10 +12,11 @@ using ::testing::Return;
 TEST(IpmiHandlerTest, OpenAllFails)
 {
     /* Open against all device files fail. */
-    internal::InternalSysMock sysMock;
-    IpmiHandler ipmi(&sysMock);
+    std::unique_ptr<internal::InternalSysMock> sysMock =
+        std::make_unique<internal::InternalSysMock>();
+    EXPECT_CALL(*sysMock, open(_, _)).WillRepeatedly(Return(-1));
 
-    EXPECT_CALL(sysMock, open(_, _)).WillRepeatedly(Return(-1));
+    IpmiHandler ipmi(std::move(sysMock));
     EXPECT_THROW(ipmi.open(), IpmiException);
 }
 

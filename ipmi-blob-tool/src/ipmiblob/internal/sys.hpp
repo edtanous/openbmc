@@ -57,8 +57,5 @@ class SysImpl : public Sys
     int poll(struct pollfd* fds, nfds_t nfds, int timeout) const override;
 };
 
-/** @brief Default instantiation of sys */
-extern SysImpl sys_impl;
-
 } // namespace internal
 } // namespace ipmiblob

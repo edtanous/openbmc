@@ -36,7 +36,7 @@ namespace ipmiblob
 
 std::unique_ptr<IpmiInterface> IpmiHandler::CreateIpmiHandler()
 {
-    return std::make_unique<IpmiHandler>();
+    return std::make_unique<IpmiHandler>(std::make_unique<internal::SysImpl>());
 }
 
 void IpmiHandler::open()

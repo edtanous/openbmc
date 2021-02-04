@@ -17,8 +17,8 @@ class IpmiHandler : public IpmiInterface
      */
     static std::unique_ptr<IpmiInterface> CreateIpmiHandler();
 
-    explicit IpmiHandler(const internal::Sys* sys = &internal::sys_impl) :
-        sys(sys){};
+    explicit IpmiHandler(std::unique_ptr<internal::Sys> sys) :
+        sys(std::move(sys)){};
 
     ~IpmiHandler() = default;
     IpmiHandler(const IpmiHandler&) = delete;
@@ -41,7 +41,7 @@ class IpmiHandler : public IpmiInterface
                    std::vector<std::uint8_t>& data) override;
 
   private:
-    const internal::Sys* sys;
+    const std::unique_ptr<internal::Sys> sys;
     /** TODO: Use a smart file descriptor when it's ready.  Until then only
      * allow moving this object.
      */
