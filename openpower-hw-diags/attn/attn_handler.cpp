@@ -53,8 +53,6 @@ void attnHandler(Config* i_config)
 
     uint32_t isr_val, isr_mask;
 
-    std::stringstream ss; // for trace messages
-
     // loop through processors looking for active attentions
     trace<level::INFO>("Attention handler started");
 
@@ -68,37 +66,37 @@ void attnHandler(Config* i_config)
             // Use PIB target to determine if a processor is enabled
             char path[16];
             sprintf(path, "/proc%d/pib", proc);
-            pdbg_target* attnTarget = pdbg_target_from_path(nullptr, path);
+            pdbg_target* pibTarget = pdbg_target_from_path(nullptr, path);
 
             // sanity check
-            if (nullptr == attnTarget)
+            if (nullptr == pibTarget)
             {
                 trace<level::INFO>("pib path or target not found");
                 continue;
             }
 
-            if (PDBG_TARGET_ENABLED == pdbg_target_probe(attnTarget))
+            // check if pib target is enabled
+            if (PDBG_TARGET_ENABLED == pdbg_target_probe(pibTarget))
             {
                 // The processor FSI target is required for CFAM read
                 sprintf(path, "/proc%d/fsi", proc);
-                attnTarget = pdbg_target_from_path(nullptr, path);
+                pdbg_target* fsiTarget = pdbg_target_from_path(nullptr, path);
 
                 // sanity check
-                if (nullptr == attnTarget)
+                if (nullptr == fsiTarget)
                 {
                     trace<level::INFO>("fsi path or target not found");
                     continue;
                 }
 
-                // trace fsi path
-                ss.str(std::string()); // clear stream
-                ss << "target - " << path;
-                trace<level::INFO>(ss.str().c_str());
+                // trace the proc number
+                std::string traceMsg = "proc: " + std::to_string(proc);
+                trace<level::INFO>(traceMsg.c_str());
 
                 isr_val = 0xffffffff; // invalid isr value
 
                 // get active attentions on processor
-                if (RC_SUCCESS != fsi_read(attnTarget, 0x1007, &isr_val))
+                if (RC_SUCCESS != fsi_read(fsiTarget, 0x1007, &isr_val))
                 {
                     // log cfam read error
                     trace<level::INFO>("Error! cfam read 0x1007 FAILED");
@@ -111,17 +109,17 @@ void attnHandler(Config* i_config)
                 }
                 else
                 {
-                    // trace isr
-                    ss.str(std::string());           // clear stream
-                    ss << std::hex << std::showbase; // trace as hex vals
-                    ss << "cfam 0x1007 = " << std::setw(8) << std::setfill('0')
-                       << isr_val;
-                    trace<level::INFO>(ss.str().c_str());
+                    // trace isr value
+                    std::stringstream ssIsr;
+                    ssIsr << "cfam 0x1007 = 0x" << std::setw(8)
+                          << std::setfill('0') << std::hex << isr_val;
+                    std::string strobjIsr = ssIsr.str();
+                    trace<level::INFO>(strobjIsr.c_str());
 
                     isr_mask = 0xffffffff; // invalid isr mask
 
                     // get interrupt enabled special attentions mask
-                    if (RC_SUCCESS != fsi_read(attnTarget, 0x100d, &isr_mask))
+                    if (RC_SUCCESS != fsi_read(fsiTarget, 0x100d, &isr_mask))
                     {
                         // log cfam read error
                         trace<level::INFO>("Error! cfam read 0x100d FAILED");
@@ -134,12 +132,12 @@ void attnHandler(Config* i_config)
                     }
                     else
                     {
-                        // trace true-mask
-                        ss.str(std::string());           // clear stream
-                        ss << std::hex << std::showbase; // trace as hex vals
-                        ss << "cfam 0x100d = " << std::setw(8)
-                           << std::setfill('0') << isr_mask;
-                        trace<level::INFO>(ss.str().c_str());
+                        // trace true mask
+                        std::stringstream ssMask;
+                        ssMask << "cfam 0x100d = 0x" << std::setw(8)
+                               << std::setfill('0') << std::hex << isr_mask;
+                        std::string strobjMask = ssMask.str();
+                        trace<level::INFO>(strobjMask.c_str());
 
                         // SBE vital attention active and not masked?
                         if (true == activeAttn(isr_val, isr_mask, SBE_ATTN))
@@ -167,8 +165,8 @@ void attnHandler(Config* i_config)
                         }
                     } // cfam 0x100d valid
                 }     // cfam 0x1007 valid
-            }         // proc target enabled
-        }             // fsi target enabled
+            }         // fsi target enabled
+        }             // pib target enabled
     }                 // next processor
 
     // convert to heap, highest priority is at front
@@ -270,13 +268,16 @@ int handleSpecial(Attention* i_attention)
     {
         TiDataArea* tiDataArea = (TiDataArea*)tiInfo;
 
-        // trace a few known TI data area values
-        std::stringstream ss;
-        ss << std::hex << std::showbase;
+        std::stringstream ss; // string stream object for tracing
+        std::string strobj;   // string object for tracing
 
-        ss << "TI data command = " << (int)tiDataArea->command;
-        trace<level::INFO>(ss.str().c_str());
-        ss.str(std::string());
+        // trace a few known TI data area values
+        ss.str(std::string()); // empty the stream
+        ss.clear();            // clear the stream
+        ss << "TI data command = 0x" << std::setw(2) << std::setfill('0')
+           << std::hex << (int)tiDataArea->command;
+        strobj = ss.str();
+        trace<level::INFO>(strobj.c_str());
 
         // Another check for valid TI Info since it has been seen that
         // tiInfo[0] != 0 but TI info is not valid
@@ -285,18 +286,27 @@ int handleSpecial(Attention* i_attention)
             tiInfoValid = true;
 
             // trace some more data since TI info appears valid
-            ss << "TI data hb_terminate_type = "
+            ss.str(std::string()); // empty the stream
+            ss.clear();            // clear the stream
+            ss << "TI data hb_terminate_type = 0x" << std::setw(2)
+               << std::setfill('0') << std::hex
                << (int)tiDataArea->hbTerminateType;
-            trace<level::INFO>(ss.str().c_str());
-            ss.str(std::string());
+            strobj = ss.str();
+            trace<level::INFO>(strobj.c_str());
 
-            ss << "TI data SRC format = " << (int)tiDataArea->srcFormat;
-            trace<level::INFO>(ss.str().c_str());
-            ss.str(std::string());
+            ss.str(std::string()); // empty the stream
+            ss.clear();            // clear the stream
+            ss << "TI data SRC format = 0x" << std::setw(2) << std::setfill('0')
+               << std::hex << (int)tiDataArea->srcFormat;
+            strobj = ss.str();
+            trace<level::INFO>(strobj.c_str());
 
-            ss << "TI data source = " << (int)tiDataArea->source;
-            trace<level::INFO>(ss.str().c_str());
-            ss.str(std::string());
+            ss.str(std::string()); // empty the stream
+            ss.clear();            // clear the stream
+            ss << "TI data source = 0x" << std::setw(2) << std::setfill('0')
+               << std::hex << (int)tiDataArea->source;
+            strobj = ss.str();
+            trace<level::INFO>(strobj.c_str());
 
             if (true == (i_attention->getConfig()->getFlag(enTerminate)))
             {
@@ -400,7 +410,8 @@ bool activeAttn(uint32_t i_val, uint32_t i_mask, uint32_t i_attn)
             }
         }
 
-        trace<level::INFO>(ss.str().c_str()); // commit trace stream
+        std::string strobj = ss.str();      // ss.str() is temporary
+        trace<level::INFO>(strobj.c_str()); // commit trace stream
     }
 
     return rc;

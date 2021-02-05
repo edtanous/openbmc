@@ -28,10 +28,9 @@ int tiHandler(TiDataArea* i_tiDataArea)
     if (nullptr != i_tiDataArea)
     {
         // HB v. PHYP TI logic: Only hosboot will fill in hbTerminateType
-        // and it will be non-zero. Only hostboot will fill out source and it
-        // it will be non-zero. Only PHYP will fill in srcFormat and it will
-        // be non-zero.
-        // source and only PHYP will fill in srcFormat.
+        // and it will be non-zero. Only hostboot will fill out source and
+        // it it will be non-zero. Only PHYP will fill in srcFormat and it
+        // will be non-zero.
         if ((0 == i_tiDataArea->hbTerminateType) &&
             (0 == i_tiDataArea->source) && (0 != i_tiDataArea->srcFormat))
         {
@@ -121,36 +120,52 @@ void handleHbTi(TiDataArea* i_tiDataArea)
     // handle specific hostboot reason codes
     if (nullptr != i_tiDataArea)
     {
-        std::stringstream ss;
-        ss << std::hex << std::showbase;
+        std::stringstream ss; // stream object for tracing
+        std::string strobj;   // string object for tracing
 
         switch (i_tiDataArea->hbTerminateType)
         {
             case TI_WITH_PLID:
             case TI_WITH_EID:
-                ss << "TI with PLID/EID: " << be32toh(i_tiDataArea->asciiData1);
-                trace<level::INFO>(ss.str().c_str());
+
+                // trace this value
+                ss.str(std::string()); // empty the stream
+                ss.clear();            // clear the stream
+                ss << "TI with PLID/EID: " << std::hex << std::showbase
+                   << std::setw(8) << std::setfill('0')
+                   << be32toh(i_tiDataArea->asciiData1);
+                strobj = ss.str();
+                trace<level::INFO>(strobj.c_str());
+
+                // see if HB dump is requested
                 if (0 == i_tiDataArea->hbDumpFlag)
                 {
                     hbDumpRequested = false; // no HB dump requested
                 }
                 break;
             case TI_WITH_SRC:
-                // SRC is byte 2 and 3 of 4 byte srcWord12HbWord0
-                uint16_t hbSrc = be32toh(i_tiDataArea->srcWord12HbWord0);
+                // Reason code is byte 2 and 3 of 4 byte srcWord12HbWord0
+                uint16_t reasonCode = be32toh(i_tiDataArea->srcWord12HbWord0);
 
-                // trace some info
-                ss << "TI with SRC: " << (int)hbSrc;
-                trace<level::INFO>(ss.str().c_str());
-                ss.str(std::string()); // clear stream
+                // trace this value
+                ss.str(std::string()); // empty the stream
+                ss.clear();            // clear the stream
+                ss << "TI with SRC: " << std::hex << std::showbase
+                   << std::setw(4) << std::setfill('0') << (int)reasonCode;
+                strobj = ss.str();
+                trace<level::INFO>(strobj.c_str());
 
-                switch (hbSrc)
+                switch (reasonCode)
                 {
                     case HB_SRC_SHUTDOWN_REQUEST:
                         trace<level::INFO>("shutdown request");
-                        generatePel = false;
+                        generatePel     = false;
+                        hbDumpRequested = false;
                         break;
                     case HB_SRC_KEY_TRANSITION:
+                        // Note: Should never see this so lets leave
+                        // hbDumpRequested == true so we can figure out why
+                        // we are here.
                         trace<level::INFO>("key transition");
                         terminateHost = false;
                         break;

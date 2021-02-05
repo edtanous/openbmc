@@ -129,9 +129,9 @@ void createFFDCTraceFiles(std::vector<util::FFDCFile>& i_files)
         }
         catch (const std::exception& e)
         {
-            std::stringstream ss;
-            ss << "createFFDCFiles: " << e.what();
-            trace<level::INFO>(ss.str().c_str());
+            std::string traceMessage =
+                "createFFDCTraceFiles: " + std::string(e.what());
+            trace<level::INFO>(traceMessage.c_str());
         }
     }
 }
