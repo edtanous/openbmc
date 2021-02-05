@@ -15,6 +15,12 @@ void trace<INFO>(const char* i_message)
     phosphor::logging::log<phosphor::logging::level::INFO>(i_message);
 }
 
+template <>
+void trace<ERROR>(const char* i_message)
+{
+    phosphor::logging::log<phosphor::logging::level::ERR>(i_message);
+}
+
 /** @brief Tuple containing information about ffdc files */
 using FFDCTuple =
     std::tuple<util::FFDCFormat, uint8_t, uint8_t, sdbusplus::message::unix_fd>;
@@ -56,8 +62,17 @@ util::FFDCFile createFFDCRawFile(void* i_buffer, size_t i_size)
     util::FFDCFile file{util::FFDCFormat::Custom};
 
     // Write buffer to file and then reset file description file offset
-    int fd = file.getFileDescriptor();
-    write(fd, static_cast<char*>(i_buffer), i_size);
+    int fd          = file.getFileDescriptor();
+    size_t numBytes = write(fd, static_cast<char*>(i_buffer), i_size);
+    if (i_size != numBytes)
+    {
+        std::stringstream traceMsg;
+        traceMsg << file.getPath().c_str() << " only " << (int)numBytes
+                 << " of " << (int)i_size << " bytes written";
+        auto strobj = traceMsg.str();
+        trace<level::ERROR>(strobj.c_str());
+    }
+
     lseek(fd, 0, SEEK_SET);
 
     return file;
@@ -89,7 +104,15 @@ util::FFDCFile createFFDCTraceFile(const std::vector<std::string>& lines)
         }
 
         // write buffer to file
-        write(fd, buffer.c_str(), buffer.size());
+        size_t numBytes = write(fd, buffer.c_str(), buffer.size());
+        if (buffer.size() != numBytes)
+        {
+            std::stringstream traceMsg;
+            traceMsg << file.getPath().c_str() << " only " << (int)numBytes
+                     << " of " << (int)buffer.size() << " bytes written";
+            auto strobj = traceMsg.str();
+            trace<level::ERROR>(strobj.c_str());
+        }
     }
 
     // Seek to beginning of file so error logging system can read data
@@ -319,11 +342,22 @@ void event(EventType i_event, std::map<std::string, std::string>& i_additional,
 
                 // read information PEL into buffer
                 std::vector<uint8_t> buffer(pelSize);
-                read(pelFd, buffer.data(), buffer.size());
-                close(pelFd);
+                size_t numBytes = read(pelFd, buffer.data(), buffer.size());
+                if (buffer.size() != numBytes)
+                {
+                    std::stringstream traceMsg;
+                    traceMsg << "Error reading event log: " << (int)numBytes
+                             << " of " << (int)buffer.size() << " bytes read";
+                    auto strobj = traceMsg.str();
+                    trace<level::ERROR>(strobj.c_str());
+                }
+                else
+                {
+                    // create PEL from buffer
+                    createPelCustom(buffer, i_additional);
+                }
 
-                // create PEL from buffer
-                createPelCustom(buffer, i_additional);
+                close(pelFd);
             }
         }
     }

@@ -17,7 +17,8 @@ constexpr auto eventPelTerminate = "xyz.open_power.Attn.Error.Terminate";
 /** @brief Logging level types */
 enum level
 {
-    INFO
+    INFO,
+    ERROR
 };
 
 /** @brief Logging event types */
