@@ -89,9 +89,11 @@ void handlePhypTi(TiDataArea* i_tiDataArea)
     tiAdditionalData["Subsystem"] =
         std::to_string(static_cast<uint8_t>(pel::SubsystemID::hypervisor));
 
-    char srcChar[8];
+    // copy ascii src chars to additional data
+    char srcChar[9]; // 8 char src + null term
     memcpy(srcChar, &(i_tiDataArea->asciiData0), 4);
     memcpy(&srcChar[4], &(i_tiDataArea->asciiData1), 4);
+    srcChar[8]                   = 0;
     tiAdditionalData["SrcAscii"] = std::string{srcChar};
 
     eventTerminate(tiAdditionalData, (char*)i_tiDataArea);
