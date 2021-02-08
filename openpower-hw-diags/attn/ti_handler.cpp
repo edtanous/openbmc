@@ -43,10 +43,10 @@ int tiHandler(TiDataArea* i_tiDataArea)
     }
     else
     {
-        // TI data was not available, assume PHYP TI for now. When a host state
-        // management interface becomes availabe we may be able to make a more
-        // informed decision here.
-        handlePhypTi(i_tiDataArea);
+        // TI data was not available This should not happen since we provide
+        // a default TI info in the case where get TI info was not successful.
+        eventAttentionFail(ATTN_INFO_NULL);
+        rc = RC_NOT_HANDLED;
     }
 
     return rc;
@@ -83,19 +83,26 @@ void handlePhypTi(TiDataArea* i_tiDataArea)
     if (nullptr != i_tiDataArea)
     {
         parsePhypOpalTiInfo(tiAdditionalData, i_tiDataArea);
+
+        tiAdditionalData["Subsystem"] =
+            std::to_string(static_cast<uint8_t>(pel::SubsystemID::hypervisor));
+
+        // copy ascii src chars to additional data
+        char srcChar[9]; // 8 char src + null term
+        memcpy(srcChar, &(i_tiDataArea->asciiData0), 4);
+        memcpy(&srcChar[4], &(i_tiDataArea->asciiData1), 4);
+        srcChar[8]                   = 0;
+        tiAdditionalData["SrcAscii"] = std::string{srcChar};
+
+        // TI event
+        eventTerminate(tiAdditionalData, (char*)i_tiDataArea);
     }
-
-    tiAdditionalData["Subsystem"] =
-        std::to_string(static_cast<uint8_t>(pel::SubsystemID::hypervisor));
-
-    // copy ascii src chars to additional data
-    char srcChar[9]; // 8 char src + null term
-    memcpy(srcChar, &(i_tiDataArea->asciiData0), 4);
-    memcpy(&srcChar[4], &(i_tiDataArea->asciiData1), 4);
-    srcChar[8]                   = 0;
-    tiAdditionalData["SrcAscii"] = std::string{srcChar};
-
-    eventTerminate(tiAdditionalData, (char*)i_tiDataArea);
+    else
+    {
+        // TI data was not available This should not happen since we provide
+        // a default TI info in the case where get TI info was not successful.
+        eventAttentionFail(ATTN_INFO_NULL);
+    }
 }
 
 /**
@@ -231,19 +238,25 @@ void handleHbTi(TiDataArea* i_tiDataArea)
     if (nullptr != i_tiDataArea)
     {
         parseHbTiInfo(tiAdditionalData, i_tiDataArea);
+
+        if (true == generatePel)
+        {
+            tiAdditionalData["Subsystem"] = std::to_string(
+                static_cast<uint8_t>(pel::SubsystemID::hostboot));
+
+            char srcChar[8];
+            memcpy(srcChar, &(i_tiDataArea->srcWord12HbWord0), 4);
+            memcpy(&srcChar[4], &(i_tiDataArea->asciiData1), 4);
+            tiAdditionalData["SrcAscii"] = std::string{srcChar};
+
+            eventTerminate(tiAdditionalData, (char*)i_tiDataArea);
+        }
     }
-
-    if (true == generatePel)
+    else
     {
-        tiAdditionalData["Subsystem"] =
-            std::to_string(static_cast<uint8_t>(pel::SubsystemID::hostboot));
-
-        char srcChar[8];
-        memcpy(srcChar, &(i_tiDataArea->srcWord12HbWord0), 4);
-        memcpy(&srcChar[4], &(i_tiDataArea->asciiData1), 4);
-        tiAdditionalData["SrcAscii"] = std::string{srcChar};
-
-        eventTerminate(tiAdditionalData, (char*)i_tiDataArea);
+        // TI data was not available This should not happen since we provide
+        // a default TI info in the case where get TI info was not successful.
+        eventAttentionFail(ATTN_INFO_NULL);
     }
 }
 

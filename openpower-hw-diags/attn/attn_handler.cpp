@@ -241,6 +241,8 @@ int handleSpecial(Attention* i_attention)
     uint32_t tiInfoLen    = 0;                        // length of TI info data
     pdbg_target* attnProc = i_attention->getTarget(); // proc with attention
 
+    bool tiInfoStatic = false; // assume TI info was provided (not created)
+
     if (attnProc != nullptr)
     {
         // The processor PIB target is required for get TI info chipop
@@ -256,7 +258,8 @@ int handleSpecial(Attention* i_attention)
                 if (tiInfo == nullptr)
                 {
                     trace<level::INFO>("TI info data ptr is null after call");
-                    tiInfo = (uint8_t*)defaultPhypTiInfo;
+                    tiInfo       = (uint8_t*)defaultPhypTiInfo;
+                    tiInfoStatic = true; // using our TI info
                 }
             }
         }
@@ -345,7 +348,7 @@ int handleSpecial(Attention* i_attention)
     }
 
     // release TI data buffer
-    if (nullptr != tiInfo)
+    if ((nullptr != tiInfo) && (false == tiInfoStatic))
     {
         free(tiInfo);
     }

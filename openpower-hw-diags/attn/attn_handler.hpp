@@ -14,6 +14,13 @@ enum ReturnCodes
     RC_CFAM_ERROR
 };
 
+/** @brief Attention handler return codes */
+enum AttnCodes
+{
+    ATTN_NO_ERROR  = 0,
+    ATTN_INFO_NULL = 1
+};
+
 /** @brief Attention global status bits */
 constexpr uint32_t SBE_ATTN       = 0x00000002;
 constexpr uint32_t CHECKSTOP_ATTN = 0x40000000;

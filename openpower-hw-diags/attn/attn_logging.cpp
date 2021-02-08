@@ -329,7 +329,7 @@ void event(EventType i_event, std::map<std::string, std::string>& i_additional,
 
         // If this is a TI event we will create an additional PEL that is
         // specific to the subsystem that generated the TI.
-        if (true == tiEvent)
+        if ((true == tiEvent) && (0 != pelId))
         {
             // get file descriptor and size of information PEL
             int pelFd = getPel(pelId);
@@ -375,22 +375,27 @@ void event(EventType i_event, std::map<std::string, std::string>& i_additional,
 void eventTerminate(std::map<std::string, std::string> i_additionalData,
                     char* i_tiInfoData)
 {
-    uint32_t tiInfoSize = 56; // assume not hypervisor TI
 
-    uint8_t subsystem = std::stoi(i_additionalData["Subsystem"]);
+    uint32_t tiInfoSize = 0; // assume TI info was not available
 
-    // If hypervisor
-    if (static_cast<uint8_t>(pel::SubsystemID::hypervisor) == subsystem)
+    if (nullptr != i_tiInfoData)
     {
-        tiInfoSize = 1024; // assume hypervisor max
+        tiInfoSize = 56; // assume not hypervisor TI
 
-        // hypervisor may just want some of the data
-        if (0 == (*(i_tiInfoData + 0x09) & 0x01))
+        uint8_t subsystem = std::stoi(i_additionalData["Subsystem"]);
+
+        // If hypervisor
+        if (static_cast<uint8_t>(pel::SubsystemID::hypervisor) == subsystem)
         {
-            uint32_t* additionalLength = (uint32_t*)(i_tiInfoData + 0x50);
-            uint32_t tiAdditional      = be32toh(*additionalLength);
+            tiInfoSize = 1024; // assume hypervisor max
 
-            tiInfoSize = std::min(tiInfoSize, (84 + tiAdditional));
+            // hypervisor may just want some of the data
+            if (0 == (*(i_tiInfoData + 0x09) & 0x01))
+            {
+                uint32_t* additionalLength = (uint32_t*)(i_tiInfoData + 0x50);
+                uint32_t tiAdditional      = be32toh(*additionalLength);
+                tiInfoSize = std::min(tiInfoSize, (84 + tiAdditional));
+            }
         }
     }
 
