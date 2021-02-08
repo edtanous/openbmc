@@ -256,6 +256,7 @@ int handleSpecial(Attention* i_attention)
                 if (tiInfo == nullptr)
                 {
                     trace<level::INFO>("TI info data ptr is null after call");
+                    tiInfo = (uint8_t*)defaultPhypTiInfo;
                 }
             }
         }
