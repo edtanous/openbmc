@@ -63,17 +63,15 @@ int dbusMethod(const std::string& i_path, const std::string& i_interface,
         }
         else
         {
-            std::stringstream ss;
-            ss << "dbusMethod service not found:  " << i_path.c_str() << ", "
-               << i_interface.c_str();
-            trace<level::INFO>(ss.str().c_str());
+            std::string traceMsg =
+                "dbusMethod service not found: " + i_path + ", " + i_interface;
+            trace<level::INFO>(traceMsg.c_str());
         }
     }
     catch (const sdbusplus::exception::SdBusError& e)
     {
-        std::stringstream ss;
-        ss << "dbusMethod exception:  " << e.what();
-        trace<level::INFO>(ss.str().c_str());
+        std::string traceMsg = "dbusMethod exception: " + std::string(e.what());
+        trace<level::INFO>(traceMsg.c_str());
     }
 
     return rc;
@@ -116,9 +114,9 @@ uint32_t createPel(const std::string& i_event,
         }
         catch (const sdbusplus::exception::SdBusError& e)
         {
-            std::stringstream ss;
-            ss << "createPel exception:  " << e.what();
-            trace<level::INFO>(ss.str().c_str());
+            std::string traceMsg =
+                "createPel exception: " + std::string(e.what());
+            trace<level::INFO>(traceMsg.c_str());
         }
     }
 
@@ -170,9 +168,9 @@ void createPelRaw(const std::vector<uint8_t>& i_buffer)
         }
         catch (const sdbusplus::exception::SdBusError& e)
         {
-            std::stringstream ss;
-            ss << "createPelRaw exception:  " << e.what();
-            trace<level::INFO>(ss.str().c_str());
+            std::string traceMsg =
+                "createPelRaw exception: " + std::string(e.what());
+            trace<level::INFO>(traceMsg.c_str());
         }
     }
 }
@@ -210,9 +208,8 @@ int getPel(const uint32_t i_pelId)
         }
         catch (const sdbusplus::exception::SdBusError& e)
         {
-            std::stringstream ss;
-            ss << "getPel exception:  " << e.what();
-            trace<level::INFO>(ss.str().c_str());
+            std::string traceMsg = "getPel exception: " + std::string(e.what());
+            trace<level::INFO>(traceMsg.c_str());
         }
     }
 
