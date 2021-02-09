@@ -87,11 +87,10 @@ void handlePhypTi(TiDataArea* i_tiDataArea)
         tiAdditionalData["Subsystem"] =
             std::to_string(static_cast<uint8_t>(pel::SubsystemID::hypervisor));
 
-        // copy ascii src chars to additional data
-        char srcChar[9]; // 8 char src + null term
-        memcpy(srcChar, &(i_tiDataArea->asciiData0), 4);
-        memcpy(&srcChar[4], &(i_tiDataArea->asciiData1), 4);
-        srcChar[8]                   = 0;
+        // Copy all ascii src chars to additional data
+        char srcChar[33]; // 32 ascii chars + null term
+        memcpy(srcChar, &(i_tiDataArea->asciiData0), 32);
+        srcChar[32]                  = 0;
         tiAdditionalData["SrcAscii"] = std::string{srcChar};
 
         // TI event
@@ -244,10 +243,12 @@ void handleHbTi(TiDataArea* i_tiDataArea)
             tiAdditionalData["Subsystem"] = std::to_string(
                 static_cast<uint8_t>(pel::SubsystemID::hostboot));
 
-            char srcChar[8];
-            memcpy(srcChar, &(i_tiDataArea->srcWord12HbWord0), 4);
-            memcpy(&srcChar[4], &(i_tiDataArea->asciiData1), 4);
-            tiAdditionalData["SrcAscii"] = std::string{srcChar};
+            // Translate hex src value to ascii. This results in an 8 character
+            // SRC (hostboot SRC is 32 bits)
+            std::stringstream src;
+            src << std::setw(8) << std::setfill('0') << std::hex
+                << be32toh(i_tiDataArea->srcWord12HbWord0);
+            tiAdditionalData["SrcAscii"] = src.str();
 
             eventTerminate(tiAdditionalData, (char*)i_tiDataArea);
         }

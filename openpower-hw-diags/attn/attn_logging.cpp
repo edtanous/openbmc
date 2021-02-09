@@ -222,12 +222,19 @@ void createPelCustom(std::vector<uint8_t>& i_rawPel,
             (uint32_t)std::stoul(i_additional["0x28 SRC Word 18"], 0, 16),
             (uint32_t)std::stoul(i_additional["0x2c SRC Word 19"], 0, 16)});
 
-        // populate hypervisor primary SRC
+        // Populate phyp primary SRC
+
+        // char array for raw pel src
         std::array<char, pel::asciiStringSize> srcChars{'0'};
+
+        // src from TI info
         std::string srcString = i_additional["SrcAscii"];
+
+        // copy from string to char array
         srcString.copy(srcChars.data(),
                        std::min(srcString.size(), pel::asciiStringSize), 0);
-        tiPel->setAsciiString(srcChars);
+
+        tiPel->setAsciiString(srcChars); // pel object src is char array
     }
     else
     {
@@ -245,12 +252,19 @@ void createPelCustom(std::vector<uint8_t>& i_rawPel,
             (uint32_t)std::stoul(i_additional["0x28 HB Word 7"], 0, 16),
             (uint32_t)std::stoul(i_additional["0x2c HB Word 8"], 0, 16)});
 
-        // populate hostboot primary SRC
+        // Populate hostboot primary SRC
+
+        // char array for raw pel src
         std::array<char, pel::asciiStringSize> srcChars{'0'};
-        std::string srcString = i_additional["0x30 error_data"];
+
+        // src from TI info
+        std::string srcString = i_additional["SrcAscii"];
+
+        // copy from string to char array
         srcString.copy(srcChars.data(),
                        std::min(srcString.size(), pel::asciiStringSize), 0);
-        tiPel->setAsciiString(srcChars);
+
+        tiPel->setAsciiString(srcChars); // pel object src is char array
     }
 
     // set severity, event type and action flags
