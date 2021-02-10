@@ -12,6 +12,13 @@ void trace<INFO>(const char* i_message)
     std::cout << "trace: " << i_message << std::endl;
 }
 
+/** @brief Log message of type ERROR using stdout */
+template <>
+void trace<ERROR>(const char* i_message)
+{
+    std::cout << "error: " << i_message << std::endl;
+}
+
 void eventAttentionFail(int i_error)
 {
     std::cout << "event: attention fail" << i_error << std::endl;
