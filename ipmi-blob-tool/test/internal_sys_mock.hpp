@@ -2,7 +2,7 @@
 
 #include <unistd.h>
 
-#include <ipmiblob/internal/sys.hpp>
+#include <ipmiblob/internal/sys_interface.hpp>
 
 #include <gmock/gmock.h>
 
