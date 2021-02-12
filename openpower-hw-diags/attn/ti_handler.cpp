@@ -375,11 +375,11 @@ bool autoRebootEnabled()
         reply.read(result);
         autoReboot = std::get<bool>(result);
     }
-    catch (const sdbusplus::exception::SdBusError& ec)
+    catch (const sdbusplus::exception::SdBusError& e)
     {
-        std::string traceMessage =
-            "Error in AutoReboot Get: " + std::string(ec.what());
-        trace<level::INFO>(traceMessage.c_str());
+        trace<level::INFO>("autoRebootEnbabled exception");
+        std::string traceMsg = std::string(e.what(), maxTraceLen);
+        trace<level::ERROR>(traceMsg.c_str());
     }
 
     return autoReboot;

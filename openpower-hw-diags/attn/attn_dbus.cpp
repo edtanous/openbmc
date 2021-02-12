@@ -63,15 +63,19 @@ int dbusMethod(const std::string& i_path, const std::string& i_interface,
         }
         else
         {
-            std::string traceMsg =
-                "dbusMethod service not found: " + i_path + ", " + i_interface;
-            trace<level::INFO>(traceMsg.c_str());
+            // This trace will be picked up in event log
+            trace<level::INFO>("dbusMethod service not found");
+            std::string traceMsgPath = std::string(i_path, maxTraceLen);
+            trace<level::INFO>(traceMsgPath.c_str());
+            std::string traceMsgIface = std::string(i_interface, maxTraceLen);
+            trace<level::INFO>(traceMsgIface.c_str());
         }
     }
     catch (const sdbusplus::exception::SdBusError& e)
     {
-        std::string traceMsg = "dbusMethod exception: " + std::string(e.what());
-        trace<level::INFO>(traceMsg.c_str());
+        trace<level::INFO>("dbusMethod exception");
+        std::string traceMsg = std::string(e.what(), maxTraceLen);
+        trace<level::ERROR>(traceMsg.c_str());
     }
 
     return rc;
@@ -114,9 +118,9 @@ uint32_t createPel(const std::string& i_event,
         }
         catch (const sdbusplus::exception::SdBusError& e)
         {
-            std::string traceMsg =
-                "createPel exception: " + std::string(e.what());
-            trace<level::INFO>(traceMsg.c_str());
+            trace<level::INFO>("createPel exception");
+            std::string traceMsg = std::string(e.what(), maxTraceLen);
+            trace<level::ERROR>(traceMsg.c_str());
         }
     }
 
@@ -168,9 +172,9 @@ void createPelRaw(const std::vector<uint8_t>& i_buffer)
         }
         catch (const sdbusplus::exception::SdBusError& e)
         {
-            std::string traceMsg =
-                "createPelRaw exception: " + std::string(e.what());
-            trace<level::INFO>(traceMsg.c_str());
+            trace<level::INFO>("createPelRaw exception");
+            std::string traceMsg = std::string(e.what(), maxTraceLen);
+            trace<level::ERROR>(traceMsg.c_str());
         }
     }
 }
@@ -208,8 +212,9 @@ int getPel(const uint32_t i_pelId)
         }
         catch (const sdbusplus::exception::SdBusError& e)
         {
-            std::string traceMsg = "getPel exception: " + std::string(e.what());
-            trace<level::INFO>(traceMsg.c_str());
+            trace<level::INFO>("getPel exception");
+            std::string traceMsg = std::string(e.what(), maxTraceLen);
+            trace<level::ERROR>(traceMsg.c_str());
         }
     }
 

@@ -10,6 +10,8 @@
 namespace attn
 {
 
+constexpr int maxTraceLen = 64; // characters
+
 constexpr auto pathLogging   = "/xyz/openbmc_project/logging";
 constexpr auto levelPelError = "xyz.openbmc_project.Logging.Entry.Level.Error";
 constexpr auto eventPelTerminate = "xyz.open_power.Attn.Error.Terminate";
