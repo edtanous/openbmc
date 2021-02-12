@@ -45,7 +45,7 @@ int tiHandler(TiDataArea* i_tiDataArea)
     {
         // TI data was not available This should not happen since we provide
         // a default TI info in the case where get TI info was not successful.
-        eventAttentionFail(ATTN_INFO_NULL);
+        eventAttentionFail((int)AttnSection::tiHandler | ATTN_INFO_NULL);
         rc = RC_NOT_HANDLED;
     }
 
@@ -100,7 +100,7 @@ void handlePhypTi(TiDataArea* i_tiDataArea)
     {
         // TI data was not available This should not happen since we provide
         // a default TI info in the case where get TI info was not successful.
-        eventAttentionFail(ATTN_INFO_NULL);
+        eventAttentionFail((int)AttnSection::handlePhypTi | ATTN_INFO_NULL);
     }
 }
 
@@ -257,7 +257,7 @@ void handleHbTi(TiDataArea* i_tiDataArea)
     {
         // TI data was not available This should not happen since we provide
         // a default TI info in the case where get TI info was not successful.
-        eventAttentionFail(ATTN_INFO_NULL);
+        eventAttentionFail((int)AttnSection::handleHbTi | ATTN_INFO_NULL);
     }
 }
 

@@ -100,7 +100,8 @@ void attnHandler(Config* i_config)
                 {
                     // log cfam read error
                     trace<level::INFO>("Error! cfam read 0x1007 FAILED");
-                    eventAttentionFail(RC_CFAM_ERROR);
+                    eventAttentionFail((int)AttnSection::attnHandler |
+                                       ATTN_PDBG_CFAM);
                 }
                 else if (0xffffffff == isr_val)
                 {
@@ -123,7 +124,8 @@ void attnHandler(Config* i_config)
                     {
                         // log cfam read error
                         trace<level::INFO>("Error! cfam read 0x100d FAILED");
-                        eventAttentionFail(RC_CFAM_ERROR);
+                        eventAttentionFail((int)AttnSection::attnHandler |
+                                           ATTN_PDBG_CFAM);
                     }
                     else if (0xffffffff == isr_mask)
                     {
@@ -292,9 +294,8 @@ int handleSpecial(Attention* i_attention)
             // trace some more data since TI info appears valid
             ss.str(std::string()); // empty the stream
             ss.clear();            // clear the stream
-            ss << "TI data hb_terminate_type = 0x" << std::setw(2)
-               << std::setfill('0') << std::hex
-               << (int)tiDataArea->hbTerminateType;
+            ss << "TI data term-type = 0x" << std::setw(2) << std::setfill('0')
+               << std::hex << (int)tiDataArea->hbTerminateType;
             strobj = ss.str();
             trace<level::INFO>(strobj.c_str());
 
@@ -337,8 +338,6 @@ int handleSpecial(Attention* i_attention)
         // if configured to handle TI as default special attention
         else
         {
-            trace<level::INFO>("assuming TI");
-
             if (true == (i_attention->getConfig()->getFlag(enTerminate)))
             {
                 // Call TI special attention handler

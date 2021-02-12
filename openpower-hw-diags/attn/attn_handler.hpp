@@ -14,11 +14,22 @@ enum ReturnCodes
     RC_CFAM_ERROR
 };
 
-/** @brief Attention handler return codes */
+/** @brief Code seciton for error reporing */
+enum class AttnSection
+{
+    reserved     = 0x0000,
+    attnHandler  = 0x0100,
+    tiHandler    = 0x0200,
+    handlePhypTi = 0x0300,
+    handleHbTi   = 0x0400
+};
+
+/** @brief Attention handler error reason codes */
 enum AttnCodes
 {
     ATTN_NO_ERROR  = 0,
-    ATTN_INFO_NULL = 1
+    ATTN_INFO_NULL = 1,
+    ATTN_PDBG_CFAM = 2
 };
 
 /** @brief Attention global status bits */
@@ -44,14 +55,14 @@ constexpr uint8_t defaultPhypTiInfo[0x58] = {
  * @brief The main attention handler logic
  *
  * Check each processor for active attentions of type SBE Vital (vital),
- * System Checkstop (checkstop) and Special Attention (special) and
- * handle each as follows:
+ * System Checkstop (checkstop) and Special Attention (special) and handle
+ * each as follows:
  *
  * checkstop: Call hardware error analyzer
  * vital:     TBD
  * special:   Determine if the special attention is a Breakpoint (BP),
- *            Terminate Immediately (TI) or CoreCodeToSp (corecode). For
- * each special attention type, do the following:
+ *            Terminate Immediately (TI) or CoreCodeToSp (corecode). For each
+ *            special attention type, do the following:
  *
  *            BP:          Notify Cronus
  *            TI:          Start host diagnostics mode systemd unit
