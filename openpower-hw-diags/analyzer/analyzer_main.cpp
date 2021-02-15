@@ -2,6 +2,7 @@
 #include <libpdbg.h>
 #include <unistd.h>
 
+#include <analyzer/service_data.hpp>
 #include <hei_main.hpp>
 #include <phosphor-logging/log.hpp>
 #include <util/pdbg.hpp>
@@ -30,9 +31,11 @@ void initializeIsolator(std::vector<libhei::Chip>& o_chips);
  * @brief Will create and submit a PEL using the given data.
  * @param i_rootCause A signature defining the attention root cause.
  * @param i_isoData   The data gathered during isolation (for FFDC).
+ * @param i_servData  Data regarding service actions gathered during analysis.
  */
 void createPel(const libhei::Signature& i_rootCause,
-               const libhei::IsolationData& i_isoData);
+               const libhei::IsolationData& i_isoData,
+               const ServiceData& i_servData);
 
 //------------------------------------------------------------------------------
 
@@ -139,10 +142,14 @@ bool __analyze(const libhei::IsolationData& i_isoData)
                    util::pdbg::getPath(rootCause.getChip()),
                    rootCause.toUint32(), __attn(rootCause.getAttnType()));
 
-        // TODO: Perform service actions based on the root cause.
+        // TODO: Perform service actions based on the root cause. The default
+        // callout if none other exist is level 2 support.
+        ServiceData servData{};
+        servData.addCallout(std::make_shared<ProcedureCallout>(
+            ProcedureCallout::NEXTLVL, Callout::Priority::HIGH));
 
         // Create and commit a PEL.
-        createPel(rootCause, i_isoData);
+        createPel(rootCause, i_isoData, servData);
     }
 
     return attnFound;

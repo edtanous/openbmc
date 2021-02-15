@@ -1,5 +1,6 @@
 #include <unistd.h>
 
+#include <analyzer/service_data.hpp>
 #include <analyzer/util.hpp>
 #include <hei_main.hpp>
 #include <phosphor-logging/elog.hpp>
@@ -86,6 +87,24 @@ void __setSrc(const libhei::Signature& i_rootCause,
     io_logData["SRC6"] = std::to_string(word6);
     io_logData["SRC7"] = std::to_string(word7);
     io_logData["SRC8"] = std::to_string(word8);
+}
+
+//------------------------------------------------------------------------------
+
+void __addCalloutList(const ServiceData& i_servData,
+                      std::vector<util::FFDCFile>& io_userDataFiles)
+{
+    // Get the JSON output for the callout list.
+    nlohmann::json json;
+    i_servData.getCalloutList(json);
+
+    // Create a new entry for the user data section containing the callout list.
+    io_userDataFiles.emplace_back(util::FFDCFormat::JSON, FFDC_CALLOUTS,
+                                  FFDC_VERSION1);
+
+    // Use a file stream to write the JSON to file.
+    std::ofstream o{io_userDataFiles.back().getPath()};
+    o << json;
 }
 
 //------------------------------------------------------------------------------
@@ -236,7 +255,8 @@ std::string __getMessageSeverity(bool i_isCheckstop)
 //------------------------------------------------------------------------------
 
 void createPel(const libhei::Signature& i_rootCause,
-               const libhei::IsolationData& i_isoData)
+               const libhei::IsolationData& i_isoData,
+               const ServiceData& i_servData)
 {
     // The message registry will require additional log data to fill in keywords
     // and additional log data.
@@ -254,6 +274,9 @@ void createPel(const libhei::Signature& i_rootCause,
 
     // Set words 6-9 of the SRC.
     __setSrc(i_rootCause, logData);
+
+    // Add the list of callouts to the PEL.
+    __addCalloutList(i_servData, userDataFiles);
 
     // Capture the complete signature list.
     __captureSignatureList(i_isoData, userDataFiles);
