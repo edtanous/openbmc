@@ -8,6 +8,7 @@ subdir('end2end')
 tests = [
   'hello-world',
   'bin_stream_test',
+  'service_data_test',
 ]
 
 gtest = dependency('gtest', main : true, required : false, method : 'system')
