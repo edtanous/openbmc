@@ -148,4 +148,50 @@ class ProcedureCallout : public Callout
     }
 };
 
+/**
+ * @brief Data regarding required service actions based on the hardware error
+ *        analysis.
+ */
+class ServiceData
+{
+  public:
+    /** @brief Default constructor. */
+    ServiceData() = default;
+
+    /** @brief Destructor. */
+    ~ServiceData() = default;
+
+    /** @brief Copy constructor. */
+    ServiceData(const ServiceData&) = default;
+
+    /** @brief Assignment operator. */
+    ServiceData& operator=(const ServiceData&) = default;
+
+  private:
+    /** The list of callouts that will be added to a PEL. */
+    std::vector<std::shared_ptr<Callout>> iv_calloutList;
+
+  public:
+    /** Add a callout to the callout list. */
+    void addCallout(const std::shared_ptr<Callout>& i_callout)
+    {
+        iv_calloutList.push_back(i_callout);
+    }
+
+    /**
+     * @brief Iterates the callout list and returns the json attached to each
+     *        callout in the list.
+     * @param o_json The returned json data.
+     */
+    void getCalloutList(nlohmann::json& o_json) const
+    {
+        o_json.clear(); // Ensure we are starting with a clean list.
+
+        for (const auto& c : iv_calloutList)
+        {
+            c->getJson(o_json);
+        }
+    }
+};
+
 } // namespace analyzer

@@ -8,15 +8,17 @@ using namespace analyzer;
 
 TEST(SericeData, TestSet1)
 {
-    HardwareCallout c1{"Test location 1", Callout::Priority::HIGH};
-    HardwareCallout c2{"Test location 2", Callout::Priority::MED_A};
-    ProcedureCallout c3{ProcedureCallout::NEXTLVL, Callout::Priority::LOW};
+    ServiceData sd{};
+
+    sd.addCallout(std::make_shared<HardwareCallout>("Test location 1",
+                                                    Callout::Priority::HIGH));
+    sd.addCallout(std::make_shared<HardwareCallout>("Test location 2",
+                                                    Callout::Priority::MED_A));
+    sd.addCallout(std::make_shared<ProcedureCallout>(ProcedureCallout::NEXTLVL,
+                                                     Callout::Priority::LOW));
 
     nlohmann::json j{};
-
-    c1.getJson(j);
-    c2.getJson(j);
-    c3.getJson(j);
+    sd.getCalloutList(j);
 
     // Create a RAW string containing what we should expect in the JSON output.
     std::string s = R"([
