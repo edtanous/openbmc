@@ -246,8 +246,8 @@ void handleHbTi(TiDataArea* i_tiDataArea)
             // Translate hex src value to ascii. This results in an 8 character
             // SRC (hostboot SRC is 32 bits)
             std::stringstream src;
-            src << std::setw(8) << std::setfill('0') << std::hex
-                << be32toh(i_tiDataArea->srcWord12HbWord0);
+            src << std::setw(8) << std::setfill('0') << std::uppercase
+                << std::hex << be32toh(i_tiDataArea->srcWord12HbWord0);
             tiAdditionalData["SrcAscii"] = src.str();
 
             eventTerminate(tiAdditionalData, (char*)i_tiDataArea);

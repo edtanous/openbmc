@@ -4,6 +4,7 @@
 #include <attn/attention.hpp>
 #include <attn/attn_common.hpp>
 #include <attn/attn_config.hpp>
+#include <attn/attn_dbus.hpp>
 #include <attn/attn_handler.hpp>
 #include <attn/attn_logging.hpp>
 #include <attn/bp_handler.hpp>
@@ -257,10 +258,33 @@ int handleSpecial(Attention* i_attention)
             if (PDBG_TARGET_ENABLED == pdbg_target_probe(tiInfoTarget))
             {
                 sbe_mpipl_get_ti_info(tiInfoTarget, &tiInfo, &tiInfoLen);
-                if (tiInfo == nullptr)
+
+                // If TI info not available use default based on host state
+                if (nullptr == tiInfo)
                 {
-                    trace<level::INFO>("TI info data ptr is null after call");
-                    tiInfo       = (uint8_t*)defaultPhypTiInfo;
+                    trace<level::INFO>("TI info data ptr is invalid");
+
+                    HostRunningState runningState = hostRunningState();
+                    std::string stateString       = "host state unknown";
+
+                    if ((HostRunningState::Started == runningState) ||
+                        (HostRunningState::Unknown == runningState))
+                    {
+                        if (HostRunningState::Started == runningState)
+                        {
+                            stateString = "host started";
+                        }
+                        tiInfo = (uint8_t*)defaultPhypTiInfo;
+                    }
+                    else
+                    {
+                        stateString = "host not started";
+                        tiInfo      = (uint8_t*)defaultHbTiInfo;
+                    }
+
+                    // trace host state
+                    trace<level::INFO>(stateString.c_str());
+
                     tiInfoStatic = true; // using our TI info
                 }
             }

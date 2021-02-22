@@ -8,6 +8,13 @@
 namespace attn
 {
 
+enum class HostRunningState
+{
+    Unknown,
+    NotStarted,
+    Started
+};
+
 /**
  * Create a PEL for the specified event type
  *
@@ -45,5 +52,15 @@ void createPelRaw(const std::vector<uint8_t>& i_buffer);
  * @return file descriptor or -1 if error
  */
 int getPel(const uint32_t i_pelId);
+
+/**
+ * Get the host running state
+ *
+ * Use host boot progress to determine if a host has been started. If host
+ * boot progress can not be determined then host state will be unknown.
+ *
+ * @return HostType == "Unknown", "Started or "NotStarted"
+ */
+HostRunningState hostRunningState();
 
 } // namespace attn

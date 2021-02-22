@@ -1,4 +1,7 @@
+#include <attn_dbus.hpp>
+#include <attn_handler.hpp>
 #include <attn_logging.hpp>
+#include <xyz/openbmc_project/State/Boot/Progress/server.hpp>
 
 #include <string>
 #include <vector>
@@ -16,14 +19,16 @@ namespace attn
  * @param i_interface - dbus method interface
  * @param i_function - dbus interface function
  * @param o_method - method that is created
+ * @param i_extended - optional for extended methods
  * @return non-zero if error
  *
  **/
 int dbusMethod(const std::string& i_path, const std::string& i_interface,
                const std::string& i_function,
-               sdbusplus::message::message& o_method)
+               sdbusplus::message::message& o_method,
+               const std::string& i_extended = "")
 {
-    int rc = 1; // assume error
+    int rc = RC_DBUS_ERROR; // assume error
 
     try
     {
@@ -54,12 +59,23 @@ int dbusMethod(const std::string& i_path, const std::string& i_interface,
         {
             auto service = responseFindService.begin()->first;
 
-            // return the method
-            o_method =
-                bus.new_method_call(service.c_str(), i_path.c_str(),
-                                    i_interface.c_str(), i_function.c_str());
+            // Some methods (e.g. get attribute) take an extended parameter
+            if (i_extended == "")
+            {
+                // return the method
+                o_method = bus.new_method_call(service.c_str(), i_path.c_str(),
+                                               i_interface.c_str(),
+                                               i_function.c_str());
+            }
+            else
+            {
+                // return extended method
+                o_method =
+                    bus.new_method_call(service.c_str(), i_path.c_str(),
+                                        i_extended.c_str(), i_function.c_str());
+            }
 
-            rc = 0;
+            rc = RC_SUCCESS;
         }
         else
         {
@@ -112,7 +128,7 @@ uint32_t createPel(const std::string& i_event,
             // reply will be tuple containing bmc log id, platform log id
             std::tuple<uint32_t, uint32_t> reply = {0, 0};
 
-            // parse dbus reply
+            // parse dbus response into reply
             response.read(reply);
             plid = std::get<1>(reply); // platform log id is tuple "second"
         }
@@ -205,7 +221,7 @@ int getPel(const uint32_t i_pelId)
             // reply will be a unix file descriptor
             sdbusplus::message::unix_fd reply;
 
-            // parse dbus reply
+            // parse dbus response into reply
             response.read(reply);
 
             fd = dup(reply); // need to copy (dup) the file descriptor
@@ -221,4 +237,66 @@ int getPel(const uint32_t i_pelId)
     return fd; // file descriptor or -1
 }
 
+/** @brief Get the running state of the host */
+HostRunningState hostRunningState()
+{
+    HostRunningState host = HostRunningState::Unknown;
+
+    // dbus specifics
+    constexpr auto path      = "/xyz/openbmc_project/state/host0";
+    constexpr auto interface = "xyz.openbmc_project.State.Boot.Progress";
+    constexpr auto extended  = "org.freedesktop.DBus.Properties";
+    constexpr auto function  = "Get";
+
+    sdbusplus::message::message method;
+
+    if (0 == dbusMethod(path, interface, function, method, extended))
+    {
+        try
+        {
+            // additional dbus call parameters
+            method.append(interface, "BootProgress");
+
+            // using system dbus
+            auto bus      = sdbusplus::bus::new_system();
+            auto response = bus.call(method);
+
+            // reply will be a variant
+            std::variant<std::string, bool, std::vector<uint8_t>,
+                         std::vector<std::string>>
+                reply;
+
+            // parse dbus response into reply
+            response.read(reply);
+
+            // get boot progress (string) and convert to boot stage
+            std::string bootProgress(std::get<std::string>(reply));
+
+            using BootProgress = sdbusplus::xyz::openbmc_project::State::Boot::
+                server::Progress::ProgressStages;
+
+            BootProgress stage = sdbusplus::xyz::openbmc_project::State::Boot::
+                server::Progress::convertProgressStagesFromString(bootProgress);
+
+            if ((stage == BootProgress::SystemInitComplete) ||
+                (stage == BootProgress::OSStart) ||
+                (stage == BootProgress::OSRunning))
+            {
+                host = HostRunningState::Started;
+            }
+            else
+            {
+                host = HostRunningState::NotStarted;
+            }
+        }
+        catch (const sdbusplus::exception::SdBusError& e)
+        {
+            trace<level::INFO>("hostRunningState exception");
+            std::string traceMsg = std::string(e.what(), maxTraceLen);
+            trace<level::ERROR>(traceMsg.c_str());
+        }
+    }
+
+    return host;
+}
 } // namespace attn
