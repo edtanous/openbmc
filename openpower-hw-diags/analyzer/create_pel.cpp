@@ -26,6 +26,7 @@ enum FfdcSubType_t : uint8_t
 {
     FFDC_SIGNATURES    = 0x01,
     FFDC_REGISTER_DUMP = 0x02,
+    FFDC_GUARD         = 0x03,
 
     // For the callout section, the value of '0xCA' is required per the
     // phosphor-logging openpower-pel extention spec.
@@ -100,6 +101,24 @@ void __addCalloutList(const ServiceData& i_servData,
 
     // Create a new entry for the user data section containing the callout list.
     io_userDataFiles.emplace_back(util::FFDCFormat::JSON, FFDC_CALLOUTS,
+                                  FFDC_VERSION1);
+
+    // Use a file stream to write the JSON to file.
+    std::ofstream o{io_userDataFiles.back().getPath()};
+    o << json;
+}
+
+//------------------------------------------------------------------------------
+
+void __addGuardList(const ServiceData& i_servData,
+                    std::vector<util::FFDCFile>& io_userDataFiles)
+{
+    // Get the JSON output for the guard list.
+    nlohmann::json json;
+    i_servData.getGuardList(json);
+
+    // Create a new entry for the user data section containing the guard list.
+    io_userDataFiles.emplace_back(util::FFDCFormat::JSON, FFDC_GUARD,
                                   FFDC_VERSION1);
 
     // Use a file stream to write the JSON to file.
@@ -277,6 +296,9 @@ void createPel(const libhei::Signature& i_rootCause,
 
     // Add the list of callouts to the PEL.
     __addCalloutList(i_servData, userDataFiles);
+
+    // Add the list of guard requests to the PEL.
+    __addGuardList(i_servData, userDataFiles);
 
     // Capture the complete signature list.
     __captureSignatureList(i_isoData, userDataFiles);
