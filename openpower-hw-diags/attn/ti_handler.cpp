@@ -1,4 +1,5 @@
 #include <attn/attn_common.hpp>
+#include <attn/attn_dbus.hpp>
 #include <attn/attn_handler.hpp>
 #include <attn/attn_logging.hpp>
 #include <attn/pel/pel_common.hpp>
@@ -211,55 +212,46 @@ void handleHbTi(TiDataArea* i_tiDataArea)
                         trace<level::INFO>("reason: other");
                 }
 
-                break;
+                break; // case TI_WITH_SRC
         }
     }
 
-    // gather additional data for PEL
-    std::map<std::string, std::string> tiAdditionalData;
-
-    if (nullptr != i_tiDataArea)
+    if (true == generatePel)
     {
-        parseHbTiInfo(tiAdditionalData, i_tiDataArea);
-
-        if (true == generatePel)
+        if (nullptr != i_tiDataArea)
         {
+            // gather additional data for PEL
+            std::map<std::string, std::string> tiAdditionalData;
+
+            parseHbTiInfo(tiAdditionalData, i_tiDataArea);
+
             tiAdditionalData["Subsystem"] = std::to_string(
                 static_cast<uint8_t>(pel::SubsystemID::hostboot));
 
-            // Translate hex src value to ascii. This results in an 8 character
-            // SRC (hostboot SRC is 32 bits)
+            // Translate hex src value to ascii. This results in an 8
+            // character SRC (hostboot SRC is 32 bits)
             std::stringstream src;
             src << std::setw(8) << std::setfill('0') << std::uppercase
                 << std::hex << be32toh(i_tiDataArea->srcWord12HbWord0);
             tiAdditionalData["SrcAscii"] = src.str();
 
+            // Request dump after generating event log?
+            tiAdditionalData["Dump"] =
+                (true == hbDumpRequested) ? "true" : "false";
+
+            // Generate event log
             eventTerminate(tiAdditionalData, (char*)i_tiDataArea);
         }
-    }
-    else
-    {
-        // TI data was not available This should not happen since we provide
-        // a default TI info in the case where get TI info was not successful.
-        eventAttentionFail((int)AttnSection::handleHbTi | ATTN_INFO_NULL);
+        else
+        {
+            // TI data was not available This should not happen.
+            eventAttentionFail((int)AttnSection::handleHbTi | ATTN_INFO_NULL);
+        }
     }
 
     if (true == terminateHost)
     {
-        // if hostboot dump is requested initiate dump
-        if (hbDumpRequested)
-        {
-            // Until HB dump support available just quiesce the host - once
-            // dump support is available the dump component will transition
-            // (ipl/halt) the host.
-            transitionHost(HostState::Quiesce);
-        }
-        else
-        {
-            // Quiese the host - when the host is quiesced it will either
-            // "halt" or IPL depending on autoreboot setting.
-            transitionHost(HostState::Quiesce);
-        }
+        transitionHost(HostState::Quiesce);
     }
 }
 
@@ -428,6 +420,117 @@ bool autoRebootEnabled()
     }
 
     return autoReboot;
+}
+
+/**
+ *  Callback for dump request properties change signal monitor
+ *
+ * @param[in] i_msg         Dbus message from the dbus match infrastructure
+ * @param[in] i_path        The object path we are monitoring
+ * @param[out] o_inProgress Used to break out of our dbus wait loop
+ * @reutn Always non-zero indicating no error, no cascading callbacks
+ */
+uint dumpStatusChanged(sdbusplus::message::message& i_msg, std::string i_path,
+                       bool& o_inProgress)
+{
+    // reply (msg) will be a property change message
+    std::string interface;
+    std::map<std::string, std::variant<std::string, uint8_t>> property;
+    i_msg.read(interface, property);
+
+    // looking for property Status changes
+    std::string propertyType = "Status";
+    auto dumpStatus          = property.find(propertyType);
+
+    if (dumpStatus != property.end())
+    {
+        const std::string* status =
+            std::get_if<std::string>(&(dumpStatus->second));
+
+        if ((nullptr != status) && ("xyz.openbmc_project.Common.Progress."
+                                    "OperationStatus.InProgress" != *status))
+        {
+            // dump is done, trace some info and change in progress flag
+            trace<level::INFO>(i_path.c_str());
+            trace<level::INFO>((*status).c_str());
+            o_inProgress = false;
+        }
+    }
+
+    return 1; // non-negative return code for successful callback
+}
+
+/**
+ * Register a callback for dump progress status changes
+ *
+ * @param[in] i_path The object path of the dump to monitor
+ */
+void monitorDump(const std::string& i_path)
+{
+    bool inProgress = true; // callback will update this
+
+    // setup the signal match rules and callback
+    std::string matchInterface = "xyz.openbmc_project.Common.Progress";
+    auto bus                   = sdbusplus::bus::new_system();
+
+    std::unique_ptr<sdbusplus::bus::match_t> match =
+        std::make_unique<sdbusplus::bus::match_t>(
+            bus,
+            sdbusplus::bus::match::rules::propertiesChanged(
+                i_path.c_str(), matchInterface.c_str()),
+            [&](auto& msg) {
+                return dumpStatusChanged(msg, i_path, inProgress);
+            });
+
+    // wait for dump status to be completed (complete == true)
+    trace<level::INFO>("hbdump requested");
+    while (true == inProgress)
+    {
+        bus.wait(0);
+        bus.process_discard();
+    }
+    trace<level::INFO>("hbdump completed");
+}
+
+/** Request a dump from the dump manager */
+void requestDump(const uint32_t logId)
+{
+    constexpr auto path      = "/org/openpower/dump";
+    constexpr auto interface = "xyz.openbmc_project.Dump.Create";
+    constexpr auto function  = "CreateDump";
+
+    sdbusplus::message::message method;
+
+    if (0 == dbusMethod(path, interface, function, method))
+    {
+        try
+        {
+            // dbus call arguments
+            std::map<std::string, std::string> createParams;
+            createParams["com.ibm.Dump.Create.CreateParameters.DumpType"] =
+                "com.ibm.Dump.Create.DumpType.Hostboot";
+            createParams["com.ibm.Dump.Create.CreateParameters.ErrorLogId"] =
+                std::to_string(logId);
+            method.append(createParams);
+
+            // using system dbus
+            auto bus      = sdbusplus::bus::new_system();
+            auto response = bus.call(method);
+
+            // reply will be type dbus::ObjectPath
+            sdbusplus::message::object_path reply;
+            response.read(reply);
+
+            // monitor dump progress
+            monitorDump(reply);
+        }
+        catch (const sdbusplus::exception::SdBusError& e)
+        {
+            trace<level::ERROR>("requestDump exception");
+            std::string traceMsg = std::string(e.what(), maxTraceLen);
+            trace<level::ERROR>(traceMsg.c_str());
+        }
+    }
 }
 
 } // namespace attn

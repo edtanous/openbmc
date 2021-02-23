@@ -16,6 +16,25 @@ enum class HostRunningState
 };
 
 /**
+ * Create a dbus method
+ *
+ * Find the dbus service associated with the dbus object path and create
+ * a dbus method for calling the specified dbus interface and function.
+ *
+ * @param i_path - dbus object path
+ * @param i_interface - dbus method interface
+ * @param i_function - dbus interface function
+ * @param o_method - method that is created
+ * @param i_extended - optional for extended methods
+ * @return non-zero if error
+ *
+ **/
+int dbusMethod(const std::string& i_path, const std::string& i_interface,
+               const std::string& i_function,
+               sdbusplus::message::message& o_method,
+               const std::string& i_extended = "");
+
+/**
  * Create a PEL for the specified event type
  *
  * The additional data provided in the map will be placed in a user data

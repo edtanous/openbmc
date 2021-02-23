@@ -1,8 +1,10 @@
 #include <unistd.h>
 
+#include <attn/attn_common.hpp>
 #include <attn/attn_dbus.hpp>
 #include <attn/attn_logging.hpp>
 #include <attn/pel/pel_minimal.hpp>
+#include <attn/ti_handler.hpp>
 #include <phosphor-logging/log.hpp>
 
 namespace attn
@@ -402,6 +404,18 @@ void event(EventType i_event, std::map<std::string, std::string>& i_additional,
                 }
 
                 close(pelFd);
+            }
+        }
+
+        uint8_t subsystem = std::stoi(i_additional["Subsystem"]);
+
+        // If not hypervisor TI
+        if (static_cast<uint8_t>(pel::SubsystemID::hypervisor) != subsystem)
+        {
+            // Request a dump and transition the host
+            if ("true" == i_additional["Dump"])
+            {
+                requestDump(pelId); // will not return until dump is complete
             }
         }
     }
