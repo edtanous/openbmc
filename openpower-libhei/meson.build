@@ -32,7 +32,6 @@ libhei_static = static_library('hei',
                                 install: true)
 
 install_headers(
-    'src/hei_bit_string.hpp',
     'src/hei_chip.hpp',
     'src/hei_isolation_data.hpp',
     'src/hei_main.hpp',
@@ -40,6 +39,12 @@ install_headers(
     'src/hei_types.hpp',
     'src/hei_user_interface.hpp',
     subdir : 'libhei'
+)
+
+install_headers(
+    'src/util/hei_bit_string.hpp',
+    'src/util/hei_flyweight.hpp',
+    subdir : 'libhei/util'
 )
 
 pkg_mod = import('pkgconfig')

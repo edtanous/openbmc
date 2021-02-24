@@ -1,7 +1,7 @@
 #pragma once
 
-#include <hei_bit_string.hpp>
 #include <hei_signature.hpp>
+#include <util/hei_bit_string.hpp>
 
 #include <map>
 #include <memory>

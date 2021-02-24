@@ -1,6 +1,6 @@
-#include <hei_bit_string.hpp>
 #include <hei_user_interface.hpp>
 #include <register/hei_hardware_register.hpp>
+#include <util/hei_bit_string.hpp>
 #include <util/hei_includes.hpp>
 
 namespace libhei
