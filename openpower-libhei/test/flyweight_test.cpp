@@ -34,5 +34,6 @@ TEST(FlyweightTest, TestSet1)
     ASSERT_NE(f1, f2); // Pointing to different objects
     ASSERT_EQ(f1, f3); // Pointing to the same object
 
-    ASSERT_EQ(2, foo_factory.size()); // Only two entries in the flyweight
+    ASSERT_EQ(size_t(2),
+              foo_factory.size()); // Only two entries in the flyweight
 }
