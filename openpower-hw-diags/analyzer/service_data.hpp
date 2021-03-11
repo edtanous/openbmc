@@ -1,5 +1,6 @@
 #pragma once
 
+#include <hei_main.hpp>
 #include <nlohmann/json.hpp>
 
 namespace analyzer
@@ -203,8 +204,13 @@ class Guard
 class ServiceData
 {
   public:
-    /** @brief Default constructor. */
-    ServiceData() = default;
+    /**
+     * @brief Constructor from components.
+     * @param The signature of the root cause attention.
+     */
+    explicit ServiceData(const libhei::Signature& i_rootCause) :
+        iv_rootCause(i_rootCause)
+    {}
 
     /** @brief Destructor. */
     ~ServiceData() = default;
@@ -216,6 +222,9 @@ class ServiceData
     ServiceData& operator=(const ServiceData&) = default;
 
   private:
+    /** The signature of the root cause attention. */
+    const libhei::Signature iv_rootCause;
+
     /** The list of callouts that will be added to a PEL. */
     std::vector<std::shared_ptr<Callout>> iv_calloutList;
 
@@ -225,6 +234,12 @@ class ServiceData
     std::vector<std::shared_ptr<Guard>> iv_guardList;
 
   public:
+    /** @return The signature of the root cause attention. */
+    const libhei::Signature& getRootCause() const
+    {
+        return iv_rootCause;
+    }
+
     /** Add a callout to the list. */
     void addCallout(const std::shared_ptr<Callout>& i_callout)
     {

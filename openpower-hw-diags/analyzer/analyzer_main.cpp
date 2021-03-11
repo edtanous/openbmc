@@ -29,12 +29,10 @@ void initializeIsolator(std::vector<libhei::Chip>& o_chips);
 
 /**
  * @brief Will create and submit a PEL using the given data.
- * @param i_rootCause A signature defining the attention root cause.
  * @param i_isoData   The data gathered during isolation (for FFDC).
  * @param i_servData  Data regarding service actions gathered during analysis.
  */
-void createPel(const libhei::Signature& i_rootCause,
-               const libhei::IsolationData& i_isoData,
+void createPel(const libhei::IsolationData& i_isoData,
                const ServiceData& i_servData);
 
 //------------------------------------------------------------------------------
@@ -144,12 +142,12 @@ bool __analyze(const libhei::IsolationData& i_isoData)
 
         // TODO: Perform service actions based on the root cause. The default
         // callout if none other exist is level 2 support.
-        ServiceData servData{};
+        ServiceData servData{rootCause};
         servData.addCallout(std::make_shared<ProcedureCallout>(
             ProcedureCallout::NEXTLVL, Callout::Priority::HIGH));
 
         // Create and commit a PEL.
-        createPel(rootCause, i_isoData, servData);
+        createPel(i_isoData, servData);
     }
 
     return attnFound;

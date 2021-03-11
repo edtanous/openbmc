@@ -273,8 +273,7 @@ std::string __getMessageSeverity(bool i_isCheckstop)
 
 //------------------------------------------------------------------------------
 
-void createPel(const libhei::Signature& i_rootCause,
-               const libhei::IsolationData& i_isoData,
+void createPel(const libhei::IsolationData& i_isoData,
                const ServiceData& i_servData)
 {
     // The message registry will require additional log data to fill in keywords
@@ -292,7 +291,7 @@ void createPel(const libhei::Signature& i_rootCause,
     bool isCheckstop = __isCheckstop(i_isoData);
 
     // Set words 6-9 of the SRC.
-    __setSrc(i_rootCause, logData);
+    __setSrc(i_servData.getRootCause(), logData);
 
     // Add the list of callouts to the PEL.
     __addCalloutList(i_servData, userDataFiles);
