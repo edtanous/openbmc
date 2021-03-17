@@ -65,11 +65,11 @@ bool __readProc(pdbg_target* i_procTrgt, RegisterType_t i_regType,
 
 //------------------------------------------------------------------------------
 
-bool __readOcmb(pdbg_target*, RegisterType_t, uint64_t, uint64_t&)
+bool __readOcmb(pdbg_target* i_obmcTrgt, RegisterType_t i_regType,
+                uint64_t i_address, uint64_t& o_value)
 {
     bool accessFailure = false;
 
-    /* TODO: ocmb_getscom() currently does not exist upstream.
     // The OCMB target is used for SCOM access.
     pdbg_target* scomTrgt = i_obmcTrgt;
 
@@ -87,7 +87,6 @@ bool __readOcmb(pdbg_target*, RegisterType_t, uint64_t, uint64_t&)
                        util::pdbg::getPath(i_obmcTrgt), i_regType, i_address);
             assert(0);
     }
-    */
 
     return accessFailure;
 }
