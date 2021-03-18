@@ -114,7 +114,7 @@ class ProcedureCallout : public Callout
 {
   public:
     /** Supported service procedures. */
-    enum Procedure
+    enum Type
     {
         NEXTLVL, ///< Contact next level support.
     };
@@ -125,19 +125,19 @@ class ProcedureCallout : public Callout
      * @param i_procedure The location code of the hardware callout.
      * @param i_priority     The callout priority.
      */
-    ProcedureCallout(Procedure i_procedure, Priority i_priority) :
+    ProcedureCallout(Type i_procedure, Priority i_priority) :
         Callout(i_priority), iv_procedure(i_procedure)
     {}
 
   private:
     /** The callout priority. */
-    const Procedure iv_procedure;
+    const Type iv_procedure;
 
   public:
     void getJson(nlohmann::json& j) const override
     {
         // clang-format off
-        static const std::map<Procedure, std::string> m =
+        static const std::map<Type, std::string> m =
         {
             {NEXTLVL, "NEXTLVL"},
         };

@@ -4,6 +4,7 @@ analyzer_src = files(
     'create_pel.cpp',
     'hei_user_interface.cpp',
     'initialize_isolator.cpp',
+    'resolution.cpp',
 )
 
 # Library dependencies.

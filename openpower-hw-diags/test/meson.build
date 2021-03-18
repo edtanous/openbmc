@@ -8,6 +8,7 @@ subdir('end2end')
 tests = [
   'hello-world',
   'bin_stream_test',
+  'resolution_test',
   'service_data_test',
 ]
 
