@@ -1,3 +1,0 @@
-[Unit]
-Description=Host S5 state target
-Conflicts=host-s0-state.target
