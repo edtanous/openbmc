@@ -4,6 +4,10 @@
 #include <util/pdbg.hpp>
 #include <util/trace.hpp>
 
+#ifdef CONFIG_PHAL_API
+#include <attribute_info.H>
+#endif
+
 namespace util
 {
 
@@ -222,6 +226,64 @@ bool queryHardwareAnalysisSupported()
 {
     // Hardware analysis is only supported on P10 systems and up.
     return (PDBG_PROC_P9 < pdbg_get_proc());
+}
+
+//------------------------------------------------------------------------------
+
+std::string getLocationCode(pdbg_target* trgt)
+{
+    if (nullptr == trgt)
+    {
+        // Either the path is wrong or the attribute doesn't exist.
+        return std::string{};
+    }
+
+#ifdef CONFIG_PHAL_API
+
+    ATTR_LOCATION_CODE_Type val;
+    if (DT_GET_PROP(ATTR_LOCATION_CODE, trgt, val))
+    {
+        // Get the immediate parent in the devtree path and try again.
+        return getLocationCode(pdbg_target_parent(nullptr, trgt));
+    }
+
+    // Attribute found.
+    return std::string{val};
+
+#else
+
+    return std::string{getPath(trgt)};
+
+#endif
+}
+
+//------------------------------------------------------------------------------
+
+std::string getPhysDevPath(pdbg_target* trgt)
+{
+    if (nullptr == trgt)
+    {
+        // Either the path is wrong or the attribute doesn't exist.
+        return std::string{};
+    }
+
+#ifdef CONFIG_PHAL_API
+
+    ATTR_PHYS_DEV_PATH_Type val;
+    if (DT_GET_PROP(ATTR_PHYS_DEV_PATH, trgt, val))
+    {
+        // Get the immediate parent in the devtree path and try again.
+        return getPhysDevPath(pdbg_target_parent(nullptr, trgt));
+    }
+
+    // Attribute found.
+    return std::string{val};
+
+#else
+
+    return std::string{getPath(trgt)};
+
+#endif
 }
 
 //------------------------------------------------------------------------------

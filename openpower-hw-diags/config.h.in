@@ -1,0 +1,18 @@
+#pragma once
+
+// clang-format off
+
+// IMPORTANT:
+//   Use constexpr and avoid #define whenever possible. This has the benefit of
+//   compiling as much code as possible, regardless if it is actually used. Thus
+//   ensuring each code path remains buildable. Note that the optimization path
+//   should delete the unused code later.
+
+constexpr const int configPhalApi = @CONFIG_PHAL_API@;
+
+// IMPORTANT:
+//   Avoid using #define whenever possible. See note above for reason.
+
+#mesondefine CONFIG_PHAL_API
+
+// clang-format on

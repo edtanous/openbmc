@@ -2,6 +2,7 @@
 
 #include <libpdbg.h>
 
+#include <string>
 #include <vector>
 
 // Forward reference to avoid pulling the libhei library into everything that
@@ -82,6 +83,26 @@ void getActiveChips(std::vector<libhei::Chip>& o_chips);
  *         and is not supported on any older chip generations.
  */
 bool queryHardwareAnalysisSupported();
+
+/**
+ * @return A string containing the FRU location code of the given chip. An empty
+ *         string indicates the target was null or the attribute does not exist
+ *         for this target.
+ * @note   This function requires PHAL APIs that are only available in certain
+ *         environments. If they do not exist the devtree path of the target is
+ *         returned.
+ */
+std::string getLocationCode(pdbg_target* trgt);
+
+/**
+ * @return A string containing the physical device path (entity path) of the
+ *         given chip. An empty string indicates the target was null or the
+ *         attribute does not exist for this target.
+ * @note   This function requires PHAL APIs that are only available in certain
+ *         environments. If they do not exist the devtree path of the target is
+ *         returned.
+ */
+std::string getPhysDevPath(pdbg_target* trgt);
 
 } // namespace pdbg
 

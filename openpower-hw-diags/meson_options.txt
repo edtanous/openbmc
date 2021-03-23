@@ -1,2 +1,7 @@
 option('tests', type: 'feature', description: 'Build tests')
 option('nlmode', type: 'feature', description: 'no run-time control')
+
+option('phal', type: 'feature', value : 'disabled',
+        description : '''Enable PHAL APIs for retrieving data from the POWER
+                         Systems device tree''')
+

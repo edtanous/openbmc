@@ -11,6 +11,10 @@ util_deps = [
     libpdbg_dep,
 ]
 
+if get_option('phal').enabled()
+    util_deps += dependency('libdt-api')
+endif
+
 # Create static library.
 util_lib = static_library(
     'util_lib',

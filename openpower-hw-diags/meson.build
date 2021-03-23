@@ -14,6 +14,16 @@ project('openpower-hw-diags', 'cpp',
 cmplr = meson.get_compiler('cpp')
 
 #-------------------------------------------------------------------------------
+# Config file
+#-------------------------------------------------------------------------------
+
+conf = configuration_data()
+
+conf.set('CONFIG_PHAL_API', get_option('phal').enabled())
+
+configure_file(input: 'config.h.in', output: 'config.h', configuration: conf)
+
+#-------------------------------------------------------------------------------
 # Include directories
 #-------------------------------------------------------------------------------
 
