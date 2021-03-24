@@ -28,6 +28,9 @@ enum TargetType_t : uint8_t
 /** @return The target associated with the given chip. */
 pdbg_target* getTrgt(const libhei::Chip& i_chip);
 
+/** @return The target associated with the given devtree path. */
+pdbg_target* getTrgt(const std::string& i_path);
+
 /** @return A string representing the given target's devtree path. */
 const char* getPath(pdbg_target* i_trgt);
 

@@ -23,6 +23,13 @@ pdbg_target* getTrgt(const libhei::Chip& i_chip)
 
 //------------------------------------------------------------------------------
 
+pdbg_target* getTrgt(const std::string& i_path)
+{
+    return pdbg_target_from_path(nullptr, i_path.c_str());
+}
+
+//------------------------------------------------------------------------------
+
 const char* getPath(pdbg_target* i_trgt)
 {
     return pdbg_target_path(i_trgt);
