@@ -13,7 +13,6 @@ ConditionPathExists=!/run/openbmc/mpreboot@%i
 RemainAfterExit=yes
 Type=oneshot
 TimeoutStartSec=10
-ExecStart=/bin/rm -f /run/openbmc/host@%i-on
 # TODO - Replace with official istep stopinstructions once available
 ExecStart=/usr/bin/pdbg -a stop
 
