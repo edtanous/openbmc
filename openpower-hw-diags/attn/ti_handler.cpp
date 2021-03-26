@@ -66,17 +66,6 @@ void handlePhypTi(TiDataArea* i_tiDataArea)
 {
     trace<level::INFO>("PHYP TI");
 
-    if (autoRebootEnabled())
-    {
-        // If autoreboot is enabled we will start crash (mpipl) mode target
-        transitionHost(HostState::Crash);
-    }
-    else
-    {
-        // If autoreboot is disabled we will quiesce the host
-        transitionHost(HostState::Quiesce);
-    }
-
     // gather additional data for PEL
     std::map<std::string, std::string> tiAdditionalData;
 
@@ -101,6 +90,19 @@ void handlePhypTi(TiDataArea* i_tiDataArea)
         // TI data was not available This should not happen since we provide
         // a default TI info in the case where get TI info was not successful.
         eventAttentionFail((int)AttnSection::handlePhypTi | ATTN_INFO_NULL);
+    }
+
+    // We are finished creating the event log entries so transition host to
+    // the required state.
+    if (autoRebootEnabled())
+    {
+        // If autoreboot is enabled we will start crash (mpipl) mode target
+        transitionHost(HostState::Crash);
+    }
+    else
+    {
+        // If autoreboot is disabled we will quiesce the host
+        transitionHost(HostState::Quiesce);
     }
 }
 
@@ -213,24 +215,6 @@ void handleHbTi(TiDataArea* i_tiDataArea)
         }
     }
 
-    if (true == terminateHost)
-    {
-        // if hostboot dump is requested initiate dump
-        if (hbDumpRequested)
-        {
-            // Until HB dump support available just quiesce the host - once
-            // dump support is available the dump component will transition
-            // (ipl/halt) the host.
-            transitionHost(HostState::Quiesce);
-        }
-        else
-        {
-            // Quiese the host - when the host is quiesced it will either
-            // "halt" or IPL depending on autoreboot setting.
-            transitionHost(HostState::Quiesce);
-        }
-    }
-
     // gather additional data for PEL
     std::map<std::string, std::string> tiAdditionalData;
 
@@ -258,6 +242,24 @@ void handleHbTi(TiDataArea* i_tiDataArea)
         // TI data was not available This should not happen since we provide
         // a default TI info in the case where get TI info was not successful.
         eventAttentionFail((int)AttnSection::handleHbTi | ATTN_INFO_NULL);
+    }
+
+    if (true == terminateHost)
+    {
+        // if hostboot dump is requested initiate dump
+        if (hbDumpRequested)
+        {
+            // Until HB dump support available just quiesce the host - once
+            // dump support is available the dump component will transition
+            // (ipl/halt) the host.
+            transitionHost(HostState::Quiesce);
+        }
+        else
+        {
+            // Quiese the host - when the host is quiesced it will either
+            // "halt" or IPL depending on autoreboot setting.
+            transitionHost(HostState::Quiesce);
+        }
     }
 }
 
