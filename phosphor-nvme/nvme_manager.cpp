@@ -116,8 +116,12 @@ void Nvme::setFaultLED(const std::string& locateLedGroupPath,
     // Before toggle LED, check whether is Identify or not.
     if (!getLEDGroupState(locateLedGroupPath))
     {
-        util::SDBusPlus::setProperty(bus, LED_GROUP_BUSNAME, faultLedGroupPath,
-                                     LED_GROUP_IFACE, "Asserted", request);
+        if (getLEDGroupState(faultLedGroupPath) != request)
+        {
+            util::SDBusPlus::setProperty(bus, LED_GROUP_BUSNAME,
+                                         faultLedGroupPath, LED_GROUP_IFACE,
+                                         "Asserted", request);
+        }
     }
 }
 
