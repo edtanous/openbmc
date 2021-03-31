@@ -43,6 +43,18 @@ int handleSpecial(Attention* i_attention);
 bool activeAttn(uint32_t i_val, uint32_t i_mask, uint32_t i_attn);
 
 /**
+ * @brief Traces some regs for hostboot
+ *
+ * @param i_procIndex - processor number (used in traces)
+ * @param i_pibTarget - target used for doing SCOMs to the processor
+ * @param i_fsiTarget - target used for doing CFAMs to the processor
+ *
+ * @return nothing
+ */
+void addHbStatusRegs(uint32_t i_procIndex, pdbg_target* i_pibTarget,
+                     pdbg_target* i_fsiTarget);
+
+/**
  * @brief The main attention handler logic
  *
  * @param i_breakpoints true = breakpoint special attn handling enabled
@@ -149,6 +161,15 @@ void attnHandler(Config* i_config)
                                                            handleVital, target,
                                                            i_config);
                         }
+                        else
+                        {
+                            // Hostboot wants some debug regs on Checkstops/TIs.
+                            // Don't bother on SBE Vitals (scoms will fail).
+                            // Only need to do on primary proc if you know what
+                            // it is, but eBMC may not so we will dump all
+                            // procs.
+                            addHbStatusRegs(proc, pibTarget, fsiTarget);
+                        } // Not SBE Vital attention
 
                         // Checkstop attention active and not masked?
                         if (true ==
@@ -445,5 +466,80 @@ bool activeAttn(uint32_t i_val, uint32_t i_mask, uint32_t i_attn)
 
     return rc;
 }
+
+/**
+ * @brief Traces some regs for hostboot
+ *
+ * When we receive a Checkstop or special Attention Term Immediate,
+ * hostboot wants some regs added to the error log. We will do this
+ * by tracing them here and then the traces will get added to
+ * the error log later
+ *
+ * @param i_procIndex - processor number (used in traces)
+ * @param i_pibTarget - target used for doing SCOMs to the processor
+ * @param i_fsiTarget - target used for doing CFAMs to the processor
+ *
+ * @return nothing
+ */
+void addHbStatusRegs(uint32_t i_procIndex, pdbg_target* i_pibTarget,
+                     pdbg_target* i_fsiTarget)
+{
+    uint32_t l_cfamData  = 0xFFFFFFFF;
+    uint64_t l_scomData1 = 0xFFFFFFFFFFFFFFFFull;
+    uint64_t l_scomData2 = 0xFFFFFFFFFFFFFFFFull;
+    uint32_t l_cfamAddr  = 0x283C;
+    uint64_t l_scomAddr1 = 0x4602F489;
+    uint64_t l_scomAddr2 = 0x4602F487;
+
+    // We only need this for PRIMARY proc, but will just do on all procs for
+    // now. All attentions handled are fatal (except for plain breakpoints). Not
+    // going to sweat the plain breakpoint case since this is lab only using
+    // cronus.
+
+    // get first debug reg (CFAM)
+    if (RC_SUCCESS != fsi_read(i_fsiTarget, l_cfamAddr, &l_cfamData))
+    {
+        l_cfamData = 0xFFFFFFFF;
+    }
+
+    // Get SCOM regs next (just 2 of them)
+    if (RC_SUCCESS != pib_read(i_pibTarget, l_scomAddr1, &l_scomData1))
+    {
+        l_scomData1 = 0xFFFFFFFFFFFFFFFFull;
+    }
+
+    if (RC_SUCCESS != pib_read(i_pibTarget, l_scomAddr2, &l_scomData2))
+    {
+        l_scomData2 = 0xFFFFFFFFFFFFFFFFull;
+    }
+
+    // Trace out the results here of all 3 regs
+    // (Format should resemble FSP: HostBoot Reg:0000283C  Data:AA801504
+    // 00000000  Proc:00050001 )
+    std::stringstream ss1, ss2, ss3;
+
+    ss1 << "HostBoot Reg:" << std::setw(8) << std::setfill('0') << std::hex
+        << l_cfamAddr << " Data:" << l_cfamData << " Proc:" << std::setw(8)
+        << i_procIndex;
+
+    ss2 << "HostBoot Reg:" << std::setw(8) << std::setfill('0') << std::hex
+        << l_scomAddr1 << " Data:" << std::setw(16) << l_scomData1
+        << " Proc:" << std::setw(8) << i_procIndex;
+
+    ss3 << "HostBoot Reg:" << std::setw(8) << std::setfill('0') << std::hex
+        << l_scomAddr2 << " Data:" << std::setw(16) << l_scomData2
+        << " Proc:" << std::setw(8) << i_procIndex;
+
+    std::string strobj1 = ss1.str();
+    std::string strobj2 = ss2.str();
+    std::string strobj3 = ss3.str();
+
+    trace<level::INFO>(strobj1.c_str());
+    trace<level::INFO>(strobj2.c_str());
+    trace<level::INFO>(strobj3.c_str());
+
+    return;
+
+} // end addHbStatusRegs
 
 } // namespace attn
