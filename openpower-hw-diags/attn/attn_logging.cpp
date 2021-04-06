@@ -235,6 +235,21 @@ void createPelCustom(std::vector<uint8_t>& i_rawPel,
                        std::min(srcString.size(), pel::asciiStringSize), 0);
 
         tiPel->setAsciiString(srcChars); // pel object src is char array
+
+        // set symptom-id
+        auto symptomId = (i_additional["SrcAscii"].substr(0, 8) + '_');
+
+        symptomId += (i_additional["0x10 SRC Word 12"]);
+        symptomId += (i_additional["0x14 SRC Word 13"] + '_');
+        symptomId += (i_additional["0x18 SRC Word 14"]);
+        symptomId += (i_additional["0x1c SRC Word 15"] + '_');
+        symptomId += (i_additional["0x20 SRC Word 16"]);
+        symptomId += (i_additional["0x24 SRC Word 17"] + '_');
+        symptomId += (i_additional["0x28 SRC Word 18"]);
+        symptomId += (i_additional["0x2c SRC Word 19"]);
+
+        // setSymptomId will take care of required null-terminate and padding
+        tiPel->setSymptomId(symptomId);
     }
     else
     {
@@ -265,6 +280,21 @@ void createPelCustom(std::vector<uint8_t>& i_rawPel,
                        std::min(srcString.size(), pel::asciiStringSize), 0);
 
         tiPel->setAsciiString(srcChars); // pel object src is char array
+
+        // set symptom-id
+        auto symptomId = (i_additional["SrcAscii"].substr(0, 8) + '_');
+
+        symptomId += (i_additional["0x10 HB Word 0"]);       // note: word 1
+        symptomId += (i_additional["0x14 HB Word 2"] + '_'); // does not exist
+        symptomId += (i_additional["0x18 HB Word 3"]);
+        symptomId += (i_additional["0x1c HB Word 4"] + '_');
+        symptomId += (i_additional["0x20 HB Word 5"]);
+        symptomId += (i_additional["0x24 HB Word 6"] + '_');
+        symptomId += (i_additional["0x28 HB Word 7"]);
+        symptomId += (i_additional["0x2c HB Word 8"]);
+
+        // setSymptomId will take care of required null-terminate and padding
+        tiPel->setSymptomId(symptomId);
     }
 
     // set severity, event type and action flags

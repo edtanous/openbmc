@@ -14,6 +14,7 @@ PelMinimal::PelMinimal(std::vector<uint8_t>& data)
     _ph = std::make_unique<PrivateHeader>(pelData);
     _uh = std::make_unique<UserHeader>(pelData);
     _ps = std::make_unique<PrimarySrc>(pelData);
+    _eh = std::make_unique<ExtendedUserHeader>(pelData);
 }
 
 void PelMinimal::raw(std::vector<uint8_t>& pelBuffer) const
@@ -24,6 +25,7 @@ void PelMinimal::raw(std::vector<uint8_t>& pelBuffer) const
     _ph->flatten(pelData);
     _uh->flatten(pelData);
     _ps->flatten(pelData);
+    _eh->flatten(pelData);
 }
 
 size_t PelMinimal::size() const
@@ -46,6 +48,12 @@ size_t PelMinimal::size() const
     if (_ps)
     {
         size += _ph->header().size;
+    }
+
+    // size of extended user section
+    if (_eh)
+    {
+        size += _eh->header().size;
     }
 
     return ((size > _maxPELSize) ? _maxPELSize : size);
@@ -89,6 +97,11 @@ uint8_t PelMinimal::getSectionCount()
 void PelMinimal::setSectionCount(uint8_t sectionCount)
 {
     _ph->setSectionCount(sectionCount);
+}
+
+void PelMinimal::setSymptomId(const std::string& symptomId)
+{
+    _eh->setSymptomId(symptomId);
 }
 
 } // namespace pel

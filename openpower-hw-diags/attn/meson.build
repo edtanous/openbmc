@@ -40,6 +40,7 @@ attn_src = files(
 
 # for custom/raw PEL creation
 pel_src = files(
+    'pel/extended_user_header.cpp',
     'pel/pel_minimal.cpp',
     'pel/private_header.cpp',
     'pel/primary_src.cpp',

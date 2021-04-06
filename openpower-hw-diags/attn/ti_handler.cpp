@@ -274,37 +274,66 @@ void parsePhypOpalTiInfo(std::map<std::string, std::string>& i_map,
 
     std::stringstream ss;
 
-    ss << std::hex << std::showbase;
-    ss << "0x00 TI Area Valid:" << (int)i_tiDataArea->tiAreaValid << ":";
-    ss << "0x01 Command:" << (int)i_tiDataArea->command << ":";
-    ss << "0x02 Num. Data Bytes:" << be16toh(i_tiDataArea->numDataBytes) << ":";
-    ss << "0x04 Reserved:" << (int)i_tiDataArea->reserved1 << ":";
-    ss << "0x06 HWDump Type:" << be16toh(i_tiDataArea->hardwareDumpType) << ":";
-    ss << "0x08 SRC Format:" << (int)i_tiDataArea->srcFormat << ":";
-    ss << "0x09 SRC Flags:" << (int)i_tiDataArea->srcFlags << ":";
-    ss << "0x0a Num. ASCII Words:" << (int)i_tiDataArea->numAsciiWords << ":";
-    ss << "0x0b Num. Hex Words:" << (int)i_tiDataArea->numHexWords << ":";
-    ss << "0x0e Length of SRC:" << be16toh(i_tiDataArea->lenSrc) << ":";
-    ss << "0x10 SRC Word 12:" << be32toh(i_tiDataArea->srcWord12HbWord0) << ":";
-    ss << "0x14 SRC Word 13:" << be32toh(i_tiDataArea->srcWord13HbWord2) << ":";
-    ss << "0x18 SRC Word 14:" << be32toh(i_tiDataArea->srcWord14HbWord3) << ":";
-    ss << "0x1c SRC Word 15:" << be32toh(i_tiDataArea->srcWord15HbWord4) << ":";
-    ss << "0x20 SRC Word 16:" << be32toh(i_tiDataArea->srcWord16HbWord5) << ":";
-    ss << "0x24 SRC Word 17:" << be32toh(i_tiDataArea->srcWord17HbWord6) << ":";
-    ss << "0x28 SRC Word 18:" << be32toh(i_tiDataArea->srcWord18HbWord7) << ":";
-    ss << "0x2c SRC Word 19:" << be32toh(i_tiDataArea->srcWord19HbWord8) << ":";
-    ss << "0x30 ASCII Data:" << be32toh(i_tiDataArea->asciiData0) << ":";
-    ss << "0x34 ASCII Data:" << be32toh(i_tiDataArea->asciiData1) << ":";
-    ss << "0x38 ASCII Data:" << be32toh(i_tiDataArea->asciiData2) << ":";
-    ss << "0x3c ASCII Data:" << be32toh(i_tiDataArea->asciiData3) << ":";
-    ss << "0x40 ASCII Data:" << be32toh(i_tiDataArea->asciiData4) << ":";
-    ss << "0x44 ASCII Data:" << be32toh(i_tiDataArea->asciiData5) << ":";
-    ss << "0x48 ASCII Data:" << be32toh(i_tiDataArea->asciiData6) << ":";
-    ss << "0x4c ASCII Data:" << be32toh(i_tiDataArea->asciiData7) << ":";
-    ss << "0x50 Location:" << (int)i_tiDataArea->location << ":";
-    ss << "0x51 Code Sections:" << (int)i_tiDataArea->codeSection << ":";
-    ss << "0x52 Additional Size:" << (int)i_tiDataArea->additionalSize << ":";
-    ss << "0x53 Additional Data:" << (int)i_tiDataArea->andData;
+    ss << "0x00 TI Area Valid:" << std::setw(2) << std::setfill('0') << std::hex
+       << (int)i_tiDataArea->tiAreaValid << ":";
+    ss << "0x01 Command:" << std::setw(2) << std::setfill('0') << std::hex
+       << (int)i_tiDataArea->command << ":";
+    ss << "0x02 Num. Data Bytes:" << std::setw(4) << std::setfill('0')
+       << std::hex << be16toh(i_tiDataArea->numDataBytes) << ":";
+    ss << "0x04 Reserved:" << std::setw(2) << std::setfill('0') << std::hex
+       << (int)i_tiDataArea->reserved1 << ":";
+    ss << "0x06 HWDump Type:" << std::setw(4) << std::setfill('0') << std::hex
+       << be16toh(i_tiDataArea->hardwareDumpType) << ":";
+    ss << "0x08 SRC Format:" << std::setw(2) << std::setfill('0') << std::hex
+       << (int)i_tiDataArea->srcFormat << ":";
+    ss << "0x09 SRC Flags:" << std::setw(2) << std::setfill('0') << std::hex
+       << (int)i_tiDataArea->srcFlags << ":";
+    ss << "0x0a Num. ASCII Words:" << std::setw(2) << std::setfill('0')
+       << std::hex << (int)i_tiDataArea->numAsciiWords << ":";
+    ss << "0x0b Num. Hex Words:" << std::setw(2) << std::setfill('0')
+       << std::hex << (int)i_tiDataArea->numHexWords << ":";
+    ss << "0x0e Length of SRC:" << std::setw(4) << std::setfill('0') << std::hex
+       << be16toh(i_tiDataArea->lenSrc) << ":";
+    ss << "0x10 SRC Word 12:" << std::setw(8) << std::setfill('0') << std::hex
+       << be32toh(i_tiDataArea->srcWord12HbWord0) << ":";
+    ss << "0x14 SRC Word 13:" << std::setw(8) << std::setfill('0') << std::hex
+       << be32toh(i_tiDataArea->srcWord13HbWord2) << ":";
+    ss << "0x18 SRC Word 14:" << std::setw(8) << std::setfill('0') << std::hex
+       << be32toh(i_tiDataArea->srcWord14HbWord3) << ":";
+    ss << "0x1c SRC Word 15:" << std::setw(8) << std::setfill('0') << std::hex
+       << be32toh(i_tiDataArea->srcWord15HbWord4) << ":";
+    ss << "0x20 SRC Word 16:" << std::setw(8) << std::setfill('0') << std::hex
+       << be32toh(i_tiDataArea->srcWord16HbWord5) << ":";
+    ss << "0x24 SRC Word 17:" << std::setw(8) << std::setfill('0') << std::hex
+       << be32toh(i_tiDataArea->srcWord17HbWord6) << ":";
+    ss << "0x28 SRC Word 18:" << std::setw(8) << std::setfill('0') << std::hex
+       << be32toh(i_tiDataArea->srcWord18HbWord7) << ":";
+    ss << "0x2c SRC Word 19:" << std::setw(8) << std::setfill('0') << std::hex
+       << be32toh(i_tiDataArea->srcWord19HbWord8) << ":";
+    ss << "0x30 ASCII Data:" << std::setw(8) << std::setfill('0') << std::hex
+       << be32toh(i_tiDataArea->asciiData0) << ":";
+    ss << "0x34 ASCII Data:" << std::setw(8) << std::setfill('0') << std::hex
+       << be32toh(i_tiDataArea->asciiData1) << ":";
+    ss << "0x38 ASCII Data:" << std::setw(8) << std::setfill('0') << std::hex
+       << be32toh(i_tiDataArea->asciiData2) << ":";
+    ss << "0x3c ASCII Data:" << std::setw(8) << std::setfill('0') << std::hex
+       << be32toh(i_tiDataArea->asciiData3) << ":";
+    ss << "0x40 ASCII Data:" << std::setw(8) << std::setfill('0') << std::hex
+       << be32toh(i_tiDataArea->asciiData4) << ":";
+    ss << "0x44 ASCII Data:" << std::setw(8) << std::setfill('0') << std::hex
+       << be32toh(i_tiDataArea->asciiData5) << ":";
+    ss << "0x48 ASCII Data:" << std::setw(8) << std::setfill('0') << std::hex
+       << be32toh(i_tiDataArea->asciiData6) << ":";
+    ss << "0x4c ASCII Data:" << std::setw(8) << std::setfill('0') << std::hex
+       << be32toh(i_tiDataArea->asciiData7) << ":";
+    ss << "0x50 Location:" << std::setw(2) << std::setfill('0') << std::hex
+       << (int)i_tiDataArea->location << ":";
+    ss << "0x51 Code Sections:" << std::setw(2) << std::setfill('0') << std::hex
+       << (int)i_tiDataArea->codeSection << ":";
+    ss << "0x52 Additional Size:" << std::setw(2) << std::setfill('0')
+       << std::hex << (int)i_tiDataArea->additionalSize << ":";
+    ss << "0x53 Additional Data:" << std::setw(2) << std::setfill('0')
+       << std::hex << (int)i_tiDataArea->andData;
 
     std::string key, value;
     char delim = ':';
@@ -327,22 +356,36 @@ void parseHbTiInfo(std::map<std::string, std::string>& i_map,
 
     std::stringstream ss;
 
-    ss << std::hex << std::showbase;
-    ss << "0x00 TI Area Valid:" << (int)i_tiDataArea->tiAreaValid << ":";
-    ss << "0x04 Reserved:" << (int)i_tiDataArea->reserved1 << ":";
-    ss << "0x05 HB_Term. Type:" << (int)i_tiDataArea->hbTerminateType << ":";
-    ss << "0x0c HB Dump Flag:" << (int)i_tiDataArea->hbDumpFlag << ":";
-    ss << "0x0d Source:" << (int)i_tiDataArea->source << ":";
-    ss << "0x10 HB Word 0:" << be32toh(i_tiDataArea->srcWord12HbWord0) << ":";
-    ss << "0x14 HB Word 2:" << be32toh(i_tiDataArea->srcWord13HbWord2) << ":";
-    ss << "0x18 HB Word 3:" << be32toh(i_tiDataArea->srcWord14HbWord3) << ":";
-    ss << "0x1c HB Word 4:" << be32toh(i_tiDataArea->srcWord15HbWord4) << ":";
-    ss << "0x20 HB Word 5:" << be32toh(i_tiDataArea->srcWord16HbWord5) << ":";
-    ss << "0x24 HB Word 6:" << be32toh(i_tiDataArea->srcWord17HbWord6) << ":";
-    ss << "0x28 HB Word 7:" << be32toh(i_tiDataArea->srcWord18HbWord7) << ":";
-    ss << "0x2c HB Word 8:" << be32toh(i_tiDataArea->srcWord19HbWord8) << ":";
-    ss << "0x30 error_data:" << be32toh(i_tiDataArea->asciiData0) << ":";
-    ss << "0x34 EID:" << be32toh(i_tiDataArea->asciiData1);
+    ss << "0x00 TI Area Valid:" << std::setw(2) << std::setfill('0') << std::hex
+       << (int)i_tiDataArea->tiAreaValid << ":";
+    ss << "0x04 Reserved:" << std::setw(2) << std::setfill('0') << std::hex
+       << (int)i_tiDataArea->reserved1 << ":";
+    ss << "0x05 HB_Term. Type:" << std::setw(2) << std::setfill('0') << std::hex
+       << (int)i_tiDataArea->hbTerminateType << ":";
+    ss << "0x0c HB Dump Flag:" << std::setw(2) << std::setfill('0') << std::hex
+       << (int)i_tiDataArea->hbDumpFlag << ":";
+    ss << "0x0d Source:" << std::setw(2) << std::setfill('0') << std::hex
+       << (int)i_tiDataArea->source << ":";
+    ss << "0x10 HB Word 0:" << std::setw(8) << std::setfill('0') << std::hex
+       << be32toh(i_tiDataArea->srcWord12HbWord0) << ":";
+    ss << "0x14 HB Word 2:" << std::setw(8) << std::setfill('0') << std::hex
+       << be32toh(i_tiDataArea->srcWord13HbWord2) << ":";
+    ss << "0x18 HB Word 3:" << std::setw(8) << std::setfill('0') << std::hex
+       << be32toh(i_tiDataArea->srcWord14HbWord3) << ":";
+    ss << "0x1c HB Word 4:" << std::setw(8) << std::setfill('0') << std::hex
+       << be32toh(i_tiDataArea->srcWord15HbWord4) << ":";
+    ss << "0x20 HB Word 5:" << std::setw(8) << std::setfill('0') << std::hex
+       << be32toh(i_tiDataArea->srcWord16HbWord5) << ":";
+    ss << "0x24 HB Word 6:" << std::setw(8) << std::setfill('0') << std::hex
+       << be32toh(i_tiDataArea->srcWord17HbWord6) << ":";
+    ss << "0x28 HB Word 7:" << std::setw(8) << std::setfill('0') << std::hex
+       << be32toh(i_tiDataArea->srcWord18HbWord7) << ":";
+    ss << "0x2c HB Word 8:" << std::setw(8) << std::setfill('0') << std::hex
+       << be32toh(i_tiDataArea->srcWord19HbWord8) << ":";
+    ss << "0x30 error_data:" << std::setw(8) << std::setfill('0') << std::hex
+       << be32toh(i_tiDataArea->asciiData0) << ":";
+    ss << "0x34 EID:" << std::setw(8) << std::setfill('0') << std::hex
+       << be32toh(i_tiDataArea->asciiData1);
 
     std::string key, value;
     char delim = ':';

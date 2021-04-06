@@ -9,9 +9,10 @@ namespace pel
 
 enum class SectionID
 {
-    privateHeader = 0x5048, // 'PH'
-    userHeader    = 0x5548, // 'UH'
-    primarySRC    = 0x5053, // 'PS'
+    privateHeader  = 0x5048, // 'PH'
+    userHeader     = 0x5548, // 'UH'
+    primarySRC     = 0x5053, // 'PS'
+    extendedHeader = 0x4548, // 'EH'
 };
 
 enum class ComponentID
@@ -64,6 +65,7 @@ enum class EventScope
 
 constexpr size_t numSrcWords = 8;  // number of SRC hex words
 const size_t asciiStringSize = 32; // size of SRC ascii string
+const size_t mtmsSize        = 20; // size of an mtms field
 
 } // namespace pel
 } // namespace attn

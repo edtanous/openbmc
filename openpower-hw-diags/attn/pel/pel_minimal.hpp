@@ -1,5 +1,6 @@
 #pragma once
 
+#include "extended_user_header.hpp"
 #include "pel_common.hpp"
 #include "primary_src.hpp"
 #include "private_header.hpp"
@@ -29,6 +30,8 @@ namespace pel
  * | 24       | User Header Section          |
  * |----------+------------------------------|
  * | 72       | Primary SRC Section          |
+ * |----------+------------------------------|
+ * | 20       | Extended User Header         |
  * |----------+------------------------------|
  */
 class PelMinimal
@@ -111,6 +114,13 @@ class PelMinimal
      */
     void setSectionCount(uint8_t sectionCount);
 
+    /**
+     * @brief Set the symptom id field in extended user header
+     *
+     * @param[in] symptomId - The symptom ID to set
+     */
+    void setSymptomId(const std::string& symptomId);
+
   private:
     /**
      * @brief Maximum PEL size
@@ -138,6 +148,11 @@ class PelMinimal
      * @brief PEL Primary SRC
      */
     std::unique_ptr<PrimarySrc> _ps;
+
+    /**
+     * @brief PEL Extended User Header
+     */
+    std::unique_ptr<ExtendedUserHeader> _eh;
 };
 
 } // namespace pel
