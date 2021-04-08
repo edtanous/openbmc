@@ -7,11 +7,11 @@ namespace attn
 /** @brief configuration flags */
 enum AttentionFlag
 {
-    enVital        = 0,
-    enCheckstop    = 1,
-    enTerminate    = 2,
-    enBreakpoints  = 3,
-    dfltBreakpoint = 4,
+    enVital       = 0,
+    enCheckstop   = 1,
+    enTerminate   = 2,
+    enBreakpoints = 3,
+    dfltTi        = 4,
     lastFlag
 };
 

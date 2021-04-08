@@ -91,12 +91,12 @@ void parseConfig(char** i_begin, char** i_end, attn::Config* o_config)
         }
 
         // This option determines whether we service a TI or breakpoint in the
-        // case where we cannot retrieve the TI info succesfully. The default
-        // setting of this is "clear" meaning handle TI by default. This
-        // flag is not affected by the set/clear all command line option.
-        if (true == getCliOption(i_begin, i_end, "--defaultbreakpoint"))
+        // case where TI info is available but not valid. The default setting
+        // of this is "clear" meaning we will handle breakpoint by default.
+        // This flag is not affected by the set/clear all command line option.
+        if (true == getCliOption(i_begin, i_end, "--defaultti"))
         {
-            o_config->setFlag(attn::dfltBreakpoint);
+            o_config->setFlag(attn::dfltTi);
         }
     }
 }
