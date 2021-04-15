@@ -8,6 +8,15 @@ project('openpower-libhei', 'cpp',
        ])
 
 #-------------------------------------------------------------------------------
+# Versioning
+#-------------------------------------------------------------------------------
+buildinfo = vcs_tag(command: ['git', 'describe', '--always', '--long'],
+                  input: 'buildinfo.hpp.in',
+                  output: 'buildinfo.hpp',
+                  replace_string:'@BUILDINFO@',
+                  fallback: '0')
+
+#-------------------------------------------------------------------------------
 # libhei library
 #-------------------------------------------------------------------------------
 
@@ -23,7 +32,7 @@ libhei_src = [
 ]
 
 libhei_dep = declare_dependency(include_directories : incdir,
-                                sources : libhei_src)
+                                sources : [libhei_src, buildinfo])
 
 # build static library libhei.a (note that the libray name is hei, the
 # resulting filename will be libhei.a)

@@ -91,4 +91,11 @@ void uninitialize();
  */
 void isolate(const std::vector<Chip>& i_chipList, IsolationData& o_isoData);
 
+/**
+ * @brief Return build information string
+ *
+ * @return Build information string
+ */
+const char* getBuildInfo();
+
 } // end namespace libhei
