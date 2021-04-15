@@ -1,0 +1,5 @@
+#pragma once
+
+// The build process use this file as a teplate to create a file used during
+// compilation. This allows for automatic updating of build information.
+#define BUILDINFO "@BUILDINFO@"

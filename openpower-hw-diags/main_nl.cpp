@@ -5,6 +5,7 @@
 #include <attn/attn_config.hpp>
 #include <attn/attn_handler.hpp>
 #include <attn/attn_main.hpp>
+#include <buildinfo.hpp>
 #include <cli.hpp>
 
 /**
@@ -31,6 +32,7 @@ int main(int argc, char* argv[])
         printf("options:\n");
         printf("  --analyze:              Analyze the hardware\n");
         printf("  --daemon:               Start the attn handler daemon\n");
+        printf("hwdiag: %s, hei: %s\n", BUILDINFO, analyzer::getBuildInfo());
     }
     else
     {

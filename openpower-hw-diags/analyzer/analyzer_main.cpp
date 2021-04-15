@@ -190,4 +190,16 @@ bool analyzeHardware()
     return attnFound;
 }
 
+//------------------------------------------------------------------------------
+
+/**
+ * @brief Get error isolator build information
+ *
+ * @return Pointer to build information
+ */
+const char* getBuildInfo()
+{
+    return libhei::getBuildInfo();
+}
+
 } // namespace analyzer

@@ -21,4 +21,11 @@ namespace analyzer
  */
 bool analyzeHardware();
 
+/**
+ * @brief Get error analyzer build information
+ *
+ * @return Pointer to build information
+ */
+const char* getBuildInfo();
+
 } // namespace analyzer
