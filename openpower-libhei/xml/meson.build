@@ -14,13 +14,14 @@ build_cdb = find_program('build_chip_data_binary')
 cdb_files = {
     'p10' :
     [
-        'chip_data_p10_10.cdb',
+        'chip_data_p10_10.cdb', 'chip_parser_p10_10.json',
+        'chip_data_p10_20.cdb', 'chip_parser_p10_20.json',
     ],
 
     'explorer' :
     [
-        'chip_data_explorer_11.cdb',
-        'chip_data_explorer_20.cdb',
+        'chip_data_explorer_11.cdb', 'chip_parser_explorer_11.json',
+        'chip_data_explorer_20.cdb', 'chip_parser_explorer_20.json',
     ],
 }
 

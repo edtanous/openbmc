@@ -7,6 +7,7 @@ use Data::Dumper;
 use Getopt::Long qw(:config no_ignore_case);
 use File::Path qw(make_path);
 use XML::Simple qw(:strict);
+use JSON;
 
 # Pull in from the lib directory
 use FindBin qw($RealBin);
@@ -1121,20 +1122,58 @@ sub __printAttnTree($$)
 
 #-------------------------------------------------------------------------------
 
-sub __printSignatures($$)
+sub __printParserData($$$$)
 {
-    my ( $fh, $data ) = @_;
+    my ( $fh, $model_ec, $sig_list, $reg_list) = @_;
 
-    my $num_sigs = scalar @{$data};
-    FAIL("No signatures defined") unless ( 0 < $num_sigs );
+    my $nodes = {};
+    my $regs  = {};
+    my $sigs  = {};
 
-    for my $s ( @{$data} )
+    for my $s ( @{$sig_list} )
     {
-        my $sig = __hash(2,$s->{name}) << 16 | $s->{inst} << 8 | $s->{bit};
-        # TODO: This is temporary until we have defined the signature files.
-        print $fh sprintf('0x%08x',$sig) .
-                  " $s->{name} $s->{inst} $s->{bit} $s->{desc}\n";
+        my $n = sprintf('%04x', __hash(2, $s->{name}));
+        my $i = sprintf('%02x', $s->{inst});
+        my $b = sprintf('%02x', $s->{bit});
+
+        if ( exists($nodes->{$n}) and $nodes->{$n} ne $s->{name} )
+        {
+            FAIL("Node hash collision for $n: $nodes->{$n} and $s->{name}");
+        }
+
+        $nodes->{$n} = $s->{name};
+
+        if ( exists($sigs->{$n}->{$b}) and $sigs->{$n}->{$b} ne $s->{desc} )
+        {
+            FAIL("Multiple signatures for $s->{name} bit $s->{bit}:\n" .
+                 "  $sigs->{$n}->{$b}\n" .
+                 "  $s->{desc}");
+        }
+
+        $sigs->{$n}->{$b} = $s->{desc};
     }
+
+    for my $r ( @{$reg_list} )
+    {
+        my $id = sprintf('%06x', __hash(3, $r->{name}));
+
+        if ( exists($regs->{$id}) and $regs->{$id} ne $r->{name} )
+        {
+            FAIL("Register hash collision for $id: $regs->{$id} and $r->{name}");
+        }
+
+        $regs->{$id} = $r->{name};
+    }
+
+    my $data =
+    {
+        'model_ec'  => $model_ec,
+        'node_name' => $nodes,
+        'reg_name'  => $regs,
+        'signature' => $sigs,
+    };
+
+    print $fh to_json( $data, {utf8 => 1, pretty => 1, canonical => 1} );
 }
 
 #-------------------------------------------------------------------------------
@@ -1157,6 +1196,12 @@ sub buildBinary($$)
         {
             FAIL("Chip $model_ec does not contain attn_tree information");
         }
+        unless ( defined $chip->{signature} )
+        {
+            FAIL("Chip $model_ec does not contain signatures");
+        }
+
+        # Chip Data Binary files ###############################################
 
         my $bin_file = "$dir/chip_data_" . lc $model_ec . ".cdb";
         open my $bin_fh, '>', $bin_file or die "Cannot open $bin_file: $!";
@@ -1173,17 +1218,16 @@ sub buildBinary($$)
 
         close $bin_fh;
 
-        unless ( defined $chip->{signature} )
-        {
-            FAIL("Chip $model_ec does not contain signatures");
-        }
+        # eBMC PEL parsing JSON ################################################
 
-        my $sig_file = "$dir/chip_signatures_" . lc $model_ec . ".txt";
-        open my $sig_fh, '>', $sig_file or die "Cannot open $sig_file: $!";
+        my $parser_file = "$dir/chip_parser_" . lc $model_ec . ".json";
+        open my $parser_fh, '>', $parser_file
+            or die "Cannot open $parser_file: $!";
 
-        __printSignatures( $sig_fh, $chip->{signature} );
+        __printParserData( $parser_fh, $model_ec, $chip->{signature},
+                           $chip->{register} );
 
-        close $sig_fh;
+        close $parser_fh;
     }
 }
 
