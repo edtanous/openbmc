@@ -33,7 +33,11 @@ class NMI : public Interface
 
     /*  @brief trigger stop followed by soft reset.
      */
+#ifdef SDBUSPP_NEW_CAMELCASE
+    void nmi() override;
+#else
     void nMI() override;
+#endif
 
   private:
     /** @brief sdbus handle */

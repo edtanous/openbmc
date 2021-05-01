@@ -31,7 +31,11 @@ NMI::NMI(sdbusplus::bus::bus& bus, const char* path) :
     Interface(bus, path), bus(bus), objectPath(path)
 {}
 
+#ifdef SDBUSPP_NEW_CAMELCASE
+void NMI::nmi()
+#else
 void NMI::nMI()
+#endif
 {
     using namespace phosphor::logging;
     using InternalFailure =
