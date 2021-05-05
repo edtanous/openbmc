@@ -4,6 +4,7 @@
 <%
 import re
 from collections import defaultdict
+from sdbusplus.namedelement import NamedElement
 objects = settingsDict.keys()
 sdbusplus_namespaces = []
 sdbusplus_includes = []
@@ -130,7 +131,7 @@ class Impl : public Parent
 
 % for index, item in enumerate(settingsDict[object]):
     % for propName, metaDict in item['Properties'].items():
-<% t = propName[:1].lower() + propName[1:] %>\
+<% t = NamedElement(name=propName).camelCase %>\
 <% fname = "validate" + propName %>\
         decltype(std::declval<Iface${index}>().${t}()) ${t}(decltype(std::declval<Iface${index}>().${t}()) value) override
         {
@@ -173,7 +174,7 @@ class Impl : public Parent
         fs::path path;
 % for index, item in enumerate(settingsDict[object]):
   % for propName, metaDict in item['Properties'].items():
-<% t = propName[:1].lower() + propName[1:] %>\
+<% t = NamedElement(name=propName).camelCase %>\
 <% fname = "validate" + propName %>\
     % if propName in validators:
 
@@ -223,7 +224,7 @@ void save(Archive& a,
 <%
 props = []
 for index, item in enumerate(settingsDict[object]):
-    intfProps = ["setting." + propName[:1].lower() + propName[1:] + "()" for \
+    intfProps = ["setting." + NamedElement(name=propName).camelCase + "()" for \
                     propName, metaDict in item['Properties'].items()]
     props.extend(intfProps)
 props = ', '.join(props)
@@ -240,7 +241,7 @@ void load(Archive& a,
 % for index, item in enumerate(settingsDict[object]):
   % for  prop, metaDict in item['Properties'].items():
 <%
-    t = "setting." + prop[:1].lower() + prop[1:] + "()"
+    t = "setting." + NamedElement(name=prop).camelCase + "()"
     props.append(prop)
 %>\
     decltype(${t}) ${prop}{};
@@ -252,7 +253,7 @@ void load(Archive& a,
 % for index, item in enumerate(settingsDict[object]):
   % for  prop, metaDict in item['Properties'].items():
 <%
-    t = "setting." + prop[:1].lower() + prop[1:] + "(" + prop + ")"
+    t = "setting." + NamedElement(name=prop).camelCase + "(" + prop + ")"
 %>\
     ${t};
   % endfor
@@ -305,7 +306,7 @@ class Manager
             {
   % for item in settingsDict[path]:
     % for propName, metaDict in item['Properties'].items():
-<% p = propName[:1].lower() + propName[1:] %>\
+<% p = NamedElement(name=propName).camelCase %>\
 <% defaultValue = metaDict['Default'] %>\
                 std::get<${index}>(settings)->
                   ${get_setting_sdbusplus_type(item['Interface'])}::${p}(${defaultValue});
