@@ -41,3 +41,10 @@
                   Unit: "Watts"
           PowerCapEnable:
                Default: 'false'
+
+# This interface also ends in Mode and sets an enum.
+/xyz/openbmc_project/control/power_mode:
+    - Interface: xyz.openbmc_project.Control.Power.Mode
+      Properties:
+          PowerMode:
+              Default: Mode::PowerMode::Static

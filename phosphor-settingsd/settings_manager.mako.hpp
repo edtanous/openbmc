@@ -6,7 +6,6 @@ import re
 from collections import defaultdict
 from sdbusplus.namedelement import NamedElement
 objects = settingsDict.keys()
-sdbusplus_namespaces = []
 sdbusplus_includes = []
 props = defaultdict(list)
 validators = defaultdict(tuple)
@@ -51,17 +50,6 @@ using namespace phosphor::logging;
 #include "${i}"
 % endfor
 
-% for object in objects:
-    % for item in settingsDict[object]:
-<%
-    ns = get_setting_sdbusplus_type(item['Interface'])
-    i = ns.rfind('::')
-    ns = ns[:i]
-    sdbusplus_namespaces.append(ns)
-%>\
-    % endfor
-% endfor
-
 namespace phosphor
 {
 namespace settings
@@ -83,10 +71,6 @@ namespace persistent
 constexpr auto fileSuffix = "__";
 
 }
-
-% for n in set(sdbusplus_namespaces):
-using namespace ${n};
-% endfor
 
 % for object in objects:
 <%
@@ -308,6 +292,13 @@ class Manager
     % for propName, metaDict in item['Properties'].items():
 <% p = NamedElement(name=propName).camelCase %>\
 <% defaultValue = metaDict['Default'] %>\
+% if isinstance(defaultValue, str) and  not \
+    defaultValue.startswith('"') and '::' in defaultValue:
+<% ns = get_setting_sdbusplus_type(item['Interface'])
+i = ns.rfind('::')
+defaultValue = "{}::{}".format(ns[:i], defaultValue)
+%>\
+% endif
                 std::get<${index}>(settings)->
                   ${get_setting_sdbusplus_type(item['Interface'])}::${p}(${defaultValue});
   % endfor
