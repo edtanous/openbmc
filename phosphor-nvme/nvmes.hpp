@@ -1,12 +1,6 @@
 #pragma once
 
-#include "config.h"
-
 #include <sdbusplus/bus.hpp>
-#include <sdbusplus/server.hpp>
-#include <sdeventplus/clock.hpp>
-#include <sdeventplus/event.hpp>
-#include <sdeventplus/utility/timer.hpp>
 #include <xyz/openbmc_project/Sensor/Threshold/Critical/server.hpp>
 #include <xyz/openbmc_project/Sensor/Threshold/Warning/server.hpp>
 #include <xyz/openbmc_project/Sensor/Value/server.hpp>

@@ -1,5 +1,9 @@
 #include "nvmes.hpp"
 
+#include <xyz/openbmc_project/Sensor/Threshold/Critical/server.hpp>
+#include <xyz/openbmc_project/Sensor/Threshold/Warning/server.hpp>
+#include <xyz/openbmc_project/Sensor/Value/server.hpp>
+
 namespace phosphor
 {
 namespace nvme

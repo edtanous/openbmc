@@ -218,7 +218,7 @@ bool getNVMeInfobyBusID(int busID, phosphor::nvme::Nvme::NVMeData& nvmeData)
     nvmeData.smartWarnings = "";
     nvmeData.statusFlags = "";
     nvmeData.driveLifeUsed = "";
-    nvmeData.sensorValue = (int8_t)TEMPERATURE_SENSOR_FAILURE;
+    nvmeData.sensorValue = static_cast<int8_t>(TEMPERATURE_SENSOR_FAILURE);
     nvmeData.wcTemp = 0;
 
     phosphor::smbus::Smbus smbus;
