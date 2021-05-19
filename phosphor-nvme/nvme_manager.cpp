@@ -214,10 +214,12 @@ bool getNVMeInfobyBusID(int busID, phosphor::nvme::Nvme::NVMeData& nvmeData)
     nvmeData.present = true;
     nvmeData.vendor = "";
     nvmeData.serialNumber = "";
+    nvmeData.modelNumber = "";
     nvmeData.smartWarnings = "";
     nvmeData.statusFlags = "";
     nvmeData.driveLifeUsed = "";
     nvmeData.sensorValue = (int8_t)TEMPERATURE_SENSOR_FAILURE;
+    nvmeData.wcTemp = 0;
 
     phosphor::smbus::Smbus smbus;
 
@@ -503,7 +505,7 @@ void Nvme::createNVMeInventory()
     std::string inventoryPath;
     std::map<sdbusplus::message::object_path, Interfaces> obj;
 
-    for (const auto config : configs)
+    for (const auto& config : configs)
     {
         inventoryPath = "/system/chassis/motherboard/nvme" + config.index;
 
@@ -547,8 +549,8 @@ void Nvme::readNvmeData(NVMeConfig& config)
             config.criticalHigh = nvmeData.wcTemp;
             config.warningHigh = nvmeData.wcTemp;
         }
+        nvmeSSD->setSensorMaxMin(config.maxValue, config.minValue);
         nvmeSSD->setSensorThreshold(config.criticalHigh, config.criticalLow,
-                                    config.maxValue, config.minValue,
                                     config.warningHigh, config.warningLow);
 
         nvmeSSD->checkSensorThreshold();
@@ -558,6 +560,12 @@ void Nvme::readNvmeData(NVMeConfig& config)
     {
         setNvmeInventoryProperties(true, nvmeData, inventoryPath);
         iter->second->setSensorValueToDbus(nvmeData.sensorValue);
+        if (nvmeData.wcTemp != 0)
+        {
+            iter->second->setSensorThreshold(
+                config.criticalHigh, config.criticalLow, config.warningHigh,
+                config.warningLow);
+        }
         iter->second->checkSensorThreshold();
         setLEDsStatus(config, success, nvmeData);
     }

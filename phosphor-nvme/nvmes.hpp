@@ -54,8 +54,9 @@ class NvmeSSD : public NvmeIfaces
     void checkSensorThreshold();
     /** @brief Set Sensor Threshold to D-bus at beginning */
     void setSensorThreshold(int8_t criticalHigh, int8_t criticalLow,
-                            int8_t maxValue, int8_t minValue,
                             int8_t warningHigh, int8_t warningLow);
+    /** @brief Set Sensor Max/Min value to D-bus at beginning */
+    void setSensorMaxMin(int8_t maxValue, int8_t minValue);
 
   private:
     sdbusplus::bus::bus& bus;
