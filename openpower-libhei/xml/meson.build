@@ -2,7 +2,7 @@
 # Chip Data Files
 #-------------------------------------------------------------------------------
 
-build_cdb = find_program('build_chip_data_binary')
+build_cdb = find_program('parse_chip_data_xml')
 
 # The key for each entry in this dictionary is a subdirectory containing XML for
 # a chip model. The value for each entry contains the expected output files that
@@ -14,14 +14,14 @@ build_cdb = find_program('build_chip_data_binary')
 cdb_files = {
     'p10' :
     [
-        'chip_data_p10_10.cdb', 'chip_parser_p10_10.json',
-        'chip_data_p10_20.cdb', 'chip_parser_p10_20.json',
+        'chip_data_p10_10.cdb',
+        'chip_data_p10_20.cdb',
     ],
 
     'explorer' :
     [
-        'chip_data_explorer_11.cdb', 'chip_parser_explorer_11.json',
-        'chip_data_explorer_20.cdb', 'chip_parser_explorer_20.json',
+        'chip_data_explorer_11.cdb',
+        'chip_data_explorer_20.cdb',
     ],
 }
 
@@ -37,7 +37,9 @@ foreach chip_dir, out_files : cdb_files
 
     custom_target('build_cdb_' + chip_dir, build_by_default : true,
                   input : in_files, output : out_files,
-                  command : [ build_cdb, '-i', source_dir, '-o', build_dir ],
+                  command : [ build_cdb, '--cdb',
+                              '-i', source_dir,
+                              '-o', build_dir ],
                   install : true,
                   install_dir : join_paths(get_option('prefix'),
                                            get_option('datadir'),

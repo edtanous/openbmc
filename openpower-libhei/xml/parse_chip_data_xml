@@ -67,12 +67,19 @@ sub help()
 Usage: $RealScript -h
        $RealScript -i <input_dir> -o <output_dir>
 
-Builds Chip Data Binary files from the input Chip Data XML.
+Generates specified data files from the input Chip Data XML.
 
-Options:
+General options:
+
  -h, --help     Prints this menu.
  -i, --input    Directory containing the Chip Data XML files.
- -o, --output   Directory that will contain the Chip Data Binary files.
+ -o, --output   Directory that will contain the data files.
+
+Data file options (must specify at least one):
+
+ --cdb          Generates Chip Data Binary files.
+ --json         Generates PEL Parser Data JSON files.
+
 EOF
 
     exit;
@@ -85,10 +92,14 @@ EOF
 help() unless @ARGV; # print help if no arguments
 
 # Get options
-my ( $help, $src_dir, $dest_dir );
-help() unless GetOptions( 'h|help'     => \$help,
-                          'i|input=s'  => \$src_dir,
-                          'o|output=s' => \$dest_dir );
+my ( $help, $src_dir, $dest_dir, $gen_cdb, $gen_json );
+help() unless GetOptions(
+    'h|help'     => \$help,
+    'i|input=s'  => \$src_dir,
+    'o|output=s' => \$dest_dir,
+    'cdb'        => \$gen_cdb,
+    'json'       => \$gen_json,
+);
 
 help() if @ARGV; # print usage if there are extra arguments
 
@@ -108,13 +119,19 @@ if ( @{$err} )
     die "ERROR> $message: $file\n";
 }
 
+# --cdb, --json
+unless ( $gen_cdb or $gen_json )
+{
+    die "ERROR> Must specify at least one data file option.";
+}
+
 #-------------------------------------------------------------------------------
 # Prototypes
 #-------------------------------------------------------------------------------
 
 sub importXML($);
 sub normalizeXML($);
-sub buildBinary($$);
+sub buildDataFiles($$);
 
 #-------------------------------------------------------------------------------
 # Main
@@ -128,7 +145,7 @@ my $chip_data_xml = importXML( $src_dir );
 my $normalized_data = normalizeXML( $chip_data_xml );
 
 # The XML should now be in a format to start building the binary files.
-buildBinary( $dest_dir, $normalized_data );
+buildDataFiles( $dest_dir, $normalized_data );
 
 #-------------------------------------------------------------------------------
 # Helper functions
@@ -1167,7 +1184,7 @@ sub __printParserData($$$$)
 
     my $data =
     {
-        'model_ec'  => $model_ec,
+        'model_ec'  => sprintf('%08x', $SUPPORTED_MODEL_EC->{$model_ec}),
         'node_name' => $nodes,
         'reg_name'  => $regs,
         'signature' => $sigs,
@@ -1178,7 +1195,7 @@ sub __printParserData($$$$)
 
 #-------------------------------------------------------------------------------
 
-sub buildBinary($$)
+sub buildDataFiles($$)
 {
     my ( $dir, $data ) = @_;
 
@@ -1203,31 +1220,36 @@ sub buildBinary($$)
 
         # Chip Data Binary files ###############################################
 
-        my $bin_file = "$dir/chip_data_" . lc $model_ec . ".cdb";
-        open my $bin_fh, '>', $bin_file or die "Cannot open $bin_file: $!";
-        binmode $bin_fh; # writes a binary file
+        if ( $gen_cdb )
+        {
+            my $bin_file = "$dir/chip_data_" . lc $model_ec . ".cdb";
+            open my $bin_fh, '>', $bin_file or die "Cannot open $bin_file: $!";
+            binmode $bin_fh; # writes a binary file
 
-        # Chip Data File metadata
-        __bin($bin_fh, 1, $_) for ( unpack("C*", "CHIPDATA") );
-        __bin($bin_fh, 4, $SUPPORTED_MODEL_EC->{$model_ec});
-        __bin($bin_fh, 1, $FILE_VERSION->{VER_01}         );
+            # Chip Data File metadata
+            __bin($bin_fh, 1, $_) for ( unpack("C*", "CHIPDATA") );
+            __bin($bin_fh, 4, $SUPPORTED_MODEL_EC->{$model_ec});
+            __bin($bin_fh, 1, $FILE_VERSION->{VER_01}         );
 
-        __printRegisters( $bin_fh, $chip->{register}  );
-        __printNodes(     $bin_fh, $chip->{node}      );
-        __printAttnTree(  $bin_fh, $chip->{attn_tree} );
+            __printRegisters( $bin_fh, $chip->{register}  );
+            __printNodes(     $bin_fh, $chip->{node}      );
+            __printAttnTree(  $bin_fh, $chip->{attn_tree} );
 
-        close $bin_fh;
+            close $bin_fh;
+        }
 
         # eBMC PEL parsing JSON ################################################
 
-        my $parser_file = "$dir/chip_parser_" . lc $model_ec . ".json";
-        open my $parser_fh, '>', $parser_file
-            or die "Cannot open $parser_file: $!";
+        if ( $gen_json )
+        {
+            my $file = "$dir/pel_parser_data_" . lc $model_ec . ".json";
+            open my $fh, '>', $file or die "Cannot open $file: $!";
 
-        __printParserData( $parser_fh, $model_ec, $chip->{signature},
-                           $chip->{register} );
+            __printParserData( $fh, $model_ec, $chip->{signature},
+                               $chip->{register} );
 
-        close $parser_fh;
+            close $fh;
+        }
     }
 }
 
