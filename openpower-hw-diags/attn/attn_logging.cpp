@@ -405,17 +405,18 @@ void event(EventType i_event, std::map<std::string, std::string>& i_additional,
 
                 close(pelFd);
             }
-        }
 
-        uint8_t subsystem = std::stoi(i_additional["Subsystem"]);
+            uint8_t subsystem = std::stoi(i_additional["Subsystem"]);
 
-        // If not hypervisor TI
-        if (static_cast<uint8_t>(pel::SubsystemID::hypervisor) != subsystem)
-        {
-            // Request a dump and transition the host
-            if ("true" == i_additional["Dump"])
+            // If not hypervisor TI
+            if (static_cast<uint8_t>(pel::SubsystemID::hypervisor) != subsystem)
             {
-                requestDump(pelId); // will not return until dump is complete
+                // Request a dump and transition the host
+                if ("true" == i_additional["Dump"])
+                {
+                    // will not return until dump is complete
+                    requestDump(pelId);
+                }
             }
         }
     }
