@@ -1143,6 +1143,8 @@ sub __printParserData($$$$)
 {
     my ( $fh, $model_ec, $sig_list, $reg_list) = @_;
 
+    # IMPORTANT: All hash keys with hex values must be lowercase.
+
     my $nodes = {};
     my $regs  = {};
     my $sigs  = {};
@@ -1170,23 +1172,43 @@ sub __printParserData($$$$)
         $sigs->{$n}->{$b} = $s->{desc};
     }
 
+    # Get the register data.
     for my $r ( @{$reg_list} )
     {
+        # Format is:
+        #   { id : [ name, { inst : addr, ... } ], ... }
+
+        # The ID is a 3-byte hash of the register name (lowercase).
         my $id = sprintf('%06x', __hash(3, $r->{name}));
 
-        if ( exists($regs->{$id}) and $regs->{$id} ne $r->{name} )
+        if ( exists($regs->{$id}) )
         {
-            FAIL("Register hash collision for $id: $regs->{$id} and $r->{name}");
+            # Check for hash collisions.
+            if ( $regs->{$id}->[0] ne $r->{name} )
+            {
+                FAIL("Register hash collision for $id: " .
+                     "$regs->{$id}->[0] and $r->{name}");
+            }
+        }
+        else
+        {
+            # Initialize this register.
+            $regs->{$id} = [ $r->{name}, {} ];
         }
 
-        $regs->{$id} = $r->{name};
+        # Add the address for each instance of the register (shouldn't have to
+        # worry about duplicates).
+        for ( @{$r->{instance}} )
+        {
+            $regs->{$id}->[1]->{$_->{reg_inst}} = $_->{addr};
+        }
     }
 
     my $data =
     {
         'model_ec'  => sprintf('%08x', $SUPPORTED_MODEL_EC->{$model_ec}),
         'node_name' => $nodes,
-        'reg_name'  => $regs,
+        'registers' => $regs,
         'signature' => $sigs,
     };
 
