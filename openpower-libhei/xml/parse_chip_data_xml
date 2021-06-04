@@ -50,11 +50,11 @@ my $REGISTER_TYPE =
 # Supported attention types and their values.
 my $ATTN_TYPE =
 {
-    CS  => 1, # System checkstop hardware attention
-    UCS => 2, # Unit checkstop hardware attention
-    RE  => 3, # Recoverable hardware attention
-    SPA => 4, # SW or HW event requiring action by the service processor FW
-    HA  => 5, # SW or HW event requiring action by the host FW
+    CS  => [ 1, 'checkstop'         ], # System checkstop hardware attention
+    UCS => [ 2, 'unit checkstop'    ], # Unit checkstop hardware attention
+    RE  => [ 3, 'recoverable'       ], # Recoverable hardware attention
+    SPA => [ 4, 'special attention' ], # event requiring action by the SP FW
+    HA  => [ 5, 'host attention'    ], # event requiring action by the host FW
 };
 
 #-------------------------------------------------------------------------------
@@ -1097,7 +1097,7 @@ sub __printNodes($$)
             for my $r ( @{$i->{rule}} )
             {
                 # Register rule metadata
-                __bin($fh, 1, $ATTN_TYPE->{$r->{attn_type}});
+                __bin($fh, 1, $ATTN_TYPE->{$r->{attn_type}}->[0]);
                 __printExpr($fh, $reg_size, $r->{expr});
             }
 
@@ -1131,9 +1131,9 @@ sub __printAttnTree($$)
     for my $r ( @{$data} )
     {
         # Root Node metadata
-        __bin($fh, 1, $ATTN_TYPE->{$r->{attn_type}});
-        __bin($fh, 2, __hash(2, $r->{root_node})   );
-        __bin($fh, 1, $r->{node_inst}              );
+        __bin($fh, 1, $ATTN_TYPE->{$r->{attn_type}}->[0]);
+        __bin($fh, 2, __hash(2, $r->{root_node})        );
+        __bin($fh, 1, $r->{node_inst}                   );
     }
 }
 
@@ -1145,8 +1145,15 @@ sub __printParserData($$$$)
 
     # IMPORTANT: All hash keys with hex values must be lowercase.
 
+    my $attns = {};
     my $regs  = {};
     my $sigs  = {};
+
+    # Get the list of attention types.
+    while ( my ($k, $v) = each %{$ATTN_TYPE} )
+    {
+        $attns->{$v->[0]} = $v->[1];
+    }
 
     # Get the signature data.
     for my $s ( @{$sig_list} )
@@ -1225,6 +1232,7 @@ sub __printParserData($$$$)
     my $data =
     {
         'model_ec'   => sprintf('%08x', $SUPPORTED_MODEL_EC->{$model_ec}),
+        'attn_types' => $attns,
         'registers'  => $regs,
         'signatures' => $sigs,
     };
