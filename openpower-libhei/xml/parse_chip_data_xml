@@ -1145,31 +1145,49 @@ sub __printParserData($$$$)
 
     # IMPORTANT: All hash keys with hex values must be lowercase.
 
-    my $nodes = {};
     my $regs  = {};
     my $sigs  = {};
 
+    # Get the signature data.
     for my $s ( @{$sig_list} )
     {
-        my $n = sprintf('%04x', __hash(2, $s->{name}));
-        my $i = sprintf('%02x', $s->{inst});
-        my $b = sprintf('%02x', $s->{bit});
+        # Format is:
+        #   { id : [ name, { bit : desc, ... } ], ... }
 
-        if ( exists($nodes->{$n}) and $nodes->{$n} ne $s->{name} )
+        # The ID is a 2-byte hash of the node name (lowercase).
+        my $id = sprintf('%04x', __hash(2, $s->{name}));
+
+        if ( exists($sigs->{$id}) )
         {
-            FAIL("Node hash collision for $n: $nodes->{$n} and $s->{name}");
+            # Check for hash collisions.
+            if ($sigs->{$id}->[0] ne $s->{name} )
+            {
+                FAIL("Node hash collision for $id: $sigs->{$id}->[0] " .
+                     "and $s->{name}");
+            }
+        }
+        else
+        {
+            # Initialize this node.
+            $sigs->{$id} = [ $s->{name}, {} ];
         }
 
-        $nodes->{$n} = $s->{name};
-
-        if ( exists($sigs->{$n}->{$b}) and $sigs->{$n}->{$b} ne $s->{desc} )
+        # Check for signature collisions.
+        if ( exists($sigs->{$id}->[1]->{$s->{bit}}) )
         {
-            FAIL("Multiple signatures for $s->{name} bit $s->{bit}:\n" .
-                 "  $sigs->{$n}->{$b}\n" .
-                 "  $s->{desc}");
+            # Check for signature collisions.
+            if ( $sigs->{$id}->[1]->{$s->{bit}} ne $s->{desc} )
+            {
+                FAIL("Multiple signatures for $s->{name} bit $s->{bit}:\n" .
+                     "  $sigs->{$id}->[1]->{$s->{bit}}\n" .
+                     "  $s->{desc}");
+            }
         }
-
-        $sigs->{$n}->{$b} = $s->{desc};
+        else
+        {
+            # Set the signature for this bit.
+            $sigs->{$id}->[1]->{$s->{bit}} = $s->{desc};
+        }
     }
 
     # Get the register data.
@@ -1206,10 +1224,9 @@ sub __printParserData($$$$)
 
     my $data =
     {
-        'model_ec'  => sprintf('%08x', $SUPPORTED_MODEL_EC->{$model_ec}),
-        'node_name' => $nodes,
-        'registers' => $regs,
-        'signature' => $sigs,
+        'model_ec'   => sprintf('%08x', $SUPPORTED_MODEL_EC->{$model_ec}),
+        'registers'  => $regs,
+        'signatures' => $sigs,
     };
 
     print $fh to_json( $data, {utf8 => 1, pretty => 1, canonical => 1} );
