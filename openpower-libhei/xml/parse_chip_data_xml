@@ -29,10 +29,10 @@ my $FILE_VERSION =
 # This is a map of all currently supported models/ECs and their IDs.
 my $SUPPORTED_MODEL_EC =
 {
-    EXPLORER_11 => 0x60D20011, # Explorer Chip DD1.0
-    EXPLORER_20 => 0x60D20020, # Explorer Chip DD1.0
-    P10_10      => 0x20DA0010, # P10 Chip DD1.0
-    P10_20      => 0x20DA0020, # P10 Chip DD2.0
+    EXPLORER_11 => { id => 0x60D20011, type => "ocmb", desc => "Explorer 1.1" },
+    EXPLORER_20 => { id => 0x60D20020, type => "ocmb", desc => "Explorer 2.0" },
+    P10_10      => { id => 0x20DA0010, type => "proc", desc => "P10 1.0" },
+    P10_20      => { id => 0x20DA0020, type => "proc", desc => "P10 2.0" },
 };
 
 # All models/ECs that may exist in the XML, but no longer needs to be built.
@@ -1149,6 +1149,10 @@ sub __printParserData($$$$)
     my $regs  = {};
     my $sigs  = {};
 
+    # Get the chip info.
+    my $info = $SUPPORTED_MODEL_EC->{$model_ec};
+    $info->{'id'} = sprintf('%08x', $info->{'id'});
+
     # Get the list of attention types.
     while ( my ($k, $v) = each %{$ATTN_TYPE} )
     {
@@ -1231,7 +1235,7 @@ sub __printParserData($$$$)
 
     my $data =
     {
-        'model_ec'   => sprintf('%08x', $SUPPORTED_MODEL_EC->{$model_ec}),
+        'model_ec'   => $info,
         'attn_types' => $attns,
         'registers'  => $regs,
         'signatures' => $sigs,
@@ -1275,8 +1279,8 @@ sub buildDataFiles($$)
 
             # Chip Data File metadata
             __bin($bin_fh, 1, $_) for ( unpack("C*", "CHIPDATA") );
-            __bin($bin_fh, 4, $SUPPORTED_MODEL_EC->{$model_ec});
-            __bin($bin_fh, 1, $FILE_VERSION->{VER_01}         );
+            __bin($bin_fh, 4, $SUPPORTED_MODEL_EC->{$model_ec}->{id});
+            __bin($bin_fh, 1, $FILE_VERSION->{VER_01}               );
 
             __printRegisters( $bin_fh, $chip->{register}  );
             __printNodes(     $bin_fh, $chip->{node}      );
