@@ -71,7 +71,6 @@ if build_phal
     ]
     extra_dependencies += [
         dependency('libdt-api'),
-        dependency('fmt'),
         cxx.find_library('ekb'),
         cxx.find_library('ipl'),
     ]
@@ -96,6 +95,7 @@ executable(
         'procedures/common/cfam_reset.cpp',
         'procedures/common/enter_mpreboot.cpp',
         'procedures/common/collect_sbe_hb_data.cpp',
+        'util.cpp',
     ] + extra_sources,
     dependencies: [
         dependency('libgpiodcxx'),
@@ -104,6 +104,7 @@ executable(
         dependency('phosphor-logging'),
         dependency('sdbusplus'),
         dependency('threads'),
+        dependency('fmt'),
     ] + extra_dependencies,
     install: true
 )

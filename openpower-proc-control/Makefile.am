@@ -25,7 +25,8 @@ openpower_proc_control_SOURCES = \
 	registration.cpp \
 	targeting.cpp \
 	openpower_procedures.cpp \
-	ext_interface.cpp
+	ext_interface.cpp \
+	util.cpp
 
 openpower_proc_nmi_SOURCES = \
 	nmi_main.cpp \
