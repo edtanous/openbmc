@@ -7,12 +7,15 @@ extern "C"
 
 #include "phalerror/phal_error.hpp"
 #include "procedures/phal/common_utils.hpp"
+#include "util.hpp"
 
+#include <fmt/format.h>
 #include <libekb.H>
 
 #include <ext_interface.hpp>
 #include <phosphor-logging/log.hpp>
 #include <registration.hpp>
+
 namespace openpower
 {
 namespace phal
@@ -114,6 +117,85 @@ void selectBootSeeprom()
 }
 
 /**
+ * @brief Read the HW Level from VPD and set CLK NE termination site
+ * Note any failure in this function will result startHost failure.
+ */
+void setClkNETerminationSite()
+{
+    // Get Motherborad VINI Recored "HW" keyword
+    constexpr auto objPath =
+        "/xyz/openbmc_project/inventory/system/chassis/motherboard";
+    constexpr auto kwdVpdInf = "com.ibm.ipzvpd.VINI";
+    constexpr auto hwKwd = "HW";
+
+    auto bus = sdbusplus::bus::new_default();
+
+    std::string service = util::getService(bus, objPath, kwdVpdInf);
+
+    auto properties = bus.new_method_call(
+        service.c_str(), objPath, "org.freedesktop.DBus.Properties", "Get");
+    properties.append(kwdVpdInf);
+    properties.append(hwKwd);
+
+    // Store "HW" Keyword data.
+    std::variant<std::vector<uint8_t>> val;
+    try
+    {
+        auto result = bus.call(properties);
+        result.read(val);
+    }
+    catch (const sdbusplus::exception::SdBusError& e)
+    {
+        log<level::ERR>("Get HW Keyword read from VINI Failed");
+        throw std::runtime_error("Get HW Keyword read from VINI Failed");
+    }
+
+    auto hwData = std::get<std::vector<uint8_t>>(val);
+
+    //"HW" Keyword size is 2 as per VPD spec.
+    constexpr auto hwKwdSize = 2;
+    if (hwKwdSize != hwData.size())
+    {
+        log<level::ERR>(
+            fmt::format("Incorrect VINI records HW Keyword data size({})",
+                        hwData.size())
+                .c_str());
+        throw std::runtime_error("Incorrect VINI records HW Keyword data size");
+    }
+
+    log<level::DEBUG>(fmt::format("VINI Records HW[0]:{} HW[1]:{}",
+                                  hwData.at(0), hwData.at(1))
+                          .c_str());
+
+    // VINI Record "HW" keyword's Byte 0's MSB bit indicates
+    // proc or planar type need to choose.
+    constexpr uint8_t SYS_CLK_NE_TERMINATION_ON_MASK = 0x80;
+
+    ATTR_SYS_CLK_NE_TERMINATION_SITE_Type clockTerm =
+        ENUM_ATTR_SYS_CLK_NE_TERMINATION_SITE_PLANAR;
+
+    if (SYS_CLK_NE_TERMINATION_ON_MASK & hwData.at(0))
+    {
+        clockTerm = ENUM_ATTR_SYS_CLK_NE_TERMINATION_SITE_PROC;
+    }
+
+    // update all the processor attributes
+    struct pdbg_target* procTarget;
+    pdbg_for_each_class_target("proc", procTarget)
+    {
+
+        if (DT_SET_PROP(ATTR_SYS_CLK_NE_TERMINATION_SITE, procTarget,
+                        clockTerm))
+        {
+            log<level::ERR>(
+                "Attribute ATTR_SYS_CLK_NE_TERMINATION_SITE set failed");
+            throw std::runtime_error(
+                "Attribute ATTR_SYS_CLK_NE_TERMINATION_SITE set failed");
+        }
+    }
+}
+
+/**
  * @brief Starts the self boot engine on POWER processor position 0
  *        to kick off a boot.
  * @return void
@@ -135,6 +217,8 @@ void startHost(enum ipl_type iplType = IPL_TYPE_NORMAL)
 
     // To clear trace if success
     openpower::pel::detail::processBootErrorCallback(true);
+
+    setClkNETerminationSite();
 
     // callback method will be called upon failure which will create the PEL
     int rc = ipl_run_major(0);
