@@ -13,17 +13,16 @@ endif
 udev = dependency('udev')
 udevdir = udev.get_pkgconfig_variable('udevdir')
 udevrules = [
-	'p10bmc-debug-trigger-kcs1',
-	'p10bmc-debug-trigger-kcs2',
-	'p10bmc-debug-trigger-kcs3',
-	'p10bmc-debug-trigger-kcs4',
+	'debug-trigger-kcs1',
+	'debug-trigger-kcs2',
+	'debug-trigger-kcs3',
+	'debug-trigger-kcs4',
 ]
 
-foreach rule : udevrules
-	if get_option(rule)
-		src = 'udev/rules.d/' + rule + '.rules'
-		dst = rule + '.rules'
-		rulesdir = udevdir + '/rules.d'
-		configure_file(input: src, output: dst, copy: true, install_dir: rulesdir)
-	endif
+triggers = get_option('triggers')
+foreach trigger : triggers
+	src = 'udev/rules.d/debug-trigger-' + trigger + '.rules'
+	dst = 'debug-trigger-' + trigger + '.rules'
+	rulesdir = udevdir + '/rules.d'
+	configure_file(input: src, output: dst, copy: true, install_dir: rulesdir)
 endforeach
