@@ -2,6 +2,7 @@ extern "C"
 {
 #include <libpdbg.h>
 }
+#include "attributes_info.H"
 
 #include "phalerror/phal_error.hpp"
 #include "procedures/phal/common_utils.hpp"
@@ -55,6 +56,34 @@ void phal_init(enum ipl_mode mode)
     {
         log<level::ERR>("ipl_init failed");
         throw std::runtime_error("libipl initialization failed");
+    }
+}
+
+/**
+ *  @brief  Check if primary processor or not
+ *
+ *  @return True/False
+ */
+bool isPrimaryProc(struct pdbg_target* procTarget)
+{
+    ATTR_PROC_MASTER_TYPE_Type type;
+
+    // Get processor type (Primary or Secondary)
+    if (DT_GET_PROP(ATTR_PROC_MASTER_TYPE, procTarget, type))
+    {
+        log<level::ERR>("Attribute [ATTR_PROC_MASTER_TYPE] get failed");
+        throw std::runtime_error(
+            "Attribute [ATTR_PROC_MASTER_TYPE] get failed");
+    }
+
+    /* Attribute value 0 corresponds to primary processor */
+    if (type == ENUM_ATTR_PROC_MASTER_TYPE_ACTING_MASTER)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
     }
 }
 

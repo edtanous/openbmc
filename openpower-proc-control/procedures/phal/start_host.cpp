@@ -24,34 +24,6 @@ namespace phal
 using namespace phosphor::logging;
 
 /**
- *  @brief  Check if master processor or not
- *
- *  @return True/False
- */
-bool isMasterProc(struct pdbg_target* procTarget)
-{
-    ATTR_PROC_MASTER_TYPE_Type type;
-
-    // Get processor type (Master or Alt-master)
-    if (DT_GET_PROP(ATTR_PROC_MASTER_TYPE, procTarget, type))
-    {
-        log<level::ERR>("Attribute [ATTR_PROC_MASTER_TYPE] get failed");
-        throw std::runtime_error(
-            "Attribute [ATTR_PROC_MASTER_TYPE] get failed");
-    }
-
-    /* Attribute value 0 corresponds to master processor */
-    if (type == 0)
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
-}
-
-/**
  *  @brief  Select BOOT SEEPROM and Measurement SEEPROM(PRIMARY/BACKUP) on POWER
  *          processor position 0/1 depending on boot count before kicking off
  *          the boot.
@@ -66,7 +38,7 @@ void selectBootSeeprom()
 
     pdbg_for_each_class_target("proc", procTarget)
     {
-        if (!isMasterProc(procTarget))
+        if (!isPrimaryProc(procTarget))
         {
             continue;
         }
