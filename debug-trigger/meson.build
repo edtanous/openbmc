@@ -12,12 +12,6 @@ endif
 
 udev = dependency('udev')
 udevdir = udev.get_pkgconfig_variable('udevdir')
-udevrules = [
-	'debug-trigger-kcs1',
-	'debug-trigger-kcs2',
-	'debug-trigger-kcs3',
-	'debug-trigger-kcs4',
-]
 
 triggers = get_option('triggers')
 foreach trigger : triggers
