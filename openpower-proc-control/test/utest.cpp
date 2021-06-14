@@ -26,8 +26,6 @@
 using namespace openpower::util;
 using namespace openpower::targeting;
 
-ProcedureMap Registration::procedures;
-
 constexpr auto masterDir = "/tmp";
 
 class TargetingTest : public ::testing::Test

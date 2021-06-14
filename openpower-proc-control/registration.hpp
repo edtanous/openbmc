@@ -40,7 +40,7 @@ class Registration
      */
     Registration(ProcedureName&& name, ProcedureFunction&& function)
     {
-        procedures.emplace(std::move(name), std::move(function));
+        procedures().emplace(std::move(name), std::move(function));
     }
 
     /**
@@ -48,11 +48,15 @@ class Registration
      */
     static const ProcedureMap& getProcedures()
     {
-        return procedures;
+        return procedures();
     }
 
   private:
-    static ProcedureMap procedures;
+    static ProcedureMap& procedures()
+    {
+        static ProcedureMap procMap;
+        return procMap;
+    }
 };
 
 } // namespace util

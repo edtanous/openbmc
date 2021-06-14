@@ -89,7 +89,6 @@ executable(
         'ext_interface.cpp',
         'filedescriptor.cpp',
         'proc_control.cpp',
-        'registration.cpp',
         'targeting.cpp',
         'procedures/common/cfam_overrides.cpp',
         'procedures/common/cfam_reset.cpp',
