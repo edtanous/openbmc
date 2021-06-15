@@ -59,11 +59,6 @@ void phal_init(enum ipl_mode mode)
     }
 }
 
-/**
- *  @brief  Check if primary processor or not
- *
- *  @return True/False
- */
 bool isPrimaryProc(struct pdbg_target* procTarget)
 {
     ATTR_PROC_MASTER_TYPE_Type type;
@@ -85,6 +80,47 @@ bool isPrimaryProc(struct pdbg_target* procTarget)
     {
         return false;
     }
+}
+
+uint32_t getCFAM(struct pdbg_target* procTarget, const uint32_t reg,
+                 uint32_t& val)
+{
+    auto procIdx = pdbg_target_index(procTarget);
+    char path[16];
+    sprintf(path, "/proc%d/pib", procIdx);
+
+    pdbg_target* pibTarget = pdbg_target_from_path(nullptr, path);
+    if (nullptr == pibTarget)
+    {
+        log<level::ERR>("pib path of target not found",
+                        entry("TARGET_PATH=%s", path));
+        return -1;
+    }
+
+    // probe PIB and ensure it's enabled
+    if (PDBG_TARGET_ENABLED != pdbg_target_probe(pibTarget))
+    {
+        log<level::ERR>("probe on pib target failed");
+        return -1;
+    }
+
+    // now build FSI path and read the input reg
+    sprintf(path, "/proc%d/fsi", procIdx);
+    pdbg_target* fsiTarget = pdbg_target_from_path(nullptr, path);
+    if (nullptr == fsiTarget)
+    {
+        log<level::ERR>("fsi path or target not found");
+        return -1;
+    }
+
+    auto rc = fsi_read(fsiTarget, reg, &val);
+    if (rc)
+    {
+        log<level::ERR>("failed to read input cfam", entry("RC=%u", rc),
+                        entry("CFAM=0x%X", reg), entry("TARGET_PATH=%s", path));
+        return rc;
+    }
+    return 0;
 }
 
 } // namespace phal
