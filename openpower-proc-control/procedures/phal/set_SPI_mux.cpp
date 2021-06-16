@@ -38,7 +38,7 @@ void setSPIMux()
 
     for (const auto& t : targets)
     {
-        writeReg(t, P10_ROOT_CTRL8, 0xFFFFFFFF);
+        writeRegWithMask(t, P10_ROOT_CTRL8, 0xF0000000, 0xF0000000);
     }
 }
 
