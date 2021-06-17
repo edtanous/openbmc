@@ -62,12 +62,13 @@ void __getSrc(const libhei::Signature& i_signature, uint32_t& o_word6,
     o_word6 = i_signature.getChip().getType();
 
     // [ 0:15] chip position
-    // [16:23] unused
+    // [16:23] node position
     // [24:31] signature attention type
-    auto pos  = util::pdbg::getChipPos(i_signature.getChip());
-    auto attn = i_signature.getAttnType();
+    auto chipPos    = util::pdbg::getChipPos(i_signature.getChip());
+    uint8_t nodePos = 0; // TODO: multi-node support
+    auto attn       = i_signature.getAttnType();
 
-    o_word7 = (pos & 0xffff) << 16 | (attn & 0xff);
+    o_word7 = (chipPos & 0xffff) << 16 | (nodePos & 0xff) << 8 | (attn & 0xff);
 
     // [ 0:15] signature ID
     // [16:23] signature instance
@@ -195,13 +196,15 @@ void __captureRegisterDump(const libhei::IsolationData& i_isoData,
         // Each chip will have the following information:
         //   4 byte chip model/EC
         //   2 byte chip position
+        //   1 byte node position
         //   4 byte number of registers
         // Then the data for each register will follow.
 
         uint32_t chipType = chip.getType();
         uint16_t chipPos  = util::pdbg::getChipPos(chip);
+        uint8_t nodePos   = 0; // TODO: multi-node support
         uint32_t numRegs  = regList.size();
-        stream << chipType << chipPos << numRegs;
+        stream << chipType << chipPos << nodePos << numRegs;
 
         for (const auto& reg : regList)
         {
