@@ -166,3 +166,23 @@ TEST(BitStringTest, TestSet6)
     ASSERT_EQ(field >> 32, (bsb >> 32).getFieldRight(0, 64));
     ASSERT_EQ(field << 32, (bsb << 32).getFieldRight(0, 64));
 }
+
+// operator ==
+TEST(BitStringTest, TestSet7)
+{
+    uint64_t field = 0x1234567890abcdef;
+
+    BitStringBuffer bsb0(64); // original
+    BitStringBuffer bsb1(64); // equal
+    BitStringBuffer bsb2(64); // not-equal
+    BitStringBuffer bsb3(32); // different size (not-equal)
+
+    bsb0.setFieldRight(0, 64, field);
+    bsb1.setFieldLeft(0, 64, field);
+    bsb2.setFieldRight(0, 64, field >> 1);
+    bsb3.setFieldRight(0, 32, field);
+
+    ASSERT_TRUE(bsb0 == bsb1);
+    ASSERT_FALSE(bsb0 == bsb2);
+    ASSERT_FALSE(bsb0 == bsb3);
+}

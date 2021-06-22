@@ -3,6 +3,7 @@
 #include <hei_signature.hpp>
 #include <util/hei_bit_string.hpp>
 
+#include <algorithm>
 #include <map>
 #include <memory>
 #include <vector>
@@ -44,6 +45,11 @@ class IsolationData
         RegisterId_t regId;                    ///< 3-byte register ID
         Instance_t regInst;                    ///< 1-byte register instance
         std::shared_ptr<BitStringBuffer> data; ///< register data
+
+        bool operator==(const RegDumpEntry& r) const
+        {
+            return regId == r.regId && regInst == r.regInst && *data == *r.data;
+        }
     };
 
   private: // Instance variables
@@ -86,8 +92,26 @@ class IsolationData
             // Make a copy of the register value.
             auto data = std::make_shared<BitStringBuffer>(*i_data);
 
-            // Add to the list.
-            iv_regDump[i_chip].emplace_back(i_regId, i_regInst, data);
+            // We'll want to avoid adding duplicate data if possible.
+            if (iv_regDump.end() == iv_regDump.find(i_chip))
+            {
+                // The chip doesn't exist in the map. Therefore, the data
+                // doesn't currently exist. So, add it.
+                iv_regDump[i_chip].emplace_back(i_regId, i_regInst, data);
+            }
+            else
+            {
+                // Search this chip for the data.
+                RegDumpEntry entry{i_regId, i_regInst, data};
+                auto itr = std::find(iv_regDump[i_chip].begin(),
+                                     iv_regDump[i_chip].end(), entry);
+
+                if (iv_regDump[i_chip].end() == itr)
+                {
+                    // The data doesn't currently exist. So, add it.
+                    iv_regDump[i_chip].push_back(entry);
+                }
+            }
         }
     }
 
