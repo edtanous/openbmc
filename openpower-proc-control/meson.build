@@ -75,9 +75,9 @@ if build_phal
         cxx.find_library('ipl'),
     ]
     extra_unit_files = [
-        'set-spi-mux.service',
-        'phal-reinit-devtree.service',
-        'proc-pre-poweroff@.service',
+        'service_files/set-spi-mux.service',
+        'service_files/phal-reinit-devtree.service',
+        'service_files/proc-pre-poweroff@.service',
     ]
     unit_subs.set('ENABLE_PHAL_TRUE', '')
 endif
@@ -124,12 +124,12 @@ executable(
 )
 
 unit_files = [
-    'pcie-poweroff@.service',
-    'xyz.openbmc_project.Control.Host.NMI.service',
-    'op-stop-instructions@.service',
-    'op-cfam-reset.service',
-    'op-continue-mpreboot@.service',
-    'op-enter-mpreboot@.service',
+    'service_files/pcie-poweroff@.service',
+    'service_files/xyz.openbmc_project.Control.Host.NMI.service',
+    'service_files/op-stop-instructions@.service',
+    'service_files/op-cfam-reset.service',
+    'service_files/op-continue-mpreboot@.service',
+    'service_files/op-enter-mpreboot@.service',
 ] + extra_unit_files
 
 systemd_system_unit_dir = dependency('systemd').get_pkgconfig_variable(
@@ -141,7 +141,7 @@ foreach u : unit_files
         input: u + '.in',
         install: true,
         install_dir: systemd_system_unit_dir,
-        output: u
+        output: '@BASENAME@'
     )
 endforeach
 
