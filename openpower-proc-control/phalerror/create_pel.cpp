@@ -27,11 +27,12 @@ using namespace phosphor::logging;
 
 namespace pel
 {
+
+constexpr auto loggingObjectPath = "/xyz/openbmc_project/logging";
+constexpr auto loggingInterface = "xyz.openbmc_project.Logging.Create";
+
 void createBootErrorPEL(const FFDCData& ffdcData, const json& calloutData)
 {
-    constexpr auto loggingObjectPath = "/xyz/openbmc_project/logging";
-    constexpr auto loggingInterface = "xyz.openbmc_project.Logging.Create";
-
     std::map<std::string, std::string> additionalData;
     auto bus = sdbusplus::bus::new_default();
     additionalData.emplace("_PID", std::to_string(getpid()));
@@ -81,6 +82,45 @@ void createBootErrorPEL(const FFDCData& ffdcData, const json& calloutData)
     }
     catch (std::exception& e)
     {
+        throw e;
+    }
+}
+
+void createHostRunningPEL()
+{
+    std::map<std::string, std::string> additionalData;
+    auto bus = sdbusplus::bus::new_default();
+    additionalData.emplace("_PID", std::to_string(getpid()));
+
+    try
+    {
+        static constexpr auto bootErrorMessage =
+            "org.open_power.PHAL.Error.HostRunning";
+        std::string service =
+            util::getService(bus, loggingObjectPath, loggingInterface);
+        auto method = bus.new_method_call(service.c_str(), loggingObjectPath,
+                                          loggingInterface, "Create");
+        auto level =
+            sdbusplus::xyz::openbmc_project::Logging::server::convertForMessage(
+                sdbusplus::xyz::openbmc_project::Logging::server::Entry::Level::
+                    Error);
+        method.append(bootErrorMessage, level, additionalData);
+        auto resp = bus.call(method);
+    }
+    catch (const sdbusplus::exception::SdBusError& e)
+    {
+        log<level::ERR>("sdbusplus D-Bus call exception",
+                        entry("OBJPATH=%s", loggingObjectPath),
+                        entry("INTERFACE=%s", loggingInterface),
+                        entry("EXCEPTION=%s", e.what()));
+
+        throw std::runtime_error(
+            "Error in invoking D-Bus logging create interface");
+    }
+    catch (std::exception& e)
+    {
+        log<level::ERR>("D-bus call exception",
+                        entry("EXCEPTION=%s", e.what()));
         throw e;
     }
 }

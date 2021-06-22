@@ -21,6 +21,14 @@ using json = nlohmann::json;
 void createBootErrorPEL(const FFDCData& ffdcData, const json& calloutData);
 
 /**
+ * Create host running error PEL
+ *
+ * The host should not be running so create an error to report this if it
+ * is found the host is up.
+ */
+void createHostRunningPEL();
+
+/**
  * @class FFDCFile
  * @brief This class is used to create ffdc data file and to get fd
  */
