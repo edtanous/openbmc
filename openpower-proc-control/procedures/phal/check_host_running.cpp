@@ -105,7 +105,53 @@ void checkHostRunning()
     throw std::runtime_error("No primary processor found in checkHostRunning");
 }
 
+/**
+ * The BMC is to make a best effort to clear the CFAM register used by PHYP
+ * to indicate it is running when the host is stopped. This procedure will do
+ * that.
+ */
+void clearHostRunning()
+{
+    struct pdbg_target* procTarget;
+    log<level::INFO>("Entering clearHostRunning");
+
+    try
+    {
+        phal_init();
+    }
+    catch (std::exception& ex)
+    {
+        // This should "never" happen so just throw the exception and let
+        // our systemd error handling process this
+        log<level::ERR>("Exception raised during init PHAL",
+                        entry("EXCEPTION=%s", ex.what()));
+        throw std::runtime_error("PHAL initialization failed");
+    }
+
+    pdbg_for_each_class_target("proc", procTarget)
+    {
+        // Only check the primary proc
+        if (!isPrimaryProc(procTarget))
+        {
+            continue;
+        }
+
+        constexpr uint32_t HOST_NOT_RUNNING_INDICATION = 0;
+        auto rc = putCFAM(procTarget, P10_SCRATCH_REG_12,
+                          HOST_NOT_RUNNING_INDICATION);
+        if (rc != 0)
+        {
+            log<level::ERR>("CFAM write to clear host running status failed");
+        }
+
+        // It's best effort, so just return either way
+        return;
+    }
+    log<level::ERR>("No primary processor found in clearHostRunning");
+}
+
 REGISTER_PROCEDURE("checkHostRunning", checkHostRunning)
+REGISTER_PROCEDURE("clearHostRunning", clearHostRunning)
 
 } // namespace phal
 } // namespace openpower
