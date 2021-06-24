@@ -82,42 +82,106 @@ bool isPrimaryProc(struct pdbg_target* procTarget)
     }
 }
 
-uint32_t getCFAM(struct pdbg_target* procTarget, const uint32_t reg,
-                 uint32_t& val)
+pdbg_target* getFsiTarget(struct pdbg_target* procTarget)
 {
-    auto procIdx = pdbg_target_index(procTarget);
-    char path[16];
-    sprintf(path, "/proc%d/pib", procIdx);
 
-    pdbg_target* pibTarget = pdbg_target_from_path(nullptr, path);
-    if (nullptr == pibTarget)
+    struct pdbg_target* fsiTarget = nullptr;
+    pdbg_for_each_target("fsi", procTarget, fsiTarget)
     {
-        log<level::ERR>("pib path of target not found",
-                        entry("TARGET_PATH=%s", path));
-        return -1;
+        // grab first one we find
+        break;
+    }
+    if (!fsiTarget)
+    {
+        log<level::ERR>(
+            "fsi path of target not found",
+            entry("PROC_TARGET_PATH=%s", pdbg_target_path(procTarget)));
+        return nullptr;
     }
 
+    return fsiTarget;
+}
+
+uint32_t probeTarget(struct pdbg_target* procTarget)
+{
+    struct pdbg_target* pibTarget = nullptr;
+    pdbg_for_each_target("pib", procTarget, pibTarget)
+    {
+        // grab first one we find
+        break;
+    }
+    if (!pibTarget)
+    {
+        log<level::ERR>(
+            "pib path of target not found",
+            entry("PROC_TARGET_PATH=%s", pdbg_target_path(procTarget)));
+        return -1;
+    }
     // probe PIB and ensure it's enabled
     if (PDBG_TARGET_ENABLED != pdbg_target_probe(pibTarget))
     {
-        log<level::ERR>("probe on pib target failed");
+        log<level::ERR>(
+            "probe on pib target failed",
+            entry("PIB_TARGET_PATH=%s", pdbg_target_path(pibTarget)));
         return -1;
     }
+    return 0;
+}
 
-    // now build FSI path and read the input reg
-    sprintf(path, "/proc%d/fsi", procIdx);
-    pdbg_target* fsiTarget = pdbg_target_from_path(nullptr, path);
+uint32_t getCFAM(struct pdbg_target* procTarget, const uint32_t reg,
+                 uint32_t& val)
+{
+
+    pdbg_target* fsiTarget = getFsiTarget(procTarget);
     if (nullptr == fsiTarget)
     {
-        log<level::ERR>("fsi path or target not found");
+        log<level::ERR>("getCFAM: fsi path or target not found");
         return -1;
     }
 
-    auto rc = fsi_read(fsiTarget, reg, &val);
+    auto rc = probeTarget(procTarget);
     if (rc)
     {
-        log<level::ERR>("failed to read input cfam", entry("RC=%u", rc),
-                        entry("CFAM=0x%X", reg), entry("TARGET_PATH=%s", path));
+        // probe function logged details to journal
+        return rc;
+    }
+
+    rc = fsi_read(fsiTarget, reg, &val);
+    if (rc)
+    {
+        log<level::ERR>(
+            "failed to read input cfam", entry("RC=%u", rc),
+            entry("CFAM=0x%X", reg),
+            entry("FSI_TARGET_PATH=%s", pdbg_target_path(fsiTarget)));
+        return rc;
+    }
+    return 0;
+}
+
+uint32_t putCFAM(struct pdbg_target* procTarget, const uint32_t reg,
+                 const uint32_t val)
+{
+    pdbg_target* fsiTarget = getFsiTarget(procTarget);
+    if (nullptr == fsiTarget)
+    {
+        log<level::ERR>("putCFAM: fsi path or target not found");
+        return -1;
+    }
+
+    auto rc = probeTarget(procTarget);
+    if (rc)
+    {
+        // probe function logged details to journal
+        return rc;
+    }
+
+    rc = fsi_write(fsiTarget, reg, val);
+    if (rc)
+    {
+        log<level::ERR>(
+            "failed to write input cfam", entry("RC=%u", rc),
+            entry("CFAM=0x%X", reg),
+            entry("FSI_TARGET_PATH=%s", pdbg_target_path(fsiTarget)));
         return rc;
     }
     return 0;
