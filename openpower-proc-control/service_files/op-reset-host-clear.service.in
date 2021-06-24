@@ -1,0 +1,13 @@
+[Unit]
+Description=Clear host running status register
+Wants=obmc-host-stop-pre@0.target
+Before=obmc-host-stop-pre@0.target
+Conflicts=obmc-host-startmin@0.target
+
+[Service]
+RemainAfterExit=yes
+Type=oneshot
+ExecStart=/usr/bin/openpower-proc-control clearHostRunning
+
+[Install]
+WantedBy=obmc-host-stop@0.target
