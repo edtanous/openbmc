@@ -19,7 +19,11 @@
 #include "registration.hpp"
 #include "targeting.hpp"
 
+extern "C"
+{
 #include <libpdbg.h>
+#include <libpdbg_sbe.h>
+}
 
 #include <phosphor-logging/log.hpp>
 namespace openpower

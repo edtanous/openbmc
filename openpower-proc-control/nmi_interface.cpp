@@ -16,7 +16,11 @@
 
 #include "nmi_interface.hpp"
 
+extern "C"
+{
 #include <libpdbg.h>
+#include <libpdbg_sbe.h>
+}
 
 #include <phosphor-logging/elog-errors.hpp>
 #include <phosphor-logging/elog.hpp>
