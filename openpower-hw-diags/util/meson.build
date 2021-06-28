@@ -1,5 +1,6 @@
 # Source files.
 util_src = files(
+    'dbus.cpp',
     'ffdc_file.cpp',
     'pdbg.cpp',
     'temporary_file.cpp',
