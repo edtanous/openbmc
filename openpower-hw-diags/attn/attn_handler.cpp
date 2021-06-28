@@ -1,4 +1,8 @@
+extern "C"
+{
 #include <libpdbg.h>
+#include <libpdbg_sbe.h>
+}
 
 #include <analyzer/analyzer_main.hpp>
 #include <attn/attention.hpp>
