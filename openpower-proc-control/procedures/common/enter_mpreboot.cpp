@@ -22,6 +22,7 @@ extern "C"
 #include <libpdbg_sbe.h>
 }
 
+#include <fmt/format.h>
 #include <sys/wait.h>
 #include <unistd.h>
 
@@ -50,6 +51,10 @@ void sbeEnterMpReboot(struct pdbg_target* tgt)
         throw std::system_error(error, std::generic_category(),
                                 "Failed to initiate memory preserving reboot");
     }
+
+    log<level::INFO>(
+        fmt::format("Enter MPIPL completed on proc({})", pdbg_target_index(tgt))
+            .c_str());
 }
 
 /**
