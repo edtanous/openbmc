@@ -6,6 +6,7 @@ extern "C"
 #include "phalerror/phal_error.hpp"
 #include "procedures/phal/common_utils.hpp"
 
+#include <fmt/format.h>
 #include <libekb.H>
 
 #include <phosphor-logging/log.hpp>
@@ -25,6 +26,18 @@ void phal_init(enum ipl_mode mode)
     //       handling callback.
     // add callback methods for debug traces and for boot failures
     openpower::pel::addBootErrorCallbacks();
+
+    // PDBG_DTB environment variable set to CEC device tree path
+    static constexpr auto PDBG_DTB_PATH =
+        "/var/lib/phosphor-software-manager/pnor/rw/DEVTREE";
+
+    if (setenv("PDBG_DTB", PDBG_DTB_PATH, 1))
+    {
+        log<level::ERR>(
+            fmt::format("Failed to set PDBG_DTB: ({})", strerror(errno))
+                .c_str());
+        throw std::runtime_error("Failed to set PDBG_DTB");
+    }
 
     if (!pdbg_targets_init(NULL))
     {
