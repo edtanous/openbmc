@@ -164,7 +164,6 @@ void Nvme::setLEDsStatus(const phosphor::nvme::Nvme::NVMeConfig& config,
                          bool success,
                          const phosphor::nvme::Nvme::NVMeData& nvmeData)
 {
-    static std::unordered_map<std::string, bool> isError;
 
     if (success)
     {
@@ -209,7 +208,8 @@ std::string intToHex(int input)
 }
 
 /** @brief Get NVMe info over smbus  */
-bool getNVMeInfobyBusID(int busID, phosphor::nvme::Nvme::NVMeData& nvmeData)
+bool Nvme::getNVMeInfobyBusID(int busID,
+                              phosphor::nvme::Nvme::NVMeData& nvmeData)
 {
     nvmeData.present = true;
     nvmeData.vendor = "";
@@ -229,8 +229,6 @@ bool getNVMeInfobyBusID(int busID, phosphor::nvme::Nvme::NVMeData& nvmeData)
     uint8_t tx_data = COMMAND_CODE_0;
 
     auto init = smbus.smbusInit(busID);
-
-    static std::unordered_map<int, bool> isErrorSmbus;
 
     if (init == -1)
     {
@@ -577,8 +575,6 @@ void Nvme::read()
     std::string devPresentPath;
     std::string devPwrGoodPath;
     std::string inventoryPath;
-
-    static std::unordered_map<std::string, bool> isErrorPower;
 
     for (auto config : configs)
     {

@@ -124,6 +124,10 @@ class Nvme
 
     void createNVMeInventory();
 
+    /** @brief read NVMe information via Smbus */
+    bool getNVMeInfobyBusID(int busID,
+                            phosphor::nvme::Nvme::NVMeData& nvmeData);
+
     /** @brief read and update NVME data to dbus */
     void readNvmeData(NVMeConfig& config);
 
@@ -136,6 +140,13 @@ class Nvme
     sdeventplus::utility::Timer<sdeventplus::ClockId::Monotonic> _timer;
 
     std::vector<phosphor::nvme::Nvme::NVMeConfig> configs;
+
+    /** @brief error status for Smbus */
+    std::unordered_map<int, bool> isErrorSmbus;
+    /** @brief error status for LED */
+    std::unordered_map<std::string, bool> isError;
+    /** @brief error status for NVMe power*/
+    std::unordered_map<std::string, bool> isErrorPower;
 
     /** @brief Set up initial configuration value of NVMe */
     void init();
