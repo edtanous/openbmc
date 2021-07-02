@@ -560,6 +560,9 @@ void Nvme::readNvmeData(NVMeConfig& config)
         iter->second->setSensorValueToDbus(nvmeData.sensorValue);
         if (nvmeData.wcTemp != 0)
         {
+            config.criticalHigh = nvmeData.wcTemp;
+            config.warningHigh = nvmeData.wcTemp;
+
             iter->second->setSensorThreshold(
                 config.criticalHigh, config.criticalLow, config.warningHigh,
                 config.warningLow);
