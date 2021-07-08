@@ -5,6 +5,7 @@ After=obmc-mapper.target
 After=mapper-wait@-xyz-openbmc_project-logging.service
 After=fsi-scan@0.service
 After=op-cfam-reset.service
+After=cfam_override@0.service
 Conflicts=obmc-host-stop@0.target
 
 [Service]
