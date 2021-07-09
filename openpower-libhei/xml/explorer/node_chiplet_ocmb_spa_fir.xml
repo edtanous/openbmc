@@ -19,11 +19,11 @@
         </expr>
     </rule>
 
-    <bit pos="1" child_node="MMIOFIR"  >Attention from MMIOFIR</bit>
-    <bit pos="4" child_node="SRQFIR"   >Attention from SRQFIR</bit>
-    <bit pos="5" child_node="MCBISTFIR">Attention from MCBISTFIR</bit>
-    <bit pos="6" child_node="RDFFIR"   >Attention from RDFFIR</bit>
-    <bit pos="8" child_node="TLXFIR"   >Attention from TLXFIR</bit>
-    <bit pos="9" child_node="OMIDLFIR" >Attention from OMIDLFIR</bit>
+    <bit pos="1" child_node="MMIOFIR"   >Attention from MMIOFIR</bit>
+    <bit pos="4" child_node="SRQFIR"    >Attention from SRQFIR</bit>
+    <bit pos="5" child_node="MCBISTFIR" >Attention from MCBISTFIR</bit>
+    <bit pos="6" child_node="RDFFIR"    >Attention from RDFFIR</bit>
+    <bit pos="8" child_node="TLXFIR"    >Attention from TLXFIR</bit>
+    <bit pos="9" child_node="OMI_DL_FIR">Attention from OMI_DL_FIR</bit>
 
 </attn_node>

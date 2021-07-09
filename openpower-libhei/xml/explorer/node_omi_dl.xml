@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<attn_node model_ec="EXPLORER_11,EXPLORER_20" name="OMI_DL" reg_type="SCOM">
+
+    <register name="OMI_DL_CONFIG0">
+        <instance reg_inst="0" addr="0x08012810" />
+    </register>
+
+    <register name="OMI_DL_CONFIG1">
+        <instance reg_inst="0" addr="0x08012811" />
+    </register>
+
+    <register name="OMI_DL_ERR_MASK">
+        <instance reg_inst="0" addr="0x08012812" />
+    </register>
+
+    <register name="OMI_DL_ERR_RPT">
+        <instance reg_inst="0" addr="0x08012813" />
+    </register>
+
+    <register name="OMI_DL_ERR_CAPTURE">
+        <instance reg_inst="0" addr="0x08012814" />
+    </register>
+
+    <register name="OMI_DL_EDPL_MAX_COUNT">
+        <instance reg_inst="0" addr="0x08012815" />
+    </register>
+
+    <register name="OMI_DL_STATUS">
+        <instance reg_inst="0" addr="0x08012816" />
+    </register>
+
+    <register name="OMI_DL_TRAINING_STATUS">
+        <instance reg_inst="0" addr="0x08012817" />
+    </register>
+
+    <register name="OMI_DL_DLX_CONFIG">
+        <instance reg_inst="0" addr="0x08012818" />
+    </register>
+
+    <register name="OMI_DL_DLX_INFO">
+        <instance reg_inst="0" addr="0x08012819" />
+    </register>
+
+    <register name="OMI_DL_ERR_ACTION">
+        <instance reg_inst="0" addr="0x0801281D" />
+    </register>
+
+    <register name="OMI_DL_DEBUG_AID">
+        <instance reg_inst="0" addr="0x0801281E" />
+    </register>
+
+    <register name="OMI_DL_CYA_BITS">
+        <instance reg_inst="0" addr="0x0801281F" />
+    </register>
+
+    <capture_group node_inst="0">
+        <capture_register reg_name="OMI_DL_CONFIG0"         reg_inst="0" />
+        <capture_register reg_name="OMI_DL_CONFIG1"         reg_inst="0" />
+        <capture_register reg_name="OMI_DL_ERR_MASK"        reg_inst="0" />
+        <capture_register reg_name="OMI_DL_ERR_RPT"         reg_inst="0" />
+        <capture_register reg_name="OMI_DL_ERR_CAPTURE"     reg_inst="0" />
+        <capture_register reg_name="OMI_DL_EDPL_MAX_COUNT"  reg_inst="0" />
+        <capture_register reg_name="OMI_DL_STATUS"          reg_inst="0" />
+        <capture_register reg_name="OMI_DL_TRAINING_STATUS" reg_inst="0" />
+        <capture_register reg_name="OMI_DL_DLX_CONFIG"      reg_inst="0" />
+        <capture_register reg_name="OMI_DL_DLX_INFO"        reg_inst="0" />
+        <capture_register reg_name="OMI_DL_ERR_ACTION"      reg_inst="0" />
+        <capture_register reg_name="OMI_DL_DEBUG_AID"       reg_inst="0" />
+        <capture_register reg_name="OMI_DL_CYA_BITS"        reg_inst="0" />
+    </capture_group>
+
+    <rule attn_type="UCS" node_inst="0">
+        <!-- FIR & ~MASK & ~ACT0 & ~ACT1 & 0xfffff00000000000-->
+        <expr type="and">
+            <expr type="reg" value1="OMI_DL_FIR"/>
+            <expr type="not">
+                <expr type="reg" value1="OMI_DL_FIR_MASK"/>
+            </expr>
+            <expr type="not">
+                <expr type="reg" value1="OMI_DL_FIR_ACT0"/>
+            </expr>
+            <expr type="not">
+                <expr type="reg" value1="OMI_DL_FIR_ACT1"/>
+            </expr>
+            <expr type="int" value1="0xfffff00000000000" />
+        </expr>
+    </rule>
+
+    <rule attn_type="RE" node_inst="0">
+        <!-- FIR & ~MASK & ~ACT0 & ACT1 & 0xfffff00000000000-->
+        <expr type="and">
+            <expr type="reg" value1="OMI_DL_FIR"/>
+            <expr type="not">
+                <expr type="reg" value1="OMI_DL_FIR_MASK"/>
+            </expr>
+            <expr type="not">
+                <expr type="reg" value1="OMI_DL_FIR_ACT0"/>
+            </expr>
+            <expr type="reg" value1="OMI_DL_FIR_ACT1"/>
+            <expr type="int" value1="0xfffff00000000000" />
+        </expr>
+    </rule>
+
+    <rule attn_type="HA" node_inst="0">
+        <!-- FIR & ~MASK & ACT0 & ~ACT1 & 0xfffff00000000000-->
+        <expr type="and">
+            <expr type="reg" value1="OMI_DL_FIR"/>
+            <expr type="not">
+                <expr type="reg" value1="OMI_DL_FIR_MASK"/>
+            </expr>
+            <expr type="reg" value1="OMI_DL_FIR_ACT0"/>
+            <expr type="not">
+                <expr type="reg" value1="OMI_DL_FIR_ACT1"/>
+            </expr>
+            <expr type="int" value1="0xfffff00000000000" />
+        </expr>
+    </rule>
+
+    <bit pos= "0" child_node="OMI_DL_ERR_RPT" node_inst="0">OMI-DL fatal error</bit>
+    <bit pos= "1">OMI-DL UE on data flit</bit>
+    <bit pos= "2">OMI-DL CE on TL flit</bit>
+    <bit pos= "3">OMI-DL detected a CRC error</bit>
+    <bit pos= "4">OMI-DL received a nack</bit>
+    <bit pos= "5">OMI-DL running in degraded mode</bit>
+    <bit pos= "6">OMI-DL parity error detection on a lane</bit>
+    <bit pos= "7">OMI-DL retrained due to no forward progress</bit>
+    <bit pos= "8">OMI-DL remote side initiated a retrain</bit>
+    <bit pos= "9">OMI-DL retrain due to internal error or software</bit>
+    <bit pos="10">OMI-DL threshold reached</bit>
+    <bit pos="11">OMI-DL trained</bit>
+    <bit pos="12">OMI-DL endpoint error bit 0</bit>
+    <bit pos="13">OMI-DL endpoint error bit 1</bit>
+    <bit pos="14">OMI-DL endpoint error bit 2</bit>
+    <bit pos="15">OMI-DL endpoint error bit 3</bit>
+    <bit pos="16">OMI-DL endpoint error bit 4</bit>
+    <bit pos="17">OMI-DL endpoint error bit 5</bit>
+    <bit pos="18">OMI-DL endpoint error bit 6</bit>
+    <bit pos="19">OMI-DL endpoint error bit 7</bit>
+
+</attn_node>

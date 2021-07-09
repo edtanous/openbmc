@@ -37,12 +37,12 @@
         </expr>
     </rule>
 
-    <bit pos= "3" child_node="OCMB_LFIR">Attention from OCMB_LFIR</bit>
-    <bit pos= "4" child_node="MMIOFIR"  >Attention from MMIOFIR</bit>
-    <bit pos= "7" child_node="SRQFIR"   >Attention from SRQFIR</bit>
-    <bit pos= "8" child_node="MCBISTFIR">Attention from MCBISTFIR</bit>
-    <bit pos= "9" child_node="RDFFIR"   >Attention from RDFFIR</bit>
-    <bit pos="11" child_node="TLXFIR"   >Attention from TLXFIR</bit>
-    <bit pos="12" child_node="OMIDLFIR" >Attention from OMIDLFIR</bit>
+    <bit pos= "3" child_node="OCMB_LFIR" >Attention from OCMB_LFIR</bit>
+    <bit pos= "4" child_node="MMIOFIR"   >Attention from MMIOFIR</bit>
+    <bit pos= "7" child_node="SRQFIR"    >Attention from SRQFIR</bit>
+    <bit pos= "8" child_node="MCBISTFIR" >Attention from MCBISTFIR</bit>
+    <bit pos= "9" child_node="RDFFIR"    >Attention from RDFFIR</bit>
+    <bit pos="11" child_node="TLXFIR"    >Attention from TLXFIR</bit>
+    <bit pos="12" child_node="OMI_DL_FIR">Attention from OMI_DL_FIR</bit>
 
 </attn_node>

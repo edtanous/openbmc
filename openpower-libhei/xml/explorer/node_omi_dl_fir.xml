@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<attn_node name="OMI_DL_FIR" model_ec="EXPLORER_11,EXPLORER_20" reg_type="SCOM">
+
+    <local_fir name="OMI_DL_FIR" config="W">
+        <instance reg_inst="0" addr="0x08012800" />
+        <action attn_type="UCS" config="00" />
+        <action attn_type="RE"  config="01" />
+        <action attn_type="HA"  config="10" />
+    </local_fir>
+
+    <register name="CMN_CONFIG">
+        <instance reg_inst="0" addr="0x0801280E" />
+    </register>
+
+    <register name="PMU_CNTR">
+        <instance reg_inst="0" addr="0x0801280F" />
+    </register>
+
+    <capture_group node_inst="0">
+        <capture_register reg_name="CMN_CONFIG" reg_inst="0" />
+        <capture_register reg_name="PMU_CNTR"   reg_inst="0" />
+    </capture_group>
+
+    <bit pos="0:19" child_node="OMI_DL" node_inst="0">OMI-DL0</bit>
+    <bit pos="20:39">OMI-DL1</bit>
+    <bit pos="40:59">OMI-DL2</bit>
+    <bit pos="60">Performance monitor wrapped</bit>
+    <bit pos="61">reserved</bit>
+    <bit pos="62">LFIR internal parity error</bit>
+    <bit pos="63">SCOM Satellite Error</bit>
+
+</attn_node>

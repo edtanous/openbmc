@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<attn_node model_ec="EXPLORER_11,EXPLORER_20" name="OMI_DL_ERR_RPT" reg_type="SCOM">
+
+    <rule attn_type="UCS" node_inst="0">
+        <!-- REG & 0x0000000000000fff -->
+        <expr type="and">
+            <expr type="reg" value1="OMI_DL_ERR_RPT" />
+            <expr type="int" value1="0x0000000000000fff" />
+        </expr>
+    </rule>
+
+    <rule attn_type="RE" node_inst="0">
+        <!-- REG & 0x0000000000000fff -->
+        <expr type="and">
+            <expr type="reg" value1="OMI_DL_ERR_RPT" />
+            <expr type="int" value1="0x0000000000000fff" />
+        </expr>
+    </rule>
+
+    <rule attn_type="HA" node_inst="0">
+        <!-- REG & 0x0000000000000fff -->
+        <expr type="and">
+            <expr type="reg" value1="OMI_DL_ERR_RPT" />
+            <expr type="int" value1="0x0000000000000fff" />
+        </expr>
+    </rule>
+
+    <bit pos="52">spare</bit>
+    <bit pos="53">spare</bit>
+    <bit pos="54">spare</bit>
+    <bit pos="55">RX receiving slow A</bit>
+    <bit pos="56">RX receiving illegal run length</bit>
+    <bit pos="57">control parity error</bit>
+    <bit pos="58">data parity error</bit>
+    <bit pos="59">truncated flit from TL</bit>
+    <bit pos="60">illegal run length from TL</bit>
+    <bit pos="61">Ack pointer overflow</bit>
+    <bit pos="62">UE on control flit replay buffer</bit>
+    <bit pos="63">UE on control flit frame buffer</bit>
+
+</attn_node>

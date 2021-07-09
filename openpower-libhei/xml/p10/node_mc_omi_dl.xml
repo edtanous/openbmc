@@ -1,0 +1,388 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<attn_node model_ec="P10_10,P10_20" name="MC_OMI_DL" reg_type="SCOM">
+
+    <register name="MC_OMI_DL_CONFIG0">
+        <instance reg_inst= "0" addr="0x0C011410" />
+        <instance reg_inst= "1" addr="0x0C011420" />
+        <instance reg_inst= "2" addr="0x0C011810" />
+        <instance reg_inst= "3" addr="0x0C011820" />
+        <instance reg_inst= "4" addr="0x0D011410" />
+        <instance reg_inst= "5" addr="0x0D011420" />
+        <instance reg_inst= "6" addr="0x0D011810" />
+        <instance reg_inst= "7" addr="0x0D011820" />
+        <instance reg_inst= "8" addr="0x0E011410" />
+        <instance reg_inst= "9" addr="0x0E011420" />
+        <instance reg_inst="10" addr="0x0E011810" />
+        <instance reg_inst="11" addr="0x0E011820" />
+        <instance reg_inst="12" addr="0x0F011410" />
+        <instance reg_inst="13" addr="0x0F011420" />
+        <instance reg_inst="14" addr="0x0F011810" />
+        <instance reg_inst="15" addr="0x0F011820" />
+    </register>
+
+    <register name="MC_OMI_DL_CONFIG1">
+        <instance reg_inst= "0" addr="0x0C011411" />
+        <instance reg_inst= "1" addr="0x0C011421" />
+        <instance reg_inst= "2" addr="0x0C011811" />
+        <instance reg_inst= "3" addr="0x0C011821" />
+        <instance reg_inst= "4" addr="0x0D011411" />
+        <instance reg_inst= "5" addr="0x0D011421" />
+        <instance reg_inst= "6" addr="0x0D011811" />
+        <instance reg_inst= "7" addr="0x0D011821" />
+        <instance reg_inst= "8" addr="0x0E011411" />
+        <instance reg_inst= "9" addr="0x0E011421" />
+        <instance reg_inst="10" addr="0x0E011811" />
+        <instance reg_inst="11" addr="0x0E011821" />
+        <instance reg_inst="12" addr="0x0F011411" />
+        <instance reg_inst="13" addr="0x0F011421" />
+        <instance reg_inst="14" addr="0x0F011811" />
+        <instance reg_inst="15" addr="0x0F011821" />
+    </register>
+
+    <register name="MC_OMI_DL_ERR_MASK">
+        <instance reg_inst= "0" addr="0x0C011412" />
+        <instance reg_inst= "1" addr="0x0C011422" />
+        <instance reg_inst= "2" addr="0x0C011812" />
+        <instance reg_inst= "3" addr="0x0C011822" />
+        <instance reg_inst= "4" addr="0x0D011412" />
+        <instance reg_inst= "5" addr="0x0D011422" />
+        <instance reg_inst= "6" addr="0x0D011812" />
+        <instance reg_inst= "7" addr="0x0D011822" />
+        <instance reg_inst= "8" addr="0x0E011412" />
+        <instance reg_inst= "9" addr="0x0E011422" />
+        <instance reg_inst="10" addr="0x0E011812" />
+        <instance reg_inst="11" addr="0x0E011822" />
+        <instance reg_inst="12" addr="0x0F011412" />
+        <instance reg_inst="13" addr="0x0F011422" />
+        <instance reg_inst="14" addr="0x0F011812" />
+        <instance reg_inst="15" addr="0x0F011822" />
+    </register>
+
+    <register name="MC_OMI_DL_ERR_RPT">
+        <instance reg_inst= "0" addr="0x0C011413" />
+        <instance reg_inst= "1" addr="0x0C011423" />
+        <instance reg_inst= "2" addr="0x0C011813" />
+        <instance reg_inst= "3" addr="0x0C011823" />
+        <instance reg_inst= "4" addr="0x0D011413" />
+        <instance reg_inst= "5" addr="0x0D011423" />
+        <instance reg_inst= "6" addr="0x0D011813" />
+        <instance reg_inst= "7" addr="0x0D011823" />
+        <instance reg_inst= "8" addr="0x0E011413" />
+        <instance reg_inst= "9" addr="0x0E011423" />
+        <instance reg_inst="10" addr="0x0E011813" />
+        <instance reg_inst="11" addr="0x0E011823" />
+        <instance reg_inst="12" addr="0x0F011413" />
+        <instance reg_inst="13" addr="0x0F011423" />
+        <instance reg_inst="14" addr="0x0F011813" />
+        <instance reg_inst="15" addr="0x0F011823" />
+    </register>
+
+    <register name="MC_OMI_DL_ERR_CAPTURE">
+        <instance reg_inst= "0" addr="0x0C011414" />
+        <instance reg_inst= "1" addr="0x0C011424" />
+        <instance reg_inst= "2" addr="0x0C011814" />
+        <instance reg_inst= "3" addr="0x0C011824" />
+        <instance reg_inst= "4" addr="0x0D011414" />
+        <instance reg_inst= "5" addr="0x0D011424" />
+        <instance reg_inst= "6" addr="0x0D011814" />
+        <instance reg_inst= "7" addr="0x0D011824" />
+        <instance reg_inst= "8" addr="0x0E011414" />
+        <instance reg_inst= "9" addr="0x0E011424" />
+        <instance reg_inst="10" addr="0x0E011814" />
+        <instance reg_inst="11" addr="0x0E011824" />
+        <instance reg_inst="12" addr="0x0F011414" />
+        <instance reg_inst="13" addr="0x0F011424" />
+        <instance reg_inst="14" addr="0x0F011814" />
+        <instance reg_inst="15" addr="0x0F011824" />
+    </register>
+
+    <register name="MC_OMI_DL_EDPL_MAX_COUNT">
+        <instance reg_inst= "0" addr="0x0C011415" />
+        <instance reg_inst= "1" addr="0x0C011425" />
+        <instance reg_inst= "2" addr="0x0C011815" />
+        <instance reg_inst= "3" addr="0x0C011825" />
+        <instance reg_inst= "4" addr="0x0D011415" />
+        <instance reg_inst= "5" addr="0x0D011425" />
+        <instance reg_inst= "6" addr="0x0D011815" />
+        <instance reg_inst= "7" addr="0x0D011825" />
+        <instance reg_inst= "8" addr="0x0E011415" />
+        <instance reg_inst= "9" addr="0x0E011425" />
+        <instance reg_inst="10" addr="0x0E011815" />
+        <instance reg_inst="11" addr="0x0E011825" />
+        <instance reg_inst="12" addr="0x0F011415" />
+        <instance reg_inst="13" addr="0x0F011425" />
+        <instance reg_inst="14" addr="0x0F011815" />
+        <instance reg_inst="15" addr="0x0F011825" />
+    </register>
+
+    <register name="MC_OMI_DL_STATUS">
+        <instance reg_inst= "0" addr="0x0C011416" />
+        <instance reg_inst= "1" addr="0x0C011426" />
+        <instance reg_inst= "2" addr="0x0C011816" />
+        <instance reg_inst= "3" addr="0x0C011826" />
+        <instance reg_inst= "4" addr="0x0D011416" />
+        <instance reg_inst= "5" addr="0x0D011426" />
+        <instance reg_inst= "6" addr="0x0D011816" />
+        <instance reg_inst= "7" addr="0x0D011826" />
+        <instance reg_inst= "8" addr="0x0E011416" />
+        <instance reg_inst= "9" addr="0x0E011426" />
+        <instance reg_inst="10" addr="0x0E011816" />
+        <instance reg_inst="11" addr="0x0E011826" />
+        <instance reg_inst="12" addr="0x0F011416" />
+        <instance reg_inst="13" addr="0x0F011426" />
+        <instance reg_inst="14" addr="0x0F011816" />
+        <instance reg_inst="15" addr="0x0F011826" />
+    </register>
+
+    <register name="MC_OMI_DL_TRAINING_STATUS">
+        <instance reg_inst= "0" addr="0x0C011417" />
+        <instance reg_inst= "1" addr="0x0C011427" />
+        <instance reg_inst= "2" addr="0x0C011817" />
+        <instance reg_inst= "3" addr="0x0C011827" />
+        <instance reg_inst= "4" addr="0x0D011417" />
+        <instance reg_inst= "5" addr="0x0D011427" />
+        <instance reg_inst= "6" addr="0x0D011817" />
+        <instance reg_inst= "7" addr="0x0D011827" />
+        <instance reg_inst= "8" addr="0x0E011417" />
+        <instance reg_inst= "9" addr="0x0E011427" />
+        <instance reg_inst="10" addr="0x0E011817" />
+        <instance reg_inst="11" addr="0x0E011827" />
+        <instance reg_inst="12" addr="0x0F011417" />
+        <instance reg_inst="13" addr="0x0F011427" />
+        <instance reg_inst="14" addr="0x0F011817" />
+        <instance reg_inst="15" addr="0x0F011827" />
+    </register>
+
+    <register name="MC_OMI_DL_DLX_CONFIG">
+        <instance reg_inst= "0" addr="0x0C011418" />
+        <instance reg_inst= "1" addr="0x0C011428" />
+        <instance reg_inst= "2" addr="0x0C011818" />
+        <instance reg_inst= "3" addr="0x0C011828" />
+        <instance reg_inst= "4" addr="0x0D011418" />
+        <instance reg_inst= "5" addr="0x0D011428" />
+        <instance reg_inst= "6" addr="0x0D011818" />
+        <instance reg_inst= "7" addr="0x0D011828" />
+        <instance reg_inst= "8" addr="0x0E011418" />
+        <instance reg_inst= "9" addr="0x0E011428" />
+        <instance reg_inst="10" addr="0x0E011818" />
+        <instance reg_inst="11" addr="0x0E011828" />
+        <instance reg_inst="12" addr="0x0F011418" />
+        <instance reg_inst="13" addr="0x0F011428" />
+        <instance reg_inst="14" addr="0x0F011818" />
+        <instance reg_inst="15" addr="0x0F011828" />
+    </register>
+
+    <register name="MC_OMI_DL_DLX_INFO">
+        <instance reg_inst= "0" addr="0x0C011419" />
+        <instance reg_inst= "1" addr="0x0C011429" />
+        <instance reg_inst= "2" addr="0x0C011819" />
+        <instance reg_inst= "3" addr="0x0C011829" />
+        <instance reg_inst= "4" addr="0x0D011419" />
+        <instance reg_inst= "5" addr="0x0D011429" />
+        <instance reg_inst= "6" addr="0x0D011819" />
+        <instance reg_inst= "7" addr="0x0D011829" />
+        <instance reg_inst= "8" addr="0x0E011419" />
+        <instance reg_inst= "9" addr="0x0E011429" />
+        <instance reg_inst="10" addr="0x0E011819" />
+        <instance reg_inst="11" addr="0x0E011829" />
+        <instance reg_inst="12" addr="0x0F011419" />
+        <instance reg_inst="13" addr="0x0F011429" />
+        <instance reg_inst="14" addr="0x0F011819" />
+        <instance reg_inst="15" addr="0x0F011829" />
+    </register>
+
+    <register name="MC_OMI_DL_ERR_ACTION">
+        <instance reg_inst= "0" addr="0x0C01141D" />
+        <instance reg_inst= "1" addr="0x0C01142D" />
+        <instance reg_inst= "2" addr="0x0C01181D" />
+        <instance reg_inst= "3" addr="0x0C01182D" />
+        <instance reg_inst= "4" addr="0x0D01141D" />
+        <instance reg_inst= "5" addr="0x0D01142D" />
+        <instance reg_inst= "6" addr="0x0D01181D" />
+        <instance reg_inst= "7" addr="0x0D01182D" />
+        <instance reg_inst= "8" addr="0x0E01141D" />
+        <instance reg_inst= "9" addr="0x0E01142D" />
+        <instance reg_inst="10" addr="0x0E01181D" />
+        <instance reg_inst="11" addr="0x0E01182D" />
+        <instance reg_inst="12" addr="0x0F01141D" />
+        <instance reg_inst="13" addr="0x0F01142D" />
+        <instance reg_inst="14" addr="0x0F01181D" />
+        <instance reg_inst="15" addr="0x0F01182D" />
+    </register>
+
+    <register name="MC_OMI_DL_DEBUG_AID">
+        <instance reg_inst= "0" addr="0x0C01141E" />
+        <instance reg_inst= "1" addr="0x0C01142E" />
+        <instance reg_inst= "2" addr="0x0C01181E" />
+        <instance reg_inst= "3" addr="0x0C01182E" />
+        <instance reg_inst= "4" addr="0x0D01141E" />
+        <instance reg_inst= "5" addr="0x0D01142E" />
+        <instance reg_inst= "6" addr="0x0D01181E" />
+        <instance reg_inst= "7" addr="0x0D01182E" />
+        <instance reg_inst= "8" addr="0x0E01141E" />
+        <instance reg_inst= "9" addr="0x0E01142E" />
+        <instance reg_inst="10" addr="0x0E01181E" />
+        <instance reg_inst="11" addr="0x0E01182E" />
+        <instance reg_inst="12" addr="0x0F01141E" />
+        <instance reg_inst="13" addr="0x0F01142E" />
+        <instance reg_inst="14" addr="0x0F01181E" />
+        <instance reg_inst="15" addr="0x0F01182E" />
+    </register>
+
+    <register name="MC_OMI_DL_CYA_BITS">
+        <instance reg_inst= "0" addr="0x0C01141F" />
+        <instance reg_inst= "1" addr="0x0C01142F" />
+        <instance reg_inst= "2" addr="0x0C01181F" />
+        <instance reg_inst= "3" addr="0x0C01182F" />
+        <instance reg_inst= "4" addr="0x0D01141F" />
+        <instance reg_inst= "5" addr="0x0D01142F" />
+        <instance reg_inst= "6" addr="0x0D01181F" />
+        <instance reg_inst= "7" addr="0x0D01182F" />
+        <instance reg_inst= "8" addr="0x0E01141F" />
+        <instance reg_inst= "9" addr="0x0E01142F" />
+        <instance reg_inst="10" addr="0x0E01181F" />
+        <instance reg_inst="11" addr="0x0E01182F" />
+        <instance reg_inst="12" addr="0x0F01141F" />
+        <instance reg_inst="13" addr="0x0F01142F" />
+        <instance reg_inst="14" addr="0x0F01181F" />
+        <instance reg_inst="15" addr="0x0F01182F" />
+    </register>
+
+    <capture_group node_inst="0:15">
+        <capture_register reg_name="MC_OMI_DL_CONFIG0"         reg_inst="0:15" />
+        <capture_register reg_name="MC_OMI_DL_CONFIG1"         reg_inst="0:15" />
+        <capture_register reg_name="MC_OMI_DL_ERR_MASK"        reg_inst="0:15" />
+        <capture_register reg_name="MC_OMI_DL_ERR_RPT"         reg_inst="0:15" />
+        <capture_register reg_name="MC_OMI_DL_ERR_CAPTURE"     reg_inst="0:15" />
+        <capture_register reg_name="MC_OMI_DL_EDPL_MAX_COUNT"  reg_inst="0:15" />
+        <capture_register reg_name="MC_OMI_DL_STATUS"          reg_inst="0:15" />
+        <capture_register reg_name="MC_OMI_DL_TRAINING_STATUS" reg_inst="0:15" />
+        <capture_register reg_name="MC_OMI_DL_DLX_CONFIG"      reg_inst="0:15" />
+        <capture_register reg_name="MC_OMI_DL_DLX_INFO"        reg_inst="0:15" />
+        <capture_register reg_name="MC_OMI_DL_ERR_ACTION"      reg_inst="0:15" />
+        <capture_register reg_name="MC_OMI_DL_DEBUG_AID"       reg_inst="0:15" />
+        <capture_register reg_name="MC_OMI_DL_CYA_BITS"        reg_inst="0:15" />
+    </capture_group>
+
+    <rule attn_type="CS" node_inst="0,2,4,6,8,10,12,14">
+        <!-- FIR & ~MASK & ~ACT0 & ~ACT1 & 0xfffff00000000000-->
+        <expr type="and">
+            <expr type="reg" value1="MC_OMI_DL_FIR" value2="0:7"/>
+            <expr type="not">
+                <expr type="reg" value1="MC_OMI_DL_FIR_MASK" value2="0:7"/>
+            </expr>
+            <expr type="not">
+                <expr type="reg" value1="MC_OMI_DL_FIR_ACT0" value2="0:7"/>
+            </expr>
+            <expr type="not">
+                <expr type="reg" value1="MC_OMI_DL_FIR_ACT1" value2="0:7"/>
+            </expr>
+            <expr type="int" value1="0xfffff00000000000" />
+        </expr>
+    </rule>
+
+    <rule attn_type="CS" node_inst="1,3,5,7,9,11,13,15">
+        <!-- (FIR & ~MASK & ~ACT0 & ~ACT1 & 0x00000fffff000000) << 20 -->
+        <expr type="lshift" value1="20">
+            <expr type="and">
+                <expr type="reg" value1="MC_OMI_DL_FIR" value2="0:7"/>
+                <expr type="not">
+                    <expr type="reg" value1="MC_OMI_DL_FIR_MASK" value2="0:7"/>
+                </expr>
+                <expr type="not">
+                    <expr type="reg" value1="MC_OMI_DL_FIR_ACT0" value2="0:7"/>
+                </expr>
+                <expr type="not">
+                    <expr type="reg" value1="MC_OMI_DL_FIR_ACT1" value2="0:7"/>
+                </expr>
+                <expr type="int" value1="0x00000fffff000000" />
+            </expr>
+        </expr>
+    </rule>
+
+    <rule attn_type="RE" node_inst="0,2,4,6,8,10,12,14">
+        <!-- FIR & ~MASK & ~ACT0 & ACT1 & 0xfffff00000000000-->
+        <expr type="and">
+            <expr type="reg" value1="MC_OMI_DL_FIR" value2="0:7"/>
+            <expr type="not">
+                <expr type="reg" value1="MC_OMI_DL_FIR_MASK" value2="0:7"/>
+            </expr>
+            <expr type="not">
+                <expr type="reg" value1="MC_OMI_DL_FIR_ACT0" value2="0:7"/>
+            </expr>
+            <expr type="reg" value1="MC_OMI_DL_FIR_ACT1" value2="0:7"/>
+            <expr type="int" value1="0xfffff00000000000" />
+        </expr>
+    </rule>
+
+    <rule attn_type="RE" node_inst="1,3,5,7,9,11,13,15">
+        <!-- (FIR & ~MASK & ~ACT0 & ACT1 & 0x00000fffff000000) << 20 -->
+        <expr type="lshift" value1="20">
+            <expr type="and">
+                <expr type="reg" value1="MC_OMI_DL_FIR" value2="0:7"/>
+                <expr type="not">
+                    <expr type="reg" value1="MC_OMI_DL_FIR_MASK" value2="0:7"/>
+                </expr>
+                <expr type="not">
+                    <expr type="reg" value1="MC_OMI_DL_FIR_ACT0" value2="0:7"/>
+                </expr>
+                <expr type="reg" value1="MC_OMI_DL_FIR_ACT1" value2="0:7"/>
+                <expr type="int" value1="0x00000fffff000000" />
+            </expr>
+        </expr>
+    </rule>
+
+    <rule attn_type="SPA" node_inst="0,2,4,6,8,10,12,14">
+        <!-- FIR & ~MASK & ACT0 & ~ACT1 & 0xfffff00000000000-->
+        <expr type="and">
+            <expr type="reg" value1="MC_OMI_DL_FIR" value2="0:7"/>
+            <expr type="not">
+                <expr type="reg" value1="MC_OMI_DL_FIR_MASK" value2="0:7"/>
+            </expr>
+            <expr type="reg" value1="MC_OMI_DL_FIR_ACT0" value2="0:7"/>
+            <expr type="not">
+                <expr type="reg" value1="MC_OMI_DL_FIR_ACT1" value2="0:7"/>
+            </expr>
+            <expr type="int" value1="0xfffff00000000000" />
+        </expr>
+    </rule>
+
+    <rule attn_type="SPA" node_inst="1,3,5,7,9,11,13,15">
+        <!-- (FIR & ~MASK & ACT0 & ~ACT1 & 0x00000fffff000000) << 20 -->
+        <expr type="lshift" value1="20">
+            <expr type="and">
+                <expr type="reg" value1="MC_OMI_DL_FIR" value2="0:7"/>
+                <expr type="not">
+                    <expr type="reg" value1="MC_OMI_DL_FIR_MASK" value2="0:7"/>
+                </expr>
+                <expr type="reg" value1="MC_OMI_DL_FIR_ACT0" value2="0:7"/>
+                <expr type="not">
+                    <expr type="reg" value1="MC_OMI_DL_FIR_ACT1" value2="0:7"/>
+                </expr>
+                <expr type="int" value1="0x00000fffff000000" />
+            </expr>
+        </expr>
+    </rule>
+
+    <bit pos= "0" child_node="MC_OMI_DL_ERR_RPT" node_inst="0:15">OMI-DL fatal error</bit>
+    <bit pos= "1">OMI-DL UE on data flit</bit>
+    <bit pos= "2">OMI-DL CE on TL flit</bit>
+    <bit pos= "3">OMI-DL detected a CRC error</bit>
+    <bit pos= "4">OMI-DL received a nack</bit>
+    <bit pos= "5">OMI-DL running in degraded mode</bit>
+    <bit pos= "6">OMI-DL parity error detection on a lane</bit>
+    <bit pos= "7">OMI-DL retrained due to no forward progress</bit>
+    <bit pos= "8">OMI-DL remote side initiated a retrain</bit>
+    <bit pos= "9">OMI-DL retrain due to internal error or software</bit>
+    <bit pos="10">OMI-DL threshold reached</bit>
+    <bit pos="11">OMI-DL trained</bit>
+    <bit pos="12">OMI-DL endpoint error bit 0</bit>
+    <bit pos="13">OMI-DL endpoint error bit 1</bit>
+    <bit pos="14">OMI-DL endpoint error bit 2</bit>
+    <bit pos="15">OMI-DL endpoint error bit 3</bit>
+    <bit pos="16">OMI-DL endpoint error bit 4</bit>
+    <bit pos="17">OMI-DL endpoint error bit 5</bit>
+    <bit pos="18">OMI-DL endpoint error bit 6</bit>
+    <bit pos="19">OMI-DL endpoint error bit 7</bit>
+
+</attn_node>
