@@ -8,6 +8,7 @@ sim_src = [
 # Test cases
 test_src = [
     'sample_test_case.cpp',
+    'test_cases/exp20_foxhound7.cpp',
 ]
 
 gtest = dependency('gtest', main : true, required : false, method : 'system')
@@ -18,5 +19,5 @@ if gtest.found()
          executable('simulator', sim_src, test_src,
                     dependencies : gtest,
                     link_with : libhei_static,
-                    include_directories: incdir))
+                    include_directories: [ incdir, '.' ]))
 endif

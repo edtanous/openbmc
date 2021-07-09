@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<attn_node name="OCMB_LFIR_FFDC_FOXHOUND" model_ec="EXPLORER_11,EXPLORER_20" reg_type="SCOM">
+
+    <!--
+        These registers are on the MicroChip side of Explorer and are not in
+        the SCOM def.
+    -->
+
+    <register name="ADSP_PCBI">
+        <instance reg_inst="0" addr="0x00200860" />
+        <instance reg_inst="1" addr="0x00201860" />
+        <instance reg_inst="2" addr="0x00202860" />
+        <instance reg_inst="3" addr="0x00203860" />
+        <instance reg_inst="4" addr="0x00204860" />
+        <instance reg_inst="5" addr="0x00205860" />
+        <instance reg_inst="6" addr="0x00206860" />
+        <instance reg_inst="7" addr="0x00207860" />
+    </register>
+
+    <register name="CSU_PCBI">
+        <instance reg_inst="0" addr="0x002000B0" />
+        <instance reg_inst="1" addr="0x002010B0" />
+        <instance reg_inst="2" addr="0x002020B0" />
+        <instance reg_inst="3" addr="0x002030B0" />
+        <instance reg_inst="4" addr="0x002040B0" />
+        <instance reg_inst="5" addr="0x002050B0" />
+        <instance reg_inst="6" addr="0x002060B0" />
+        <instance reg_inst="7" addr="0x002070B0" />
+    </register>
+
+    <capture_group node_inst="0:7">
+        <capture_register reg_name="ADSP_PCBI" reg_inst="0:7" />
+        <capture_register reg_name="CSU_PCBI"  reg_inst="0:7" />
+    </capture_group>
+
+</attn_node>
+

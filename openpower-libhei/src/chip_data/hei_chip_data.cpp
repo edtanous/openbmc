@@ -257,8 +257,10 @@ void __readNode(ChipDataStream& io_stream, const IsolationChip::Ptr& i_isoChip,
         uint8_t numCapRegs, numIsoRules, numChildNodes;
         io_stream >> nodeInst >> numCapRegs >> numIsoRules >> numChildNodes;
 
-        // There must be at least one isolation rule defined.
-        HEI_ASSERT(0 != numIsoRules);
+        // It is possible to have rules defined and no child nodes, However, if
+        // there are no rules defined (FFDC-only node), there should not be
+        // any child nodes defined.
+        HEI_ASSERT(0 != numIsoRules || 0 == numChildNodes);
 
         // Allocate memory for this isolation node.
         auto isoNode =

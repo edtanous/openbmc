@@ -552,12 +552,6 @@ sub __normalizeRule($$)
 {
     my ( $node, $insts_data ) = @_;
 
-    # There must be at least one rule entry.
-    unless ( defined $node->{rule} and 0 < scalar @{$node->{rule}} )
-    {
-        FAIL( "Node $node->{name} does not contain at least one rule" );
-    }
-
     # There should be only one rule per attention type and node instance for
     # this node.
     my $rule_dups = {};
@@ -606,12 +600,6 @@ sub __normalizeRule($$)
 sub __normalizeBit($$$)
 {
     my ( $node, $sigs, $insts_data ) = @_;
-
-    # There must be at least one bit entry.
-    unless ( defined $node->{bit} and 0 < scalar @{$node->{bit}} )
-    {
-        FAIL( "Node $node->{name} does not contain at least one bit" );
-    }
 
     my @node_insts = sort keys %{$insts_data};
     my $sz_insts = scalar @node_insts;
@@ -720,13 +708,27 @@ sub __normalizeNode($$$)
     # Split the capture group information per node instance.
     __normalizeCaptureGroup($node, $insts_data);
 
-    # Split the rule information per node instance. The sorted instance list
-    # will be used as indexes for the node_inst attribute of the <bit> elements.
-    __normalizeRule($node, $insts_data);
+    my $is_rule = (defined $node->{rule} and 0 < scalar @{$node->{rule}}) ? 1 : 0;
+    my $is_bit  = (defined $node->{bit}  and 0 < scalar @{$node->{bit}})  ? 1 : 0;
 
-    # Finally, collect the signature details and split the bit information per
-    # node instance.
-    __normalizeBit($node, $sigs, $insts_data);
+    # If a rule is defined, a bit must be defined as well. It is possible for
+    # neither to be defined (FFDC-only node).
+    if ( $is_rule and $is_bit )
+    {
+        # Split the rule information per node instance. The sorted instance list
+        # will be used as indexes for the node_inst attribute of the <bit>
+        # elements.
+        __normalizeRule($node, $insts_data);
+
+        # Finally, collect the signature details and split the bit information
+        # per node instance.
+        __normalizeBit($node, $sigs, $insts_data);
+    }
+    elsif ( $is_rule or $is_bit )
+    {
+        # One is defined and the other is not. This is an error.
+        FAIL("Node $node->{name} has a bit or rule defined and the other is not.");
+    }
 
     # Now that we have all of the node data, collapse the instance data into
     # a list.
@@ -1068,12 +1070,8 @@ sub __printNodes($$)
             my $num_cap_regs = (defined $i->{capture_group})
                                     ? scalar @{$i->{capture_group}} : 0;
 
-            # At least one rule is required.
-            my $num_rules = scalar @{$i->{rule}};
-            unless ( 0 < $num_rules )
-            {
-                FAIL("No rule for $n->{name} $i->{node_inst}");
-            }
+            # Rules may not exist for this node.
+            my $num_rules = (defined $i->{rule}) ? scalar @{$i->{rule}} : 0;
 
             # Child nodes may not exist for this node.
             my $num_bit = (defined $i->{bit}) ? scalar @{$i->{bit}} : 0;
@@ -1094,11 +1092,14 @@ sub __printNodes($$)
                 }
             }
 
-            for my $r ( @{$i->{rule}} )
+            if ( 0 < $num_rules )
             {
-                # Register rule metadata
-                __bin($fh, 1, $ATTN_TYPE->{$r->{attn_type}}->[0]);
-                __printExpr($fh, $reg_size, $r->{expr});
+                for my $r ( @{$i->{rule}} )
+                {
+                    # Register rule metadata
+                    __bin($fh, 1, $ATTN_TYPE->{$r->{attn_type}}->[0]);
+                    __printExpr($fh, $reg_size, $r->{expr});
+                }
             }
 
             if ( 0 < $num_bit )

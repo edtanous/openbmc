@@ -31,7 +31,14 @@
     <bit pos="36"   >DDR4 PHY fatal</bit>
     <bit pos="37"   >DDR4 PHY non fatal</bit>
     <bit pos="38"   >DDR4 PHY interrupt</bit>
-    <bit pos="39:46">foxhound fatal</bit>
+    <bit pos="39" child_node="OCMB_LFIR_FFDC_FOXHOUND" node_inst="7">foxhound fatal lane 7</bit>
+    <bit pos="40" child_node="OCMB_LFIR_FFDC_FOXHOUND" node_inst="6">foxhound fatal lane 6</bit>
+    <bit pos="41" child_node="OCMB_LFIR_FFDC_FOXHOUND" node_inst="5">foxhound fatal lane 5</bit>
+    <bit pos="42" child_node="OCMB_LFIR_FFDC_FOXHOUND" node_inst="4">foxhound fatal lane 4</bit>
+    <bit pos="43" child_node="OCMB_LFIR_FFDC_FOXHOUND" node_inst="3">foxhound fatal lane 3</bit>
+    <bit pos="44" child_node="OCMB_LFIR_FFDC_FOXHOUND" node_inst="2">foxhound fatal lane 2</bit>
+    <bit pos="45" child_node="OCMB_LFIR_FFDC_FOXHOUND" node_inst="1">foxhound fatal lane 1</bit>
+    <bit pos="46" child_node="OCMB_LFIR_FFDC_FOXHOUND" node_inst="0">foxhound fatal lane 0</bit>
     <bit pos="47:54">foxhound non fatal</bit>
     <bit pos="55:62">foxhound serdes interrupt</bit>
     <bit pos="63"   >GIF2PCB parity error on FSM or Registers</bit>

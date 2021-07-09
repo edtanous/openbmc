@@ -17,7 +17,7 @@
             <xsd:element name="capture_group" type="capture_group" minOccurs="0"
                          maxOccurs="255"/>
             <xsd:element name="rule" type="rule" minOccurs="0" maxOccurs="255"/>
-            <xsd:element name="bit"  type="bit"  minOccurs="1" maxOccurs="255"/>
+            <xsd:element name="bit"  type="bit"  minOccurs="0" maxOccurs="255"/>
         </xsd:sequence>
 
         <xsd:attribute name="name"     type="name_type"     use="required"/>

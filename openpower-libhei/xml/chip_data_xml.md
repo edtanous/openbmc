@@ -101,11 +101,13 @@ vs. right to left). Supported types:
    * Register length:   8 bytes
    * Bit order:         ascending (0-63, left to right)
 
-### 2.4) Element `<register>` (required 1 or more)
+### 2.4) Element `<register>` (conditionally optional)
 
-These provide a list of all registers required for isolation of this node. At
-a minimum, a `<register>` element must exist for each register referenced by
-the `<rule>` elements.
+These provide a list of all registers required for isolation of this node.
+
+At a minimum, a `<register>` element must exist for each register referenced by
+the `<capture_group>` or `<rule>` elements. Also, see the `<local_fir>` element
+for a possible shorthand definition.
 
 #### 2.4.1) Attribute `name` (required)
 
@@ -187,12 +189,17 @@ requires the number of instances represented by this attribute to equal the
 number of instances represented by the the `node_inst` attribute of the
 `<capture_group>` element.
 
-### 2.6) Element `<rule>` (required 1 or more)
+### 2.6) Element `<rule>` (conditionally optional)
 
 A rule helps specify if an attention is being raised from a register and what
 type of attention is being raised. A rule is constructed by a series of
 expressions (see `<expr>` below). The result of the expressions will indicate
 all active attentions for a rule.
+
+At least one `<rule>` must exist if any `<bit>` elements are defined. The
+`<rule>` elements are optional for nodes that are intended to only capture FFDC
+for a bit defined in the parent node. Also, see the `<local_fir>` element for a
+possible shorthand definition.
 
 #### 2.6.1) Attribute `attn_type` (required)
 
@@ -259,10 +266,13 @@ Expression type notes:
    The length of the number is defined by the `reg_type` attribute of the root
    `<attn_node>` element.
 
-### 2.7) Element `<bit>` (required 1 or more)
+### 2.7) Element `<bit>` (conditionally optional)
 
-These provide metadata for each bit in this node. There should be a `<bit>`
-element for each bit that could generate an attention.
+These provide metadata for each bit in this node.
+
+The `<bit>` elements should only be defined if there are `<rule>` elements
+defined and there should be a `<bit>` element for each bit in the rules that
+could generate an attention.
 
 #### 2.7.1) Attribute `pos` (required)
 
