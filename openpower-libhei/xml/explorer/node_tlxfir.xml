@@ -8,6 +8,39 @@
         <action attn_type="HA"  config="10" />
     </local_fir>
 
+    <register name="TLX_ERR_RPT_0">
+        <instance reg_inst="0" addr="0x0801241C" />
+    </register>
+
+    <register name="TLX_ERR_RPT_1">
+        <instance reg_inst="0" addr="0x0801241D" />
+    </register>
+
+    <register name="TLX_ERR_RPT_2">
+        <instance reg_inst="0" addr="0x0801241E" />
+    </register>
+
+    <register name="TLX_ERR_RPT_0_MASK">
+        <instance reg_inst="0" addr="0x08012414" />
+    </register>
+
+    <register name="TLX_ERR_RPT_1_MASK">
+        <instance reg_inst="0" addr="0x08012415" />
+    </register>
+
+    <register name="TLX_ERR_RPT_2_MASK">
+        <instance reg_inst="0" addr="0x08012416" />
+    </register>
+
+    <capture_group node_inst="0">
+        <capture_register reg_name="TLX_ERR_RPT_0"      reg_inst="0" />
+        <capture_register reg_name="TLX_ERR_RPT_1"      reg_inst="0" />
+        <capture_register reg_name="TLX_ERR_RPT_2"      reg_inst="0" />
+        <capture_register reg_name="TLX_ERR_RPT_0_MASK" reg_inst="0" />
+        <capture_register reg_name="TLX_ERR_RPT_1_MASK" reg_inst="0" />
+        <capture_register reg_name="TLX_ERR_RPT_2_MASK" reg_inst="0" />
+    </capture_group>
+
     <bit pos= "0"   >Info reg parity error</bit>
     <bit pos= "1"   >Ctrl reg parity error</bit>
     <bit pos= "2"   >TLX VC0 return credit counter overflow</bit>
@@ -17,7 +50,7 @@
     <bit pos= "6"   >TLX credit management block error</bit>
     <bit pos= "7"   >TLX credit management block parity error</bit>
     <bit pos= "8"   >TLXT fatal parity error</bit>
-    <bit pos= "9"   >TLXT recoverable error</bit>
+    <bit pos= "9" child_node="TLX_ERR_RPT_1">TLXT recoverable error</bit>
     <bit pos="10"   >TLXT configuration error</bit>
     <bit pos="11"   >TLXT informational parity error</bit>
     <bit pos="12"   >TLXT hard error</bit>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<attn_node name="TLX_ERR_RPT_1" model_ec="EXPLORER_11,EXPLORER_20" reg_type="SCOM">
+
+    <rule attn_type="UCS" node_inst="0">
+        <!-- REG & ~MASK & 0x0000000005C00000 -->
+        <expr type="and">
+            <expr type="reg" value1="TLX_ERR_RPT_1" />
+            <expr type="not">
+                <expr type="reg" value1="TLX_ERR_RPT_1_MASK" />
+            </expr>
+            <expr type="int" value1="0x0000000005C00000" />
+        </expr>
+    </rule>
+
+    <rule attn_type="RE" node_inst="0">
+        <!-- REG & ~MASK & 0x0000000005C00000 -->
+        <expr type="and">
+            <expr type="reg" value1="TLX_ERR_RPT_1" />
+            <expr type="not">
+                <expr type="reg" value1="TLX_ERR_RPT_1_MASK" />
+            </expr>
+            <expr type="int" value1="0x0000000005C00000" />
+        </expr>
+    </rule>
+
+    <rule attn_type="HA" node_inst="0">
+        <!-- REG & ~MASK & 0x0000000005C00000 -->
+        <expr type="and">
+            <expr type="reg" value1="TLX_ERR_RPT_1" />
+            <expr type="not">
+                <expr type="reg" value1="TLX_ERR_RPT_1_MASK" />
+            </expr>
+            <expr type="int" value1="0x0000000005C00000" />
+        </expr>
+    </rule>
+
+    <bit pos= "37">TLXT FIFO CE</bit>
+    <bit pos= "39">Unexpected Interrupt Response</bit>
+    <bit pos= "40">BDI Poisoned</bit>
+    <bit pos= "41">TLXT Metadata UE</bit>
+
+</attn_node>
