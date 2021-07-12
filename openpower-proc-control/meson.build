@@ -67,8 +67,8 @@ if build_phal
         'procedures/phal/proc_pre_poweroff.cpp',
         'procedures/phal/common_utils.cpp',
         'procedures/phal/check_host_running.cpp',
-        'phalerror/create_pel.cpp',
-        'phalerror/phal_error.cpp',
+        'extensions/phal/create_pel.cpp',
+        'extensions/phal/phal_error.cpp',
     ]
     extra_dependencies += [
         dependency('libdt-api'),

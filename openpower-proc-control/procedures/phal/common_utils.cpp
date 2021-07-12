@@ -4,7 +4,7 @@ extern "C"
 }
 #include "attributes_info.H"
 
-#include "phalerror/phal_error.hpp"
+#include "extensions/phal/phal_error.hpp"
 #include "procedures/phal/common_utils.hpp"
 
 #include <fmt/format.h>
