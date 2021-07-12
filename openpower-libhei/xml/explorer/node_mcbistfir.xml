@@ -8,6 +8,19 @@
         <action attn_type="HA"  config="10" />
     </local_fir>
 
+    <register name="MCB_ERR_RPT_0">
+        <instance reg_inst="0" addr="0x080118E7" />
+    </register>
+
+    <register name="MCB_ERR_RPT_1">
+        <instance reg_inst="0" addr="0x080118EC" />
+    </register>
+
+    <capture_group node_inst="0">
+        <capture_register reg_name="MCB_ERR_RPT_0" reg_inst="0" />
+        <capture_register reg_name="MCB_ERR_RPT_1" reg_inst="0" />
+    </capture_group>
+
     <bit pos= "0"   >Invalid maint address</bit>
     <bit pos= "1"   >Command address timeout</bit>
     <bit pos= "2"   >Internal FSM error</bit>

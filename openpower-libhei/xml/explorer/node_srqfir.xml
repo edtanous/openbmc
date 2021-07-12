@@ -8,6 +8,14 @@
         <action attn_type="HA"  config="10" />
     </local_fir>
 
+    <register name="SRQ_ERR_RPT">
+        <instance reg_inst="0" addr="0x0801141C" />
+    </register>
+
+    <capture_group node_inst="0">
+        <capture_register reg_name="SRQ_ERR_RPT" reg_inst="0" />
+    </capture_group>
+
     <bit pos= "0">SRQ recoverable error</bit>
     <bit pos= "1">SRQ nonrecoverable error</bit>
     <bit pos= "2">Refresh overrun</bit>

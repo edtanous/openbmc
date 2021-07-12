@@ -8,6 +8,178 @@
         <action attn_type="HA"  config="10" />
     </local_fir>
 
+    <register name="FARB0">
+        <instance reg_inst="0" addr="0x08011415" />
+    </register>
+
+    <register name="MBSEC0">
+        <instance reg_inst="0" addr="0x08011855" />
+    </register>
+
+    <register name="MBSEC1">
+        <instance reg_inst="0" addr="0x08011856" />
+    </register>
+
+    <register name="MBSTR">
+        <instance reg_inst="0" addr="0x08011857" />
+    </register>
+
+    <register name="MBSSYMEC">
+        <instance reg_inst="0" addr="0x08011858" />
+        <instance reg_inst="1" addr="0x08011859" />
+        <instance reg_inst="2" addr="0x0801185A" />
+        <instance reg_inst="3" addr="0x0801185B" />
+        <instance reg_inst="4" addr="0x0801185C" />
+        <instance reg_inst="5" addr="0x0801185D" />
+        <instance reg_inst="6" addr="0x0801185E" />
+        <instance reg_inst="7" addr="0x0801185F" />
+        <instance reg_inst="8" addr="0x08011860" />
+    </register>
+
+    <register name="MBSMSEC">
+        <instance reg_inst="0" addr="0x08011869" />
+    </register>
+
+    <register name="MBNCER">
+        <instance reg_inst="0" addr="0x0801186A" />
+    </register>
+
+    <register name="MBRCER">
+        <instance reg_inst="0" addr="0x0801186B" />
+    </register>
+
+    <register name="MBMPER">
+        <instance reg_inst="0" addr="0x0801186C" />
+    </register>
+
+    <register name="MBUER">
+        <instance reg_inst="0" addr="0x0801186D" />
+    </register>
+
+    <register name="MBAUER">
+        <instance reg_inst="0" addr="0x0801186E" />
+    </register>
+
+    <register name="MC_ADDR_TRANS0">
+        <instance reg_inst="0" addr="0x0801186F" />
+    </register>
+
+    <register name="MC_ADDR_TRANS1">
+        <instance reg_inst="0" addr="0x08011870" />
+    </register>
+
+    <register name="MC_ADDR_TRANS2">
+        <instance reg_inst="0" addr="0x08011871" />
+    </register>
+
+    <register name="MBSEVR0">
+        <instance reg_inst="0" addr="0x0801187E" />
+    </register>
+
+    <register name="MCBAGRA">
+        <instance reg_inst="0" addr="0x080118D6" />
+    </register>
+
+    <register name="MCBMCAT">
+        <instance reg_inst="0" addr="0x080118D7" />
+    </register>
+
+    <register name="MCB_CNTL">
+        <instance reg_inst="0" addr="0x080118DB" />
+    </register>
+
+    <register name="MCB_CNTLSTAT">
+        <instance reg_inst="0" addr="0x080118DC" />
+    </register>
+
+    <register name="MCBCFG">
+        <instance reg_inst="0" addr="0x080118E0" />
+    </register>
+
+    <register name="EXP_MSR">
+        <instance reg_inst="0" addr="0x08011C0C" />
+    </register>
+
+    <register name="RDF_ERR_RPT_0">
+        <instance reg_inst="0" addr="0x08011C0E" />
+    </register>
+
+    <register name="RDF_ERR_RPT_1">
+        <instance reg_inst="0" addr="0x08011C0F" />
+    </register>
+
+    <register name="HW_MS">
+        <instance reg_inst="0" addr="0x08011C10" />
+        <instance reg_inst="1" addr="0x08011C11" />
+        <instance reg_inst="2" addr="0x08011C12" />
+        <instance reg_inst="3" addr="0x08011C13" />
+        <instance reg_inst="4" addr="0x08011C14" />
+        <instance reg_inst="5" addr="0x08011C15" />
+        <instance reg_inst="6" addr="0x08011C16" />
+        <instance reg_inst="7" addr="0x08011C17" />
+    </register>
+
+    <register name="FW_MS">
+        <instance reg_inst="0" addr="0x08011C18" />
+        <instance reg_inst="1" addr="0x08011C19" />
+        <instance reg_inst="2" addr="0x08011C1A" />
+        <instance reg_inst="3" addr="0x08011C1B" />
+        <instance reg_inst="4" addr="0x08011C1C" />
+        <instance reg_inst="5" addr="0x08011C1D" />
+        <instance reg_inst="6" addr="0x08011C1E" />
+        <instance reg_inst="7" addr="0x08011C1F" />
+    </register>
+
+    <capture_group node_inst="0">
+        <capture_register reg_name="FARB0" reg_inst="0" />
+        <capture_register reg_name="MBSEC0" reg_inst="0" />
+        <capture_register reg_name="MBSEC1" reg_inst="0" />
+        <capture_register reg_name="MBSTR" reg_inst="0" />
+        <capture_register reg_name="MBSSYMEC" reg_inst="0" />
+        <capture_register reg_name="MBSSYMEC" reg_inst="1" />
+        <capture_register reg_name="MBSSYMEC" reg_inst="2" />
+        <capture_register reg_name="MBSSYMEC" reg_inst="3" />
+        <capture_register reg_name="MBSSYMEC" reg_inst="4" />
+        <capture_register reg_name="MBSSYMEC" reg_inst="5" />
+        <capture_register reg_name="MBSSYMEC" reg_inst="6" />
+        <capture_register reg_name="MBSSYMEC" reg_inst="7" />
+        <capture_register reg_name="MBSSYMEC" reg_inst="8" />
+        <capture_register reg_name="MBSMSEC" reg_inst="0" />
+        <capture_register reg_name="MBNCER" reg_inst="0" />
+        <capture_register reg_name="MBRCER" reg_inst="0" />
+        <capture_register reg_name="MBMPER" reg_inst="0" />
+        <capture_register reg_name="MBUER" reg_inst="0" />
+        <capture_register reg_name="MBAUER" reg_inst="0" />
+        <capture_register reg_name="MC_ADDR_TRANS0" reg_inst="0" />
+        <capture_register reg_name="MC_ADDR_TRANS1" reg_inst="0" />
+        <capture_register reg_name="MC_ADDR_TRANS2" reg_inst="0" />
+        <capture_register reg_name="MBSEVR0" reg_inst="0" />
+        <capture_register reg_name="MCBAGRA" reg_inst="0" />
+        <capture_register reg_name="MCBMCAT" reg_inst="0" />
+        <capture_register reg_name="MCB_CNTL" reg_inst="0" />
+        <capture_register reg_name="MCB_CNTLSTAT" reg_inst="0" />
+        <capture_register reg_name="MCBCFG" reg_inst="0" />
+        <capture_register reg_name="EXP_MSR" reg_inst="0" />
+        <capture_register reg_name="RDF_ERR_RPT_0" reg_inst="0" />
+        <capture_register reg_name="RDF_ERR_RPT_1" reg_inst="0" />
+        <capture_register reg_name="HW_MS" reg_inst="0" />
+        <capture_register reg_name="HW_MS" reg_inst="1" />
+        <capture_register reg_name="HW_MS" reg_inst="2" />
+        <capture_register reg_name="HW_MS" reg_inst="3" />
+        <capture_register reg_name="HW_MS" reg_inst="4" />
+        <capture_register reg_name="HW_MS" reg_inst="5" />
+        <capture_register reg_name="HW_MS" reg_inst="6" />
+        <capture_register reg_name="HW_MS" reg_inst="7" />
+        <capture_register reg_name="FW_MS" reg_inst="0" />
+        <capture_register reg_name="FW_MS" reg_inst="1" />
+        <capture_register reg_name="FW_MS" reg_inst="2" />
+        <capture_register reg_name="FW_MS" reg_inst="3" />
+        <capture_register reg_name="FW_MS" reg_inst="4" />
+        <capture_register reg_name="FW_MS" reg_inst="5" />
+        <capture_register reg_name="FW_MS" reg_inst="6" />
+        <capture_register reg_name="FW_MS" reg_inst="7" />
+    </capture_group>
+
     <bit pos= "0"   >Mainline read MPE on rank 0</bit>
     <bit pos= "1"   >Mainline read MPE on rank 1</bit>
     <bit pos= "2"   >Mainline read MPE on rank 2</bit>

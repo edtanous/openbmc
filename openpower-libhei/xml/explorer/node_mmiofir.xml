@@ -8,6 +8,19 @@
         <action attn_type="HA"  config="10" />
     </local_fir>
 
+    <register name="MMIO_ERR_RPT_0">
+        <instance reg_inst="0" addr="0x0801087C" />
+    </register>
+
+    <register name="MMIO_ERR_RPT_1">
+        <instance reg_inst="0" addr="0x0801087E" />
+    </register>
+
+    <capture_group node_inst="0">
+        <capture_register reg_name="MMIO_ERR_RPT_0" reg_inst="0" />
+        <capture_register reg_name="MMIO_ERR_RPT_1" reg_inst="0" />
+    </capture_group>
+
     <bit pos= "0">AFU desc unimp</bit>
     <bit pos= "1">MMIO err</bit>
     <bit pos= "2">SCOM err</bit>
