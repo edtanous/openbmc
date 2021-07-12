@@ -1,5 +1,5 @@
+#include "extensions/phal/common_utils.hpp"
 #include "extensions/phal/phal_error.hpp"
-#include "procedures/phal/common_utils.hpp"
 #include "registration.hpp"
 
 #include <libekb.H>

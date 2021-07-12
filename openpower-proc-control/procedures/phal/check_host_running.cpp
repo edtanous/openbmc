@@ -3,10 +3,9 @@ extern "C"
 #include "libpdbg.h"
 }
 
-#include "common_utils.hpp"
+#include "extensions/phal/common_utils.hpp"
 #include "extensions/phal/create_pel.hpp"
 #include "p10_cfam.hpp"
-#include "procedures/phal/common_utils.hpp"
 #include "registration.hpp"
 
 #include <phosphor-logging/log.hpp>

@@ -5,8 +5,8 @@ extern "C"
 
 #include "attributes_info.H"
 
+#include "extensions/phal/common_utils.hpp"
 #include "extensions/phal/phal_error.hpp"
-#include "procedures/phal/common_utils.hpp"
 #include "util.hpp"
 
 #include <fmt/format.h>
