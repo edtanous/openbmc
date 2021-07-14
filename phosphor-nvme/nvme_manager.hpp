@@ -119,7 +119,8 @@ class Nvme
 
     /** @brief Set inventory properties of nvme */
     void setNvmeInventoryProperties(
-        bool present, const phosphor::nvme::Nvme::NVMeData& nvmeData,
+        NVMeConfig& config, bool present,
+        const phosphor::nvme::Nvme::NVMeData& nvmeData,
         const std::string& inventoryPath);
 
     void createNVMeInventory();
