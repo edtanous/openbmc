@@ -127,6 +127,23 @@ executable(
    install: true
 )
 
+if build_phal
+    executable(
+        'phal-export-devtree',
+        [
+            'extensions/phal/devtree_export.cpp',
+            'extensions/phal/fw_update_watch.cpp',
+        ],
+        dependencies: [
+            dependency('phosphor-logging'),
+            dependency('sdbusplus'),
+            dependency('sdeventplus'),
+            dependency('fmt'),
+       ],
+       install: true
+   )
+endif
+
 unit_files = [
     'service_files/pcie-poweroff@.service',
     'service_files/xyz.openbmc_project.Control.Host.NMI.service',
