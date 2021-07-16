@@ -149,6 +149,7 @@ class SimulatorData
     {
         flushIterationData();
         iv_chipList.clear();
+        iv_typeList.clear();
     }
 
     /**
