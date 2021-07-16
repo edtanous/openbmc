@@ -218,7 +218,7 @@
     <bit pos="35"   >Maintenance RCD</bit>
     <bit pos="36"   >Maintenance IAUE</bit>
     <bit pos="37"   >Maintenance IUE</bit>
-    <bit pos="38"   >Maintenance  IRCD</bit>
+    <bit pos="38"   >Maintenance IRCD</bit>
     <bit pos="39"   >Maintenance IMPE</bit>
     <bit pos="40"   >RDDATA valid error</bit>
     <bit pos="41"   >SCOM status register parity error</bit>

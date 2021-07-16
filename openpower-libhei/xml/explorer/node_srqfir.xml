@@ -41,7 +41,7 @@
     <bit pos="22">WDF SCOM fsm parity error</bit>
     <bit pos="23">WDF write buffer array CE</bit>
     <bit pos="24">NCF UE</bit>
-    <bit pos="25">TBD</bit>
+    <bit pos="25">Firmware initiated channel fail</bit>
     <bit pos="26">NCF logic error</bit>
     <bit pos="27">NCF parity error</bit>
     <bit pos="28">NCF correctable error</bit>
