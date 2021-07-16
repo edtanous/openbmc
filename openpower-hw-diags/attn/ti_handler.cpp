@@ -1,6 +1,5 @@
 #include <attn/attn_common.hpp>
 #include <attn/attn_dbus.hpp>
-#include <attn/attn_handler.hpp>
 #include <attn/attn_logging.hpp>
 #include <attn/pel/pel_common.hpp>
 #include <attn/ti_handler.hpp>
@@ -24,6 +23,9 @@ namespace attn
 int tiHandler(TiDataArea* i_tiDataArea)
 {
     int rc = RC_SUCCESS;
+
+    // capture some additional data for logs/traces
+    addHbStatusRegs();
 
     // check TI data area if it is available
     if (nullptr != i_tiDataArea)

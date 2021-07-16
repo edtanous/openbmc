@@ -1,6 +1,5 @@
 #include <attn/attention.hpp>
 #include <attn/attn_common.hpp>
-#include <attn/attn_handler.hpp>
 #include <attn/attn_logging.hpp>
 #include <sdbusplus/bus.hpp>
 

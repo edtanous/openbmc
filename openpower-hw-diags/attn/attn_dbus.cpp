@@ -1,5 +1,5 @@
+#include <attn_common.hpp>
 #include <attn_dbus.hpp>
-#include <attn_handler.hpp>
 #include <attn_logging.hpp>
 #include <xyz/openbmc_project/State/Boot/Progress/server.hpp>
 

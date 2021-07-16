@@ -1,5 +1,5 @@
 #include <attn/attention.hpp>    // for Attention
-#include <attn/attn_handler.hpp> // for RC_SUCCESS
+#include <attn/attn_common.hpp>  // for RC_SUCCESS
 #include <attn/attn_logging.hpp> // for trace
 
 namespace attn
