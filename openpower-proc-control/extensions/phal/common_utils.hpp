@@ -76,5 +76,12 @@ pdbg_target* getFsiTarget(struct pdbg_target* procTarget);
  */
 uint32_t probeTarget(struct pdbg_target* procTarget);
 
+/**
+ * @brief Helper function to set PDBG_DTB
+ *
+ * PDBG_DTB environment variable set to CEC device tree path
+ */
+void setDevtreeEnv();
+
 } // namespace phal
 } // namespace openpower

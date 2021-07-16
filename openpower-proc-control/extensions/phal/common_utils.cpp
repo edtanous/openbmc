@@ -29,16 +29,7 @@ void phal_init(enum ipl_mode mode)
     openpower::pel::addBootErrorCallbacks();
 
     // PDBG_DTB environment variable set to CEC device tree path
-    static constexpr auto PDBG_DTB_PATH =
-        "/var/lib/phosphor-software-manager/pnor/rw/DEVTREE";
-
-    if (setenv("PDBG_DTB", PDBG_DTB_PATH, 1))
-    {
-        log<level::ERR>(
-            fmt::format("Failed to set PDBG_DTB: ({})", strerror(errno))
-                .c_str());
-        throw std::runtime_error("Failed to set PDBG_DTB");
-    }
+    setDevtreeEnv();
 
     if (!pdbg_targets_init(NULL))
     {
@@ -185,6 +176,21 @@ uint32_t putCFAM(struct pdbg_target* procTarget, const uint32_t reg,
         return rc;
     }
     return 0;
+}
+
+void setDevtreeEnv()
+{
+    // PDBG_DTB environment variable set to CEC device tree path
+    static constexpr auto PDBG_DTB_PATH =
+        "/var/lib/phosphor-software-manager/pnor/rw/DEVTREE";
+
+    if (setenv("PDBG_DTB", PDBG_DTB_PATH, 1))
+    {
+        log<level::ERR>(
+            fmt::format("Failed to set PDBG_DTB: ({})", strerror(errno))
+                .c_str());
+        throw std::runtime_error("Failed to set PDBG_DTB");
+    }
 }
 
 } // namespace phal
