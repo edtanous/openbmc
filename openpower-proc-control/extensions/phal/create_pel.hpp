@@ -21,12 +21,11 @@ using json = nlohmann::json;
 void createBootErrorPEL(const FFDCData& ffdcData, const json& calloutData);
 
 /**
- * Create host running error PEL
+ * @brief Create a PEL for the specified event type
  *
- * The host should not be running so create an error to report this if it
- * is found the host is up.
+ *  @param  event - the event type
  */
-void createHostRunningPEL();
+void createPEL(const std::string& event);
 
 /**
  * @class FFDCFile

@@ -82,7 +82,7 @@ void checkHostRunning()
         }
 
         // Create an error so user knows system is in a bad state
-        openpower::pel::createHostRunningPEL();
+        openpower::pel::createPEL("org.open_power.PHAL.Error.HostRunning");
 
         // Create file for host instance and create in filesystem to
         // indicate to services that host is running.

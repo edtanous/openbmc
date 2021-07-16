@@ -86,7 +86,7 @@ void createBootErrorPEL(const FFDCData& ffdcData, const json& calloutData)
     }
 }
 
-void createHostRunningPEL()
+void createPEL(const std::string& event)
 {
     std::map<std::string, std::string> additionalData;
     auto bus = sdbusplus::bus::new_default();
@@ -94,8 +94,6 @@ void createHostRunningPEL()
 
     try
     {
-        static constexpr auto bootErrorMessage =
-            "org.open_power.PHAL.Error.HostRunning";
         std::string service =
             util::getService(bus, loggingObjectPath, loggingInterface);
         auto method = bus.new_method_call(service.c_str(), loggingObjectPath,
@@ -104,23 +102,26 @@ void createHostRunningPEL()
             sdbusplus::xyz::openbmc_project::Logging::server::convertForMessage(
                 sdbusplus::xyz::openbmc_project::Logging::server::Entry::Level::
                     Error);
-        method.append(bootErrorMessage, level, additionalData);
+        method.append(event, level, additionalData);
         auto resp = bus.call(method);
     }
     catch (const sdbusplus::exception::SdBusError& e)
     {
-        log<level::ERR>("sdbusplus D-Bus call exception",
-                        entry("OBJPATH=%s", loggingObjectPath),
-                        entry("INTERFACE=%s", loggingInterface),
-                        entry("EXCEPTION=%s", e.what()));
+        log<level::ERR>(fmt::format("sdbusplus D-Bus call exception",
+                                    "OBJPATH={}, INTERFACE={}, EXCEPTION={}",
+                                    loggingObjectPath, loggingInterface,
+                                    e.what())
+                            .c_str());
+        ;
 
         throw std::runtime_error(
             "Error in invoking D-Bus logging create interface");
     }
     catch (std::exception& e)
     {
-        log<level::ERR>("D-bus call exception",
-                        entry("EXCEPTION=%s", e.what()));
+        log<level::ERR>(
+            fmt::format("D-bus call exception", "EXCEPTION={}", e.what())
+                .c_str());
         throw e;
     }
 }
