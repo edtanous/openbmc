@@ -1,15 +1,11 @@
 # Simulator sources
-sim_src = [
+sim_src = files(
     'simulator.cpp',
     'sim_hardware_access.cpp',
     '../sim_tracing.cpp'
-]
+)
 
-# Test cases
-test_src = [
-    'sample_test_case.cpp',
-    'test_cases/exp20_foxhound7.cpp',
-]
+subdir('testcases')
 
 gtest = dependency('gtest', main : true, required : false, method : 'system')
 
