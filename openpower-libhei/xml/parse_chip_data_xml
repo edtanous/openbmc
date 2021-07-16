@@ -367,11 +367,7 @@ sub __normalizeRegister($$)
 {
     my ( $node, $regs ) = @_;
 
-    # There must be at least one register entry.
-    unless ( defined $node->{register} and 0 < scalar @{$node->{register}} )
-    {
-        FAIL( "Node $node->{name} does not contain at least one register" );
-    }
+    return unless ( defined $node->{register} );
 
     # All of the registers will be put in the master register list for the chip.
     for my $r ( @{$node->{register}} )
