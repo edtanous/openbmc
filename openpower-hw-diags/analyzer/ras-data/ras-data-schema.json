@@ -1,0 +1,240 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "title": "RAS Data schema for openpower-hw-diags",
+    "type": "object",
+    "additionalProperties": false,
+    "required": [ "model_ec", "version", "actions", "signatures" ],
+    "properties": {
+        "model_ec": {
+            "type": "string",
+            "pattern": "^[0-9A-Fa-f]{8}$"
+        },
+        "version": {
+            "type": "integer",
+            "minimum": 1
+        },
+        "units": {
+            "type": "object",
+            "additionalProperties": false,
+            "patternProperties": {
+                "^\\w+$": {
+                    "type": "string",
+                    "pattern": "^\\w+(\\/\\w+)*$"
+                }
+            }
+        },
+        "buses": {
+            "type": "object",
+            "additionalProperties": false,
+            "patternProperties": {
+                "^\\w+$": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [ "type" ],
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "enum": [ "peer", "parent", "child" ]
+                        },
+                        "unit": {
+                            "type": "string",
+                            "pattern": "^\\w+$"
+                        }
+                    }
+                }
+            }
+        },
+        "actions": {
+            "type": "object",
+            "additionalProperties": false,
+            "patternProperties": {
+                "^\\w+$": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "required": [ "type" ],
+                        "properties": {
+                            "type": {
+                                "type": "string",
+                                "enum": [
+                                    "action",
+                                    "callout_self",
+                                    "callout_unit",
+                                    "callout_connected",
+                                    "callout_bus",
+                                    "callout_clock",
+                                    "callout_procedure",
+                                    "callout_part",
+                                    "plugin"
+                                ]
+                            },
+                            "priority": {
+                                "$id": "#priority",
+                                "type": "string",
+                                "enum": [
+                                    "HIGH",
+                                    "MED",
+                                    "MED_A",
+                                    "MED_B",
+                                    "MED_C",
+                                    "LOW"
+                                ]
+                            },
+                            "guard": {
+                                "type": "boolean"
+                            },
+                            "name": {
+                                "type": "string",
+                                "pattern": "^\\w+$"
+                            }
+                        },
+                        "allOf": [
+                            {
+                                "if": {
+                                    "properties": {
+                                        "type": { "const": "action" }
+                                    }
+                                },
+                                "then": {
+                                    "required": [ "name" ],
+                                    "not": { "required": [ "priority", "guard" ] }
+                                }
+                            },
+                            {
+                                "if": {
+                                    "properties": {
+                                        "type": { "const": "callout_self" }
+                                    }
+                                },
+                                "then": {
+                                    "required": [ "priority", "guard" ],
+                                    "not": { "required": [ "name" ] }
+                                }
+                            },
+                            {
+                                "if": {
+                                    "properties": {
+                                        "type": { "const": "callout_unit" }
+                                    }
+                                },
+                                "then": {
+                                    "required": [ "name", "priority", "guard" ]
+                                }
+                            },
+                            {
+                                "if": {
+                                    "properties": {
+                                        "type": { "const": "callout_connected" }
+                                    }
+                                },
+                                "then": {
+                                    "required": [ "name", "priority", "guard" ]
+                                }
+                            },
+                            {
+                                "if": {
+                                    "properties": {
+                                        "type": { "const": "callout_bus" }
+                                    }
+                                },
+                                "then": {
+                                    "required": [ "name", "guard" ],
+                                    "not": { "required": [ "priority" ] },
+                                    "properties": {
+                                        "rx_priority": { "$ref": "#priority" },
+                                        "tx_priority": { "$ref": "#priority" }
+                                    }
+                                }
+                            },
+                            {
+                                "if": {
+                                    "properties": {
+                                        "type": { "const": "callout_clock" }
+                                    }
+                                },
+                                "then": {
+                                    "required": [ "priority", "guard", "position" ],
+                                    "not": { "required": [ "name" ] },
+                                    "properties": {
+                                        "position": {
+                                            "type": "integer",
+                                            "minimum": 0,
+                                            "maximum": 1
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "if": {
+                                    "properties": {
+                                        "type": { "const": "callout_procedure" }
+                                    }
+                                },
+                                "then": {
+                                    "required": [ "name", "priority" ],
+                                    "not": { "required": [ "guard" ] },
+                                    "properties": {
+                                        "name": {
+                                            "enum": [
+                                                "LEVEL2"
+                                            ]
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "if": {
+                                    "properties": {
+                                        "type": { "const": "callout_part" }
+                                    }
+                                },
+                                "then": {
+                                    "required": [ "name", "priority" ],
+                                    "not": { "required": [ "guard" ] },
+                                    "properties": {
+                                        "name": {
+                                            "enum": []
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "if": {
+                                    "properties": {
+                                        "type": { "const": "plugin" }
+                                    }
+                                },
+                                "then": {
+                                    "required": [ "name" ],
+                                    "not": { "required": [ "priority", "guard" ] }
+                                }
+                            }
+                        ]
+                    }
+                }
+            }
+        },
+        "signatures": {
+            "type": "object",
+            "additionalProperties": false,
+            "patternProperties": {
+                "^[0-9A-Fa-f]{4}$": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "patternProperties": {
+                        "^[0-9A-Fa-f]{2}$": {
+                            "type": "object",
+                            "additionalProperties": false,
+                            "patternProperties": {
+                                "^[0-9A-Fa-f]{2}$": {
+                                    "type": "string",
+                                    "pattern": "^\\w+$"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
