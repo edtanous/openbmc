@@ -21,10 +21,10 @@ int find(const std::string& i_interface, std::string& o_path,
 
     auto bus = sdbusplus::bus::new_default();
 
-    constexpr auto function = "GetSubTree";
-
     try
     {
+        constexpr auto function = "GetSubTree";
+
         auto method = bus.new_method_call(objectMapperService, objectMapperPath,
                                           objectMapperInterface, function);
 
@@ -65,10 +65,10 @@ int findService(const std::string& i_interface, const std::string& i_path,
 
     auto bus = sdbusplus::bus::new_default();
 
-    constexpr auto function = "GetObject";
-
     try
     {
+        constexpr auto function = "GetObject";
+
         auto method = bus.new_method_call(objectMapperService, objectMapperPath,
                                           objectMapperInterface, function);
 
@@ -109,11 +109,11 @@ int getProperty(const std::string& i_interface, const std::string& i_path,
 
     auto bus = sdbusplus::bus::new_default();
 
-    constexpr auto interface = "org.freedesktop.DBus.Properties";
-    constexpr auto function  = "Get";
-
     try
     {
+        constexpr auto interface = "org.freedesktop.DBus.Properties";
+        constexpr auto function  = "Get";
+
         // calling the get property method
         auto method = bus.new_method_call(i_service.c_str(), i_path.c_str(),
                                           interface, function);
