@@ -508,11 +508,12 @@ void requestDump(const uint32_t logId)
         try
         {
             // dbus call arguments
-            std::map<std::string, std::string> createParams;
+            std::map<std::string, std::variant<std::string, uint64_t>>
+                createParams;
             createParams["com.ibm.Dump.Create.CreateParameters.DumpType"] =
                 "com.ibm.Dump.Create.DumpType.Hostboot";
             createParams["com.ibm.Dump.Create.CreateParameters.ErrorLogId"] =
-                std::to_string(logId);
+                uint64_t(logId);
             method.append(createParams);
 
             // using system dbus
