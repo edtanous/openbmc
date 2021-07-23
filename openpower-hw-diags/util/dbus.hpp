@@ -64,7 +64,7 @@ int getProperty(const std::string& i_interface, const std::string& i_path,
  */
 std::vector<std::string> systemNames();
 
-/** @brief Host states for util::dbus host state operations */
+/** @brief Host transition states for host transition operations */
 enum class HostState
 {
     Quiesce,
@@ -88,6 +88,24 @@ void transitionHost(const HostState i_hostState);
  * determine whether to either mpipl or quiesce the host on TI condition.
  */
 bool autoRebootEnabled();
+
+/** @brief Host running states for host running operations */
+enum class HostRunningState
+{
+    Unknown,
+    NotStarted,
+    Started
+};
+
+/**
+ * Get the host running state
+ *
+ * Use host boot progress to determine if a host has been started. If host
+ * boot progress can not be determined then host state will be unknown.
+ *
+ * @return HostType == "Unknown", "Started or "NotStarted"
+ */
+HostRunningState hostRunningState();
 
 } // namespace dbus
 

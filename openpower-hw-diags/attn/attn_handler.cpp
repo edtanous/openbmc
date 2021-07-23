@@ -14,6 +14,7 @@ extern "C"
 #include <attn/bp_handler.hpp>
 #include <attn/ti_handler.hpp>
 #include <attn/vital_handler.hpp>
+#include <util/dbus.hpp>
 
 #include <algorithm>
 #include <iomanip>
@@ -271,13 +272,17 @@ int handleSpecial(Attention* i_attention)
                 {
                     trace<level::INFO>("TI info data ptr is invalid");
 
-                    HostRunningState runningState = hostRunningState();
-                    std::string stateString       = "host state unknown";
+                    util::dbus::HostRunningState runningState =
+                        util::dbus::hostRunningState();
 
-                    if ((HostRunningState::Started == runningState) ||
-                        (HostRunningState::Unknown == runningState))
+                    std::string stateString = "host state unknown";
+
+                    if ((util::dbus::HostRunningState::Started ==
+                         runningState) ||
+                        (util::dbus::HostRunningState::Unknown == runningState))
                     {
-                        if (HostRunningState::Started == runningState)
+                        if (util::dbus::HostRunningState::Started ==
+                            runningState)
                         {
                             stateString = "host started";
                         }

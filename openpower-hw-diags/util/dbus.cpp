@@ -1,5 +1,6 @@
 #include <util/dbus.hpp>
 #include <util/trace.hpp>
+#include <xyz/openbmc_project/State/Boot/Progress/server.hpp>
 
 namespace util
 {
@@ -223,6 +224,53 @@ bool autoRebootEnabled()
     }
 
     return autoReboot;
+}
+
+/** @brief Get the running state of the host */
+HostRunningState hostRunningState()
+{
+    // assume not able to get host running state
+    HostRunningState host = HostRunningState::Unknown;
+
+    constexpr auto interface = "xyz.openbmc_project.State.Boot.Progress";
+
+    DBusService service;
+    DBusPath path;
+
+    // find a dbus object and path that implements the interface
+    if (0 == find(interface, path, service))
+    {
+        DBusValue value;
+
+        // boot progress is implemented as a property
+        constexpr auto property = "BootProgress";
+
+        if (0 == getProperty(interface, path, service, property, value))
+        {
+            // return value is a variant, progress is in the vector of strings
+            std::string bootProgress(std::get<std::string>(value));
+
+            // convert boot progress to host state
+            using BootProgress = sdbusplus::xyz::openbmc_project::State::Boot::
+                server::Progress::ProgressStages;
+
+            BootProgress stage = sdbusplus::xyz::openbmc_project::State::Boot::
+                server::Progress::convertProgressStagesFromString(bootProgress);
+
+            if ((stage == BootProgress::SystemInitComplete) ||
+                (stage == BootProgress::OSStart) ||
+                (stage == BootProgress::OSRunning))
+            {
+                host = HostRunningState::Started;
+            }
+            else
+            {
+                host = HostRunningState::NotStarted;
+            }
+        }
+    }
+
+    return host;
 }
 
 } // namespace dbus

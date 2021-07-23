@@ -1,7 +1,6 @@
 #include <attn_common.hpp>
 #include <attn_dbus.hpp>
 #include <attn_logging.hpp>
-#include <xyz/openbmc_project/State/Boot/Progress/server.hpp>
 
 #include <string>
 #include <vector>
@@ -224,66 +223,4 @@ int getPel(const uint32_t i_pelId)
     return fd; // file descriptor or -1
 }
 
-/** @brief Get the running state of the host */
-HostRunningState hostRunningState()
-{
-    HostRunningState host = HostRunningState::Unknown;
-
-    // dbus specifics
-    constexpr auto path      = "/xyz/openbmc_project/state/host0";
-    constexpr auto interface = "xyz.openbmc_project.State.Boot.Progress";
-    constexpr auto extended  = "org.freedesktop.DBus.Properties";
-    constexpr auto function  = "Get";
-
-    sdbusplus::message::message method;
-
-    if (0 == dbusMethod(path, interface, function, method, extended))
-    {
-        try
-        {
-            // additional dbus call parameters
-            method.append(interface, "BootProgress");
-
-            // using system dbus
-            auto bus      = sdbusplus::bus::new_system();
-            auto response = bus.call(method);
-
-            // reply will be a variant
-            std::variant<std::string, bool, std::vector<uint8_t>,
-                         std::vector<std::string>>
-                reply;
-
-            // parse dbus response into reply
-            response.read(reply);
-
-            // get boot progress (string) and convert to boot stage
-            std::string bootProgress(std::get<std::string>(reply));
-
-            using BootProgress = sdbusplus::xyz::openbmc_project::State::Boot::
-                server::Progress::ProgressStages;
-
-            BootProgress stage = sdbusplus::xyz::openbmc_project::State::Boot::
-                server::Progress::convertProgressStagesFromString(bootProgress);
-
-            if ((stage == BootProgress::SystemInitComplete) ||
-                (stage == BootProgress::OSStart) ||
-                (stage == BootProgress::OSRunning))
-            {
-                host = HostRunningState::Started;
-            }
-            else
-            {
-                host = HostRunningState::NotStarted;
-            }
-        }
-        catch (const sdbusplus::exception::SdBusError& e)
-        {
-            trace<level::ERROR>("hostRunningState exception");
-            std::string traceMsg = std::string(e.what(), maxTraceLen);
-            trace<level::ERROR>(traceMsg.c_str());
-        }
-    }
-
-    return host;
-}
 } // namespace attn
