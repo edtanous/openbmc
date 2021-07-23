@@ -5,6 +5,7 @@
 #include <attn/ti_handler.hpp>
 #include <sdbusplus/bus.hpp>
 #include <sdbusplus/exception.hpp>
+#include <util/dbus.hpp>
 
 #include <iomanip>
 #include <iostream>
@@ -100,12 +101,12 @@ void handlePhypTi(TiDataArea* i_tiDataArea)
     if (autoRebootEnabled())
     {
         // If autoreboot is enabled we will start crash (mpipl) mode target
-        transitionHost(HostState::Crash);
+        util::dbus::transitionHost(util::dbus::HostState::Crash);
     }
     else
     {
         // If autoreboot is disabled we will quiesce the host
-        transitionHost(HostState::Quiesce);
+        util::dbus::transitionHost(util::dbus::HostState::Quiesce);
     }
 }
 
@@ -253,7 +254,7 @@ void handleHbTi(TiDataArea* i_tiDataArea)
 
     if (true == terminateHost)
     {
-        transitionHost(HostState::Quiesce);
+        util::dbus::transitionHost(util::dbus::HostState::Quiesce);
     }
 }
 

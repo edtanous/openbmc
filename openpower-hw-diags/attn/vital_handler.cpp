@@ -2,6 +2,7 @@
 #include <attn/attn_common.hpp>
 #include <attn/attn_logging.hpp>
 #include <sdbusplus/bus.hpp>
+#include <util/dbus.hpp>
 
 namespace attn
 {
@@ -28,7 +29,7 @@ int handleVital(Attention* i_attention)
     else
     {
         // transition host state after analyses
-        transitionHost(HostState::Quiesce);
+        util::dbus::transitionHost(util::dbus::HostState::Quiesce);
 
         // generate pel
         eventVital();

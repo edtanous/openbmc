@@ -64,6 +64,23 @@ int getProperty(const std::string& i_interface, const std::string& i_path,
  */
 std::vector<std::string> systemNames();
 
+/** @brief Host states for util::dbus host state operations */
+enum class HostState
+{
+    Quiesce,
+    Diagnostic,
+    Crash
+};
+
+/**
+ * @brief Transition the host state
+ *
+ * We will transition the host state by starting the appropriate dbus target.
+ *
+ * @param i_hostState the state to transition the host to
+ */
+void transitionHost(const HostState i_hostState);
+
 } // namespace dbus
 
 } // namespace util
