@@ -197,6 +197,34 @@ void transitionHost(const HostState i_hostState)
     }
 }
 
+/** @brief Read state of autoreboot propertyi via dbus */
+bool autoRebootEnabled()
+{
+    bool autoReboot = false; // assume autoreboot attribute not available
+
+    constexpr auto interface = "xyz.openbmc_project.Control.Boot.RebootPolicy";
+
+    DBusService service;
+    DBusPath path;
+
+    // find a dbus object and path that implements the interface
+    if (0 == find(interface, path, service))
+    {
+        DBusValue value;
+
+        // autoreboot policy is implemented as a property
+        constexpr auto property = "AutoReboot";
+
+        if (0 == getProperty(interface, path, service, property, value))
+        {
+            // return value is a variant, autoreboot policy is boolean
+            autoReboot = std::get<bool>(value);
+        }
+    }
+
+    return autoReboot;
+}
+
 } // namespace dbus
 
 } // namespace util

@@ -125,14 +125,6 @@ void parseHbTiInfo(std::map<std::string, std::string>& i_map,
                    TiDataArea* i_tiDataArea);
 
 /**
- * @brief Read autoreboot property
- *
- * Read the autoreboot property via dbus. This status will be used to
- * determine whether to either mpipl or quiesce the host on TI condition.
- */
-bool autoRebootEnabled();
-
-/**
  * Request a dump from the dump manager
  *
  * Request a dump from the dump manager and register a monitor for observing

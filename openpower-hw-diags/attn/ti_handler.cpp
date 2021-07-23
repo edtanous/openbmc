@@ -98,7 +98,7 @@ void handlePhypTi(TiDataArea* i_tiDataArea)
 
     // We are finished creating the event log entries so transition host to
     // the required state.
-    if (autoRebootEnabled())
+    if (true == util::dbus::autoRebootEnabled())
     {
         // If autoreboot is enabled we will start crash (mpipl) mode target
         util::dbus::transitionHost(util::dbus::HostState::Crash);
@@ -390,39 +390,6 @@ void parseHbTiInfo(std::map<std::string, std::string>& i_map,
         std::getline(ss, value, delim);
         i_map[key] = value;
     }
-}
-
-/** @brief Read state of autoreboot propertyi via dbus */
-bool autoRebootEnabled()
-{
-    // Use dbus get-property interface to read the autoreboot property
-    auto bus = sdbusplus::bus::new_system();
-    auto method =
-        bus.new_method_call("xyz.openbmc_project.Settings",
-                            "/xyz/openbmc_project/control/host0/auto_reboot",
-                            "org.freedesktop.DBus.Properties", "Get");
-
-    method.append("xyz.openbmc_project.Control.Boot.RebootPolicy",
-                  "AutoReboot");
-
-    bool autoReboot = false; // assume autoreboot attribute not available
-
-    try
-    {
-        auto reply = bus.call(method);
-
-        std::variant<bool> result;
-        reply.read(result);
-        autoReboot = std::get<bool>(result);
-    }
-    catch (const sdbusplus::exception::SdBusError& e)
-    {
-        trace<level::INFO>("autoRebootEnbabled exception");
-        std::string traceMsg = std::string(e.what(), maxTraceLen);
-        trace<level::ERROR>(traceMsg.c_str());
-    }
-
-    return autoReboot;
 }
 
 /**
