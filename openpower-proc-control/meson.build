@@ -27,6 +27,21 @@ extra_sources = []
 extra_dependencies = []
 extra_unit_files = []
 
+# Configuration header file(config.h) generation
+conf_data = configuration_data()
+
+conf_data.set_quoted('DEVTREE_EXPORT_FILTER_FILE', get_option('DEVTREE_EXPORT_FILTER_FILE'),
+                      description : 'Path to the phal devtree export filter file'
+                    )
+
+conf_data.set_quoted('DEVTREE_EXP_FILE', get_option('DEVTREE_EXP_FILE'),
+                      description : 'Path to the devtree export copy file'
+                    )
+
+configure_file(configuration : conf_data,
+               output : 'config.h'
+              )
+
 unit_subs = configuration_data()
 unit_subs.set('bindir', join_paths(get_option('prefix'), get_option('bindir')))
 unit_subs.set('ENABLE_PHAL_TRUE', '#')
@@ -133,12 +148,17 @@ if build_phal
         [
             'extensions/phal/devtree_export.cpp',
             'extensions/phal/fw_update_watch.cpp',
+            'extensions/phal/pdbg_utils.cpp',
+            'extensions/phal/create_pel.cpp',
+            'util.cpp',
         ],
         dependencies: [
             dependency('phosphor-logging'),
             dependency('sdbusplus'),
             dependency('sdeventplus'),
             dependency('fmt'),
+            dependency('phosphor-dbus-interfaces'),
+            cxx.find_library('pdbg'),
        ],
        install: true
    )

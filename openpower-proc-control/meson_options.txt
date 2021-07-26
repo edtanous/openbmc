@@ -2,3 +2,12 @@ option('tests', type: 'feature', description: 'Build tests.')
 option('p9', type: 'feature', description: 'Enable support for POWER9')
 option('openfsi', type: 'feature', description: 'Enable support for OpenFSI')
 option('phal', type: 'feature', description: 'Enable support for PHAL')
+
+option('DEVTREE_EXPORT_FILTER_FILE', type : 'string',
+        value : '/usr/share/pdata/preserved_attrs_list',
+        description : 'Path to the phal devtree export filter file'
+)
+option('DEVTREE_EXP_FILE', type : 'string',
+        value : '/var/lib/phal/exportdevtree',
+        description : 'Path to the devtree export copy file'
+)
