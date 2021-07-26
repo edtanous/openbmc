@@ -180,7 +180,8 @@ sub importXML($)
             my $path = "$dir/$file";
 
             # Ensure the XML is well-formed and validates against the schema.
-            my $out = `xmllint --noout --schema $RealBin/$type.xsd $path 2>&1`;
+            my $schema = "$RealBin/schema/$type.xsd";
+            my $out = `xmllint --noout --schema $schema $path 2>&1`;
             die "$out\nRAS XML validation failed on $file" if ( 0 != $? );
 
             # Import the XML.
