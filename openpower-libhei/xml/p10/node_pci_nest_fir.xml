@@ -10,32 +10,56 @@
         <action attn_type="CS" config="00"/>
         <action attn_type="RE" config="01"/>
     </local_fir>
-    <bit pos="0">PCI Nest FIR NFIR</bit>
-    <bit pos="1">PCI Nest FIR NFIR</bit>
-    <bit pos="2">PCI Nest FIR NFIR</bit>
-    <bit pos="3">PCI Nest FIR NFIR</bit>
-    <bit pos="4">PCI Nest FIR NFIR</bit>
-    <bit pos="5">PCI Nest FIR NFIR</bit>
-    <bit pos="6">PCI Nest FIR NFIR</bit>
-    <bit pos="7">PCI Nest FIR NFIR</bit>
-    <bit pos="8">PCI Nest FIR NFIR</bit>
-    <bit pos="9">PCI Nest FIR NFIR</bit>
-    <bit pos="10">PCI Nest FIR NFIR</bit>
-    <bit pos="11">PCI Nest FIR NFIR</bit>
-    <bit pos="12">PCI Nest FIR NFIR</bit>
-    <bit pos="13">PCI Nest FIR NFIR</bit>
-    <bit pos="14">PCI Nest FIR NFIR</bit>
-    <bit pos="15">PCI Nest FIR NFIR</bit>
-    <bit pos="16">PCI Nest FIR NFIR</bit>
-    <bit pos="17">PCI Nest FIR NFIR</bit>
-    <bit pos="18">PCI Nest FIR NFIR</bit>
-    <bit pos="19">PCI Nest FIR NFIR</bit>
-    <bit pos="20">PCI Nest FIR NFIR</bit>
-    <bit pos="21">PCI Nest FIR NFIR</bit>
-    <bit pos="22">PCI Nest FIR NFIR</bit>
-    <bit pos="23">PCI Nest FIR NFIR</bit>
-    <bit pos="24">PCI Nest FIR NFIR</bit>
-    <bit pos="25">PCI Nest FIR NFIR</bit>
-    <bit pos="26">PCI Nest FIR NFIR</bit>
-    <bit pos="27">PCI Nest FIR NFIR</bit>
+
+    <register name="PCI_NFIR_ERR_RPT0">
+        <instance reg_inst="0" addr="0x0301184A" />
+        <instance reg_inst="1" addr="0x0301188A" />
+        <instance reg_inst="2" addr="0x030118CA" />
+        <instance reg_inst="3" addr="0x0201184A" />
+        <instance reg_inst="4" addr="0x0201188A" />
+        <instance reg_inst="5" addr="0x020118CA" />
+    </register>
+
+    <register name="PCI_NFIR_ERR_RPT1">
+        <instance reg_inst="0" addr="0x0301184B" />
+        <instance reg_inst="1" addr="0x0301188B" />
+        <instance reg_inst="2" addr="0x030118CB" />
+        <instance reg_inst="3" addr="0x0201184B" />
+        <instance reg_inst="4" addr="0x0201188B" />
+        <instance reg_inst="5" addr="0x020118CB" />
+    </register>
+
+    <capture_group node_inst="0:5">
+        <capture_register reg_name="PCI_NFIR_ERR_RPT0" reg_inst="0:5" />
+        <capture_register reg_name="PCI_NFIR_ERR_RPT1" reg_inst="0:5" />
+    </capture_group>
+
+    <bit pos="0">BAR Parity Error</bit>
+    <bit pos="1">Non-BAR Parity Error</bit>
+    <bit pos="2">Power Bus to PEC CE</bit>
+    <bit pos="3">Power Bus to PEC UE</bit>
+    <bit pos="4">Power Bus to PEC SUE</bit>
+    <bit pos="5">Array CE</bit>
+    <bit pos="6">Array UE</bit>
+    <bit pos="7">Array SUE</bit>
+    <bit pos="8">Register Array Parity Error</bit>
+    <bit pos="9">Power Bus Interface Parity Error</bit>
+    <bit pos="10">Power Bus Data Hang</bit>
+    <bit pos="11">Power Bus Hang Error</bit>
+    <bit pos="12">RD ARE Error</bit>
+    <bit pos="13">Non-Rd ARE Error</bit>
+    <bit pos="14">PCI Hang Error</bit>
+    <bit pos="15">PCI Clock Error</bit>
+    <bit pos="16">AIB Fence</bit>
+    <bit pos="17">Hardware Error</bit>
+    <bit pos="18">Unsolicited Power Bus Data</bit>
+    <bit pos="19">Unexpected Combined Response</bit>
+    <bit pos="20">Invalid Combined Response</bit>
+    <bit pos="21">Power Bus Unsupported Size</bit>
+    <bit pos="22">Power Bus Unsupported Command</bit>
+    <bit pos="23">reserved</bit>
+    <bit pos="24">reserved</bit>
+    <bit pos="25">reserved</bit>
+    <bit pos="26">Software Defined</bit>
+    <bit pos="27">PEC SCOM Engine Error</bit>
 </attn_node>

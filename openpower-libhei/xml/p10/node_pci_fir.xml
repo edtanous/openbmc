@@ -10,10 +10,24 @@
         <action attn_type="CS" config="00"/>
         <action attn_type="RE" config="01"/>
     </local_fir>
-    <bit pos="0">PCI FIR</bit>
-    <bit pos="1">PCI FIR</bit>
-    <bit pos="2">PCI FIR</bit>
-    <bit pos="3">PCI FIR</bit>
-    <bit pos="4">PCI FIR</bit>
-    <bit pos="5">PCI FIR</bit>
+
+    <register name="PBAIB_CERR_RPT_REG">
+        <instance reg_inst="0" addr="0x0801084B" />
+        <instance reg_inst="1" addr="0x0801088B" />
+        <instance reg_inst="2" addr="0x080108CB" />
+        <instance reg_inst="3" addr="0x0901084B" />
+        <instance reg_inst="4" addr="0x0901088B" />
+        <instance reg_inst="5" addr="0x090108CB" />
+    </register>
+
+    <capture_group node_inst="0:5">
+        <capture_register reg_name="PBAIB_CERR_RPT_REG" reg_inst="0:5" />
+    </capture_group>
+
+    <bit pos="0">register parity error</bit>
+    <bit pos="1">hardware error</bit>
+    <bit pos="2">AIB interface error</bit>
+    <bit pos="3">ETU reset error</bit>
+    <bit pos="4">PEC SCOM error</bit>
+    <bit pos="5">spare</bit>
 </attn_node>

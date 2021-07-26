@@ -23,13 +23,13 @@
     <bit pos="9">NDL Brick4 nostall</bit>
     <bit pos="10">NDL Brick5 stall</bit>
     <bit pos="11">NDL Brick5 nostall</bit>
-    <bit pos="12">MISC Register ring error (noack, &gt;1 ack)</bit>
+    <bit pos="12">MISC Register ring error</bit>
     <bit pos="13">MISC Parity error from interrupt base real address register</bit>
     <bit pos="14">MISC Parity error on Indirect SCOM Address register</bit>
     <bit pos="15">MISC Parity error on MISC Control register</bit>
     <bit pos="16">FIR1 Reserved, bit 16</bit>
-    <bit pos="17">ATS Invalid TVT entry (TCE Table Size = 0b00000)</bit>
-    <bit pos="18">ATS TVT Address range error (no xlate: EA out of range; xlate: unused EA bits non-zero, TVE uses &gt; max # EA bits)</bit>
+    <bit pos="17">ATS Invalid TVT entry</bit>
+    <bit pos="18">ATS TVT Address range error</bit>
     <bit pos="19">ATS TCE Page access error during TCE cache lookup</bit>
     <bit pos="20">ATS Effective Address hit multiple TCE cache entries</bit>
     <bit pos="21">ATS TCE Page access error during TCE table-walk</bit>
@@ -38,7 +38,7 @@
     <bit pos="24">ATS Parity error on TCE cache data array</bit>
     <bit pos="25">ATS ECC UE on Effective Address array</bit>
     <bit pos="26">ATS ECC CE on Effective Address array</bit>
-    <bit pos="27">ATS ECC UE on TDRmem array (table-walk state machine also hangs)</bit>
+    <bit pos="27">ATS ECC UE on TDRmem array</bit>
     <bit pos="28">ATS ECC CE on TDRmem array</bit>
     <bit pos="29">ATS ECC UE on CQ CTL DMA Read data to TDR_mem array during table-walk</bit>
     <bit pos="30">ATS ECC CE on CQ CTL DMA Read data to TDR_mem array during table-walk</bit>

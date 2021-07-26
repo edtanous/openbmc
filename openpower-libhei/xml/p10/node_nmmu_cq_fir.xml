@@ -7,6 +7,16 @@
         <action attn_type="RE" config="01"/>
         <action attn_type="UCS" config="11"/>
     </local_fir>
+
+    <register name="NMMU_CQ_ERR_RPT_0">
+        <instance reg_inst="0" addr="0x02010C22" />
+        <instance reg_inst="1" addr="0x03010C22" />
+    </register>
+
+    <capture_group node_inst="0:1">
+        <capture_register reg_name="NMMU_CQ_ERR_RPT_0" reg_inst="0:1" />
+    </capture_group>
+
     <bit pos="0">PBI internal parity error</bit>
     <bit pos="1">PowerBus command hang error</bit>
     <bit pos="2">PowerBus read address error</bit>

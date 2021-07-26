@@ -16,39 +16,39 @@
     <bit pos="2">NTL data array UE</bit>
     <bit pos="3">NTL NVLInk Control/Header/AE Parity error</bit>
     <bit pos="4">NTL NVLink Data Parity error</bit>
-    <bit pos="5">NTL NVLink Malformed Packet (illegal Cmd encode, etc.)</bit>
-    <bit pos="6">NTL NVLink Unsupported Packet (receiving DGD, receiving Atomic with unsupported DatLen, etc)</bit>
-    <bit pos="7">NTL NVLink Config errors (Credits received &gt; max configured)</bit>
+    <bit pos="5">NTL NVLink Malformed Packet</bit>
+    <bit pos="6">NTL NVLink Unsupported Packet</bit>
+    <bit pos="7">NTL NVLink Config errors</bit>
     <bit pos="8">NTL NVLink CRC errors or LMD=Stomp</bit>
-    <bit pos="9">NTL PRI errors (errors returned by NDL Wrapper on PRI interface)</bit>
-    <bit pos="10">NTL logic error (overflow, underflow, etc)</bit>
+    <bit pos="9">NTL PRI errors</bit>
+    <bit pos="10">NTL logic error</bit>
     <bit pos="11">NTL LMD=Data Poison</bit>
     <bit pos="12">NTL data array SUE</bit>
     <bit pos="13">CQ CTL/SM ASBE Array single-bit correctable error</bit>
-    <bit pos="14">CQ CTL/SM PBR  PowerBus Recoverable (ex: abort_trm CResp)</bit>
-    <bit pos="15">CQ CTL/SM REG  Register ring error (ie noack)</bit>
-    <bit pos="16">CQ CTL/SM DUE  Data Uncorrectable error for MMIO store data</bit>
-    <bit pos="17">CQ CTL/SM UT=1 to frozen PE (for naples this was in AT as part of the PCT lookup).</bit>
-    <bit pos="18">CQ CTL/SM NCF  NVLink configuration error (ex: Probe missed its GPUBAR)</bit>
-    <bit pos="19">CQ CTL/SM NVF  NVLink fatal (ex: rcv data resp to write req)</bit>
-    <bit pos="20">CQ CTL/SM OCR OpenCAPI Recoverable, Command failed (ex: SUE data to memory, a*_failed response to AFU, etc) and brick not fenced.</bit>
-    <bit pos="21">CQ CTL/SM AUE  Array uncorrectable error</bit>
-    <bit pos="22">CQ CTL/SM PBP  PowerBus parity error</bit>
-    <bit pos="23">CQ CTL/SM PBF  PowerBus Fatal (ex: addr_error CResp)</bit>
-    <bit pos="24">CQ CTL/SM PBC  PowerBus configuration error (ex: group &gt; 3)</bit>
-    <bit pos="25">CQ CTL/SM FWD  Forward-Progress (internal timer or rpt_hang.data)</bit>
-    <bit pos="26">CQ CTL/SM NLG  PAU Logic error (ex: invalid state, missed table lookup, etc.)</bit>
-    <bit pos="27">Cresp=Addr_Error received for a load command (PowerBus LD_cresp_addr_error)</bit>
-    <bit pos="28">Cresp=Addr_Error received for a store command (PowerBus ST_cresp_addr_error)</bit>
-    <bit pos="29">CQ DAT ECC UE on data/BE arrays. Relevant word is marked with SUE</bit>
+    <bit pos="14">CQ CTL/SM PBR PowerBus Recoverable</bit>
+    <bit pos="15">CQ CTL/SM REG Register ring error</bit>
+    <bit pos="16">CQ CTL/SM DUE Data Uncorrectable error for MMIO store data</bit>
+    <bit pos="17">CQ CTL/SM UT=1 to frozen PE</bit>
+    <bit pos="18">CQ CTL/SM NCF NVLink configuration error</bit>
+    <bit pos="19">CQ CTL/SM NVF NVLink fatal</bit>
+    <bit pos="20">CQ CTL/SM OCR OpenCAPI Recoverable, Command failed, and brick not fenced.</bit>
+    <bit pos="21">CQ CTL/SM AUE Array uncorrectable error</bit>
+    <bit pos="22">CQ CTL/SM PBP PowerBus parity error</bit>
+    <bit pos="23">CQ CTL/SM PBF PowerBus Fatal</bit>
+    <bit pos="24">CQ CTL/SM PBC PowerBus configuration error</bit>
+    <bit pos="25">CQ CTL/SM FWD Forward-Progress</bit>
+    <bit pos="26">CQ CTL/SM NLG PAU Logic error</bit>
+    <bit pos="27">Cresp=Addr_Error received for a load command</bit>
+    <bit pos="28">Cresp=Addr_Error received for a store command</bit>
+    <bit pos="29">CQ DAT ECC UE on data/BE arrays</bit>
     <bit pos="30">CQ DAT ECC CE on data/BE arrays</bit>
-    <bit pos="31">CQ DAT parity error on data/BE latches. Relevant word is marked with SUE</bit>
+    <bit pos="31">CQ DAT parity error on data/BE latches</bit>
     <bit pos="32">CQ DAT parity errors on configuration registers</bit>
     <bit pos="33">CQ DAT parity errors on received PowerBus rtag</bit>
     <bit pos="34">CQ DAT parity errors on internal state latches</bit>
-    <bit pos="35">CQ DAT logic error (invalid state bit patterns, credit overflow, etc.)</bit>
-    <bit pos="36">CQ_DAT ECC SUE on data/BE arrays that can be due to poisoned data from GPU</bit>
-    <bit pos="37">CQ_DAT ECC SUE on PB receive data (CANNOT be due to poisoned data from GPU)</bit>
+    <bit pos="35">CQ DAT logic error</bit>
+    <bit pos="36">CQ DAT ECC SUE on data/BE arrays</bit>
+    <bit pos="37">CQ DAT ECC SUE on PB receive data</bit>
     <bit pos="38">CQ DAT Reserved, macro bit 9</bit>
     <bit pos="39">CQ DAT Reserved, macro bit 10</bit>
     <bit pos="40">XTS internal logic error</bit>
