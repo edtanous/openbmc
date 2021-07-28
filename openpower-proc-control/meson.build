@@ -66,6 +66,7 @@ if build_phal
         'procedures/phal/set_SPI_mux.cpp',
         'procedures/phal/proc_pre_poweroff.cpp',
         'extensions/phal/common_utils.cpp',
+        'extensions/phal/pdbg_utils.cpp',
         'procedures/phal/check_host_running.cpp',
         'extensions/phal/create_pel.cpp',
         'extensions/phal/phal_error.cpp',
