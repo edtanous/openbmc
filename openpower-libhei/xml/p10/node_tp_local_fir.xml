@@ -8,13 +8,112 @@
         <action attn_type="UCS" config="110"/>
         <action attn_type="HA" config="001"/>
     </local_fir>
+
+    <register name="ROOT_CTRL0">
+        <instance reg_inst="0" addr="0x00050010" />
+    </register>
+
+    <register name="ROOT_CTRL3">
+        <instance reg_inst="0" addr="0x00050013" />
+    </register>
+
+    <register name="ROOT_CTRL4">
+        <instance reg_inst="0" addr="0x00050014" />
+    </register>
+
+    <register name="ROOT_CTRL5">
+        <instance reg_inst="0" addr="0x00050015" />
+    </register>
+
+    <register name="ROOT_CTRL6">
+        <instance reg_inst="0" addr="0x00050016" />
+    </register>
+
+    <register name="RCS_SENSE_1">
+        <instance reg_inst="0" addr="0x0005001D" />
+    </register>
+
+    <register name="RCS_SENSE_2">
+        <instance reg_inst="0" addr="0x0005001E" />
+    </register>
+
+    <register name="BC_OR_PCBSLV_ERROR">
+        <instance reg_inst="0" addr="0x470F001F" />
+    </register>
+
+    <register name="PCBSLV_CONFIG">
+        <!-- One per chiplet -->
+        <instance reg_inst= "1" addr="0x010F001E" />
+        <instance reg_inst= "2" addr="0x020F001E" />
+        <instance reg_inst= "3" addr="0x030F001E" />
+        <instance reg_inst= "8" addr="0x080F001E" />
+        <instance reg_inst= "9" addr="0x090F001E" />
+        <instance reg_inst="12" addr="0x0C0F001E" />
+        <instance reg_inst="13" addr="0x0D0F001E" />
+        <instance reg_inst="14" addr="0x0E0F001E" />
+        <instance reg_inst="15" addr="0x0F0F001E" />
+        <instance reg_inst="16" addr="0x100F001E" />
+        <instance reg_inst="17" addr="0x110F001E" />
+        <instance reg_inst="18" addr="0x120F001E" />
+        <instance reg_inst="19" addr="0x130F001E" />
+        <instance reg_inst="24" addr="0x180F001E" />
+        <instance reg_inst="25" addr="0x190F001E" />
+        <instance reg_inst="26" addr="0x1A0F001E" />
+        <instance reg_inst="27" addr="0x1B0F001E" />
+        <instance reg_inst="28" addr="0x1C0F001E" />
+        <instance reg_inst="29" addr="0x1D0F001E" />
+        <instance reg_inst="30" addr="0x1E0F001E" />
+        <instance reg_inst="31" addr="0x1F0F001E" />
+        <instance reg_inst="32" addr="0x200F001E" />
+        <instance reg_inst="33" addr="0x210F001E" />
+        <instance reg_inst="34" addr="0x220F001E" />
+        <instance reg_inst="35" addr="0x230F001E" />
+        <instance reg_inst="36" addr="0x240F001E" />
+        <instance reg_inst="37" addr="0x250F001E" />
+        <instance reg_inst="38" addr="0x260F001E" />
+        <instance reg_inst="39" addr="0x270F001E" />
+    </register>
+
+    <register name="PCBSLV_ERROR">
+        <!-- One per chiplet -->
+        <instance reg_inst= "1" addr="0x010F001F" />
+        <instance reg_inst= "2" addr="0x020F001F" />
+        <instance reg_inst= "3" addr="0x030F001F" />
+        <instance reg_inst= "8" addr="0x080F001F" />
+        <instance reg_inst= "9" addr="0x090F001F" />
+        <instance reg_inst="12" addr="0x0C0F001F" />
+        <instance reg_inst="13" addr="0x0D0F001F" />
+        <instance reg_inst="14" addr="0x0E0F001F" />
+        <instance reg_inst="15" addr="0x0F0F001F" />
+        <instance reg_inst="16" addr="0x100F001F" />
+        <instance reg_inst="17" addr="0x110F001F" />
+        <instance reg_inst="18" addr="0x120F001F" />
+        <instance reg_inst="19" addr="0x130F001F" />
+        <instance reg_inst="24" addr="0x180F001F" />
+        <instance reg_inst="25" addr="0x190F001F" />
+        <instance reg_inst="26" addr="0x1A0F001F" />
+        <instance reg_inst="27" addr="0x1B0F001F" />
+        <instance reg_inst="28" addr="0x1C0F001F" />
+        <instance reg_inst="29" addr="0x1D0F001F" />
+        <instance reg_inst="30" addr="0x1E0F001F" />
+        <instance reg_inst="31" addr="0x1F0F001F" />
+        <instance reg_inst="32" addr="0x200F001F" />
+        <instance reg_inst="33" addr="0x210F001F" />
+        <instance reg_inst="34" addr="0x220F001F" />
+        <instance reg_inst="35" addr="0x230F001F" />
+        <instance reg_inst="36" addr="0x240F001F" />
+        <instance reg_inst="37" addr="0x250F001F" />
+        <instance reg_inst="38" addr="0x260F001F" />
+        <instance reg_inst="39" addr="0x270F001F" />
+    </register>
+
     <bit pos="0">CFIR - Parity or PCB access error</bit>
     <bit pos="1">CPLT_CTRL - PCB access error</bit>
     <bit pos="2">CC - PCB access error</bit>
     <bit pos="3">CC - Clock Control Error</bit>
     <bit pos="4">PSC - PSCOM access error</bit>
     <bit pos="5">PSC - internal or ring interface error</bit>
-    <bit pos="6">THERM - pwr_comp_err, skitter_comp_err, scan_init_version_reg_parity_err_out , count_state_err_out</bit>
+    <bit pos="6">THERM - internal error</bit>
     <bit pos="7">THERM - pcb error</bit>
     <bit pos="8">THERMTRIP - Critical temperature indicator</bit>
     <bit pos="9">THERMTRIP - Fatal temperature indicator</bit>
@@ -35,23 +134,23 @@
     <bit pos="24">I2CM - Parity errors</bit>
     <bit pos="25">TOD - any error</bit>
     <bit pos="26">TOD - access error PIB</bit>
-    <bit pos="27">TOD - unused tie0</bit>
-    <bit pos="28">Error reported from one or more PCB Slaves</bit>
+    <bit pos="27">TOD - Error reported from PHYP</bit>
+    <bit pos="28" child_node="PLL_UNLOCK">PCB slave error</bit>
     <bit pos="29">SBE - PPE int hardware error</bit>
     <bit pos="30">SBE - PPE ext hardware error</bit>
-    <bit pos="31">SBE- PPE code error</bit>
+    <bit pos="31">SBE - PPE code error</bit>
     <bit pos="32">SBE - PPE debug code breakpoint</bit>
     <bit pos="33">SBE - PPE in halted state</bit>
     <bit pos="34">SBE - PPE watchdog timeout</bit>
-    <bit pos="35">SBE - unused tie0</bit>
-    <bit pos="36">SBE - unused tie0</bit>
+    <bit pos="35">SBE - unused</bit>
+    <bit pos="36">SBE - unused</bit>
     <bit pos="37">SBE - PPE triggers DBG</bit>
-    <bit pos="38">OTP - SCOM access errors &amp; single ecc correctable errors</bit>
+    <bit pos="38">OTP - SCOM access errors and single ecc correctable</bit>
     <bit pos="39">TPIO External Trigger</bit>
     <bit pos="40">PCB Master - Multicast group member count underrun (MC misconfig)</bit>
     <bit pos="41">PCB Master - Parity ERR</bit>
-    <bit pos="42">RCS - OSC0 Error</bit>
-    <bit pos="43">RCS - OSC1 Error</bit>
+    <bit pos="42" child_node="RCS_OSC_ERROR">RCS OSC error on clk A</bit>
+    <bit pos="43" child_node="RCS_OSC_ERROR">RCS OSC error on clk B</bit>
     <bit pos="44">RCS - Up/down counter A unlock</bit>
     <bit pos="45">RCS - Up/down counter B unlock</bit>
     <bit pos="46">PIBMEM</bit>

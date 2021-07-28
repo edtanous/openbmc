@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<attn_node model_ec="P10_10,P10_20" name="RCS_OSC_ERROR" reg_type="SCOM">
+
+    <capture_group node_inst="0">
+        <capture_register reg_name="ROOT_CTRL0"         reg_inst= "0" />
+        <capture_register reg_name="ROOT_CTRL3"         reg_inst= "0" />
+        <capture_register reg_name="ROOT_CTRL4"         reg_inst= "0" />
+        <capture_register reg_name="ROOT_CTRL5"         reg_inst= "0" />
+        <capture_register reg_name="ROOT_CTRL6"         reg_inst= "0" />
+        <capture_register reg_name="RCS_SENSE_1"        reg_inst= "0" />
+        <capture_register reg_name="RCS_SENSE_2"        reg_inst= "0" />
+        <capture_register reg_name="PCBSLV_CONFIG"      reg_inst= "1" />
+        <capture_register reg_name="PCBSLV_CONFIG"      reg_inst= "2" />
+        <capture_register reg_name="PCBSLV_CONFIG"      reg_inst= "3" />
+        <capture_register reg_name="PCBSLV_CONFIG"      reg_inst= "8" />
+        <capture_register reg_name="PCBSLV_CONFIG"      reg_inst= "9" />
+        <capture_register reg_name="PCBSLV_CONFIG"      reg_inst="12" />
+        <capture_register reg_name="PCBSLV_CONFIG"      reg_inst="13" />
+        <capture_register reg_name="PCBSLV_CONFIG"      reg_inst="14" />
+        <capture_register reg_name="PCBSLV_CONFIG"      reg_inst="15" />
+        <capture_register reg_name="PCBSLV_CONFIG"      reg_inst="16" />
+        <capture_register reg_name="PCBSLV_CONFIG"      reg_inst="17" />
+        <capture_register reg_name="PCBSLV_CONFIG"      reg_inst="18" />
+        <capture_register reg_name="PCBSLV_CONFIG"      reg_inst="19" />
+        <capture_register reg_name="PCBSLV_CONFIG"      reg_inst="24" />
+        <capture_register reg_name="PCBSLV_CONFIG"      reg_inst="25" />
+        <capture_register reg_name="PCBSLV_CONFIG"      reg_inst="26" />
+        <capture_register reg_name="PCBSLV_CONFIG"      reg_inst="27" />
+        <capture_register reg_name="PCBSLV_CONFIG"      reg_inst="28" />
+        <capture_register reg_name="PCBSLV_CONFIG"      reg_inst="29" />
+        <capture_register reg_name="PCBSLV_CONFIG"      reg_inst="30" />
+        <capture_register reg_name="PCBSLV_CONFIG"      reg_inst="31" />
+        <capture_register reg_name="PCBSLV_CONFIG"      reg_inst="32" />
+        <capture_register reg_name="PCBSLV_CONFIG"      reg_inst="33" />
+        <capture_register reg_name="PCBSLV_CONFIG"      reg_inst="34" />
+        <capture_register reg_name="PCBSLV_CONFIG"      reg_inst="35" />
+        <capture_register reg_name="PCBSLV_CONFIG"      reg_inst="36" />
+        <capture_register reg_name="PCBSLV_CONFIG"      reg_inst="37" />
+        <capture_register reg_name="PCBSLV_CONFIG"      reg_inst="38" />
+        <capture_register reg_name="PCBSLV_CONFIG"      reg_inst="39" />
+        <capture_register reg_name="BC_OR_PCBSLV_ERROR" reg_inst= "0" />
+        <capture_register reg_name="PCBSLV_ERROR"       reg_inst= "1" />
+        <capture_register reg_name="PCBSLV_ERROR"       reg_inst= "2" />
+        <capture_register reg_name="PCBSLV_ERROR"       reg_inst= "3" />
+        <capture_register reg_name="PCBSLV_ERROR"       reg_inst= "8" />
+        <capture_register reg_name="PCBSLV_ERROR"       reg_inst= "9" />
+        <capture_register reg_name="PCBSLV_ERROR"       reg_inst="12" />
+        <capture_register reg_name="PCBSLV_ERROR"       reg_inst="13" />
+        <capture_register reg_name="PCBSLV_ERROR"       reg_inst="14" />
+        <capture_register reg_name="PCBSLV_ERROR"       reg_inst="15" />
+        <capture_register reg_name="PCBSLV_ERROR"       reg_inst="16" />
+        <capture_register reg_name="PCBSLV_ERROR"       reg_inst="17" />
+        <capture_register reg_name="PCBSLV_ERROR"       reg_inst="18" />
+        <capture_register reg_name="PCBSLV_ERROR"       reg_inst="19" />
+        <capture_register reg_name="PCBSLV_ERROR"       reg_inst="24" />
+        <capture_register reg_name="PCBSLV_ERROR"       reg_inst="25" />
+        <capture_register reg_name="PCBSLV_ERROR"       reg_inst="26" />
+        <capture_register reg_name="PCBSLV_ERROR"       reg_inst="27" />
+        <capture_register reg_name="PCBSLV_ERROR"       reg_inst="28" />
+        <capture_register reg_name="PCBSLV_ERROR"       reg_inst="29" />
+        <capture_register reg_name="PCBSLV_ERROR"       reg_inst="30" />
+        <capture_register reg_name="PCBSLV_ERROR"       reg_inst="31" />
+        <capture_register reg_name="PCBSLV_ERROR"       reg_inst="32" />
+        <capture_register reg_name="PCBSLV_ERROR"       reg_inst="33" />
+        <capture_register reg_name="PCBSLV_ERROR"       reg_inst="34" />
+        <capture_register reg_name="PCBSLV_ERROR"       reg_inst="35" />
+        <capture_register reg_name="PCBSLV_ERROR"       reg_inst="36" />
+        <capture_register reg_name="PCBSLV_ERROR"       reg_inst="37" />
+        <capture_register reg_name="PCBSLV_ERROR"       reg_inst="38" />
+        <capture_register reg_name="PCBSLV_ERROR"       reg_inst="39" />
+    </capture_group>
+
+</attn_node>
