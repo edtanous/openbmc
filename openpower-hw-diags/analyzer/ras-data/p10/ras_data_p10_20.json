@@ -18,6 +18,13 @@
                 "guard"     : true
             }
         ],
+        "self_H" : [
+            {
+                "type"      : "callout_self",
+                "priority"  : "HIGH",
+                "guard"     : true
+            }
+        ],
         "self_L" : [
             {
                 "type"      : "callout_self",
@@ -51,9 +58,31 @@
         "pau6": [ { "type": "callout_unit", "name": "pau6", "priority": "MED", "guard": true } ],
         "pau7": [ { "type": "callout_unit", "name": "pau7", "priority": "MED", "guard": true } ],
 
-        "masked"  : [ { "type": "action", "name": "level2" } ],
-        "chiplet" : [ { "type": "action", "name": "level2" } ],
-        "external": [ { "type": "action", "name": "level2" } ]
+        "rcs_osc_error_0": [
+            { "type": "callout_clock", "position": 0, "priority": "HIGH", "guard": true },
+            { "type": "action", "name": "self_L" }
+        ],
+        "rcs_osc_error_1": [
+            { "type": "callout_clock", "position": 1, "priority": "HIGH", "guard": true },
+            { "type": "action", "name": "self_L" }
+        ],
+        "pll_unlock_0": [
+            { "type": "plugin", "name": "pll_unlock_0" },
+            { "type": "callout_self", "priority": "MED", "guard": false }
+        ],
+        "pll_unlock_1": [
+            { "type": "plugin", "name": "pll_unlock_1" },
+            { "type": "callout_self", "priority": "MED", "guard": false }
+        ],
+        "pcb_slave_parity": [
+            { "type": "action", "name": "self_H" }
+        ],
+
+        "masked"         : [ { "type": "action", "name": "level2" } ],
+        "chiplet"        : [ { "type": "action", "name": "level2" } ],
+        "external"       : [ { "type": "action", "name": "level2" } ],
+        "tod_error"      : [ { "type": "action", "name": "level2" } ],
+        "sbe_vital_attn" : [ { "type": "action", "name": "level2" } ]
    },
    "signatures" : {
       "06b6" : {
@@ -14409,6 +14438,10 @@
             "07" : "masked"
          }
       },
+      "9ecb" : {
+         "00" : { "00" : "pll_unlock_0" },
+         "01" : { "00" : "pll_unlock_1" }
+      },
       "a832" : {
          "00" : {
             "00" : "self",
@@ -17707,18 +17740,18 @@
          "09" : { "00" : "masked" }
       },
       "df2a" : {
-         "00" : { "00" : "masked" },
-         "01" : { "00" : "masked" },
-         "02" : { "00" : "masked" },
-         "03" : { "00" : "masked" },
-         "04" : { "00" : "masked" },
-         "05" : { "00" : "masked" },
-         "06" : { "00" : "masked" },
-         "07" : { "00" : "masked" },
-         "08" : { "00" : "masked" },
-         "09" : { "00" : "masked" },
-         "0a" : { "00" : "masked" },
-         "0b" : { "00" : "masked" },
+         "00" : { "00" : "self" },
+         "01" : { "00" : "self" },
+         "02" : { "00" : "self" },
+         "03" : { "00" : "self" },
+         "04" : { "00" : "self" },
+         "05" : { "00" : "self" },
+         "06" : { "00" : "self" },
+         "07" : { "00" : "self" },
+         "08" : { "00" : "self" },
+         "09" : { "00" : "self" },
+         "0a" : { "00" : "self" },
+         "0b" : { "00" : "self" },
          "0c" : { "00" : "masked" },
          "0d" : { "00" : "masked" },
          "0e" : { "00" : "masked" },
@@ -17727,46 +17760,46 @@
          "11" : { "00" : "masked" },
          "12" : { "00" : "masked" },
          "13" : { "00" : "masked" },
-         "14" : { "00" : "masked" },
+         "14" : { "00" : "self" },
          "15" : { "00" : "masked" },
-         "16" : { "00" : "masked" },
-         "17" : { "00" : "masked" },
-         "18" : { "00" : "masked" },
-         "19" : { "00" : "masked" },
-         "1a" : { "00" : "masked" },
-         "1b" : { "00" : "masked" },
-         "1c" : { "00" : "masked" },
+         "16" : { "00" : "self" },
+         "17" : { "00" : "self" },
+         "18" : { "00" : "self" },
+         "19" : { "00" : "tod_error" },
+         "1a" : { "00" : "tod_error" },
+         "1b" : { "00" : "tod_error" },
+         "1c" : { "00" : "pcb_slave_parity" },
          "1d" : { "00" : "masked" },
          "1e" : { "00" : "masked" },
          "1f" : { "00" : "masked" },
          "20" : { "00" : "masked" },
-         "21" : { "00" : "masked" },
+         "21" : { "00" : "sbe_vital_attn" },
          "22" : { "00" : "masked" },
          "23" : { "00" : "masked" },
          "24" : { "00" : "masked" },
          "25" : { "00" : "masked" },
-         "26" : { "00" : "masked" },
+         "26" : { "00" : "self" },
          "27" : { "00" : "masked" },
-         "28" : { "00" : "masked" },
-         "29" : { "00" : "masked" },
-         "2a" : { "00" : "masked" },
-         "2b" : { "00" : "masked" },
+         "28" : { "00" : "self" },
+         "29" : { "00" : "self" },
+         "2a" : { "00" : "rcs_osc_error_0" },
+         "2b" : { "00" : "rcs_osc_error_1" },
          "2c" : { "00" : "masked" },
          "2d" : { "00" : "masked" },
-         "2e" : { "00" : "masked" },
-         "2f" : { "00" : "masked" },
-         "30" : { "00" : "masked" },
+         "2e" : { "00" : "self" },
+         "2f" : { "00" : "self" },
+         "30" : { "00" : "self" },
          "31" : { "00" : "masked" },
          "32" : { "00" : "masked" },
          "33" : { "00" : "masked" },
          "34" : { "00" : "masked" },
          "35" : { "00" : "masked" },
          "36" : { "00" : "masked" },
-         "37" : { "00" : "masked" },
-         "38" : { "00" : "masked" },
-         "39" : { "00" : "masked" },
-         "3a" : { "00" : "masked" },
-         "3b" : { "00" : "masked" },
+         "37" : { "00" : "self" },
+         "38" : { "00" : "self" },
+         "39" : { "00" : "self" },
+         "3a" : { "00" : "self" },
+         "3b" : { "00" : "self" },
          "3c" : { "00" : "masked" },
          "3d" : { "00" : "masked" },
          "3e" : { "00" : "masked" },
