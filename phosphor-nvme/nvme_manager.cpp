@@ -300,7 +300,9 @@ bool Nvme::getNVMeInfobyBusID(int busID,
     for (int offset = SERIALNUMBER_START_INDEX; offset < SERIALNUMBER_END_INDEX;
          offset++)
     {
-        if (rsp_data_command_8[offset] != ' ')
+        // Only accept digits/letters/punctuation characters.
+        if (rsp_data_command_8[offset] >= '!' &&
+            rsp_data_command_8[offset] <= '~')
             nvmeData.serialNumber +=
                 static_cast<char>(rsp_data_command_8[offset]);
     }
@@ -330,7 +332,8 @@ bool Nvme::getNVMeInfobyBusID(int busID,
 
         for (int i = 0; i < rx_len; i++)
         {
-            if (rsp_data_vpd[i] != ' ')
+            // Only accept digits/letters/punctuation characters.
+            if ((rsp_data_vpd[i] >= '!' && rsp_data_vpd[i] <= '~'))
                 nvmeData.modelNumber += static_cast<char>(rsp_data_vpd[i]);
         }
 
