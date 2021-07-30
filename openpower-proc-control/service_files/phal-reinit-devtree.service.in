@@ -7,6 +7,7 @@ ConditionPathExists=!/run/openbmc/host@0-on
 Type=oneshot
 RemainAfterExit=no
 ExecStart=/bin/rm -f /var/lib/phal/genesisboot
+ExecStart=/bin/rm -f /var/lib/phal/exportdevtree
 
 [Install]
 RequiredBy=obmc-host-start@0.target
