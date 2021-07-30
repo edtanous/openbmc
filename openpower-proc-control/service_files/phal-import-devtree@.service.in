@@ -1,0 +1,14 @@
+[Unit]
+Description=Import Host%i PHAL devtree attributes
+After=obmc-host-reset-running@%i.target
+Before=attn_handler.service
+ConditionPathExists=/run/openbmc/chassis@%i-on
+ConditionPathExists=/run/openbmc/host@%i-on
+
+[Service]
+RemainAfterExit=yes
+Type=oneshot
+ExecStart=/usr/bin/openpower-proc-control importDevtree
+
+[Install]
+WantedBy=multi-user.target
