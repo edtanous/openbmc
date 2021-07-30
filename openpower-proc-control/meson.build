@@ -99,6 +99,7 @@ if build_phal
         'service_files/op-reset-host-check@.service',
         'service_files/op-reset-host-clear.service',
         'service_files/phal-import-devtree@.service',
+        'service_files/phal-export-devtree@.service',
     ]
     unit_subs.set('ENABLE_PHAL_TRUE', '')
 endif

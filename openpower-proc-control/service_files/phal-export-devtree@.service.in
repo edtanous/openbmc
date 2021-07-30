@@ -1,0 +1,13 @@
+[Unit]
+Description=Export Host%i PHAL devtree attributes
+Wants=obmc-host-started@%i.target
+After=obmc-host-started@%i.target
+Conflicts=obmc-host-stop@%i.target
+
+[Service]
+RemainAfterExit=yes
+Type=simple
+ExecStart=/usr/bin/phal-export-devtree
+
+[Install]
+WantedBy=obmc-host-startmin@0.target
