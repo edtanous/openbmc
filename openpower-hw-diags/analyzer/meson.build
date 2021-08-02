@@ -24,3 +24,6 @@ analyzer_lib = static_library(
     install : false,
 )
 
+# Install the RAS data files
+subdir('ras-data')
+
