@@ -77,6 +77,31 @@ endif
 pthread = declare_dependency(link_args : '-pthread')
 lrt = declare_dependency(link_args : '-lrt')
 
+# JSON parser
+if cmplr.has_header('nlohmann/json.hpp')
+    nlohmann_json_dep = declare_dependency()
+else
+    subproject('nlohmann', required: false)
+    nlohmann_json_dep = declare_dependency(
+        include_directories: [
+            'subprojects/nlohmann/single_include',
+            'subprojects/nlohmann/single_include/nlohmann',
+        ]
+    )
+    nlohmann_json_dep = nlohmann_json_dep.as_system('system')
+endif
+
+# JSON validator
+if cmplr.has_header('valijson/validator.hpp')
+    valijson_dep = declare_dependency()
+else
+    subproject('valijson', required: false)
+    valijson_dep = declare_dependency(
+        include_directories: 'subprojects/valijson/include'
+    )
+    valijson_dep = valijson_dep.as_system('system')
+endif
+
 #-------------------------------------------------------------------------------
 # Build the local static libraries
 #-------------------------------------------------------------------------------

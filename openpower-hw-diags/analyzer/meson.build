@@ -12,7 +12,9 @@ analyzer_src = files(
 analyzer_deps = [
     dbus_interfaces_dep,
     libhei_dep,
+    nlohmann_json_dep,
     sdbusplus_dep,
+    valijson_dep,
 ]
 
 # Create static library.
