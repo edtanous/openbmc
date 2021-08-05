@@ -1,11 +1,18 @@
 
-subdir('p10')      # for p10_data_files
-subdir('explorer') # for explorer_data_files
+# Install the RAS data files
 
-data_files = [
-    p10_data_files,
-    explorer_data_files,
-]
+ras_data_files = files(
+    'data/ras-data-p10-10.json',
+    'data/ras-data-p10-20.json',
+    'data/ras-data-explorer-11.json',
+    'data/ras-data-explorer-20.json',
+)
 
-install_data( data_files, install_dir : package_dir )
+install_data( ras_data_files, install_dir: join_paths(package_dir, 'ras-data') )
+
+# Install the RAS data schema
+
+ras_data_schema = files( 'schema/ras-data-schema.json' )
+
+install_data( ras_data_schema, install_dir: join_paths(package_dir, 'schema') )
 
