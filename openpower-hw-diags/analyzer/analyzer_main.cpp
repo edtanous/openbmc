@@ -28,6 +28,12 @@ namespace analyzer
 void initializeIsolator(std::vector<libhei::Chip>& o_chips);
 
 /**
+ * @brief Apply any RAS actions required by the given data.
+ * @param i_servData Data regarding service actions gathered during analysis.
+ */
+void applyRasActions(ServiceData& io_servData);
+
+/**
  * @brief Will create and submit a PEL using the given data.
  * @param i_isoData   The data gathered during isolation (for FFDC).
  * @param i_servData  Data regarding service actions gathered during analysis.
@@ -119,19 +125,38 @@ bool __filterRootCause(const libhei::IsolationData& i_isoData,
 
 //------------------------------------------------------------------------------
 
-bool __analyze(const libhei::IsolationData& i_isoData)
+bool analyzeHardware()
 {
     bool attnFound = false;
 
+    if (!util::pdbg::queryHardwareAnalysisSupported())
+    {
+        trace::err("Hardware error analysis is not supported on this system");
+        return attnFound;
+    }
+
+    trace::inf(">>> enter analyzeHardware()");
+
+    // Initialize the isolator and get all of the chips to be analyzed.
+    trace::inf("Initializing the isolator...");
+    std::vector<libhei::Chip> chips;
+    initializeIsolator(chips);
+
+    // Isolate attentions.
+    trace::inf("Isolating errors: # of chips=%u", chips.size());
+    libhei::IsolationData isoData{};
+    libhei::isolate(chips, isoData);
+
+    // Filter for root cause attention.
     libhei::Signature rootCause{};
-    attnFound = __filterRootCause(i_isoData, rootCause);
+    attnFound = __filterRootCause(isoData, rootCause);
 
     if (!attnFound)
     {
-        // NOTE: It is possible for TI handling that there will not be an active
-        //       attention. In which case, we will not do anything and let the
-        //       caller of this function determine if this is the expected
-        //       behavior.
+        // It is possible for TI handling, or manually initiated analysis via
+        // the command line, that there will not be an active attention. In
+        // which case, we will do nothing and let the caller of this function
+        // determine if this is the expected behavior.
         trace::inf("No active attentions found");
     }
     else
@@ -140,50 +165,17 @@ bool __analyze(const libhei::IsolationData& i_isoData)
                    util::pdbg::getPath(rootCause.getChip()),
                    rootCause.toUint32(), __attn(rootCause.getAttnType()));
 
-        // TODO: Perform service actions based on the root cause. The default
-        // callout if none other exist is level 2 support.
+        // Perform service actions based on the root cause.
         ServiceData servData{rootCause};
-        servData.addCallout(std::make_shared<ProcedureCallout>(
-            ProcedureCallout::NEXTLVL, Callout::Priority::HIGH));
+        applyRasActions(servData);
 
         // Create and commit a PEL.
-        createPel(i_isoData, servData);
+        createPel(isoData, servData);
     }
 
-    return attnFound;
-}
-
-//------------------------------------------------------------------------------
-
-bool analyzeHardware()
-{
-    bool attnFound = false;
-
-    trace::inf(">>> enter analyzeHardware()");
-
-    if (util::pdbg::queryHardwareAnalysisSupported())
-    {
-        // Initialize the isolator and get all of the chips to be analyzed.
-        trace::inf("Initializing the isolator...");
-        std::vector<libhei::Chip> chips;
-        initializeIsolator(chips);
-
-        // Isolate attentions.
-        trace::inf("Isolating errors: # of chips=%u", chips.size());
-        libhei::IsolationData isoData{};
-        libhei::isolate(chips, isoData);
-
-        // Analyze the isolation data and perform service actions if needed.
-        attnFound = __analyze(isoData);
-
-        // All done, clean up the isolator.
-        trace::inf("Uninitializing isolator...");
-        libhei::uninitialize();
-    }
-    else
-    {
-        trace::err("Hardware error analysis is not supported on this system");
-    }
+    // All done, clean up the isolator.
+    trace::inf("Uninitializing isolator...");
+    libhei::uninitialize();
 
     trace::inf("<<< exit analyzeHardware()");
 
