@@ -2,6 +2,19 @@
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "title": "RAS Data schema for openpower-hw-diags",
     "type": "object",
+    "definitions": {
+        "priority": {
+            "type": "string",
+            "enum": [
+                "HIGH",
+                "MED",
+                "MED_A",
+                "MED_B",
+                "MED_C",
+                "LOW"
+            ]
+        }
+    },
     "additionalProperties": false,
     "required": [ "model_ec", "version", "actions", "signatures" ],
     "properties": {
@@ -69,16 +82,7 @@
                                 ]
                             },
                             "priority": {
-                                "$id": "#priority",
-                                "type": "string",
-                                "enum": [
-                                    "HIGH",
-                                    "MED",
-                                    "MED_A",
-                                    "MED_B",
-                                    "MED_C",
-                                    "LOW"
-                                ]
+                                "$ref": "#/definitions/priority"
                             },
                             "guard": {
                                 "type": "boolean"
@@ -141,8 +145,8 @@
                                     "required": [ "name", "guard" ],
                                     "not": { "required": [ "priority" ] },
                                     "properties": {
-                                        "rx_priority": { "$ref": "#priority" },
-                                        "tx_priority": { "$ref": "#priority" }
+                                        "rx_priority": { "$ref": "#/definitions/priority" },
+                                        "tx_priority": { "$ref": "#/definitions/priority" }
                                     }
                                 }
                             },
