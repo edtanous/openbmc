@@ -7,6 +7,14 @@ project('openpower-hw-diags', 'cpp',
           'cpp_std=c++17',
         ])
 
+# Package directory root, which will contain required data files.
+package_dir = join_paths( get_option('prefix'),
+                          get_option('datadir'),
+                          meson.project_name() )
+
+# Compiler option so that source knows the package directory.
+package_args = [ '-DPACKAGE_DIR="' + package_dir + '/"' ]
+
 #-------------------------------------------------------------------------------
 # Versioning
 #-------------------------------------------------------------------------------

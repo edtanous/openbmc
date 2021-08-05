@@ -20,10 +20,10 @@ analyzer_lib = static_library(
     analyzer_src,
     include_directories : incdir,
     dependencies : analyzer_deps,
-    cpp_args : test_arg,
+    cpp_args : [ package_args, test_arg ],
     install : false,
 )
 
-# Install the RAS data files
+# Install the RAS data files.
 subdir('ras-data')
 
