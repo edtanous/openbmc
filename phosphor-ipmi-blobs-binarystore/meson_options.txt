@@ -1,0 +1,2 @@
+option('tests', type: 'feature', description: 'Build tests')
+option('blobtool', type: 'feature', description: 'Build blobtool cli')
