@@ -2,6 +2,7 @@
 #include <libpdbg.h>
 #include <unistd.h>
 
+#include <analyzer/ras-data/ras-data-parser.hpp>
 #include <analyzer/service_data.hpp>
 #include <hei_main.hpp>
 #include <phosphor-logging/log.hpp>
@@ -26,12 +27,6 @@ namespace analyzer
  * @param o_chips The returned list of active chips.
  */
 void initializeIsolator(std::vector<libhei::Chip>& o_chips);
-
-/**
- * @brief Apply any RAS actions required by the given data.
- * @param i_servData Data regarding service actions gathered during analysis.
- */
-void applyRasActions(ServiceData& io_servData);
 
 /**
  * @brief Will create and submit a PEL using the given data.
@@ -166,8 +161,9 @@ bool analyzeHardware()
                    rootCause.toUint32(), __attn(rootCause.getAttnType()));
 
         // Perform service actions based on the root cause.
+        RasDataParser rasData{};
         ServiceData servData{rootCause};
-        applyRasActions(servData);
+        rasData.getResolution(rootCause)->resolve(servData);
 
         // Create and commit a PEL.
         createPel(isoData, servData);

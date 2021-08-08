@@ -1,10 +1,10 @@
 # Source files.
 analyzer_src = files(
     'analyzer_main.cpp',
-    'apply_ras_actions.cpp',
     'create_pel.cpp',
     'hei_user_interface.cpp',
     'initialize_isolator.cpp',
+    'ras-data/ras-data-parser.cpp',
     'resolution.cpp',
 )
 
