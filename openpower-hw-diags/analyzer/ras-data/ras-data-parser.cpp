@@ -29,22 +29,33 @@ void RasDataParser::initDataFiles()
 
     // Get the RAS data schema files from the package `schema` subdirectory.
     fs::path schemaDir{PACKAGE_DIR "schema"};
-    auto schemaRegex = R"(ras-data-schema\.json)";
-    std::vector<fs::path> schmemaPaths;
-    util::findFiles(schemaDir, schemaRegex, schmemaPaths);
-    assert(1 == schmemaPaths.size()); // Should be one, and only one, file.
+    auto schemaRegex = R"(ras-data-schema-v[0-9]{2}\.json)";
+    std::vector<fs::path> schemaPaths;
+    util::findFiles(schemaDir, schemaRegex, schemaPaths);
 
-    // Trace the file for debug.
-    trace::inf("File found: path=%s", schmemaPaths.front().string().c_str());
+    // Parse each of the schema files.
+    std::map<unsigned int, nlohmann::json> schemaFiles;
+    for (const auto& path : schemaPaths)
+    {
+        // Trace each data file for debug.
+        trace::inf("File found: path=%s", path.string().c_str());
 
-    // Open the file.
-    std::ifstream schemaFile{schmemaPaths.front()};
-    assert(schemaFile.good()); // The file must be readable.
+        // Open the file.
+        std::ifstream file{path};
+        assert(file.good()); // The file must be readable.
 
-    // Parse the JSON.
-    auto schema = nlohmann::json::parse(schemaFile);
+        // Parse the JSON.
+        auto schema = nlohmann::json::parse(file);
 
-    // Get the RAS data files from the package `ras-data` subdirectory.
+        // Get the schema version.
+        auto version = schema.at("version").get<unsigned int>();
+
+        // Keep track of the schemas.
+        auto ret = schemaFiles.emplace(version, schema);
+        assert(ret.second); // Should not have duplicate entries
+    }
+
+    // Get the RAS data files from the package `data` subdirectory.
     fs::path dataDir{PACKAGE_DIR "ras-data"};
     std::vector<fs::path> dataPaths;
     util::findFiles(dataDir, R"(.*\.json)", dataPaths);
@@ -61,6 +72,12 @@ void RasDataParser::initDataFiles()
 
         // Parse the JSON.
         const auto data = nlohmann::json::parse(file);
+
+        // Get the data version.
+        auto version = data.at("version").get<unsigned int>();
+
+        // Get the schema for this file.
+        auto schema = schemaFiles.at(version);
 
         // Validate the data against the schema.
         assert(util::validateJson(schema, data));

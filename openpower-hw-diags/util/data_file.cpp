@@ -19,8 +19,8 @@ void findFiles(const fs::path& i_dirPath, const std::string& i_matchString,
         std::regex search{i_matchString};
         for (const auto& file : fs::directory_iterator(i_dirPath))
         {
-            std::string path = file.path().string();
-            if (std::regex_search(path, search))
+            std::string filename = file.path().filename().string();
+            if (std::regex_search(filename, search))
             {
                 o_foundPaths.emplace_back(file.path());
             }
