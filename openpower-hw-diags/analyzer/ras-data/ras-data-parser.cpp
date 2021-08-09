@@ -14,11 +14,13 @@ namespace analyzer
 //------------------------------------------------------------------------------
 
 std::shared_ptr<Resolution>
-    RasDataParser::getResolution(const libhei::Signature&)
+    RasDataParser::getResolution(const libhei::Signature& i_signature)
 {
-    // TODO: Default to level 2 support callout until fully implemented.
-    return std::make_shared<ProcedureCalloutResolution>(
-        ProcedureCallout::NEXTLVL, Callout::HIGH);
+    const auto data = iv_dataFiles.at(i_signature.getChip().getType());
+
+    const auto action = parseSignature(data, i_signature);
+
+    return parseAction(data, action);
 }
 
 //------------------------------------------------------------------------------
@@ -92,6 +94,163 @@ void RasDataParser::initDataFiles()
         auto ret = iv_dataFiles.emplace(chipType, data);
         assert(ret.second); // Should not have duplicate entries
     }
+}
+
+//------------------------------------------------------------------------------
+
+std::string RasDataParser::parseSignature(const nlohmann::json& i_data,
+                                          const libhei::Signature& i_signature)
+{
+    // Get the signature keys. All are hex (lower case) with no prefix.
+    char buf[5];
+    sprintf(buf, "%04x", i_signature.getId());
+    std::string id{buf};
+
+    sprintf(buf, "%02x", i_signature.getBit());
+    std::string bit{buf};
+
+    sprintf(buf, "%02x", i_signature.getInstance());
+    std::string inst{buf};
+
+    // Return the action.
+    return i_data.at("signatures").at(id).at(bit).at(inst).get<std::string>();
+}
+
+//------------------------------------------------------------------------------
+
+std::shared_ptr<Resolution>
+    RasDataParser::parseAction(const nlohmann::json& i_data,
+                               const std::string& i_action)
+{
+    auto o_list = std::make_shared<ResolutionList>();
+
+    // This function will be called recursively and we want to prevent cyclic
+    // recursion.
+    static std::vector<std::string> stack;
+    assert(stack.end() == std::find(stack.begin(), stack.end(), i_action));
+    stack.push_back(i_action);
+
+    // Iterate the action list and apply the changes.
+    for (const auto& a : i_data.at("actions").at(i_action))
+    {
+        auto type = a.at("type").get<std::string>();
+
+        if ("action" == type)
+        {
+            auto name = a.at("name").get<std::string>();
+
+            o_list->push(parseAction(i_data, name));
+        }
+        else if ("callout_self" == type)
+        {
+            auto priority = a.at("priority").get<std::string>();
+            auto guard    = a.at("guard").get<bool>();
+
+            // TODO
+            trace::inf("callout_self: priority=%s guard=%c", priority.c_str(),
+                       guard ? 'T' : 'F');
+        }
+        else if ("callout_unit" == type)
+        {
+            auto name     = a.at("name").get<std::string>();
+            auto priority = a.at("priority").get<std::string>();
+            auto guard    = a.at("guard").get<bool>();
+
+            // TODO
+            trace::inf("callout_unit: name=%s priority=%s guard=%c",
+                       name.c_str(), priority.c_str(), guard ? 'T' : 'F');
+        }
+        else if ("callout_connected" == type)
+        {
+            auto name     = a.at("name").get<std::string>();
+            auto priority = a.at("priority").get<std::string>();
+            auto guard    = a.at("guard").get<bool>();
+
+            // TODO
+            trace::inf("callout_connected: name=%s priority=%s guard=%c",
+                       name.c_str(), priority.c_str(), guard ? 'T' : 'F');
+        }
+        else if ("callout_bus" == type)
+        {
+            auto name = a.at("name").get<std::string>();
+            // auto rx_priority = a.at("rx_priority").get<std::string>();
+            // auto tx_priority = a.at("tx_priority").get<std::string>();
+            auto guard = a.at("guard").get<bool>();
+
+            // TODO
+            trace::inf("callout_bus: name=%s guard=%c", name.c_str(),
+                       guard ? 'T' : 'F');
+        }
+        else if ("callout_clock" == type)
+        {
+            auto position = a.at("position").get<unsigned int>();
+            auto priority = a.at("priority").get<std::string>();
+            auto guard    = a.at("guard").get<bool>();
+
+            // TODO
+            trace::inf("callout_clock: position=%u priority=%s guard=%c",
+                       position, priority.c_str(), guard ? 'T' : 'F');
+        }
+        else if ("callout_procedure" == type)
+        {
+            auto name     = a.at("name").get<std::string>();
+            auto priority = a.at("priority").get<std::string>();
+
+            // clang-format off
+            static const std::map<std::string, ProcedureCallout::Type> m =
+            {
+                {"LEVEL2", ProcedureCallout::NEXTLVL},
+            };
+            // clang-format on
+
+            o_list->push(std::make_shared<ProcedureCalloutResolution>(
+                m.at(name), getPriority(priority)));
+        }
+        else if ("callout_part" == type)
+        {
+            auto name     = a.at("name").get<std::string>();
+            auto priority = a.at("priority").get<std::string>();
+
+            // TODO
+            trace::inf("callout_part: name=%s priority=%s", name.c_str(),
+                       priority.c_str());
+        }
+        else if ("plugin" == type)
+        {
+            auto name = a.at("name").get<std::string>();
+
+            // TODO
+            trace::inf("plugin: name=%s", name.c_str());
+        }
+        else
+        {
+            throw std::logic_error("Unsupported action type: " + type);
+        }
+    }
+
+    // Done with this action pop it off the stack.
+    stack.pop_back();
+
+    return o_list;
+}
+
+//------------------------------------------------------------------------------
+
+Callout::Priority RasDataParser::getPriority(const std::string& i_priority)
+{
+    // clang-format off
+    static const std::map<std::string, Callout::Priority> m =
+    {
+        {"HIGH",  Callout::HIGH},
+        {"MED",   Callout::MED},
+        {"MED_A", Callout::MED_A},
+        {"MED_B", Callout::MED_B},
+        {"MED_C", Callout::MED_C},
+        {"LOW",   Callout::LOW},
+    };
+    // clang-format on
+
+    return m.at(i_priority);
 }
 
 //------------------------------------------------------------------------------

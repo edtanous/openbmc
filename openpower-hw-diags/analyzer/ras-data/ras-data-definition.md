@@ -160,7 +160,6 @@ default `MED_A`. In which case, the optional priority properties can be used.
 | name        | The `<bus_name>` as defined by the `buses` keyword.            |
 | rx_priority | Optional priority of the receiving side endpoint               |
 | tx_priority | Optional priority of the transfer side endpoint                |
-| name        | The `<bus_name>` as defined by the `buses` keyword.            |
 | guard       | See `guard` table above.                                       |
 
 #### 5.1.6) action type `callout_clock`
