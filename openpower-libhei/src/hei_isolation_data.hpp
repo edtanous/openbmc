@@ -54,7 +54,7 @@ class IsolationData
 
   private: // Instance variables
     /** A list of all signatures found during isolation. */
-    std::vector<Signature> iv_sigLists;
+    std::vector<Signature> iv_sigList;
 
     /**
      * This intended to be a snapshot of the register values read from hardware
@@ -71,7 +71,7 @@ class IsolationData
      */
     void addSignature(const Signature& i_signature)
     {
-        iv_sigLists.push_back(i_signature);
+        iv_sigList.push_back(i_signature);
     }
 
     /**
@@ -118,7 +118,7 @@ class IsolationData
     /** @brief Allows access to the signature list. */
     const std::vector<Signature>& getSignatureList() const
     {
-        return iv_sigLists;
+        return iv_sigList;
     }
 
     /** @brief Allows access to the register dump. */
@@ -130,8 +130,19 @@ class IsolationData
     /** @brief Flushes the data to ensure a clean slate for isolation. */
     void flush()
     {
-        iv_sigLists.clear();
+        iv_sigList.clear();
         iv_regDump.clear();
+    }
+
+    /** @brief Queries the signature list for any checkstop attentions. */
+    bool queryCheckstop() const
+    {
+        auto itr = std::find_if(
+            iv_sigList.begin(), iv_sigList.end(), [](const auto& s) {
+                return ATTN_TYPE_CHECKSTOP == s.getAttnType();
+            });
+
+        return iv_sigList.end() != itr;
     }
 
 }; // end class IsolationData
