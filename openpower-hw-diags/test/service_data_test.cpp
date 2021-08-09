@@ -12,7 +12,7 @@ TEST(ServiceData, TestSet1)
     libhei::Signature rootCause{chip, 0xabcd, 0, 0,
                                 libhei::ATTN_TYPE_CHECKSTOP};
 
-    ServiceData sd{rootCause};
+    ServiceData sd{rootCause, true};
 
     sd.addCallout(std::make_shared<HardwareCallout>("Test location 1",
                                                     Callout::Priority::HIGH));

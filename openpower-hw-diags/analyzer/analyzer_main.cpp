@@ -162,7 +162,7 @@ bool analyzeHardware()
 
         // Perform service actions based on the root cause.
         RasDataParser rasData{};
-        ServiceData servData{rootCause};
+        ServiceData servData{rootCause, isoData.queryCheckstop()};
         rasData.getResolution(rootCause)->resolve(servData);
 
         // Create and commit a PEL.

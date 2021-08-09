@@ -65,8 +65,8 @@ TEST(Resolution, TestSet1)
     // Get some ServiceData objects
     libhei::Chip chip{chip_str, 0xdeadbeef};
     libhei::Signature sig{chip, 0xabcd, 0, 0, libhei::ATTN_TYPE_CHECKSTOP};
-    ServiceData sd1{sig};
-    ServiceData sd2{sig};
+    ServiceData sd1{sig, true};
+    ServiceData sd2{sig, false};
 
     // Resolve
     l1->resolve(sd1);

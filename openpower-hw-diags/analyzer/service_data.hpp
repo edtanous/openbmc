@@ -207,9 +207,11 @@ class ServiceData
     /**
      * @brief Constructor from components.
      * @param The signature of the root cause attention.
+     * @param True if the signature list contained a system checkstop attention.
+     *        False, otherwise.
      */
-    explicit ServiceData(const libhei::Signature& i_rootCause) :
-        iv_rootCause(i_rootCause)
+    ServiceData(const libhei::Signature& i_rootCause, bool i_isCheckstop) :
+        iv_rootCause(i_rootCause), iv_isCheckstop(i_isCheckstop)
     {}
 
     /** @brief Destructor. */
@@ -225,6 +227,10 @@ class ServiceData
     /** The signature of the root cause attention. */
     const libhei::Signature iv_rootCause;
 
+    /** True if the signature list contained a system checkstop attention.
+     *  False, otherwise. */
+    const bool iv_isCheckstop;
+
     /** The list of callouts that will be added to a PEL. */
     std::vector<std::shared_ptr<Callout>> iv_calloutList;
 
@@ -238,6 +244,13 @@ class ServiceData
     const libhei::Signature& getRootCause() const
     {
         return iv_rootCause;
+    }
+
+    /** @return True if the signature list contained a system checkstop
+     *          attention. False, otherwise. */
+    bool queryCheckstop() const
+    {
+        return iv_isCheckstop;
     }
 
     /** Add a callout to the list. */

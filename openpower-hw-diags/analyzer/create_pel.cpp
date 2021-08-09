@@ -40,19 +40,6 @@ enum FfdcVersion_t : uint8_t
 
 //------------------------------------------------------------------------------
 
-bool __isCheckstop(const libhei::IsolationData& i_isoData)
-{
-    // Look for any signature with a system checkstop attention.
-    auto list = i_isoData.getSignatureList();
-    auto itr  = std::find_if(list.begin(), list.end(), [](const auto& s) {
-        return libhei::ATTN_TYPE_CHECKSTOP == s.getAttnType();
-    });
-
-    return list.end() != itr;
-}
-
-//------------------------------------------------------------------------------
-
 void __getSrc(const libhei::Signature& i_signature, uint32_t& o_word6,
               uint32_t& o_word7, uint32_t& o_word8)
 {
@@ -291,7 +278,7 @@ void createPel(const libhei::IsolationData& i_isoData,
 
     // In several cases, it is important to know if the reason for analysis was
     // due to a system checsktop.
-    bool isCheckstop = __isCheckstop(i_isoData);
+    bool isCheckstop = i_isoData.queryCheckstop();
 
     // Set words 6-9 of the SRC.
     __setSrc(i_servData.getRootCause(), logData);
