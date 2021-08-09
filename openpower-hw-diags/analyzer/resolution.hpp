@@ -89,35 +89,36 @@ class ProcedureCalloutResolution : public Resolution
 };
 
 /**
- * @brief Links two resolutions into a single resolution. The resolutions will
- *        will be resolved in the order they are inputted into the constructor.
+ * @brief Contains a list of resolutions. This resolutions will be resolved the
+ *        list in the order in which they were inputted into the constructor.
  */
-class LinkResolution : public Resolution
+class ResolutionList : public Resolution
 {
   public:
-    /**
-     * @brief Constructor from components.
-     * @param i_first  The first resolution.
-     * @param i_second The second resolution.
-     */
-    LinkResolution(const std::shared_ptr<Resolution>& i_first,
-                   const std::shared_ptr<Resolution>& i_second) :
-        iv_first(i_first),
-        iv_second(i_second)
-    {}
+    /** @brief Default constructor. */
+    ResolutionList() = default;
 
   private:
-    /** The first resolution. */
-    const std::shared_ptr<Resolution> iv_first;
-
-    /** The second resolution. */
-    const std::shared_ptr<Resolution> iv_second;
+    /** The resolution list. */
+    std::vector<std::shared_ptr<Resolution>> iv_list;
 
   public:
+    /**
+     * @brief Adds a new resolution to the end of the list.
+     * @param i_resolution The new resolution
+     */
+    void push(const std::shared_ptr<Resolution>& i_resolution)
+    {
+        iv_list.push_back(i_resolution);
+    }
+
+    // Overloaded from parent.
     void resolve(ServiceData& io_sd) const override
     {
-        iv_first->resolve(io_sd);
-        iv_second->resolve(io_sd);
+        for (const auto& e : iv_list)
+        {
+            e->resolve(io_sd);
+        }
     }
 };
 

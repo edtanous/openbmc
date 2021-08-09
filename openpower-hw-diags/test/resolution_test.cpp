@@ -51,14 +51,16 @@ TEST(Resolution, TestSet1)
     auto c4 = std::make_shared<ProcedureCalloutResolution>(
         ProcedureCallout::NEXTLVL, Callout::Priority::LOW);
 
-    // l3 = (c1, c2, c3, c4)
-    auto l1 = std::make_shared<LinkResolution>(c1, c2);
-    auto l2 = std::make_shared<LinkResolution>(l1, c3);
-    auto l3 = std::make_shared<LinkResolution>(l2, c4);
+    // l1 = (c1, c2)
+    auto l1 = std::make_shared<ResolutionList>();
+    l1->push(c1);
+    l1->push(c2);
 
-    // l5 = (c4, c3, c1, c2)
-    auto l4 = std::make_shared<LinkResolution>(c3, l1);
-    auto l5 = std::make_shared<LinkResolution>(c4, l4);
+    // l2 = (c4, c3, c1, c2)
+    auto l2 = std::make_shared<ResolutionList>();
+    l2->push(c4);
+    l2->push(c3);
+    l2->push(l1);
 
     // Get some ServiceData objects
     libhei::Chip chip{chip_str, 0xdeadbeef};
@@ -67,8 +69,8 @@ TEST(Resolution, TestSet1)
     ServiceData sd2{sig};
 
     // Resolve
-    l3->resolve(sd1);
-    l5->resolve(sd2);
+    l1->resolve(sd1);
+    l2->resolve(sd2);
 
     // Start verifying
     nlohmann::json j{};
@@ -83,14 +85,6 @@ TEST(Resolution, TestSet1)
     {
         "LocationCode": "/proc0",
         "Priority": "A"
-    },
-    {
-        "LocationCode": "/proc0",
-        "Priority": "M"
-    },
-    {
-        "Priority": "L",
-        "Procedure": "NEXTLVL"
     }
 ])";
     ASSERT_EQ(s, j.dump(4));
@@ -104,10 +98,6 @@ TEST(Resolution, TestSet1)
     {
         "Path": "/proc0/pib/perv12/mc0/mi0/mcc0/omi0",
         "Type": "FATAL"
-    },
-    {
-        "Path": "/proc0/pib/perv39/eq7/fc1/core1",
-        "Type": "NON_FATAL"
     }
 ])";
     ASSERT_EQ(s, j.dump(4));
