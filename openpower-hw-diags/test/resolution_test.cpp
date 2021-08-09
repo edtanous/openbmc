@@ -21,15 +21,21 @@ void HardwareCalloutResolution::resolve(ServiceData& io_sd) const
     auto sig = io_sd.getRootCause();
 
     std::string fru{(const char*)sig.getChip().getChip()};
-    std::string guard{fru};
+    std::string path{fru};
     if (!iv_path.empty())
     {
-        guard += "/" + iv_path;
+        path += "/" + iv_path;
     }
 
     io_sd.addCallout(std::make_shared<HardwareCallout>(fru, iv_priority));
 
-    io_sd.addGuard(std::make_shared<Guard>(guard, iv_guard));
+    Guard::Type guard = Guard::NONE;
+    if (iv_guard)
+    {
+        guard = io_sd.queryCheckstop() ? Guard::FATAL : Guard::NON_FATAL;
+    }
+
+    io_sd.addGuard(std::make_shared<Guard>(path, guard));
 }
 
 } // namespace analyzer
@@ -40,13 +46,13 @@ TEST(Resolution, TestSet1)
 {
     // Create a few resolutions
     auto c1 = std::make_shared<HardwareCalloutResolution>(
-        proc_str, Callout::Priority::HIGH, Guard::NONE);
+        proc_str, Callout::Priority::HIGH, false);
 
     auto c2 = std::make_shared<HardwareCalloutResolution>(
-        omi_str, Callout::Priority::MED_A, Guard::FATAL);
+        omi_str, Callout::Priority::MED_A, true);
 
     auto c3 = std::make_shared<HardwareCalloutResolution>(
-        core_str, Callout::Priority::MED, Guard::NON_FATAL);
+        core_str, Callout::Priority::MED, true);
 
     auto c4 = std::make_shared<ProcedureCalloutResolution>(
         ProcedureCallout::NEXTLVL, Callout::Priority::LOW);
@@ -135,7 +141,7 @@ TEST(Resolution, TestSet1)
     },
     {
         "Path": "/proc0/pib/perv12/mc0/mi0/mcc0/omi0",
-        "Type": "FATAL"
+        "Type": "NON_FATAL"
     }
 ])";
     ASSERT_EQ(s, j.dump(4));

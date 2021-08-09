@@ -43,7 +43,13 @@ void HardwareCalloutResolution::resolve(ServiceData& io_sd) const
     }
     else
     {
-        io_sd.addGuard(std::make_shared<Guard>(entityPath, iv_guard));
+        Guard::Type guard = Guard::NONE;
+        if (iv_guard)
+        {
+            guard = io_sd.queryCheckstop() ? Guard::FATAL : Guard::NON_FATAL;
+        }
+
+        io_sd.addGuard(std::make_shared<Guard>(entityPath, guard));
     }
 }
 

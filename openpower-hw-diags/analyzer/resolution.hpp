@@ -33,11 +33,10 @@ class HardwareCalloutResolution : public Resolution
      * @param i_path     The devtree path of a guardable unit relative to a
      *                   chip. An empty string refers to the chip itself.
      * @param i_priority The callout priority.
-     * @param i_guard    The guard type for this callout.
+     * @param i_guard    True, if guard is required. False, otherwise.
      */
     HardwareCalloutResolution(const std::string& i_path,
-                              Callout::Priority i_priority,
-                              Guard::Type i_guard) :
+                              Callout::Priority i_priority, bool i_guard) :
         iv_path(i_path),
         iv_priority(i_priority), iv_guard(i_guard)
     {}
@@ -50,8 +49,8 @@ class HardwareCalloutResolution : public Resolution
     /** The callout priority. */
     const Callout::Priority iv_priority;
 
-    /** The guard type for this callout. */
-    const Guard::Type iv_guard;
+    /** True, if guard is required. False, otherwise. */
+    const bool iv_guard;
 
   public:
     void resolve(ServiceData& io_sd) const override;
