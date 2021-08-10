@@ -2,9 +2,9 @@
 
 #include <attn/attn_common.hpp>
 #include <attn/attn_dbus.hpp>
+#include <attn/attn_dump.hpp>
 #include <attn/attn_logging.hpp>
 #include <attn/pel/pel_minimal.hpp>
-#include <attn/ti_handler.hpp>
 #include <phosphor-logging/log.hpp>
 
 namespace attn
@@ -415,7 +415,7 @@ void event(EventType i_event, std::map<std::string, std::string>& i_additional,
                 if ("true" == i_additional["Dump"])
                 {
                     // will not return until dump is complete
-                    requestDump(pelId);
+                    requestDump(DumpParameters{pelId, 0, DumpType::Hostboot});
                 }
             }
         }

@@ -6,6 +6,7 @@
 #include <phosphor-logging/elog.hpp>
 #include <sdbusplus/bus.hpp>
 #include <util/bin_stream.hpp>
+#include <util/dbus.hpp>
 #include <util/ffdc_file.hpp>
 #include <util/pdbg.hpp>
 #include <util/trace.hpp>
@@ -263,8 +264,8 @@ std::string __getMessageSeverity(bool i_isCheckstop)
 
 //------------------------------------------------------------------------------
 
-void createPel(const libhei::IsolationData& i_isoData,
-               const ServiceData& i_servData)
+std::tuple<uint32_t, uint32_t> createPel(const libhei::IsolationData& i_isoData,
+                                         const ServiceData& i_servData)
 {
     // The message registry will require additional log data to fill in keywords
     // and additional log data.
@@ -300,28 +301,58 @@ void createPel(const libhei::IsolationData& i_isoData,
     std::vector<util::FFDCTuple> userData;
     util::transformFFDC(userDataFiles, userData);
 
-    // Get access to logging interface and method for creating log.
-    auto bus = sdbusplus::bus::new_default_system();
+    // Response will be a tuple containing bmc-log-id, pel-log-id
+    std::tuple<uint32_t, uint32_t> response = {0, 0};
 
-    // Using direct create method (for additional data).
-    auto method = bus.new_method_call(
-        "xyz.openbmc_project.Logging", "/xyz/openbmc_project/logging",
-        "xyz.openbmc_project.Logging.Create", "CreateWithFFDCFiles");
+    try
+    {
+        // We want to use the logging interface that returns the event log
+        // id's of the newly created logs (org.open_power.Logging.PEL) so
+        // find the service that implements this interface.
+        constexpr auto interface = "org.open_power.Logging.PEL";
+        constexpr auto path      = "/xyz/openbmc_project/logging";
+        std::string service;
 
-    // The "Create" method requires manually adding the process ID.
-    logData["_PID"] = std::to_string(getpid());
+        if (0 == util::dbus::findService(interface, path, service))
+        {
+            // Use function that returns log id's
+            constexpr auto function = "CreatePELWithFFDCFiles";
 
-    // Get the message registry entry for this failure.
-    auto message = __getMessageRegistry(isCheckstop);
+            // Get access to logging interface and method for creating log.
+            auto bus = sdbusplus::bus::new_default_system();
 
-    // Get the message severity for this failure.
-    auto severity = __getMessageSeverity(isCheckstop);
+            // Using direct create method (for additional data).
+            auto method =
+                bus.new_method_call(service.c_str(), path, interface, function);
 
-    // Add the message, with additional log and user data.
-    method.append(message, severity, logData, userData);
+            // The "Create" method requires manually adding the process ID.
+            logData["_PID"] = std::to_string(getpid());
 
-    // Log the event.
-    bus.call_noreply(method);
+            // Get the message registry entry for this failure.
+            auto message = __getMessageRegistry(isCheckstop);
+
+            // Get the message severity for this failure.
+            auto severity = __getMessageSeverity(isCheckstop);
+
+            // Add the message, with additional log and user data.
+            method.append(message, severity, logData, userData);
+
+            // Log the event.
+            auto reply = bus.call(method);
+
+            // Parse reply for response
+            reply.read(response);
+        }
+    }
+    catch (const sdbusplus::exception::SdBusError& e)
+    {
+        trace::err("Exception while creating event log entry");
+        std::string exceptionString = std::string(e.what());
+        trace::err(exceptionString.c_str());
+    }
+
+    // return tuple of {bmc-log-id, pel-log-id} or {0, 0} on error
+    return response;
 }
 
 } // namespace analyzer

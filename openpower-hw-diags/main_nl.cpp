@@ -3,6 +3,7 @@
 #include <analyzer/analyzer_main.hpp>
 #include <attn/attention.hpp>
 #include <attn/attn_config.hpp>
+#include <attn/attn_dump.hpp>
 #include <attn/attn_handler.hpp>
 #include <attn/attn_main.hpp>
 #include <buildinfo.hpp>
@@ -47,7 +48,8 @@ int main(int argc, char* argv[])
         // Either analyze (application mode) or daemon mode
         if (true == getCliOption(argv, argv + argc, "--analyze"))
         {
-            rc = analyzer::analyzeHardware(); // analyze hardware
+            attn::DumpParameters dumpParameters;
+            rc = analyzer::analyzeHardware(dumpParameters); // analyze hardware
         }
         // daemon mode
         else

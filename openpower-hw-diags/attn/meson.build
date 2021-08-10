@@ -36,6 +36,7 @@ attn_src = files(
     'attn_common.cpp',
     'attn_config.cpp',
     'attn_dbus.cpp',
+    'attn_dump.cpp',
     'attn_handler.cpp',
     'attn_main.cpp',
     'attn_monitor.cpp',

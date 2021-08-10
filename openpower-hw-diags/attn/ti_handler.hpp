@@ -124,14 +124,4 @@ void parsePhypOpalTiInfo(std::map<std::string, std::string>& i_map,
 void parseHbTiInfo(std::map<std::string, std::string>& i_map,
                    TiDataArea* i_tiDataArea);
 
-/**
- * Request a dump from the dump manager
- *
- * Request a dump from the dump manager and register a monitor for observing
- * the dump progress.
- *
- * @param logId The id of the event log associated with this dump request
- */
-void requestDump(const uint32_t logId);
-
 } // namespace attn

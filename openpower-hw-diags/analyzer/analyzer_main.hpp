@@ -1,5 +1,7 @@
 #pragma once
 
+#include <attn/attn_dump.hpp>
+
 namespace analyzer
 {
 
@@ -8,6 +10,7 @@ namespace analyzer
  *         chip. Then it performs all approriate RAS actions based on the active
  *         attentions.
  *
+ * @param[out] o_dumpParameters Dump request parameters
  * @return True if an active attenion was successfully analyzed, false
  *         otherwise.
  *         For system checkstop handling:
@@ -19,7 +22,7 @@ namespace analyzer
  *            analysis could fail to find an attention and it should not be
  *            treated as a defect.
  */
-bool analyzeHardware();
+bool analyzeHardware(attn::DumpParameters& o_dumpParameters);
 
 /**
  * @brief Get error analyzer build information

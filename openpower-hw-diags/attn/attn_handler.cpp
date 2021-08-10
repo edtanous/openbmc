@@ -227,9 +227,15 @@ int handleCheckstop(Attention* i_attention)
     {
         // Look for any attentions found in hardware. This will generate and
         // commit a PEL if any errors are found.
-        if (true != analyzer::analyzeHardware())
+        DumpParameters dumpParameters;
+        if (true != analyzer::analyzeHardware(dumpParameters))
         {
             rc = RC_ANALYZER_ERROR;
+        }
+        else
+        {
+            requestDump(dumpParameters);
+            util::dbus::transitionHost(util::dbus::HostState::Quiesce);
         }
     }
 
