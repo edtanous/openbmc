@@ -8,7 +8,12 @@
 //   ensuring each code path remains buildable. Note that the optimization path
 //   should delete the unused code later.
 
-constexpr const int configPhalApi = @CONFIG_PHAL_API@;
+// TODO: This has a problem because as currently designed, meson will replace
+//       the field with `True`, which won't compile. Will need to investigate
+//       later. Fortunately, this variable is not currently used. So we can
+//       comment it out and leave it here for an example when other config
+//       options are added later.
+// constexpr const int configPhalApi = @CONFIG_PHAL_API@;
 
 // IMPORTANT:
 //   Avoid using #define whenever possible. See note above for reason.

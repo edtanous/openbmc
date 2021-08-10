@@ -1,11 +1,12 @@
 #include <assert.h>
+#include <config.h>
 
 #include <hei_main.hpp>
 #include <util/pdbg.hpp>
 #include <util/trace.hpp>
 
 #ifdef CONFIG_PHAL_API
-#include <attribute_info.H>
+#include <attributes_info.H>
 #endif
 
 namespace util

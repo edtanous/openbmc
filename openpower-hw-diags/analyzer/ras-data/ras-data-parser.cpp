@@ -146,9 +146,10 @@ std::shared_ptr<Resolution>
             auto priority = a.at("priority").get<std::string>();
             auto guard    = a.at("guard").get<bool>();
 
-            // TODO
-            trace::inf("callout_self: priority=%s guard=%c", priority.c_str(),
-                       guard ? 'T' : 'F');
+            std::string path{}; // Must be empty to callout the chip.
+
+            o_list->push(std::make_shared<HardwareCalloutResolution>(
+                path, getPriority(priority), guard));
         }
         else if ("callout_unit" == type)
         {
@@ -156,9 +157,10 @@ std::shared_ptr<Resolution>
             auto priority = a.at("priority").get<std::string>();
             auto guard    = a.at("guard").get<bool>();
 
-            // TODO
-            trace::inf("callout_unit: name=%s priority=%s guard=%c",
-                       name.c_str(), priority.c_str(), guard ? 'T' : 'F');
+            auto path = i_data.at("units").at(name).get<std::string>();
+
+            o_list->push(std::make_shared<HardwareCalloutResolution>(
+                path, getPriority(priority), guard));
         }
         else if ("callout_connected" == type)
         {
