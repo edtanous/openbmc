@@ -9,7 +9,6 @@ tests = [
   'bin_stream_test',
   'ffdc_file_test',
   'resolution_test',
-  'service_data_test',
 ]
 
 gtest = dependency('gtest', main : true, required : false, method : 'system')

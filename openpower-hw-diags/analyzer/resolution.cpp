@@ -23,17 +23,14 @@ void HardwareCalloutResolution::resolve(ServiceData& io_sd) const
         }
     }
 
-    // Add location code to callout list.
+    // Get the location code for this target.
     auto locCode = util::pdbg::getLocationCode(trgt);
-    if (locCode.empty())
-    {
-        trace::err("Unable to find location code for %s", path.c_str());
-    }
-    else
-    {
-        io_sd.addCallout(
-            std::make_shared<HardwareCallout>(locCode, iv_priority));
-    }
+
+    // Add the actual callout to the service data.
+    nlohmann::json callout;
+    callout["LocationCode"] = locCode;
+    callout["Priority"]     = iv_priority.getUserDataString();
+    io_sd.addCallout(callout);
 
     // Add entity path to gard list.
     auto entityPath = util::pdbg::getPhysDevPath(trgt);
@@ -52,5 +49,18 @@ void HardwareCalloutResolution::resolve(ServiceData& io_sd) const
         io_sd.addGuard(std::make_shared<Guard>(entityPath, guard));
     }
 }
+
+//------------------------------------------------------------------------------
+
+void ProcedureCalloutResolution::resolve(ServiceData& io_sd) const
+{
+    // Add the actual callout to the service data.
+    nlohmann::json callout;
+    callout["Procedure"] = iv_procedure.getString();
+    callout["Priority"]  = iv_priority.getUserDataString();
+    io_sd.addCallout(callout);
+}
+
+//------------------------------------------------------------------------------
 
 } // namespace analyzer

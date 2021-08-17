@@ -74,7 +74,7 @@ class RasDataParser
      * @param  i_priority The priority string.
      * @return A callout priority enum value.
      */
-    Callout::Priority getPriority(const std::string& i_priority);
+    callout::Priority getPriority(const std::string& i_priority);
 };
 
 } // namespace analyzer

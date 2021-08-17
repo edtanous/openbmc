@@ -36,7 +36,7 @@ class HardwareCalloutResolution : public Resolution
      * @param i_guard    True, if guard is required. False, otherwise.
      */
     HardwareCalloutResolution(const std::string& i_path,
-                              Callout::Priority i_priority, bool i_guard) :
+                              callout::Priority i_priority, bool i_guard) :
         iv_path(i_path),
         iv_priority(i_priority), iv_guard(i_guard)
     {}
@@ -47,7 +47,7 @@ class HardwareCalloutResolution : public Resolution
     const std::string iv_path;
 
     /** The callout priority. */
-    const Callout::Priority iv_priority;
+    const callout::Priority iv_priority;
 
     /** True, if guard is required. False, otherwise. */
     const bool iv_guard;
@@ -65,26 +65,21 @@ class ProcedureCalloutResolution : public Resolution
      * @param i_procedure The procedure callout type.
      * @param i_priority  The callout priority.
      */
-    ProcedureCalloutResolution(ProcedureCallout::Type i_procedure,
-                               Callout::Priority i_priority) :
+    ProcedureCalloutResolution(const callout::Procedure& i_procedure,
+                               const callout::Priority& i_priority) :
         iv_procedure(i_procedure),
         iv_priority(i_priority)
     {}
 
   private:
     /** The procedure callout type. */
-    const ProcedureCallout::Type iv_procedure;
+    const callout::Procedure iv_procedure;
 
     /** The callout priority. */
-    const Callout::Priority iv_priority;
+    const callout::Priority iv_priority;
 
   public:
-    void resolve(ServiceData& io_sd) const override
-    {
-        // Simply add the procedure to the callout list.
-        io_sd.addCallout(
-            std::make_shared<ProcedureCallout>(iv_procedure, iv_priority));
-    }
+    void resolve(ServiceData& io_sd) const override;
 };
 
 /**

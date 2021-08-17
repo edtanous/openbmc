@@ -84,17 +84,13 @@ void __setSrc(const libhei::Signature& i_rootCause,
 void __addCalloutList(const ServiceData& i_servData,
                       std::vector<util::FFDCFile>& io_userDataFiles)
 {
-    // Get the JSON output for the callout list.
-    nlohmann::json json;
-    i_servData.getCalloutList(json);
-
     // Create a new entry for the user data section containing the callout list.
     io_userDataFiles.emplace_back(util::FFDCFormat::JSON, FFDC_CALLOUTS,
                                   FFDC_VERSION1);
 
     // Use a file stream to write the JSON to file.
     std::ofstream o{io_userDataFiles.back().getPath()};
-    o << json;
+    o << i_servData.getCalloutList();
 }
 
 //------------------------------------------------------------------------------

@@ -27,7 +27,11 @@ void HardwareCalloutResolution::resolve(ServiceData& io_sd) const
         path += "/" + iv_path;
     }
 
-    io_sd.addCallout(std::make_shared<HardwareCallout>(fru, iv_priority));
+    // Add the actual callout to the service data.
+    nlohmann::json callout;
+    callout["LocationCode"] = fru;
+    callout["Priority"]     = iv_priority.getUserDataString();
+    io_sd.addCallout(callout);
 
     Guard::Type guard = Guard::NONE;
     if (iv_guard)
@@ -38,6 +42,17 @@ void HardwareCalloutResolution::resolve(ServiceData& io_sd) const
     io_sd.addGuard(std::make_shared<Guard>(path, guard));
 }
 
+//------------------------------------------------------------------------------
+
+void ProcedureCalloutResolution::resolve(ServiceData& io_sd) const
+{
+    // Add the actual callout to the service data.
+    nlohmann::json callout;
+    callout["Procedure"] = iv_procedure.getString();
+    callout["Priority"]  = iv_priority.getUserDataString();
+    io_sd.addCallout(callout);
+}
+
 } // namespace analyzer
 
 using namespace analyzer;
@@ -46,16 +61,16 @@ TEST(Resolution, TestSet1)
 {
     // Create a few resolutions
     auto c1 = std::make_shared<HardwareCalloutResolution>(
-        proc_str, Callout::Priority::HIGH, false);
+        proc_str, callout::Priority::HIGH, false);
 
     auto c2 = std::make_shared<HardwareCalloutResolution>(
-        omi_str, Callout::Priority::MED_A, true);
+        omi_str, callout::Priority::MED_A, true);
 
     auto c3 = std::make_shared<HardwareCalloutResolution>(
-        core_str, Callout::Priority::MED, true);
+        core_str, callout::Priority::MED, true);
 
     auto c4 = std::make_shared<ProcedureCalloutResolution>(
-        ProcedureCallout::NEXTLVL, Callout::Priority::LOW);
+        callout::Procedure::NEXTLVL, callout::Priority::LOW);
 
     // l1 = (c1, c2)
     auto l1 = std::make_shared<ResolutionList>();
@@ -82,7 +97,7 @@ TEST(Resolution, TestSet1)
     nlohmann::json j{};
     std::string s{};
 
-    sd1.getCalloutList(j);
+    j = sd1.getCalloutList();
     s = R"([
     {
         "LocationCode": "/proc0",
@@ -108,7 +123,7 @@ TEST(Resolution, TestSet1)
 ])";
     ASSERT_EQ(s, j.dump(4));
 
-    sd2.getCalloutList(j);
+    j = sd2.getCalloutList();
     s = R"([
     {
         "Priority": "L",

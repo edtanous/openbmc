@@ -199,9 +199,9 @@ std::shared_ptr<Resolution>
             auto priority = a.at("priority").get<std::string>();
 
             // clang-format off
-            static const std::map<std::string, ProcedureCallout::Type> m =
+            static const std::map<std::string, callout::Procedure> m =
             {
-                {"LEVEL2", ProcedureCallout::NEXTLVL},
+                {"LEVEL2", callout::Procedure::NEXTLVL},
             };
             // clang-format on
 
@@ -238,17 +238,17 @@ std::shared_ptr<Resolution>
 
 //------------------------------------------------------------------------------
 
-Callout::Priority RasDataParser::getPriority(const std::string& i_priority)
+callout::Priority RasDataParser::getPriority(const std::string& i_priority)
 {
     // clang-format off
-    static const std::map<std::string, Callout::Priority> m =
+    static const std::map<std::string, callout::Priority> m =
     {
-        {"HIGH",  Callout::HIGH},
-        {"MED",   Callout::MED},
-        {"MED_A", Callout::MED_A},
-        {"MED_B", Callout::MED_B},
-        {"MED_C", Callout::MED_C},
-        {"LOW",   Callout::LOW},
+        {"HIGH",  callout::Priority::HIGH},
+        {"MED",   callout::Priority::MED},
+        {"MED_A", callout::Priority::MED_A},
+        {"MED_B", callout::Priority::MED_B},
+        {"MED_C", callout::Priority::MED_C},
+        {"LOW",   callout::Priority::LOW},
     };
     // clang-format on
 
