@@ -42,9 +42,10 @@ void eventTerminate(std::map<std::string, std::string> i_additionalData,
     }
 }
 
-void eventVital()
+uint32_t eventVital()
 {
     std::cout << "event: vital" << std::endl;
+    return 0;
 }
 
 } // namespace attn

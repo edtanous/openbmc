@@ -44,8 +44,8 @@ void trace(const char* i_message);
 void eventTerminate(std::map<std::string, std::string> i_additionalData,
                     char* i_tiInfoData);
 
-/** @brief Commit SBE vital event to log */
-void eventVital();
+/** @brief Commit SBE vital event to log, returns event log Id */
+uint32_t eventVital();
 
 /** @brief Commit attention handler failure event to log */
 void eventAttentionFail(int i_error);

@@ -1,5 +1,6 @@
 #include <attn/attention.hpp>
 #include <attn/attn_common.hpp>
+#include <attn/attn_dump.hpp>
 #include <attn/attn_logging.hpp>
 #include <sdbusplus/bus.hpp>
 #include <util/dbus.hpp>
@@ -28,11 +29,18 @@ int handleVital(Attention* i_attention)
     }
     else
     {
-        // transition host state after analyses
-        util::dbus::transitionHost(util::dbus::HostState::Quiesce);
-
         // generate pel
-        eventVital();
+        auto pelId = eventVital();
+
+        // conditionally request dump
+        if ((0 != pelId) && (util::dbus::HostRunningState::NotStarted ==
+                             util::dbus::hostRunningState()))
+        {
+            requestDump(DumpParameters{pelId, 0, DumpType::SBE});
+        }
+
+        // transition host
+        util::dbus::transitionHost(util::dbus::HostState::Quiesce);
     }
 
     return rc;

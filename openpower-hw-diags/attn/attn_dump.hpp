@@ -7,7 +7,8 @@ namespace attn
 enum class DumpType
 {
     Hostboot,
-    Hardware
+    Hardware,
+    SBE
 };
 
 /** @brief Structure for dump request parameters */

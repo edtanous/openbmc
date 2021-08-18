@@ -332,10 +332,14 @@ void createPelCustom(std::vector<uint8_t>& i_rawPel,
  * @param  i_event - The event type
  * @param  i_additional - Additional PEL data
  * @param  i_ffdc - FFDC PEL data
+ * @return Event log Id (0 if no event log generated)
  */
-void event(EventType i_event, std::map<std::string, std::string>& i_additional,
-           const std::vector<util::FFDCFile>& i_ffdc)
+uint32_t event(EventType i_event,
+               std::map<std::string, std::string>& i_additional,
+               const std::vector<util::FFDCFile>& i_ffdc)
 {
+    uint32_t pelId = 0; // assume no event log generated
+
     bool eventValid = false; // assume no event created
     bool tiEvent    = false; // assume not a terminate event
 
@@ -370,8 +374,7 @@ void event(EventType i_event, std::map<std::string, std::string>& i_additional,
     {
         // Create PEL with additional data and FFDC data. The newly created
         // PEL's platform log-id will be returned.
-        auto pelId =
-            createPel(eventName, i_additional, createFFDCTuples(i_ffdc));
+        pelId = createPel(eventName, i_additional, createFFDCTuples(i_ffdc));
 
         // If this is a TI event we will create an additional PEL that is
         // specific to the subsystem that generated the TI.
@@ -420,6 +423,7 @@ void event(EventType i_event, std::map<std::string, std::string>& i_additional,
             }
         }
     }
+    return pelId;
 }
 
 /**
@@ -465,14 +469,14 @@ void eventTerminate(std::map<std::string, std::string> i_additionalData,
           createFFDCFiles(i_tiInfoData, tiInfoSize));
 }
 
-/** @brief Commit SBE vital event to log */
-void eventVital()
+/** @brief Commit SBE vital event to log, returns event log ID */
+uint32_t eventVital()
 {
     // Additional data for log
     std::map<std::string, std::string> additionalData;
 
     // Create log event with additional data and FFDC data
-    event(EventType::Vital, additionalData, createFFDCFiles(nullptr, 0));
+    return event(EventType::Vital, additionalData, createFFDCFiles(nullptr, 0));
 }
 
 /**

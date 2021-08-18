@@ -108,6 +108,14 @@ void requestDump(const DumpParameters& i_dumpParameters)
                     ["com.ibm.Dump.Create.CreateParameters.FailingUnitId"] =
                         i_dumpParameters.unitId;
             }
+            else if (DumpType::SBE == i_dumpParameters.dumpType)
+            {
+                createParams["com.ibm.Dump.Create.CreateParameters.DumpType"] =
+                    "com.ibm.Dump.Create.DumpType.SBE";
+                createParams
+                    ["com.ibm.Dump.Create.CreateParameters.FailingUnitId"] =
+                        i_dumpParameters.unitId;
+            }
             method.append(createParams);
 
             // using system dbus
