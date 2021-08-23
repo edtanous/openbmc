@@ -162,7 +162,7 @@ bool analyzeHardware(attn::DumpParameters& o_dumpParameters)
                    util::pdbg::getPath(rootCause.getChip()),
                    rootCause.toUint32(), __attn(rootCause.getAttnType()));
 
-        // Perform service actions based on the root cause.
+        // Resolve any service actions required by the root cause.
         RasDataParser rasData{};
         ServiceData servData{rootCause, isoData.queryCheckstop()};
         rasData.getResolution(rootCause)->resolve(servData);
@@ -170,7 +170,19 @@ bool analyzeHardware(attn::DumpParameters& o_dumpParameters)
         // Create and commit a PEL.
         uint32_t logId = std::get<1>(createPel(isoData, servData));
 
-        // Populate dump parameters
+        // Write guard records to persistent storage.
+        // TODO: The PEL ID will be required, but interface is still unknown.
+        for (const auto& guard : servData.getGuardList())
+        {
+            guard.apply();
+        }
+
+        // Gather/return information needed for dump.
+        // TODO: Need ID from root cause. At the moment, HUID does not exist in
+        //       devtree. Will need a better ID definition.
+        // TODO: HW dump is default, but some attentions may require something
+        //       different. Will need to investigate adding that information to
+        //       the RAS data files.
         o_dumpParameters.logId    = logId;
         o_dumpParameters.unitId   = 0;
         o_dumpParameters.dumpType = attn::DumpType::Hardware;

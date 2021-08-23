@@ -23,8 +23,9 @@ void HardwareCalloutResolution::resolve(ServiceData& io_sd) const
         }
     }
 
-    // Get the location code for this target.
-    auto locCode = util::pdbg::getLocationCode(trgt);
+    // Get the location code and entity path for this target.
+    auto locCode    = util::pdbg::getLocationCode(trgt);
+    auto entityPath = util::pdbg::getPhysDevPath(trgt);
 
     // Add the actual callout to the service data.
     nlohmann::json callout;
@@ -32,22 +33,8 @@ void HardwareCalloutResolution::resolve(ServiceData& io_sd) const
     callout["Priority"]     = iv_priority.getUserDataString();
     io_sd.addCallout(callout);
 
-    // Add entity path to gard list.
-    auto entityPath = util::pdbg::getPhysDevPath(trgt);
-    if (entityPath.empty())
-    {
-        trace::err("Unable to find entity path for %s", path.c_str());
-    }
-    else
-    {
-        Guard::Type guard = Guard::NONE;
-        if (iv_guard)
-        {
-            guard = io_sd.queryCheckstop() ? Guard::FATAL : Guard::NON_FATAL;
-        }
-
-        io_sd.addGuard(std::make_shared<Guard>(entityPath, guard));
-    }
+    // Add the guard info to the service data.
+    io_sd.addGuard(entityPath, iv_guard);
 }
 
 //------------------------------------------------------------------------------

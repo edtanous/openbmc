@@ -33,13 +33,8 @@ void HardwareCalloutResolution::resolve(ServiceData& io_sd) const
     callout["Priority"]     = iv_priority.getUserDataString();
     io_sd.addCallout(callout);
 
-    Guard::Type guard = Guard::NONE;
-    if (iv_guard)
-    {
-        guard = io_sd.queryCheckstop() ? Guard::FATAL : Guard::NON_FATAL;
-    }
-
-    io_sd.addGuard(std::make_shared<Guard>(path, guard));
+    // Add the guard info to the service data.
+    io_sd.addGuard(path, iv_guard);
 }
 
 //------------------------------------------------------------------------------
@@ -110,19 +105,6 @@ TEST(Resolution, TestSet1)
 ])";
     ASSERT_EQ(s, j.dump(4));
 
-    sd1.getGuardList(j);
-    s = R"([
-    {
-        "Path": "/proc0",
-        "Type": "NONE"
-    },
-    {
-        "Path": "/proc0/pib/perv12/mc0/mi0/mcc0/omi0",
-        "Type": "FATAL"
-    }
-])";
-    ASSERT_EQ(s, j.dump(4));
-
     j = sd2.getCalloutList();
     s = R"([
     {
@@ -140,23 +122,6 @@ TEST(Resolution, TestSet1)
     {
         "LocationCode": "/proc0",
         "Priority": "A"
-    }
-])";
-    ASSERT_EQ(s, j.dump(4));
-
-    sd2.getGuardList(j);
-    s = R"([
-    {
-        "Path": "/proc0/pib/perv39/eq7/fc1/core1",
-        "Type": "NON_FATAL"
-    },
-    {
-        "Path": "/proc0",
-        "Type": "NONE"
-    },
-    {
-        "Path": "/proc0/pib/perv12/mc0/mi0/mcc0/omi0",
-        "Type": "NON_FATAL"
     }
 ])";
     ASSERT_EQ(s, j.dump(4));

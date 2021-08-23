@@ -1,59 +1,12 @@
 #pragma once
 
 #include <analyzer/callout.hpp>
+#include <analyzer/guard.hpp>
 #include <hei_main.hpp>
 #include <nlohmann/json.hpp>
 
 namespace analyzer
 {
-
-/**
- * @brief A service event requiring hardware to be guarded.
- */
-class Guard
-{
-  public:
-    /** Supported guard types. */
-    enum Type
-    {
-        NONE,      ///< Do not guard
-        FATAL,     ///< Guard on fatal error (cannot recover resource)
-        NON_FATAL, ///< Guard on non-fatal error (can recover resource)
-    };
-
-  public:
-    /**
-     * @brief Constructor from components.
-     * @param i_path The hardware path to guard.
-     * @param i_type The guard type.
-     */
-    Guard(const std::string& i_path, Type i_type) :
-        iv_path(i_path), iv_type(i_type)
-    {}
-
-  private:
-    /** The hardware path to guard. */
-    const std::string iv_path;
-
-    /** The guard type. */
-    const Type iv_type;
-
-  public:
-    void getJson(nlohmann::json& j) const
-    {
-        // clang-format off
-        static const std::map<Type, std::string> m =
-        {
-            {NONE,      "NONE"},
-            {FATAL,     "FATAL"},
-            {NON_FATAL, "NON_FATAL"},
-        };
-        // clang-format on
-
-        nlohmann::json c = {{"Path", iv_path}, {"Type", m.at(iv_type)}};
-        j.emplace_back(c);
-    }
-};
 
 /**
  * @brief Data regarding required service actions based on the hardware error
@@ -93,9 +46,9 @@ class ServiceData
     nlohmann::json iv_calloutList = nlohmann::json::array();
 
     /** The list of hardware guard requests. Some information will be added to
-     * the PEL, but the actual guard record will be created after submitting the
-     * PEL. */
-    std::vector<std::shared_ptr<Guard>> iv_guardList;
+     *  the PEL, but the actual guard record will be created after submitting
+     *  the PEL. */
+    std::vector<Guard> iv_guardList;
 
   public:
     /** @return The signature of the root cause attention. */
@@ -120,10 +73,23 @@ class ServiceData
         iv_calloutList.push_back(i_callout);
     }
 
-    /** Add a guard request to the list. */
-    void addGuard(const std::shared_ptr<Guard>& i_guard)
+    /**
+     * @brief  Add a guard request to the guard list.
+     * @param  i_path  Entity path for the target part.
+     * @param  i_guard True, if the part should be guarded. False, otherwise.
+     */
+    void addGuard(const std::string& i_path, bool i_guard)
     {
-        iv_guardList.push_back(i_guard);
+        Guard::Type guardType = Guard::Type::NONE;
+        if (i_guard)
+        {
+            // The guard type is dependent on the presence of a system checkstop
+            // attention.
+            guardType =
+                queryCheckstop() ? Guard::Type::FATAL : Guard::Type::NON_FATAL;
+        }
+
+        iv_guardList.emplace_back(i_path, guardType);
     }
 
     /** @brief Accessor to iv_calloutList. */
@@ -132,19 +98,10 @@ class ServiceData
         return iv_calloutList;
     }
 
-    /**
-     * @brief Iterates the guard list and returns the json attached to each
-     *        guard request in the list.
-     * @param o_json The returned json data.
-     */
-    void getGuardList(nlohmann::json& o_json) const
+    /** @brief Accessor to iv_guardList. */
+    const std::vector<Guard>& getGuardList() const
     {
-        o_json.clear(); // Ensure we are starting with a clean list.
-
-        for (const auto& g : iv_guardList)
-        {
-            g->getJson(o_json);
-        }
+        return iv_guardList;
     }
 };
 
