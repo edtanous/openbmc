@@ -14,97 +14,89 @@
 *                                                                               *
 ********************************************************************************/
 
-#include <common.hpp>
+#include <ipmid/api.hpp>
+#include <phosphor-logging/log.hpp>
+#include <sdbusplus/message/types.hpp>
 #include <bioscommands.hpp>
+#include <boost/endian/arithmetic.hpp>
+#include <file_handling.hpp>
+
+struct bios_boot_count
+{
+    uint32_t header;
+    uint32_t count;
+};
 
 namespace ipmi
 {
-    static void registerBIOSFunctions() __attribute__((constructor));
-
-    ipmi::RspType<std::vector<uint8_t>> FiiBIOSBootCount(boost::asio::yield_context yield, std::vector<uint8_t> reqParams)
+static void registerBIOSFunctions() __attribute__((constructor));
+ipmi::RspType<uint32_t> FiiBIOSBootCount(boost::asio::yield_context yield,
+        std::vector<uint8_t> reqParams)
+{
+    int boot_count_operation;
+    bios_boot_count boot;
+    if (reqParams.empty())
     {
-        bool op;
-        std::vector<uint8_t> boot_count;
-        uint32_t counter = 0, ret;
-
-        if (reqParams.empty())
-        {
-            phosphor::logging::log<phosphor::logging::level::ERR>(" Fii bios cmd : command format error.");
-
-            return ipmi::responseReqDataLenInvalid();
-        }
-
-        op = reqParams[0] & 0b11;
-        // check the boot count file exist or not
-        std::fstream fptr(BOOT_COUNT_FILE);
-
-        if (!fptr.is_open())
-        {
-            std::cerr << " Fii bios cmd : file didn't exist and try to create one\n";
-            ret = system("mkdir -p /etc/conf");
-            std::ofstream outfile (BOOT_COUNT_FILE);
-            outfile << "0" << std::endl;
-            outfile.close();
-            boot_count.push_back(static_cast<uint8_t>(counter));
-            boot_count.push_back(static_cast<uint8_t>(counter >> 8));
-            boot_count.push_back(static_cast<uint8_t>(counter >> 16));
-            boot_count.push_back(static_cast<uint8_t>(counter >> 24));
-        }
-        else
-        {
-            std::string str;
-            while (std::getline(fptr, str))
-            {
-                //boot_count.push_back(static_cast<uint8_t>(std::stoul(str)));
-                counter = (std::stoul(str));
-                //std::cerr << " Fii bios cmd : " << counter << std::endl;
-            }
-            boot_count.push_back(static_cast<uint8_t>(counter));
-            boot_count.push_back(static_cast<uint8_t>(counter >> 8));
-            boot_count.push_back(static_cast<uint8_t>(counter >> 16));
-            boot_count.push_back(static_cast<uint8_t>(counter >> 24));
-            fptr.close();
-        }
-        if (op == OP_CODE_READ)
-        {
-            return ipmi::responseSuccess(boot_count);
-        }
-        else if (op == OP_CODE_WRITE)
-        {
-            uint32_t value = 0;
-            if (reqParams.size() == 1)
-            {
-                value = boot_count[0] + (boot_count[1] << 8) + (boot_count[2] << 16) + (boot_count[3] << 24);
-                value += 1;
-                boot_count.clear();
-                boot_count.push_back(static_cast<uint8_t>(value));
-                boot_count.push_back(static_cast<uint8_t>(value >> 8));
-                boot_count.push_back(static_cast<uint8_t>(value >> 16));
-                boot_count.push_back(static_cast<uint8_t>(value >> 24));
-            }
-            else if (reqParams.size() == FII_CMD_BIOS_BOOT_COUNT_LEN)
-            {
-                value = reqParams[1] + + (reqParams[2] << 8) + (reqParams[3] << 16) + (reqParams[4] << 24);
-                boot_count.clear();
-                boot_count.insert(boot_count.begin(), reqParams.begin()+1, reqParams.end());
-            }
-            std::ofstream fptr_w(BOOT_COUNT_FILE, std::ios::out | std::ios::trunc);
-            fptr_w << value << std::endl;
-            fptr_w.close();
-        }
-        else
-        {
-            return ipmi::responseInvalidCommand();
-        }
-        return ipmi::responseSuccess(boot_count);
+        phosphor::logging::log<phosphor::logging::level::ERR>(
+                " Fii bios cmd : command format error.");
+        return ipmi::responseReqDataLenInvalid();
     }
 
-    void registerBIOSFunctions()
-    {
-        std::fprintf(stderr, "Registering OEM:[0x34], Cmd:[%#04X] for Fii BIOS OEM Commands\n", FII_CMD_BIOS_BOOT_COUNT);
-        ipmi::registerHandler(ipmi::prioOemBase, ipmi::netFnOemThree, FII_CMD_BIOS_BOOT_COUNT, ipmi::Privilege::User,
-                FiiBIOSBootCount);
+    boot_count_operation = reqParams[0];
 
-        return;
+    if((boot_count_operation == BOOT_COUNT_SET &&
+        reqParams.size() != SET_BYTE_LENGTH) ||
+        (boot_count_operation != BOOT_COUNT_SET &&
+         reqParams.size() != OPERATION_BYTE_LENGTH))
+    {
+         return ipmi::responseReqDataLenInvalid();
     }
+
+    if(boot_count_operation > BOOT_COUNT_SET)
+    {
+         return ipmi::responseInvalidCommand();
+    }
+
+    int fd = sysopen(EEPROM_PATH);
+    readBin(fd, EEPROM_OFFSET, &boot, sizeof(boot));
+
+    if(boot.header != BOOT_COUNT_HEADER)
+    {
+        phosphor::logging::log<phosphor::logging::level::INFO>(
+                  "Boot count header is corrupted or missing. Initializing.");
+        boot.header = BOOT_COUNT_HEADER;
+        boot.count = INITIAL_VALUE;
+        writeBin(fd, EEPROM_OFFSET, &boot, sizeof(boot));
+    }
+
+    switch(boot_count_operation)
+    {
+        case BOOT_COUNT_READ:
+            break;
+        case BOOT_COUNT_INCREMENT:
+            boot.count = boot.count + 1;
+            break;
+        case BOOT_COUNT_CLEAR:
+            boot.count = INITIAL_VALUE;
+            break;
+        case BOOT_COUNT_SET:
+            memcpy(&boot.count, &reqParams[1], sizeof(boot.count));
+            break;
+    }
+
+    if( boot_count_operation != BOOT_COUNT_READ )
+    {
+        writeBin(fd, EEPROM_OFFSET + 4, &boot.count, sizeof(boot.count));
+    } 
+    sysclose(fd);
+    return ipmi::responseSuccess(boot.count);
+}
+
+void registerBIOSFunctions()
+{
+    std::fprintf(stderr, "Registering OEM:[0x34], Cmd:[%#04X] for Fii BIOS OEM Commands\n",
+            FII_CMD_BIOS_BOOT_COUNT);
+    ipmi::registerHandler(ipmi::prioOemBase, ipmi::netFnOemThree, FII_CMD_BIOS_BOOT_COUNT,
+            ipmi::Privilege::User, FiiBIOSBootCount);
+}
 }

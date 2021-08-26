@@ -1,7 +1,7 @@
 /********************************************************************************
 *                       HON HAI Precision IND.Co., LTD.                         *
 *            Personal Computer & Enterprise Product Business Group              *
-*                      Enterprise Product Business Gro:qup                      *
+*                      Enterprise Product Business Group                        *
 *                                                                               *
 *     Copyright (c) 2010 by FOXCONN/CESBG/CABG/SRD. All rights reserved.        *
 *     All data and information contained in this document is confidential       *
@@ -13,20 +13,17 @@
 *     permission of FOXCONN/CESBG/CABG/SRD.                                     *
 *                                                                               *
 ********************************************************************************/
-#include <sys/stat.h>
-#include <fcntl.h>
 #include <unistd.h>
-#include <iostream>
-#include <iomanip>
-#include <sstream>
-#include <fstream>
 
-#include <ipmid/api.hpp>
-#include <ipmid/utils.hpp>
-#include <ipmid/message.hpp>
-#include <phosphor-logging/log.hpp>
-#include <sdbusplus/message/types.hpp>
+std::system_error errnoException(const std::string& message);
 
-#define OP_CODE_READ	0b00
-#define OP_CODE_WRITE	0b01
+int sysopen(const std::string& path);
+
+void sysclose(int fd_);
+
+void lseeker(int fd_, size_t offset);
+
+void readBin(int fd_, size_t offset, void *ptr, size_t size);
+
+void writeBin(int fd_, size_t offset, void *ptr, size_t size);
 

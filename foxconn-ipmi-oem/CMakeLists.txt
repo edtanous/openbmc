@@ -83,6 +83,7 @@ add_custom_command(OUTPUT include/ipmi-whitelist.hpp
 add_library (fiioemcmds
              SHARED
              src/systemcommands.cpp
+             src/file_handling.cpp
              src/bioscommands.cpp)
 
 set_target_properties (fiioemcmds PROPERTIES VERSION "0.1.0")

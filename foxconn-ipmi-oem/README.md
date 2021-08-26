@@ -28,37 +28,47 @@ Example
 |--------|-------|----
 |1|Read the information|ipmitool 0x34 0x03
 
-### BIOS Related Commands (7x h)
+### BIOS Related Commands (0x7X)
 
 #### BIOS Boot Count 0x71
 
-This is a 32 bits register that provides bios pushs the boot counter to BMC, or 
+This is a 32 bits register that provides bios pushs the boot counter to BMC, or
 get the boot counter from BMC.
 
 Request
+|Byte(s) |Value|Description
+|--------|-----|----
+|0x00|0x71|Subcommand
+|0x01|Op value|Operation to be performed
+|0x02-0x05|byte0 byte1 byte2 byte3|32-bit Count value for set operation
 
-|Byte(s) |Value  |Data
-|--------|-------|----
-|0x00|0x03|Subcommand
-|0x01|0x00/0x01| read/write the boot counter register
-|0x02|0x--|Byte 0
-|0x03|0x--|Byte 1
-|0x04|0x--|Byte 2
-|0x05|0x--|Byte 3
+|Op value |Operation to be performed
+|------|---------
+|0x00|Read boot count value
+|0x01|Increment boot count value
+|0x02|Clear boot count value
+|0x03|Set the boot count with given 4 byte value
 
 Response
-
-|Byte(s) |Value  |Data
+|Byte(s) |Value  |Description
 |--------|-------|----
-|0x00|0x71|Subcommand
-|0x00|0x--|Byte 0
-|0x01|0x--|Byte 1
-|0x02|0x--|Byte 2
-|0x03|0x--|Byte 3
+|0x00|CC|Completion code returned
+|0x01|--|Byte 0 of boot count
+|0x02|--|Byte 1 of boot count
+|0x03|--|Byte 2 of boot count
+|0x04|--|Byte 3 of boot count
+
+Completion Codes (CC)
+|CC   |Description
+|-----|-----------|
+|0xC1|Invalid Command
+|0x00|Command Success
+|0xC7|Data length Invalid
 
 Example
 |# |Command |Example
 |--------|-------|----
 |1|Read the boot count|ipmitool raw 0x34 0x71 0x00
-|2|Add the boot count by 1|ipmitool raw 0x34 0x71 0x01
-|3|Add the boot count by index|ipmitool raw 0x34 0x71 0x01 byte0 byte1 byte2 byte3
+|2|Increment the boot count by 1|ipmitool raw 0x34 0x71 0x01
+|3|Clear the boot count to all 0's|ipmitool raw 0x34 0x71 0x02
+|4|Set the boot count to given value|ipmitool raw 0x34 0x71 0x03 byte0 byte1 byte2 byte3
