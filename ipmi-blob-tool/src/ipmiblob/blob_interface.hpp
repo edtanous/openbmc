@@ -22,6 +22,15 @@ enum class BlobOEMCommands : std::uint8_t
     bmcBlobWriteMeta = 10,
 };
 
+enum StateFlags
+{
+    open_read = (1 << 0),
+    open_write = (1 << 1),
+    committing = (1 << 2),
+    committed = (1 << 3),
+    commit_error = (1 << 4),
+};
+
 struct StatResponse
 {
     std::uint16_t blob_state;
