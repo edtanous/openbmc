@@ -1,6 +1,7 @@
 [Unit]
 Description=Check Host%i status on BMC reset via CFAM reg
-After=phosphor-reset-host-check@%i.service
+Wants=mapper-wait@-xyz-openbmc_project-state-host%i.service
+After=mapper-wait@-xyz-openbmc_project-state-host%i.service
 Wants=obmc-host-reset-running@%i.target
 Before=obmc-host-reset-running@%i.target
 Wants=op-reset-chassis-on@%i.service
