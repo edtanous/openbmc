@@ -445,7 +445,7 @@ static ipmi_ret_t hiomap_reset(ipmi_request_t request, ipmi_response_t response,
 
         *data_len = 0;
     }
-    catch (const exception::SdBusError& e)
+    catch (const exception::exception& e)
     {
         return hiomap_xlate_errno(e.get_errno());
     }
@@ -488,7 +488,7 @@ static ipmi_ret_t hiomap_get_info(ipmi_request_t request,
 
         *data_len = 4;
     }
-    catch (const exception::SdBusError& e)
+    catch (const exception::exception& e)
     {
         return hiomap_xlate_errno(e.get_errno());
     }
@@ -518,7 +518,7 @@ static ipmi_ret_t hiomap_get_flash_info(ipmi_request_t request,
 
         *data_len = 4;
     }
-    catch (const exception::SdBusError& e)
+    catch (const exception::exception& e)
     {
         return hiomap_xlate_errno(e.get_errno());
     }
@@ -560,7 +560,7 @@ static ipmi_ret_t hiomap_create_window(struct hiomap* ctx, bool ro,
 
         *data_len = 6;
     }
-    catch (const exception::SdBusError& e)
+    catch (const exception::exception& e)
     {
         return hiomap_xlate_errno(e.get_errno());
     }
@@ -611,7 +611,7 @@ static ipmi_ret_t hiomap_close_window(ipmi_request_t request,
 
         *data_len = 0;
     }
-    catch (const exception::SdBusError& e)
+    catch (const exception::exception& e)
     {
         return hiomap_xlate_errno(e.get_errno());
     }
@@ -644,7 +644,7 @@ static ipmi_ret_t hiomap_mark_dirty(ipmi_request_t request,
 
         *data_len = 0;
     }
-    catch (const exception::SdBusError& e)
+    catch (const exception::exception& e)
     {
         return hiomap_xlate_errno(e.get_errno());
     }
@@ -667,7 +667,7 @@ static ipmi_ret_t hiomap_flush(ipmi_request_t request, ipmi_response_t response,
 
         *data_len = 0;
     }
-    catch (const exception::SdBusError& e)
+    catch (const exception::exception& e)
     {
         return hiomap_xlate_errno(e.get_errno());
     }
@@ -697,7 +697,7 @@ static ipmi_ret_t hiomap_ack(ipmi_request_t request, ipmi_response_t response,
 
         *data_len = 0;
     }
-    catch (const exception::SdBusError& e)
+    catch (const exception::exception& e)
     {
         return hiomap_xlate_errno(e.get_errno());
     }
@@ -728,7 +728,7 @@ static ipmi_ret_t hiomap_erase(ipmi_request_t request, ipmi_response_t response,
 
         *data_len = 0;
     }
-    catch (const exception::SdBusError& e)
+    catch (const exception::exception& e)
     {
         return hiomap_xlate_errno(e.get_errno());
     }
