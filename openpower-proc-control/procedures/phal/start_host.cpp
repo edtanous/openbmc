@@ -116,7 +116,7 @@ void setClkNETerminationSite()
         auto result = bus.call(properties);
         result.read(val);
     }
-    catch (const sdbusplus::exception::SdBusError& e)
+    catch (const sdbusplus::exception::exception& e)
     {
         log<level::ERR>("Get HW Keyword read from VINI Failed");
         throw std::runtime_error("Get HW Keyword read from VINI Failed");

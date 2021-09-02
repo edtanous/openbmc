@@ -27,7 +27,7 @@ std::string getService(sdbusplus::bus::bus& bus, const std::string& objectPath,
         auto reply = bus.call(method);
         reply.read(response);
     }
-    catch (const sdbusplus::exception::SdBusError& e)
+    catch (const sdbusplus::exception::exception& e)
     {
         log<level::ERR>(fmt::format("D-Bus call exception OBJPATH={}"
                                     "INTERFACE={}  EXCEPTION={}",

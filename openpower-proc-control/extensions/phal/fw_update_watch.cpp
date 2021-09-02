@@ -43,7 +43,7 @@ void Watch::fwIntfAddedCallback(sdbusplus::message::message& msg)
     {
         msg.read(objectPath, interfaceMap);
     }
-    catch (const sdbusplus::exception::SdBusError& e)
+    catch (const sdbusplus::exception::exception& e)
     {
         log<level::ERR>(fmt::format("Failed to parse software add signal"
                                     "Exception [{}] REPLY_SIG [{}]",

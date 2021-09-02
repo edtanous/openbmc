@@ -70,7 +70,7 @@ void createBootErrorPEL(const FFDCData& ffdcData, const json& calloutData)
         method.append(bootErrorMessage, level, additionalData, pelCalloutInfo);
         auto resp = bus.call(method);
     }
-    catch (const sdbusplus::exception::SdBusError& e)
+    catch (const sdbusplus::exception::exception& e)
     {
         log<level::ERR>("D-Bus call exception",
                         entry("OBJPATH=%s", loggingObjectPath),
@@ -105,7 +105,7 @@ void createPEL(const std::string& event)
         method.append(event, level, additionalData);
         auto resp = bus.call(method);
     }
-    catch (const sdbusplus::exception::SdBusError& e)
+    catch (const sdbusplus::exception::exception& e)
     {
         log<level::ERR>(fmt::format("sdbusplus D-Bus call exception",
                                     "OBJPATH={}, INTERFACE={}, EXCEPTION={}",
