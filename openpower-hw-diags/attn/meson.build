@@ -6,18 +6,21 @@ boost_args = ['-DBOOST_ASIO_DISABLE_THREADS',
 # dependency to link gpiod support
 libgpiod = dependency('libgpiod', version : '>=1.4.1')
 
-# ENABLE_PHAL_TRUE used in attn_handler.service
+# ENABLE_PHAL_TRUE used in attn_handler.service.in
+attn_conf = configuration_data()
+
 if (get_option('phal').enabled())
-    configuration_data().set('ENABLE_PHAL_TRUE', '')
+    attn_conf.set('ENABLE_PHAL_TRUE', '')
 else
-    configuration_data().set('ENABLE_PHAL_TRUE', '#')
+    attn_conf.set('ENABLE_PHAL_TRUE', '#')
 endif
 
 # install systemd unit file
 configure_file(
-    input: 'attn_handler.service',
+    configuration: attn_conf,
+    input: 'attn_handler.service.in',
     output: 'attn_handler.service',
-    copy: true,
+    install: true,
     install_dir:
         dependency('systemd').get_pkgconfig_variable(
             'systemdsystemunitdir')
