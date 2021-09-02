@@ -103,7 +103,7 @@ std::string getService(sdbusplus::bus::bus& bus, const std::string& path,
             return std::string{};
         }
     }
-    catch (const sdbusplus::exception::SdBusError& e)
+    catch (const sdbusplus::exception::exception& e)
     {
         log<level::ERR>("Error in mapper method call",
                         entry("ERROR=%s", e.what()));
@@ -369,7 +369,7 @@ ipmi_ret_t ipmi_ibm_oem_bmc_factory_reset(ipmi_netfn_t netfn, ipmi_cmd_t cmd,
     {
         bus.call_noreply(method);
     }
-    catch (const sdbusplus::exception::SdBusError& e)
+    catch (const sdbusplus::exception::exception& e)
     {
         log<level::ERR>("Error powering off the chassis",
                         entry("ERROR=%s", e.what()));
@@ -386,7 +386,7 @@ ipmi_ret_t ipmi_ibm_oem_bmc_factory_reset(ipmi_netfn_t netfn, ipmi_cmd_t cmd,
     {
         bus.call_noreply(method);
     }
-    catch (const sdbusplus::exception::SdBusError& e)
+    catch (const sdbusplus::exception::exception& e)
     {
         log<level::ERR>("Error setting factory reset",
                         entry("ERROR=%s", e.what()));
@@ -415,7 +415,7 @@ ipmi_ret_t ipmi_ibm_oem_bmc_factory_reset(ipmi_netfn_t netfn, ipmi_cmd_t cmd,
     {
         bus.call_noreply(method);
     }
-    catch (const sdbusplus::exception::SdBusError& e)
+    catch (const sdbusplus::exception::exception& e)
     {
         log<level::ALERT>("Error calling to reboot the BMC. The BMC needs to "
                           "be manually rebooted to complete the factory reset.",
