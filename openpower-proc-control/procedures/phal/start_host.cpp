@@ -14,6 +14,7 @@ extern "C"
 #include <libekb.H>
 
 #include <ext_interface.hpp>
+#include <nlohmann/json.hpp>
 #include <phosphor-logging/log.hpp>
 #include <registration.hpp>
 
@@ -169,6 +170,114 @@ void setClkNETerminationSite()
 }
 
 /**
+ * @brief Helper function to create error log (aka PEL) with
+ *        procedure callout for the hardware isolation policy
+ *        settings failures.
+ *
+ * @param[in] procedureCode - The procedure code to include in the callout
+ * @param[in] priority - The priority for the procedure callout
+ * @param[in] additionalData - The additional data to include in the error log
+ *
+ * @return void
+ */
+static void
+    createPELForHwIsolationSettingsErr(const std::string& procedureCode,
+                                       const std::string& priority,
+                                       const pel::FFDCData& additionalData)
+{
+    try
+    {
+        using json = nlohmann::json;
+
+        json jsonCalloutDataList;
+        jsonCalloutDataList = json::array();
+        json jsonCalloutData;
+        jsonCalloutData["Procedure"] = procedureCode;
+        jsonCalloutData["Priority"] = priority;
+        jsonCalloutDataList.emplace_back(jsonCalloutData);
+
+        openpower::pel::createErrorPEL("org.open_power.PHAL.Error.Boot",
+                                       jsonCalloutDataList, additionalData);
+    }
+    catch (const std::exception& e)
+    {
+        // Don't throw exception since the caller might call in the error path
+        // and even we should allow the hardware isolation by default.
+        log<level::ERR>(
+            fmt::format("Exception [{}], failed to create the error log "
+                        "for the hardware isolation policy settings failures.",
+                        e.what())
+                .c_str());
+    }
+}
+
+/**
+ * @brief Helper function to decide the hardware isolation (aka guard)
+ *
+ * @return xyz.openbmc_project.Object.Enable::Enabled value on success
+ *         true on failure since hardware isolation feature should be
+ *         enabled by default.
+ */
+static bool allowHwIsolation()
+{
+    bool allowHwIsolation{true};
+
+    constexpr auto hwIsolationPolicyObjPath =
+        "/xyz/openbmc_project/hardware_isolation/allow_hw_isolation";
+    constexpr auto hwIsolationPolicyIface = "xyz.openbmc_project.Object.Enable";
+
+    try
+    {
+        auto bus = sdbusplus::bus::new_default();
+
+        std::string service = util::getService(bus, hwIsolationPolicyObjPath,
+                                               hwIsolationPolicyIface);
+
+        auto method =
+            bus.new_method_call(service.c_str(), hwIsolationPolicyObjPath,
+                                "org.freedesktop.DBus.Properties", "Get");
+        method.append(hwIsolationPolicyIface, "Enabled");
+
+        auto reply = bus.call(method);
+
+        std::variant<bool> resp;
+
+        reply.read(resp);
+
+        if (const bool* enabledPropVal = std::get_if<bool>(&resp))
+        {
+            allowHwIsolation = *enabledPropVal;
+        }
+        else
+        {
+            const auto trace{fmt::format(
+                "Failed to read the HardwareIsolation policy "
+                "from the path [{}] interface [{}]. Continuing with "
+                "default mode(allow_hw_isolation)",
+                hwIsolationPolicyObjPath, hwIsolationPolicyIface)};
+
+            log<level::ERR>(trace.c_str());
+            createPELForHwIsolationSettingsErr("BMC0001", "M",
+                                               {{"REASON_FOR_PEL", trace}});
+        }
+    }
+    catch (const sdbusplus::exception::exception& e)
+    {
+        const auto trace{fmt::format(
+            "Exception [{}] to get the HardwareIsolation policy "
+            "from the path [{}] interface [{}]. Continuing with "
+            "default mode (allow_hw_isolation)",
+            e.what(), hwIsolationPolicyObjPath, hwIsolationPolicyIface)};
+
+        log<level::ERR>(trace.c_str());
+        createPELForHwIsolationSettingsErr("BMC0001", "M",
+                                           {{"REASON_FOR_PEL", trace}});
+    }
+
+    return allowHwIsolation;
+}
+
+/**
  * @brief Starts the self boot engine on POWER processor position 0
  *        to kick off a boot.
  * @return void
@@ -179,6 +288,17 @@ void startHost(enum ipl_type iplType = IPL_TYPE_NORMAL)
     {
         phal_init();
         ipl_set_type(iplType);
+
+        /**
+         * Don't apply guard records if the HardwareIsolation (aka guard)
+         * the policy is disabled (false). By default, libipl will apply
+         * guard records.
+         */
+        if (!allowHwIsolation())
+        {
+            ipl_disable_guard();
+        }
+
         if (iplType == IPL_TYPE_NORMAL)
         {
             // Update SEEPROM side only for NORMAL boot
