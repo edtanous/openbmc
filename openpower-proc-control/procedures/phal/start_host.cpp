@@ -183,12 +183,12 @@ void startHost(enum ipl_type iplType = IPL_TYPE_NORMAL)
     {
         log<level::ERR>("Exception raised during init PHAL",
                         entry("EXCEPTION=%s", ex.what()));
-        openpower::pel::detail::processBootErrorCallback(false);
+        openpower::pel::detail::processBootError(false);
         throw std::runtime_error("PHAL initialization failed");
     }
 
     // To clear trace if success
-    openpower::pel::detail::processBootErrorCallback(true);
+    openpower::pel::detail::processBootError(true);
 
     setClkNETerminationSite();
 
@@ -223,12 +223,12 @@ void startHostNormal()
         selectBootSeeprom();
 
         // To clear trace as it is success
-        openpower::pel::detail::processBootErrorCallback(true);
+        openpower::pel::detail::processBootError(true);
     }
     catch (const std::exception& ex)
     {
         // create PEL in failure
-        openpower::pel::detail::processBootErrorCallback(false);
+        openpower::pel::detail::processBootError(false);
         log<level::ERR>("SEEPROM selection failed", entry("ERR=%s", ex.what()));
         throw ex;
     }

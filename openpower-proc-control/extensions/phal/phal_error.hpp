@@ -1,6 +1,9 @@
 #pragma once
 
+#include <libipl.H>
+
 #include <cstdarg>
+
 namespace openpower
 {
 namespace pel
@@ -23,6 +26,16 @@ namespace detail
 void processLogTraceCallback(void* private_data, const char* fmt, va_list ap);
 
 /**
+ * @brief Process ipl failure/success status
+ *
+ * If status is success log traces are cleared else used in the
+ * creation of failure
+ *
+ * @param[in] errInfo - Error info structure
+ */
+void processIplErrorCallback(const ipl_error_info& errInfo);
+
+/**
  * @brief Process boot failure/success status
  *
  * If status is success log traces are cleared else used in the
@@ -30,12 +43,13 @@ void processLogTraceCallback(void* private_data, const char* fmt, va_list ap);
  *
  * @param[in] status - Boot execution status
  */
-void processBootErrorCallback(bool status);
+void processBootError(bool status);
 
 /**
  * @brief Reset trace log list
  */
 void reset();
+
 } // namespace detail
 
 /**

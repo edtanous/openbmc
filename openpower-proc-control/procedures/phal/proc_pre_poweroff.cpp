@@ -23,14 +23,14 @@ void prePoweroff(void)
     {
         log<level::ERR>("Exception raised during init PHAL",
                         entry("EXCEPTION=%s", ex.what()));
-        openpower::pel::detail::processBootErrorCallback(false);
+        openpower::pel::detail::processBootError(false);
         // Dont throw exception on failure because, we need to proceed
         // further eventhough there is failure for proc-pre-poweroff
         return;
     }
 
     // To clear trace if success
-    openpower::pel::detail::processBootErrorCallback(true);
+    openpower::pel::detail::processBootError(true);
 
     // callback method will be called upon failure which will create the PEL
     int rc = ipl_pre_poweroff();

@@ -9,7 +9,6 @@ extern "C"
 #include <attributes_info.H>
 #include <fmt/format.h>
 #include <libekb.H>
-#include <libipl.H>
 
 #include <nlohmann/json.hpp>
 #include <phosphor-logging/elog.hpp>
@@ -257,9 +256,26 @@ static std::string getPelPriority(const std::string& phalPriority)
     return it->second;
 }
 
-void processBootErrorCallback(bool status)
+void processIplErrorCallback(const ipl_error_info& errInfo)
 {
-    log<level::INFO>("processBootCallback ", entry("STATUS=%d", status));
+    log<level::INFO>(
+        fmt::format("processIplErrorCallback: Error type(%x) \n", errInfo.type)
+            .c_str());
+
+    if (errInfo.type == IPL_NO_ERR)
+    {
+        // reset trace log and exit
+        reset();
+        return;
+    }
+    // TODO: Keeping the existing behaviour now
+    // Handle errors based on special reason codes once support is available
+    processBootError(false);
+}
+
+void processBootError(bool status)
+{
+    log<level::INFO>("processBootError ", entry("STATUS=%d", status));
     try
     {
         // return If no failure during hwp execution
@@ -520,7 +536,7 @@ void addBootErrorCallbacks()
     ipl_set_logfunc(detail::processLogTraceCallback, NULL);
 
     // add callback for ipl failures
-    ipl_set_error_callback_func(detail::processBootErrorCallback);
+    ipl_set_error_callback_func(detail::processIplErrorCallback);
 }
 
 } // namespace pel
