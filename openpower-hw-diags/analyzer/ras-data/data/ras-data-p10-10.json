@@ -59,11 +59,11 @@
         "pau7": [ { "type": "callout_unit", "name": "pau7", "priority": "MED", "guard": true } ],
 
         "rcs_osc_error_0": [
-            { "type": "callout_clock", "position": 0, "priority": "HIGH", "guard": true },
+            { "type": "callout_clock", "name": "OSC_REF_CLOCK_0", "priority": "HIGH", "guard": true },
             { "type": "action", "name": "self_L" }
         ],
         "rcs_osc_error_1": [
-            { "type": "callout_clock", "position": 1, "priority": "HIGH", "guard": true },
+            { "type": "callout_clock", "name": "OSC_REF_CLOCK_1", "priority": "HIGH", "guard": true },
             { "type": "action", "name": "self_L" }
         ],
         "pll_unlock_0": [

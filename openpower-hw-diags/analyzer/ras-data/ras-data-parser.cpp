@@ -185,13 +185,20 @@ std::shared_ptr<Resolution>
         }
         else if ("callout_clock" == type)
         {
-            auto position = a.at("position").get<unsigned int>();
+            auto name     = a.at("name").get<std::string>();
             auto priority = a.at("priority").get<std::string>();
             auto guard    = a.at("guard").get<bool>();
 
-            // TODO
-            trace::inf("callout_clock: position=%u priority=%s guard=%c",
-                       position, priority.c_str(), guard ? 'T' : 'F');
+            // clang-format off
+            static const std::map<std::string, callout::ClockType> m =
+            {
+                {"OSC_REF_CLOCK_0", callout::ClockType::OSC_REF_CLOCK_0},
+                {"OSC_REF_CLOCK_1", callout::ClockType::OSC_REF_CLOCK_1},
+            };
+            // clang-format on
+
+            o_list->push(std::make_shared<ClockCalloutResolution>(
+                m.at(name), getPriority(priority), guard));
         }
         else if ("callout_procedure" == type)
         {

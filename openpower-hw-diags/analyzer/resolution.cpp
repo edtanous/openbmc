@@ -49,6 +49,43 @@ void HardwareCalloutResolution::resolve(ServiceData& io_sd) const
 
 //------------------------------------------------------------------------------
 
+void ClockCalloutResolution::resolve(ServiceData& io_sd) const
+{
+    // Add the callout to the service data.
+    // TODO: For P10, the callout is simply the backplane. There isn't a devtree
+    //       object for this, yet. So will need to hardcode the location code
+    //       for now. In the future, we will need a mechanism to make this data
+    //       driven.
+    nlohmann::json callout;
+    callout["LocationCode"] = "P0";
+    callout["Priority"]     = iv_priority.getUserDataString();
+    io_sd.addCallout(callout);
+
+    // Add the guard info to the service data.
+    // TODO: Still waiting for clock targets to be defined in the device tree.
+    //       For get the processor path for the FFDC.
+    // static const std::map<callout::ClockType, std::string> m = {
+    //     {callout::ClockType::OSC_REF_CLOCK_0, ""},
+    //     {callout::ClockType::OSC_REF_CLOCK_1, ""},
+    // };
+    // auto target = std::string{util::pdbg::getPath(m.at(iv_clockType))};
+    // auto guardPath = util::pdbg::getPhysDevPath(target);
+    // Guard guard = io_sd.addGuard(guardPath, iv_guard);
+    auto target    = util::pdbg::getTrgt(io_sd.getRootCause().getChip());
+    auto guardPath = util::pdbg::getPhysDevPath(target);
+
+    // Add the callout FFDC to the service data.
+    nlohmann::json ffdc;
+    ffdc["Callout Type"] = "Clock Callout";
+    ffdc["Clock Type"]   = iv_clockType.getString();
+    ffdc["Target"]       = guardPath;
+    ffdc["Priority"]     = iv_priority.getRegistryString();
+    ffdc["Guard Type"]   = ""; // TODO: guard.getString();
+    io_sd.addCalloutFFDC(ffdc);
+}
+
+//------------------------------------------------------------------------------
+
 void ProcedureCalloutResolution::resolve(ServiceData& io_sd) const
 {
     // Add the actual callout to the service data.

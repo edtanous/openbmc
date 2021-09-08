@@ -16,6 +16,8 @@ constexpr auto core_str = "pib/perv39/eq7/fc1/core1";
 namespace analyzer
 {
 
+//------------------------------------------------------------------------------
+
 void HardwareCalloutResolution::resolve(ServiceData& io_sd) const
 {
     auto sig = io_sd.getRootCause();
@@ -48,6 +50,27 @@ void ProcedureCalloutResolution::resolve(ServiceData& io_sd) const
     io_sd.addCallout(callout);
 }
 
+//------------------------------------------------------------------------------
+
+void ClockCalloutResolution::resolve(ServiceData& io_sd) const
+{
+    auto sig = io_sd.getRootCause();
+
+    std::string fru{"P0"};
+    std::string path{(const char*)sig.getChip().getChip()};
+
+    // Add the actual callout to the service data.
+    nlohmann::json callout;
+    callout["LocationCode"] = fru;
+    callout["Priority"]     = iv_priority.getUserDataString();
+    io_sd.addCallout(callout);
+
+    // Add the guard info to the service data.
+    io_sd.addGuard(path, iv_guard);
+}
+
+//------------------------------------------------------------------------------
+
 } // namespace analyzer
 
 using namespace analyzer;
@@ -67,12 +90,16 @@ TEST(Resolution, TestSet1)
     auto c4 = std::make_shared<ProcedureCalloutResolution>(
         callout::Procedure::NEXTLVL, callout::Priority::LOW);
 
-    // l1 = (c1, c2)
+    auto c5 = std::make_shared<ClockCalloutResolution>(
+        callout::ClockType::OSC_REF_CLOCK_1, callout::Priority::LOW, false);
+
+    // l1 = (c1, c2, c5)
     auto l1 = std::make_shared<ResolutionList>();
     l1->push(c1);
     l1->push(c2);
+    l1->push(c5);
 
-    // l2 = (c4, c3, c1, c2)
+    // l2 = (c4, c3, c1, c2, c5)
     auto l2 = std::make_shared<ResolutionList>();
     l2->push(c4);
     l2->push(c3);
@@ -101,6 +128,10 @@ TEST(Resolution, TestSet1)
     {
         "LocationCode": "/proc0",
         "Priority": "A"
+    },
+    {
+        "LocationCode": "P0",
+        "Priority": "L"
     }
 ])";
     ASSERT_EQ(s, j.dump(4));
@@ -122,6 +153,10 @@ TEST(Resolution, TestSet1)
     {
         "LocationCode": "/proc0",
         "Priority": "A"
+    },
+    {
+        "LocationCode": "P0",
+        "Priority": "L"
     }
 ])";
     ASSERT_EQ(s, j.dump(4));

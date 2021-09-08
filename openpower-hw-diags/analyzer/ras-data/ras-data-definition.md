@@ -169,9 +169,16 @@ This will request to callout a clock associated with this chip.
 | Keyword  | Description                                                       |
 |----------|-------------------------------------------------------------------|
 | type     | value (string): `callout_clock`                                   |
-| position | value (integer): 0 or 1                                           |
+| name     | See `clock type` table below.                                     |
 | priority | See `priority` table above.                                       |
 | guard    | See `guard` table above.                                          |
+
+Supported clock types:
+
+| Clock Type      | Description                                                |
+|-----------------|------------------------------------------------------------|
+| OSC_REF_CLOCK_0 | Oscillator reference clock 0                               |
+| OSC_REF_CLOCK_1 | Oscillator reference clock 1                               |
 
 #### 5.1.7) action type `callout_procedure`
 
@@ -180,7 +187,7 @@ This will request to callout a service procedure.
 | Keyword  | Description                                                       |
 |----------|-------------------------------------------------------------------|
 | type     | value (string): `callout_procedure`                               |
-| name     | The `procedures` table below.                                     |
+| name     | See `procedures` table below.                                     |
 | priority | See `priority` table above.                                       |
 
 Supported procedures:
@@ -197,7 +204,7 @@ callout actions (e.g. the PNOR).
 | Keyword  | Description                                                       |
 |----------|-------------------------------------------------------------------|
 | type     | value (string): `callout_part`                                    |
-| name     | The `parts` table below.                                          |
+| name     | See `parts` table below.                                          |
 | priority | See `priority` table above.                                       |
 
 Supported parts:

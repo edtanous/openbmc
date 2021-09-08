@@ -158,13 +158,13 @@
                                     }
                                 },
                                 "then": {
-                                    "required": [ "priority", "guard", "position" ],
-                                    "not": { "required": [ "name" ] },
+                                    "required": [ "name", "priority", "guard" ],
                                     "properties": {
-                                        "position": {
-                                            "type": "integer",
-                                            "minimum": 0,
-                                            "maximum": 1
+                                        "name": {
+                                            "enum": [
+                                                "OSC_REF_CLOCK_0",
+                                                "OSC_REF_CLOCK_1"
+                                            ]
                                         }
                                     }
                                 }

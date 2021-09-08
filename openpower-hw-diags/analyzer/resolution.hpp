@@ -56,6 +56,36 @@ class HardwareCalloutResolution : public Resolution
     void resolve(ServiceData& io_sd) const override;
 };
 
+/** @brief Resolves a clock callout service event. */
+class ClockCalloutResolution : public Resolution
+{
+  public:
+    /**
+     * @brief Constructor from components.
+     * @param i_clockType The clock type.
+     * @param i_priority  The callout priority.
+     * @param i_guard     The guard type for this callout.
+     */
+    ClockCalloutResolution(const callout::ClockType& i_clockType,
+                           const callout::Priority& i_priority, bool i_guard) :
+        iv_clockType(i_clockType),
+        iv_priority(i_priority), iv_guard(i_guard)
+    {}
+
+  private:
+    /** The clock type. */
+    const callout::ClockType iv_clockType;
+
+    /** The callout priority. */
+    const callout::Priority iv_priority;
+
+    /** True, if guard is required. False, otherwise. */
+    const bool iv_guard;
+
+  public:
+    void resolve(ServiceData& io_sd) const override;
+};
+
 /** @brief Resolves a procedure callout service event. */
 class ProcedureCalloutResolution : public Resolution
 {

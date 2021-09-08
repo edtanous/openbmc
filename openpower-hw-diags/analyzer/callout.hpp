@@ -110,6 +110,39 @@ class Procedure
 
 inline const Procedure Procedure::NEXTLVL{"NEXTLVL"};
 
+/** @brief Container class for clock callout service actions. */
+class ClockType
+{
+  public:
+    /** Oscillator reference clock 0. */
+    static const ClockType OSC_REF_CLOCK_0;
+
+    /** Oscillator reference clock 1. */
+    static const ClockType OSC_REF_CLOCK_1;
+
+  private:
+    /**
+     * @brief Constructor from components.
+     * @param i_string The string representation of the procedure used for
+     *                 callouts.
+     */
+    explicit ClockType(const std::string& i_string) : iv_string(i_string) {}
+
+  private:
+    /** The string representation of the procedure used for callouts. */
+    const std::string iv_string;
+
+  public:
+    /** iv_string accessor */
+    std::string getString() const
+    {
+        return iv_string;
+    }
+};
+
+inline const ClockType ClockType::OSC_REF_CLOCK_0{"OSC_REF_CLOCK_0"};
+inline const ClockType ClockType::OSC_REF_CLOCK_1{"OSC_REF_CLOCK_1"};
+
 } // namespace callout
 
 } // namespace analyzer
