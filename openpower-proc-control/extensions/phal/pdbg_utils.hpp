@@ -64,5 +64,12 @@ uint32_t probeTarget(struct pdbg_target* procTarget);
  */
 void setDevtreeEnv();
 
+/**
+ * @brief Helper function to set PDATA_INFODB
+ *
+ * PDATA_INFODB environment variable set to pdata attributes infodb path
+ */
+void setPdataInfoDBEnv();
+
 } // namespace phal
 } // namespace openpower

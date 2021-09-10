@@ -137,5 +137,20 @@ void setDevtreeEnv()
     }
 }
 
+void setPdataInfoDBEnv()
+{
+    // PDATA_INFODB environment variable set to attributes tool  infodb path
+    static constexpr auto PDATA_INFODB_PATH =
+        "/usr/share/pdata/attributes_info.db";
+
+    if (setenv("PDATA_INFODB", PDATA_INFODB_PATH, 1))
+    {
+        log<level::ERR>(
+            fmt::format("Failed to set PDATA_INFODB: ({})", strerror(errno))
+                .c_str());
+        throw std::runtime_error("Failed to set PDATA_INFODB");
+    }
+}
+
 } // namespace phal
 } // namespace openpower
