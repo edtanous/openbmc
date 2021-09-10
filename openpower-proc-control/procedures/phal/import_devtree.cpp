@@ -37,6 +37,9 @@ void importDevtree()
     // Update PDBG_DTB value
     openpower::phal::setDevtreeEnv();
 
+    // Update PDATA_INFODB value
+    openpower::phal::setPdataInfoDBEnv();
+
     int status = 0;
     pid_t pid = fork();
     if (pid == 0)
