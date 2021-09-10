@@ -47,6 +47,8 @@ void importDevtree()
         std::string cmd("/usr/bin/attributes ");
         cmd += "import ";
         cmd += DEVTREE_EXP_FILE;
+        cmd += " 2>";
+        cmd += " /dev/null";
         execl("/bin/sh", "sh", "-c", cmd.c_str(), 0);
 
         auto error = errno;
