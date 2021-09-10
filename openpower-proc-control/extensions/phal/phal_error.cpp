@@ -262,7 +262,7 @@ void processIplErrorCallback(const ipl_error_info& errInfo)
         fmt::format("processIplErrorCallback: Error type(%x) \n", errInfo.type)
             .c_str());
 
-    if (errInfo.type == IPL_NO_ERR)
+    if (errInfo.type == IPL_ERR_OK)
     {
         // reset trace log and exit
         reset();
