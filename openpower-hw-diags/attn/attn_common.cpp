@@ -31,26 +31,31 @@ void addHbStatusRegs()
 
         if ((nullptr != fsiTarget) && (nullptr != pibTarget))
         {
+            // buffer for formatted strings (+1 for null, just in case)
+            char buffer[sizeof("some read error: 0x0123456789ABCDEF ")];
+
             // get first debug reg (CFAM)
             if (RC_SUCCESS != fsi_read(fsiTarget, l_cfamAddr, &l_cfamData))
             {
-                eventAttentionFail((int)AttnSection::addHbStatusRegs |
-                                   ATTN_PDBG_CFAM);
+                sprintf(buffer, "cfam read error: 0x%08x", l_cfamAddr);
+                trace<level::ERROR>(buffer);
                 l_cfamData = 0xFFFFFFFF;
             }
 
             // Get SCOM regs next (just 2 of them)
             if (RC_SUCCESS != pib_read(pibTarget, l_scomAddr1, &l_scomData1))
             {
-                eventAttentionFail((int)AttnSection::addHbStatusRegs |
-                                   ATTN_PDBG_SCOM);
+                sprintf(buffer, "scom read error: 0x%016" PRIx64 "",
+                        l_scomAddr1);
+                trace<level::ERROR>(buffer);
                 l_scomData1 = 0xFFFFFFFFFFFFFFFFull;
             }
 
             if (RC_SUCCESS != pib_read(pibTarget, l_scomAddr2, &l_scomData2))
             {
-                eventAttentionFail((int)AttnSection::addHbStatusRegs |
-                                   ATTN_PDBG_SCOM);
+                sprintf(buffer, "scom read error: 0x%016" PRIx64 "",
+                        l_scomAddr2);
+                trace<level::ERROR>(buffer);
                 l_scomData2 = 0xFFFFFFFFFFFFFFFFull;
             }
         }
