@@ -54,6 +54,17 @@ class RasDataParser
                                const libhei::Signature& i_signature);
 
     /**
+     * @brief  Parses a bus object in the given data file and returns the bus
+     *         type and unit path.
+     * @param  i_data The parsed RAS data file associated with the signature's
+     *                chip type.
+     * @param  i_name The name of the target bus.
+     * @return A tuple containing the bus type and unit path.
+     */
+    std::tuple<callout::BusType, std::string>
+        parseBus(const nlohmann::json& i_data, const std::string& i_name);
+
+    /**
      * @brief  Parses an action in the given data file and returns the
      *         corresponding resolution.
      * @param  i_data   The parsed RAS data file associated with the signature's

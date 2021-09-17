@@ -118,6 +118,33 @@ std::string RasDataParser::parseSignature(const nlohmann::json& i_data,
 
 //------------------------------------------------------------------------------
 
+std::tuple<callout::BusType, std::string>
+    RasDataParser::parseBus(const nlohmann::json& i_data,
+                            const std::string& i_name)
+{
+    auto bus = i_data.at("buses").at(i_name);
+
+    // clang-format off
+    static const std::map<std::string, callout::BusType> m =
+    {
+        {"SMP_BUS", callout::BusType::SMP_BUS},
+        {"OMI_BUS", callout::BusType::OMI_BUS},
+    };
+    // clang-format on
+
+    auto busType = m.at(bus.at("type").get<std::string>());
+
+    std::string unitPath{}; // default empty if unit does not exist
+    if (bus.contains("unit"))
+    {
+        unitPath = bus.at("unit").get<std::string>();
+    }
+
+    return std::make_tuple(busType, unitPath);
+}
+
+//------------------------------------------------------------------------------
+
 std::shared_ptr<Resolution>
     RasDataParser::parseAction(const nlohmann::json& i_data,
                                const std::string& i_action)
@@ -168,9 +195,11 @@ std::shared_ptr<Resolution>
             auto priority = a.at("priority").get<std::string>();
             auto guard    = a.at("guard").get<bool>();
 
-            // TODO
-            trace::inf("callout_connected: name=%s priority=%s guard=%c",
-                       name.c_str(), priority.c_str(), guard ? 'T' : 'F');
+            auto busData = parseBus(i_data, name);
+
+            o_list->push(std::make_shared<ConnectedCalloutResolution>(
+                std::get<0>(busData), std::get<1>(busData),
+                getPriority(priority), guard));
         }
         else if ("callout_bus" == type)
         {

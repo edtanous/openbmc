@@ -48,7 +48,7 @@
                     "properties": {
                         "type": {
                             "type": "string",
-                            "enum": [ "peer", "parent", "child" ]
+                            "enum": [ "SMP_BUS", "OMI_BUS" ]
                         },
                         "unit": {
                             "type": "string",

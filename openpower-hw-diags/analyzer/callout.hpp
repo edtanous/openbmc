@@ -110,6 +110,44 @@ class Procedure
 
 inline const Procedure Procedure::NEXTLVL{"NEXTLVL"};
 
+/** @brief Container class for bus callout service actions. */
+class BusType
+{
+  public:
+    /** SMP bus (fabric A or X bus). */
+    static const BusType SMP_BUS;
+
+    /** OMI bus (memory bus). */
+    static const BusType OMI_BUS;
+
+  private:
+    /**
+     * @brief Constructor from components.
+     * @param i_string The string representation of the procedure used for
+     *                 callouts.
+     */
+    explicit BusType(const std::string& i_string) : iv_string(i_string) {}
+
+  private:
+    /** The string representation of the procedure used for callouts. */
+    const std::string iv_string;
+
+  public:
+    bool operator==(const BusType& r) const
+    {
+        return this->iv_string == r.iv_string;
+    }
+
+    /** iv_string accessor */
+    std::string getString() const
+    {
+        return iv_string;
+    }
+};
+
+inline const BusType BusType::SMP_BUS{"SMP_BUS"};
+inline const BusType BusType::OMI_BUS{"OMI_BUS"};
+
 /** @brief Container class for clock callout service actions. */
 class ClockType
 {

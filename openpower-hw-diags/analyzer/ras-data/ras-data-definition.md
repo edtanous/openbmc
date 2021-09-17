@@ -58,7 +58,7 @@ find the connected `parent` chip/unit.
 
 | Keyword | Description                                                        |
 |---------|--------------------------------------------------------------------|
-| type    | The bus connection type. Values (string): `peer`, `parent`, `child`|
+| type    | The bus connection type. Values (string): `SMP_BUS` and `OMI_BUS`  |
 | unit    | Optional. The `<unit_name>` of the bus endpoint on this chip.      |
 
 ## 5) `actions` keyword (required)

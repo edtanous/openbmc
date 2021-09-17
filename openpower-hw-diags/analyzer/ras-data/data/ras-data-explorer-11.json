@@ -7,7 +7,7 @@
    },
    "buses" : {
        "omi_bus": {
-           "type": "parent"
+           "type": "OMI_BUS"
        }
    },
    "actions" : {
