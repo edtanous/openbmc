@@ -7,27 +7,51 @@ namespace analyzer
 
 //------------------------------------------------------------------------------
 
-void HardwareCalloutResolution::resolve(ServiceData& io_sd) const
+// Helper function to get the root cause chip target from the service data.
+pdbg_target* __getRootCauseChipTarget(const ServiceData& i_sd)
 {
-    // Get the chip target from the root cause signature.
-    auto trgt = util::pdbg::getTrgt(io_sd.getRootCause().getChip());
-    auto path = std::string{util::pdbg::getPath(trgt)};
+    auto target = util::pdbg::getTrgt(i_sd.getRootCause().getChip());
+    assert(nullptr != target); // This would be a really bad bug.
+    return target;
+}
 
-    // Get the unit target, if needed.
-    if (!iv_path.empty())
+//------------------------------------------------------------------------------
+
+// Helper function to get a unit target from the given unit path, which is a
+// devtree path relative the the containing chip. An empty string indicates the
+// chip target should be returned.
+pdbg_target* __getUnitTarget(pdbg_target* i_chipTarget,
+                             const std::string& i_unitPath)
+{
+    assert(nullptr != i_chipTarget);
+
+    auto target = i_chipTarget; // default, if i_unitPath is empty
+
+    if (!i_unitPath.empty())
     {
-        path += "/" + iv_path;
-        trgt = util::pdbg::getTrgt(path);
-        if (nullptr == trgt)
+        auto path = std::string{util::pdbg::getPath(target)} + "/" + i_unitPath;
+
+        target = util::pdbg::getTrgt(path);
+        if (nullptr == target)
         {
-            trace::err("Unable to find target for %s", path.c_str());
-            return; // can't continue
+            // Likely a bug the RAS data files.
+            throw std::logic_error("Unable to find target for " + path);
         }
     }
 
+    return target;
+}
+
+//------------------------------------------------------------------------------
+
+void HardwareCalloutResolution::resolve(ServiceData& io_sd) const
+{
+    // Get the target for the hardware callout.
+    auto target = __getUnitTarget(__getRootCauseChipTarget(io_sd), iv_unitPath);
+
     // Get the location code and entity path for this target.
-    auto locCode    = util::pdbg::getLocationCode(trgt);
-    auto entityPath = util::pdbg::getPhysDevPath(trgt);
+    auto locCode    = util::pdbg::getLocationCode(target);
+    auto entityPath = util::pdbg::getPhysDevPath(target);
 
     // Add the actual callout to the service data.
     nlohmann::json callout;
@@ -71,7 +95,7 @@ void ClockCalloutResolution::resolve(ServiceData& io_sd) const
     // auto target = std::string{util::pdbg::getPath(m.at(iv_clockType))};
     // auto guardPath = util::pdbg::getPhysDevPath(target);
     // Guard guard = io_sd.addGuard(guardPath, iv_guard);
-    auto target    = util::pdbg::getTrgt(io_sd.getRootCause().getChip());
+    auto target    = __getRootCauseChipTarget(io_sd);
     auto guardPath = util::pdbg::getPhysDevPath(target);
 
     // Add the callout FFDC to the service data.

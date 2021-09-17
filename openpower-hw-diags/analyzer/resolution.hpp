@@ -30,21 +30,22 @@ class HardwareCalloutResolution : public Resolution
   public:
     /**
      * @brief Constructor from components.
-     * @param i_path     The devtree path of a guardable unit relative to a
+     * @param i_unitPath The devtree path of a guardable unit relative to a
      *                   chip. An empty string refers to the chip itself.
      * @param i_priority The callout priority.
      * @param i_guard    True, if guard is required. False, otherwise.
      */
-    HardwareCalloutResolution(const std::string& i_path,
-                              callout::Priority i_priority, bool i_guard) :
-        iv_path(i_path),
+    HardwareCalloutResolution(const std::string& i_unitPath,
+                              const callout::Priority& i_priority,
+                              bool i_guard) :
+        iv_unitPath(i_unitPath),
         iv_priority(i_priority), iv_guard(i_guard)
     {}
 
   private:
     /** The devtree path of a guardable unit relative to a chip. An empty string
      *  refers to the chip itself. */
-    const std::string iv_path;
+    const std::string iv_unitPath;
 
     /** The callout priority. */
     const callout::Priority iv_priority;
