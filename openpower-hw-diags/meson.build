@@ -1,6 +1,6 @@
 # See README.md for details.
 project('openpower-hw-diags', 'cpp',
-        version: '0.1', meson_version: '>=0.49.0',
+        version: '0.1', meson_version: '>=0.50.0',
         default_options: [
           'warning_level=3',
           'werror=true',
