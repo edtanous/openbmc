@@ -21,11 +21,12 @@ using json = nlohmann::json;
 void createBootErrorPEL(const FFDCData& ffdcData, const json& calloutData);
 
 /**
- * @brief Create a PEL for the specified event type
+ * @brief Create a PEL for the specified event type and additional data
  *
  *  @param  event - the event type
+ *  @param[in] ffdcData - failure data to append to PEL
  */
-void createPEL(const std::string& event);
+void createPEL(const std::string& event, const FFDCData& ffdcData = {});
 
 /**
  * @class FFDCFile

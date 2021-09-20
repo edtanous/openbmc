@@ -86,11 +86,16 @@ void createBootErrorPEL(const FFDCData& ffdcData, const json& calloutData)
     }
 }
 
-void createPEL(const std::string& event)
+void createPEL(const std::string& event, const FFDCData& ffdcData)
 {
     std::map<std::string, std::string> additionalData;
     auto bus = sdbusplus::bus::new_default();
+
     additionalData.emplace("_PID", std::to_string(getpid()));
+    for (auto& data : ffdcData)
+    {
+        additionalData.emplace(data);
+    }
 
     try
     {
