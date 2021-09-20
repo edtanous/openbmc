@@ -91,6 +91,7 @@ if build_phal
         dependency('libdt-api'),
         cxx.find_library('ekb'),
         cxx.find_library('ipl'),
+        cxx.find_library('phal'),
     ]
     extra_unit_files = [
         'service_files/set-spi-mux.service',

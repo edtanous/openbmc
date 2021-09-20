@@ -4,11 +4,13 @@ extern "C"
 }
 
 #include "create_pel.hpp"
+#include "extensions/phal/common_utils.hpp"
 #include "phal_error.hpp"
 
 #include <attributes_info.H>
 #include <fmt/format.h>
 #include <libekb.H>
+#include <libphal.H>
 
 #include <nlohmann/json.hpp>
 #include <phosphor-logging/elog.hpp>
@@ -259,7 +261,7 @@ static std::string getPelPriority(const std::string& phalPriority)
 void processIplErrorCallback(const ipl_error_info& errInfo)
 {
     log<level::INFO>(
-        fmt::format("processIplErrorCallback: Error type(%x) \n", errInfo.type)
+        fmt::format("processIplErrorCallback: Error type({})", errInfo.type)
             .c_str());
 
     if (errInfo.type == IPL_ERR_OK)
@@ -268,6 +270,13 @@ void processIplErrorCallback(const ipl_error_info& errInfo)
         reset();
         return;
     }
+
+    if (errInfo.type == IPL_ERR_SBE_BOOT)
+    {
+        processSbeBootError();
+        return;
+    }
+
     // TODO: Keeping the existing behaviour now
     // Handle errors based on special reason codes once support is available
     processBootError(false);
@@ -489,6 +498,78 @@ void processBootError(bool status)
         throw ex;
     }
     reset();
+}
+
+void processSbeBootError()
+{
+    log<level::INFO>("processSbeBootError : Entered ");
+
+    using namespace openpower::phal::sbe;
+    using namespace openpower::phal::exception;
+
+    // To store phal trace and other additional data about ffdc.
+    FFDCData pelAdditionalData;
+
+    // Adding collected phal logs into PEL additional data
+    for_each(
+        traceLog.begin(), traceLog.end(),
+        [&pelAdditionalData](std::pair<std::string, std::string>& ele) -> void {
+            pelAdditionalData.emplace_back(ele.first, ele.second);
+        });
+
+    // reset the trace log and counter
+    reset();
+
+    // get primary processor to collect FFDC/Dump information.
+    struct pdbg_target* procTarget;
+    pdbg_for_each_class_target("proc", procTarget)
+    {
+        if (openpower::phal::isPrimaryProc(procTarget))
+            break;
+        procTarget = nullptr;
+    }
+    // check valid primary processor is available
+    if (procTarget == nullptr)
+    {
+        log<level::ERR>("processSbeBootError: fail to get primary processor");
+        // Initialise the SRC6 with default data, not used in this use case.
+        pelAdditionalData.emplace_back("SRC6", "00000000");
+        openpower::pel::createPEL(
+            "org.open_power.Processor.Error.SbeBootFailure", pelAdditionalData);
+        return;
+    }
+    // SBE error object.
+    sbeError_t sbeError;
+    bool dumpIsRequired = false;
+
+    try
+    {
+        // Capture FFDC information on primary processor
+        sbeError = captureFFDC(procTarget);
+    }
+    catch (const std::exception& e)
+    {
+        // Fail to collect FFDC information , trigger Dump
+        log<level::ERR>(
+            fmt::format("captureFFDC: Exception{}", e.what()).c_str());
+        dumpIsRequired = true;
+    }
+
+    if ((sbeError.errType() == SBE_FFDC_NO_DATA) ||
+        (sbeError.errType() == SBE_CMD_TIMEOUT) || (dumpIsRequired))
+    {
+        // Create SBE Dump type error log and trigger Dump
+        openpower::pel::createPEL(
+            "org.open_power.Processor.Error.SbeBootTimeout", pelAdditionalData);
+        // TODO Add dump request
+        return;
+    }
+    // SRC6 : [0:15] chip position
+    uint32_t word6 = pdbg_target_index(procTarget);
+    pelAdditionalData.emplace_back("SRC6", std::to_string(word6 << 16));
+    // Create SBE Error with FFDC data.
+    createSbeErrorPEL("org.open_power.Processor.Error.SbeBootFailure", sbeError,
+                      pelAdditionalData);
 }
 
 void reset()

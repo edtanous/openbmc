@@ -46,6 +46,17 @@ void processIplErrorCallback(const ipl_error_info& errInfo);
 void processBootError(bool status);
 
 /**
+ * @brief Process SBE boot failure/success status
+ *
+ * This function is used for SBE related failure handling during
+ * boot path. For any SBE related boot failure reason code, collects
+ * the SBE FFDC using libphal api's. Based on the reason code provided
+ * as part of error object collects Dump or PEL.
+ * Also resets the trace buffer.
+ */
+void processSbeBootError();
+
+/**
  * @brief Reset trace log list
  */
 void reset();
