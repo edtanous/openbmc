@@ -264,10 +264,6 @@ TEST(Resolution, TestSet1)
         "Priority": "H"
     },
     {
-        "LocationCode": "/proc0",
-        "Priority": "A"
-    },
-    {
         "LocationCode": "P0",
         "Priority": "L"
     }
@@ -282,15 +278,7 @@ TEST(Resolution, TestSet1)
     },
     {
         "LocationCode": "/proc0",
-        "Priority": "M"
-    },
-    {
-        "LocationCode": "/proc0",
         "Priority": "H"
-    },
-    {
-        "LocationCode": "/proc0",
-        "Priority": "A"
     },
     {
         "LocationCode": "P0",

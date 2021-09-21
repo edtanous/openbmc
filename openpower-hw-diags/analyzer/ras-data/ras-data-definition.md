@@ -92,6 +92,9 @@ Actions with a `priority` keyword can only use the following values (string):
 | `MED_C`  | Same as `MED` except all in group C replaced at the same time.    |
 | `LOW`    | Same as `MED*`, but only if higher priority service does not work.|
 
+NOTE: If a part is called out more than once, only the highest priority callout
+will be used.
+
 Actions with a `guard` keyword can only use the following values (boolean):
 
 | Guard | Description                                                          |

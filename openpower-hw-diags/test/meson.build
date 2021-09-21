@@ -11,11 +11,15 @@ tests = [
   'resolution_test',
 ]
 
+analyzer_src = files(
+  '../analyzer/service_data.cpp',
+)
+
 gtest = dependency('gtest', main : true, required : false, method : 'system')
 
 if gtest.found()
     foreach t : tests
-        test(t, executable(t.underscorify(), t + '.cpp',
+        test(t, executable(t.underscorify(), [ t + '.cpp', analyzer_src ],
                            link_with : [ util_lib ],
                            dependencies : [ libhei_dep, gtest ],
                            cpp_args : test_arg,

@@ -7,6 +7,7 @@ analyzer_src = files(
     'initialize_isolator.cpp',
     'ras-data/ras-data-parser.cpp',
     'resolution.cpp',
+    'service_data.cpp',
 )
 
 # Library dependencies.

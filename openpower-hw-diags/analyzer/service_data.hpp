@@ -72,10 +72,7 @@ class ServiceData
      * @brief Add callout information to the callout list.
      * @param The JSON object for this callout.
      */
-    void addCallout(const nlohmann::json& i_callout)
-    {
-        iv_calloutList.push_back(i_callout);
-    }
+    void addCallout(const nlohmann::json& i_callout);
 
     /**
      * @brief Add FFDC for a callout that would otherwise not be available in
