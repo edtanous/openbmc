@@ -176,6 +176,62 @@ void ConnectedCalloutResolution::resolve(ServiceData& io_sd) const
 
 //------------------------------------------------------------------------------
 
+void BusCalloutResolution::resolve(ServiceData& io_sd) const
+{
+    // Get the chip target from the root cause signature.
+    auto chipTarget = __getRootCauseChipTarget(io_sd);
+
+    // Get the endpoint target for the receiving side of the bus.
+    auto rxTarget = __getUnitTarget(chipTarget, iv_unitPath);
+
+    // Get the endpoint target for the transfer side of the bus.
+    auto txTarget = __getConnectedTarget(rxTarget, iv_busType);
+
+    // Callout the RX endpoint.
+    nlohmann::json rxCallout;
+    rxCallout["LocationCode"] = util::pdbg::getLocationCode(rxTarget);
+    rxCallout["Priority"]     = iv_priority.getUserDataString();
+    io_sd.addCallout(rxCallout);
+
+    // Callout the TX endpoint.
+    nlohmann::json txCallout;
+    txCallout["LocationCode"] = util::pdbg::getLocationCode(txTarget);
+    txCallout["Priority"]     = iv_priority.getUserDataString();
+    io_sd.addCallout(txCallout);
+
+    // Callout everything else in between.
+    // TODO: For P10 (OMI bus and XBUS), the callout is simply the backplane.
+    //       There isn't a devtree object for this, yet. So will need to
+    //       hardcode the location code for now. In the future, we will need a
+    //       mechanism to make this data driven.
+    nlohmann::json bpCallout;
+    bpCallout["LocationCode"] = "P0";
+    bpCallout["Priority"]     = iv_priority.getUserDataString();
+    io_sd.addCallout(bpCallout);
+
+    // Guard the RX endpoint.
+    Guard guard =
+        io_sd.addGuard(util::pdbg::getPhysDevPath(rxTarget), iv_guard);
+
+    // Guard the TX endpoint.
+    // No need to check return because it is the same as RX target.
+    io_sd.addGuard(util::pdbg::getPhysDevPath(txTarget), iv_guard);
+
+    // TODO: Currently no guard for "everything else in between".
+
+    // Add the callout FFDC to the service data.
+    nlohmann::json ffdc;
+    ffdc["Callout Type"] = "Bus Callout";
+    ffdc["Bus Type"]     = iv_busType.getString();
+    ffdc["RX Target"]    = util::pdbg::getPhysDevPath(rxTarget);
+    ffdc["TX Target"]    = util::pdbg::getPhysDevPath(txTarget);
+    ffdc["Priority"]     = iv_priority.getRegistryString();
+    ffdc["Guard Type"]   = guard.getString();
+    io_sd.addCalloutFFDC(ffdc);
+}
+
+//------------------------------------------------------------------------------
+
 void ClockCalloutResolution::resolve(ServiceData& io_sd) const
 {
     // Add the callout to the service data.

@@ -51,9 +51,21 @@
         ],
         "omi_bus" : [
             {
-                "type"  : "callout_bus",
-                "name"  : "omi_bus",
-                "guard" : true
+                "type"      : "callout_self",
+                "priority"  : "MED_A",
+                "guard"     : true
+            },
+            {
+                "type"      : "callout_connected",
+                "name"      : "omi_bus",
+                "priority"  : "MED_A",
+                "guard"     : true
+            },
+            {
+                "type"      : "callout_bus",
+                "name"      : "omi_bus",
+                "priority"  : "LOW",
+                "guard"     : false
             }
         ],
         "level2_M_self_L" : [

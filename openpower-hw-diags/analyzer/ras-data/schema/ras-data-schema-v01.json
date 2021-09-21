@@ -143,11 +143,7 @@
                                     }
                                 },
                                 "then": {
-                                    "required": [ "name", "guard" ],
-                                    "not": { "required": [ "priority" ] },
-                                    "properties": {
-                                        "rx_priority": { "$ref": "#/definitions/priority" },
-                                        "tx_priority": { "$ref": "#/definitions/priority" }
+                                    "required": [ "name", "priority", "guard" ],
                                     }
                                 }
                             },

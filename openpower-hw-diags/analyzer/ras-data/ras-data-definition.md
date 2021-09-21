@@ -147,22 +147,20 @@ This will request to callout a connected chip/unit on the other side of a bus.
 #### 5.1.5) action type `callout_bus`
 
 This will request to callout all parts associated with a bus (RX/TX endpoints
-and everything else in between the endpoints). Bus callouts have very specific
-priority:
+and everything else in between the endpoints). All parts will be called out with
+the same priority. If a particular part, like the endpoints, need to be called
+out at a different priority, they will need to be called out using a different
+action type. For example:
 
-- If an SMP cable exists, callout the cable with priority `HIGH`.
-- Callout both RX and TX endpoints with priority `MED_A`.
-- Callout everything else in between with priority `LOW`.
-
-In some special cases, the callout priority of the endpoints may differ from the
-default `MED_A`. In which case, the optional priority properties can be used.
+- `callout_self` with priority `MED_A`.         (RX endpoint MED_A)
+- `callout_connected` with priority `MED_A`.    (TX endpoint MED_A)
+- `callout_bus` with priority `LOW`.            (everything else LOW)
 
 | Keyword     | Description                                                    |
 |-------------|----------------------------------------------------------------|
 | type        | value (string): `callout_bus`                                  |
 | name        | The `<bus_name>` as defined by the `buses` keyword.            |
-| rx_priority | Optional priority of the receiving side endpoint               |
-| tx_priority | Optional priority of the transfer side endpoint                |
+| priority    | See `priority` table above.                                    |
 | guard       | See `guard` table above.                                       |
 
 #### 5.1.6) action type `callout_clock`

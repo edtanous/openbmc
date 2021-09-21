@@ -203,14 +203,15 @@ std::shared_ptr<Resolution>
         }
         else if ("callout_bus" == type)
         {
-            auto name = a.at("name").get<std::string>();
-            // auto rx_priority = a.at("rx_priority").get<std::string>();
-            // auto tx_priority = a.at("tx_priority").get<std::string>();
-            auto guard = a.at("guard").get<bool>();
+            auto name     = a.at("name").get<std::string>();
+            auto priority = a.at("priority").get<std::string>();
+            auto guard    = a.at("guard").get<bool>();
 
-            // TODO
-            trace::inf("callout_bus: name=%s guard=%c", name.c_str(),
-                       guard ? 'T' : 'F');
+            auto busData = parseBus(i_data, name);
+
+            o_list->push(std::make_shared<BusCalloutResolution>(
+                std::get<0>(busData), std::get<1>(busData),
+                getPriority(priority), guard));
         }
         else if ("callout_clock" == type)
         {

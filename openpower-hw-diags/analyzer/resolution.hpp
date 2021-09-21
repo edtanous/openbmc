@@ -97,6 +97,48 @@ class ConnectedCalloutResolution : public Resolution
     void resolve(ServiceData& io_sd) const override;
 };
 
+/**
+ * @brief Resolution to callout all parts on a bus (RX/TX endpoints and
+ *         everything else in between).
+ */
+class BusCalloutResolution : public Resolution
+{
+  public:
+    /**
+     * @brief Constructor from components.
+     * @param i_busType  The bus type.
+     * @param i_unitPath The path of the chip unit that is connected to the
+     *                   other chip. An empty string refers to the chip itself,
+     *                   which generally means this chip is a child of another.
+     * @param i_priority The callout priority.
+     * @param i_guard    The guard type for this callout.
+     */
+    BusCalloutResolution(const callout::BusType& i_busType,
+                         const std::string& i_unitPath,
+                         const callout::Priority& i_priority, bool i_guard) :
+        iv_busType(i_busType),
+        iv_unitPath(i_unitPath), iv_priority(i_priority), iv_guard(i_guard)
+    {}
+
+  private:
+    /** The bus type. */
+    const callout::BusType iv_busType;
+
+    /** The devtree path the chip unit that is connected to the other chip. An
+     *  empty string refers to the chip itself, which generally means this chip
+     *  is a child of the other chip. */
+    const std::string iv_unitPath;
+
+    /** The callout priority. */
+    const callout::Priority iv_priority;
+
+    /** True, if guard is required. False, otherwise. */
+    const bool iv_guard;
+
+  public:
+    void resolve(ServiceData& io_sd) const override;
+};
+
 /** @brief Resolves a clock callout service event. */
 class ClockCalloutResolution : public Resolution
 {

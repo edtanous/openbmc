@@ -155,6 +155,61 @@ void ConnectedCalloutResolution::resolve(ServiceData& io_sd) const
 
 //------------------------------------------------------------------------------
 
+void BusCalloutResolution::resolve(ServiceData& io_sd) const
+{
+    // Get the chip target path from the root cause signature.
+    auto chipPath = __getRootCauseChipPath(io_sd);
+
+    // Get the endpoint target path for the receiving side of the bus.
+    auto rxPath = __getUnitPath(chipPath, iv_unitPath);
+
+    // Get the endpoint target path for the transfer side of the bus.
+    auto txPath = __getConnectedPath(rxPath, iv_busType);
+
+    // Callout the RX endpoint.
+    nlohmann::json rxCallout;
+    rxCallout["LocationCode"] = chipPath;
+    rxCallout["Priority"]     = iv_priority.getUserDataString();
+    io_sd.addCallout(rxCallout);
+
+    // Callout the TX endpoint.
+    nlohmann::json txCallout;
+    txCallout["LocationCode"] = std::get<1>(txPath);
+    txCallout["Priority"]     = iv_priority.getUserDataString();
+    io_sd.addCallout(txCallout);
+
+    // Callout everything else in between.
+    // TODO: For P10 (OMI bus and XBUS), the callout is simply the backplane.
+    //       There isn't a devtree object for this, yet. So will need to
+    //       hardcode the location code for now. In the future, we will need a
+    //       mechanism to make this data driven.
+    nlohmann::json bpCallout;
+    bpCallout["LocationCode"] = "P0";
+    bpCallout["Priority"]     = iv_priority.getUserDataString();
+    io_sd.addCallout(bpCallout);
+
+    // Guard the RX endpoint.
+    Guard guard = io_sd.addGuard(rxPath, iv_guard);
+
+    // Guard the TX endpoint.
+    // No need to check return because it is the same as RX target.
+    io_sd.addGuard(std::get<0>(txPath), iv_guard);
+
+    // TODO: Currently no guard for "everything else in between".
+
+    // Add the callout FFDC to the service data.
+    nlohmann::json ffdc;
+    ffdc["Callout Type"] = "Bus Callout";
+    ffdc["Bus Type"]     = iv_busType.getString();
+    ffdc["RX Target"]    = rxPath;
+    ffdc["TX Target"]    = std::get<0>(txPath);
+    ffdc["Priority"]     = iv_priority.getRegistryString();
+    ffdc["Guard Type"]   = guard.getString();
+    io_sd.addCalloutFFDC(ffdc);
+}
+
+//------------------------------------------------------------------------------
+
 void ProcedureCalloutResolution::resolve(ServiceData& io_sd) const
 {
     // Add the actual callout to the service data.
@@ -388,6 +443,74 @@ TEST(Resolution, ConnectedCallout)
         "Guard Type": "FATAL",
         "Priority": "medium_group_C",
         "Target": "/proc0/pib/perv12/mc0/mi0/mcc0/omi0/ocmb0"
+    }
+])";
+    EXPECT_EQ(s, j.dump(4));
+}
+
+TEST(Resolution, BusCallout)
+{
+    auto c1 = std::make_shared<HardwareCalloutResolution>(
+        omi_str, callout::Priority::MED_A, true);
+
+    auto c2 = std::make_shared<ConnectedCalloutResolution>(
+        callout::BusType::OMI_BUS, omi_str, callout::Priority::MED_A, true);
+
+    auto c3 = std::make_shared<BusCalloutResolution>(
+        callout::BusType::OMI_BUS, omi_str, callout::Priority::LOW, false);
+
+    libhei::Chip chip{chip_str, 0xdeadbeef};
+    libhei::Signature sig{chip, 0xabcd, 0, 0, libhei::ATTN_TYPE_CHECKSTOP};
+    ServiceData sd{sig, true};
+
+    nlohmann::json j{};
+    std::string s{};
+
+    c1->resolve(sd);
+    c2->resolve(sd);
+    c3->resolve(sd);
+
+    // Callout list
+    j = sd.getCalloutList();
+    s = R"([
+    {
+        "LocationCode": "/proc0",
+        "Priority": "A"
+    },
+    {
+        "LocationCode": "/proc0/pib/perv12/mc0/mi0/mcc0/omi0/ocmb0",
+        "Priority": "A"
+    },
+    {
+        "LocationCode": "P0",
+        "Priority": "L"
+    }
+])";
+    EXPECT_EQ(s, j.dump(4));
+
+    // Callout FFDC
+    j = sd.getCalloutFFDC();
+    s = R"([
+    {
+        "Callout Type": "Hardware Callout",
+        "Guard Type": "FATAL",
+        "Priority": "medium_group_A",
+        "Target": "/proc0/pib/perv12/mc0/mi0/mcc0/omi0"
+    },
+    {
+        "Bus Type": "OMI_BUS",
+        "Callout Type": "Connected Callout",
+        "Guard Type": "FATAL",
+        "Priority": "medium_group_A",
+        "Target": "/proc0/pib/perv12/mc0/mi0/mcc0/omi0/ocmb0"
+    },
+    {
+        "Bus Type": "OMI_BUS",
+        "Callout Type": "Bus Callout",
+        "Guard Type": "NONE",
+        "Priority": "low",
+        "RX Target": "/proc0/pib/perv12/mc0/mi0/mcc0/omi0",
+        "TX Target": "/proc0/pib/perv12/mc0/mi0/mcc0/omi0/ocmb0"
     }
 ])";
     EXPECT_EQ(s, j.dump(4));
