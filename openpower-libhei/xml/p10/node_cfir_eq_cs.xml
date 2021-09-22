@@ -29,22 +29,22 @@
             <expr type="int" value1="0x0FFFFFFFFFFFFFFF"/>
         </expr>
     </rule>
-    <bit child_node="EQ_LOCAL_FIR" node_inst="0,1,2,3,4,5,6,7" pos="4">Local FIR</bit>
-    <bit child_node="EQ_L2_FIR" node_inst="0,4,8,12,16,20,24,28" pos="9">L2 FIR Register</bit>
-    <bit child_node="EQ_L2_FIR" node_inst="1,5,9,13,17,21,25,29" pos="10">L2 FIR Register</bit>
-    <bit child_node="EQ_L2_FIR" node_inst="2,6,10,14,18,22,26,30" pos="11">L2 FIR Register</bit>
-    <bit child_node="EQ_L2_FIR" node_inst="3,7,11,15,19,23,27,31" pos="12">L2 FIR Register</bit>
-    <bit child_node="EQ_L3_FIR" node_inst="0,4,8,12,16,20,24,28" pos="13">L3 FIR Register</bit>
-    <bit child_node="EQ_L3_FIR" node_inst="1,5,9,13,17,21,25,29" pos="14">L3 FIR Register</bit>
-    <bit child_node="EQ_L3_FIR" node_inst="2,6,10,14,18,22,26,30" pos="15">L3 FIR Register</bit>
-    <bit child_node="EQ_L3_FIR" node_inst="3,7,11,15,19,23,27,31" pos="16">L3 FIR Register</bit>
-    <bit child_node="EQ_NCU_FIR" node_inst="0,4,8,12,16,20,24,28" pos="17">NCU FIR Register</bit>
-    <bit child_node="EQ_NCU_FIR" node_inst="1,5,9,13,17,21,25,29" pos="18">NCU FIR Register</bit>
-    <bit child_node="EQ_NCU_FIR" node_inst="2,6,10,14,18,22,26,30" pos="19">NCU FIR Register</bit>
-    <bit child_node="EQ_NCU_FIR" node_inst="3,7,11,15,19,23,27,31" pos="20">NCU FIR Register</bit>
-    <bit child_node="EQ_QME_FIR" node_inst="0,1,2,3,4,5,6,7" pos="21">QME Local Fault Isolation Register</bit>
-    <bit child_node="EQ_CORE_FIR" node_inst="0,4,8,12,16,20,24,28" pos="5">Core Fault Isolation Register</bit>
-    <bit child_node="EQ_CORE_FIR" node_inst="1,5,9,13,17,21,25,29" pos="6">Core Fault Isolation Register</bit>
-    <bit child_node="EQ_CORE_FIR" node_inst="2,6,10,14,18,22,26,30" pos="7">Core Fault Isolation Register</bit>
-    <bit child_node="EQ_CORE_FIR" node_inst="3,7,11,15,19,23,27,31" pos="8">Core Fault Isolation Register</bit>
+    <bit child_node="EQ_LOCAL_FIR" node_inst="0,1,2,3,4,5,6,7" pos="4">Attention from EQ_LOCAL_FIR</bit>
+    <bit child_node="EQ_L2_FIR" node_inst="0,4,8,12,16,20,24,28" pos="9">Attention from EQ_L2_FIR 0</bit>
+    <bit child_node="EQ_L2_FIR" node_inst="1,5,9,13,17,21,25,29" pos="10">Attention from EQ_L2_FIR 1</bit>
+    <bit child_node="EQ_L2_FIR" node_inst="2,6,10,14,18,22,26,30" pos="11">Attention from EQ_L2_FIR 2</bit>
+    <bit child_node="EQ_L2_FIR" node_inst="3,7,11,15,19,23,27,31" pos="12">Attention from EQ_L2_FIR 2</bit>
+    <bit child_node="EQ_L3_FIR" node_inst="0,4,8,12,16,20,24,28" pos="13">Attention from EQ_L3_FIR 0</bit>
+    <bit child_node="EQ_L3_FIR" node_inst="1,5,9,13,17,21,25,29" pos="14">Attention from EQ_L3_FIR 1</bit>
+    <bit child_node="EQ_L3_FIR" node_inst="2,6,10,14,18,22,26,30" pos="15">Attention from EQ_L3_FIR 2</bit>
+    <bit child_node="EQ_L3_FIR" node_inst="3,7,11,15,19,23,27,31" pos="16">Attention from EQ_L3_FIR 3</bit>
+    <bit child_node="EQ_NCU_FIR" node_inst="0,4,8,12,16,20,24,28" pos="17">Attention from EQ_NCU_FIR 0</bit>
+    <bit child_node="EQ_NCU_FIR" node_inst="1,5,9,13,17,21,25,29" pos="18">Attention from EQ_NCU_FIR 1</bit>
+    <bit child_node="EQ_NCU_FIR" node_inst="2,6,10,14,18,22,26,30" pos="19">Attention from EQ_NCU_FIR 2</bit>
+    <bit child_node="EQ_NCU_FIR" node_inst="3,7,11,15,19,23,27,31" pos="20">Attention from EQ_NCU_FIR 3</bit>
+    <bit child_node="EQ_QME_FIR" node_inst="0,1,2,3,4,5,6,7" pos="21">Attention from EQ_QME_FIR</bit>
+    <bit child_node="EQ_CORE_FIR" node_inst="0,4,8,12,16,20,24,28" pos="5">Attention from EQ_CORE_FIR 0</bit>
+    <bit child_node="EQ_CORE_FIR" node_inst="1,5,9,13,17,21,25,29" pos="6">Attention from EQ_CORE_FIR 1</bit>
+    <bit child_node="EQ_CORE_FIR" node_inst="2,6,10,14,18,22,26,30" pos="7">Attention from EQ_CORE_FIR 2</bit>
+    <bit child_node="EQ_CORE_FIR" node_inst="3,7,11,15,19,23,27,31" pos="8">Attention from EQ_CORE_FIR 3</bit>
 </attn_node>

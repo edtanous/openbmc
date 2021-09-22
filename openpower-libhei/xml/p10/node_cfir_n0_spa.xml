@@ -15,6 +15,6 @@
             <expr type="int" value1="0x0FFFFFFFFFFFFFFF"/>
         </expr>
     </rule>
-    <bit child_node="N0_LOCAL_FIR" node_inst="0" pos="4">Local FIR</bit>
-    <bit child_node="INT_CQ_FIR" node_inst="0" pos="7">Primary Error Register for INT_CQ.  This contains all of the individual errors detected by INT_CQ, plus summary error indicators from VC and PC (see bits 43:63).</bit>
+    <bit child_node="N0_LOCAL_FIR" node_inst="0" pos="4">Attention from N0_LOCAL_FIR</bit>
+    <bit child_node="INT_CQ_FIR" node_inst="0" pos="7">Attention from INT_CQ_FIR</bit>
 </attn_node>

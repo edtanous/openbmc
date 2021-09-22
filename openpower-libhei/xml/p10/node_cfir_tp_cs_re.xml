@@ -30,7 +30,7 @@
             <expr type="int" value1="0x0FFFFFFFFFFFFFFF"/>
         </expr>
     </rule>
-    <bit child_node="TP_LOCAL_FIR" node_inst="0" pos="4">Local FIR</bit>
-    <bit child_node="OCC_FIR" node_inst="0" pos="5">OCC Local Fault Isolation Register</bit>
-    <bit child_node="PBAO_FIR" node_inst="0" pos="6">PBA Local Fault Isolation Register.  Register bits are set for any error condition detected by the PBA.  The PBAFIR will freeze upon logging the first error not masked in PBAFIRMASK.</bit>
+    <bit child_node="TP_LOCAL_FIR" node_inst="0" pos="4">Attention from TP_LOCAL_FIR</bit>
+    <bit child_node="OCC_FIR" node_inst="0" pos="5">Attention from OCC_FIR</bit>
+    <bit child_node="PBAO_FIR" node_inst="0" pos="6">Attention from PBAO_FIR</bit>
 </attn_node>

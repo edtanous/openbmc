@@ -45,5 +45,5 @@
             <expr type="int" value1="0x0FFFFFFFFFFFFFFF"/>
         </expr>
     </rule>
-    <bit child_node="TP_LOCAL_FIR" node_inst="0" pos="4">Local FIR</bit>
+    <bit child_node="TP_LOCAL_FIR" node_inst="0" pos="4">Attention from TP_LOCAL_FIR</bit>
 </attn_node>

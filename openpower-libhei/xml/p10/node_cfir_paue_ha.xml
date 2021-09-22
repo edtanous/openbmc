@@ -17,5 +17,5 @@
             <expr type="int" value1="0x0FFFFFFFFFFFFFFF"/>
         </expr>
     </rule>
-    <bit child_node="PAU_LOCAL_FIR" node_inst="0,1" pos="4">Local FIR</bit>
+    <bit child_node="PAU_LOCAL_FIR" node_inst="0,1" pos="4">Attention from PAU_LOCAL_FIR</bit>
 </attn_node>

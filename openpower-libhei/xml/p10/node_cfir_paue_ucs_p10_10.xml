@@ -17,10 +17,10 @@
             <expr type="int" value1="0x0FFFFFFFFFFFFFFF"/>
         </expr>
     </rule>
-    <bit child_node="PAU_LOCAL_FIR" node_inst="0,1" pos="4">Local FIR</bit>
-    <bit child_node="PAU_FIR_0" node_inst="0,3" pos="5">Local FIR register for the PAU (1 of 3)</bit>
-    <bit child_node="PAU_FIR_1" node_inst="0,3" pos="6">Local FIR register for the PAU (2 of 3)</bit>
-    <bit child_node="PAU_FIR_2" node_inst="0,3" pos="7">Local FIR register for the PAU (3 of 3)</bit>
-    <bit child_node="PAU_PHY_FIR" node_inst="0,1" pos="13">Local FIR register for the chip pervasive logic</bit>
-    <bit child_node="PAU_DL_FIR" node_inst="0,1" pos="14">Local FIR register for the chip pervasive logic</bit>
+    <bit child_node="PAU_LOCAL_FIR" node_inst="0,1" pos="4">Attention from PAU_LOCAL_FIR</bit>
+    <bit child_node="PAU_FIR_0" node_inst="0,3" pos="5">Attention from PAU_FIR_0</bit>
+    <bit child_node="PAU_FIR_1" node_inst="0,3" pos="6">Attention from PAU_FIR_1</bit>
+    <bit child_node="PAU_FIR_2" node_inst="0,3" pos="7">Attention from PAU_FIR_2</bit>
+    <bit child_node="PAU_PHY_FIR" node_inst="0,1" pos="13">Attention from PAU_PHY_FIR</bit>
+    <bit child_node="PAU_DL_FIR" node_inst="0,1" pos="14">Attention from PAU_DL_FIR</bit>
 </attn_node>

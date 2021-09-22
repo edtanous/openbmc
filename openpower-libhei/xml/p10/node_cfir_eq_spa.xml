@@ -29,7 +29,7 @@
             <expr type="int" value1="0x0FFFFFFFFFFFFFFF"/>
         </expr>
     </rule>
-    <bit child_node="EQ_LOCAL_FIR" node_inst="0,1,2,3,4,5,6,7" pos="4">Local FIR</bit>
+    <bit child_node="EQ_LOCAL_FIR" node_inst="0,1,2,3,4,5,6,7" pos="4">Attention from EQ_LOCAL_FIR</bit>
     <!-- NOTE: Attentions routed to this node from the EQ_SPATTN registers
          depend if the cores are configured in Normal or Fused Core mode.
          Therefore the core thread state must be queried first. -->

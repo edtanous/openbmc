@@ -34,5 +34,5 @@
             <expr type="int" value1="0x0FFFFFFFFFFFFFFF"/>
         </expr>
     </rule>
-    <bit child_node="PCI_LOCAL_FIR" node_inst="0,1" pos="4">Local FIR</bit>
+    <bit child_node="PCI_LOCAL_FIR" node_inst="0,1" pos="4">Attention from PCI_LOCAL_FIR</bit>
 </attn_node>

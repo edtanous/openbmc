@@ -15,22 +15,22 @@
             <expr type="int" value1="0x0FFFFFFFFFFFFFFF"/>
         </expr>
     </rule>
-    <bit child_node="N1_LOCAL_FIR" node_inst="0" pos="4">Local FIR</bit>
-    <bit child_node="MCD_FIR" node_inst="0" pos="7">Local FIR register for MCD</bit>
-    <bit child_node="PB_STATION_FIR_EQ" node_inst="0" pos="17">PowerBus PB RaceTrack Station nest domain FIR register</bit>
-    <bit child_node="PB_STATION_FIR_EQ" node_inst="1" pos="18">PowerBus PB RaceTrack Station nest domain FIR register</bit>
-    <bit child_node="PB_STATION_FIR_EQ" node_inst="2" pos="19">PowerBus PB RaceTrack Station nest domain FIR register</bit>
-    <bit child_node="PB_STATION_FIR_EQ" node_inst="3" pos="20">PowerBus PB RaceTrack Station nest domain FIR register</bit>
-    <bit child_node="PB_STATION_FIR_EQ" node_inst="4" pos="21">PowerBus PB RaceTrack Station nest domain FIR register</bit>
-    <bit child_node="PB_STATION_FIR_EQ" node_inst="5" pos="22">PowerBus PB RaceTrack Station nest domain FIR register</bit>
-    <bit child_node="PB_STATION_FIR_EQ" node_inst="6" pos="23">PowerBus PB RaceTrack Station nest domain FIR register</bit>
-    <bit child_node="PB_STATION_FIR_EQ" node_inst="7" pos="24">PowerBus PB RaceTrack Station nest domain FIR register</bit>
-    <bit child_node="PB_STATION_FIR_EN1" node_inst="0" pos="25">PowerBus PB RaceTrack Station nest domain FIR register</bit>
-    <bit child_node="PB_STATION_FIR_EN2" node_inst="0" pos="26">PowerBus PB RaceTrack Station nest domain FIR register</bit>
-    <bit child_node="PB_STATION_FIR_EN3" node_inst="0" pos="27">PowerBus PB RaceTrack Station nest domain FIR register</bit>
-    <bit child_node="PB_STATION_FIR_EN4" node_inst="0" pos="28">PowerBus PB RaceTrack Station nest domain FIR register</bit>
-    <bit child_node="PB_STATION_FIR_ES1" node_inst="0" pos="29">PowerBus PB RaceTrack Station nest domain FIR register</bit>
-    <bit child_node="PB_STATION_FIR_ES2" node_inst="0" pos="30">PowerBus PB RaceTrack Station nest domain FIR register</bit>
-    <bit child_node="PB_STATION_FIR_ES3" node_inst="0" pos="31">PowerBus PB RaceTrack Station nest domain FIR register</bit>
-    <bit child_node="PB_STATION_FIR_ES4" node_inst="0" pos="32">PowerBus PB RaceTrack Station nest domain FIR register</bit>
+    <bit child_node="N1_LOCAL_FIR" node_inst="0" pos="4">Attention from N1_LOCAL_FIR</bit>
+    <bit child_node="MCD_FIR" node_inst="0" pos="7">Attention from MCD_FIR</bit>
+    <bit child_node="PB_STATION_FIR_EQ" node_inst="0" pos="17">Attention from PB_STATION_FIR_EQ 0</bit>
+    <bit child_node="PB_STATION_FIR_EQ" node_inst="1" pos="18">Attention from PB_STATION_FIR_EQ 1</bit>
+    <bit child_node="PB_STATION_FIR_EQ" node_inst="2" pos="19">Attention from PB_STATION_FIR_EQ 2</bit>
+    <bit child_node="PB_STATION_FIR_EQ" node_inst="3" pos="20">Attention from PB_STATION_FIR_EQ 3</bit>
+    <bit child_node="PB_STATION_FIR_EQ" node_inst="4" pos="21">Attention from PB_STATION_FIR_EQ 4</bit>
+    <bit child_node="PB_STATION_FIR_EQ" node_inst="5" pos="22">Attention from PB_STATION_FIR_EQ 5</bit>
+    <bit child_node="PB_STATION_FIR_EQ" node_inst="6" pos="23">Attention from PB_STATION_FIR_EQ 6</bit>
+    <bit child_node="PB_STATION_FIR_EQ" node_inst="7" pos="24">Attention from PB_STATION_FIR_EQ 7</bit>
+    <bit child_node="PB_STATION_FIR_EN1" node_inst="0" pos="25">Attention from PB_STATION_FIR_EN1</bit>
+    <bit child_node="PB_STATION_FIR_EN2" node_inst="0" pos="26">Attention from PB_STATION_FIR_EN2</bit>
+    <bit child_node="PB_STATION_FIR_EN3" node_inst="0" pos="27">Attention from PB_STATION_FIR_EN3</bit>
+    <bit child_node="PB_STATION_FIR_EN4" node_inst="0" pos="28">Attention from PB_STATION_FIR_EN4</bit>
+    <bit child_node="PB_STATION_FIR_ES1" node_inst="0" pos="29">Attention from PB_STATION_FIR_ES1</bit>
+    <bit child_node="PB_STATION_FIR_ES2" node_inst="0" pos="30">Attention from PB_STATION_FIR_ES2</bit>
+    <bit child_node="PB_STATION_FIR_ES3" node_inst="0" pos="31">Attention from PB_STATION_FIR_ES3</bit>
+    <bit child_node="PB_STATION_FIR_ES4" node_inst="0" pos="32">Attention from PB_STATION_FIR_ES4</bit>
 </attn_node>
