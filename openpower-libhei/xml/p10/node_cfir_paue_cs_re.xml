@@ -1,35 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <attn_node model_ec="P10_20" name="CFIR_PAUE_CS_RE" reg_type="SCOM">
-    <register name="CFIR_PAUE_XSTOP">
+    <register name="CFIR_PAUE_CS">
         <instance addr="0x10040000" reg_inst="0"/>
         <instance addr="0x11040000" reg_inst="1"/>
     </register>
-    <register name="CFIR_PAUE_XSTOP_MASK">
+    <register name="CFIR_PAUE_CS_MASK">
         <instance addr="0x10040040" reg_inst="0"/>
         <instance addr="0x11040040" reg_inst="1"/>
     </register>
-    <register name="CFIR_PAUE_RECOV">
+    <register name="CFIR_PAUE_RE">
         <instance addr="0x10040001" reg_inst="0"/>
         <instance addr="0x11040001" reg_inst="1"/>
     </register>
-    <register name="CFIR_PAUE_RECOV_MASK">
+    <register name="CFIR_PAUE_RE_MASK">
         <instance addr="0x10040041" reg_inst="0"/>
         <instance addr="0x11040041" reg_inst="1"/>
     </register>
     <rule attn_type="CS" node_inst="0:1">
         <expr type="and">
-            <expr type="reg" value1="CFIR_PAUE_XSTOP"/>
+            <expr type="reg" value1="CFIR_PAUE_CS"/>
             <expr type="not">
-                <expr type="reg" value1="CFIR_PAUE_XSTOP_MASK"/>
+                <expr type="reg" value1="CFIR_PAUE_CS_MASK"/>
             </expr>
             <expr type="int" value1="0x0FFFFFFFFFFFFFFF"/>
         </expr>
     </rule>
     <rule attn_type="RE" node_inst="0:1">
         <expr type="and">
-            <expr type="reg" value1="CFIR_PAUE_RECOV"/>
+            <expr type="reg" value1="CFIR_PAUE_RE"/>
             <expr type="not">
-                <expr type="reg" value1="CFIR_PAUE_RECOV_MASK"/>
+                <expr type="reg" value1="CFIR_PAUE_RE_MASK"/>
             </expr>
             <expr type="int" value1="0x0FFFFFFFFFFFFFFF"/>
         </expr>

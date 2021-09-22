@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <attn_node model_ec="P10_10,P10_20" name="CFIR_EQ_UCS" reg_type="SCOM">
-    <register name="CFIR_EQ_LOCAL_XSTOP">
+    <register name="CFIR_EQ_UCS">
         <instance addr="0x20040003" reg_inst="0"/>
         <instance addr="0x21040003" reg_inst="1"/>
         <instance addr="0x22040003" reg_inst="2"/>
@@ -10,7 +10,7 @@
         <instance addr="0x26040003" reg_inst="6"/>
         <instance addr="0x27040003" reg_inst="7"/>
     </register>
-    <register name="CFIR_EQ_LOCAL_XSTOP_MASK">
+    <register name="CFIR_EQ_UCS_MASK">
         <instance addr="0x20040043" reg_inst="0"/>
         <instance addr="0x21040043" reg_inst="1"/>
         <instance addr="0x22040043" reg_inst="2"/>
@@ -22,9 +22,9 @@
     </register>
     <rule attn_type="UCS" node_inst="0:7">
         <expr type="and">
-            <expr type="reg" value1="CFIR_EQ_LOCAL_XSTOP"/>
+            <expr type="reg" value1="CFIR_EQ_UCS"/>
             <expr type="not">
-                <expr type="reg" value1="CFIR_EQ_LOCAL_XSTOP_MASK"/>
+                <expr type="reg" value1="CFIR_EQ_UCS_MASK"/>
             </expr>
             <expr type="int" value1="0x0FFFFFFFFFFFFFFF"/>
         </expr>

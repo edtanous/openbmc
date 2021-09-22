@@ -1,46 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <attn_node model_ec="P10_10,P10_20" name="CFIR_TP_SPA_UCS_HA" reg_type="SCOM">
-    <register name="CFIR_TP_SPATTN">
+    <register name="CFIR_TP_SPA">
         <instance addr="0x01040002" reg_inst="0"/>
     </register>
-    <register name="CFIR_TP_SPATTN_MASK">
+    <register name="CFIR_TP_SPA_MASK">
         <instance addr="0x01040042" reg_inst="0"/>
     </register>
-    <register name="CFIR_TP_LOCAL_XSTOP">
+    <register name="CFIR_TP_UCS">
         <instance addr="0x01040003" reg_inst="0"/>
     </register>
-    <register name="CFIR_TP_LOCAL_XSTOP_MASK">
+    <register name="CFIR_TP_UCS_MASK">
         <instance addr="0x01040043" reg_inst="0"/>
     </register>
-    <register name="CFIR_TP_HOSTATTN">
+    <register name="CFIR_TP_HA">
         <instance addr="0x01040004" reg_inst="0"/>
     </register>
-    <register name="CFIR_TP_HOSTATTN_MASK">
+    <register name="CFIR_TP_HA_MASK">
         <instance addr="0x01040044" reg_inst="0"/>
     </register>
     <rule attn_type="SPA" node_inst="0">
         <expr type="and">
-            <expr type="reg" value1="CFIR_TP_SPATTN"/>
+            <expr type="reg" value1="CFIR_TP_SPA"/>
             <expr type="not">
-                <expr type="reg" value1="CFIR_TP_SPATTN_MASK"/>
+                <expr type="reg" value1="CFIR_TP_SPA_MASK"/>
             </expr>
             <expr type="int" value1="0x0FFFFFFFFFFFFFFF"/>
         </expr>
     </rule>
     <rule attn_type="UCS" node_inst="0">
         <expr type="and">
-            <expr type="reg" value1="CFIR_TP_LOCAL_XSTOP"/>
+            <expr type="reg" value1="CFIR_TP_UCS"/>
             <expr type="not">
-                <expr type="reg" value1="CFIR_TP_LOCAL_XSTOP_MASK"/>
+                <expr type="reg" value1="CFIR_TP_UCS_MASK"/>
             </expr>
             <expr type="int" value1="0x0FFFFFFFFFFFFFFF"/>
         </expr>
     </rule>
     <rule attn_type="HA" node_inst="0">
         <expr type="and">
-            <expr type="reg" value1="CFIR_TP_HOSTATTN"/>
+            <expr type="reg" value1="CFIR_TP_HA"/>
             <expr type="not">
-                <expr type="reg" value1="CFIR_TP_HOSTATTN_MASK"/>
+                <expr type="reg" value1="CFIR_TP_HA_MASK"/>
             </expr>
             <expr type="int" value1="0x0FFFFFFFFFFFFFFF"/>
         </expr>

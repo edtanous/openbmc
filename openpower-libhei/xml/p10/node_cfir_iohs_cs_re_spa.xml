@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <attn_node model_ec="P10_10,P10_20" name="CFIR_IOHS_CS_RE_SPA" reg_type="SCOM">
-    <register name="CFIR_IOHS_XSTOP">
+    <register name="CFIR_IOHS_CS">
         <instance addr="0x18040000" reg_inst="0"/>
         <instance addr="0x19040000" reg_inst="1"/>
         <instance addr="0x1A040000" reg_inst="2"/>
@@ -10,7 +10,7 @@
         <instance addr="0x1E040000" reg_inst="6"/>
         <instance addr="0x1F040000" reg_inst="7"/>
     </register>
-    <register name="CFIR_IOHS_XSTOP_MASK">
+    <register name="CFIR_IOHS_CS_MASK">
         <instance addr="0x18040040" reg_inst="0"/>
         <instance addr="0x19040040" reg_inst="1"/>
         <instance addr="0x1A040040" reg_inst="2"/>
@@ -20,7 +20,7 @@
         <instance addr="0x1E040040" reg_inst="6"/>
         <instance addr="0x1F040040" reg_inst="7"/>
     </register>
-    <register name="CFIR_IOHS_RECOV">
+    <register name="CFIR_IOHS_RE">
         <instance addr="0x18040001" reg_inst="0"/>
         <instance addr="0x19040001" reg_inst="1"/>
         <instance addr="0x1A040001" reg_inst="2"/>
@@ -30,7 +30,7 @@
         <instance addr="0x1E040001" reg_inst="6"/>
         <instance addr="0x1F040001" reg_inst="7"/>
     </register>
-    <register name="CFIR_IOHS_RECOV_MASK">
+    <register name="CFIR_IOHS_RE_MASK">
         <instance addr="0x18040041" reg_inst="0"/>
         <instance addr="0x19040041" reg_inst="1"/>
         <instance addr="0x1A040041" reg_inst="2"/>
@@ -40,7 +40,7 @@
         <instance addr="0x1E040041" reg_inst="6"/>
         <instance addr="0x1F040041" reg_inst="7"/>
     </register>
-    <register name="CFIR_IOHS_SPATTN">
+    <register name="CFIR_IOHS_SPA">
         <instance addr="0x18040002" reg_inst="0"/>
         <instance addr="0x19040002" reg_inst="1"/>
         <instance addr="0x1A040002" reg_inst="2"/>
@@ -50,7 +50,7 @@
         <instance addr="0x1E040002" reg_inst="6"/>
         <instance addr="0x1F040002" reg_inst="7"/>
     </register>
-    <register name="CFIR_IOHS_SPATTN_MASK">
+    <register name="CFIR_IOHS_SPA_MASK">
         <instance addr="0x18040042" reg_inst="0"/>
         <instance addr="0x19040042" reg_inst="1"/>
         <instance addr="0x1A040042" reg_inst="2"/>
@@ -62,27 +62,27 @@
     </register>
     <rule attn_type="CS" node_inst="0:7">
         <expr type="and">
-            <expr type="reg" value1="CFIR_IOHS_XSTOP"/>
+            <expr type="reg" value1="CFIR_IOHS_CS"/>
             <expr type="not">
-                <expr type="reg" value1="CFIR_IOHS_XSTOP_MASK"/>
+                <expr type="reg" value1="CFIR_IOHS_CS_MASK"/>
             </expr>
             <expr type="int" value1="0x0FFFFFFFFFFFFFFF"/>
         </expr>
     </rule>
     <rule attn_type="RE" node_inst="0:7">
         <expr type="and">
-            <expr type="reg" value1="CFIR_IOHS_RECOV"/>
+            <expr type="reg" value1="CFIR_IOHS_RE"/>
             <expr type="not">
-                <expr type="reg" value1="CFIR_IOHS_RECOV_MASK"/>
+                <expr type="reg" value1="CFIR_IOHS_RE_MASK"/>
             </expr>
             <expr type="int" value1="0x0FFFFFFFFFFFFFFF"/>
         </expr>
     </rule>
     <rule attn_type="SPA" node_inst="0:7">
         <expr type="and">
-            <expr type="reg" value1="CFIR_IOHS_SPATTN"/>
+            <expr type="reg" value1="CFIR_IOHS_SPA"/>
             <expr type="not">
-                <expr type="reg" value1="CFIR_IOHS_SPATTN_MASK"/>
+                <expr type="reg" value1="CFIR_IOHS_SPA_MASK"/>
             </expr>
             <expr type="int" value1="0x0FFFFFFFFFFFFFFF"/>
         </expr>

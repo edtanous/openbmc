@@ -1,35 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <attn_node model_ec="P10_10,P10_20" name="CFIR_PCI_CS_RE" reg_type="SCOM">
-    <register name="CFIR_PCI_XSTOP">
+    <register name="CFIR_PCI_CS">
         <instance addr="0x08040000" reg_inst="0"/>
         <instance addr="0x09040000" reg_inst="1"/>
     </register>
-    <register name="CFIR_PCI_XSTOP_MASK">
+    <register name="CFIR_PCI_CS_MASK">
         <instance addr="0x08040040" reg_inst="0"/>
         <instance addr="0x09040040" reg_inst="1"/>
     </register>
-    <register name="CFIR_PCI_RECOV">
+    <register name="CFIR_PCI_RE">
         <instance addr="0x08040001" reg_inst="0"/>
         <instance addr="0x09040001" reg_inst="1"/>
     </register>
-    <register name="CFIR_PCI_RECOV_MASK">
+    <register name="CFIR_PCI_RE_MASK">
         <instance addr="0x08040041" reg_inst="0"/>
         <instance addr="0x09040041" reg_inst="1"/>
     </register>
     <rule attn_type="CS" node_inst="0:1">
         <expr type="and">
-            <expr type="reg" value1="CFIR_PCI_XSTOP"/>
+            <expr type="reg" value1="CFIR_PCI_CS"/>
             <expr type="not">
-                <expr type="reg" value1="CFIR_PCI_XSTOP_MASK"/>
+                <expr type="reg" value1="CFIR_PCI_CS_MASK"/>
             </expr>
             <expr type="int" value1="0x0FFFFFFFFFFFFFFF"/>
         </expr>
     </rule>
     <rule attn_type="RE" node_inst="0:1">
         <expr type="and">
-            <expr type="reg" value1="CFIR_PCI_RECOV"/>
+            <expr type="reg" value1="CFIR_PCI_RE"/>
             <expr type="not">
-                <expr type="reg" value1="CFIR_PCI_RECOV_MASK"/>
+                <expr type="reg" value1="CFIR_PCI_RE_MASK"/>
             </expr>
             <expr type="int" value1="0x0FFFFFFFFFFFFFFF"/>
         </expr>

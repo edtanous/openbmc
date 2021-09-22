@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <attn_node model_ec="P10_10,P10_20" name="CFIR_EQ_HA" reg_type="SCOM">
-    <register name="CFIR_EQ_HOSTATTN">
+    <register name="CFIR_EQ_HA">
         <instance addr="0x20040004" reg_inst="0"/>
         <instance addr="0x21040004" reg_inst="1"/>
         <instance addr="0x22040004" reg_inst="2"/>
@@ -10,7 +10,7 @@
         <instance addr="0x26040004" reg_inst="6"/>
         <instance addr="0x27040004" reg_inst="7"/>
     </register>
-    <register name="CFIR_EQ_HOSTATTN_MASK">
+    <register name="CFIR_EQ_HA_MASK">
         <instance addr="0x20040044" reg_inst="0"/>
         <instance addr="0x21040044" reg_inst="1"/>
         <instance addr="0x22040044" reg_inst="2"/>
@@ -22,9 +22,9 @@
     </register>
     <rule attn_type="HA" node_inst="0:7">
         <expr type="and">
-            <expr type="reg" value1="CFIR_EQ_HOSTATTN"/>
+            <expr type="reg" value1="CFIR_EQ_HA"/>
             <expr type="not">
-                <expr type="reg" value1="CFIR_EQ_HOSTATTN_MASK"/>
+                <expr type="reg" value1="CFIR_EQ_HA_MASK"/>
             </expr>
             <expr type="int" value1="0x0FFFFFFFFFFFFFFF"/>
         </expr>

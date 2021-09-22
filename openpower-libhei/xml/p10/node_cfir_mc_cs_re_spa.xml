@@ -1,36 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <attn_node model_ec="P10_10,P10_20" name="CFIR_MC_CS_RE_SPA" reg_type="SCOM">
-    <register name="CFIR_MC_XSTOP">
+    <register name="CFIR_MC_CS">
         <instance addr="0x0C040000" reg_inst="0"/>
         <instance addr="0x0D040000" reg_inst="1"/>
         <instance addr="0x0E040000" reg_inst="2"/>
         <instance addr="0x0F040000" reg_inst="3"/>
     </register>
-    <register name="CFIR_MC_XSTOP_MASK">
+    <register name="CFIR_MC_CS_MASK">
         <instance addr="0x0C040040" reg_inst="0"/>
         <instance addr="0x0D040040" reg_inst="1"/>
         <instance addr="0x0E040040" reg_inst="2"/>
         <instance addr="0x0F040040" reg_inst="3"/>
     </register>
-    <register name="CFIR_MC_RECOV">
+    <register name="CFIR_MC_RE">
         <instance addr="0x0C040001" reg_inst="0"/>
         <instance addr="0x0D040001" reg_inst="1"/>
         <instance addr="0x0E040001" reg_inst="2"/>
         <instance addr="0x0F040001" reg_inst="3"/>
     </register>
-    <register name="CFIR_MC_RECOV_MASK">
+    <register name="CFIR_MC_RE_MASK">
         <instance addr="0x0C040041" reg_inst="0"/>
         <instance addr="0x0D040041" reg_inst="1"/>
         <instance addr="0x0E040041" reg_inst="2"/>
         <instance addr="0x0F040041" reg_inst="3"/>
     </register>
-    <register name="CFIR_MC_SPATTN">
+    <register name="CFIR_MC_SPA">
         <instance addr="0x0C040002" reg_inst="0"/>
         <instance addr="0x0D040002" reg_inst="1"/>
         <instance addr="0x0E040002" reg_inst="2"/>
         <instance addr="0x0F040002" reg_inst="3"/>
     </register>
-    <register name="CFIR_MC_SPATTN_MASK">
+    <register name="CFIR_MC_SPA_MASK">
         <instance addr="0x0C040042" reg_inst="0"/>
         <instance addr="0x0D040042" reg_inst="1"/>
         <instance addr="0x0E040042" reg_inst="2"/>
@@ -38,27 +38,27 @@
     </register>
     <rule attn_type="CS" node_inst="0:3">
         <expr type="and">
-            <expr type="reg" value1="CFIR_MC_XSTOP"/>
+            <expr type="reg" value1="CFIR_MC_CS"/>
             <expr type="not">
-                <expr type="reg" value1="CFIR_MC_XSTOP_MASK"/>
+                <expr type="reg" value1="CFIR_MC_CS_MASK"/>
             </expr>
             <expr type="int" value1="0x0FFFFFFFFFFFFFFF"/>
         </expr>
     </rule>
     <rule attn_type="RE" node_inst="0:3">
         <expr type="and">
-            <expr type="reg" value1="CFIR_MC_RECOV"/>
+            <expr type="reg" value1="CFIR_MC_RE"/>
             <expr type="not">
-                <expr type="reg" value1="CFIR_MC_RECOV_MASK"/>
+                <expr type="reg" value1="CFIR_MC_RE_MASK"/>
             </expr>
             <expr type="int" value1="0x0FFFFFFFFFFFFFFF"/>
         </expr>
     </rule>
     <rule attn_type="SPA" node_inst="0:3">
         <expr type="and">
-            <expr type="reg" value1="CFIR_MC_SPATTN"/>
+            <expr type="reg" value1="CFIR_MC_SPA"/>
             <expr type="not">
-                <expr type="reg" value1="CFIR_MC_SPATTN_MASK"/>
+                <expr type="reg" value1="CFIR_MC_SPA_MASK"/>
             </expr>
             <expr type="int" value1="0x0FFFFFFFFFFFFFFF"/>
         </expr>

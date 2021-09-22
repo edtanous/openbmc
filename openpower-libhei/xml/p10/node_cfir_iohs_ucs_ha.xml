@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <attn_node model_ec="P10_10,P10_20" name="CFIR_IOHS_UCS_HA" reg_type="SCOM">
-    <register name="CFIR_IOHS_LOCAL_XSTOP">
+    <register name="CFIR_IOHS_UCS">
         <instance addr="0x18040003" reg_inst="0"/>
         <instance addr="0x19040003" reg_inst="1"/>
         <instance addr="0x1A040003" reg_inst="2"/>
@@ -10,7 +10,7 @@
         <instance addr="0x1E040003" reg_inst="6"/>
         <instance addr="0x1F040003" reg_inst="7"/>
     </register>
-    <register name="CFIR_IOHS_LOCAL_XSTOP_MASK">
+    <register name="CFIR_IOHS_UCS_MASK">
         <instance addr="0x18040043" reg_inst="0"/>
         <instance addr="0x19040043" reg_inst="1"/>
         <instance addr="0x1A040043" reg_inst="2"/>
@@ -20,7 +20,7 @@
         <instance addr="0x1E040043" reg_inst="6"/>
         <instance addr="0x1F040043" reg_inst="7"/>
     </register>
-    <register name="CFIR_IOHS_HOSTATTN">
+    <register name="CFIR_IOHS_HA">
         <instance addr="0x18040004" reg_inst="0"/>
         <instance addr="0x19040004" reg_inst="1"/>
         <instance addr="0x1A040004" reg_inst="2"/>
@@ -30,7 +30,7 @@
         <instance addr="0x1E040004" reg_inst="6"/>
         <instance addr="0x1F040004" reg_inst="7"/>
     </register>
-    <register name="CFIR_IOHS_HOSTATTN_MASK">
+    <register name="CFIR_IOHS_HA_MASK">
         <instance addr="0x18040044" reg_inst="0"/>
         <instance addr="0x19040044" reg_inst="1"/>
         <instance addr="0x1A040044" reg_inst="2"/>
@@ -42,18 +42,18 @@
     </register>
     <rule attn_type="UCS" node_inst="0:7">
         <expr type="and">
-            <expr type="reg" value1="CFIR_IOHS_LOCAL_XSTOP"/>
+            <expr type="reg" value1="CFIR_IOHS_UCS"/>
             <expr type="not">
-                <expr type="reg" value1="CFIR_IOHS_LOCAL_XSTOP_MASK"/>
+                <expr type="reg" value1="CFIR_IOHS_UCS_MASK"/>
             </expr>
             <expr type="int" value1="0x0FFFFFFFFFFFFFFF"/>
         </expr>
     </rule>
     <rule attn_type="HA" node_inst="0:7">
         <expr type="and">
-            <expr type="reg" value1="CFIR_IOHS_HOSTATTN"/>
+            <expr type="reg" value1="CFIR_IOHS_HA"/>
             <expr type="not">
-                <expr type="reg" value1="CFIR_IOHS_HOSTATTN_MASK"/>
+                <expr type="reg" value1="CFIR_IOHS_HA_MASK"/>
             </expr>
             <expr type="int" value1="0x0FFFFFFFFFFFFFFF"/>
         </expr>

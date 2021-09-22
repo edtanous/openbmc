@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <attn_node model_ec="P10_10" name="CFIR_PAUW_UCS" reg_type="SCOM">
-    <register name="CFIR_PAUW_LOCAL_XSTOP">
+    <register name="CFIR_PAUW_UCS">
         <instance addr="0x12040003" reg_inst="0"/>
         <instance addr="0x13040003" reg_inst="1"/>
     </register>
-    <register name="CFIR_PAUW_LOCAL_XSTOP_MASK">
+    <register name="CFIR_PAUW_UCS_MASK">
         <instance addr="0x12040043" reg_inst="0"/>
         <instance addr="0x13040043" reg_inst="1"/>
     </register>
     <rule attn_type="UCS" node_inst="0:1">
         <expr type="and">
-            <expr type="reg" value1="CFIR_PAUW_LOCAL_XSTOP"/>
+            <expr type="reg" value1="CFIR_PAUW_UCS"/>
             <expr type="not">
-                <expr type="reg" value1="CFIR_PAUW_LOCAL_XSTOP_MASK"/>
+                <expr type="reg" value1="CFIR_PAUW_UCS_MASK"/>
             </expr>
             <expr type="int" value1="0x0FFFFFFFFFFFFFFF"/>
         </expr>

@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <attn_node model_ec="P10_10,P10_20" name="CFIR_N0_HA" reg_type="SCOM">
-    <register name="CFIR_N0_HOSTATTN">
+    <register name="CFIR_N0_HA">
         <instance addr="0x02040004" reg_inst="0"/>
     </register>
-    <register name="CFIR_N0_HOSTATTN_MASK">
+    <register name="CFIR_N0_HA_MASK">
         <instance addr="0x02040044" reg_inst="0"/>
     </register>
     <rule attn_type="HA" node_inst="0">
         <expr type="and">
-            <expr type="reg" value1="CFIR_N0_HOSTATTN"/>
+            <expr type="reg" value1="CFIR_N0_HA"/>
             <expr type="not">
-                <expr type="reg" value1="CFIR_N0_HOSTATTN_MASK"/>
+                <expr type="reg" value1="CFIR_N0_HA_MASK"/>
             </expr>
             <expr type="int" value1="0x0FFFFFFFFFFFFFFF"/>
         </expr>
