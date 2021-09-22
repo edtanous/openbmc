@@ -1,38 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <attn_node model_ec="P10_10,P10_20" name="GFIR_CS" reg_type="SCOM">
-    <register name="GFIR_REG_CS">
+    <register name="GFIR_CS">
         <instance addr="0x570F001C" reg_inst="0"/>
     </register>
     <rule attn_type="CS" node_inst="0">
-        <expr type="reg" value1="GFIR_REG_CS"/>
+        <expr type="reg" value1="GFIR_CS"/>
     </rule>
-    <bit child_node="CFIR_TP_CS_RE" node_inst="0" pos="1">XSTOP Register - after masking - OLD XFIR</bit>
-    <bit child_node="CFIR_N0_CS_RE" node_inst="0" pos="2">XSTOP Register - after masking - OLD XFIR</bit>
-    <bit child_node="CFIR_N1_CS" node_inst="0" pos="3">XSTOP Register - after masking - OLD XFIR</bit>
-    <bit child_node="CFIR_PCI_CS_RE" node_inst="0" pos="8">XSTOP Register - after masking - OLD XFIR</bit>
-    <bit child_node="CFIR_PCI_CS_RE" node_inst="1" pos="9">XSTOP Register - after masking - OLD XFIR</bit>
-    <bit child_node="CFIR_MC_CS_RE_SPA" node_inst="0" pos="12">XSTOP Register - after masking - OLD XFIR</bit>
-    <bit child_node="CFIR_MC_CS_RE_SPA" node_inst="1" pos="13">XSTOP Register - after masking - OLD XFIR</bit>
-    <bit child_node="CFIR_MC_CS_RE_SPA" node_inst="2" pos="14">XSTOP Register - after masking - OLD XFIR</bit>
-    <bit child_node="CFIR_MC_CS_RE_SPA" node_inst="3" pos="15">XSTOP Register - after masking - OLD XFIR</bit>
-    <bit child_node="CFIR_PAUE_CS_RE" node_inst="0" pos="16">XSTOP Register - after masking - OLD XFIR</bit>
-    <bit child_node="CFIR_PAUE_CS_RE" node_inst="1" pos="17">XSTOP Register - after masking - OLD XFIR</bit>
-    <bit child_node="CFIR_PAUW_CS_RE" node_inst="0" pos="18">XSTOP Register - after masking - OLD XFIR</bit>
-    <bit child_node="CFIR_PAUW_CS_RE" node_inst="1" pos="19">XSTOP Register - after masking - OLD XFIR</bit>
-    <bit child_node="CFIR_IOHS_CS_RE_SPA" node_inst="0" pos="24">XSTOP Register - after masking - OLD XFIR</bit>
-    <bit child_node="CFIR_IOHS_CS_RE_SPA" node_inst="1" pos="25">XSTOP Register - after masking - OLD XFIR</bit>
-    <bit child_node="CFIR_IOHS_CS_RE_SPA" node_inst="2" pos="26">XSTOP Register - after masking - OLD XFIR</bit>
-    <bit child_node="CFIR_IOHS_CS_RE_SPA" node_inst="3" pos="27">XSTOP Register - after masking - OLD XFIR</bit>
-    <bit child_node="CFIR_IOHS_CS_RE_SPA" node_inst="4" pos="28">XSTOP Register - after masking - OLD XFIR</bit>
-    <bit child_node="CFIR_IOHS_CS_RE_SPA" node_inst="5" pos="29">XSTOP Register - after masking - OLD XFIR</bit>
-    <bit child_node="CFIR_IOHS_CS_RE_SPA" node_inst="6" pos="30">XSTOP Register - after masking - OLD XFIR</bit>
-    <bit child_node="CFIR_IOHS_CS_RE_SPA" node_inst="7" pos="31">XSTOP Register - after masking - OLD XFIR</bit>
-    <bit child_node="CFIR_EQ_CS" node_inst="0" pos="32">XSTOP Register - after masking - OLD XFIR</bit>
-    <bit child_node="CFIR_EQ_CS" node_inst="1" pos="33">XSTOP Register - after masking - OLD XFIR</bit>
-    <bit child_node="CFIR_EQ_CS" node_inst="2" pos="34">XSTOP Register - after masking - OLD XFIR</bit>
-    <bit child_node="CFIR_EQ_CS" node_inst="3" pos="35">XSTOP Register - after masking - OLD XFIR</bit>
-    <bit child_node="CFIR_EQ_CS" node_inst="4" pos="36">XSTOP Register - after masking - OLD XFIR</bit>
-    <bit child_node="CFIR_EQ_CS" node_inst="5" pos="37">XSTOP Register - after masking - OLD XFIR</bit>
-    <bit child_node="CFIR_EQ_CS" node_inst="6" pos="38">XSTOP Register - after masking - OLD XFIR</bit>
-    <bit child_node="CFIR_EQ_CS" node_inst="7" pos="39">XSTOP Register - after masking - OLD XFIR</bit>
+    <bit child_node="CFIR_TP_CS_RE" node_inst="0" pos="1">Attention from TP chiplet</bit>
+    <bit child_node="CFIR_N0_CS_RE" node_inst="0" pos="2">Attention from N0 chiplet</bit>
+    <bit child_node="CFIR_N1_CS" node_inst="0" pos="3">Attention from N1 chiplet</bit>
+    <bit child_node="CFIR_PCI_CS_RE" node_inst="0" pos="8">Attention from PCI 0 chiplet</bit>
+    <bit child_node="CFIR_PCI_CS_RE" node_inst="1" pos="9">Attention from PCI 1 chiplet</bit>
+    <bit child_node="CFIR_MC_CS_RE_SPA" node_inst="0" pos="12">Attention from MC 0 chiplet</bit>
+    <bit child_node="CFIR_MC_CS_RE_SPA" node_inst="1" pos="13">Attention from MC 1 chiplet</bit>
+    <bit child_node="CFIR_MC_CS_RE_SPA" node_inst="2" pos="14">Attention from MC 2 chiplet</bit>
+    <bit child_node="CFIR_MC_CS_RE_SPA" node_inst="3" pos="15">Attention from MC 3 chiplet</bit>
+    <bit child_node="CFIR_PAUE_CS_RE" node_inst="0" pos="16">Attention from PAU 0 chiplet</bit>
+    <bit child_node="CFIR_PAUE_CS_RE" node_inst="1" pos="17">Attention from PAU 1 chiplet</bit>
+    <bit child_node="CFIR_PAUW_CS_RE" node_inst="0" pos="18">Attention from PAU 2 chiplet</bit>
+    <bit child_node="CFIR_PAUW_CS_RE" node_inst="1" pos="19">Attention from PAU 3 chiplet</bit>
+    <bit child_node="CFIR_IOHS_CS_RE_SPA" node_inst="0" pos="24">Attention from IOHS 0 chiplet</bit>
+    <bit child_node="CFIR_IOHS_CS_RE_SPA" node_inst="1" pos="25">Attention from IOHS 1 chiplet</bit>
+    <bit child_node="CFIR_IOHS_CS_RE_SPA" node_inst="2" pos="26">Attention from IOHS 2 chiplet</bit>
+    <bit child_node="CFIR_IOHS_CS_RE_SPA" node_inst="3" pos="27">Attention from IOHS 3 chiplet</bit>
+    <bit child_node="CFIR_IOHS_CS_RE_SPA" node_inst="4" pos="28">Attention from IOHS 4 chiplet</bit>
+    <bit child_node="CFIR_IOHS_CS_RE_SPA" node_inst="5" pos="29">Attention from IOHS 5 chiplet</bit>
+    <bit child_node="CFIR_IOHS_CS_RE_SPA" node_inst="6" pos="30">Attention from IOHS 6 chiplet</bit>
+    <bit child_node="CFIR_IOHS_CS_RE_SPA" node_inst="7" pos="31">Attention from IOHS 7 chiplet</bit>
+    <bit child_node="CFIR_EQ_CS" node_inst="0" pos="32">Attention from EQ 0 chiplet</bit>
+    <bit child_node="CFIR_EQ_CS" node_inst="1" pos="33">Attention from EQ 1 chiplet</bit>
+    <bit child_node="CFIR_EQ_CS" node_inst="2" pos="34">Attention from EQ 2 chiplet</bit>
+    <bit child_node="CFIR_EQ_CS" node_inst="3" pos="35">Attention from EQ 3 chiplet</bit>
+    <bit child_node="CFIR_EQ_CS" node_inst="4" pos="36">Attention from EQ 4 chiplet</bit>
+    <bit child_node="CFIR_EQ_CS" node_inst="5" pos="37">Attention from EQ 5 chiplet</bit>
+    <bit child_node="CFIR_EQ_CS" node_inst="6" pos="38">Attention from EQ 6 chiplet</bit>
+    <bit child_node="CFIR_EQ_CS" node_inst="7" pos="39">Attention from EQ 7 chiplet</bit>
 </attn_node>
