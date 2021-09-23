@@ -1,17 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<attn_node model_ec="P10_10,P10_20" name="CFIR_MC_UCS_HA" reg_type="SCOM">
-    <register name="CFIR_MC_UCS">
-        <instance addr="0x0C040003" reg_inst="0"/>
-        <instance addr="0x0D040003" reg_inst="1"/>
-        <instance addr="0x0E040003" reg_inst="2"/>
-        <instance addr="0x0F040003" reg_inst="3"/>
-    </register>
-    <register name="CFIR_MC_UCS_MASK">
-        <instance addr="0x0C040043" reg_inst="0"/>
-        <instance addr="0x0D040043" reg_inst="1"/>
-        <instance addr="0x0E040043" reg_inst="2"/>
-        <instance addr="0x0F040043" reg_inst="3"/>
-    </register>
+<attn_node model_ec="P10_10,P10_20" name="CFIR_MC_HA" reg_type="SCOM">
     <register name="CFIR_MC_HA">
         <instance addr="0x0C040004" reg_inst="0"/>
         <instance addr="0x0D040004" reg_inst="1"/>
@@ -24,15 +12,6 @@
         <instance addr="0x0E040044" reg_inst="2"/>
         <instance addr="0x0F040044" reg_inst="3"/>
     </register>
-    <rule attn_type="UCS" node_inst="0:3">
-        <expr type="and">
-            <expr type="reg" value1="CFIR_MC_UCS"/>
-            <expr type="not">
-                <expr type="reg" value1="CFIR_MC_UCS_MASK"/>
-            </expr>
-            <expr type="int" value1="0x0FFFFFFFFFFFFFFF"/>
-        </expr>
-    </rule>
     <rule attn_type="HA" node_inst="0:3">
         <expr type="and">
             <expr type="reg" value1="CFIR_MC_HA"/>

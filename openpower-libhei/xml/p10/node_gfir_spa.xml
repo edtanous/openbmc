@@ -6,11 +6,11 @@
     <rule attn_type="SPA" node_inst="0">
         <expr type="reg" value1="GFIR_SPA"/>
     </rule>
-    <bit child_node="CFIR_TP_SPA_UCS_HA" node_inst="0" pos="1">Attention from TP chiplet</bit>
+    <bit child_node="CFIR_TP_SPA" node_inst="0" pos="1">Attention from TP chiplet</bit>
     <bit child_node="CFIR_N0_SPA" node_inst="0" pos="2">Attention from N0 chiplet</bit>
     <bit child_node="CFIR_N1_SPA" node_inst="0" pos="3">Attention from N1 chiplet</bit>
-    <bit child_node="CFIR_PCI_SPA_HA" node_inst="0" pos="8">Attention from PCI 0 chiplet</bit>
-    <bit child_node="CFIR_PCI_SPA_HA" node_inst="1" pos="9">Attention from PCI 1 chiplet</bit>
+    <bit child_node="CFIR_PCI_SPA" node_inst="0" pos="8">Attention from PCI 0 chiplet</bit>
+    <bit child_node="CFIR_PCI_SPA" node_inst="1" pos="9">Attention from PCI 1 chiplet</bit>
     <bit child_node="CFIR_MC_SPA" node_inst="0" pos="12">Attention from MC 0 chiplet</bit>
     <bit child_node="CFIR_MC_SPA" node_inst="1" pos="13">Attention from MC 1 chiplet</bit>
     <bit child_node="CFIR_MC_SPA" node_inst="2" pos="14">Attention from MC 2 chiplet</bit>

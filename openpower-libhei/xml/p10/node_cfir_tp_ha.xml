@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<attn_node model_ec="P10_10,P10_20" name="CFIR_TP_HA" reg_type="SCOM">
+    <register name="CFIR_TP_HA">
+        <instance addr="0x01040004" reg_inst="0"/>
+    </register>
+    <register name="CFIR_TP_HA_MASK">
+        <instance addr="0x01040044" reg_inst="0"/>
+    </register>
+    <rule attn_type="HA" node_inst="0">
+        <expr type="and">
+            <expr type="reg" value1="CFIR_TP_HA"/>
+            <expr type="not">
+                <expr type="reg" value1="CFIR_TP_HA_MASK"/>
+            </expr>
+            <expr type="int" value1="0x0FFFFFFFFFFFFFFF"/>
+        </expr>
+    </rule>
+    <bit child_node="TP_LOCAL_FIR" node_inst="0" pos="4">Attention from TP_LOCAL_FIR</bit>
+</attn_node>
