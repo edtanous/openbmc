@@ -79,6 +79,7 @@
         ],
 
         "masked"         : [ { "type": "action", "name": "level2" } ],
+        "global"         : [ { "type": "action", "name": "level2" } ],
         "chiplet"        : [ { "type": "action", "name": "level2" } ],
         "external"       : [ { "type": "action", "name": "level2" } ],
         "tod_error"      : [ { "type": "action", "name": "level2" } ],
@@ -182,35 +183,35 @@
          "15" : { "00" : "masked" }
       },
       "07f5" : {
-         "01" : { "00" : "masked" },
-         "02" : { "00" : "masked" },
-         "03" : { "00" : "masked" },
-         "08" : { "00" : "masked" },
-         "09" : { "00" : "masked" },
-         "0c" : { "00" : "masked" },
-         "0d" : { "00" : "masked" },
-         "0e" : { "00" : "masked" },
-         "0f" : { "00" : "masked" },
-         "10" : { "00" : "masked" },
-         "11" : { "00" : "masked" },
-         "12" : { "00" : "masked" },
-         "13" : { "00" : "masked" },
-         "18" : { "00" : "masked" },
-         "19" : { "00" : "masked" },
-         "1a" : { "00" : "masked" },
-         "1b" : { "00" : "masked" },
-         "1c" : { "00" : "masked" },
-         "1d" : { "00" : "masked" },
-         "1e" : { "00" : "masked" },
-         "1f" : { "00" : "masked" },
-         "20" : { "00" : "masked" },
-         "21" : { "00" : "masked" },
-         "22" : { "00" : "masked" },
-         "23" : { "00" : "masked" },
-         "24" : { "00" : "masked" },
-         "25" : { "00" : "masked" },
-         "26" : { "00" : "masked" },
-         "27" : { "00" : "masked" }
+         "01" : { "00" : "global" },
+         "02" : { "00" : "global" },
+         "03" : { "00" : "global" },
+         "08" : { "00" : "global" },
+         "09" : { "00" : "global" },
+         "0c" : { "00" : "global" },
+         "0d" : { "00" : "global" },
+         "0e" : { "00" : "global" },
+         "0f" : { "00" : "global" },
+         "10" : { "00" : "global" },
+         "11" : { "00" : "global" },
+         "12" : { "00" : "global" },
+         "13" : { "00" : "global" },
+         "18" : { "00" : "global" },
+         "19" : { "00" : "global" },
+         "1a" : { "00" : "global" },
+         "1b" : { "00" : "global" },
+         "1c" : { "00" : "global" },
+         "1d" : { "00" : "global" },
+         "1e" : { "00" : "global" },
+         "1f" : { "00" : "global" },
+         "20" : { "00" : "global" },
+         "21" : { "00" : "global" },
+         "22" : { "00" : "global" },
+         "23" : { "00" : "global" },
+         "24" : { "00" : "global" },
+         "25" : { "00" : "global" },
+         "26" : { "00" : "global" },
+         "27" : { "00" : "global" }
       },
       "0985" : {
          "00" : {
@@ -435,35 +436,35 @@
          }
       },
       "0a94" : {
-         "01" : { "00" : "masked" },
-         "02" : { "00" : "masked" },
-         "03" : { "00" : "masked" },
-         "08" : { "00" : "masked" },
-         "09" : { "00" : "masked" },
-         "0c" : { "00" : "masked" },
-         "0d" : { "00" : "masked" },
-         "0e" : { "00" : "masked" },
-         "0f" : { "00" : "masked" },
-         "10" : { "00" : "masked" },
-         "11" : { "00" : "masked" },
-         "12" : { "00" : "masked" },
-         "13" : { "00" : "masked" },
-         "18" : { "00" : "masked" },
-         "19" : { "00" : "masked" },
-         "1a" : { "00" : "masked" },
-         "1b" : { "00" : "masked" },
-         "1c" : { "00" : "masked" },
-         "1d" : { "00" : "masked" },
-         "1e" : { "00" : "masked" },
-         "1f" : { "00" : "masked" },
-         "20" : { "00" : "masked" },
-         "21" : { "00" : "masked" },
-         "22" : { "00" : "masked" },
-         "23" : { "00" : "masked" },
-         "24" : { "00" : "masked" },
-         "25" : { "00" : "masked" },
-         "26" : { "00" : "masked" },
-         "27" : { "00" : "masked" }
+         "01" : { "00" : "global" },
+         "02" : { "00" : "global" },
+         "03" : { "00" : "global" },
+         "08" : { "00" : "global" },
+         "09" : { "00" : "global" },
+         "0c" : { "00" : "global" },
+         "0d" : { "00" : "global" },
+         "0e" : { "00" : "global" },
+         "0f" : { "00" : "global" },
+         "10" : { "00" : "global" },
+         "11" : { "00" : "global" },
+         "12" : { "00" : "global" },
+         "13" : { "00" : "global" },
+         "18" : { "00" : "global" },
+         "19" : { "00" : "global" },
+         "1a" : { "00" : "global" },
+         "1b" : { "00" : "global" },
+         "1c" : { "00" : "global" },
+         "1d" : { "00" : "global" },
+         "1e" : { "00" : "global" },
+         "1f" : { "00" : "global" },
+         "20" : { "00" : "global" },
+         "21" : { "00" : "global" },
+         "22" : { "00" : "global" },
+         "23" : { "00" : "global" },
+         "24" : { "00" : "global" },
+         "25" : { "00" : "global" },
+         "26" : { "00" : "global" },
+         "27" : { "00" : "global" }
       },
       "0bb6" : {
          "00" : { "00" : "masked" },
@@ -626,28 +627,48 @@
          "13" : { "00" : "masked" }
       },
       "0e19" : {
-         "04" : { "00" : "masked" },
-         "05" : { "00" : "masked" },
-         "06" : { "00" : "masked" },
-         "08" : { "00" : "masked" },
-         "09" : { "00" : "masked" },
-         "0a" : { "00" : "masked" }
+         "04" : { "00" : "chiplet" },
+         "05" : { "00" : "chiplet" },
+         "06" : { "00" : "chiplet" },
+         "08" : { "00" : "chiplet" },
+         "09" : { "00" : "chiplet" },
+         "0a" : { "00" : "chiplet" }
       },
       "1119" : {
-         "04" : { "00" : "masked" },
-         "05" : { "00" : "masked" },
-         "06" : { "00" : "masked" }
+         "04" : { "00" : "chiplet" },
+         "05" : { "00" : "chiplet" },
+         "06" : { "00" : "chiplet" }
       },
-      "155a" : {
+      "118e" : {
          "04" : {
-            "00" : "masked",
-            "01" : "masked"
+            "00" : "chiplet",
+            "01" : "chiplet"
+         },
+         "05" : {
+            "00" : "chiplet",
+            "01" : "chiplet"
+         },
+         "06" : {
+            "00" : "chiplet",
+            "01" : "chiplet"
+         },
+         "07" : {
+            "00" : "chiplet",
+            "01" : "chiplet"
+         },
+         "0d" : {
+            "00" : "chiplet",
+            "01" : "chiplet"
+         },
+         "10" : {
+            "00" : "chiplet",
+            "01" : "chiplet"
          }
       },
       "167c" : {
          "04" : {
-            "00" : "masked",
-            "01" : "masked"
+            "00" : "chiplet",
+            "01" : "chiplet"
          }
       },
       "1bdb" : {
@@ -1282,16 +1303,34 @@
          "06" : { "00" : "masked" },
          "07" : { "00" : "masked" }
       },
-      "1fd0" : {
+      "2080" : {
+         "02" : {
+            "00" : "chiplet",
+            "01" : "chiplet"
+         },
          "04" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "chiplet",
+            "01" : "chiplet"
+         },
+         "05" : {
+            "00" : "chiplet",
+            "01" : "chiplet"
+         },
+         "06" : {
+            "00" : "chiplet",
+            "01" : "chiplet"
+         },
+         "07" : {
+            "00" : "chiplet",
+            "01" : "chiplet"
+         },
+         "0d" : {
+            "00" : "chiplet",
+            "01" : "chiplet"
+         },
+         "10" : {
+            "00" : "chiplet",
+            "01" : "chiplet"
          }
       },
       "2387" : {
@@ -1366,16 +1405,16 @@
       },
       "2877" : {
          "04" : {
-            "00" : "masked",
-            "01" : "masked"
+            "00" : "chiplet",
+            "01" : "chiplet"
          },
          "0d" : {
-            "00" : "masked",
-            "01" : "masked"
+            "00" : "chiplet",
+            "01" : "chiplet"
          },
          "10" : {
-            "00" : "masked",
-            "01" : "masked"
+            "00" : "chiplet",
+            "01" : "chiplet"
          }
       },
       "2911" : {
@@ -1564,6 +1603,62 @@
             "01" : "masked"
          }
       },
+      "312f" : {
+         "04" : {
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet"
+         },
+         "05" : {
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet"
+         },
+         "06" : {
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet"
+         },
+         "07" : {
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet"
+         },
+         "08" : {
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet"
+         },
+         "09" : {
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet"
+         },
+         "0a" : {
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet"
+         },
+         "0d" : {
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet"
+         },
+         "0e" : {
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet"
+         }
+      },
       "31b3" : {
          "00" : { "00" : "masked" },
          "01" : { "00" : "masked" },
@@ -1617,6 +1712,56 @@
          "31" : { "00" : "masked" },
          "32" : { "00" : "masked" },
          "33" : { "00" : "masked" }
+      },
+      "358e" : {
+         "04" : {
+            "00" : "chiplet",
+            "01" : "chiplet"
+         },
+         "05" : {
+            "00" : "chiplet",
+            "01" : "chiplet"
+         },
+         "06" : {
+            "00" : "chiplet",
+            "01" : "chiplet"
+         },
+         "07" : {
+            "00" : "chiplet",
+            "01" : "chiplet"
+         },
+         "09" : {
+            "00" : "chiplet",
+            "01" : "chiplet"
+         },
+         "0a" : {
+            "00" : "chiplet",
+            "01" : "chiplet"
+         },
+         "0b" : {
+            "00" : "chiplet",
+            "01" : "chiplet"
+         },
+         "0d" : {
+            "00" : "chiplet",
+            "01" : "chiplet"
+         },
+         "10" : {
+            "00" : "chiplet",
+            "01" : "chiplet"
+         }
+      },
+      "37a1" : {
+         "04" : { "00" : "chiplet" },
+         "05" : { "00" : "chiplet" },
+         "06" : { "00" : "chiplet" },
+         "07" : { "00" : "chiplet" },
+         "08" : { "00" : "chiplet" },
+         "09" : { "00" : "chiplet" },
+         "0a" : { "00" : "chiplet" },
+         "0d" : { "00" : "chiplet" },
+         "0e" : { "00" : "chiplet" },
+         "0f" : { "00" : "chiplet" }
       },
       "384d" : {
          "00" : {
@@ -1877,68 +2022,68 @@
          }
       },
       "39a1" : {
-         "04" : { "00" : "masked" },
-         "05" : { "00" : "masked" },
-         "06" : { "00" : "masked" },
-         "07" : { "00" : "masked" },
-         "09" : { "00" : "masked" },
-         "0b" : { "00" : "masked" },
-         "0d" : { "00" : "masked" },
-         "0e" : { "00" : "masked" },
-         "0f" : { "00" : "masked" },
-         "11" : { "00" : "masked" },
-         "12" : { "00" : "masked" },
-         "13" : { "00" : "masked" },
-         "14" : { "00" : "masked" },
-         "15" : { "00" : "masked" },
-         "16" : { "00" : "masked" },
-         "17" : { "00" : "masked" },
-         "18" : { "00" : "masked" },
-         "19" : { "00" : "masked" },
-         "1a" : { "00" : "masked" },
-         "1b" : { "00" : "masked" },
-         "1c" : { "00" : "masked" },
-         "1d" : { "00" : "masked" },
-         "1e" : { "00" : "masked" },
-         "1f" : { "00" : "masked" },
-         "20" : { "00" : "masked" },
-         "21" : { "00" : "masked" },
-         "26" : { "00" : "masked" },
-         "27" : { "00" : "masked" }
+         "04" : { "00" : "chiplet" },
+         "05" : { "00" : "chiplet" },
+         "06" : { "00" : "chiplet" },
+         "07" : { "00" : "chiplet" },
+         "09" : { "00" : "chiplet" },
+         "0b" : { "00" : "chiplet" },
+         "0d" : { "00" : "chiplet" },
+         "0e" : { "00" : "chiplet" },
+         "0f" : { "00" : "chiplet" },
+         "11" : { "00" : "chiplet" },
+         "12" : { "00" : "chiplet" },
+         "13" : { "00" : "chiplet" },
+         "14" : { "00" : "chiplet" },
+         "15" : { "00" : "chiplet" },
+         "16" : { "00" : "chiplet" },
+         "17" : { "00" : "chiplet" },
+         "18" : { "00" : "chiplet" },
+         "19" : { "00" : "chiplet" },
+         "1a" : { "00" : "chiplet" },
+         "1b" : { "00" : "chiplet" },
+         "1c" : { "00" : "chiplet" },
+         "1d" : { "00" : "chiplet" },
+         "1e" : { "00" : "chiplet" },
+         "1f" : { "00" : "chiplet" },
+         "20" : { "00" : "chiplet" },
+         "21" : { "00" : "chiplet" },
+         "26" : { "00" : "chiplet" },
+         "27" : { "00" : "chiplet" }
       },
       "3a7c" : {
          "04" : {
-            "00" : "masked",
-            "01" : "masked"
+            "00" : "chiplet",
+            "01" : "chiplet"
          }
       },
       "3c8f" : {
-         "04" : { "00" : "masked" }
+         "04" : { "00" : "chiplet" }
       },
       "3e5d" : {
          "04" : {
-            "00" : "masked",
-            "01" : "masked"
+            "00" : "chiplet",
+            "01" : "chiplet"
          },
          "05" : {
-            "00" : "masked",
-            "01" : "masked"
+            "00" : "chiplet",
+            "01" : "chiplet"
          },
          "06" : {
-            "00" : "masked",
-            "01" : "masked"
+            "00" : "chiplet",
+            "01" : "chiplet"
          },
          "07" : {
-            "00" : "masked",
-            "01" : "masked"
+            "00" : "chiplet",
+            "01" : "chiplet"
          },
          "0d" : {
-            "00" : "masked",
-            "01" : "masked"
+            "00" : "chiplet",
+            "01" : "chiplet"
          }
       },
       "3e8f" : {
-         "04" : { "00" : "masked" }
+         "04" : { "00" : "chiplet" }
       },
       "43fc" : {
          "00" : {
@@ -3544,6 +3689,48 @@
             "05" : "masked"
          }
       },
+      "4480" : {
+         "02" : {
+            "00" : "chiplet",
+            "01" : "chiplet"
+         },
+         "04" : {
+            "00" : "chiplet",
+            "01" : "chiplet"
+         },
+         "05" : {
+            "00" : "chiplet",
+            "01" : "chiplet"
+         },
+         "06" : {
+            "00" : "chiplet",
+            "01" : "chiplet"
+         },
+         "07" : {
+            "00" : "chiplet",
+            "01" : "chiplet"
+         },
+         "09" : {
+            "00" : "chiplet",
+            "01" : "chiplet"
+         },
+         "0a" : {
+            "00" : "chiplet",
+            "01" : "chiplet"
+         },
+         "0b" : {
+            "00" : "chiplet",
+            "01" : "chiplet"
+         },
+         "0d" : {
+            "00" : "chiplet",
+            "01" : "chiplet"
+         },
+         "10" : {
+            "00" : "chiplet",
+            "01" : "chiplet"
+         }
+      },
       "4558" : {
          "00" : {
             "00" : "masked",
@@ -3618,47 +3805,153 @@
             "03" : "masked"
          }
       },
+      "4693" : {
+         "02" : { "00" : "chiplet" },
+         "04" : { "00" : "chiplet" },
+         "05" : { "00" : "chiplet" },
+         "06" : { "00" : "chiplet" },
+         "07" : { "00" : "chiplet" },
+         "08" : { "00" : "chiplet" },
+         "09" : { "00" : "chiplet" },
+         "0a" : { "00" : "chiplet" },
+         "0d" : { "00" : "chiplet" },
+         "0e" : { "00" : "chiplet" },
+         "0f" : { "00" : "chiplet" }
+      },
+      "4715" : {
+         "04" : {
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet"
+         },
+         "05" : {
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet"
+         },
+         "06" : {
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet"
+         },
+         "07" : {
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet"
+         },
+         "08" : {
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet"
+         },
+         "09" : {
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet"
+         },
+         "0a" : {
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet"
+         }
+      },
       "4893" : {
-         "04" : { "00" : "masked" },
-         "05" : { "00" : "masked" },
-         "06" : { "00" : "masked" },
-         "07" : { "00" : "masked" },
-         "09" : { "00" : "masked" },
-         "0b" : { "00" : "masked" },
-         "0d" : { "00" : "masked" },
-         "0e" : { "00" : "masked" },
-         "0f" : { "00" : "masked" },
-         "11" : { "00" : "masked" },
-         "12" : { "00" : "masked" },
-         "13" : { "00" : "masked" },
-         "14" : { "00" : "masked" },
-         "15" : { "00" : "masked" },
-         "16" : { "00" : "masked" },
-         "17" : { "00" : "masked" },
-         "18" : { "00" : "masked" },
-         "19" : { "00" : "masked" },
-         "1a" : { "00" : "masked" },
-         "1b" : { "00" : "masked" },
-         "1c" : { "00" : "masked" },
-         "1d" : { "00" : "masked" },
-         "1e" : { "00" : "masked" },
-         "1f" : { "00" : "masked" },
-         "20" : { "00" : "masked" },
-         "26" : { "00" : "masked" },
-         "27" : { "00" : "masked" }
+         "02" : { "00" : "chiplet" },
+         "04" : { "00" : "chiplet" },
+         "05" : { "00" : "chiplet" },
+         "06" : { "00" : "chiplet" },
+         "07" : { "00" : "chiplet" },
+         "09" : { "00" : "chiplet" },
+         "0b" : { "00" : "chiplet" },
+         "0d" : { "00" : "chiplet" },
+         "0e" : { "00" : "chiplet" },
+         "0f" : { "00" : "chiplet" },
+         "11" : { "00" : "chiplet" },
+         "12" : { "00" : "chiplet" },
+         "13" : { "00" : "chiplet" },
+         "14" : { "00" : "chiplet" },
+         "15" : { "00" : "chiplet" },
+         "16" : { "00" : "chiplet" },
+         "17" : { "00" : "chiplet" },
+         "18" : { "00" : "chiplet" },
+         "19" : { "00" : "chiplet" },
+         "1a" : { "00" : "chiplet" },
+         "1b" : { "00" : "chiplet" },
+         "1c" : { "00" : "chiplet" },
+         "1d" : { "00" : "chiplet" },
+         "1e" : { "00" : "chiplet" },
+         "1f" : { "00" : "chiplet" },
+         "20" : { "00" : "chiplet" },
+         "26" : { "00" : "chiplet" },
+         "27" : { "00" : "chiplet" }
+      },
+      "48e9" : {
+         "04" : {
+            "00" : "chiplet",
+            "01" : "chiplet"
+         }
       },
       "4b56" : {
          "04" : {
-            "00" : "masked",
-            "01" : "masked"
+            "00" : "chiplet",
+            "01" : "chiplet"
          },
          "0c" : {
-            "00" : "masked",
-            "01" : "masked"
+            "00" : "chiplet",
+            "01" : "chiplet"
          },
          "0d" : {
-            "00" : "masked",
-            "01" : "masked"
+            "00" : "chiplet",
+            "01" : "chiplet"
+         }
+      },
+      "4cfd" : {
+         "02" : {
+            "00" : "chiplet",
+            "01" : "chiplet"
+         },
+         "04" : {
+            "00" : "chiplet",
+            "01" : "chiplet"
+         },
+         "05" : {
+            "00" : "chiplet",
+            "01" : "chiplet"
+         },
+         "06" : {
+            "00" : "chiplet",
+            "01" : "chiplet"
+         },
+         "07" : {
+            "00" : "chiplet",
+            "01" : "chiplet"
+         },
+         "09" : {
+            "00" : "chiplet",
+            "01" : "chiplet"
+         },
+         "0a" : {
+            "00" : "chiplet",
+            "01" : "chiplet"
+         },
+         "0b" : {
+            "00" : "chiplet",
+            "01" : "chiplet"
+         },
+         "0c" : {
+            "00" : "chiplet",
+            "01" : "chiplet"
+         },
+         "0d" : {
+            "00" : "chiplet",
+            "01" : "chiplet"
          }
       },
       "4d74" : {
@@ -6743,176 +7036,257 @@
             "1f" : "masked"
          }
       },
-      "5b0f" : {
+      "574b" : {
          "04" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet",
+            "04" : "chiplet",
+            "05" : "chiplet",
+            "06" : "chiplet",
+            "07" : "chiplet"
          },
          "05" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet",
+            "04" : "chiplet",
+            "05" : "chiplet",
+            "06" : "chiplet",
+            "07" : "chiplet"
+         }
+      },
+      "5840" : {
+         "04" : {
+            "00" : "chiplet",
+            "01" : "chiplet"
+         }
+      },
+      "584b" : {
+         "04" : { "00" : "chiplet" }
+      },
+      "5adf" : {
+         "04" : {
+            "00" : "chiplet",
+            "01" : "chiplet"
+         },
+         "05" : {
+            "00" : "chiplet",
+            "01" : "chiplet"
          },
          "06" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "chiplet",
+            "01" : "chiplet"
          },
          "07" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
-         },
-         "08" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "chiplet",
+            "01" : "chiplet"
          },
          "09" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "chiplet",
+            "01" : "chiplet"
          },
          "0a" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "chiplet",
+            "01" : "chiplet"
          },
          "0b" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "chiplet",
+            "01" : "chiplet"
          },
          "0c" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "chiplet",
+            "01" : "chiplet"
          },
          "0d" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "chiplet",
+            "01" : "chiplet"
+         }
+      },
+      "5b0f" : {
+         "04" : {
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet",
+            "04" : "chiplet",
+            "05" : "chiplet",
+            "06" : "chiplet",
+            "07" : "chiplet"
+         },
+         "05" : {
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet",
+            "04" : "chiplet",
+            "05" : "chiplet",
+            "06" : "chiplet",
+            "07" : "chiplet"
+         },
+         "06" : {
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet",
+            "04" : "chiplet",
+            "05" : "chiplet",
+            "06" : "chiplet",
+            "07" : "chiplet"
+         },
+         "07" : {
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet",
+            "04" : "chiplet",
+            "05" : "chiplet",
+            "06" : "chiplet",
+            "07" : "chiplet"
+         },
+         "08" : {
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet",
+            "04" : "chiplet",
+            "05" : "chiplet",
+            "06" : "chiplet",
+            "07" : "chiplet"
+         },
+         "09" : {
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet",
+            "04" : "chiplet",
+            "05" : "chiplet",
+            "06" : "chiplet",
+            "07" : "chiplet"
+         },
+         "0a" : {
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet",
+            "04" : "chiplet",
+            "05" : "chiplet",
+            "06" : "chiplet",
+            "07" : "chiplet"
+         },
+         "0b" : {
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet",
+            "04" : "chiplet",
+            "05" : "chiplet",
+            "06" : "chiplet",
+            "07" : "chiplet"
+         },
+         "0c" : {
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet",
+            "04" : "chiplet",
+            "05" : "chiplet",
+            "06" : "chiplet",
+            "07" : "chiplet"
+         },
+         "0d" : {
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet",
+            "04" : "chiplet",
+            "05" : "chiplet",
+            "06" : "chiplet",
+            "07" : "chiplet"
          },
          "0e" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet",
+            "04" : "chiplet",
+            "05" : "chiplet",
+            "06" : "chiplet",
+            "07" : "chiplet"
          },
          "0f" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet",
+            "04" : "chiplet",
+            "05" : "chiplet",
+            "06" : "chiplet",
+            "07" : "chiplet"
          },
          "10" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet",
+            "04" : "chiplet",
+            "05" : "chiplet",
+            "06" : "chiplet",
+            "07" : "chiplet"
          },
          "11" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet",
+            "04" : "chiplet",
+            "05" : "chiplet",
+            "06" : "chiplet",
+            "07" : "chiplet"
          },
          "12" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet",
+            "04" : "chiplet",
+            "05" : "chiplet",
+            "06" : "chiplet",
+            "07" : "chiplet"
          },
          "13" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet",
+            "04" : "chiplet",
+            "05" : "chiplet",
+            "06" : "chiplet",
+            "07" : "chiplet"
          },
          "14" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet",
+            "04" : "chiplet",
+            "05" : "chiplet",
+            "06" : "chiplet",
+            "07" : "chiplet"
+         }
+      },
+      "5c39" : {
+         "04" : {
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet",
+            "04" : "chiplet",
+            "05" : "chiplet",
+            "06" : "chiplet",
+            "07" : "chiplet"
          }
       },
       "5c6e" : {
@@ -6945,118 +7319,150 @@
          "1a" : { "00" : "masked" },
          "1b" : { "00" : "masked" }
       },
-      "5cff" : {
+      "5d9e" : {
          "04" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked"
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet"
          },
          "05" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked"
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet"
          },
          "06" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked"
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet"
          },
          "07" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked"
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet"
          },
          "08" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked"
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet"
          },
          "09" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked"
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet"
          },
          "0a" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked"
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet"
          },
          "0d" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked"
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet"
          },
          "0e" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked"
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet"
          }
       },
       "5e77" : {
          "04" : {
-            "00" : "masked",
-            "01" : "masked"
+            "00" : "chiplet",
+            "01" : "chiplet"
          },
          "0d" : {
-            "00" : "masked",
-            "01" : "masked"
+            "00" : "chiplet",
+            "01" : "chiplet"
          },
          "10" : {
-            "00" : "masked",
-            "01" : "masked"
+            "00" : "chiplet",
+            "01" : "chiplet"
          }
       },
-      "679b" : {
+      "628c" : {
          "04" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked"
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet"
          },
          "05" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked"
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet"
          },
          "06" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked"
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet"
          },
          "07" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked"
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet"
          },
          "08" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked"
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet"
          },
          "09" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked"
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet"
          },
          "0a" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked"
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet"
+         }
+      },
+      "663d" : {
+         "02" : {
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet",
+            "04" : "chiplet",
+            "05" : "chiplet",
+            "06" : "chiplet",
+            "07" : "chiplet"
+         },
+         "04" : {
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet",
+            "04" : "chiplet",
+            "05" : "chiplet",
+            "06" : "chiplet",
+            "07" : "chiplet"
+         },
+         "05" : {
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet",
+            "04" : "chiplet",
+            "05" : "chiplet",
+            "06" : "chiplet",
+            "07" : "chiplet"
          }
       },
       "682c" : {
@@ -9237,272 +9643,342 @@
             "1f" : "masked"
          }
       },
-      "70f5" : {
+      "6c90" : {
+         "02" : {
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet"
+         },
          "04" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet"
          },
          "05" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet"
          },
          "06" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet"
          },
          "07" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet"
          },
          "08" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet"
+         },
+         "09" : {
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet"
+         },
+         "0a" : {
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet"
+         },
+         "0d" : {
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet"
+         },
+         "0e" : {
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet"
+         }
+      },
+      "6e31" : {
+         "04" : { "00" : "chiplet" }
+      },
+      "70f5" : {
+         "04" : {
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet",
+            "04" : "chiplet",
+            "05" : "chiplet",
+            "06" : "chiplet",
+            "07" : "chiplet"
+         },
+         "05" : {
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet",
+            "04" : "chiplet",
+            "05" : "chiplet",
+            "06" : "chiplet",
+            "07" : "chiplet"
+         },
+         "06" : {
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet",
+            "04" : "chiplet",
+            "05" : "chiplet",
+            "06" : "chiplet",
+            "07" : "chiplet"
+         },
+         "07" : {
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet",
+            "04" : "chiplet",
+            "05" : "chiplet",
+            "06" : "chiplet",
+            "07" : "chiplet"
+         },
+         "08" : {
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet",
+            "04" : "chiplet",
+            "05" : "chiplet",
+            "06" : "chiplet",
+            "07" : "chiplet"
          }
       },
       "745d" : {
          "04" : {
-            "00" : "masked",
-            "01" : "masked"
+            "00" : "chiplet",
+            "01" : "chiplet"
          },
          "05" : {
-            "00" : "masked",
-            "01" : "masked"
+            "00" : "chiplet",
+            "01" : "chiplet"
          },
          "06" : {
-            "00" : "masked",
-            "01" : "masked"
+            "00" : "chiplet",
+            "01" : "chiplet"
          },
          "07" : {
-            "00" : "masked",
-            "01" : "masked"
+            "00" : "chiplet",
+            "01" : "chiplet"
          },
          "09" : {
-            "00" : "masked",
-            "01" : "masked"
+            "00" : "chiplet",
+            "01" : "chiplet"
          },
          "0a" : {
-            "00" : "masked",
-            "01" : "masked"
+            "00" : "chiplet",
+            "01" : "chiplet"
          },
          "0b" : {
-            "00" : "masked",
-            "01" : "masked"
+            "00" : "chiplet",
+            "01" : "chiplet"
          },
          "0d" : {
-            "00" : "masked",
-            "01" : "masked"
+            "00" : "chiplet",
+            "01" : "chiplet"
          }
+      },
+      "77b3" : {
+         "04" : { "00" : "chiplet" },
+         "05" : { "00" : "chiplet" },
+         "06" : { "00" : "chiplet" }
       },
       "7986" : {
          "04" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet",
+            "04" : "chiplet",
+            "05" : "chiplet",
+            "06" : "chiplet",
+            "07" : "chiplet"
          },
          "05" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet",
+            "04" : "chiplet",
+            "05" : "chiplet",
+            "06" : "chiplet",
+            "07" : "chiplet"
          },
          "06" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet",
+            "04" : "chiplet",
+            "05" : "chiplet",
+            "06" : "chiplet",
+            "07" : "chiplet"
          },
          "07" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet",
+            "04" : "chiplet",
+            "05" : "chiplet",
+            "06" : "chiplet",
+            "07" : "chiplet"
          },
          "08" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet",
+            "04" : "chiplet",
+            "05" : "chiplet",
+            "06" : "chiplet",
+            "07" : "chiplet"
          },
          "09" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet",
+            "04" : "chiplet",
+            "05" : "chiplet",
+            "06" : "chiplet",
+            "07" : "chiplet"
          },
          "0a" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet",
+            "04" : "chiplet",
+            "05" : "chiplet",
+            "06" : "chiplet",
+            "07" : "chiplet"
          },
          "0b" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet",
+            "04" : "chiplet",
+            "05" : "chiplet",
+            "06" : "chiplet",
+            "07" : "chiplet"
          },
          "0c" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet",
+            "04" : "chiplet",
+            "05" : "chiplet",
+            "06" : "chiplet",
+            "07" : "chiplet"
          },
          "0d" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet",
+            "04" : "chiplet",
+            "05" : "chiplet",
+            "06" : "chiplet",
+            "07" : "chiplet"
          },
          "0e" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet",
+            "04" : "chiplet",
+            "05" : "chiplet",
+            "06" : "chiplet",
+            "07" : "chiplet"
          },
          "0f" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet",
+            "04" : "chiplet",
+            "05" : "chiplet",
+            "06" : "chiplet",
+            "07" : "chiplet"
          },
          "10" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet",
+            "04" : "chiplet",
+            "05" : "chiplet",
+            "06" : "chiplet",
+            "07" : "chiplet"
          },
          "11" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet",
+            "04" : "chiplet",
+            "05" : "chiplet",
+            "06" : "chiplet",
+            "07" : "chiplet"
          },
          "12" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet",
+            "04" : "chiplet",
+            "05" : "chiplet",
+            "06" : "chiplet",
+            "07" : "chiplet"
          },
          "13" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet",
+            "04" : "chiplet",
+            "05" : "chiplet",
+            "06" : "chiplet",
+            "07" : "chiplet"
          },
          "14" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet",
+            "04" : "chiplet",
+            "05" : "chiplet",
+            "06" : "chiplet",
+            "07" : "chiplet"
          },
          "15" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet",
+            "04" : "chiplet",
+            "05" : "chiplet",
+            "06" : "chiplet",
+            "07" : "chiplet"
          }
       },
       "7a0e" : {
@@ -9579,21 +10055,19 @@
             "03" : "masked"
          }
       },
-      "7a93" : {
-         "04" : { "00" : "masked" },
-         "05" : { "00" : "masked" },
-         "06" : { "00" : "masked" }
+      "7ca1" : {
+         "04" : { "00" : "chiplet" }
       },
       "7e74" : {
          "04" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet",
+            "04" : "chiplet",
+            "05" : "chiplet",
+            "06" : "chiplet",
+            "07" : "chiplet"
          }
       },
       "803f" : {
@@ -9980,32 +10454,6 @@
             "01" : "masked",
             "02" : "masked",
             "03" : "masked"
-         }
-      },
-      "8110" : {
-         "04" : {
-            "00" : "masked",
-            "01" : "masked"
-         },
-         "05" : {
-            "00" : "masked",
-            "01" : "masked"
-         },
-         "06" : {
-            "00" : "masked",
-            "01" : "masked"
-         },
-         "07" : {
-            "00" : "masked",
-            "01" : "masked"
-         },
-         "0d" : {
-            "00" : "masked",
-            "01" : "masked"
-         },
-         "10" : {
-            "00" : "masked",
-            "01" : "masked"
          }
       },
       "8530" : {
@@ -10650,196 +11098,224 @@
             "07" : "masked"
          }
       },
+      "86a5" : {
+         "02" : { "00" : "chiplet" },
+         "04" : { "00" : "chiplet" },
+         "05" : { "00" : "chiplet" },
+         "06" : { "00" : "chiplet" }
+      },
       "8878" : {
          "02" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet",
+            "04" : "chiplet",
+            "05" : "chiplet",
+            "06" : "chiplet",
+            "07" : "chiplet"
          },
          "04" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet",
+            "04" : "chiplet",
+            "05" : "chiplet",
+            "06" : "chiplet",
+            "07" : "chiplet"
          },
          "05" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet",
+            "04" : "chiplet",
+            "05" : "chiplet",
+            "06" : "chiplet",
+            "07" : "chiplet"
          },
          "06" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet",
+            "04" : "chiplet",
+            "05" : "chiplet",
+            "06" : "chiplet",
+            "07" : "chiplet"
          },
          "07" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet",
+            "04" : "chiplet",
+            "05" : "chiplet",
+            "06" : "chiplet",
+            "07" : "chiplet"
          },
          "08" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet",
+            "04" : "chiplet",
+            "05" : "chiplet",
+            "06" : "chiplet",
+            "07" : "chiplet"
          },
          "09" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet",
+            "04" : "chiplet",
+            "05" : "chiplet",
+            "06" : "chiplet",
+            "07" : "chiplet"
          },
          "0a" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet",
+            "04" : "chiplet",
+            "05" : "chiplet",
+            "06" : "chiplet",
+            "07" : "chiplet"
          },
          "0b" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet",
+            "04" : "chiplet",
+            "05" : "chiplet",
+            "06" : "chiplet",
+            "07" : "chiplet"
          },
          "0c" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet",
+            "04" : "chiplet",
+            "05" : "chiplet",
+            "06" : "chiplet",
+            "07" : "chiplet"
          },
          "0d" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet",
+            "04" : "chiplet",
+            "05" : "chiplet",
+            "06" : "chiplet",
+            "07" : "chiplet"
          },
          "0e" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet",
+            "04" : "chiplet",
+            "05" : "chiplet",
+            "06" : "chiplet",
+            "07" : "chiplet"
          },
          "0f" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet",
+            "04" : "chiplet",
+            "05" : "chiplet",
+            "06" : "chiplet",
+            "07" : "chiplet"
          },
          "10" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet",
+            "04" : "chiplet",
+            "05" : "chiplet",
+            "06" : "chiplet",
+            "07" : "chiplet"
          },
          "11" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet",
+            "04" : "chiplet",
+            "05" : "chiplet",
+            "06" : "chiplet",
+            "07" : "chiplet"
          },
          "12" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet",
+            "04" : "chiplet",
+            "05" : "chiplet",
+            "06" : "chiplet",
+            "07" : "chiplet"
          },
          "13" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet",
+            "04" : "chiplet",
+            "05" : "chiplet",
+            "06" : "chiplet",
+            "07" : "chiplet"
          },
          "14" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet",
+            "04" : "chiplet",
+            "05" : "chiplet",
+            "06" : "chiplet",
+            "07" : "chiplet"
          },
          "15" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet",
+            "04" : "chiplet",
+            "05" : "chiplet",
+            "06" : "chiplet",
+            "07" : "chiplet"
+         }
+      },
+      "8a20" : {
+         "04" : {
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet",
+            "04" : "chiplet",
+            "05" : "chiplet",
+            "06" : "chiplet",
+            "07" : "chiplet"
+         },
+         "05" : {
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet",
+            "04" : "chiplet",
+            "05" : "chiplet",
+            "06" : "chiplet",
+            "07" : "chiplet"
          }
       },
       "8b57" : {
@@ -12420,44 +12896,6 @@
             "05" : "masked",
             "06" : "masked",
             "07" : "masked"
-         }
-      },
-      "8f56" : {
-         "04" : {
-            "00" : "masked",
-            "01" : "masked"
-         },
-         "05" : {
-            "00" : "masked",
-            "01" : "masked"
-         },
-         "06" : {
-            "00" : "masked",
-            "01" : "masked"
-         },
-         "07" : {
-            "00" : "masked",
-            "01" : "masked"
-         },
-         "09" : {
-            "00" : "masked",
-            "01" : "masked"
-         },
-         "0a" : {
-            "00" : "masked",
-            "01" : "masked"
-         },
-         "0b" : {
-            "00" : "masked",
-            "01" : "masked"
-         },
-         "0c" : {
-            "00" : "masked",
-            "01" : "masked"
-         },
-         "0d" : {
-            "00" : "masked",
-            "01" : "masked"
          }
       },
       "8f5a" : {
@@ -14442,6 +14880,18 @@
          "00" : { "00" : "pll_unlock_0" },
          "01" : { "00" : "pll_unlock_1" }
       },
+      "a006" : {
+         "04" : {
+            "00" : "chiplet",
+            "01" : "chiplet",
+            "02" : "chiplet",
+            "03" : "chiplet",
+            "04" : "chiplet",
+            "05" : "chiplet",
+            "06" : "chiplet",
+            "07" : "chiplet"
+         }
+      },
       "a832" : {
          "00" : {
             "00" : "self",
@@ -16062,9 +16512,6 @@
             "03" : "masked"
          }
       },
-      "ba60" : {
-         "04" : { "00" : "masked" }
-      },
       "ba6a" : {
          "00" : { "00" : "masked" },
          "01" : { "00" : "masked" },
@@ -17623,66 +18070,6 @@
             "07" : "masked"
          }
       },
-      "c910" : {
-         "04" : {
-            "00" : "masked",
-            "01" : "masked"
-         },
-         "05" : {
-            "00" : "masked",
-            "01" : "masked"
-         },
-         "06" : {
-            "00" : "masked",
-            "01" : "masked"
-         },
-         "07" : {
-            "00" : "masked",
-            "01" : "masked"
-         },
-         "09" : {
-            "00" : "masked",
-            "01" : "masked"
-         },
-         "0a" : {
-            "00" : "masked",
-            "01" : "masked"
-         },
-         "0b" : {
-            "00" : "masked",
-            "01" : "masked"
-         },
-         "0d" : {
-            "00" : "masked",
-            "01" : "masked"
-         },
-         "10" : {
-            "00" : "masked",
-            "01" : "masked"
-         }
-      },
-      "d3bc" : {
-         "04" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
-         },
-         "05" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
-         }
-      },
       "d773" : {
          "00" : { "00" : "masked" },
          "01" : { "00" : "masked" },
@@ -18391,102 +18778,90 @@
          }
       },
       "f833" : {
-         "04" : { "00" : "masked" },
-         "07" : { "00" : "masked" }
+         "04" : { "00" : "chiplet" },
+         "07" : { "00" : "chiplet" }
       },
       "f89e" : {
-         "01" : { "00" : "masked" },
-         "02" : { "00" : "masked" },
-         "03" : { "00" : "masked" },
-         "08" : { "00" : "masked" },
-         "09" : { "00" : "masked" },
-         "0c" : { "00" : "masked" },
-         "0d" : { "00" : "masked" },
-         "0e" : { "00" : "masked" },
-         "0f" : { "00" : "masked" },
-         "10" : { "00" : "masked" },
-         "11" : { "00" : "masked" },
-         "12" : { "00" : "masked" },
-         "13" : { "00" : "masked" },
-         "18" : { "00" : "masked" },
-         "19" : { "00" : "masked" },
-         "1a" : { "00" : "masked" },
-         "1b" : { "00" : "masked" },
-         "1c" : { "00" : "masked" },
-         "1d" : { "00" : "masked" },
-         "1e" : { "00" : "masked" },
-         "1f" : { "00" : "masked" },
-         "20" : { "00" : "masked" },
-         "21" : { "00" : "masked" },
-         "22" : { "00" : "masked" },
-         "23" : { "00" : "masked" },
-         "24" : { "00" : "masked" },
-         "25" : { "00" : "masked" },
-         "26" : { "00" : "masked" },
-         "27" : { "00" : "masked" }
-      },
-      "fa75" : {
-         "04" : { "00" : "masked" },
-         "05" : { "00" : "masked" },
-         "06" : { "00" : "masked" },
-         "07" : { "00" : "masked" },
-         "08" : { "00" : "masked" },
-         "09" : { "00" : "masked" },
-         "0a" : { "00" : "masked" },
-         "0d" : { "00" : "masked" },
-         "0e" : { "00" : "masked" },
-         "0f" : { "00" : "masked" }
+         "01" : { "00" : "global" },
+         "02" : { "00" : "global" },
+         "03" : { "00" : "global" },
+         "08" : { "00" : "global" },
+         "09" : { "00" : "global" },
+         "0c" : { "00" : "global" },
+         "0d" : { "00" : "global" },
+         "0e" : { "00" : "global" },
+         "0f" : { "00" : "global" },
+         "10" : { "00" : "global" },
+         "11" : { "00" : "global" },
+         "12" : { "00" : "global" },
+         "13" : { "00" : "global" },
+         "18" : { "00" : "global" },
+         "19" : { "00" : "global" },
+         "1a" : { "00" : "global" },
+         "1b" : { "00" : "global" },
+         "1c" : { "00" : "global" },
+         "1d" : { "00" : "global" },
+         "1e" : { "00" : "global" },
+         "1f" : { "00" : "global" },
+         "20" : { "00" : "global" },
+         "21" : { "00" : "global" },
+         "22" : { "00" : "global" },
+         "23" : { "00" : "global" },
+         "24" : { "00" : "global" },
+         "25" : { "00" : "global" },
+         "26" : { "00" : "global" },
+         "27" : { "00" : "global" }
       },
       "fb0b" : {
-         "01" : { "00" : "masked" },
-         "02" : { "00" : "masked" },
-         "03" : { "00" : "masked" },
-         "08" : { "00" : "masked" },
-         "09" : { "00" : "masked" },
-         "0c" : { "00" : "masked" },
-         "0d" : { "00" : "masked" },
-         "0e" : { "00" : "masked" },
-         "0f" : { "00" : "masked" },
-         "10" : { "00" : "masked" },
-         "11" : { "00" : "masked" },
-         "12" : { "00" : "masked" },
-         "13" : { "00" : "masked" },
-         "18" : { "00" : "masked" },
-         "19" : { "00" : "masked" },
-         "1a" : { "00" : "masked" },
-         "1b" : { "00" : "masked" },
-         "1c" : { "00" : "masked" },
-         "1d" : { "00" : "masked" },
-         "1e" : { "00" : "masked" },
-         "1f" : { "00" : "masked" },
-         "20" : { "00" : "masked" },
-         "21" : { "00" : "masked" },
-         "22" : { "00" : "masked" },
-         "23" : { "00" : "masked" },
-         "24" : { "00" : "masked" },
-         "25" : { "00" : "masked" },
-         "26" : { "00" : "masked" },
-         "27" : { "00" : "masked" }
+         "01" : { "00" : "global" },
+         "02" : { "00" : "global" },
+         "03" : { "00" : "global" },
+         "08" : { "00" : "global" },
+         "09" : { "00" : "global" },
+         "0c" : { "00" : "global" },
+         "0d" : { "00" : "global" },
+         "0e" : { "00" : "global" },
+         "0f" : { "00" : "global" },
+         "10" : { "00" : "global" },
+         "11" : { "00" : "global" },
+         "12" : { "00" : "global" },
+         "13" : { "00" : "global" },
+         "18" : { "00" : "global" },
+         "19" : { "00" : "global" },
+         "1a" : { "00" : "global" },
+         "1b" : { "00" : "global" },
+         "1c" : { "00" : "global" },
+         "1d" : { "00" : "global" },
+         "1e" : { "00" : "global" },
+         "1f" : { "00" : "global" },
+         "20" : { "00" : "global" },
+         "21" : { "00" : "global" },
+         "22" : { "00" : "global" },
+         "23" : { "00" : "global" },
+         "24" : { "00" : "global" },
+         "25" : { "00" : "global" },
+         "26" : { "00" : "global" },
+         "27" : { "00" : "global" }
       },
       "fb33" : {
-         "04" : { "00" : "masked" },
-         "07" : { "00" : "masked" },
-         "11" : { "00" : "masked" },
-         "12" : { "00" : "masked" },
-         "13" : { "00" : "masked" },
-         "14" : { "00" : "masked" },
-         "15" : { "00" : "masked" },
-         "16" : { "00" : "masked" },
-         "17" : { "00" : "masked" },
-         "18" : { "00" : "masked" },
-         "19" : { "00" : "masked" },
-         "1a" : { "00" : "masked" },
-         "1b" : { "00" : "masked" },
-         "1c" : { "00" : "masked" },
-         "1d" : { "00" : "masked" },
-         "1e" : { "00" : "masked" },
-         "1f" : { "00" : "masked" },
-         "20" : { "00" : "masked" }
+         "04" : { "00" : "chiplet" },
+         "07" : { "00" : "chiplet" },
+         "11" : { "00" : "chiplet" },
+         "12" : { "00" : "chiplet" },
+         "13" : { "00" : "chiplet" },
+         "14" : { "00" : "chiplet" },
+         "15" : { "00" : "chiplet" },
+         "16" : { "00" : "chiplet" },
+         "17" : { "00" : "chiplet" },
+         "18" : { "00" : "chiplet" },
+         "19" : { "00" : "chiplet" },
+         "1a" : { "00" : "chiplet" },
+         "1b" : { "00" : "chiplet" },
+         "1c" : { "00" : "chiplet" },
+         "1d" : { "00" : "chiplet" },
+         "1e" : { "00" : "chiplet" },
+         "1f" : { "00" : "chiplet" },
+         "20" : { "00" : "chiplet" }
       },
       "fbbb" : {
          "00" : {
@@ -18539,35 +18914,35 @@
          }
       },
       "fcb2" : {
-         "01" : { "00" : "masked" },
-         "02" : { "00" : "masked" },
-         "03" : { "00" : "masked" },
-         "08" : { "00" : "masked" },
-         "09" : { "00" : "masked" },
-         "0c" : { "00" : "masked" },
-         "0d" : { "00" : "masked" },
-         "0e" : { "00" : "masked" },
-         "0f" : { "00" : "masked" },
-         "10" : { "00" : "masked" },
-         "11" : { "00" : "masked" },
-         "12" : { "00" : "masked" },
-         "13" : { "00" : "masked" },
-         "18" : { "00" : "masked" },
-         "19" : { "00" : "masked" },
-         "1a" : { "00" : "masked" },
-         "1b" : { "00" : "masked" },
-         "1c" : { "00" : "masked" },
-         "1d" : { "00" : "masked" },
-         "1e" : { "00" : "masked" },
-         "1f" : { "00" : "masked" },
-         "20" : { "00" : "masked" },
-         "21" : { "00" : "masked" },
-         "22" : { "00" : "masked" },
-         "23" : { "00" : "masked" },
-         "24" : { "00" : "masked" },
-         "25" : { "00" : "masked" },
-         "26" : { "00" : "masked" },
-         "27" : { "00" : "masked" }
+         "01" : { "00" : "global" },
+         "02" : { "00" : "global" },
+         "03" : { "00" : "global" },
+         "08" : { "00" : "global" },
+         "09" : { "00" : "global" },
+         "0c" : { "00" : "global" },
+         "0d" : { "00" : "global" },
+         "0e" : { "00" : "global" },
+         "0f" : { "00" : "global" },
+         "10" : { "00" : "global" },
+         "11" : { "00" : "global" },
+         "12" : { "00" : "global" },
+         "13" : { "00" : "global" },
+         "18" : { "00" : "global" },
+         "19" : { "00" : "global" },
+         "1a" : { "00" : "global" },
+         "1b" : { "00" : "global" },
+         "1c" : { "00" : "global" },
+         "1d" : { "00" : "global" },
+         "1e" : { "00" : "global" },
+         "1f" : { "00" : "global" },
+         "20" : { "00" : "global" },
+         "21" : { "00" : "global" },
+         "22" : { "00" : "global" },
+         "23" : { "00" : "global" },
+         "24" : { "00" : "global" },
+         "25" : { "00" : "global" },
+         "26" : { "00" : "global" },
+         "27" : { "00" : "global" }
       }
    }
 }
