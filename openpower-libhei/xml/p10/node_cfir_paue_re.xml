@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<attn_node model_ec="P10_20" name="CFIR_PAUE_RE" reg_type="SCOM">
+    <register name="CFIR_PAUE_RE">
+        <instance addr="0x10040001" reg_inst="0"/>
+        <instance addr="0x11040001" reg_inst="1"/>
+    </register>
+    <register name="CFIR_PAUE_RE_MASK">
+        <instance addr="0x10040041" reg_inst="0"/>
+        <instance addr="0x11040041" reg_inst="1"/>
+    </register>
+    <rule attn_type="RE" node_inst="0:1">
+        <expr type="and">
+            <expr type="reg" value1="CFIR_PAUE_RE"/>
+            <expr type="not">
+                <expr type="reg" value1="CFIR_PAUE_RE_MASK"/>
+            </expr>
+            <expr type="int" value1="0x0FFFFFFFFFFFFFFF"/>
+        </expr>
+    </rule>
+    <bit pos="2">recovery with any local checkstop</bit>
+    <bit child_node="PAU_LOCAL_FIR" node_inst="0,1" pos="4">Attention from PAU_LOCAL_FIR</bit>
+    <bit child_node="PAU_FIR_0" node_inst="0,3" pos="5">Attention from PAU_FIR_0</bit>
+    <bit child_node="PAU_FIR_1" node_inst="0,3" pos="6">Attention from PAU_FIR_1</bit>
+    <bit child_node="PAU_FIR_2" node_inst="0,3" pos="7">Attention from PAU_FIR_2</bit>
+    <bit child_node="PAU_PHY_FIR" node_inst="0,1" pos="13">Attention from PAU_PHY_FIR</bit>
+    <bit child_node="PAU_PTL_FIR" node_inst="0,1" pos="16">Attention from PAU_PTL_FIR</bit>
+</attn_node>

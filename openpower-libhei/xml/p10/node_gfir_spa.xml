@@ -11,22 +11,22 @@
     <bit child_node="CFIR_N1_SPA" node_inst="0" pos="3">Attention from N1 chiplet</bit>
     <bit child_node="CFIR_PCI_SPA_HA" node_inst="0" pos="8">Attention from PCI 0 chiplet</bit>
     <bit child_node="CFIR_PCI_SPA_HA" node_inst="1" pos="9">Attention from PCI 1 chiplet</bit>
-    <bit child_node="CFIR_MC_CS_RE_SPA" node_inst="0" pos="12">Attention from MC 0 chiplet</bit>
-    <bit child_node="CFIR_MC_CS_RE_SPA" node_inst="1" pos="13">Attention from MC 1 chiplet</bit>
-    <bit child_node="CFIR_MC_CS_RE_SPA" node_inst="2" pos="14">Attention from MC 2 chiplet</bit>
-    <bit child_node="CFIR_MC_CS_RE_SPA" node_inst="3" pos="15">Attention from MC 3 chiplet</bit>
+    <bit child_node="CFIR_MC_SPA" node_inst="0" pos="12">Attention from MC 0 chiplet</bit>
+    <bit child_node="CFIR_MC_SPA" node_inst="1" pos="13">Attention from MC 1 chiplet</bit>
+    <bit child_node="CFIR_MC_SPA" node_inst="2" pos="14">Attention from MC 2 chiplet</bit>
+    <bit child_node="CFIR_MC_SPA" node_inst="3" pos="15">Attention from MC 3 chiplet</bit>
     <bit child_node="CFIR_PAUE_SPA" node_inst="0" pos="16">Attention from PAU 0 chiplet</bit>
     <bit child_node="CFIR_PAUE_SPA" node_inst="1" pos="17">Attention from PAU 1 chiplet</bit>
     <bit child_node="CFIR_PAUW_SPA" node_inst="0" pos="18">Attention from PAU 2 chiplet</bit>
     <bit child_node="CFIR_PAUW_SPA" node_inst="1" pos="19">Attention from PAU 3 chiplet</bit>
-    <bit child_node="CFIR_IOHS_CS_RE_SPA" node_inst="0" pos="24">Attention from IOHS 0 chiplet</bit>
-    <bit child_node="CFIR_IOHS_CS_RE_SPA" node_inst="1" pos="25">Attention from IOHS 1 chiplet</bit>
-    <bit child_node="CFIR_IOHS_CS_RE_SPA" node_inst="2" pos="26">Attention from IOHS 2 chiplet</bit>
-    <bit child_node="CFIR_IOHS_CS_RE_SPA" node_inst="3" pos="27">Attention from IOHS 3 chiplet</bit>
-    <bit child_node="CFIR_IOHS_CS_RE_SPA" node_inst="4" pos="28">Attention from IOHS 4 chiplet</bit>
-    <bit child_node="CFIR_IOHS_CS_RE_SPA" node_inst="5" pos="29">Attention from IOHS 5 chiplet</bit>
-    <bit child_node="CFIR_IOHS_CS_RE_SPA" node_inst="6" pos="30">Attention from IOHS 6 chiplet</bit>
-    <bit child_node="CFIR_IOHS_CS_RE_SPA" node_inst="7" pos="31">Attention from IOHS 7 chiplet</bit>
+    <bit child_node="CFIR_IOHS_SPA" node_inst="0" pos="24">Attention from IOHS 0 chiplet</bit>
+    <bit child_node="CFIR_IOHS_SPA" node_inst="1" pos="25">Attention from IOHS 1 chiplet</bit>
+    <bit child_node="CFIR_IOHS_SPA" node_inst="2" pos="26">Attention from IOHS 2 chiplet</bit>
+    <bit child_node="CFIR_IOHS_SPA" node_inst="3" pos="27">Attention from IOHS 3 chiplet</bit>
+    <bit child_node="CFIR_IOHS_SPA" node_inst="4" pos="28">Attention from IOHS 4 chiplet</bit>
+    <bit child_node="CFIR_IOHS_SPA" node_inst="5" pos="29">Attention from IOHS 5 chiplet</bit>
+    <bit child_node="CFIR_IOHS_SPA" node_inst="6" pos="30">Attention from IOHS 6 chiplet</bit>
+    <bit child_node="CFIR_IOHS_SPA" node_inst="7" pos="31">Attention from IOHS 7 chiplet</bit>
     <bit child_node="CFIR_EQ_SPA" node_inst="0" pos="32">Attention from EQ 0 chiplet</bit>
     <bit child_node="CFIR_EQ_SPA" node_inst="1" pos="33">Attention from EQ 1 chiplet</bit>
     <bit child_node="CFIR_EQ_SPA" node_inst="2" pos="34">Attention from EQ 2 chiplet</bit>

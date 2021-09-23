@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<attn_node model_ec="P10_10,P10_20" name="CFIR_N0_RE" reg_type="SCOM">
+    <register name="CFIR_N0_RE">
+        <instance addr="0x02040001" reg_inst="0"/>
+    </register>
+    <register name="CFIR_N0_RE_MASK">
+        <instance addr="0x02040041" reg_inst="0"/>
+    </register>
+    <rule attn_type="RE" node_inst="0">
+        <expr type="and">
+            <expr type="reg" value1="CFIR_N0_RE"/>
+            <expr type="not">
+                <expr type="reg" value1="CFIR_N0_RE_MASK"/>
+            </expr>
+            <expr type="int" value1="0x0FFFFFFFFFFFFFFF"/>
+        </expr>
+    </rule>
+    <bit pos="2">recovery with any local checkstop</bit>
+    <bit child_node="N0_LOCAL_FIR" node_inst="0" pos="4">Attention from N0_LOCAL_FIR</bit>
+    <bit child_node="NMMU_CQ_FIR" node_inst="0" pos="5">Attention from NMMU_CQ_FIR 0</bit>
+    <bit child_node="NMMU_FIR" node_inst="0" pos="6">Attention from NMMU_FIR 0</bit>
+    <bit child_node="INT_CQ_FIR" node_inst="0" pos="7">Attention from INT_CQ_FIR</bit>
+    <bit child_node="VAS_FIR" node_inst="0" pos="8">Attention from VAS_FIR</bit>
+    <bit child_node="NX_DMA_ENG_FIR" node_inst="0" pos="9">Attention from NX_DMA_ENG_FIR</bit>
+    <bit child_node="NX_CQ_FIR" node_inst="0" pos="10">Attention from NX_CQ_FIR</bit>
+    <bit child_node="PCI_NEST_FIR" node_inst="3" pos="13">Attention from PCI_NEST_FIR 3</bit>
+    <bit child_node="PCI_NEST_FIR" node_inst="4" pos="14">Attention from PCI_NEST_FIR 4</bit>
+    <bit child_node="PCI_NEST_FIR" node_inst="5" pos="15">Attention from PCI_NEST_FIR 5</bit>
+</attn_node>

@@ -1,31 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<attn_node model_ec="P10_10,P10_20" name="CFIR_N0_CS_RE" reg_type="SCOM">
+<attn_node model_ec="P10_10,P10_20" name="CFIR_N0_CS" reg_type="SCOM">
     <register name="CFIR_N0_CS">
         <instance addr="0x02040000" reg_inst="0"/>
     </register>
     <register name="CFIR_N0_CS_MASK">
         <instance addr="0x02040040" reg_inst="0"/>
     </register>
-    <register name="CFIR_N0_RE">
-        <instance addr="0x02040001" reg_inst="0"/>
-    </register>
-    <register name="CFIR_N0_RE_MASK">
-        <instance addr="0x02040041" reg_inst="0"/>
-    </register>
     <rule attn_type="CS" node_inst="0">
         <expr type="and">
             <expr type="reg" value1="CFIR_N0_CS"/>
             <expr type="not">
                 <expr type="reg" value1="CFIR_N0_CS_MASK"/>
-            </expr>
-            <expr type="int" value1="0x0FFFFFFFFFFFFFFF"/>
-        </expr>
-    </rule>
-    <rule attn_type="RE" node_inst="0">
-        <expr type="and">
-            <expr type="reg" value1="CFIR_N0_RE"/>
-            <expr type="not">
-                <expr type="reg" value1="CFIR_N0_RE_MASK"/>
             </expr>
             <expr type="int" value1="0x0FFFFFFFFFFFFFFF"/>
         </expr>

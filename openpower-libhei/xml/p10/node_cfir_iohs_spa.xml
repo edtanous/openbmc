@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<attn_node model_ec="P10_10,P10_20" name="CFIR_IOHS_SPA" reg_type="SCOM">
+    <register name="CFIR_IOHS_SPA">
+        <instance addr="0x18040002" reg_inst="0"/>
+        <instance addr="0x19040002" reg_inst="1"/>
+        <instance addr="0x1A040002" reg_inst="2"/>
+        <instance addr="0x1B040002" reg_inst="3"/>
+        <instance addr="0x1C040002" reg_inst="4"/>
+        <instance addr="0x1D040002" reg_inst="5"/>
+        <instance addr="0x1E040002" reg_inst="6"/>
+        <instance addr="0x1F040002" reg_inst="7"/>
+    </register>
+    <register name="CFIR_IOHS_SPA_MASK">
+        <instance addr="0x18040042" reg_inst="0"/>
+        <instance addr="0x19040042" reg_inst="1"/>
+        <instance addr="0x1A040042" reg_inst="2"/>
+        <instance addr="0x1B040042" reg_inst="3"/>
+        <instance addr="0x1C040042" reg_inst="4"/>
+        <instance addr="0x1D040042" reg_inst="5"/>
+        <instance addr="0x1E040042" reg_inst="6"/>
+        <instance addr="0x1F040042" reg_inst="7"/>
+    </register>
+    <rule attn_type="SPA" node_inst="0:7">
+        <expr type="and">
+            <expr type="reg" value1="CFIR_IOHS_SPA"/>
+            <expr type="not">
+                <expr type="reg" value1="CFIR_IOHS_SPA_MASK"/>
+            </expr>
+            <expr type="int" value1="0x0FFFFFFFFFFFFFFF"/>
+        </expr>
+    </rule>
+    <bit child_node="IOHS_LOCAL_FIR" node_inst="0,1,2,3,4,5,6,7" pos="4">Attention from IOHS_LOCAL_FIR</bit>
+    <bit child_node="IOHS_DLP_FIR" node_inst="0,1,2,3,4,5,6,7" pos="5">Attention from IOHS_DLP_FIR</bit>
+</attn_node>

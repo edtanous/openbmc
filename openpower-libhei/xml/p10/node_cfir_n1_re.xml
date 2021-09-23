@@ -15,6 +15,7 @@
             <expr type="int" value1="0x0FFFFFFFFFFFFFFF"/>
         </expr>
     </rule>
+    <bit pos="2">recovery with any local checkstop</bit>
     <bit child_node="N1_LOCAL_FIR" node_inst="0" pos="4">Attention from N1_LOCAL_FIR</bit>
     <bit child_node="NMMU_CQ_FIR" node_inst="1" pos="5">Attention from NMMU_CQ_FIR 1</bit>
     <bit child_node="NMMU_FIR" node_inst="1" pos="6">Attention from NMMU_FIR 1</bit>

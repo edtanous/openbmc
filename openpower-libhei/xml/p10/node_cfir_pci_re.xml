@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<attn_node model_ec="P10_10,P10_20" name="CFIR_PCI_RE" reg_type="SCOM">
+    <register name="CFIR_PCI_RE">
+        <instance addr="0x08040001" reg_inst="0"/>
+        <instance addr="0x09040001" reg_inst="1"/>
+    </register>
+    <register name="CFIR_PCI_RE_MASK">
+        <instance addr="0x08040041" reg_inst="0"/>
+        <instance addr="0x09040041" reg_inst="1"/>
+    </register>
+    <rule attn_type="RE" node_inst="0:1">
+        <expr type="and">
+            <expr type="reg" value1="CFIR_PCI_RE"/>
+            <expr type="not">
+                <expr type="reg" value1="CFIR_PCI_RE_MASK"/>
+            </expr>
+            <expr type="int" value1="0x0FFFFFFFFFFFFFFF"/>
+        </expr>
+    </rule>
+    <bit pos="2">recovery with any local checkstop</bit>
+    <bit child_node="PCI_LOCAL_FIR" node_inst="0,1" pos="4">Attention from PCI_LOCAL_FIR</bit>
+    <bit child_node="PCI_ETU_FIR" node_inst="0,3" pos="5">Attention from PCI_ETU_FIR 0</bit>
+    <bit child_node="PCI_ETU_FIR" node_inst="1,4" pos="6">Attention from PCI_ETU_FIR 1</bit>
+    <bit child_node="PCI_ETU_FIR" node_inst="2,5" pos="7">Attention from PCI_ETU_FIR 2</bit>
+    <bit child_node="PCI_FIR" node_inst="0,3" pos="9">Attention from PCI_FIR 0</bit>
+    <bit child_node="PCI_FIR" node_inst="1,4" pos="10">Attention from PCI_FIR 1</bit>
+    <bit child_node="PCI_FIR" node_inst="2,5" pos="11">Attention from PCI_FIR 2</bit>
+    <bit child_node="PCI_IOP_FIR" node_inst="0,2" pos="12">Attention from PCI_IOP_FIR 0</bit>
+    <bit child_node="PCI_IOP_FIR" node_inst="1,3" pos="13">Attention from PCI_IOP_FIR 1</bit>
+</attn_node>

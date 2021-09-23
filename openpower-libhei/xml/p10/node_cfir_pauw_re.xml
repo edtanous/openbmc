@@ -1,13 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<attn_node model_ec="P10_10" name="CFIR_PAUW_CS_RE" reg_type="SCOM">
-    <register name="CFIR_PAUW_CS">
-        <instance addr="0x12040000" reg_inst="0"/>
-        <instance addr="0x13040000" reg_inst="1"/>
-    </register>
-    <register name="CFIR_PAUW_CS_MASK">
-        <instance addr="0x12040040" reg_inst="0"/>
-        <instance addr="0x13040040" reg_inst="1"/>
-    </register>
+<attn_node model_ec="P10_20" name="CFIR_PAUW_RE" reg_type="SCOM">
     <register name="CFIR_PAUW_RE">
         <instance addr="0x12040001" reg_inst="0"/>
         <instance addr="0x13040001" reg_inst="1"/>
@@ -16,15 +8,6 @@
         <instance addr="0x12040041" reg_inst="0"/>
         <instance addr="0x13040041" reg_inst="1"/>
     </register>
-    <rule attn_type="CS" node_inst="0:1">
-        <expr type="and">
-            <expr type="reg" value1="CFIR_PAUW_CS"/>
-            <expr type="not">
-                <expr type="reg" value1="CFIR_PAUW_CS_MASK"/>
-            </expr>
-            <expr type="int" value1="0x0FFFFFFFFFFFFFFF"/>
-        </expr>
-    </rule>
     <rule attn_type="RE" node_inst="0:1">
         <expr type="and">
             <expr type="reg" value1="CFIR_PAUW_RE"/>
@@ -34,6 +17,7 @@
             <expr type="int" value1="0x0FFFFFFFFFFFFFFF"/>
         </expr>
     </rule>
+    <bit pos="2">recovery with any local checkstop</bit>
     <bit child_node="PAU_LOCAL_FIR" node_inst="2,3" pos="4">Attention from PAU_LOCAL_FIR</bit>
     <bit child_node="PAU_FIR_0" node_inst="4,6" pos="5">Attention from PAU_FIR_0</bit>
     <bit child_node="PAU_FIR_1" node_inst="4,6" pos="6">Attention from PAU_FIR_1</bit>
@@ -42,6 +26,5 @@
     <bit child_node="PAU_FIR_1" node_inst="5,7" pos="10">Attention from PAU_FIR_1</bit>
     <bit child_node="PAU_FIR_2" node_inst="5,7" pos="11">Attention from PAU_FIR_2</bit>
     <bit child_node="PAU_PHY_FIR" node_inst="2,3" pos="13">Attention from PAU_PHY_FIR</bit>
-    <bit child_node="PAU_DL_FIR" node_inst="2,3" pos="14">Attention from PAU_DL_FIR</bit>
     <bit child_node="PAU_PTL_FIR" node_inst="2,3" pos="16">Attention from PAU_PTL_FIR</bit>
 </attn_node>
