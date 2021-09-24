@@ -250,6 +250,10 @@
             { "type": "action", "name": "level2" }
         ],
 
+        "deadman_timer": [
+            { "type": "action", "name": "level2" }
+        ],
+
         "masked"         : [ { "type": "action", "name": "level2" } ],
         "global"         : [ { "type": "action", "name": "level2" } ],
         "chiplet"        : [ { "type": "action", "name": "level2" } ],
@@ -1938,52 +1942,52 @@
       },
       "384d" : {
          "00" : {
-            "00" : "masked",
-            "01" : "masked"
+            "00" : "self",
+            "01" : "self"
          },
          "01" : {
-            "00" : "masked",
-            "01" : "masked"
+            "00" : "self",
+            "01" : "self"
          },
          "02" : {
-            "00" : "masked",
-            "01" : "masked"
+            "00" : "self",
+            "01" : "self"
          },
          "03" : {
-            "00" : "masked",
-            "01" : "masked"
+            "00" : "self",
+            "01" : "self"
          },
          "04" : {
-            "00" : "masked",
-            "01" : "masked"
+            "00" : "self",
+            "01" : "self"
          },
          "05" : {
             "00" : "masked",
             "01" : "masked"
          },
          "06" : {
-            "00" : "masked",
-            "01" : "masked"
+            "00" : "self",
+            "01" : "self"
          },
          "07" : {
-            "00" : "masked",
-            "01" : "masked"
+            "00" : "self",
+            "01" : "self"
          },
          "08" : {
-            "00" : "masked",
-            "01" : "masked"
+            "00" : "self",
+            "01" : "self"
          },
          "09" : {
-            "00" : "masked",
-            "01" : "masked"
+            "00" : "self",
+            "01" : "self"
          },
          "0a" : {
-            "00" : "masked",
-            "01" : "masked"
+            "00" : "self",
+            "01" : "self"
          },
          "0b" : {
-            "00" : "masked",
-            "01" : "masked"
+            "00" : "self",
+            "01" : "self"
          },
          "0c" : {
             "00" : "masked",
@@ -2018,12 +2022,12 @@
             "01" : "masked"
          },
          "14" : {
-            "00" : "masked",
-            "01" : "masked"
+            "00" : "self",
+            "01" : "self"
          },
          "15" : {
-            "00" : "masked",
-            "01" : "masked"
+            "00" : "self",
+            "01" : "self"
          },
          "16" : {
             "00" : "masked",
@@ -10245,76 +10249,76 @@
       },
       "803f" : {
          "00" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked"
+            "00" : "self",
+            "01" : "self",
+            "02" : "self",
+            "03" : "self"
          },
          "01" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked"
+            "00" : "self",
+            "01" : "self",
+            "02" : "self",
+            "03" : "self"
          },
          "02" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked"
+            "00" : "self",
+            "01" : "self",
+            "02" : "self",
+            "03" : "self"
          },
          "03" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked"
+            "00" : "self",
+            "01" : "self",
+            "02" : "self",
+            "03" : "self"
          },
          "04" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked"
+            "00" : "self",
+            "01" : "self",
+            "02" : "self",
+            "03" : "self"
          },
          "05" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked"
+            "00" : "self",
+            "01" : "self",
+            "02" : "self",
+            "03" : "self"
          },
          "06" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked"
+            "00" : "self",
+            "01" : "self",
+            "02" : "self",
+            "03" : "self"
          },
          "07" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked"
+            "00" : "self",
+            "01" : "self",
+            "02" : "self",
+            "03" : "self"
          },
          "08" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked"
+            "00" : "self",
+            "01" : "self",
+            "02" : "self",
+            "03" : "self"
          },
          "09" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked"
+            "00" : "self",
+            "01" : "self",
+            "02" : "self",
+            "03" : "self"
          },
          "0a" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked"
+            "00" : "self",
+            "01" : "self",
+            "02" : "self",
+            "03" : "self"
          },
          "0b" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked"
+            "00" : "self",
+            "01" : "self",
+            "02" : "self",
+            "03" : "self"
          },
          "0c" : {
             "00" : "masked",
@@ -10365,16 +10369,16 @@
             "03" : "masked"
          },
          "14" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked"
+            "00" : "self",
+            "01" : "self",
+            "02" : "self",
+            "03" : "self"
          },
          "15" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked"
+            "00" : "self",
+            "01" : "self",
+            "02" : "self",
+            "03" : "self"
          },
          "16" : {
             "00" : "masked",
@@ -10631,44 +10635,44 @@
       },
       "8530" : {
          "00" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "self",
+            "01" : "self",
+            "02" : "self",
+            "03" : "self",
+            "04" : "self",
+            "05" : "self",
+            "06" : "self",
+            "07" : "self"
          },
          "01" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "self",
+            "01" : "self",
+            "02" : "self",
+            "03" : "self",
+            "04" : "self",
+            "05" : "self",
+            "06" : "self",
+            "07" : "self"
          },
          "02" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "self",
+            "01" : "self",
+            "02" : "self",
+            "03" : "self",
+            "04" : "self",
+            "05" : "self",
+            "06" : "self",
+            "07" : "self"
          },
          "03" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "self",
+            "01" : "self",
+            "02" : "self",
+            "03" : "self",
+            "04" : "self",
+            "05" : "self",
+            "06" : "self",
+            "07" : "self"
          },
          "04" : {
             "00" : "masked",
@@ -10681,124 +10685,124 @@
             "07" : "masked"
          },
          "05" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "self",
+            "01" : "self",
+            "02" : "self",
+            "03" : "self",
+            "04" : "self",
+            "05" : "self",
+            "06" : "self",
+            "07" : "self"
          },
          "06" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "self",
+            "01" : "self",
+            "02" : "self",
+            "03" : "self",
+            "04" : "self",
+            "05" : "self",
+            "06" : "self",
+            "07" : "self"
          },
          "07" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "self",
+            "01" : "self",
+            "02" : "self",
+            "03" : "self",
+            "04" : "self",
+            "05" : "self",
+            "06" : "self",
+            "07" : "self"
          },
          "08" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "self",
+            "01" : "self",
+            "02" : "self",
+            "03" : "self",
+            "04" : "self",
+            "05" : "self",
+            "06" : "self",
+            "07" : "self"
          },
          "09" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "self",
+            "01" : "self",
+            "02" : "self",
+            "03" : "self",
+            "04" : "self",
+            "05" : "self",
+            "06" : "self",
+            "07" : "self"
          },
          "0a" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "self",
+            "01" : "self",
+            "02" : "self",
+            "03" : "self",
+            "04" : "self",
+            "05" : "self",
+            "06" : "self",
+            "07" : "self"
          },
          "0b" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "self",
+            "01" : "self",
+            "02" : "self",
+            "03" : "self",
+            "04" : "self",
+            "05" : "self",
+            "06" : "self",
+            "07" : "self"
          },
          "0c" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "self",
+            "01" : "self",
+            "02" : "self",
+            "03" : "self",
+            "04" : "self",
+            "05" : "self",
+            "06" : "self",
+            "07" : "self"
          },
          "0d" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "self",
+            "01" : "self",
+            "02" : "self",
+            "03" : "self",
+            "04" : "self",
+            "05" : "self",
+            "06" : "self",
+            "07" : "self"
          },
          "0e" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "self",
+            "01" : "self",
+            "02" : "self",
+            "03" : "self",
+            "04" : "self",
+            "05" : "self",
+            "06" : "self",
+            "07" : "self"
          },
          "0f" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "self",
+            "01" : "self",
+            "02" : "self",
+            "03" : "self",
+            "04" : "self",
+            "05" : "self",
+            "06" : "self",
+            "07" : "self"
          },
          "10" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "self",
+            "01" : "self",
+            "02" : "self",
+            "03" : "self",
+            "04" : "self",
+            "05" : "self",
+            "06" : "self",
+            "07" : "self"
          },
          "11" : {
             "00" : "masked",
@@ -10831,204 +10835,204 @@
             "07" : "masked"
          },
          "14" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "self",
+            "01" : "self",
+            "02" : "self",
+            "03" : "self",
+            "04" : "self",
+            "05" : "self",
+            "06" : "self",
+            "07" : "self"
          },
          "15" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "self",
+            "01" : "self",
+            "02" : "self",
+            "03" : "self",
+            "04" : "self",
+            "05" : "self",
+            "06" : "self",
+            "07" : "self"
          },
          "16" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "self",
+            "01" : "self",
+            "02" : "self",
+            "03" : "self",
+            "04" : "self",
+            "05" : "self",
+            "06" : "self",
+            "07" : "self"
          },
          "17" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "self",
+            "01" : "self",
+            "02" : "self",
+            "03" : "self",
+            "04" : "self",
+            "05" : "self",
+            "06" : "self",
+            "07" : "self"
          },
          "18" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "self",
+            "01" : "self",
+            "02" : "self",
+            "03" : "self",
+            "04" : "self",
+            "05" : "self",
+            "06" : "self",
+            "07" : "self"
          },
          "19" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "self",
+            "01" : "self",
+            "02" : "self",
+            "03" : "self",
+            "04" : "self",
+            "05" : "self",
+            "06" : "self",
+            "07" : "self"
          },
          "1a" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "self",
+            "01" : "self",
+            "02" : "self",
+            "03" : "self",
+            "04" : "self",
+            "05" : "self",
+            "06" : "self",
+            "07" : "self"
          },
          "1b" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "self",
+            "01" : "self",
+            "02" : "self",
+            "03" : "self",
+            "04" : "self",
+            "05" : "self",
+            "06" : "self",
+            "07" : "self"
          },
          "1c" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "self",
+            "01" : "self",
+            "02" : "self",
+            "03" : "self",
+            "04" : "self",
+            "05" : "self",
+            "06" : "self",
+            "07" : "self"
          },
          "1d" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "self",
+            "01" : "self",
+            "02" : "self",
+            "03" : "self",
+            "04" : "self",
+            "05" : "self",
+            "06" : "self",
+            "07" : "self"
          },
          "1e" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "self",
+            "01" : "self",
+            "02" : "self",
+            "03" : "self",
+            "04" : "self",
+            "05" : "self",
+            "06" : "self",
+            "07" : "self"
          },
          "1f" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "self",
+            "01" : "self",
+            "02" : "self",
+            "03" : "self",
+            "04" : "self",
+            "05" : "self",
+            "06" : "self",
+            "07" : "self"
          },
          "20" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "self",
+            "01" : "self",
+            "02" : "self",
+            "03" : "self",
+            "04" : "self",
+            "05" : "self",
+            "06" : "self",
+            "07" : "self"
          },
          "21" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "self",
+            "01" : "self",
+            "02" : "self",
+            "03" : "self",
+            "04" : "self",
+            "05" : "self",
+            "06" : "self",
+            "07" : "self"
          },
          "22" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "self",
+            "01" : "self",
+            "02" : "self",
+            "03" : "self",
+            "04" : "self",
+            "05" : "self",
+            "06" : "self",
+            "07" : "self"
          },
          "23" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "self",
+            "01" : "self",
+            "02" : "self",
+            "03" : "self",
+            "04" : "self",
+            "05" : "self",
+            "06" : "self",
+            "07" : "self"
          },
          "24" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "self",
+            "01" : "self",
+            "02" : "self",
+            "03" : "self",
+            "04" : "self",
+            "05" : "self",
+            "06" : "self",
+            "07" : "self"
          },
          "25" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "self",
+            "01" : "self",
+            "02" : "self",
+            "03" : "self",
+            "04" : "self",
+            "05" : "self",
+            "06" : "self",
+            "07" : "self"
          },
          "26" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "self",
+            "01" : "self",
+            "02" : "self",
+            "03" : "self",
+            "04" : "self",
+            "05" : "self",
+            "06" : "self",
+            "07" : "self"
          },
          "27" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "self",
+            "01" : "self",
+            "02" : "self",
+            "03" : "self",
+            "04" : "self",
+            "05" : "self",
+            "06" : "self",
+            "07" : "self"
          },
          "28" : {
             "00" : "masked",
@@ -14409,124 +14413,124 @@
       },
       "9865" : {
          "00" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "self",
+            "01" : "self",
+            "02" : "self",
+            "03" : "self",
+            "04" : "self",
+            "05" : "self",
+            "06" : "self",
+            "07" : "self"
          },
          "01" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "self",
+            "01" : "self",
+            "02" : "self",
+            "03" : "self",
+            "04" : "self",
+            "05" : "self",
+            "06" : "self",
+            "07" : "self"
          },
          "02" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "self",
+            "01" : "self",
+            "02" : "self",
+            "03" : "self",
+            "04" : "self",
+            "05" : "self",
+            "06" : "self",
+            "07" : "self"
          },
          "03" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "self",
+            "01" : "self",
+            "02" : "self",
+            "03" : "self",
+            "04" : "self",
+            "05" : "self",
+            "06" : "self",
+            "07" : "self"
          },
          "04" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "self",
+            "01" : "self",
+            "02" : "self",
+            "03" : "self",
+            "04" : "self",
+            "05" : "self",
+            "06" : "self",
+            "07" : "self"
          },
          "05" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "self",
+            "01" : "self",
+            "02" : "self",
+            "03" : "self",
+            "04" : "self",
+            "05" : "self",
+            "06" : "self",
+            "07" : "self"
          },
          "06" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "self",
+            "01" : "self",
+            "02" : "self",
+            "03" : "self",
+            "04" : "self",
+            "05" : "self",
+            "06" : "self",
+            "07" : "self"
          },
          "07" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "self",
+            "01" : "self",
+            "02" : "self",
+            "03" : "self",
+            "04" : "self",
+            "05" : "self",
+            "06" : "self",
+            "07" : "self"
          },
          "08" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "self",
+            "01" : "self",
+            "02" : "self",
+            "03" : "self",
+            "04" : "self",
+            "05" : "self",
+            "06" : "self",
+            "07" : "self"
          },
          "09" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "self",
+            "01" : "self",
+            "02" : "self",
+            "03" : "self",
+            "04" : "self",
+            "05" : "self",
+            "06" : "self",
+            "07" : "self"
          },
          "0a" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "self",
+            "01" : "self",
+            "02" : "self",
+            "03" : "self",
+            "04" : "self",
+            "05" : "self",
+            "06" : "self",
+            "07" : "self"
          },
          "0b" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "self",
+            "01" : "self",
+            "02" : "self",
+            "03" : "self",
+            "04" : "self",
+            "05" : "self",
+            "06" : "self",
+            "07" : "self"
          },
          "0c" : {
             "00" : "masked",
@@ -14609,24 +14613,24 @@
             "07" : "masked"
          },
          "14" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "self",
+            "01" : "self",
+            "02" : "self",
+            "03" : "self",
+            "04" : "self",
+            "05" : "self",
+            "06" : "self",
+            "07" : "self"
          },
          "15" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "self",
+            "01" : "self",
+            "02" : "self",
+            "03" : "self",
+            "04" : "self",
+            "05" : "self",
+            "06" : "self",
+            "07" : "self"
          },
          "16" : {
             "00" : "masked",
@@ -16137,52 +16141,52 @@
       },
       "b4dc" : {
          "00" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked"
+            "00" : "self",
+            "01" : "self",
+            "02" : "self",
+            "03" : "self"
          },
          "01" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked"
+            "00" : "self",
+            "01" : "self",
+            "02" : "self",
+            "03" : "self"
          },
          "02" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked"
+            "00" : "self",
+            "01" : "self",
+            "02" : "self",
+            "03" : "self"
          },
          "03" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked"
+            "00" : "self",
+            "01" : "self",
+            "02" : "self",
+            "03" : "self"
          },
          "04" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked"
+            "00" : "self",
+            "01" : "self",
+            "02" : "self",
+            "03" : "self"
          },
          "05" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked"
+            "00" : "self",
+            "01" : "self",
+            "02" : "self",
+            "03" : "self"
          },
          "06" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked"
+            "00" : "self",
+            "01" : "self",
+            "02" : "self",
+            "03" : "self"
          },
          "07" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked"
+            "00" : "self",
+            "01" : "self",
+            "02" : "self",
+            "03" : "self"
          },
          "08" : {
             "00" : "masked",
@@ -16203,10 +16207,10 @@
             "03" : "masked"
          },
          "0b" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked"
+            "00" : "self",
+            "01" : "self",
+            "02" : "self",
+            "03" : "self"
          },
          "0c" : {
             "00" : "masked",
@@ -16257,16 +16261,16 @@
             "03" : "masked"
          },
          "14" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked"
+            "00" : "self",
+            "01" : "self",
+            "02" : "self",
+            "03" : "self"
          },
          "15" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked"
+            "00" : "self",
+            "01" : "self",
+            "02" : "self",
+            "03" : "self"
          },
          "16" : {
             "00" : "masked",
@@ -16686,18 +16690,18 @@
          }
       },
       "ba6a" : {
-         "00" : { "00" : "masked" },
-         "01" : { "00" : "masked" },
-         "02" : { "00" : "masked" },
-         "03" : { "00" : "masked" },
-         "04" : { "00" : "masked" },
-         "05" : { "00" : "masked" },
-         "06" : { "00" : "masked" },
-         "07" : { "00" : "masked" },
-         "08" : { "00" : "masked" },
-         "09" : { "00" : "masked" },
-         "0a" : { "00" : "masked" },
-         "0b" : { "00" : "masked" },
+         "00" : { "00" : "self" },
+         "01" : { "00" : "self" },
+         "02" : { "00" : "self" },
+         "03" : { "00" : "self" },
+         "04" : { "00" : "self" },
+         "05" : { "00" : "self" },
+         "06" : { "00" : "self" },
+         "07" : { "00" : "self" },
+         "08" : { "00" : "self" },
+         "09" : { "00" : "self" },
+         "0a" : { "00" : "self" },
+         "0b" : { "00" : "self" },
          "0c" : { "00" : "masked" },
          "0d" : { "00" : "masked" },
          "0e" : { "00" : "masked" },
@@ -16706,8 +16710,8 @@
          "11" : { "00" : "masked" },
          "12" : { "00" : "masked" },
          "13" : { "00" : "masked" },
-         "14" : { "00" : "masked" },
-         "15" : { "00" : "masked" },
+         "14" : { "00" : "self" },
+         "15" : { "00" : "self" },
          "16" : { "00" : "masked" },
          "17" : { "00" : "masked" },
          "18" : { "00" : "masked" },
@@ -16752,18 +16756,18 @@
          "3f" : { "00" : "masked" }
       },
       "ba70" : {
-         "00" : { "00" : "masked" },
-         "01" : { "00" : "masked" },
-         "02" : { "00" : "masked" },
-         "03" : { "00" : "masked" },
-         "04" : { "00" : "masked" },
-         "05" : { "00" : "masked" },
-         "06" : { "00" : "masked" },
-         "07" : { "00" : "masked" },
-         "08" : { "00" : "masked" },
-         "09" : { "00" : "masked" },
-         "0a" : { "00" : "masked" },
-         "0b" : { "00" : "masked" },
+         "00" : { "00" : "self" },
+         "01" : { "00" : "self" },
+         "02" : { "00" : "self" },
+         "03" : { "00" : "self" },
+         "04" : { "00" : "self" },
+         "05" : { "00" : "self" },
+         "06" : { "00" : "self" },
+         "07" : { "00" : "self" },
+         "08" : { "00" : "self" },
+         "09" : { "00" : "self" },
+         "0a" : { "00" : "self" },
+         "0b" : { "00" : "self" },
          "0c" : { "00" : "masked" },
          "0d" : { "00" : "masked" },
          "0e" : { "00" : "masked" },
@@ -16772,8 +16776,8 @@
          "11" : { "00" : "masked" },
          "12" : { "00" : "masked" },
          "13" : { "00" : "masked" },
-         "14" : { "00" : "masked" },
-         "15" : { "00" : "masked" },
+         "14" : { "00" : "self" },
+         "15" : { "00" : "self" },
          "16" : { "00" : "masked" },
          "17" : { "00" : "masked" },
          "18" : { "00" : "masked" },
@@ -16808,11 +16812,11 @@
          "35" : { "00" : "masked" },
          "36" : { "00" : "masked" },
          "37" : { "00" : "masked" },
-         "38" : { "00" : "masked" },
-         "39" : { "00" : "masked" },
-         "3a" : { "00" : "masked" },
-         "3b" : { "00" : "masked" },
-         "3c" : { "00" : "masked" },
+         "38" : { "00" : "self" },
+         "39" : { "00" : "self" },
+         "3a" : { "00" : "deadman_timer" },
+         "3b" : { "00" : "self" },
+         "3c" : { "00" : "level2" },
          "3d" : { "00" : "masked" },
          "3e" : { "00" : "masked" },
          "3f" : { "00" : "masked" }
