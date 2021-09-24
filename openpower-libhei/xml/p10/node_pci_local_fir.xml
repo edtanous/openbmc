@@ -15,7 +15,7 @@
     <bit pos="3">CC - Clock Control Error</bit>
     <bit pos="4">PSC - PSCOM access error</bit>
     <bit pos="5">PSC - internal or ring interface error</bit>
-    <bit pos="6">THERM - pwr_comp_err, skitter_comp_err, scan_init_version_reg_parity_err_out , count_state_err_out</bit>
+    <bit pos="6">THERM - internal error</bit>
     <bit pos="7">THERM - pcb error</bit>
     <bit pos="8">THERMTRIP - Critical temperature indicator</bit>
     <bit pos="9">THERMTRIP - Fatal temperature indicator</bit>
@@ -30,7 +30,7 @@
     <bit pos="18">reserved</bit>
     <bit pos="19">reserved</bit>
     <bit pos="20">Trace00 - scom parity err</bit>
-    <bit pos="21">Trace01 - scom parity err - Unused in Axon,PCI</bit>
+    <bit pos="21">Trace01 - scom parity err</bit>
     <bit pos="22">unused</bit>
     <bit pos="23">unused</bit>
     <bit pos="24">unused</bit>

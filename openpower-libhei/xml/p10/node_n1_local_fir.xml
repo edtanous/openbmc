@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<attn_node model_ec="P10_20" name="N1_LOCAL_FIR" reg_type="SCOM">
+<attn_node model_ec="P10_10,P10_20" name="N1_LOCAL_FIR" reg_type="SCOM">
     <local_fir config="W2" name="N1_LOCAL_FIR">
         <instance addr="0x03040100" reg_inst="0"/>
         <action attn_type="CS" config="000"/>
@@ -14,7 +14,7 @@
     <bit pos="3">CC - Clock Control Error</bit>
     <bit pos="4">PSC - PSCOM access error</bit>
     <bit pos="5">PSC - internal or ring interface error</bit>
-    <bit pos="6">THERM - pwr_comp_err, skitter_comp_err, scan_init_version_reg_parity_err_out , count_state_err_out</bit>
+    <bit pos="6">THERM - internal error</bit>
     <bit pos="7">THERM - pcb error</bit>
     <bit pos="8">THERMTRIP - Critical temperature indicator</bit>
     <bit pos="9">THERMTRIP - Fatal temperature indicator</bit>
@@ -29,7 +29,7 @@
     <bit pos="18">reserved</bit>
     <bit pos="19">reserved</bit>
     <bit pos="20">Trace00 - scom parity err</bit>
-    <bit pos="21">Trace01 - scom parity err - Unused in Axon,PCI</bit>
+    <bit pos="21">Trace01 - scom parity err</bit>
     <bit pos="22">unused</bit>
     <bit pos="23">unused</bit>
     <bit pos="24">unused</bit>
@@ -64,11 +64,11 @@
     <bit pos="53">unused</bit>
     <bit pos="54">unused</bit>
     <bit pos="55">unused</bit>
-    <bit pos="56">PowerBus chip quiesce failed - triggered by firmware</bit>
-    <bit pos="57">PowerBus system quiesce failed - triggered by firmware</bit>
-    <bit pos="58">Deadman timer expired during master core wakeup by SBE - triggered by firmware</bit>
-    <bit pos="59">Switch from cache contained into system mode failed - triggered by firmware</bit>
-    <bit pos="60">Hypervisor / Hostboot / OPAL initiated Terminate Immediate (TI) - triggered by firmware</bit>
+    <bit pos="56">Firmware signaled power bus quiesce failed</bit>
+    <bit pos="57">Firmware signaled power bus system quiesce failed</bit>
+    <bit pos="58">Firmware signaled deadman timer tigger occurred</bit>
+    <bit pos="59">Fimware signaled power bus chip quiesce failed</bit>
+    <bit pos="60">Hypervisor / Hostboot / OPAL initiated Terminate Immediate</bit>
     <bit pos="61">reserved for software use</bit>
     <bit pos="62">reserved for software use</bit>
     <bit pos="63">ext_local_xstop</bit>
