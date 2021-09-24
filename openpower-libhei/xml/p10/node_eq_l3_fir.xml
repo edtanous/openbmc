@@ -36,37 +36,109 @@
         <action attn_type="CS" config="00"/>
         <action attn_type="RE" config="01"/>
     </local_fir>
-    <bit pos="0">When this error occurs, no members are available for a particular CGC. This will cause an infinite hang of a CI machine. There may be no members available due to a combination of line delete, way disable, and segr lco/qbit mode.</bit>
-    <bit pos="1">L3 attempted to master a CP (Castout/Push) command to the fabric when in chip_contained mode</bit>
-    <bit pos="2">Access attempted to use invalid topology table entry. Access may be from CO, RD, PF or snoop</bit>
-    <bit pos="3">This error indicates at least 1 CE and 1 UE have occurred within 1 fabric data hang pulse interval. This is an indication that a wordline fail may be occurring.</bit>
-    <bit pos="4">CE detected along read dataflow. This may assert due to cache read, casthru, pf_byp. If we are configured to do a single line delete and detect a CE for a cache read from a snoop/read machine, then fir26 will assert instead (fir4 will not assert). If set to do continuous line deletes fir4 will assert on CE (fir26 will not assert).</bit>
-    <bit pos="5">UE detected along read dataflow. May assert due to cache read, casthru, pf_byp.</bit>
-    <bit pos="6">SUE detected along read dataflow. May assert due to cache read, casthru, pf_byp.</bit>
-    <bit pos="7">CE detected along write dataflow with data from PowerBus (Prefetch, LCO or Cache Inject)</bit>
-    <bit pos="8">UE detected along write dataflow with data from PowerBus (Prefetch, LCO or Cache Inject)</bit>
-    <bit pos="9">SUE detected along write dataflow with data from PowerBus (Prefetch, LCO or Cache Inject)</bit>
-    <bit pos="10">CE detected along write dataflow with data from L2 CPI buffer or WIHPC</bit>
-    <bit pos="11">UE detected along write dataflow with data from L2 CPI buffer or WIHPC</bit>
-    <bit pos="12">SUE detected along write dataflow with data from L2 CPI buffer or WIHPC</bit>
-    <bit pos="13">Directory CE Occured</bit>
-    <bit pos="14">Directory UE Occured</bit>
-    <bit pos="15">Directory error occured but no error found during re-read of the directory again</bit>
+    <register name="L3_ERR_RPT0">
+        <instance addr="0x20018610" reg_inst="0"/>
+        <instance addr="0x20014610" reg_inst="1"/>
+        <instance addr="0x20012610" reg_inst="2"/>
+        <instance addr="0x20011610" reg_inst="3"/>
+        <instance addr="0x21018610" reg_inst="4"/>
+        <instance addr="0x21014610" reg_inst="5"/>
+        <instance addr="0x21012610" reg_inst="6"/>
+        <instance addr="0x21011610" reg_inst="7"/>
+        <instance addr="0x22018610" reg_inst="8"/>
+        <instance addr="0x22014610" reg_inst="9"/>
+        <instance addr="0x22012610" reg_inst="10"/>
+        <instance addr="0x22011610" reg_inst="11"/>
+        <instance addr="0x23018610" reg_inst="12"/>
+        <instance addr="0x23014610" reg_inst="13"/>
+        <instance addr="0x23012610" reg_inst="14"/>
+        <instance addr="0x23011610" reg_inst="15"/>
+        <instance addr="0x24018610" reg_inst="16"/>
+        <instance addr="0x24014610" reg_inst="17"/>
+        <instance addr="0x24012610" reg_inst="18"/>
+        <instance addr="0x24011610" reg_inst="19"/>
+        <instance addr="0x25018610" reg_inst="20"/>
+        <instance addr="0x25014610" reg_inst="21"/>
+        <instance addr="0x25012610" reg_inst="22"/>
+        <instance addr="0x25011610" reg_inst="23"/>
+        <instance addr="0x26018610" reg_inst="24"/>
+        <instance addr="0x26014610" reg_inst="25"/>
+        <instance addr="0x26012610" reg_inst="26"/>
+        <instance addr="0x26011610" reg_inst="27"/>
+        <instance addr="0x27018610" reg_inst="28"/>
+        <instance addr="0x27014610" reg_inst="29"/>
+        <instance addr="0x27012610" reg_inst="30"/>
+        <instance addr="0x27011610" reg_inst="31"/>
+    </register>
+    <register name="L3_ERR_RPT1">
+        <instance addr="0x20018617" reg_inst="0"/>
+        <instance addr="0x20014617" reg_inst="1"/>
+        <instance addr="0x20012617" reg_inst="2"/>
+        <instance addr="0x20011617" reg_inst="3"/>
+        <instance addr="0x21018617" reg_inst="4"/>
+        <instance addr="0x21014617" reg_inst="5"/>
+        <instance addr="0x21012617" reg_inst="6"/>
+        <instance addr="0x21011617" reg_inst="7"/>
+        <instance addr="0x22018617" reg_inst="8"/>
+        <instance addr="0x22014617" reg_inst="9"/>
+        <instance addr="0x22012617" reg_inst="10"/>
+        <instance addr="0x22011617" reg_inst="11"/>
+        <instance addr="0x23018617" reg_inst="12"/>
+        <instance addr="0x23014617" reg_inst="13"/>
+        <instance addr="0x23012617" reg_inst="14"/>
+        <instance addr="0x23011617" reg_inst="15"/>
+        <instance addr="0x24018617" reg_inst="16"/>
+        <instance addr="0x24014617" reg_inst="17"/>
+        <instance addr="0x24012617" reg_inst="18"/>
+        <instance addr="0x24011617" reg_inst="19"/>
+        <instance addr="0x25018617" reg_inst="20"/>
+        <instance addr="0x25014617" reg_inst="21"/>
+        <instance addr="0x25012617" reg_inst="22"/>
+        <instance addr="0x25011617" reg_inst="23"/>
+        <instance addr="0x26018617" reg_inst="24"/>
+        <instance addr="0x26014617" reg_inst="25"/>
+        <instance addr="0x26012617" reg_inst="26"/>
+        <instance addr="0x26011617" reg_inst="27"/>
+        <instance addr="0x27018617" reg_inst="28"/>
+        <instance addr="0x27014617" reg_inst="29"/>
+        <instance addr="0x27012617" reg_inst="30"/>
+        <instance addr="0x27011617" reg_inst="31"/>
+    </register>
+    <capture_group node_inst="0:31">
+        <capture_register reg_name="L3_ERR_RPT0" reg_inst= "0:31" />
+        <capture_register reg_name="L3_ERR_RPT1" reg_inst= "0:31" />
+    </capture_group>
+    <bit pos="0">No members available for a CGC</bit>
+    <bit pos="1">L3 attempted to master a CP (Castout/Push) command</bit>
+    <bit pos="2">Access attempted to use invalid topology table entry</bit>
+    <bit pos="3">L3 cache CE and UE within a short period</bit>
+    <bit pos="4">CE detected on L3 cache read</bit>
+    <bit pos="5">UE detected on L3 cache read</bit>
+    <bit pos="6">SUE detected on L3 cache read</bit>
+    <bit pos="7">L3 cache write data CE from Power Bus</bit>
+    <bit pos="8">L3 cache write data UE from Power Bus</bit>
+    <bit pos="9">L3 cache write data sue from Power Bus</bit>
+    <bit pos="10">L3 cache write data CE from L2</bit>
+    <bit pos="11">L3 cache write data UE from L2</bit>
+    <bit pos="12">L3 cache write SUE from L2</bit>
+    <bit pos="13">L3 DIR read CE</bit>
+    <bit pos="14">L3 Dir read UE</bit>
+    <bit pos="15">Dir error not found during corr seq</bit>
     <bit pos="16">Received addr_error cresp on Snoop Machine or Castout Operation</bit>
     <bit pos="17">Received addr_error cresp for Prefetch Operation</bit>
-    <bit pos="18">Asserts when the L3 returns presp_rty_other to a PowerBus hang.poll or hang.check RCMD. This is typically masked, but provides an indication that an operation hang has been detected and signalled.</bit>
-    <bit pos="19">lru invalid count error. Violation of requirement that, when not in dmap or fixed-member mode, each group must have a member with lru_cnt=0 for 1st class and a member with lru_cnt=0 for 2nd class if there is a 2nd class member. Will not assert when an lru_cnt=0 is found for a member that is disabled. This error is typically masked because l3_lru_vic_sel_error is the true check for LRU errors. This is only a partial check (it doesn't check for multiple lru_cnt=0) and it can assert even when the LRU array contents are not used (error is in a class that isn't used) This error (missing lru_cnt=0) is recoverable - the L3 fails dispatch and then goes into random-victim- selection mode until it succeeds. This bit may assert despite no error if the group and config have changed since the last time the CGC was accessed.</bit>
-    <bit pos="20">spare20</bit>
-    <bit pos="21">spare21</bit>
-    <bit pos="22">spare22</bit>
-    <bit pos="23">Prefetcj or Write Inject machine PowerBus data hang check</bit>
-    <bit pos="24">Hardware Control Error. See Hardware Control Error Read0/1 SCOM Registers for details.</bit>
-    <bit pos="25">Cache Inhibited operation was hit in the L3 directory. This is usually a software bug.</bit>
-    <bit pos="26">Snoop Machine or Read machine has performed a line delete from a cache read</bit>
-    <bit pos="27">Indicates that this l3 has snooped an incoming lco and in which the source (rcmdx_source) is not proxime. This is likely due to a programming error and could result in multiple owners of a line</bit>
-    <bit pos="28">Indicates the L3 is inserting a line and thus a victimization might be needed (if there are no invalid line in the CGC), but the L3 failed to select exactly one member for (possible) victimization. This asserts due to a LRU array bit error (lru_inval_cnt_err may also asserts). This may assert despite no error if the group and config have changed since the last time the CGC was accessed. This error is recoverable - the L3 fails dispatch and then goes into random-victim- selection mode until it succeeds, at which time (sometimes prior to this) the error is overwritten. On an L2-read or snoop, an LRU array is read, but errors aren't checked or corrected because there is no LRU array write.</bit>
-    <bit pos="29">All members are either column or line deleted in some CGC class</bit>
-    <bit pos="30">Indicates that this l3 has snooped an incoming lco and we are the target however, our lco target id (set via SCOM in mode_reg1) does not match the chiplet id set by pb through input pins pb_ex_chiplet_id_dc Note that in chip-contained mode, the LCOs ID are often set to values that dont match the pb_ex_chiplet_id, thus this error is masked in that mode.</bit>
-    <bit pos="31">Received ack_dead or ed_ack_dead cresp on CO, SN operation (pb write)</bit>
-    <bit pos="32">Received ack_dead or ed_ack_dead cresp on PF operation (pb read)</bit>
+    <bit pos="18">L3_PB_HANG_POLL</bit>
+    <bit pos="19">Invalid LRU count error</bit>
+    <bit pos="20">Reserved</bit>
+    <bit pos="21">Reserved</bit>
+    <bit pos="22">Reserved</bit>
+    <bit pos="23">Prefetch or Write Inject machine PowerBus data hang check</bit>
+    <bit pos="24">L3 Hw control err</bit>
+    <bit pos="25">Cache inhibited op in L3 directory</bit>
+    <bit pos="26">L3 line delete CE done</bit>
+    <bit pos="27">L3  snooped an incoming LCO</bit>
+    <bit pos="28">LRU intended to victimize a line, but invalid line selected</bit>
+    <bit pos="29">L3 cache congruence class deleted</bit>
+    <bit pos="30">Incoming LCO ID mismatch</bit>
+    <bit pos="31">L3 PowerBus Master Write CRESP ack_dead</bit>
+    <bit pos="32">PB Master Read received ack_dead CRESP</bit>
 </attn_node>

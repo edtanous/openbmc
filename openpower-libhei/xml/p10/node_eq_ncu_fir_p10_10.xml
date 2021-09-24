@@ -36,33 +36,70 @@
         <action attn_type="CS" config="00"/>
         <action attn_type="RE" config="01"/>
     </local_fir>
-    <bit pos="0">H/W control error.</bit>
-    <bit pos="1">TLBIE control error.</bit>
-    <bit pos="2">TLBIE or SLBIEG received illegal fields from core.</bit>
-    <bit pos="3">Store address machine received addr_err cresp.</bit>
-    <bit pos="4">Load address machine received addr_err cresp.</bit>
+    <register name="NCU_ERR_RPT_REG">
+        <instance addr="0x2001864E" reg_inst="0"/>
+        <instance addr="0x2001464E" reg_inst="1"/>
+        <instance addr="0x2001264E" reg_inst="2"/>
+        <instance addr="0x2001164E" reg_inst="3"/>
+        <instance addr="0x2101864E" reg_inst="4"/>
+        <instance addr="0x2101464E" reg_inst="5"/>
+        <instance addr="0x2101264E" reg_inst="6"/>
+        <instance addr="0x2101164E" reg_inst="7"/>
+        <instance addr="0x2201864E" reg_inst="8"/>
+        <instance addr="0x2201464E" reg_inst="9"/>
+        <instance addr="0x2201264E" reg_inst="10"/>
+        <instance addr="0x2201164E" reg_inst="11"/>
+        <instance addr="0x2301864E" reg_inst="12"/>
+        <instance addr="0x2301464E" reg_inst="13"/>
+        <instance addr="0x2301264E" reg_inst="14"/>
+        <instance addr="0x2301164E" reg_inst="15"/>
+        <instance addr="0x2401864E" reg_inst="16"/>
+        <instance addr="0x2401464E" reg_inst="17"/>
+        <instance addr="0x2401264E" reg_inst="18"/>
+        <instance addr="0x2401164E" reg_inst="19"/>
+        <instance addr="0x2501864E" reg_inst="20"/>
+        <instance addr="0x2501464E" reg_inst="21"/>
+        <instance addr="0x2501264E" reg_inst="22"/>
+        <instance addr="0x2501164E" reg_inst="23"/>
+        <instance addr="0x2601864E" reg_inst="24"/>
+        <instance addr="0x2601464E" reg_inst="25"/>
+        <instance addr="0x2601264E" reg_inst="26"/>
+        <instance addr="0x2601164E" reg_inst="27"/>
+        <instance addr="0x2701864E" reg_inst="28"/>
+        <instance addr="0x2701464E" reg_inst="29"/>
+        <instance addr="0x2701264E" reg_inst="30"/>
+        <instance addr="0x2701164E" reg_inst="31"/>
+    </register>
+    <capture_group node_inst="0:31">
+        <capture_register reg_name="NCU_ERR_RPT_REG" reg_inst= "0:31" />
+    </capture_group>
+    <bit pos="0">NCU store queue control error</bit>
+    <bit pos="1">TLBIE control error</bit>
+    <bit pos="2">TLBIE or SLBIEG received illegal fields from core</bit>
+    <bit pos="3">Store address machine received addr_err cresp</bit>
+    <bit pos="4">Load address machine received addr_err cresp</bit>
     <bit pos="5">Topology table error - tried accessing invalid entry</bit>
-    <bit pos="6">One the NCU machines triggerd PB into early hang recovery</bit>
+    <bit pos="6">An NCU machine triggerd PB into early hang recovery</bit>
     <bit pos="7">MSGSND received addr_err</bit>
-    <bit pos="8">Store data parity error from regfile detected.</bit>
-    <bit pos="9">Store timed out on PB.</bit>
-    <bit pos="10">TLBIE master timed out on PB.</bit>
-    <bit pos="11">TLBIE snooper timed out waiting for core.</bit>
-    <bit pos="12">IMA received addr_err cresp.</bit>
-    <bit pos="13">TLBIE/sync machine received addr_err cresp.</bit>
-    <bit pos="14">PMISC received address error cresp.</bit>
-    <bit pos="15">Spare fir bits.</bit>
-    <bit pos="16">Spare fir bits.</bit>
-    <bit pos="17">Spare fir bits.</bit>
-    <bit pos="18">Spare fir bits.</bit>
-    <bit pos="19">PPE write received ack_dead</bit>
-    <bit pos="20">Darn ttype while darn not enabled.</bit>
-    <bit pos="21">Darn Address Error cresp.</bit>
-    <bit pos="22">Spare fir bits.</bit>
-    <bit pos="23">Spare fir bits.</bit>
-    <bit pos="24">Spare fir bits.</bit>
-    <bit pos="25">Spare fir bits.</bit>
-    <bit pos="26">Spare fir bits.</bit>
-    <bit pos="27">Spare fir bits.</bit>
-    <bit pos="28">Spare fir bits.</bit>
+    <bit pos="8">Store data parity error from regfile detected</bit>
+    <bit pos="9">Store timed out on PB</bit>
+    <bit pos="10">TLBIE master timed out on PB</bit>
+    <bit pos="11">TLBIE snooper timed out waiting for core</bit>
+    <bit pos="12">IMA received addr_err cresp</bit>
+    <bit pos="13">TLBIE/sync machine received addr_err cresp</bit>
+    <bit pos="14">PMISC received address error cresp</bit>
+    <bit pos="15">spare</bit>
+    <bit pos="16">spare</bit>
+    <bit pos="17">spare</bit>
+    <bit pos="18">spare</bit>
+    <bit pos="19">Targeted nodal request got rty_inc cresp</bit>
+    <bit pos="20">Darn ttype while darn not enabled</bit>
+    <bit pos="21">Darn Address Error cresp</bit>
+    <bit pos="22">spare</bit>
+    <bit pos="23">spare</bit>
+    <bit pos="24">spare</bit>
+    <bit pos="25">spare</bit>
+    <bit pos="26">spare</bit>
+    <bit pos="27">spare</bit>
+    <bit pos="28">spare</bit>
 </attn_node>

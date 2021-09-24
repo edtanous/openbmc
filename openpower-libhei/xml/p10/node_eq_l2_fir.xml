@@ -36,44 +36,116 @@
         <action attn_type="CS" config="00"/>
         <action attn_type="RE" config="01"/>
     </local_fir>
-    <bit pos="0">H/W Trigger Mechanism at point cache read occurs that detects a CE by ECCCK on RC/CO/SN read. Note: PRD counts the number of these and then will trigger LineDelete.</bit>
-    <bit pos="1">H/W Trigger Mechanism at point cache read occurs that detects a UE(non SUE) by ECCCK on RC/CO/SN read.</bit>
-    <bit pos="2">H/W Trigger Mechanism at point cache read occurs that detects a SUE by ECCCK on RC/CO/SN read.</bit>
-    <bit pos="3">H/W intiated Line Delete occured (Id state injected into the dir) by RC or SN machine.</bit>
-    <bit pos="4">L2 Castout where L2 cache read detected UE/SUE and Line is M,Mu,T,Tn</bit>
-    <bit pos="5">L2 Castout where L2 cache read detected UE/SUE and Line is Me,Te,Ten,Sl,S</bit>
-    <bit pos="6">L2 corrected a CE in the L2 directory</bit>
-    <bit pos="7">L2 detected a UE in the L2 directory</bit>
-    <bit pos="8">L2 detected a SBCE in the L2 directory</bit>
-    <bit pos="9">PEC attempted to repair and CO a SBCE condition but failed(eg CO disp failed). Cache line was lost.</bit>
-    <bit pos="10">DEPRICATED: THIS FIR BIT SHOULD ALWAYS BE MASKED. Multiple CE/UE deteceted between 2 hang 'early hang' pulse time window</bit>
-    <bit pos="11">LRU array has illegal valu in it(due to flipped bit)</bit>
-    <bit pos="12">RC timed out waiting for powerbus to return data.</bit>
-    <bit pos="13">NCU timed out waiting for powerbus to return data.</bit>
+    <register name="L2_ERR_RPT0">
+        <instance addr="0x20028012" reg_inst="0"/>
+        <instance addr="0x20024012" reg_inst="1"/>
+        <instance addr="0x20022012" reg_inst="2"/>
+        <instance addr="0x20021012" reg_inst="3"/>
+        <instance addr="0x21028012" reg_inst="4"/>
+        <instance addr="0x21024012" reg_inst="5"/>
+        <instance addr="0x21022012" reg_inst="6"/>
+        <instance addr="0x21021012" reg_inst="7"/>
+        <instance addr="0x22028012" reg_inst="8"/>
+        <instance addr="0x22024012" reg_inst="9"/>
+        <instance addr="0x22022012" reg_inst="10"/>
+        <instance addr="0x22021012" reg_inst="11"/>
+        <instance addr="0x23028012" reg_inst="12"/>
+        <instance addr="0x23024012" reg_inst="13"/>
+        <instance addr="0x23022012" reg_inst="14"/>
+        <instance addr="0x23021012" reg_inst="15"/>
+        <instance addr="0x24028012" reg_inst="16"/>
+        <instance addr="0x24024012" reg_inst="17"/>
+        <instance addr="0x24022012" reg_inst="18"/>
+        <instance addr="0x24021012" reg_inst="19"/>
+        <instance addr="0x25028012" reg_inst="20"/>
+        <instance addr="0x25024012" reg_inst="21"/>
+        <instance addr="0x25022012" reg_inst="22"/>
+        <instance addr="0x25021012" reg_inst="23"/>
+        <instance addr="0x26028012" reg_inst="24"/>
+        <instance addr="0x26024012" reg_inst="25"/>
+        <instance addr="0x26022012" reg_inst="26"/>
+        <instance addr="0x26021012" reg_inst="27"/>
+        <instance addr="0x27028012" reg_inst="28"/>
+        <instance addr="0x27024012" reg_inst="29"/>
+        <instance addr="0x27022012" reg_inst="30"/>
+        <instance addr="0x27021012" reg_inst="31"/>
+    </register>
+    <register name="L2_ERR_RPT1">
+        <instance addr="0x20028013" reg_inst="0"/>
+        <instance addr="0x20024013" reg_inst="1"/>
+        <instance addr="0x20022013" reg_inst="2"/>
+        <instance addr="0x20021013" reg_inst="3"/>
+        <instance addr="0x21028013" reg_inst="4"/>
+        <instance addr="0x21024013" reg_inst="5"/>
+        <instance addr="0x21022013" reg_inst="6"/>
+        <instance addr="0x21021013" reg_inst="7"/>
+        <instance addr="0x22028013" reg_inst="8"/>
+        <instance addr="0x22024013" reg_inst="9"/>
+        <instance addr="0x22022013" reg_inst="10"/>
+        <instance addr="0x22021013" reg_inst="11"/>
+        <instance addr="0x23028013" reg_inst="12"/>
+        <instance addr="0x23024013" reg_inst="13"/>
+        <instance addr="0x23022013" reg_inst="14"/>
+        <instance addr="0x23021013" reg_inst="15"/>
+        <instance addr="0x24028013" reg_inst="16"/>
+        <instance addr="0x24024013" reg_inst="17"/>
+        <instance addr="0x24022013" reg_inst="18"/>
+        <instance addr="0x24021013" reg_inst="19"/>
+        <instance addr="0x25028013" reg_inst="20"/>
+        <instance addr="0x25024013" reg_inst="21"/>
+        <instance addr="0x25022013" reg_inst="22"/>
+        <instance addr="0x25021013" reg_inst="23"/>
+        <instance addr="0x26028013" reg_inst="24"/>
+        <instance addr="0x26024013" reg_inst="25"/>
+        <instance addr="0x26022013" reg_inst="26"/>
+        <instance addr="0x26021013" reg_inst="27"/>
+        <instance addr="0x27028013" reg_inst="28"/>
+        <instance addr="0x27024013" reg_inst="29"/>
+        <instance addr="0x27022013" reg_inst="30"/>
+        <instance addr="0x27021013" reg_inst="31"/>
+    </register>
+    <capture_group node_inst="0:31">
+        <capture_register reg_name="L2_ERR_RPT0" reg_inst= "0:31" />
+        <capture_register reg_name="L2_ERR_RPT1" reg_inst= "0:31" />
+    </capture_group>
+    <bit pos="0">L2 cache read CE</bit>
+    <bit pos="1">L2 cache read UE</bit>
+    <bit pos="2">L2 cache read SUE</bit>
+    <bit pos="3">Hw directory initiated line delete</bit>
+    <bit pos="4">UE or SUE detected by on modified line</bit>
+    <bit pos="5">UE or SUE detected on non-modified line</bit>
+    <bit pos="6">L2 directory read CE</bit>
+    <bit pos="7">L2 directory read UE</bit>
+    <bit pos="8">L2 directory CE due to stuck bit</bit>
+    <bit pos="9">L2 directory stuck bit CE repair failed</bit>
+    <bit pos="10">reserved</bit>
+    <bit pos="11">LRU read error detected</bit>
+    <bit pos="12">RC timed out waiting for powerbus to return data</bit>
+    <bit pos="13">NCU timed out waiting for powerbus to return data</bit>
     <bit pos="14">Internal h/w control error</bit>
-    <bit pos="15">All members in a single congruence class has been deleted</bit>
-    <bit pos="16">Cache Inhibited Ld/St hit a line in the L2 cache. SW error</bit>
-    <bit pos="17">RC was doing a fabric op on behalf of a load and got an cresp=addr_err</bit>
-    <bit pos="18">RC was doing a fabric op on behalf of a store and got an cresp=addr_err</bit>
-    <bit pos="19">RC incoming Power Bus data had a CE error.</bit>
-    <bit pos="20">RC incoming Power Bus data had a UE error.</bit>
-    <bit pos="21">RC incoming Power Bus data had a SUE error.</bit>
-    <bit pos="22">Targetted nodal request got rty_inc cresp.</bit>
-    <bit pos="23">RC was doing a fabric op on behalf of a load and got an cresp=addr_err for hyp memory</bit>
-    <bit pos="24">RCDAT read parity error.</bit>
-    <bit pos="25">CO or SNP was doing a fabric op on behalf of a store and got an cresp=addr_err</bit>
-    <bit pos="26">LVDIR took a parity error.</bit>
-    <bit pos="27">bad topology table config software error</bit>
-    <bit pos="28">Darn timed out waiting for data.</bit>
-    <bit pos="29">Early hang in L2.</bit>
-    <bit pos="30">Unexpected cast-out or push during chip_contained mode, maybe also during host-boot before memory available. Mask after host-boot memory ipl.</bit>
-    <bit pos="31">L2 FIR Register</bit>
-    <bit pos="32">PEC Phase3 timeout, recoverable problem, information only.</bit>
-    <bit pos="33">L2 FIR Register</bit>
-    <bit pos="34">L2 FIR Register</bit>
-    <bit pos="35">L2 FIR Register</bit>
-    <bit pos="36">Cache read CE and UE popped within a short hang pulse. Could be a triple bit error.</bit>
-    <bit pos="37">L2 FIR Register</bit>
-    <bit pos="38">L2 FIR Register</bit>
-    <bit pos="39">L2 FIR Register</bit>
+    <bit pos="15">LRU all members in a class line deleted</bit>
+    <bit pos="16">Cache Inhibited Ld/St hit a line in the L2 cache</bit>
+    <bit pos="17">(RC) load received pb cresp addr error</bit>
+    <bit pos="18">(RC) store received pb cresp addr error</bit>
+    <bit pos="19">RC incoming Power Bus data had a CE error</bit>
+    <bit pos="20">RC incoming Power Bus data had a UE error</bit>
+    <bit pos="21">RC incoming Power Bus data had a SUE error</bit>
+    <bit pos="22">Targetted nodal request got rty_inc cresp</bit>
+    <bit pos="23">RC fabric op Ld cresp addr error for hyp</bit>
+    <bit pos="24">RCDAT read parity error</bit>
+    <bit pos="25">L2 castout or CN cresp addr err</bit>
+    <bit pos="26">LVDIR took a parity error</bit>
+    <bit pos="27">Bad topology table config software error</bit>
+    <bit pos="28">Darn timed out waiting for data</bit>
+    <bit pos="29">Early hang in L2</bit>
+    <bit pos="30">Unexpected cast-out or push during chip_contained</bit>
+    <bit pos="31">reserved</bit>
+    <bit pos="32">Time out during PEC sequence trying to correct l2dir error</bit>
+    <bit pos="33">reserved</bit>
+    <bit pos="34">reserved</bit>
+    <bit pos="35">reserved</bit>
+    <bit pos="36">Cache CE and UE in short time period</bit>
+    <bit pos="37">reserved</bit>
+    <bit pos="38">reserved</bit>
+    <bit pos="39">reserved</bit>
 </attn_node>
