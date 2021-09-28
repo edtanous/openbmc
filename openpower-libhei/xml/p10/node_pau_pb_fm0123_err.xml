@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<attn_node model_ec="P10_10,P10_20" name="PB_FM0123_ERR" reg_type="SCOM">
+    <register name="PB_FM0123_ERR">
+        <instance reg_inst="0" addr="0x10011827" />
+        <instance reg_inst="1" addr="0x11011827" />
+        <instance reg_inst="2" addr="0x12011827" />
+        <instance reg_inst="3" addr="0x13011827" />
+    </register>
+    <rule attn_type="CS" node_inst="0:3">
+        <expr type="reg" value1="PB_FM0123_ERR"/>
+    </rule>
+    <rule attn_type="RE" node_inst="0:3">
+        <expr type="reg" value1="PB_FM0123_ERR"/>
+    </rule>
+    <rule attn_type="SPA" node_inst="0:3">
+        <expr type="reg" value1="PB_FM0123_ERR"/>
+    </rule>
+    <bit pos="0">fmr0_control_error</bit>
+    <bit pos="1">fmr0_addr_perr</bit>
+    <bit pos="2">fmr0_cc0_crediterr</bit>
+    <bit pos="3">fmr0_cc1_crediterr</bit>
+    <bit pos="4">fmr0_cc2_crediterr</bit>
+    <bit pos="5">fmr0_cc3_crediterr</bit>
+    <bit pos="6">fmr0_dat_hi_perr</bit>
+    <bit pos="7">fmr0_dat_lo_perr</bit>
+    <bit pos="8">fmr0_frame_crediterr</bit>
+    <bit pos="9">fmr0_internal_err</bit>
+    <bit pos="10">fmr0_prsp_ptyerr</bit>
+    <bit pos="11">fmr0_ttag_perr</bit>
+    <bit pos="12">fmr0_vc0_crediterr</bit>
+    <bit pos="13">fmr0_vc1_crediterr</bit>
+    <bit pos="14">fmr0_rtag_ptyerr</bit>
+    <bit pos="15">fmr0_rtag_misc_pty</bit>
+    <bit pos="16">fmr1_control_error</bit>
+    <bit pos="17">fmr1_addr_perr</bit>
+    <bit pos="18">fmr1_cc0_crediterr</bit>
+    <bit pos="19">fmr1_cc1_crediterr</bit>
+    <bit pos="20">fmr1_cc2_crediterr</bit>
+    <bit pos="21">fmr1_cc3_crediterr</bit>
+    <bit pos="22">fmr1_dat_hi_perr</bit>
+    <bit pos="23">fmr1_dat_lo_perr</bit>
+    <bit pos="24">fmr1_frame_crediterr</bit>
+    <bit pos="25">fmr1_internal_err</bit>
+    <bit pos="26">fmr1_prsp_ptyerr</bit>
+    <bit pos="27">fmr1_ttag_perr</bit>
+    <bit pos="28">fmr1_vc0_crediterr</bit>
+    <bit pos="29">fmr1_vc1_crediterr</bit>
+    <bit pos="30">fmr1_rtag_ptyerr</bit>
+    <bit pos="31">fmr1_rtag_misc_pty</bit>
+    <bit pos="32">fmr2_control_error</bit>
+    <bit pos="33">fmr2_addr_perr</bit>
+    <bit pos="34">fmr2_cc0_crediterr</bit>
+    <bit pos="35">fmr2_cc1_crediterr</bit>
+    <bit pos="36">fmr2_cc2_crediterr</bit>
+    <bit pos="37">fmr2_cc3_crediterr</bit>
+    <bit pos="38">fmr2_dat_hi_perr</bit>
+    <bit pos="39">fmr2_dat_lo_perr</bit>
+    <bit pos="40">fmr2_frame_crediterr</bit>
+    <bit pos="41">fmr2_internal_err</bit>
+    <bit pos="42">fmr2_prsp_ptyerr</bit>
+    <bit pos="43">fmr2_ttag_perr</bit>
+    <bit pos="44">fmr2_vc0_crediterr</bit>
+    <bit pos="45">fmr2_vc1_crediterr</bit>
+    <bit pos="46">fmr2_rtag_ptyerr</bit>
+    <bit pos="47">fmr2_rtag_misc_pty</bit>
+    <bit pos="48">fmr3_control_error</bit>
+    <bit pos="49">fmr3_addr_perr</bit>
+    <bit pos="50">fmr3_cc0_crediterr</bit>
+    <bit pos="51">fmr3_cc1_crediterr</bit>
+    <bit pos="52">fmr3_cc2_crediterr</bit>
+    <bit pos="53">fmr3_cc3_crediterr</bit>
+    <bit pos="54">fmr3_dat_hi_perr</bit>
+    <bit pos="55">fmr3_dat_lo_perr</bit>
+    <bit pos="56">fmr3_frame_crediterr</bit>
+    <bit pos="57">fmr3_internal_err</bit>
+    <bit pos="58">fmr3_prsp_ptyerr</bit>
+    <bit pos="59">fmr3_ttag_perr</bit>
+    <bit pos="60">fmr3_vc0_crediterr</bit>
+    <bit pos="61">fmr3_vc1_crediterr</bit>
+    <bit pos="62">fmr3_rtag_ptyerr</bit>
+    <bit pos="63">fmr3_rtag_misc_pty</bit>
+</attn_node>

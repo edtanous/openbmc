@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<attn_node model_ec="P10_10,P10_20" name="PB_PR0123_ERR" reg_type="SCOM">
+    <register name="PB_PR0123_ERR">
+        <instance reg_inst="0" addr="0x10011829" />
+        <instance reg_inst="1" addr="0x11011829" />
+        <instance reg_inst="2" addr="0x12011829" />
+        <instance reg_inst="3" addr="0x13011829" />
+    </register>
+    <rule attn_type="CS" node_inst="0:3">
+        <expr type="reg" value1="PB_PR0123_ERR"/>
+    </rule>
+    <rule attn_type="RE" node_inst="0:3">
+        <expr type="reg" value1="PB_PR0123_ERR"/>
+    </rule>
+    <rule attn_type="SPA" node_inst="0:3">
+        <expr type="reg" value1="PB_PR0123_ERR"/>
+    </rule>
+    <bit pos="0">prs0_address_pty</bit>
+    <bit pos="1">prs0_atag_pty</bit>
+    <bit pos="2">prs0_cc0_crediterr</bit>
+    <bit pos="3">prs0_cc1_crediterr</bit>
+    <bit pos="4">prs0_cc2_crediterr</bit>
+    <bit pos="5">prs0_cc3_crediterr</bit>
+    <bit pos="6">prs0_control_error</bit>
+    <bit pos="7">prs0_data_pty_err</bit>
+    <bit pos="8">prs0_rtag_misc_pty</bit>
+    <bit pos="9">prs0_rtag_pty</bit>
+    <bit pos="10">prs0_ttag_pty</bit>
+    <bit pos="11">prs0_vc0_crediterr</bit>
+    <bit pos="12">prs0_vc1_crediterr</bit>
+    <bit pos="13">prs0_link_down</bit>
+    <bit pos="16">prs1_address_pty</bit>
+    <bit pos="17">prs1_atag_pty</bit>
+    <bit pos="18">prs1_cc0_crediterr</bit>
+    <bit pos="19">prs1_cc1_crediterr</bit>
+    <bit pos="20">prs1_cc2_crediterr</bit>
+    <bit pos="21">prs1_cc3_crediterr</bit>
+    <bit pos="22">prs1_control_error</bit>
+    <bit pos="23">prs1_data_pty_err</bit>
+    <bit pos="24">prs1_rtag_misc_pty</bit>
+    <bit pos="25">prs1_rtag_pty</bit>
+    <bit pos="26">prs1_ttag_pty</bit>
+    <bit pos="27">prs1_vc0_crediterr</bit>
+    <bit pos="28">prs1_vc1_crediterr</bit>
+    <bit pos="29">prs1_link_down</bit>
+    <bit pos="32">prs2_address_pty</bit>
+    <bit pos="33">prs2_atag_pty</bit>
+    <bit pos="34">prs2_cc0_crediterr</bit>
+    <bit pos="35">prs2_cc1_crediterr</bit>
+    <bit pos="36">prs2_cc2_crediterr</bit>
+    <bit pos="37">prs2_cc3_crediterr</bit>
+    <bit pos="38">prs2_control_error</bit>
+    <bit pos="39">prs2_data_pty_err</bit>
+    <bit pos="40">prs2_rtag_misc_pty</bit>
+    <bit pos="41">prs2_rtag_pty</bit>
+    <bit pos="42">prs2_ttag_pty</bit>
+    <bit pos="43">prs2_vc0_crediterr</bit>
+    <bit pos="44">prs2_vc1_crediterr</bit>
+    <bit pos="45">prs2_link_down</bit>
+    <bit pos="48">prs3_address_pty</bit>
+    <bit pos="49">prs3_atag_pty</bit>
+    <bit pos="50">prs3_cc0_crediterr</bit>
+    <bit pos="51">prs3_cc1_crediterr</bit>
+    <bit pos="52">prs3_cc2_crediterr</bit>
+    <bit pos="53">prs3_cc3_crediterr</bit>
+    <bit pos="54">prs3_control_error</bit>
+    <bit pos="55">prs3_data_pty_err</bit>
+    <bit pos="56">prs3_rtag_misc_pty</bit>
+    <bit pos="57">prs3_rtag_pty</bit>
+    <bit pos="58">prs3_ttag_pty</bit>
+    <bit pos="59">prs3_vc0_crediterr</bit>
+    <bit pos="60">prs3_vc1_crediterr</bit>
+    <bit pos="61">prs3_link_down</bit>
+</attn_node>

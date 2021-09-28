@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<attn_node model_ec="P10_10,P10_20" name="PB_DOB01_DIB01_INT_ERR" reg_type="SCOM">
+    <register name="PB_DOB01_DIB01_INT_ERR">
+        <instance reg_inst="0" addr="0x10011828" />
+        <instance reg_inst="1" addr="0x11011828" />
+        <instance reg_inst="2" addr="0x12011828" />
+        <instance reg_inst="3" addr="0x13011828" />
+    </register>
+    <rule attn_type="CS" node_inst="0:3">
+        <expr type="reg" value1="PB_DOB01_DIB01_INT_ERR"/>
+    </rule>
+    <rule attn_type="RE" node_inst="0:3">
+        <expr type="reg" value1="PB_DOB01_DIB01_INT_ERR"/>
+    </rule>
+    <rule attn_type="SPA" node_inst="0:3">
+        <expr type="reg" value1="PB_DOB01_DIB01_INT_ERR"/>
+    </rule>
+    <bit pos="0">dob01_rtag_pbiterr</bit>
+    <bit pos="1">dob01_rtag_perr</bit>
+    <bit pos="2">dob01_misc_perr</bit>
+    <bit pos="3">dob01_f0vc0_evenperr</bit>
+    <bit pos="4">dob01_f0vc0_oddperr</bit>
+    <bit pos="5">dob01_f0vc1_evenperr</bit>
+    <bit pos="6">dob01_f0vc1_oddperr</bit>
+    <bit pos="7">dob01_f1vc0_evenperr</bit>
+    <bit pos="8">dob01_f1vc0_oddperr</bit>
+    <bit pos="9">dob01_f1vc1_evenperr</bit>
+    <bit pos="10">dob01_f1vc1_oddperr</bit>
+    <bit pos="11">dob01_f0_underflow</bit>
+    <bit pos="12">dob01_f0_overflow</bit>
+    <bit pos="13">dob01_f1_underflow</bit>
+    <bit pos="14">dob01_f1_overflow</bit>
+    <bit pos="15">dob01_vc0_underflow</bit>
+    <bit pos="16">dob01_vc0_overflow</bit>
+    <bit pos="17">dob01_vc1_underflow</bit>
+    <bit pos="18">dob01_vc1_overflow</bit>
+    <bit pos="19">dob01_f0vc0_underflow</bit>
+    <bit pos="20">dob01_f0vc0_overflow</bit>
+    <bit pos="21">dob01_f0vc1_underflow</bit>
+    <bit pos="22">dob01_f0vc1_overflow</bit>
+    <bit pos="23">dob01_f1vc0_underflow</bit>
+    <bit pos="24">dob01_f1vc0_overflow</bit>
+    <bit pos="25">dob01_f1vc1_underflow</bit>
+    <bit pos="26">dob01_f1vc1_overflow</bit>
+    <bit pos="27">dob01_vc0_prefetch_overflow</bit>
+    <bit pos="28">dob01_vc1_prefetch_overflow</bit>
+    <bit pos="29">dib01_evn0_underflow</bit>
+    <bit pos="30">dib01_evn0_overflow</bit>
+    <bit pos="31">dib01_evn1_underflow</bit>
+    <bit pos="32">dib01_evn1_overflow</bit>
+    <bit pos="33">dib01_rtag_pbiterr</bit>
+    <bit pos="34">dib01_rtag_perr</bit>
+    <bit pos="35">dib01_misc_perr</bit>
+    <bit pos="36">dib01_odd0_underflow</bit>
+    <bit pos="37">dib01_odd0_overflow</bit>
+    <bit pos="38">dib01_odd1_underflow</bit>
+    <bit pos="39">dib01_odd1_overflow</bit>
+    <bit pos="40">dib01_rtag_underflow</bit>
+    <bit pos="41">dib01_rtag_overflow</bit>
+    <bit pos="42">dib01_data_underflow</bit>
+    <bit pos="43">dib01_data_overflow</bit>
+    <bit pos="44">dib01_vc0_underflow</bit>
+    <bit pos="45">dib01_vc0_overflow</bit>
+    <bit pos="46">dib01_vc1_underflow</bit>
+    <bit pos="47">dib01_vc1_overflow</bit>
+    <bit pos="48">dib01_f0vc0_over_underflow</bit>
+    <bit pos="49">dib01_f0vc1_over_underflow</bit>
+    <bit pos="50">dib01_f1vc0_over_underflow</bit>
+    <bit pos="51">dib01_f1vc1_over_underflow</bit>
+</attn_node>
