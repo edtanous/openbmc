@@ -34,6 +34,8 @@
        "core29" : "pib/perv39/eq7/fc0/core1",
        "core30" : "pib/perv39/eq7/fc1/core0",
        "core31" : "pib/perv39/eq7/fc1/core1",
+       "pec0" : "pib/perv8/pec0",
+       "pec1" : "pib/perv9/pec1",
        "pau0" : "pib/perv16/pauc0/pau0",
        "pau3" : "pib/perv17/pauc1/pau1",
        "pau4" : "pib/perv18/pauc2/pau0",
@@ -3936,76 +3938,76 @@
       },
       "4558" : {
          "00" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked"
+            "00" : "pec0",
+            "01" : "pec0",
+            "02" : "pec1",
+            "03" : "pec1"
          },
          "01" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked"
+            "00" : "pec0",
+            "01" : "pec0",
+            "02" : "pec1",
+            "03" : "pec1"
          },
          "02" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked"
+            "00" : "pec0",
+            "01" : "pec0",
+            "02" : "pec1",
+            "03" : "pec1"
          },
          "03" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked"
+            "00" : "pec0",
+            "01" : "pec0",
+            "02" : "pec1",
+            "03" : "pec1"
          },
          "04" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked"
+            "00" : "pec0",
+            "01" : "pec0",
+            "02" : "pec1",
+            "03" : "pec1"
          },
          "05" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked"
+            "00" : "pec0",
+            "01" : "pec0",
+            "02" : "pec1",
+            "03" : "pec1"
          },
          "06" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked"
+            "00" : "pec0",
+            "01" : "pec0",
+            "02" : "pec1",
+            "03" : "pec1"
          },
          "07" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked"
+            "00" : "pec0",
+            "01" : "pec0",
+            "02" : "pec1",
+            "03" : "pec1"
          },
          "08" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked"
+            "00" : "pec0",
+            "01" : "pec0",
+            "02" : "pec1",
+            "03" : "pec1"
          },
          "09" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked"
+            "00" : "pec0",
+            "01" : "pec0",
+            "02" : "pec1",
+            "03" : "pec1"
          },
          "0a" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked"
+            "00" : "pec0",
+            "01" : "pec0",
+            "02" : "pec1",
+            "03" : "pec1"
          },
          "0b" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked"
+            "00" : "pec0",
+            "01" : "pec0",
+            "02" : "pec1",
+            "03" : "pec1"
          }
       },
       "4693" : {
