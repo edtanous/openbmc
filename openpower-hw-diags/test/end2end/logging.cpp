@@ -48,4 +48,9 @@ uint32_t eventVital()
     return 0;
 }
 
+void eventPhalSbeChipop(uint32_t proc)
+{
+    std::cout << "event: sbe timeout proc " << proc << std::endl;
+}
+
 } // namespace attn

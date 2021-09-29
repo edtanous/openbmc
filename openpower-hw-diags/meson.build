@@ -61,6 +61,10 @@ dbus_interfaces_dep = dependency('phosphor-dbus-interfaces')
 
 libpdbg_dep = cmplr.find_library('pdbg')
 
+if get_option('phal').enabled()
+  libphal_dep = cmplr.find_library('phal')
+endif
+
 # See if phosphor-logging is available, if not use test case logging code. This
 # allows for local builds outside of CI test sandbox.
 h = 'phosphor-logging/log.hpp'

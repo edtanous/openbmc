@@ -30,7 +30,8 @@ enum class EventType
     Terminate     = 1,
     Vital         = 2,
     HwDiagsFail   = 3,
-    AttentionFail = 4
+    AttentionFail = 4,
+    PhalSbeChipop = 5
 };
 
 /** @brief Maximum length of a single trace event message */
@@ -49,5 +50,8 @@ uint32_t eventVital();
 
 /** @brief Commit attention handler failure event to log */
 void eventAttentionFail(int i_error);
+
+/** @brief Commit sbe chipop event to log */
+void eventPhalSbeChipop(uint32_t proc);
 
 } // namespace attn

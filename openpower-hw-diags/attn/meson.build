@@ -65,6 +65,11 @@ attn_deps = [
     sdbusplus_dep,
 ]
 
+# conditional library dependencies
+if get_option('phal').enabled()
+  attn_deps += libphal_dep
+endif
+
 # Create static library.
 attn_lib = static_library(
     'attn_lib',
