@@ -25,6 +25,7 @@ enum TargetType_t : uint8_t
     TYPE_IOLINK = 0x47,
     TYPE_OMI    = 0x48,
     TYPE_OCMB   = 0x4b,
+    TYPE_IOHS   = 0x51,
 };
 
 /** @return The target associated with the given chip. */

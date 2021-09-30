@@ -34,6 +34,33 @@
        "core29" : "pib/perv39/eq7/fc0/core1",
        "core30" : "pib/perv39/eq7/fc1/core0",
        "core31" : "pib/perv39/eq7/fc1/core1",
+
+       "iohs0" : "pib/perv24/pauc0/iohs0",
+       "iohs1" : "pib/perv25/pauc0/iohs1",
+       "iohs2" : "pib/perv26/pauc1/iohs0",
+       "iohs3" : "pib/perv27/pauc1/iohs1",
+       "iohs4" : "pib/perv28/pauc2/iohs0",
+       "iohs5" : "pib/perv29/pauc2/iohs1",
+       "iohs6" : "pib/perv30/pauc3/iohs0",
+       "iohs7" : "pib/perv31/pauc3/iohs1",
+
+       "iolink0"  : "pib/perv24/pauc0/iohs0/smpgroup0",
+       "iolink1"  : "pib/perv24/pauc0/iohs0/smpgroup1",
+       "iolink2"  : "pib/perv25/pauc0/iohs1/smpgroup0",
+       "iolink3"  : "pib/perv25/pauc0/iohs1/smpgroup1",
+       "iolink4"  : "pib/perv26/pauc1/iohs0/smpgroup0",
+       "iolink5"  : "pib/perv26/pauc1/iohs0/smpgroup1",
+       "iolink6"  : "pib/perv27/pauc1/iohs1/smpgroup0",
+       "iolink7"  : "pib/perv27/pauc1/iohs1/smpgroup1",
+       "iolink8"  : "pib/perv28/pauc2/iohs0/smpgroup0",
+       "iolink9"  : "pib/perv28/pauc2/iohs0/smpgroup1",
+       "iolink10" : "pib/perv29/pauc2/iohs1/smpgroup0",
+       "iolink11" : "pib/perv29/pauc2/iohs1/smpgroup1",
+       "iolink12" : "pib/perv30/pauc3/iohs0/smpgroup0",
+       "iolink13" : "pib/perv30/pauc3/iohs0/smpgroup1",
+       "iolink14" : "pib/perv31/pauc3/iohs1/smpgroup0",
+       "iolink15" : "pib/perv31/pauc3/iohs1/smpgroup1",
+
        "pec0" : "pib/perv8/pec0",
        "pec1" : "pib/perv9/pec1",
        "pau0" : "pib/perv16/pauc0/pau0",
@@ -43,7 +70,33 @@
        "pau6" : "pib/perv19/pauc3/pau0",
        "pau7" : "pib/perv19/pauc3/pau1"
    },
-   "buses" : {},
+   "buses" : {
+       "iohs0":  { "type": "SMP_BUS", "unit": "iohs0" },
+       "iohs1":  { "type": "SMP_BUS", "unit": "iohs1" },
+       "iohs2":  { "type": "SMP_BUS", "unit": "iohs2" },
+       "iohs3":  { "type": "SMP_BUS", "unit": "iohs3" },
+       "iohs4":  { "type": "SMP_BUS", "unit": "iohs4" },
+       "iohs5":  { "type": "SMP_BUS", "unit": "iohs5" },
+       "iohs6":  { "type": "SMP_BUS", "unit": "iohs6" },
+       "iohs7":  { "type": "SMP_BUS", "unit": "iohs7" },
+
+       "iolink0":  { "type": "SMP_BUS", "unit": "iolink0" },
+       "iolink1":  { "type": "SMP_BUS", "unit": "iolink1" },
+       "iolink2":  { "type": "SMP_BUS", "unit": "iolink2" },
+       "iolink3":  { "type": "SMP_BUS", "unit": "iolink3" },
+       "iolink4":  { "type": "SMP_BUS", "unit": "iolink4" },
+       "iolink5":  { "type": "SMP_BUS", "unit": "iolink5" },
+       "iolink6":  { "type": "SMP_BUS", "unit": "iolink6" },
+       "iolink7":  { "type": "SMP_BUS", "unit": "iolink7" },
+       "iolink8":  { "type": "SMP_BUS", "unit": "iolink8" },
+       "iolink9":  { "type": "SMP_BUS", "unit": "iolink9" },
+       "iolink10": { "type": "SMP_BUS", "unit": "iolink10" },
+       "iolink11": { "type": "SMP_BUS", "unit": "iolink11" },
+       "iolink12": { "type": "SMP_BUS", "unit": "iolink12" },
+       "iolink13": { "type": "SMP_BUS", "unit": "iolink13" },
+       "iolink14": { "type": "SMP_BUS", "unit": "iolink14" },
+       "iolink15": { "type": "SMP_BUS", "unit": "iolink15" }
+   },
    "actions" : {
         "self" : [
             {
@@ -217,6 +270,244 @@
         "level2_M_core30_L": [ { "type": "action", "name": "level2" }, { "type": "callout_unit", "name": "core30", "priority": "LOW", "guard": false } ],
         "level2_M_core31_L": [ { "type": "action", "name": "level2" }, { "type": "callout_unit", "name": "core31", "priority": "LOW", "guard": false } ],
 
+        "iohs0" : [ { "type": "callout_unit", "name": "iohs0",  "priority": "MED", "guard": true } ],
+        "iohs1" : [ { "type": "callout_unit", "name": "iohs1",  "priority": "MED", "guard": true } ],
+        "iohs2" : [ { "type": "callout_unit", "name": "iohs2",  "priority": "MED", "guard": true } ],
+        "iohs3" : [ { "type": "callout_unit", "name": "iohs3",  "priority": "MED", "guard": true } ],
+        "iohs4" : [ { "type": "callout_unit", "name": "iohs4",  "priority": "MED", "guard": true } ],
+        "iohs5" : [ { "type": "callout_unit", "name": "iohs5",  "priority": "MED", "guard": true } ],
+        "iohs6" : [ { "type": "callout_unit", "name": "iohs6",  "priority": "MED", "guard": true } ],
+        "iohs7" : [ { "type": "callout_unit", "name": "iohs7",  "priority": "MED", "guard": true } ],
+
+        "iolink0" : [ { "type": "callout_unit", "name": "iolink0",  "priority": "MED", "guard": true } ],
+        "iolink1" : [ { "type": "callout_unit", "name": "iolink1",  "priority": "MED", "guard": true } ],
+        "iolink2" : [ { "type": "callout_unit", "name": "iolink2",  "priority": "MED", "guard": true } ],
+        "iolink3" : [ { "type": "callout_unit", "name": "iolink3",  "priority": "MED", "guard": true } ],
+        "iolink4" : [ { "type": "callout_unit", "name": "iolink4",  "priority": "MED", "guard": true } ],
+        "iolink5" : [ { "type": "callout_unit", "name": "iolink5",  "priority": "MED", "guard": true } ],
+        "iolink6" : [ { "type": "callout_unit", "name": "iolink6",  "priority": "MED", "guard": true } ],
+        "iolink7" : [ { "type": "callout_unit", "name": "iolink7",  "priority": "MED", "guard": true } ],
+        "iolink8" : [ { "type": "callout_unit", "name": "iolink8",  "priority": "MED", "guard": true } ],
+        "iolink9" : [ { "type": "callout_unit", "name": "iolink9",  "priority": "MED", "guard": true } ],
+        "iolink10": [ { "type": "callout_unit", "name": "iolink10", "priority": "MED", "guard": true } ],
+        "iolink11": [ { "type": "callout_unit", "name": "iolink11", "priority": "MED", "guard": true } ],
+        "iolink12": [ { "type": "callout_unit", "name": "iolink12", "priority": "MED", "guard": true } ],
+        "iolink13": [ { "type": "callout_unit", "name": "iolink13", "priority": "MED", "guard": true } ],
+        "iolink14": [ { "type": "callout_unit", "name": "iolink14", "priority": "MED", "guard": true } ],
+        "iolink15": [ { "type": "callout_unit", "name": "iolink15", "priority": "MED", "guard": true } ],
+
+        "bus_endpoints_iohs0" : [
+            { "type": "callout_unit",      "name": "iohs0", "priority": "MED_A", "guard": true },
+            { "type": "callout_connected", "name": "iohs0", "priority": "MED_A", "guard": true }
+        ],
+        "bus_endpoints_iohs1" : [
+            { "type": "callout_unit",      "name": "iohs1", "priority": "MED_A", "guard": true },
+            { "type": "callout_connected", "name": "iohs1", "priority": "MED_A", "guard": true }
+        ],
+        "bus_endpoints_iohs2" : [
+            { "type": "callout_unit",      "name": "iohs2", "priority": "MED_A", "guard": true },
+            { "type": "callout_connected", "name": "iohs2", "priority": "MED_A", "guard": true }
+        ],
+        "bus_endpoints_iohs3" : [
+            { "type": "callout_unit",      "name": "iohs3", "priority": "MED_A", "guard": true },
+            { "type": "callout_connected", "name": "iohs3", "priority": "MED_A", "guard": true }
+        ],
+        "bus_endpoints_iohs4" : [
+            { "type": "callout_unit",      "name": "iohs4", "priority": "MED_A", "guard": true },
+            { "type": "callout_connected", "name": "iohs4", "priority": "MED_A", "guard": true }
+        ],
+        "bus_endpoints_iohs5" : [
+            { "type": "callout_unit",      "name": "iohs5", "priority": "MED_A", "guard": true },
+            { "type": "callout_connected", "name": "iohs5", "priority": "MED_A", "guard": true }
+        ],
+        "bus_endpoints_iohs6" : [
+            { "type": "callout_unit",      "name": "iohs6", "priority": "MED_A", "guard": true },
+            { "type": "callout_connected", "name": "iohs6", "priority": "MED_A", "guard": true }
+        ],
+        "bus_endpoints_iohs7" : [
+            { "type": "callout_unit",      "name": "iohs7", "priority": "MED_A", "guard": true },
+            { "type": "callout_connected", "name": "iohs7", "priority": "MED_A", "guard": true }
+        ],
+
+        "bus_endpoints_iolink0" : [
+            { "type": "callout_unit",      "name": "iolink0", "priority": "MED_A", "guard": true },
+            { "type": "callout_connected", "name": "iolink0", "priority": "MED_A", "guard": true }
+        ],
+        "bus_endpoints_iolink1" : [
+            { "type": "callout_unit",      "name": "iolink1", "priority": "MED_A", "guard": true },
+            { "type": "callout_connected", "name": "iolink1", "priority": "MED_A", "guard": true }
+        ],
+        "bus_endpoints_iolink2" : [
+            { "type": "callout_unit",      "name": "iolink2", "priority": "MED_A", "guard": true },
+            { "type": "callout_connected", "name": "iolink2", "priority": "MED_A", "guard": true }
+        ],
+        "bus_endpoints_iolink3" : [
+            { "type": "callout_unit",      "name": "iolink3", "priority": "MED_A", "guard": true },
+            { "type": "callout_connected", "name": "iolink3", "priority": "MED_A", "guard": true }
+        ],
+        "bus_endpoints_iolink4" : [
+            { "type": "callout_unit",      "name": "iolink4", "priority": "MED_A", "guard": true },
+            { "type": "callout_connected", "name": "iolink4", "priority": "MED_A", "guard": true }
+        ],
+        "bus_endpoints_iolink5" : [
+            { "type": "callout_unit",      "name": "iolink5", "priority": "MED_A", "guard": true },
+            { "type": "callout_connected", "name": "iolink5", "priority": "MED_A", "guard": true }
+        ],
+        "bus_endpoints_iolink6" : [
+            { "type": "callout_unit",      "name": "iolink6", "priority": "MED_A", "guard": true },
+            { "type": "callout_connected", "name": "iolink6", "priority": "MED_A", "guard": true }
+        ],
+        "bus_endpoints_iolink7" : [
+            { "type": "callout_unit",      "name": "iolink7", "priority": "MED_A", "guard": true },
+            { "type": "callout_connected", "name": "iolink7", "priority": "MED_A", "guard": true }
+        ],
+        "bus_endpoints_iolink8" : [
+            { "type": "callout_unit",      "name": "iolink8", "priority": "MED_A", "guard": true },
+            { "type": "callout_connected", "name": "iolink8", "priority": "MED_A", "guard": true }
+        ],
+        "bus_endpoints_iolink9" : [
+            { "type": "callout_unit",      "name": "iolink9", "priority": "MED_A", "guard": true },
+            { "type": "callout_connected", "name": "iolink9", "priority": "MED_A", "guard": true }
+        ],
+        "bus_endpoints_iolink10" : [
+            { "type": "callout_unit",      "name": "iolink10", "priority": "MED_A", "guard": true },
+            { "type": "callout_connected", "name": "iolink10", "priority": "MED_A", "guard": true }
+        ],
+        "bus_endpoints_iolink11" : [
+            { "type": "callout_unit",      "name": "iolink11", "priority": "MED_A", "guard": true },
+            { "type": "callout_connected", "name": "iolink11", "priority": "MED_A", "guard": true }
+        ],
+        "bus_endpoints_iolink12" : [
+            { "type": "callout_unit",      "name": "iolink12", "priority": "MED_A", "guard": true },
+            { "type": "callout_connected", "name": "iolink12", "priority": "MED_A", "guard": true }
+        ],
+        "bus_endpoints_iolink13" : [
+            { "type": "callout_unit",      "name": "iolink13", "priority": "MED_A", "guard": true },
+            { "type": "callout_connected", "name": "iolink13", "priority": "MED_A", "guard": true }
+        ],
+        "bus_endpoints_iolink14" : [
+            { "type": "callout_unit",      "name": "iolink14", "priority": "MED_A", "guard": true },
+            { "type": "callout_connected", "name": "iolink14", "priority": "MED_A", "guard": true }
+        ],
+        "bus_endpoints_iolink15" : [
+            { "type": "callout_unit",      "name": "iolink15", "priority": "MED_A", "guard": true },
+            { "type": "callout_connected", "name": "iolink15", "priority": "MED_A", "guard": true }
+        ],
+
+        "smp_bus_iolink0" : [
+            { "type": "action",      "name": "bus_endpoints_iolink0" },
+            { "type": "callout_bus", "name": "iolink0", "priority": "LOW", "guard": false }
+        ],
+        "smp_bus_iolink1" : [
+            { "type": "action",      "name": "bus_endpoints_iolink1" },
+            { "type": "callout_bus", "name": "iolink1", "priority": "LOW", "guard": false }
+        ],
+        "smp_bus_iolink2" : [
+            { "type": "action",      "name": "bus_endpoints_iolink2" },
+            { "type": "callout_bus", "name": "iolink2", "priority": "LOW", "guard": false }
+        ],
+        "smp_bus_iolink3" : [
+            { "type": "action",      "name": "bus_endpoints_iolink3" },
+            { "type": "callout_bus", "name": "iolink3", "priority": "LOW", "guard": false }
+        ],
+        "smp_bus_iolink4" : [
+            { "type": "action",      "name": "bus_endpoints_iolink4" },
+            { "type": "callout_bus", "name": "iolink4", "priority": "LOW", "guard": false }
+        ],
+        "smp_bus_iolink5" : [
+            { "type": "action",      "name": "bus_endpoints_iolink5" },
+            { "type": "callout_bus", "name": "iolink5", "priority": "LOW", "guard": false }
+        ],
+        "smp_bus_iolink6" : [
+            { "type": "action",      "name": "bus_endpoints_iolink6" },
+            { "type": "callout_bus", "name": "iolink6", "priority": "LOW", "guard": false }
+        ],
+        "smp_bus_iolink7" : [
+            { "type": "action",      "name": "bus_endpoints_iolink7" },
+            { "type": "callout_bus", "name": "iolink7", "priority": "LOW", "guard": false }
+        ],
+        "smp_bus_iolink8" : [
+            { "type": "action",      "name": "bus_endpoints_iolink8" },
+            { "type": "callout_bus", "name": "iolink8", "priority": "LOW", "guard": false }
+        ],
+        "smp_bus_iolink9" : [
+            { "type": "action",      "name": "bus_endpoints_iolink9" },
+            { "type": "callout_bus", "name": "iolink9", "priority": "LOW", "guard": false }
+        ],
+        "smp_bus_iolink10": [
+            { "type": "action",      "name": "bus_endpoints_iolink10" },
+            { "type": "callout_bus", "name": "iolink10", "priority": "LOW", "guard": false }
+        ],
+        "smp_bus_iolink11": [
+            { "type": "action",      "name": "bus_endpoints_iolink11" },
+            { "type": "callout_bus", "name": "iolink11", "priority": "LOW", "guard": false }
+        ],
+        "smp_bus_iolink12": [
+            { "type": "action",      "name": "bus_endpoints_iolink12" },
+            { "type": "callout_bus", "name": "iolink12", "priority": "LOW", "guard": false }
+        ],
+        "smp_bus_iolink13": [
+            { "type": "action",      "name": "bus_endpoints_iolink13" },
+            { "type": "callout_bus", "name": "iolink13", "priority": "LOW", "guard": false }
+        ],
+        "smp_bus_iolink14": [
+            { "type": "action",      "name": "bus_endpoints_iolink14" },
+            { "type": "callout_bus", "name": "iolink14", "priority": "LOW", "guard": false }
+        ],
+        "smp_bus_iolink15": [
+            { "type": "action",      "name": "bus_endpoints_iolink15" },
+            { "type": "callout_bus", "name": "iolink15", "priority": "LOW", "guard": false }
+        ],
+
+        "framer_error_iolink0" : [
+            { "type": "callout_connected", "name": "iolink0",  "priority": "MED_A", "guard": true }
+        ],
+        "framer_error_iolink1" : [
+            { "type": "callout_connected", "name": "iolink1",  "priority": "MED_A", "guard": true }
+        ],
+        "framer_error_iolink2" : [
+            { "type": "callout_connected", "name": "iolink2",  "priority": "MED_A", "guard": true }
+        ],
+        "framer_error_iolink3" : [
+            { "type": "callout_connected", "name": "iolink3",  "priority": "MED_A", "guard": true }
+        ],
+        "framer_error_iolink4" : [
+            { "type": "callout_connected", "name": "iolink4",  "priority": "MED_A", "guard": true }
+        ],
+        "framer_error_iolink5" : [
+            { "type": "callout_connected", "name": "iolink5",  "priority": "MED_A", "guard": true }
+        ],
+        "framer_error_iolink6" : [
+            { "type": "callout_connected", "name": "iolink6",  "priority": "MED_A", "guard": true }
+        ],
+        "framer_error_iolink7" : [
+            { "type": "callout_connected", "name": "iolink7",  "priority": "MED_A", "guard": true }
+        ],
+        "framer_error_iolink8" : [
+            { "type": "callout_connected", "name": "iolink8",  "priority": "MED_A", "guard": true }
+        ],
+        "framer_error_iolink9" : [
+            { "type": "callout_connected", "name": "iolink9",  "priority": "MED_A", "guard": true }
+        ],
+        "framer_error_iolink10" : [
+            { "type": "callout_connected", "name": "iolink10", "priority": "MED_A", "guard": true }
+        ],
+        "framer_error_iolink11" : [
+            { "type": "callout_connected", "name": "iolink11", "priority": "MED_A", "guard": true }
+        ],
+        "framer_error_iolink12" : [
+            { "type": "callout_connected", "name": "iolink12", "priority": "MED_A", "guard": true }
+        ],
+        "framer_error_iolink13" : [
+            { "type": "callout_connected", "name": "iolink13", "priority": "MED_A", "guard": true }
+        ],
+        "framer_error_iolink14" : [
+            { "type": "callout_connected", "name": "iolink14", "priority": "MED_A", "guard": true }
+        ],
+        "framer_error_iolink15" : [
+            { "type": "callout_connected", "name": "iolink15", "priority": "MED_A", "guard": true }
+        ],
+
         "pau0": [ { "type": "callout_unit", "name": "pau0", "priority": "MED", "guard": true } ],
         "pau3": [ { "type": "callout_unit", "name": "pau3", "priority": "MED", "guard": true } ],
         "pau4": [ { "type": "callout_unit", "name": "pau4", "priority": "MED", "guard": true } ],
@@ -259,6 +550,7 @@
         "masked"         : [ { "type": "action", "name": "level2" } ],
         "global"         : [ { "type": "action", "name": "level2" } ],
         "chiplet"        : [ { "type": "action", "name": "level2" } ],
+        "c_err_rpt"      : [ { "type": "action", "name": "level2" } ],
         "external"       : [ { "type": "action", "name": "level2" } ],
         "tod_error"      : [ { "type": "action", "name": "level2" } ],
         "sbe_vital_attn" : [ { "type": "action", "name": "level2" } ],
@@ -1796,6 +2088,392 @@
             "01" : "masked"
          }
       },
+      "2aeb" : {
+         "00" : {
+            "00" : "iolink0",
+            "01" : "iolink4",
+            "02" : "iolink8",
+            "03" : "iolink12"
+         },
+         "01" : {
+            "00" : "iolink0",
+            "01" : "iolink4",
+            "02" : "iolink8",
+            "03" : "iolink12"
+         },
+         "02" : {
+            "00" : "iolink0",
+            "01" : "iolink4",
+            "02" : "iolink8",
+            "03" : "iolink12"
+         },
+         "03" : {
+            "00" : "iolink0",
+            "01" : "iolink4",
+            "02" : "iolink8",
+            "03" : "iolink12"
+         },
+         "04" : {
+            "00" : "iolink0",
+            "01" : "iolink4",
+            "02" : "iolink8",
+            "03" : "iolink12"
+         },
+         "05" : {
+            "00" : "iolink0",
+            "01" : "iolink4",
+            "02" : "iolink8",
+            "03" : "iolink12"
+         },
+         "06" : {
+            "00" : "iolink0",
+            "01" : "iolink4",
+            "02" : "iolink8",
+            "03" : "iolink12"
+         },
+         "07" : {
+            "00" : "iolink0",
+            "01" : "iolink4",
+            "02" : "iolink8",
+            "03" : "iolink12"
+         },
+         "08" : {
+            "00" : "iolink0",
+            "01" : "iolink4",
+            "02" : "iolink8",
+            "03" : "iolink12"
+         },
+         "09" : {
+            "00" : "iolink0",
+            "01" : "iolink4",
+            "02" : "iolink8",
+            "03" : "iolink12"
+         },
+         "0a" : {
+            "00" : "iolink0",
+            "01" : "iolink4",
+            "02" : "iolink8",
+            "03" : "iolink12"
+         },
+         "0b" : {
+            "00" : "iolink0",
+            "01" : "iolink4",
+            "02" : "iolink8",
+            "03" : "iolink12"
+         },
+         "0c" : {
+            "00" : "bus_endpoints_iolink0",
+            "01" : "bus_endpoints_iolink4",
+            "02" : "bus_endpoints_iolink8",
+            "03" : "bus_endpoints_iolink12"
+         },
+         "0d" : {
+            "00" : "bus_endpoints_iolink0",
+            "01" : "bus_endpoints_iolink4",
+            "02" : "bus_endpoints_iolink8",
+            "03" : "bus_endpoints_iolink12"
+         },
+         "0e" : {
+            "00" : "iolink0",
+            "01" : "iolink4",
+            "02" : "iolink8",
+            "03" : "iolink12"
+         },
+         "0f" : {
+            "00" : "iolink0",
+            "01" : "iolink4",
+            "02" : "iolink8",
+            "03" : "iolink12"
+         },
+         "10" : {
+            "00" : "iolink1",
+            "01" : "iolink5",
+            "02" : "iolink9",
+            "03" : "iolink13"
+         },
+         "11" : {
+            "00" : "iolink1",
+            "01" : "iolink5",
+            "02" : "iolink9",
+            "03" : "iolink13"
+         },
+         "12" : {
+            "00" : "iolink1",
+            "01" : "iolink5",
+            "02" : "iolink9",
+            "03" : "iolink13"
+         },
+         "13" : {
+            "00" : "iolink1",
+            "01" : "iolink5",
+            "02" : "iolink9",
+            "03" : "iolink13"
+         },
+         "14" : {
+            "00" : "iolink1",
+            "01" : "iolink5",
+            "02" : "iolink9",
+            "03" : "iolink13"
+         },
+         "15" : {
+            "00" : "iolink1",
+            "01" : "iolink5",
+            "02" : "iolink9",
+            "03" : "iolink13"
+         },
+         "16" : {
+            "00" : "iolink1",
+            "01" : "iolink5",
+            "02" : "iolink9",
+            "03" : "iolink13"
+         },
+         "17" : {
+            "00" : "iolink1",
+            "01" : "iolink5",
+            "02" : "iolink9",
+            "03" : "iolink13"
+         },
+         "18" : {
+            "00" : "iolink1",
+            "01" : "iolink5",
+            "02" : "iolink9",
+            "03" : "iolink13"
+         },
+         "19" : {
+            "00" : "iolink1",
+            "01" : "iolink5",
+            "02" : "iolink9",
+            "03" : "iolink13"
+         },
+         "1a" : {
+            "00" : "iolink1",
+            "01" : "iolink5",
+            "02" : "iolink9",
+            "03" : "iolink13"
+         },
+         "1b" : {
+            "00" : "iolink1",
+            "01" : "iolink5",
+            "02" : "iolink9",
+            "03" : "iolink13"
+         },
+         "1c" : {
+            "00" : "bus_endpoints_iolink1",
+            "01" : "bus_endpoints_iolink5",
+            "02" : "bus_endpoints_iolink9",
+            "03" : "bus_endpoints_iolink13"
+         },
+         "1d" : {
+            "00" : "bus_endpoints_iolink1",
+            "01" : "bus_endpoints_iolink5",
+            "02" : "bus_endpoints_iolink9",
+            "03" : "bus_endpoints_iolink13"
+         },
+         "1e" : {
+            "00" : "iolink1",
+            "01" : "iolink5",
+            "02" : "iolink9",
+            "03" : "iolink13"
+         },
+         "1f" : {
+            "00" : "iolink1",
+            "01" : "iolink5",
+            "02" : "iolink9",
+            "03" : "iolink13"
+         },
+         "20" : {
+            "00" : "iolink2",
+            "01" : "iolink6",
+            "02" : "iolink10",
+            "03" : "iolink14"
+         },
+         "21" : {
+            "00" : "iolink2",
+            "01" : "iolink6",
+            "02" : "iolink10",
+            "03" : "iolink14"
+         },
+         "22" : {
+            "00" : "iolink2",
+            "01" : "iolink6",
+            "02" : "iolink10",
+            "03" : "iolink14"
+         },
+         "23" : {
+            "00" : "iolink2",
+            "01" : "iolink6",
+            "02" : "iolink10",
+            "03" : "iolink14"
+         },
+         "24" : {
+            "00" : "iolink2",
+            "01" : "iolink6",
+            "02" : "iolink10",
+            "03" : "iolink14"
+         },
+         "25" : {
+            "00" : "iolink2",
+            "01" : "iolink6",
+            "02" : "iolink10",
+            "03" : "iolink14"
+         },
+         "26" : {
+            "00" : "iolink2",
+            "01" : "iolink6",
+            "02" : "iolink10",
+            "03" : "iolink14"
+         },
+         "27" : {
+            "00" : "iolink2",
+            "01" : "iolink6",
+            "02" : "iolink10",
+            "03" : "iolink14"
+         },
+         "28" : {
+            "00" : "iolink2",
+            "01" : "iolink6",
+            "02" : "iolink10",
+            "03" : "iolink14"
+         },
+         "29" : {
+            "00" : "iolink2",
+            "01" : "iolink6",
+            "02" : "iolink10",
+            "03" : "iolink14"
+         },
+         "2a" : {
+            "00" : "iolink2",
+            "01" : "iolink6",
+            "02" : "iolink10",
+            "03" : "iolink14"
+         },
+         "2b" : {
+            "00" : "iolink2",
+            "01" : "iolink6",
+            "02" : "iolink10",
+            "03" : "iolink14"
+         },
+         "2c" : {
+            "00" : "bus_endpoints_iolink2",
+            "01" : "bus_endpoints_iolink6",
+            "02" : "bus_endpoints_iolink10",
+            "03" : "bus_endpoints_iolink14"
+         },
+         "2d" : {
+            "00" : "bus_endpoints_iolink2",
+            "01" : "bus_endpoints_iolink6",
+            "02" : "bus_endpoints_iolink10",
+            "03" : "bus_endpoints_iolink14"
+         },
+         "2e" : {
+            "00" : "iolink2",
+            "01" : "iolink6",
+            "02" : "iolink10",
+            "03" : "iolink14"
+         },
+         "2f" : {
+            "00" : "iolink2",
+            "01" : "iolink6",
+            "02" : "iolink10",
+            "03" : "iolink14"
+         },
+         "30" : {
+            "00" : "iolink3",
+            "01" : "iolink7",
+            "02" : "iolink11",
+            "03" : "iolink15"
+         },
+         "31" : {
+            "00" : "iolink3",
+            "01" : "iolink7",
+            "02" : "iolink11",
+            "03" : "iolink15"
+         },
+         "32" : {
+            "00" : "iolink3",
+            "01" : "iolink7",
+            "02" : "iolink11",
+            "03" : "iolink15"
+         },
+         "33" : {
+            "00" : "iolink3",
+            "01" : "iolink7",
+            "02" : "iolink11",
+            "03" : "iolink15"
+         },
+         "34" : {
+            "00" : "iolink3",
+            "01" : "iolink7",
+            "02" : "iolink11",
+            "03" : "iolink15"
+         },
+         "35" : {
+            "00" : "iolink3",
+            "01" : "iolink7",
+            "02" : "iolink11",
+            "03" : "iolink15"
+         },
+         "36" : {
+            "00" : "iolink3",
+            "01" : "iolink7",
+            "02" : "iolink11",
+            "03" : "iolink15"
+         },
+         "37" : {
+            "00" : "iolink3",
+            "01" : "iolink7",
+            "02" : "iolink11",
+            "03" : "iolink15"
+         },
+         "38" : {
+            "00" : "iolink3",
+            "01" : "iolink7",
+            "02" : "iolink11",
+            "03" : "iolink15"
+         },
+         "39" : {
+            "00" : "iolink3",
+            "01" : "iolink7",
+            "02" : "iolink11",
+            "03" : "iolink15"
+         },
+         "3a" : {
+            "00" : "iolink3",
+            "01" : "iolink7",
+            "02" : "iolink11",
+            "03" : "iolink15"
+         },
+         "3b" : {
+            "00" : "iolink3",
+            "01" : "iolink7",
+            "02" : "iolink11",
+            "03" : "iolink15"
+         },
+         "3c" : {
+            "00" : "bus_endpoints_iolink3",
+            "01" : "bus_endpoints_iolink7",
+            "02" : "bus_endpoints_iolink11",
+            "03" : "bus_endpoints_iolink15"
+         },
+         "3d" : {
+            "00" : "bus_endpoints_iolink3",
+            "01" : "bus_endpoints_iolink7",
+            "02" : "bus_endpoints_iolink11",
+            "03" : "bus_endpoints_iolink15"
+         },
+         "3e" : {
+            "00" : "iolink3",
+            "01" : "iolink7",
+            "02" : "iolink11",
+            "03" : "iolink15"
+         },
+         "3f" : {
+            "00" : "iolink3",
+            "01" : "iolink7",
+            "02" : "iolink11",
+            "03" : "iolink15"
+         }
+      },
       "312f" : {
          "04" : {
             "00" : "chiplet",
@@ -1905,6 +2583,320 @@
          "31" : { "00" : "masked" },
          "32" : { "00" : "masked" },
          "33" : { "00" : "masked" }
+      },
+      "32b1" : {
+         "00" : {
+            "00" : "iohs0",
+            "01" : "iohs2",
+            "02" : "iohs4",
+            "03" : "iohs6"
+         },
+         "01" : {
+            "00" : "iohs0",
+            "01" : "iohs2",
+            "02" : "iohs4",
+            "03" : "iohs6"
+         },
+         "02" : {
+            "00" : "iohs0",
+            "01" : "iohs2",
+            "02" : "iohs4",
+            "03" : "iohs6"
+         },
+         "03" : {
+            "00" : "iolink0",
+            "01" : "iolink4",
+            "02" : "iolink8",
+            "03" : "iolink12"
+         },
+         "04" : {
+            "00" : "iolink0",
+            "01" : "iolink4",
+            "02" : "iolink8",
+            "03" : "iolink12"
+         },
+         "05" : {
+            "00" : "iolink0",
+            "01" : "iolink4",
+            "02" : "iolink8",
+            "03" : "iolink12"
+         },
+         "06" : {
+            "00" : "iolink0",
+            "01" : "iolink4",
+            "02" : "iolink8",
+            "03" : "iolink12"
+         },
+         "07" : {
+            "00" : "iolink1",
+            "01" : "iolink5",
+            "02" : "iolink9",
+            "03" : "iolink13"
+         },
+         "08" : {
+            "00" : "iolink1",
+            "01" : "iolink5",
+            "02" : "iolink9",
+            "03" : "iolink13"
+         },
+         "09" : {
+            "00" : "iolink1",
+            "01" : "iolink5",
+            "02" : "iolink9",
+            "03" : "iolink13"
+         },
+         "0a" : {
+            "00" : "iolink1",
+            "01" : "iolink5",
+            "02" : "iolink9",
+            "03" : "iolink13"
+         },
+         "0b" : {
+            "00" : "bus_endpoints_iolink0",
+            "01" : "bus_endpoints_iolink4",
+            "02" : "bus_endpoints_iolink8",
+            "03" : "bus_endpoints_iolink12"
+         },
+         "0c" : {
+            "00" : "iolink0",
+            "01" : "iolink4",
+            "02" : "iolink8",
+            "03" : "iolink12"
+         },
+         "0d" : {
+            "00" : "bus_endpoints_iolink1",
+            "01" : "bus_endpoints_iolink5",
+            "02" : "bus_endpoints_iolink9",
+            "03" : "bus_endpoints_iolink13"
+         },
+         "0e" : {
+            "00" : "iolink1",
+            "01" : "iolink5",
+            "02" : "iolink9",
+            "03" : "iolink13"
+         },
+         "0f" : {
+            "00" : "bus_endpoints_iohs0",
+            "01" : "bus_endpoints_iohs2",
+            "02" : "bus_endpoints_iohs4",
+            "03" : "bus_endpoints_iohs6"
+         },
+         "10" : {
+            "00" : "iohs0",
+            "01" : "iohs2",
+            "02" : "iohs4",
+            "03" : "iohs6"
+         },
+         "11" : {
+            "00" : "bus_endpoints_iohs0",
+            "01" : "bus_endpoints_iohs2",
+            "02" : "bus_endpoints_iohs4",
+            "03" : "bus_endpoints_iohs6"
+         },
+         "12" : {
+            "00" : "iohs0",
+            "01" : "iohs2",
+            "02" : "iohs4",
+            "03" : "iohs6"
+         },
+         "13" : {
+            "00" : "bus_endpoints_iolink0",
+            "01" : "bus_endpoints_iolink4",
+            "02" : "bus_endpoints_iolink8",
+            "03" : "bus_endpoints_iolink12"
+         },
+         "14" : {
+            "00" : "bus_endpoints_iolink0",
+            "01" : "bus_endpoints_iolink4",
+            "02" : "bus_endpoints_iolink8",
+            "03" : "bus_endpoints_iolink12"
+         },
+         "15" : {
+            "00" : "bus_endpoints_iolink0",
+            "01" : "bus_endpoints_iolink4",
+            "02" : "bus_endpoints_iolink8",
+            "03" : "bus_endpoints_iolink12"
+         },
+         "16" : {
+            "00" : "bus_endpoints_iolink0",
+            "01" : "bus_endpoints_iolink4",
+            "02" : "bus_endpoints_iolink8",
+            "03" : "bus_endpoints_iolink12"
+         },
+         "17" : {
+            "00" : "bus_endpoints_iolink1",
+            "01" : "bus_endpoints_iolink5",
+            "02" : "bus_endpoints_iolink9",
+            "03" : "bus_endpoints_iolink13"
+         },
+         "18" : {
+            "00" : "bus_endpoints_iolink1",
+            "01" : "bus_endpoints_iolink5",
+            "02" : "bus_endpoints_iolink9",
+            "03" : "bus_endpoints_iolink13"
+         },
+         "19" : {
+            "00" : "bus_endpoints_iolink1",
+            "01" : "bus_endpoints_iolink5",
+            "02" : "bus_endpoints_iolink9",
+            "03" : "bus_endpoints_iolink13"
+         },
+         "1a" : {
+            "00" : "bus_endpoints_iolink1",
+            "01" : "bus_endpoints_iolink5",
+            "02" : "bus_endpoints_iolink9",
+            "03" : "bus_endpoints_iolink13"
+         },
+         "1b" : {
+            "00" : "iohs0",
+            "01" : "iohs2",
+            "02" : "iohs4",
+            "03" : "iohs6"
+         },
+         "1c" : {
+            "00" : "iohs0",
+            "01" : "iohs2",
+            "02" : "iohs4",
+            "03" : "iohs6"
+         },
+         "1d" : {
+            "00" : "bus_endpoints_iolink0",
+            "01" : "bus_endpoints_iolink4",
+            "02" : "bus_endpoints_iolink8",
+            "03" : "bus_endpoints_iolink12"
+         },
+         "1e" : {
+            "00" : "bus_endpoints_iolink0",
+            "01" : "bus_endpoints_iolink4",
+            "02" : "bus_endpoints_iolink8",
+            "03" : "bus_endpoints_iolink12"
+         },
+         "1f" : {
+            "00" : "bus_endpoints_iolink0",
+            "01" : "bus_endpoints_iolink4",
+            "02" : "bus_endpoints_iolink8",
+            "03" : "bus_endpoints_iolink12"
+         },
+         "20" : {
+            "00" : "bus_endpoints_iolink0",
+            "01" : "bus_endpoints_iolink4",
+            "02" : "bus_endpoints_iolink8",
+            "03" : "bus_endpoints_iolink12"
+         },
+         "21" : {
+            "00" : "bus_endpoints_iohs0",
+            "01" : "bus_endpoints_iohs2",
+            "02" : "bus_endpoints_iohs4",
+            "03" : "bus_endpoints_iohs6"
+         },
+         "22" : {
+            "00" : "bus_endpoints_iohs0",
+            "01" : "bus_endpoints_iohs2",
+            "02" : "bus_endpoints_iohs4",
+            "03" : "bus_endpoints_iohs6"
+         },
+         "23" : {
+            "00" : "iohs0",
+            "01" : "iohs2",
+            "02" : "iohs4",
+            "03" : "iohs6"
+         },
+         "24" : {
+            "00" : "bus_endpoints_iolink1",
+            "01" : "bus_endpoints_iolink5",
+            "02" : "bus_endpoints_iolink9",
+            "03" : "bus_endpoints_iolink13"
+         },
+         "25" : {
+            "00" : "bus_endpoints_iolink1",
+            "01" : "bus_endpoints_iolink5",
+            "02" : "bus_endpoints_iolink9",
+            "03" : "bus_endpoints_iolink13"
+         },
+         "26" : {
+            "00" : "bus_endpoints_iolink1",
+            "01" : "bus_endpoints_iolink5",
+            "02" : "bus_endpoints_iolink9",
+            "03" : "bus_endpoints_iolink13"
+         },
+         "27" : {
+            "00" : "bus_endpoints_iolink1",
+            "01" : "bus_endpoints_iolink5",
+            "02" : "bus_endpoints_iolink9",
+            "03" : "bus_endpoints_iolink13"
+         },
+         "28" : {
+            "00" : "bus_endpoints_iohs0",
+            "01" : "bus_endpoints_iohs2",
+            "02" : "bus_endpoints_iohs4",
+            "03" : "bus_endpoints_iohs6"
+         },
+         "29" : {
+            "00" : "iohs0",
+            "01" : "iohs2",
+            "02" : "iohs4",
+            "03" : "iohs6"
+         },
+         "2a" : {
+            "00" : "iohs0",
+            "01" : "iohs2",
+            "02" : "iohs4",
+            "03" : "iohs6"
+         },
+         "2b" : {
+            "00" : "iohs0",
+            "01" : "iohs2",
+            "02" : "iohs4",
+            "03" : "iohs6"
+         },
+         "2c" : {
+            "00" : "iohs0",
+            "01" : "iohs2",
+            "02" : "iohs4",
+            "03" : "iohs6"
+         },
+         "2d" : {
+            "00" : "iohs0",
+            "01" : "iohs2",
+            "02" : "iohs4",
+            "03" : "iohs6"
+         },
+         "2e" : {
+            "00" : "iohs0",
+            "01" : "iohs2",
+            "02" : "iohs4",
+            "03" : "iohs6"
+         },
+         "2f" : {
+            "00" : "iohs0",
+            "01" : "iohs2",
+            "02" : "iohs4",
+            "03" : "iohs6"
+         },
+         "30" : {
+            "00" : "bus_endpoints_iolink0",
+            "01" : "bus_endpoints_iolink4",
+            "02" : "bus_endpoints_iolink8",
+            "03" : "bus_endpoints_iolink12"
+         },
+         "31" : {
+            "00" : "bus_endpoints_iolink0",
+            "01" : "bus_endpoints_iolink4",
+            "02" : "bus_endpoints_iolink8",
+            "03" : "bus_endpoints_iolink12"
+         },
+         "32" : {
+            "00" : "bus_endpoints_iolink1",
+            "01" : "bus_endpoints_iolink5",
+            "02" : "bus_endpoints_iolink9",
+            "03" : "bus_endpoints_iolink13"
+         },
+         "33" : {
+            "00" : "bus_endpoints_iolink1",
+            "01" : "bus_endpoints_iolink5",
+            "02" : "bus_endpoints_iolink9",
+            "03" : "bus_endpoints_iolink13"
+         }
       },
       "358e" : {
          "04" : {
@@ -3376,6 +4368,344 @@
             "1f" : "masked"
          }
       },
+      "4427" : {
+         "00" : {
+            "00" : "framer_error_iolink0",
+            "01" : "framer_error_iolink4",
+            "02" : "framer_error_iolink8",
+            "03" : "framer_error_iolink12"
+         },
+         "01" : {
+            "00" : "framer_error_iolink0",
+            "01" : "framer_error_iolink4",
+            "02" : "framer_error_iolink8",
+            "03" : "framer_error_iolink12"
+         },
+         "02" : {
+            "00" : "bus_endpoints_iolink0",
+            "01" : "bus_endpoints_iolink4",
+            "02" : "bus_endpoints_iolink8",
+            "03" : "bus_endpoints_iolink12"
+         },
+         "03" : {
+            "00" : "bus_endpoints_iolink0",
+            "01" : "bus_endpoints_iolink4",
+            "02" : "bus_endpoints_iolink8",
+            "03" : "bus_endpoints_iolink12"
+         },
+         "04" : {
+            "00" : "bus_endpoints_iolink0",
+            "01" : "bus_endpoints_iolink4",
+            "02" : "bus_endpoints_iolink8",
+            "03" : "bus_endpoints_iolink12"
+         },
+         "05" : {
+            "00" : "bus_endpoints_iolink0",
+            "01" : "bus_endpoints_iolink4",
+            "02" : "bus_endpoints_iolink8",
+            "03" : "bus_endpoints_iolink12"
+         },
+         "06" : {
+            "00" : "self",
+            "01" : "self",
+            "02" : "self",
+            "03" : "self"
+         },
+         "07" : {
+            "00" : "self",
+            "01" : "self",
+            "02" : "self",
+            "03" : "self"
+         },
+         "08" : {
+            "00" : "framer_error_iolink0",
+            "01" : "framer_error_iolink4",
+            "02" : "framer_error_iolink8",
+            "03" : "framer_error_iolink12"
+         },
+         "09" : {
+            "00" : "framer_error_iolink0",
+            "01" : "framer_error_iolink4",
+            "02" : "framer_error_iolink8",
+            "03" : "framer_error_iolink12"
+         },
+         "0a" : {
+            "00" : "framer_error_iolink0",
+            "01" : "framer_error_iolink4",
+            "02" : "framer_error_iolink8",
+            "03" : "framer_error_iolink12"
+         },
+         "0b" : {
+            "00" : "bus_endpoints_iolink0",
+            "01" : "bus_endpoints_iolink4",
+            "02" : "bus_endpoints_iolink8",
+            "03" : "bus_endpoints_iolink12"
+         },
+         "0c" : {
+            "00" : "bus_endpoints_iolink0",
+            "01" : "bus_endpoints_iolink4",
+            "02" : "bus_endpoints_iolink8",
+            "03" : "bus_endpoints_iolink12"
+         },
+         "0d" : {
+            "00" : "bus_endpoints_iolink0",
+            "01" : "bus_endpoints_iolink4",
+            "02" : "bus_endpoints_iolink8",
+            "03" : "bus_endpoints_iolink12"
+         },
+         "10" : {
+            "00" : "framer_error_iolink1",
+            "01" : "framer_error_iolink5",
+            "02" : "framer_error_iolink9",
+            "03" : "framer_error_iolink13"
+         },
+         "11" : {
+            "00" : "framer_error_iolink1",
+            "01" : "framer_error_iolink5",
+            "02" : "framer_error_iolink9",
+            "03" : "framer_error_iolink13"
+         },
+         "12" : {
+            "00" : "bus_endpoints_iolink1",
+            "01" : "bus_endpoints_iolink5",
+            "02" : "bus_endpoints_iolink9",
+            "03" : "bus_endpoints_iolink13"
+         },
+         "13" : {
+            "00" : "bus_endpoints_iolink1",
+            "01" : "bus_endpoints_iolink5",
+            "02" : "bus_endpoints_iolink9",
+            "03" : "bus_endpoints_iolink13"
+         },
+         "14" : {
+            "00" : "bus_endpoints_iolink1",
+            "01" : "bus_endpoints_iolink5",
+            "02" : "bus_endpoints_iolink9",
+            "03" : "bus_endpoints_iolink13"
+         },
+         "15" : {
+            "00" : "bus_endpoints_iolink1",
+            "01" : "bus_endpoints_iolink5",
+            "02" : "bus_endpoints_iolink9",
+            "03" : "bus_endpoints_iolink13"
+         },
+         "16" : {
+            "00" : "self",
+            "01" : "self",
+            "02" : "self",
+            "03" : "self"
+         },
+         "17" : {
+            "00" : "self",
+            "01" : "self",
+            "02" : "self",
+            "03" : "self"
+         },
+         "18" : {
+            "00" : "framer_error_iolink1",
+            "01" : "framer_error_iolink5",
+            "02" : "framer_error_iolink9",
+            "03" : "framer_error_iolink13"
+         },
+         "19" : {
+            "00" : "framer_error_iolink1",
+            "01" : "framer_error_iolink5",
+            "02" : "framer_error_iolink9",
+            "03" : "framer_error_iolink13"
+         },
+         "1a" : {
+            "00" : "framer_error_iolink1",
+            "01" : "framer_error_iolink5",
+            "02" : "framer_error_iolink9",
+            "03" : "framer_error_iolink13"
+         },
+         "1b" : {
+            "00" : "bus_endpoints_iolink1",
+            "01" : "bus_endpoints_iolink5",
+            "02" : "bus_endpoints_iolink9",
+            "03" : "bus_endpoints_iolink13"
+         },
+         "1c" : {
+            "00" : "bus_endpoints_iolink1",
+            "01" : "bus_endpoints_iolink5",
+            "02" : "bus_endpoints_iolink9",
+            "03" : "bus_endpoints_iolink13"
+         },
+         "1d" : {
+            "00" : "bus_endpoints_iolink1",
+            "01" : "bus_endpoints_iolink5",
+            "02" : "bus_endpoints_iolink9",
+            "03" : "bus_endpoints_iolink13"
+         },
+         "20" : {
+            "00" : "framer_error_iolink2",
+            "01" : "framer_error_iolink6",
+            "02" : "framer_error_iolink10",
+            "03" : "framer_error_iolink14"
+         },
+         "21" : {
+            "00" : "framer_error_iolink2",
+            "01" : "framer_error_iolink6",
+            "02" : "framer_error_iolink10",
+            "03" : "framer_error_iolink14"
+         },
+         "22" : {
+            "00" : "bus_endpoints_iolink2",
+            "01" : "bus_endpoints_iolink6",
+            "02" : "bus_endpoints_iolink10",
+            "03" : "bus_endpoints_iolink14"
+         },
+         "23" : {
+            "00" : "bus_endpoints_iolink2",
+            "01" : "bus_endpoints_iolink6",
+            "02" : "bus_endpoints_iolink10",
+            "03" : "bus_endpoints_iolink14"
+         },
+         "24" : {
+            "00" : "bus_endpoints_iolink2",
+            "01" : "bus_endpoints_iolink6",
+            "02" : "bus_endpoints_iolink10",
+            "03" : "bus_endpoints_iolink14"
+         },
+         "25" : {
+            "00" : "bus_endpoints_iolink2",
+            "01" : "bus_endpoints_iolink6",
+            "02" : "bus_endpoints_iolink10",
+            "03" : "bus_endpoints_iolink14"
+         },
+         "26" : {
+            "00" : "self",
+            "01" : "self",
+            "02" : "self",
+            "03" : "self"
+         },
+         "27" : {
+            "00" : "self",
+            "01" : "self",
+            "02" : "self",
+            "03" : "self"
+         },
+         "28" : {
+            "00" : "framer_error_iolink2",
+            "01" : "framer_error_iolink6",
+            "02" : "framer_error_iolink10",
+            "03" : "framer_error_iolink14"
+         },
+         "29" : {
+            "00" : "framer_error_iolink2",
+            "01" : "framer_error_iolink6",
+            "02" : "framer_error_iolink10",
+            "03" : "framer_error_iolink14"
+         },
+         "2a" : {
+            "00" : "framer_error_iolink2",
+            "01" : "framer_error_iolink6",
+            "02" : "framer_error_iolink10",
+            "03" : "framer_error_iolink14"
+         },
+         "2b" : {
+            "00" : "bus_endpoints_iolink2",
+            "01" : "bus_endpoints_iolink6",
+            "02" : "bus_endpoints_iolink10",
+            "03" : "bus_endpoints_iolink14"
+         },
+         "2c" : {
+            "00" : "bus_endpoints_iolink2",
+            "01" : "bus_endpoints_iolink6",
+            "02" : "bus_endpoints_iolink10",
+            "03" : "bus_endpoints_iolink14"
+         },
+         "2d" : {
+            "00" : "bus_endpoints_iolink2",
+            "01" : "bus_endpoints_iolink6",
+            "02" : "bus_endpoints_iolink10",
+            "03" : "bus_endpoints_iolink14"
+         },
+         "30" : {
+            "00" : "framer_error_iolink3",
+            "01" : "framer_error_iolink7",
+            "02" : "framer_error_iolink11",
+            "03" : "framer_error_iolink15"
+         },
+         "31" : {
+            "00" : "framer_error_iolink3",
+            "01" : "framer_error_iolink7",
+            "02" : "framer_error_iolink11",
+            "03" : "framer_error_iolink15"
+         },
+         "32" : {
+            "00" : "bus_endpoints_iolink3",
+            "01" : "bus_endpoints_iolink7",
+            "02" : "bus_endpoints_iolink11",
+            "03" : "bus_endpoints_iolink15"
+         },
+         "33" : {
+            "00" : "bus_endpoints_iolink3",
+            "01" : "bus_endpoints_iolink7",
+            "02" : "bus_endpoints_iolink11",
+            "03" : "bus_endpoints_iolink15"
+         },
+         "34" : {
+            "00" : "bus_endpoints_iolink3",
+            "01" : "bus_endpoints_iolink7",
+            "02" : "bus_endpoints_iolink11",
+            "03" : "bus_endpoints_iolink15"
+         },
+         "35" : {
+            "00" : "bus_endpoints_iolink3",
+            "01" : "bus_endpoints_iolink7",
+            "02" : "bus_endpoints_iolink11",
+            "03" : "bus_endpoints_iolink15"
+         },
+         "36" : {
+            "00" : "self",
+            "01" : "self",
+            "02" : "self",
+            "03" : "self"
+         },
+         "37" : {
+            "00" : "self",
+            "01" : "self",
+            "02" : "self",
+            "03" : "self"
+         },
+         "38" : {
+            "00" : "framer_error_iolink3",
+            "01" : "framer_error_iolink7",
+            "02" : "framer_error_iolink11",
+            "03" : "framer_error_iolink15"
+         },
+         "39" : {
+            "00" : "framer_error_iolink3",
+            "01" : "framer_error_iolink7",
+            "02" : "framer_error_iolink11",
+            "03" : "framer_error_iolink15"
+         },
+         "3a" : {
+            "00" : "framer_error_iolink3",
+            "01" : "framer_error_iolink7",
+            "02" : "framer_error_iolink11",
+            "03" : "framer_error_iolink15"
+         },
+         "3b" : {
+            "00" : "bus_endpoints_iolink3",
+            "01" : "bus_endpoints_iolink7",
+            "02" : "bus_endpoints_iolink11",
+            "03" : "bus_endpoints_iolink15"
+         },
+         "3c" : {
+            "00" : "bus_endpoints_iolink3",
+            "01" : "bus_endpoints_iolink7",
+            "02" : "bus_endpoints_iolink11",
+            "03" : "bus_endpoints_iolink15"
+         },
+         "3d" : {
+            "00" : "bus_endpoints_iolink3",
+            "01" : "bus_endpoints_iolink7",
+            "02" : "bus_endpoints_iolink11",
+            "03" : "bus_endpoints_iolink15"
+         }
+      },
       "446c" : {
          "00" : {
             "00" : "masked",
@@ -4115,6 +5445,320 @@
          "0d" : {
             "00" : "chiplet",
             "01" : "chiplet"
+         }
+      },
+      "4ccb" : {
+         "00" : {
+            "00" : "iohs1",
+            "01" : "iohs3",
+            "02" : "iohs5",
+            "03" : "iohs7"
+         },
+         "01" : {
+            "00" : "iohs1",
+            "01" : "iohs3",
+            "02" : "iohs5",
+            "03" : "iohs7"
+         },
+         "02" : {
+            "00" : "iohs1",
+            "01" : "iohs3",
+            "02" : "iohs5",
+            "03" : "iohs7"
+         },
+         "03" : {
+            "00" : "iolink2",
+            "01" : "iolink6",
+            "02" : "iolink10",
+            "03" : "iolink14"
+         },
+         "04" : {
+            "00" : "iolink2",
+            "01" : "iolink6",
+            "02" : "iolink10",
+            "03" : "iolink14"
+         },
+         "05" : {
+            "00" : "iolink2",
+            "01" : "iolink6",
+            "02" : "iolink10",
+            "03" : "iolink14"
+         },
+         "06" : {
+            "00" : "iolink2",
+            "01" : "iolink6",
+            "02" : "iolink10",
+            "03" : "iolink14"
+         },
+         "07" : {
+            "00" : "iolink3",
+            "01" : "iolink7",
+            "02" : "iolink11",
+            "03" : "iolink15"
+         },
+         "08" : {
+            "00" : "iolink3",
+            "01" : "iolink7",
+            "02" : "iolink11",
+            "03" : "iolink15"
+         },
+         "09" : {
+            "00" : "iolink3",
+            "01" : "iolink7",
+            "02" : "iolink11",
+            "03" : "iolink15"
+         },
+         "0a" : {
+            "00" : "iolink3",
+            "01" : "iolink7",
+            "02" : "iolink11",
+            "03" : "iolink15"
+         },
+         "0b" : {
+            "00" : "bus_endpoints_iolink2",
+            "01" : "bus_endpoints_iolink6",
+            "02" : "bus_endpoints_iolink10",
+            "03" : "bus_endpoints_iolink14"
+         },
+         "0c" : {
+            "00" : "iolink2",
+            "01" : "iolink6",
+            "02" : "iolink10",
+            "03" : "iolink14"
+         },
+         "0d" : {
+            "00" : "bus_endpoints_iolink3",
+            "01" : "bus_endpoints_iolink7",
+            "02" : "bus_endpoints_iolink11",
+            "03" : "bus_endpoints_iolink15"
+         },
+         "0e" : {
+            "00" : "iolink3",
+            "01" : "iolink7",
+            "02" : "iolink11",
+            "03" : "iolink15"
+         },
+         "0f" : {
+            "00" : "bus_endpoints_iohs1",
+            "01" : "bus_endpoints_iohs3",
+            "02" : "bus_endpoints_iohs5",
+            "03" : "bus_endpoints_iohs7"
+         },
+         "10" : {
+            "00" : "iohs1",
+            "01" : "iohs3",
+            "02" : "iohs5",
+            "03" : "iohs7"
+         },
+         "11" : {
+            "00" : "bus_endpoints_iohs1",
+            "01" : "bus_endpoints_iohs3",
+            "02" : "bus_endpoints_iohs5",
+            "03" : "bus_endpoints_iohs7"
+         },
+         "12" : {
+            "00" : "iohs1",
+            "01" : "iohs3",
+            "02" : "iohs5",
+            "03" : "iohs7"
+         },
+         "13" : {
+            "00" : "bus_endpoints_iolink2",
+            "01" : "bus_endpoints_iolink6",
+            "02" : "bus_endpoints_iolink10",
+            "03" : "bus_endpoints_iolink14"
+         },
+         "14" : {
+            "00" : "bus_endpoints_iolink2",
+            "01" : "bus_endpoints_iolink6",
+            "02" : "bus_endpoints_iolink10",
+            "03" : "bus_endpoints_iolink14"
+         },
+         "15" : {
+            "00" : "bus_endpoints_iolink2",
+            "01" : "bus_endpoints_iolink6",
+            "02" : "bus_endpoints_iolink10",
+            "03" : "bus_endpoints_iolink14"
+         },
+         "16" : {
+            "00" : "bus_endpoints_iolink2",
+            "01" : "bus_endpoints_iolink6",
+            "02" : "bus_endpoints_iolink10",
+            "03" : "bus_endpoints_iolink14"
+         },
+         "17" : {
+            "00" : "bus_endpoints_iolink3",
+            "01" : "bus_endpoints_iolink7",
+            "02" : "bus_endpoints_iolink11",
+            "03" : "bus_endpoints_iolink15"
+         },
+         "18" : {
+            "00" : "bus_endpoints_iolink3",
+            "01" : "bus_endpoints_iolink7",
+            "02" : "bus_endpoints_iolink11",
+            "03" : "bus_endpoints_iolink15"
+         },
+         "19" : {
+            "00" : "bus_endpoints_iolink3",
+            "01" : "bus_endpoints_iolink7",
+            "02" : "bus_endpoints_iolink11",
+            "03" : "bus_endpoints_iolink15"
+         },
+         "1a" : {
+            "00" : "bus_endpoints_iolink3",
+            "01" : "bus_endpoints_iolink7",
+            "02" : "bus_endpoints_iolink11",
+            "03" : "bus_endpoints_iolink15"
+         },
+         "1b" : {
+            "00" : "iohs1",
+            "01" : "iohs3",
+            "02" : "iohs5",
+            "03" : "iohs7"
+         },
+         "1c" : {
+            "00" : "iohs1",
+            "01" : "iohs3",
+            "02" : "iohs5",
+            "03" : "iohs7"
+         },
+         "1d" : {
+            "00" : "bus_endpoints_iolink2",
+            "01" : "bus_endpoints_iolink6",
+            "02" : "bus_endpoints_iolink10",
+            "03" : "bus_endpoints_iolink14"
+         },
+         "1e" : {
+            "00" : "bus_endpoints_iolink2",
+            "01" : "bus_endpoints_iolink6",
+            "02" : "bus_endpoints_iolink10",
+            "03" : "bus_endpoints_iolink14"
+         },
+         "1f" : {
+            "00" : "bus_endpoints_iolink2",
+            "01" : "bus_endpoints_iolink6",
+            "02" : "bus_endpoints_iolink10",
+            "03" : "bus_endpoints_iolink14"
+         },
+         "20" : {
+            "00" : "bus_endpoints_iolink2",
+            "01" : "bus_endpoints_iolink6",
+            "02" : "bus_endpoints_iolink10",
+            "03" : "bus_endpoints_iolink14"
+         },
+         "21" : {
+            "00" : "bus_endpoints_iohs1",
+            "01" : "bus_endpoints_iohs3",
+            "02" : "bus_endpoints_iohs5",
+            "03" : "bus_endpoints_iohs7"
+         },
+         "22" : {
+            "00" : "bus_endpoints_iohs1",
+            "01" : "bus_endpoints_iohs3",
+            "02" : "bus_endpoints_iohs5",
+            "03" : "bus_endpoints_iohs7"
+         },
+         "23" : {
+            "00" : "iohs1",
+            "01" : "iohs3",
+            "02" : "iohs5",
+            "03" : "iohs7"
+         },
+         "24" : {
+            "00" : "bus_endpoints_iolink3",
+            "01" : "bus_endpoints_iolink7",
+            "02" : "bus_endpoints_iolink11",
+            "03" : "bus_endpoints_iolink15"
+         },
+         "25" : {
+            "00" : "bus_endpoints_iolink3",
+            "01" : "bus_endpoints_iolink7",
+            "02" : "bus_endpoints_iolink11",
+            "03" : "bus_endpoints_iolink15"
+         },
+         "26" : {
+            "00" : "bus_endpoints_iolink3",
+            "01" : "bus_endpoints_iolink7",
+            "02" : "bus_endpoints_iolink11",
+            "03" : "bus_endpoints_iolink15"
+         },
+         "27" : {
+            "00" : "bus_endpoints_iolink3",
+            "01" : "bus_endpoints_iolink7",
+            "02" : "bus_endpoints_iolink11",
+            "03" : "bus_endpoints_iolink15"
+         },
+         "28" : {
+            "00" : "bus_endpoints_iohs1",
+            "01" : "bus_endpoints_iohs3",
+            "02" : "bus_endpoints_iohs5",
+            "03" : "bus_endpoints_iohs7"
+         },
+         "29" : {
+            "00" : "iohs1",
+            "01" : "iohs3",
+            "02" : "iohs5",
+            "03" : "iohs7"
+         },
+         "2a" : {
+            "00" : "iohs1",
+            "01" : "iohs3",
+            "02" : "iohs5",
+            "03" : "iohs7"
+         },
+         "2b" : {
+            "00" : "iohs1",
+            "01" : "iohs3",
+            "02" : "iohs5",
+            "03" : "iohs7"
+         },
+         "2c" : {
+            "00" : "iohs1",
+            "01" : "iohs3",
+            "02" : "iohs5",
+            "03" : "iohs7"
+         },
+         "2d" : {
+            "00" : "iohs1",
+            "01" : "iohs3",
+            "02" : "iohs5",
+            "03" : "iohs7"
+         },
+         "2e" : {
+            "00" : "iohs1",
+            "01" : "iohs3",
+            "02" : "iohs5",
+            "03" : "iohs7"
+         },
+         "2f" : {
+            "00" : "iohs1",
+            "01" : "iohs3",
+            "02" : "iohs5",
+            "03" : "iohs7"
+         },
+         "30" : {
+            "00" : "bus_endpoints_iolink2",
+            "01" : "bus_endpoints_iolink6",
+            "02" : "bus_endpoints_iolink10",
+            "03" : "bus_endpoints_iolink14"
+         },
+         "31" : {
+            "00" : "bus_endpoints_iolink2",
+            "01" : "bus_endpoints_iolink6",
+            "02" : "bus_endpoints_iolink10",
+            "03" : "bus_endpoints_iolink14"
+         },
+         "32" : {
+            "00" : "bus_endpoints_iolink3",
+            "01" : "bus_endpoints_iolink7",
+            "02" : "bus_endpoints_iolink11",
+            "03" : "bus_endpoints_iolink15"
+         },
+         "33" : {
+            "00" : "bus_endpoints_iolink3",
+            "01" : "bus_endpoints_iolink7",
+            "02" : "bus_endpoints_iolink11",
+            "03" : "bus_endpoints_iolink15"
          }
       },
       "4cfd" : {
@@ -14165,16 +15809,16 @@
             "03" : "masked"
          },
          "04" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked"
+            "00" : "self",
+            "01" : "self",
+            "02" : "self",
+            "03" : "self"
          },
          "05" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked"
+            "00" : "self",
+            "01" : "self",
+            "02" : "self",
+            "03" : "self"
          },
          "06" : {
             "00" : "masked",
@@ -14183,22 +15827,22 @@
             "03" : "masked"
          },
          "07" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked"
+            "00" : "c_err_rpt",
+            "01" : "c_err_rpt",
+            "02" : "c_err_rpt",
+            "03" : "c_err_rpt"
          },
          "08" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked"
+            "00" : "self",
+            "01" : "self",
+            "02" : "self",
+            "03" : "self"
          },
          "09" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked"
+            "00" : "self",
+            "01" : "self",
+            "02" : "self",
+            "03" : "self"
          },
          "0a" : {
             "00" : "masked",
@@ -14207,106 +15851,106 @@
             "03" : "masked"
          },
          "0b" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked"
+            "00" : "c_err_rpt",
+            "01" : "c_err_rpt",
+            "02" : "c_err_rpt",
+            "03" : "c_err_rpt"
          },
          "0c" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked"
+            "00" : "c_err_rpt",
+            "01" : "c_err_rpt",
+            "02" : "c_err_rpt",
+            "03" : "c_err_rpt"
          },
          "0d" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked"
+            "00" : "self",
+            "01" : "self",
+            "02" : "self",
+            "03" : "self"
          },
          "0e" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked"
+            "00" : "c_err_rpt",
+            "01" : "c_err_rpt",
+            "02" : "c_err_rpt",
+            "03" : "c_err_rpt"
          },
          "0f" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked"
+            "00" : "c_err_rpt",
+            "01" : "c_err_rpt",
+            "02" : "c_err_rpt",
+            "03" : "c_err_rpt"
          },
          "10" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked"
+            "00" : "self",
+            "01" : "self",
+            "02" : "self",
+            "03" : "self"
          },
          "11" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked"
+            "00" : "c_err_rpt",
+            "01" : "c_err_rpt",
+            "02" : "c_err_rpt",
+            "03" : "c_err_rpt"
          },
          "12" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked"
+            "00" : "c_err_rpt",
+            "01" : "c_err_rpt",
+            "02" : "c_err_rpt",
+            "03" : "c_err_rpt"
          },
          "13" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked"
+            "00" : "c_err_rpt",
+            "01" : "c_err_rpt",
+            "02" : "c_err_rpt",
+            "03" : "c_err_rpt"
          },
          "14" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked"
+            "00" : "c_err_rpt",
+            "01" : "c_err_rpt",
+            "02" : "c_err_rpt",
+            "03" : "c_err_rpt"
          },
          "15" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked"
+            "00" : "c_err_rpt",
+            "01" : "c_err_rpt",
+            "02" : "c_err_rpt",
+            "03" : "c_err_rpt"
          },
          "16" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked"
+            "00" : "smp_bus_iolink0",
+            "01" : "smp_bus_iolink4",
+            "02" : "smp_bus_iolink8",
+            "03" : "smp_bus_iolink12"
          },
          "17" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked"
+            "00" : "smp_bus_iolink1",
+            "01" : "smp_bus_iolink5",
+            "02" : "smp_bus_iolink9",
+            "03" : "smp_bus_iolink13"
          },
          "18" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked"
+            "00" : "smp_bus_iolink2",
+            "01" : "smp_bus_iolink6",
+            "02" : "smp_bus_iolink10",
+            "03" : "smp_bus_iolink14"
          },
          "19" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked"
+            "00" : "smp_bus_iolink3",
+            "01" : "smp_bus_iolink7",
+            "02" : "smp_bus_iolink11",
+            "03" : "smp_bus_iolink15"
          },
          "1a" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked"
+            "00" : "c_err_rpt",
+            "01" : "c_err_rpt",
+            "02" : "c_err_rpt",
+            "03" : "c_err_rpt"
          },
          "1b" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked"
+            "00" : "c_err_rpt",
+            "01" : "c_err_rpt",
+            "02" : "c_err_rpt",
+            "03" : "c_err_rpt"
          },
          "1c" : {
             "00" : "masked",

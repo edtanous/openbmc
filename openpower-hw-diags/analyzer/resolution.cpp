@@ -65,6 +65,15 @@ pdbg_target* __getConnectedTarget(pdbg_target* i_rxTarget,
         trace::inf("No support to get peer target on SMP bus");
         txTarget = i_rxTarget;
     }
+    else if (callout::BusType::SMP_BUS == i_busType &&
+             util::pdbg::TYPE_IOHS == rxType)
+    {
+        // TODO: Will need to reference some sort of data that can tell us how
+        //       the processors are connected in the system. For now, return the
+        //       RX target to avoid returning a nullptr.
+        trace::inf("No support to get peer target on SMP bus");
+        txTarget = i_rxTarget;
+    }
     else if (callout::BusType::OMI_BUS == i_busType &&
              util::pdbg::TYPE_OMI == rxType)
     {
