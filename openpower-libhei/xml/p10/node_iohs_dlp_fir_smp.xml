@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<attn_node model_ec="P10_10,P10_20" name="IOHS_DLP_FIR_SMP" reg_type="SCOM">
+    <local_fir config="W" name="IOHS_DLP_FIR">
+        <instance addr="0x18011000" reg_inst="0"/>
+        <instance addr="0x19011000" reg_inst="1"/>
+        <instance addr="0x1A011000" reg_inst="2"/>
+        <instance addr="0x1B011000" reg_inst="3"/>
+        <instance addr="0x1C011000" reg_inst="4"/>
+        <instance addr="0x1D011000" reg_inst="5"/>
+        <instance addr="0x1E011000" reg_inst="6"/>
+        <instance addr="0x1F011000" reg_inst="7"/>
+        <action attn_type="CS" config="00"/>
+        <action attn_type="RE" config="01"/>
+        <action attn_type="SPA" config="10"/>
+    </local_fir>
+    <register name="IOHS_DLP_OPTICAL_CONFIG">
+        <instance addr="0x1801100C" reg_inst="0"/>
+        <instance addr="0x1901100C" reg_inst="1"/>
+        <instance addr="0x1A01100C" reg_inst="2"/>
+        <instance addr="0x1B01100C" reg_inst="3"/>
+        <instance addr="0x1C01100C" reg_inst="4"/>
+        <instance addr="0x1D01100C" reg_inst="5"/>
+        <instance addr="0x1E01100C" reg_inst="6"/>
+        <instance addr="0x1F01100C" reg_inst="7"/>
+    </register>
+    <register name="IOHS_DLP_LINK0_TX_LANE_CONTROL">
+        <instance addr="0x18011010" reg_inst="0"/>
+        <instance addr="0x19011010" reg_inst="1"/>
+        <instance addr="0x1A011010" reg_inst="2"/>
+        <instance addr="0x1B011010" reg_inst="3"/>
+        <instance addr="0x1C011010" reg_inst="4"/>
+        <instance addr="0x1D011010" reg_inst="5"/>
+        <instance addr="0x1E011010" reg_inst="6"/>
+        <instance addr="0x1F011010" reg_inst="7"/>
+    </register>
+    <register name="IOHS_DLP_LINK1_TX_LANE_CONTROL">
+        <instance addr="0x18011011" reg_inst="0"/>
+        <instance addr="0x19011011" reg_inst="1"/>
+        <instance addr="0x1A011011" reg_inst="2"/>
+        <instance addr="0x1B011011" reg_inst="3"/>
+        <instance addr="0x1C011011" reg_inst="4"/>
+        <instance addr="0x1D011011" reg_inst="5"/>
+        <instance addr="0x1E011011" reg_inst="6"/>
+        <instance addr="0x1F011011" reg_inst="7"/>
+    </register>
+    <register name="IOHS_DLP_LINK0_RX_LANE_CONTROL">
+        <instance addr="0x18011012" reg_inst="0"/>
+        <instance addr="0x19011012" reg_inst="1"/>
+        <instance addr="0x1A011012" reg_inst="2"/>
+        <instance addr="0x1B011012" reg_inst="3"/>
+        <instance addr="0x1C011012" reg_inst="4"/>
+        <instance addr="0x1D011012" reg_inst="5"/>
+        <instance addr="0x1E011012" reg_inst="6"/>
+        <instance addr="0x1F011012" reg_inst="7"/>
+    </register>
+    <register name="IOHS_DLP_LINK1_RX_LANE_CONTROL">
+        <instance addr="0x18011013" reg_inst="0"/>
+        <instance addr="0x19011013" reg_inst="1"/>
+        <instance addr="0x1A011013" reg_inst="2"/>
+        <instance addr="0x1B011013" reg_inst="3"/>
+        <instance addr="0x1C011013" reg_inst="4"/>
+        <instance addr="0x1D011013" reg_inst="5"/>
+        <instance addr="0x1E011013" reg_inst="6"/>
+        <instance addr="0x1F011013" reg_inst="7"/>
+    </register>
+    <register name="IOHS_DLP_LINK0_INFO">
+        <instance addr="0x18011014" reg_inst="0"/>
+        <instance addr="0x19011014" reg_inst="1"/>
+        <instance addr="0x1A011014" reg_inst="2"/>
+        <instance addr="0x1B011014" reg_inst="3"/>
+        <instance addr="0x1C011014" reg_inst="4"/>
+        <instance addr="0x1D011014" reg_inst="5"/>
+        <instance addr="0x1E011014" reg_inst="6"/>
+        <instance addr="0x1F011014" reg_inst="7"/>
+    </register>
+    <register name="IOHS_DLP_LINK1_INFO">
+        <instance addr="0x18011015" reg_inst="0"/>
+        <instance addr="0x19011015" reg_inst="1"/>
+        <instance addr="0x1A011015" reg_inst="2"/>
+        <instance addr="0x1B011015" reg_inst="3"/>
+        <instance addr="0x1C011015" reg_inst="4"/>
+        <instance addr="0x1D011015" reg_inst="5"/>
+        <instance addr="0x1E011015" reg_inst="6"/>
+        <instance addr="0x1F011015" reg_inst="7"/>
+    </register>
+    <register name="IOHS_DLP_LINK0_ERROR_STATUS">
+        <instance addr="0x18011016" reg_inst="0"/>
+        <instance addr="0x19011016" reg_inst="1"/>
+        <instance addr="0x1A011016" reg_inst="2"/>
+        <instance addr="0x1B011016" reg_inst="3"/>
+        <instance addr="0x1C011016" reg_inst="4"/>
+        <instance addr="0x1D011016" reg_inst="5"/>
+        <instance addr="0x1E011016" reg_inst="6"/>
+        <instance addr="0x1F011016" reg_inst="7"/>
+    </register>
+    <register name="IOHS_DLP_LINK1_ERROR_STATUS">
+        <instance addr="0x18011017" reg_inst="0"/>
+        <instance addr="0x19011017" reg_inst="1"/>
+        <instance addr="0x1A011017" reg_inst="2"/>
+        <instance addr="0x1B011017" reg_inst="3"/>
+        <instance addr="0x1C011017" reg_inst="4"/>
+        <instance addr="0x1D011017" reg_inst="5"/>
+        <instance addr="0x1E011017" reg_inst="6"/>
+        <instance addr="0x1F011017" reg_inst="7"/>
+    </register>
+    <register name="IOHS_DLP_REPLAY_THRESHOLD">
+        <instance addr="0x18011018" reg_inst="0"/>
+        <instance addr="0x19011018" reg_inst="1"/>
+        <instance addr="0x1A011018" reg_inst="2"/>
+        <instance addr="0x1B011018" reg_inst="3"/>
+        <instance addr="0x1C011018" reg_inst="4"/>
+        <instance addr="0x1D011018" reg_inst="5"/>
+        <instance addr="0x1E011018" reg_inst="6"/>
+        <instance addr="0x1F011018" reg_inst="7"/>
+    </register>
+    <register name="IOHS_DLP_SL_ECC_THRESHOLD">
+        <instance addr="0x18011019" reg_inst="0"/>
+        <instance addr="0x19011019" reg_inst="1"/>
+        <instance addr="0x1A011019" reg_inst="2"/>
+        <instance addr="0x1B011019" reg_inst="3"/>
+        <instance addr="0x1C011019" reg_inst="4"/>
+        <instance addr="0x1D011019" reg_inst="5"/>
+        <instance addr="0x1E011019" reg_inst="6"/>
+        <instance addr="0x1F011019" reg_inst="7"/>
+    </register>
+    <register name="IOHS_DLP_LINK0_SYN_CAPTURE">
+        <instance addr="0x18011022" reg_inst="0"/>
+        <instance addr="0x19011022" reg_inst="1"/>
+        <instance addr="0x1A011022" reg_inst="2"/>
+        <instance addr="0x1B011022" reg_inst="3"/>
+        <instance addr="0x1C011022" reg_inst="4"/>
+        <instance addr="0x1D011022" reg_inst="5"/>
+        <instance addr="0x1E011022" reg_inst="6"/>
+        <instance addr="0x1F011022" reg_inst="7"/>
+    </register>
+    <register name="IOHS_DLP_LINK1_SYN_CAPTURE">
+        <instance addr="0x18011023" reg_inst="0"/>
+        <instance addr="0x19011023" reg_inst="1"/>
+        <instance addr="0x1A011023" reg_inst="2"/>
+        <instance addr="0x1B011023" reg_inst="3"/>
+        <instance addr="0x1C011023" reg_inst="4"/>
+        <instance addr="0x1D011023" reg_inst="5"/>
+        <instance addr="0x1E011023" reg_inst="6"/>
+        <instance addr="0x1F011023" reg_inst="7"/>
+    </register>
+    <register name="IOHS_DLP_LINK0_EDPL_STATUS">
+        <instance addr="0x18011024" reg_inst="0"/>
+        <instance addr="0x19011024" reg_inst="1"/>
+        <instance addr="0x1A011024" reg_inst="2"/>
+        <instance addr="0x1B011024" reg_inst="3"/>
+        <instance addr="0x1C011024" reg_inst="4"/>
+        <instance addr="0x1D011024" reg_inst="5"/>
+        <instance addr="0x1E011024" reg_inst="6"/>
+        <instance addr="0x1F011024" reg_inst="7"/>
+    </register>
+    <register name="IOHS_DLP_LINK1_EDPL_STATUS">
+        <instance addr="0x18011025" reg_inst="0"/>
+        <instance addr="0x19011025" reg_inst="1"/>
+        <instance addr="0x1A011025" reg_inst="2"/>
+        <instance addr="0x1B011025" reg_inst="3"/>
+        <instance addr="0x1C011025" reg_inst="4"/>
+        <instance addr="0x1D011025" reg_inst="5"/>
+        <instance addr="0x1E011025" reg_inst="6"/>
+        <instance addr="0x1F011025" reg_inst="7"/>
+    </register>
+    <register name="IOHS_DLP_LINK0_QUALITY">
+        <instance addr="0x18011026" reg_inst="0"/>
+        <instance addr="0x19011026" reg_inst="1"/>
+        <instance addr="0x1A011026" reg_inst="2"/>
+        <instance addr="0x1B011026" reg_inst="3"/>
+        <instance addr="0x1C011026" reg_inst="4"/>
+        <instance addr="0x1D011026" reg_inst="5"/>
+        <instance addr="0x1E011026" reg_inst="6"/>
+        <instance addr="0x1F011026" reg_inst="7"/>
+    </register>
+    <register name="IOHS_DLP_LINK1_QUALITY">
+        <instance addr="0x18011027" reg_inst="0"/>
+        <instance addr="0x19011027" reg_inst="1"/>
+        <instance addr="0x1A011027" reg_inst="2"/>
+        <instance addr="0x1B011027" reg_inst="3"/>
+        <instance addr="0x1C011027" reg_inst="4"/>
+        <instance addr="0x1D011027" reg_inst="5"/>
+        <instance addr="0x1E011027" reg_inst="6"/>
+        <instance addr="0x1F011027" reg_inst="7"/>
+    </register>
+    <register name="IOHS_DLP_DLL_STATUS">
+        <instance addr="0x18011028" reg_inst="0"/>
+        <instance addr="0x19011028" reg_inst="1"/>
+        <instance addr="0x1A011028" reg_inst="2"/>
+        <instance addr="0x1B011028" reg_inst="3"/>
+        <instance addr="0x1C011028" reg_inst="4"/>
+        <instance addr="0x1D011028" reg_inst="5"/>
+        <instance addr="0x1E011028" reg_inst="6"/>
+        <instance addr="0x1F011028" reg_inst="7"/>
+    </register>
+    <register name="IOHS_DLP_MISC_ERROR_STATUS">
+        <instance addr="0x18011029" reg_inst="0"/>
+        <instance addr="0x19011029" reg_inst="1"/>
+        <instance addr="0x1A011029" reg_inst="2"/>
+        <instance addr="0x1B011029" reg_inst="3"/>
+        <instance addr="0x1C011029" reg_inst="4"/>
+        <instance addr="0x1D011029" reg_inst="5"/>
+        <instance addr="0x1E011029" reg_inst="6"/>
+        <instance addr="0x1F011029" reg_inst="7"/>
+    </register>
+    <capture_group node_inst="0:7">
+        <capture_register reg_inst="0:7" reg_name="IOHS_DLP_OPTICAL_CONFIG" />
+        <capture_register reg_inst="0:7" reg_name="IOHS_DLP_LINK0_TX_LANE_CONTROL" />
+        <capture_register reg_inst="0:7" reg_name="IOHS_DLP_LINK1_TX_LANE_CONTROL" />
+        <capture_register reg_inst="0:7" reg_name="IOHS_DLP_LINK0_RX_LANE_CONTROL" />
+        <capture_register reg_inst="0:7" reg_name="IOHS_DLP_LINK1_RX_LANE_CONTROL" />
+        <capture_register reg_inst="0:7" reg_name="IOHS_DLP_LINK0_INFO" />
+        <capture_register reg_inst="0:7" reg_name="IOHS_DLP_LINK1_INFO" />
+        <capture_register reg_inst="0:7" reg_name="IOHS_DLP_LINK0_ERROR_STATUS" />
+        <capture_register reg_inst="0:7" reg_name="IOHS_DLP_LINK1_ERROR_STATUS" />
+        <capture_register reg_inst="0:7" reg_name="IOHS_DLP_REPLAY_THRESHOLD" />
+        <capture_register reg_inst="0:7" reg_name="IOHS_DLP_SL_ECC_THRESHOLD" />
+        <capture_register reg_inst="0:7" reg_name="IOHS_DLP_LINK0_SYN_CAPTURE" />
+        <capture_register reg_inst="0:7" reg_name="IOHS_DLP_LINK1_SYN_CAPTURE" />
+        <capture_register reg_inst="0:7" reg_name="IOHS_DLP_LINK0_EDPL_STATUS" />
+        <capture_register reg_inst="0:7" reg_name="IOHS_DLP_LINK1_EDPL_STATUS" />
+        <capture_register reg_inst="0:7" reg_name="IOHS_DLP_LINK0_QUALITY" />
+        <capture_register reg_inst="0:7" reg_name="IOHS_DLP_LINK1_QUALITY" />
+        <capture_register reg_inst="0:7" reg_name="IOHS_DLP_DLL_STATUS" />
+        <capture_register reg_inst="0:7" reg_name="IOHS_DLP_MISC_ERROR_STATUS" />
+    </capture_group>
+    <bit pos="0">link0 trained</bit>
+    <bit pos="1">link1 trained</bit>
+    <bit pos="2">link0 op irq</bit>
+    <bit pos="3">link1 op irq</bit>
+    <bit pos="4">link0 replay threshold</bit>
+    <bit pos="5">link1 replay threshold</bit>
+    <bit pos="6">link0 crc error</bit>
+    <bit pos="7">link1 crc error</bit>
+    <bit pos="8">link0 nak received</bit>
+    <bit pos="9">link1 nak received</bit>
+    <bit pos="10">link0 replay buffer full</bit>
+    <bit pos="11">link1 replay buffer full</bit>
+    <bit pos="12">link0 sl ecc threshold</bit>
+    <bit pos="13">link1 sl ecc threshold</bit>
+    <bit pos="14">link0 sl ecc correctable</bit>
+    <bit pos="15">link1 sl ecc correctable</bit>
+    <bit pos="16">link0 sl ecc ue</bit>
+    <bit pos="17">link1 sl ecc ue</bit>
+    <bit pos="18">link0 retrain threshold</bit>
+    <bit pos="19">link1 retrain threshold</bit>
+    <bit pos="20">link0 loss block align</bit>
+    <bit pos="21">link1 loss block align</bit>
+    <bit pos="22">link0 invalid block</bit>
+    <bit pos="23">link1 invalid block</bit>
+    <bit pos="24">link0 deskew error</bit>
+    <bit pos="25">link1 deskew error</bit>
+    <bit pos="26">link0 deskew overflow</bit>
+    <bit pos="27">link1 deskew overflow</bit>
+    <bit pos="28">link0 sw retrain</bit>
+    <bit pos="29">link1 sw retrain</bit>
+    <bit pos="30">link0 ack queue overflow</bit>
+    <bit pos="31">link1 ack queue overflow</bit>
+    <bit pos="32">link0 ack queue underflow</bit>
+    <bit pos="33">link1 ack queue underflow</bit>
+    <bit pos="34">link0 num replay</bit>
+    <bit pos="35">link1 num replay</bit>
+    <bit pos="36">link0 training set received</bit>
+    <bit pos="37">link1 training set received</bit>
+    <bit pos="38">link0 prbs select error</bit>
+    <bit pos="39">link1 prbs select error</bit>
+    <bit pos="40">link0 tcomplete bad</bit>
+    <bit pos="41">link1 tcomplete bad</bit>
+    <bit pos="42">link0 no spare lane available</bit>
+    <bit pos="43">link1 no spare lane available</bit>
+    <bit pos="44">link0 spare done</bit>
+    <bit pos="45">link1 spare done</bit>
+    <bit pos="46">link0 too many crc errors</bit>
+    <bit pos="47">link1 too many crc errors</bit>
+    <bit pos="48">unused</bit>
+    <bit pos="49">unused</bit>
+    <bit pos="50">link0 osc switch</bit>
+    <bit pos="51">link1 osc switch</bit>
+    <bit pos="52">link0 correctable array error</bit>
+    <bit pos="53">link1 correctable array error</bit>
+    <bit pos="54">link0 uncorrectable array error</bit>
+    <bit pos="55">link1 uncorrectable array error</bit>
+    <bit pos="56">link0 training failed</bit>
+    <bit pos="57">link1 training failed</bit>
+    <bit pos="58">link0 unrecoverable error</bit>
+    <bit pos="59">link1 unrecoverable error</bit>
+    <bit pos="60">link0 internal error</bit>
+    <bit pos="61">link1 internal error</bit>
+</attn_node>

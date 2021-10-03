@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<attn_node model_ec="P10_10,P10_20" name="IOHS_DLP_PHY_CONFIG" reg_type="SCOM">
+    <register name="IOHS_DLP_PHY_CONFIG">
+        <instance addr="0x1801100C" reg_inst="0"/>
+        <instance addr="0x1901100C" reg_inst="1"/>
+        <instance addr="0x1A01100C" reg_inst="2"/>
+        <instance addr="0x1B01100C" reg_inst="3"/>
+        <instance addr="0x1C01100C" reg_inst="4"/>
+        <instance addr="0x1D01100C" reg_inst="5"/>
+        <instance addr="0x1E01100C" reg_inst="6"/>
+        <instance addr="0x1F01100C" reg_inst="7"/>
+    </register>
+    <rule attn_type="CS" node_inst="0:7">
+        <expr type="and">
+            <expr type="reg" value1="IOHS_DLP_PHY_CONFIG"/>
+            <expr type="int" value1="0x0000000000000003"/>
+        </expr>
+    </rule>
+    <rule attn_type="RE" node_inst="0:7">
+        <expr type="and">
+            <expr type="reg" value1="IOHS_DLP_PHY_CONFIG"/>
+            <expr type="int" value1="0x0000000000000003"/>
+        </expr>
+    </rule>
+    <rule attn_type="SPA" node_inst="0:7">
+        <expr type="and">
+            <expr type="reg" value1="IOHS_DLP_PHY_CONFIG"/>
+            <expr type="int" value1="0x0000000000000003"/>
+        </expr>
+    </rule>
+    <bit pos="62" child_node="IOHS_DLP_FIR_OC" node_inst="0:7">Attention from IOHS_DLP_FIR in OpenCAPI mode</bit>
+    <bit pos="63" child_node="IOHS_DLP_FIR_SMP" node_inst="0:7">Attention from IOHS_DLP_FIR in SMP mode</bit>
+</attn_node>

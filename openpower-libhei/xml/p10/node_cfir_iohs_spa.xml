@@ -30,5 +30,5 @@
         </expr>
     </rule>
     <bit child_node="IOHS_LOCAL_FIR" node_inst="0,1,2,3,4,5,6,7" pos="4">Attention from IOHS_LOCAL_FIR</bit>
-    <bit child_node="IOHS_DLP_FIR" node_inst="0,1,2,3,4,5,6,7" pos="5">Attention from IOHS_DLP_FIR</bit>
+    <bit child_node="IOHS_DLP_PHY_CONFIG" node_inst="0,1,2,3,4,5,6,7" pos="5">Attention from IOHS_DLP_FIR</bit>
 </attn_node>
