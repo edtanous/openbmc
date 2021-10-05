@@ -11,16 +11,25 @@
         <action attn_type="UCS" config="110"/>
         <action attn_type="HA" config="001"/>
     </local_fir>
-    <bit pos="0">WAT Debug Bus Attention. This is a way for the WAT debug bus to trigger an attention.</bit>
-    <bit pos="1">SCOM DBGSRC Register parity Error. Indicates that control register for Debug logic has taken a parity error.</bit>
-    <bit pos="2">SCOM Recoverable Register Parity Error. This bit is set when a recoverable parity error on SCOM registers AACR or MCDBG_SCOM_CFG takes place. These register errors are config-related, unable to corrupt data or mainline.</bit>
-    <bit pos="3">Spare fir; hooked up to the parity error dectect of the SPARE scom register</bit>
-    <bit pos="4">Indicates that an application interrupt was received from the OCMB on</bit>
-    <bit pos="5">Indicates that an application interrupt was received from the OCMB on</bit>
-    <bit pos="6">Indicates that an application interrupt was received from the OCMB on</bit>
-    <bit pos="7">Indicates that an application interrupt was received from the OCMB on</bit>
-    <bit pos="8">Parity Error taken on MCEBUSEN[0,1,2,3] regs.</bit>
-    <bit pos="9">Parity Error taken on WAT* Regs.</bit>
-    <bit pos="10">Reserved Fir Bit 10.</bit>
-    <bit pos="11">Reserved Fir Bit 11.</bit>
+    <register name="MC_MISC_ERR_RPT">
+        <instance addr="0x0C010FE7" reg_inst="0"/>
+        <instance addr="0x0D010FE7" reg_inst="1"/>
+        <instance addr="0x0E010FE7" reg_inst="2"/>
+        <instance addr="0x0F010FE7" reg_inst="3"/>
+    </register>
+    <capture_group node_inst="0:3">
+        <capture_register reg_inst="0:3" reg_name="MC_MISC_ERR_RPT" />
+    </capture_group>
+    <bit pos="0">WAT Debug Bus Attention</bit>
+    <bit pos="1">SCOM DBGSRC Register parity Error</bit>
+    <bit pos="2">SCOM Recoverable Register Parity Error</bit>
+    <bit pos="3">spare</bit>
+    <bit pos="4">Application interrupt received from OCMB on channel 0, subchannel A</bit>
+    <bit pos="5">Application interrupt received from OCMB on channel 0, subchannel B</bit>
+    <bit pos="6">Application interrupt received from OCMB on channel 1, subchannel A</bit>
+    <bit pos="7">Application interrupt received from OCMB on channel 1, subchannel B</bit>
+    <bit pos="8">Parity Error taken on MCEBUSEN[0,1,2,3] regs</bit>
+    <bit pos="9">Parity Error taken on WAT* Regs</bit>
+    <bit pos="10">Reserved</bit>
+    <bit pos="11">Reserved</bit>
 </attn_node>
