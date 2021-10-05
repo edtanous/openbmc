@@ -61,6 +61,11 @@
        "iolink14" : "pib/perv31/pauc3/iohs1/smpgroup0",
        "iolink15" : "pib/perv31/pauc3/iohs1/smpgroup1",
 
+       "mc0" : "pib/perv12/mc0",
+       "mc1" : "pib/perv13/mc1",
+       "mc2" : "pib/perv14/mc2",
+       "mc3" : "pib/perv15/mc3",
+
        "omi0"  : "pib/perv12/mc0/mi0/mcc0/omi0",
        "omi1"  : "pib/perv12/mc0/mi0/mcc0/omi1",
        "omi2"  : "pib/perv12/mc0/mi0/mcc1/omi0",
@@ -590,6 +595,16 @@
         "framer_error_iolink15" : [
             { "type": "callout_connected", "name": "iolink15", "priority": "MED_A", "guard": true }
         ],
+
+        "mc0" : [ { "type": "callout_unit", "name": "mc0", "priority": "MED", "guard": true } ],
+        "mc1" : [ { "type": "callout_unit", "name": "mc1", "priority": "MED", "guard": true } ],
+        "mc2" : [ { "type": "callout_unit", "name": "mc2", "priority": "MED", "guard": true } ],
+        "mc3" : [ { "type": "callout_unit", "name": "mc3", "priority": "MED", "guard": true } ],
+
+        "level2_M_mc0_L" : [ { "type": "action", "name": "level2" }, { "type": "callout_unit", "name": "mc0", "priority": "LOW", "guard": false } ],
+        "level2_M_mc1_L" : [ { "type": "action", "name": "level2" }, { "type": "callout_unit", "name": "mc1", "priority": "LOW", "guard": false } ],
+        "level2_M_mc2_L" : [ { "type": "action", "name": "level2" }, { "type": "callout_unit", "name": "mc2", "priority": "LOW", "guard": false } ],
+        "level2_M_mc3_L" : [ { "type": "action", "name": "level2" }, { "type": "callout_unit", "name": "mc3", "priority": "LOW", "guard": false } ],
 
         "omi0" : [ { "type": "callout_unit", "name": "omi0",  "priority": "MED", "guard": true } ],
         "omi1" : [ { "type": "callout_unit", "name": "omi1",  "priority": "MED", "guard": true } ],
@@ -13268,10 +13283,10 @@
             "03" : "masked"
          },
          "02" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked"
+            "00" : "mc0",
+            "01" : "mc1",
+            "02" : "mc2",
+            "03" : "mc3"
          },
          "03" : {
             "00" : "masked",
@@ -13304,10 +13319,10 @@
             "03" : "masked"
          },
          "08" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked"
+            "00" : "mc0",
+            "01" : "mc1",
+            "02" : "mc2",
+            "03" : "mc3"
          },
          "09" : {
             "00" : "masked",
@@ -20922,40 +20937,40 @@
       },
       "efa7" : {
          "00" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked"
+            "00" : "mc0",
+            "01" : "mc1",
+            "02" : "mc2",
+            "03" : "mc3"
          },
          "01" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked"
+            "00" : "mc0",
+            "01" : "mc1",
+            "02" : "mc2",
+            "03" : "mc3"
          },
          "02" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked"
+            "00" : "level2",
+            "01" : "level2",
+            "02" : "level2",
+            "03" : "level2"
          },
          "03" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked"
+            "00" : "level2_M_mc0_L",
+            "01" : "level2_M_mc1_L",
+            "02" : "level2_M_mc2_L",
+            "03" : "level2_M_mc3_L"
          },
          "04" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked"
+            "00" : "mc0",
+            "01" : "mc1",
+            "02" : "mc2",
+            "03" : "mc3"
          },
          "05" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked"
+            "00" : "level2",
+            "01" : "level2",
+            "02" : "level2",
+            "03" : "level2"
          },
          "06" : {
             "00" : "masked",
@@ -20970,10 +20985,10 @@
             "03" : "masked"
          },
          "08" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked"
+            "00" : "level2",
+            "01" : "level2",
+            "02" : "level2",
+            "03" : "level2"
          },
          "09" : {
             "00" : "masked",
@@ -21012,16 +21027,16 @@
             "03" : "masked"
          },
          "0f" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked"
+            "00" : "mc0",
+            "01" : "mc1",
+            "02" : "mc2",
+            "03" : "mc3"
          },
          "10" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked"
+            "00" : "mc0",
+            "01" : "mc1",
+            "02" : "mc2",
+            "03" : "mc3"
          },
          "11" : {
             "00" : "masked",
@@ -21042,10 +21057,10 @@
             "03" : "masked"
          },
          "14" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked"
+            "00" : "mc0",
+            "01" : "mc1",
+            "02" : "mc2",
+            "03" : "mc3"
          },
          "15" : {
             "00" : "masked",
@@ -21060,10 +21075,10 @@
             "03" : "masked"
          },
          "17" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked"
+            "00" : "mc0",
+            "01" : "mc1",
+            "02" : "mc2",
+            "03" : "mc3"
          }
       },
       "f1ee" : {
