@@ -66,6 +66,15 @@
        "mc2" : "pib/perv14/mc2",
        "mc3" : "pib/perv15/mc3",
 
+       "mcc0" : "pib/perv12/mc0/mcc0",
+       "mcc1" : "pib/perv12/mc0/mcc1",
+       "mcc2" : "pib/perv13/mc1/mcc0",
+       "mcc3" : "pib/perv13/mc1/mcc1",
+       "mcc4" : "pib/perv14/mc2/mcc0",
+       "mcc5" : "pib/perv14/mc2/mcc1",
+       "mcc6" : "pib/perv15/mc3/mcc0",
+       "mcc7" : "pib/perv15/mc3/mcc1",
+
        "omi0"  : "pib/perv12/mc0/mi0/mcc0/omi0",
        "omi1"  : "pib/perv12/mc0/mi0/mcc0/omi1",
        "omi2"  : "pib/perv12/mc0/mi0/mcc1/omi0",
@@ -601,6 +610,15 @@
         "mc2" : [ { "type": "callout_unit", "name": "mc2", "priority": "MED", "guard": true } ],
         "mc3" : [ { "type": "callout_unit", "name": "mc3", "priority": "MED", "guard": true } ],
 
+        "mcc0" : [ { "type": "callout_unit", "name": "mcc0",  "priority": "MED", "guard": true } ],
+        "mcc1" : [ { "type": "callout_unit", "name": "mcc1",  "priority": "MED", "guard": true } ],
+        "mcc2" : [ { "type": "callout_unit", "name": "mcc2",  "priority": "MED", "guard": true } ],
+        "mcc3" : [ { "type": "callout_unit", "name": "mcc3",  "priority": "MED", "guard": true } ],
+        "mcc4" : [ { "type": "callout_unit", "name": "mcc4",  "priority": "MED", "guard": true } ],
+        "mcc5" : [ { "type": "callout_unit", "name": "mcc5",  "priority": "MED", "guard": true } ],
+        "mcc6" : [ { "type": "callout_unit", "name": "mcc6",  "priority": "MED", "guard": true } ],
+        "mcc7" : [ { "type": "callout_unit", "name": "mcc7",  "priority": "MED", "guard": true } ],
+
         "level2_M_mc0_L" : [ { "type": "action", "name": "level2" }, { "type": "callout_unit", "name": "mc0", "priority": "LOW", "guard": false } ],
         "level2_M_mc1_L" : [ { "type": "action", "name": "level2" }, { "type": "callout_unit", "name": "mc1", "priority": "LOW", "guard": false } ],
         "level2_M_mc2_L" : [ { "type": "action", "name": "level2" }, { "type": "callout_unit", "name": "mc2", "priority": "LOW", "guard": false } ],
@@ -622,6 +640,23 @@
         "omi13": [ { "type": "callout_unit", "name": "omi13", "priority": "MED", "guard": true } ],
         "omi14": [ { "type": "callout_unit", "name": "omi14", "priority": "MED", "guard": true } ],
         "omi15": [ { "type": "callout_unit", "name": "omi15", "priority": "MED", "guard": true } ],
+
+        "connected_ocmb0"  : [ { "type": "callout_connected", "name": "omi0",  "priority": "MED", "guard": true } ],
+        "connected_ocmb1"  : [ { "type": "callout_connected", "name": "omi1",  "priority": "MED", "guard": true } ],
+        "connected_ocmb2"  : [ { "type": "callout_connected", "name": "omi2",  "priority": "MED", "guard": true } ],
+        "connected_ocmb3"  : [ { "type": "callout_connected", "name": "omi3",  "priority": "MED", "guard": true } ],
+        "connected_ocmb4"  : [ { "type": "callout_connected", "name": "omi4",  "priority": "MED", "guard": true } ],
+        "connected_ocmb5"  : [ { "type": "callout_connected", "name": "omi5",  "priority": "MED", "guard": true } ],
+        "connected_ocmb6"  : [ { "type": "callout_connected", "name": "omi6",  "priority": "MED", "guard": true } ],
+        "connected_ocmb7"  : [ { "type": "callout_connected", "name": "omi7",  "priority": "MED", "guard": true } ],
+        "connected_ocmb8"  : [ { "type": "callout_connected", "name": "omi8",  "priority": "MED", "guard": true } ],
+        "connected_ocmb9"  : [ { "type": "callout_connected", "name": "omi9",  "priority": "MED", "guard": true } ],
+        "connected_ocmb10" : [ { "type": "callout_connected", "name": "omi10", "priority": "MED", "guard": true } ],
+        "connected_ocmb11" : [ { "type": "callout_connected", "name": "omi11", "priority": "MED", "guard": true } ],
+        "connected_ocmb12" : [ { "type": "callout_connected", "name": "omi12", "priority": "MED", "guard": true } ],
+        "connected_ocmb13" : [ { "type": "callout_connected", "name": "omi13", "priority": "MED", "guard": true } ],
+        "connected_ocmb14" : [ { "type": "callout_connected", "name": "omi14", "priority": "MED", "guard": true } ],
+        "connected_ocmb15" : [ { "type": "callout_connected", "name": "omi15", "priority": "MED", "guard": true } ],
 
         "omi_bus0" : [
             { "type": "callout_unit",      "name": "omi0",  "priority": "MED_A", "guard": true },
@@ -702,6 +737,177 @@
             { "type": "callout_unit",      "name": "omi15",  "priority": "MED_A", "guard": true },
             { "type": "callout_connected", "name": "omi15",  "priority": "MED_A", "guard": true },
             { "type": "callout_bus",       "name": "omi15",  "priority": "LOW",   "guard": false }
+        ],
+
+        "channel_timeout_omi0" : [
+            { "type": "callout_connected", "name": "omi0",  "priority": "HIGH", "guard": true },
+            { "type": "callout_bus",       "name": "omi0",  "priority": "LOW",  "guard": false }
+        ],
+        "channel_timeout_omi1" : [
+            { "type": "callout_connected", "name": "omi1",  "priority": "HIGH", "guard": true },
+            { "type": "callout_bus",       "name": "omi1",  "priority": "LOW",  "guard": false }
+        ],
+        "channel_timeout_omi2" : [
+            { "type": "callout_connected", "name": "omi2",  "priority": "HIGH", "guard": true },
+            { "type": "callout_bus",       "name": "omi2",  "priority": "LOW",  "guard": false }
+        ],
+        "channel_timeout_omi3" : [
+            { "type": "callout_connected", "name": "omi3",  "priority": "HIGH", "guard": true },
+            { "type": "callout_bus",       "name": "omi3",  "priority": "LOW",  "guard": false }
+        ],
+        "channel_timeout_omi4" : [
+            { "type": "callout_connected", "name": "omi4",  "priority": "HIGH", "guard": true },
+            { "type": "callout_bus",       "name": "omi4",  "priority": "LOW",  "guard": false }
+        ],
+        "channel_timeout_omi5" : [
+            { "type": "callout_connected", "name": "omi5",  "priority": "HIGH", "guard": true },
+            { "type": "callout_bus",       "name": "omi5",  "priority": "LOW",  "guard": false }
+        ],
+        "channel_timeout_omi6" : [
+            { "type": "callout_connected", "name": "omi6",  "priority": "HIGH", "guard": true },
+            { "type": "callout_bus",       "name": "omi6",  "priority": "LOW",  "guard": false }
+        ],
+        "channel_timeout_omi7" : [
+            { "type": "callout_connected", "name": "omi7",  "priority": "HIGH", "guard": true },
+            { "type": "callout_bus",       "name": "omi7",  "priority": "LOW",  "guard": false }
+        ],
+        "channel_timeout_omi8" : [
+            { "type": "callout_connected", "name": "omi8",  "priority": "HIGH", "guard": true },
+            { "type": "callout_bus",       "name": "omi8",  "priority": "LOW",  "guard": false }
+        ],
+        "channel_timeout_omi9" : [
+            { "type": "callout_connected", "name": "omi9",  "priority": "HIGH", "guard": true },
+            { "type": "callout_bus",       "name": "omi9",  "priority": "LOW",  "guard": false }
+        ],
+        "channel_timeout_omi10" : [
+            { "type": "callout_connected", "name": "omi10",  "priority": "HIGH", "guard": true },
+            { "type": "callout_bus",       "name": "omi10",  "priority": "LOW",  "guard": false }
+        ],
+        "channel_timeout_omi11" : [
+            { "type": "callout_connected", "name": "omi11",  "priority": "HIGH", "guard": true },
+            { "type": "callout_bus",       "name": "omi11",  "priority": "LOW",  "guard": false }
+        ],
+        "channel_timeout_omi12" : [
+            { "type": "callout_connected", "name": "omi12",  "priority": "HIGH", "guard": true },
+            { "type": "callout_bus",       "name": "omi12",  "priority": "LOW",  "guard": false }
+        ],
+        "channel_timeout_omi13" : [
+            { "type": "callout_connected", "name": "omi13",  "priority": "HIGH", "guard": true },
+            { "type": "callout_bus",       "name": "omi13",  "priority": "LOW",  "guard": false }
+        ],
+        "channel_timeout_omi14" : [
+            { "type": "callout_connected", "name": "omi14",  "priority": "HIGH", "guard": true },
+            { "type": "callout_bus",       "name": "omi14",  "priority": "LOW",  "guard": false }
+        ],
+        "channel_timeout_omi15" : [
+            { "type": "callout_connected", "name": "omi15",  "priority": "HIGH", "guard": true },
+            { "type": "callout_bus",       "name": "omi15",  "priority": "LOW",  "guard": false }
+        ],
+
+        "all_ocmb_and_mcc0" : [
+            { "type": "action", "name": "connected_ocmb0" },
+            { "type": "action", "name": "connected_ocmb1" },
+            { "type": "action", "name": "mcc0"           }
+        ],
+        "all_ocmb_and_mcc1" : [
+            { "type": "action", "name": "connected_ocmb2" },
+            { "type": "action", "name": "connected_ocmb3" },
+            { "type": "action", "name": "mcc1"           }
+        ],
+        "all_ocmb_and_mcc2" : [
+            { "type": "action", "name": "connected_ocmb4" },
+            { "type": "action", "name": "connected_ocmb5" },
+            { "type": "action", "name": "mcc2"           }
+        ],
+        "all_ocmb_and_mcc3" : [
+            { "type": "action", "name": "connected_ocmb6" },
+            { "type": "action", "name": "connected_ocmb7" },
+            { "type": "action", "name": "mcc3"           }
+        ],
+        "all_ocmb_and_mcc4" : [
+            { "type": "action", "name": "connected_ocmb8" },
+            { "type": "action", "name": "connected_ocmb9" },
+            { "type": "action", "name": "mcc4"           }
+        ],
+        "all_ocmb_and_mcc5" : [
+            { "type": "action", "name": "connected_ocmb10" },
+            { "type": "action", "name": "connected_ocmb11" },
+            { "type": "action", "name": "mcc5"             }
+        ],
+        "all_ocmb_and_mcc6" : [
+            { "type": "action", "name": "connected_ocmb12" },
+            { "type": "action", "name": "connected_ocmb13" },
+            { "type": "action", "name": "mcc6"             }
+        ],
+        "all_ocmb_and_mcc7" : [
+            { "type": "action", "name": "connected_ocmb14" },
+            { "type": "action", "name": "connected_ocmb15" },
+            { "type": "action", "name": "mcc7"             }
+        ],
+
+        "ocmb_H_omi_L_0" : [
+            { "type": "callout_connected", "name": "omi0",  "priority": "HIGH", "guard": true  },
+            { "type": "callout_unit",      "name": "omi0",  "priority": "LOW",  "guard": false }
+        ],
+        "ocmb_H_omi_L_1" : [
+            { "type": "callout_connected", "name": "omi1",  "priority": "HIGH", "guard": true  },
+            { "type": "callout_unit",      "name": "omi1",  "priority": "LOW",  "guard": false }
+        ],
+        "ocmb_H_omi_L_2" : [
+            { "type": "callout_connected", "name": "omi2",  "priority": "HIGH", "guard": true  },
+            { "type": "callout_unit",      "name": "omi2",  "priority": "LOW",  "guard": false }
+        ],
+        "ocmb_H_omi_L_3" : [
+            { "type": "callout_connected", "name": "omi3",  "priority": "HIGH", "guard": true  },
+            { "type": "callout_unit",      "name": "omi3",  "priority": "LOW",  "guard": false }
+        ],
+        "ocmb_H_omi_L_4" : [
+            { "type": "callout_connected", "name": "omi4",  "priority": "HIGH", "guard": true  },
+            { "type": "callout_unit",      "name": "omi4",  "priority": "LOW",  "guard": false }
+        ],
+        "ocmb_H_omi_L_5" : [
+            { "type": "callout_connected", "name": "omi5",  "priority": "HIGH", "guard": true  },
+            { "type": "callout_unit",      "name": "omi5",  "priority": "LOW",  "guard": false }
+        ],
+        "ocmb_H_omi_L_6" : [
+            { "type": "callout_connected", "name": "omi6",  "priority": "HIGH", "guard": true  },
+            { "type": "callout_unit",      "name": "omi6",  "priority": "LOW",  "guard": false }
+        ],
+        "ocmb_H_omi_L_7" : [
+            { "type": "callout_connected", "name": "omi7",  "priority": "HIGH", "guard": true  },
+            { "type": "callout_unit",      "name": "omi7",  "priority": "LOW",  "guard": false }
+        ],
+        "ocmb_H_omi_L_8" : [
+            { "type": "callout_connected", "name": "omi8",  "priority": "HIGH", "guard": true  },
+            { "type": "callout_unit",      "name": "omi8",  "priority": "LOW",  "guard": false }
+        ],
+        "ocmb_H_omi_L_9" : [
+            { "type": "callout_connected", "name": "omi9",  "priority": "HIGH", "guard": true  },
+            { "type": "callout_unit",      "name": "omi9",  "priority": "LOW",  "guard": false }
+        ],
+        "ocmb_H_omi_L_10" : [
+            { "type": "callout_connected", "name": "omi10", "priority": "HIGH", "guard": true  },
+            { "type": "callout_unit",      "name": "omi10", "priority": "LOW",  "guard": false }
+        ],
+        "ocmb_H_omi_L_11" : [
+            { "type": "callout_connected", "name": "omi11", "priority": "HIGH", "guard": true  },
+            { "type": "callout_unit",      "name": "omi11", "priority": "LOW",  "guard": false }
+        ],
+        "ocmb_H_omi_L_12" : [
+            { "type": "callout_connected", "name": "omi12", "priority": "HIGH", "guard": true  },
+            { "type": "callout_unit",      "name": "omi12", "priority": "LOW",  "guard": false }
+        ],
+        "ocmb_H_omi_L_13" : [
+            { "type": "callout_connected", "name": "omi13", "priority": "HIGH", "guard": true  },
+            { "type": "callout_unit",      "name": "omi13", "priority": "LOW",  "guard": false }
+        ],
+        "ocmb_H_omi_L_14" : [
+            { "type": "callout_connected", "name": "omi14", "priority": "HIGH", "guard": true  },
+            { "type": "callout_unit",      "name": "omi14", "priority": "LOW",  "guard": false }
+        ],
+        "ocmb_H_omi_L_15" : [
+            { "type": "callout_connected", "name": "omi15", "priority": "HIGH", "guard": true  },
+            { "type": "callout_unit",      "name": "omi15", "priority": "LOW",  "guard": false }
         ],
 
         "pau0": [ { "type": "callout_unit", "name": "pau0", "priority": "MED", "guard": true } ],
@@ -19312,34 +19518,34 @@
       },
       "bce5" : {
          "00" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "downstream_attn",
+            "01" : "downstream_attn",
+            "02" : "downstream_attn",
+            "03" : "downstream_attn",
+            "04" : "downstream_attn",
+            "05" : "downstream_attn",
+            "06" : "downstream_attn",
+            "07" : "downstream_attn"
          },
          "01" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "downstream_attn",
+            "01" : "downstream_attn",
+            "02" : "downstream_attn",
+            "03" : "downstream_attn",
+            "04" : "downstream_attn",
+            "05" : "downstream_attn",
+            "06" : "downstream_attn",
+            "07" : "downstream_attn"
          },
          "02" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "downstream_attn",
+            "01" : "downstream_attn",
+            "02" : "downstream_attn",
+            "03" : "downstream_attn",
+            "04" : "downstream_attn",
+            "05" : "downstream_attn",
+            "06" : "downstream_attn",
+            "07" : "downstream_attn"
          },
          "03" : {
             "00" : "masked",
@@ -19352,34 +19558,34 @@
             "07" : "masked"
          },
          "04" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "downstream_attn",
+            "01" : "downstream_attn",
+            "02" : "downstream_attn",
+            "03" : "downstream_attn",
+            "04" : "downstream_attn",
+            "05" : "downstream_attn",
+            "06" : "downstream_attn",
+            "07" : "downstream_attn"
          },
          "05" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "downstream_attn",
+            "01" : "downstream_attn",
+            "02" : "downstream_attn",
+            "03" : "downstream_attn",
+            "04" : "downstream_attn",
+            "05" : "downstream_attn",
+            "06" : "downstream_attn",
+            "07" : "downstream_attn"
          },
          "06" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "downstream_attn",
+            "01" : "downstream_attn",
+            "02" : "downstream_attn",
+            "03" : "downstream_attn",
+            "04" : "downstream_attn",
+            "05" : "downstream_attn",
+            "06" : "downstream_attn",
+            "07" : "downstream_attn"
          },
          "07" : {
             "00" : "masked",
@@ -19392,104 +19598,104 @@
             "07" : "masked"
          },
          "08" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "mcc0",
+            "01" : "mcc1",
+            "02" : "mcc2",
+            "03" : "mcc3",
+            "04" : "mcc4",
+            "05" : "mcc5",
+            "06" : "mcc6",
+            "07" : "mcc7"
          },
          "09" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "level2",
+            "01" : "level2",
+            "02" : "level2",
+            "03" : "level2",
+            "04" : "level2",
+            "05" : "level2",
+            "06" : "level2",
+            "07" : "level2"
          },
          "0a" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "mcc0",
+            "01" : "mcc1",
+            "02" : "mcc2",
+            "03" : "mcc3",
+            "04" : "mcc4",
+            "05" : "mcc5",
+            "06" : "mcc6",
+            "07" : "mcc7"
          },
          "0b" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "mcc0",
+            "01" : "mcc1",
+            "02" : "mcc2",
+            "03" : "mcc3",
+            "04" : "mcc4",
+            "05" : "mcc5",
+            "06" : "mcc6",
+            "07" : "mcc7"
          },
          "0c" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "omi_bus0",
+            "01" : "omi_bus2",
+            "02" : "omi_bus4",
+            "03" : "omi_bus6",
+            "04" : "omi_bus8",
+            "05" : "omi_bus10",
+            "06" : "omi_bus12",
+            "07" : "omi_bus14"
          },
          "0d" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "omi_bus1",
+            "01" : "omi_bus3",
+            "02" : "omi_bus5",
+            "03" : "omi_bus7",
+            "04" : "omi_bus9",
+            "05" : "omi_bus11",
+            "06" : "omi_bus13",
+            "07" : "omi_bus15"
          },
          "0e" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "omi_bus0",
+            "01" : "omi_bus2",
+            "02" : "omi_bus4",
+            "03" : "omi_bus6",
+            "04" : "omi_bus8",
+            "05" : "omi_bus10",
+            "06" : "omi_bus12",
+            "07" : "omi_bus14"
          },
          "0f" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "omi_bus1",
+            "01" : "omi_bus3",
+            "02" : "omi_bus5",
+            "03" : "omi_bus7",
+            "04" : "omi_bus9",
+            "05" : "omi_bus11",
+            "06" : "omi_bus13",
+            "07" : "omi_bus15"
          },
          "10" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "connected_ocmb0",
+            "01" : "connected_ocmb2",
+            "02" : "connected_ocmb4",
+            "03" : "connected_ocmb6",
+            "04" : "connected_ocmb8",
+            "05" : "connected_ocmb10",
+            "06" : "connected_ocmb12",
+            "07" : "connected_ocmb14"
          },
          "11" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "connected_ocmb1",
+            "01" : "connected_ocmb3",
+            "02" : "connected_ocmb5",
+            "03" : "connected_ocmb7",
+            "04" : "connected_ocmb9",
+            "05" : "connected_ocmb11",
+            "06" : "connected_ocmb13",
+            "07" : "connected_ocmb15"
          },
          "12" : {
             "00" : "masked",
@@ -19532,114 +19738,114 @@
             "07" : "masked"
          },
          "16" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "channel_timeout_omi0",
+            "01" : "channel_timeout_omi2",
+            "02" : "channel_timeout_omi4",
+            "03" : "channel_timeout_omi6",
+            "04" : "channel_timeout_omi8",
+            "05" : "channel_timeout_omi10",
+            "06" : "channel_timeout_omi12",
+            "07" : "channel_timeout_omi14"
          },
          "17" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "channel_timeout_omi1",
+            "01" : "channel_timeout_omi3",
+            "02" : "channel_timeout_omi5",
+            "03" : "channel_timeout_omi7",
+            "04" : "channel_timeout_omi9",
+            "05" : "channel_timeout_omi11",
+            "06" : "channel_timeout_omi13",
+            "07" : "channel_timeout_omi15"
          },
          "18" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "mcc0",
+            "01" : "mcc1",
+            "02" : "mcc2",
+            "03" : "mcc3",
+            "04" : "mcc4",
+            "05" : "mcc5",
+            "06" : "mcc6",
+            "07" : "mcc7"
          },
          "19" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "level2",
+            "01" : "level2",
+            "02" : "level2",
+            "03" : "level2",
+            "04" : "level2",
+            "05" : "level2",
+            "06" : "level2",
+            "07" : "level2"
          },
          "1a" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "mcc0",
+            "01" : "mcc1",
+            "02" : "mcc2",
+            "03" : "mcc3",
+            "04" : "mcc4",
+            "05" : "mcc5",
+            "06" : "mcc6",
+            "07" : "mcc7"
          },
          "1b" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "mcc0",
+            "01" : "mcc1",
+            "02" : "mcc2",
+            "03" : "mcc3",
+            "04" : "mcc4",
+            "05" : "mcc5",
+            "06" : "mcc6",
+            "07" : "mcc7"
          },
          "1c" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "mcc0",
+            "01" : "mcc1",
+            "02" : "mcc2",
+            "03" : "mcc3",
+            "04" : "mcc4",
+            "05" : "mcc5",
+            "06" : "mcc6",
+            "07" : "mcc7"
          },
          "1d" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "mcc0",
+            "01" : "mcc1",
+            "02" : "mcc2",
+            "03" : "mcc3",
+            "04" : "mcc4",
+            "05" : "mcc5",
+            "06" : "mcc6",
+            "07" : "mcc7"
          },
          "1e" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "level2",
+            "01" : "level2",
+            "02" : "level2",
+            "03" : "level2",
+            "04" : "level2",
+            "05" : "level2",
+            "06" : "level2",
+            "07" : "level2"
          },
          "1f" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "mcc0",
+            "01" : "mcc1",
+            "02" : "mcc2",
+            "03" : "mcc3",
+            "04" : "mcc4",
+            "05" : "mcc5",
+            "06" : "mcc6",
+            "07" : "mcc7"
          },
          "20" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "mcc0",
+            "01" : "mcc1",
+            "02" : "mcc2",
+            "03" : "mcc3",
+            "04" : "mcc4",
+            "05" : "mcc5",
+            "06" : "mcc6",
+            "07" : "mcc7"
          },
          "21" : {
             "00" : "masked",
@@ -19662,24 +19868,24 @@
             "07" : "masked"
          },
          "23" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "omi0",
+            "01" : "omi2",
+            "02" : "omi4",
+            "03" : "omi6",
+            "04" : "omi8",
+            "05" : "omi10",
+            "06" : "omi12",
+            "07" : "omi14"
          },
          "24" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "omi1",
+            "01" : "omi3",
+            "02" : "omi5",
+            "03" : "omi7",
+            "04" : "omi9",
+            "05" : "omi11",
+            "06" : "omi13",
+            "07" : "omi15"
          },
          "25" : {
             "00" : "masked",
@@ -19724,44 +19930,44 @@
       },
       "bd3a" : {
          "00" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "connected_ocmb0",
+            "01" : "connected_ocmb2",
+            "02" : "connected_ocmb4",
+            "03" : "connected_ocmb6",
+            "04" : "connected_ocmb8",
+            "05" : "connected_ocmb10",
+            "06" : "connected_ocmb12",
+            "07" : "connected_ocmb14"
          },
          "01" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "connected_ocmb1",
+            "01" : "connected_ocmb3",
+            "02" : "connected_ocmb5",
+            "03" : "connected_ocmb7",
+            "04" : "connected_ocmb9",
+            "05" : "connected_ocmb11",
+            "06" : "connected_ocmb13",
+            "07" : "connected_ocmb15"
          },
          "02" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "connected_ocmb0",
+            "01" : "connected_ocmb2",
+            "02" : "connected_ocmb4",
+            "03" : "connected_ocmb6",
+            "04" : "connected_ocmb8",
+            "05" : "connected_ocmb10",
+            "06" : "connected_ocmb12",
+            "07" : "connected_ocmb14"
          },
          "03" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "connected_ocmb1",
+            "01" : "connected_ocmb3",
+            "02" : "connected_ocmb5",
+            "03" : "connected_ocmb7",
+            "04" : "connected_ocmb9",
+            "05" : "connected_ocmb11",
+            "06" : "connected_ocmb13",
+            "07" : "connected_ocmb15"
          },
          "04" : {
             "00" : "masked",
@@ -19784,24 +19990,24 @@
             "07" : "masked"
          },
          "06" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "mcc0",
+            "01" : "mcc1",
+            "02" : "mcc2",
+            "03" : "mcc3",
+            "04" : "mcc4",
+            "05" : "mcc5",
+            "06" : "mcc6",
+            "07" : "mcc7"
          },
          "07" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "mcc0",
+            "01" : "mcc1",
+            "02" : "mcc2",
+            "03" : "mcc3",
+            "04" : "mcc4",
+            "05" : "mcc5",
+            "06" : "mcc6",
+            "07" : "mcc7"
          },
          "08" : {
             "00" : "masked",
@@ -19814,64 +20020,64 @@
             "07" : "masked"
          },
          "09" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "mcc0",
+            "01" : "mcc1",
+            "02" : "mcc2",
+            "03" : "mcc3",
+            "04" : "mcc4",
+            "05" : "mcc5",
+            "06" : "mcc6",
+            "07" : "mcc7"
          },
          "0a" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "mcc0",
+            "01" : "mcc1",
+            "02" : "mcc2",
+            "03" : "mcc3",
+            "04" : "mcc4",
+            "05" : "mcc5",
+            "06" : "mcc6",
+            "07" : "mcc7"
          },
          "0b" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "mcc0",
+            "01" : "mcc1",
+            "02" : "mcc2",
+            "03" : "mcc3",
+            "04" : "mcc4",
+            "05" : "mcc5",
+            "06" : "mcc6",
+            "07" : "mcc7"
          },
          "0c" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "mcc0",
+            "01" : "mcc1",
+            "02" : "mcc2",
+            "03" : "mcc3",
+            "04" : "mcc4",
+            "05" : "mcc5",
+            "06" : "mcc6",
+            "07" : "mcc7"
          },
          "0d" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "mcc0",
+            "01" : "mcc1",
+            "02" : "mcc2",
+            "03" : "mcc3",
+            "04" : "mcc4",
+            "05" : "mcc5",
+            "06" : "mcc6",
+            "07" : "mcc7"
          },
          "0e" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "mcc0",
+            "01" : "mcc1",
+            "02" : "mcc2",
+            "03" : "mcc3",
+            "04" : "mcc4",
+            "05" : "mcc5",
+            "06" : "mcc6",
+            "07" : "mcc7"
          },
          "0f" : {
             "00" : "masked",
@@ -19884,14 +20090,14 @@
             "07" : "masked"
          },
          "10" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "mcc0",
+            "01" : "mcc1",
+            "02" : "mcc2",
+            "03" : "mcc3",
+            "04" : "mcc4",
+            "05" : "mcc5",
+            "06" : "mcc6",
+            "07" : "mcc7"
          },
          "11" : {
             "00" : "masked",
@@ -19914,34 +20120,34 @@
             "07" : "masked"
          },
          "13" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "all_ocmb_and_mcc0",
+            "01" : "all_ocmb_and_mcc1",
+            "02" : "all_ocmb_and_mcc2",
+            "03" : "all_ocmb_and_mcc3",
+            "04" : "all_ocmb_and_mcc4",
+            "05" : "all_ocmb_and_mcc5",
+            "06" : "all_ocmb_and_mcc6",
+            "07" : "all_ocmb_and_mcc7"
          },
          "14" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "self",
+            "01" : "self",
+            "02" : "self",
+            "03" : "self",
+            "04" : "self",
+            "05" : "self",
+            "06" : "self",
+            "07" : "self"
          },
          "15" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "self",
+            "01" : "self",
+            "02" : "self",
+            "03" : "self",
+            "04" : "self",
+            "05" : "self",
+            "06" : "self",
+            "07" : "self"
          },
          "16" : {
             "00" : "masked",
@@ -19954,24 +20160,24 @@
             "07" : "masked"
          },
          "17" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "mcc0",
+            "01" : "mcc1",
+            "02" : "mcc2",
+            "03" : "mcc3",
+            "04" : "mcc4",
+            "05" : "mcc5",
+            "06" : "mcc6",
+            "07" : "mcc7"
          },
          "18" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "mcc0",
+            "01" : "mcc1",
+            "02" : "mcc2",
+            "03" : "mcc3",
+            "04" : "mcc4",
+            "05" : "mcc5",
+            "06" : "mcc6",
+            "07" : "mcc7"
          },
          "19" : {
             "00" : "masked",
@@ -19984,54 +20190,54 @@
             "07" : "masked"
          },
          "1a" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "mcc0",
+            "01" : "mcc1",
+            "02" : "mcc2",
+            "03" : "mcc3",
+            "04" : "mcc4",
+            "05" : "mcc5",
+            "06" : "mcc6",
+            "07" : "mcc7"
          },
          "1b" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "connected_ocmb0",
+            "01" : "connected_ocmb2",
+            "02" : "connected_ocmb4",
+            "03" : "connected_ocmb6",
+            "04" : "connected_ocmb8",
+            "05" : "connected_ocmb10",
+            "06" : "connected_ocmb12",
+            "07" : "connected_ocmb14"
          },
          "1c" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "connected_ocmb1",
+            "01" : "connected_ocmb3",
+            "02" : "connected_ocmb5",
+            "03" : "connected_ocmb7",
+            "04" : "connected_ocmb9",
+            "05" : "connected_ocmb11",
+            "06" : "connected_ocmb13",
+            "07" : "connected_ocmb15"
          },
          "1d" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "connected_ocmb0",
+            "01" : "connected_ocmb2",
+            "02" : "connected_ocmb4",
+            "03" : "connected_ocmb6",
+            "04" : "connected_ocmb8",
+            "05" : "connected_ocmb10",
+            "06" : "connected_ocmb12",
+            "07" : "connected_ocmb14"
          },
          "1e" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "connected_ocmb1",
+            "01" : "connected_ocmb3",
+            "02" : "connected_ocmb5",
+            "03" : "connected_ocmb7",
+            "04" : "connected_ocmb9",
+            "05" : "connected_ocmb11",
+            "06" : "connected_ocmb13",
+            "07" : "connected_ocmb15"
          },
          "1f" : {
             "00" : "masked",
@@ -20054,144 +20260,144 @@
             "07" : "masked"
          },
          "21" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "ocmb_H_omi_L_0",
+            "01" : "ocmb_H_omi_L_2",
+            "02" : "ocmb_H_omi_L_4",
+            "03" : "ocmb_H_omi_L_6",
+            "04" : "ocmb_H_omi_L_8",
+            "05" : "ocmb_H_omi_L_10",
+            "06" : "ocmb_H_omi_L_12",
+            "07" : "ocmb_H_omi_L_14"
          },
          "22" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "ocmb_H_omi_L_1",
+            "01" : "ocmb_H_omi_L_3",
+            "02" : "ocmb_H_omi_L_5",
+            "03" : "ocmb_H_omi_L_7",
+            "04" : "ocmb_H_omi_L_9",
+            "05" : "ocmb_H_omi_L_11",
+            "06" : "ocmb_H_omi_L_13",
+            "07" : "ocmb_H_omi_L_15"
          },
          "23" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "omi0",
+            "01" : "omi2",
+            "02" : "omi4",
+            "03" : "omi6",
+            "04" : "omi8",
+            "05" : "omi10",
+            "06" : "omi12",
+            "07" : "omi14"
          },
          "24" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "omi1",
+            "01" : "omi3",
+            "02" : "omi5",
+            "03" : "omi7",
+            "04" : "omi9",
+            "05" : "omi11",
+            "06" : "omi13",
+            "07" : "omi15"
          },
          "25" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "omi0",
+            "01" : "omi2",
+            "02" : "omi4",
+            "03" : "omi6",
+            "04" : "omi8",
+            "05" : "omi10",
+            "06" : "omi12",
+            "07" : "omi14"
          },
          "26" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "omi1",
+            "01" : "omi3",
+            "02" : "omi5",
+            "03" : "omi7",
+            "04" : "omi9",
+            "05" : "omi11",
+            "06" : "omi13",
+            "07" : "omi15"
          },
          "27" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "connected_ocmb0",
+            "01" : "connected_ocmb2",
+            "02" : "connected_ocmb4",
+            "03" : "connected_ocmb6",
+            "04" : "connected_ocmb8",
+            "05" : "connected_ocmb10",
+            "06" : "connected_ocmb12",
+            "07" : "connected_ocmb14"
          },
          "28" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "connected_ocmb1",
+            "01" : "connected_ocmb3",
+            "02" : "connected_ocmb5",
+            "03" : "connected_ocmb7",
+            "04" : "connected_ocmb9",
+            "05" : "connected_ocmb11",
+            "06" : "connected_ocmb13",
+            "07" : "connected_ocmb15"
          },
          "29" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "connected_ocmb0",
+            "01" : "connected_ocmb2",
+            "02" : "connected_ocmb4",
+            "03" : "connected_ocmb6",
+            "04" : "connected_ocmb8",
+            "05" : "connected_ocmb10",
+            "06" : "connected_ocmb12",
+            "07" : "connected_ocmb14"
          },
          "2a" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "connected_ocmb1",
+            "01" : "connected_ocmb3",
+            "02" : "connected_ocmb5",
+            "03" : "connected_ocmb7",
+            "04" : "connected_ocmb9",
+            "05" : "connected_ocmb11",
+            "06" : "connected_ocmb13",
+            "07" : "connected_ocmb15"
          },
          "2b" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "connected_ocmb0",
+            "01" : "connected_ocmb2",
+            "02" : "connected_ocmb4",
+            "03" : "connected_ocmb6",
+            "04" : "connected_ocmb8",
+            "05" : "connected_ocmb10",
+            "06" : "connected_ocmb12",
+            "07" : "connected_ocmb14"
          },
          "2c" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "connected_ocmb1",
+            "01" : "connected_ocmb3",
+            "02" : "connected_ocmb5",
+            "03" : "connected_ocmb7",
+            "04" : "connected_ocmb9",
+            "05" : "connected_ocmb11",
+            "06" : "connected_ocmb13",
+            "07" : "connected_ocmb15"
          },
          "2d" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "omi0",
+            "01" : "omi2",
+            "02" : "omi4",
+            "03" : "omi6",
+            "04" : "omi8",
+            "05" : "omi10",
+            "06" : "omi12",
+            "07" : "omi14"
          },
          "2e" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "omi1",
+            "01" : "omi3",
+            "02" : "omi5",
+            "03" : "omi7",
+            "04" : "omi9",
+            "05" : "omi11",
+            "06" : "omi13",
+            "07" : "omi15"
          },
          "2f" : {
             "00" : "masked",
@@ -20214,134 +20420,134 @@
             "07" : "masked"
          },
          "31" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "connected_ocmb0",
+            "01" : "connected_ocmb2",
+            "02" : "connected_ocmb4",
+            "03" : "connected_ocmb6",
+            "04" : "connected_ocmb8",
+            "05" : "connected_ocmb10",
+            "06" : "connected_ocmb12",
+            "07" : "connected_ocmb14"
          },
          "32" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "connected_ocmb1",
+            "01" : "connected_ocmb3",
+            "02" : "connected_ocmb5",
+            "03" : "connected_ocmb7",
+            "04" : "connected_ocmb9",
+            "05" : "connected_ocmb11",
+            "06" : "connected_ocmb13",
+            "07" : "connected_ocmb15"
          },
          "33" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "omi0",
+            "01" : "omi2",
+            "02" : "omi4",
+            "03" : "omi6",
+            "04" : "omi8",
+            "05" : "omi10",
+            "06" : "omi12",
+            "07" : "omi14"
          },
          "34" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "omi1",
+            "01" : "omi3",
+            "02" : "omi5",
+            "03" : "omi7",
+            "04" : "omi9",
+            "05" : "omi11",
+            "06" : "omi13",
+            "07" : "omi15"
          },
          "35" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "omi0",
+            "01" : "omi2",
+            "02" : "omi4",
+            "03" : "omi6",
+            "04" : "omi8",
+            "05" : "omi10",
+            "06" : "omi12",
+            "07" : "omi14"
          },
          "36" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "omi1",
+            "01" : "omi3",
+            "02" : "omi5",
+            "03" : "omi7",
+            "04" : "omi9",
+            "05" : "omi11",
+            "06" : "omi13",
+            "07" : "omi15"
          },
          "37" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "connected_ocmb0",
+            "01" : "connected_ocmb2",
+            "02" : "connected_ocmb4",
+            "03" : "connected_ocmb6",
+            "04" : "connected_ocmb8",
+            "05" : "connected_ocmb10",
+            "06" : "connected_ocmb12",
+            "07" : "connected_ocmb14"
          },
          "38" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "connected_ocmb1",
+            "01" : "connected_ocmb3",
+            "02" : "connected_ocmb5",
+            "03" : "connected_ocmb7",
+            "04" : "connected_ocmb9",
+            "05" : "connected_ocmb11",
+            "06" : "connected_ocmb13",
+            "07" : "connected_ocmb15"
          },
          "39" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "mcc0",
+            "01" : "mcc1",
+            "02" : "mcc2",
+            "03" : "mcc3",
+            "04" : "mcc4",
+            "05" : "mcc5",
+            "06" : "mcc6",
+            "07" : "mcc7"
          },
          "3a" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "mcc0",
+            "01" : "mcc1",
+            "02" : "mcc2",
+            "03" : "mcc3",
+            "04" : "mcc4",
+            "05" : "mcc5",
+            "06" : "mcc6",
+            "07" : "mcc7"
          },
          "3b" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "connected_ocmb0",
+            "01" : "connected_ocmb2",
+            "02" : "connected_ocmb4",
+            "03" : "connected_ocmb6",
+            "04" : "connected_ocmb8",
+            "05" : "connected_ocmb10",
+            "06" : "connected_ocmb12",
+            "07" : "connected_ocmb14"
          },
          "3c" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "connected_ocmb1",
+            "01" : "connected_ocmb3",
+            "02" : "connected_ocmb5",
+            "03" : "connected_ocmb7",
+            "04" : "connected_ocmb9",
+            "05" : "connected_ocmb11",
+            "06" : "connected_ocmb13",
+            "07" : "connected_ocmb15"
          },
          "3d" : {
-            "00" : "masked",
-            "01" : "masked",
-            "02" : "masked",
-            "03" : "masked",
-            "04" : "masked",
-            "05" : "masked",
-            "06" : "masked",
-            "07" : "masked"
+            "00" : "mcc0",
+            "01" : "mcc1",
+            "02" : "mcc2",
+            "03" : "mcc3",
+            "04" : "mcc4",
+            "05" : "mcc5",
+            "06" : "mcc6",
+            "07" : "mcc7"
          }
       },
       "c3bb" : {
