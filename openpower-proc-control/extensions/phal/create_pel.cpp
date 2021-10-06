@@ -80,7 +80,7 @@ void createBootErrorPEL(const FFDCData& ffdcData, const json& calloutData)
         throw std::runtime_error(
             "Error in invoking D-Bus logging create interface");
     }
-    catch (std::exception& e)
+    catch (const std::exception& e)
     {
         throw e;
     }
@@ -138,7 +138,7 @@ void createSbeErrorPEL(const std::string& event, const sbeError_t& sbeError,
         throw std::runtime_error(
             "Error in invoking D-Bus logging create interface");
     }
-    catch (std::exception& e)
+    catch (const std::exception& e)
     {
         throw e;
     }
@@ -180,7 +180,7 @@ void createPEL(const std::string& event, const FFDCData& ffdcData)
         throw std::runtime_error(
             "Error in invoking D-Bus logging create interface");
     }
-    catch (std::exception& e)
+    catch (const std::exception& e)
     {
         log<level::ERR>(
             fmt::format("D-bus call exception", "EXCEPTION={}", e.what())

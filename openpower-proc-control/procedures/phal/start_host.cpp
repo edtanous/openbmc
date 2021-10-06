@@ -179,7 +179,7 @@ void startHost(enum ipl_type iplType = IPL_TYPE_NORMAL)
         phal_init();
         ipl_set_type(iplType);
     }
-    catch (std::exception& ex)
+    catch (const std::exception& ex)
     {
         log<level::ERR>("Exception raised during init PHAL",
                         entry("EXCEPTION=%s", ex.what()));

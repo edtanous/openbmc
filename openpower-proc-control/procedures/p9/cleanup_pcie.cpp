@@ -51,7 +51,7 @@ void cleanupPcie()
             {
                 writeReg(target, P9_ROOT_CTRL1_CLEAR, 0x00001C00);
             }
-            catch (std::exception& e)
+            catch (const std::exception& e)
             {
                 // Don't need an error log coming from the power off
                 // path, just keep trying on the other processors.
@@ -59,7 +59,7 @@ void cleanupPcie()
             }
         }
     }
-    catch (file_error::Open& e)
+    catch (const file_error::Open& e)
     {
         // For this procedure we can ignore the ::Open error
     }

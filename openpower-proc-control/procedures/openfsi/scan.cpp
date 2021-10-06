@@ -52,7 +52,7 @@ static void doScan(const std::string& path)
         file.open(path);
         file << "1";
     }
-    catch (std::exception& e)
+    catch (const std::exception& e)
     {
         auto err = errno;
         throw std::system_error(err, std::generic_category());
@@ -78,7 +78,7 @@ void scan()
     {
         doScan(masterScanPath);
     }
-    catch (std::system_error& e)
+    catch (const std::system_error& e)
     {
         log<level::ERR>("Failed to run the FSI master scan");
 
@@ -104,7 +104,7 @@ void scan()
     {
         doScan(hubScanPath);
     }
-    catch (std::system_error& e)
+    catch (const std::system_error& e)
     {
         // If the device driver is ever updated in the future to fail the sysfs
         // write call on a scan failure then it should also provide some hints

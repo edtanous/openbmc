@@ -492,7 +492,7 @@ void processBootError(bool status)
         openpower::pel::createBootErrorPEL(pelAdditionalData,
                                            jsonCalloutDataList);
     }
-    catch (std::exception& ex)
+    catch (const std::exception& ex)
     {
         reset();
         throw ex;
@@ -595,7 +595,7 @@ static inline uint8_t getLogLevelFromEnv(const char* env, const uint8_t dValue)
             logLevel = std::stoi(env_p);
         }
     }
-    catch (std::exception& e)
+    catch (const std::exception& e)
     {
         log<level::ERR>(("Conversion Failure"), entry("ENVIRONMENT=%s", env),
                         entry("EXCEPTION=%s", e.what()));

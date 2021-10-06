@@ -92,7 +92,7 @@ Targeting::Targeting(const std::string& fsiMasterDev,
             }
         }
     }
-    catch (std::filesystem::filesystem_error& e)
+    catch (const std::filesystem::filesystem_error& e)
     {
         using metadata = xyz::openbmc_project::Common::File::Open;
 

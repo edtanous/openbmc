@@ -70,42 +70,42 @@ int main(int argc, char** argv)
     {
         procedure->second();
     }
-    catch (file_error::Seek& e)
+    catch (const file_error::Seek& e)
     {
         commit<file_error::Seek>();
         return -1;
     }
-    catch (file_error::Open& e)
+    catch (const file_error::Open& e)
     {
         commit<file_error::Open>();
         return -1;
     }
-    catch (device_error::WriteFailure& e)
+    catch (const device_error::WriteFailure& e)
     {
         commit<device_error::WriteFailure>();
         return -1;
     }
-    catch (device_error::ReadFailure& e)
+    catch (const device_error::ReadFailure& e)
     {
         commit<device_error::ReadFailure>();
         return -1;
     }
-    catch (common_error::InvalidArgument& e)
+    catch (const common_error::InvalidArgument& e)
     {
         commit<common_error::InvalidArgument>();
         return -1;
     }
-    catch (fsi_error::MasterDetectionFailure& e)
+    catch (const fsi_error::MasterDetectionFailure& e)
     {
         commit<fsi_error::MasterDetectionFailure>();
         return -1;
     }
-    catch (fsi_error::SlaveDetectionFailure& e)
+    catch (const fsi_error::SlaveDetectionFailure& e)
     {
         commit<fsi_error::SlaveDetectionFailure>();
         return -1;
     }
-    catch (std::exception& e)
+    catch (const std::exception& e)
     {
         log<level::ERR>("exception raised", entry("EXCEPTION=%s", e.what()));
         return -1;

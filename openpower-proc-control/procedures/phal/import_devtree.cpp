@@ -82,7 +82,7 @@ void importDevtree()
             fs::remove_all(path);
         }
     }
-    catch (fs::filesystem_error& e)
+    catch (const fs::filesystem_error& e)
     { // Log message and continue. Data already applied successfully.
         log<level::ERR>(fmt::format("File({}) delete failed Error:({})",
                                     DEVTREE_EXP_FILE, e.what())

@@ -42,7 +42,7 @@ void checkHostRunning()
     {
         phal_init();
     }
-    catch (std::exception& ex)
+    catch (const std::exception& ex)
     {
         // This should "never" happen so just throw the exception and let
         // our systemd error handling process this
@@ -119,7 +119,7 @@ void clearHostRunning()
     {
         phal_init();
     }
-    catch (std::exception& ex)
+    catch (const std::exception& ex)
     {
         // This should "never" happen so just throw the exception and let
         // our systemd error handling process this

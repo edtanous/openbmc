@@ -23,7 +23,7 @@ int main()
         // Watch for software update
         eventRet = event.loop();
     }
-    catch (std::exception& e)
+    catch (const std::exception& e)
     {
         using namespace phosphor::logging;
         log<level::ERR>(

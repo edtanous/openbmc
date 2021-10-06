@@ -91,7 +91,7 @@ void Watch::fwIntfAddedCallback(sdbusplus::message::message& msg)
             // Colect device tree data
             openpower::phal::fwupdate::exportDevtree();
         }
-        catch (fs::filesystem_error& e)
+        catch (const fs::filesystem_error& e)
         {
             log<level::ERR>(
                 fmt::format("Filesystem error reported Error:({})", e.what())
