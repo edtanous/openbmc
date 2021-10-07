@@ -6,6 +6,16 @@
         <action attn_type="RE" config="01"/>
         <action attn_type="UCS" config="11"/>
     </local_fir>
+    <register name="NX_CQ_ERR_RPT_0">
+        <instance addr="0x020110A2" reg_inst="0"/>
+    </register>
+    <register name="NX_CQ_ERR_RPT_1">
+        <instance addr="0x020110A1" reg_inst="0"/>
+    </register>
+    <capture_group node_inst="0">
+        <capture_register reg_inst="0" reg_name="NX_CQ_ERR_RPT_0" />
+        <capture_register reg_inst="0" reg_name="NX_CQ_ERR_RPT_1" />
+    </capture_group>
     <bit pos="0">PBI internal parity error</bit>
     <bit pos="1">PowerBus CE error</bit>
     <bit pos="2">PowerBus UE error</bit>

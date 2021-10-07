@@ -6,17 +6,135 @@
         <action attn_type="RE" config="01"/>
         <action attn_type="SPA" config="10"/>
     </local_fir>
-    <bit pos="0">Correctable ECC error detected while consuming data from the PowerBus Data ramp.  See INT_CQ_ERR_INFO2 for details.</bit>
-    <bit pos="1">Uncorrectable ECC error detected while consuming data from the PowerBus Data ramp.  See INT_CQ_ERR_INFO2 for details.</bit>
-    <bit pos="2">Special uncorrectable ECC error detected while consuming data on the PowerBus Data ramp for a Master DMA Read or Master CI Read.</bit>
-    <bit pos="3">Correctable ECC error detected while reading the PowerBus Data In Array. See INT_CQ_ERR_INFO2 for details.</bit>
-    <bit pos="4">Uncorrectable ECC error detected while reading the PowerBus Data In Array.  See INT_CQ_ERR_INFO2 for details.</bit>
-    <bit pos="5">Correctable ECC error detected while reading the PowerBus Data Out  Array. See INT_CQ_ERR_INFO2 for details.</bit>
-    <bit pos="6">Uncorrectable ECC error detected while reading the PowerBus Data Out Array.  See INT_CQ_ERR_INFO2 for details.</bit>
-    <bit pos="7">Correctable ECC error detected while consuming data on the AIB Data Bus.  See INT_CQ_ERR_INFO2 for details.</bit>
-    <bit pos="8">Uncorrectable ECC error detected while consuming data on the AIB Data Bus.  See INT_CQ_ERR_INFO2 for details.</bit>
-    <bit pos="9">Received an unsolicited master Combined Response - The master cResp tTag(0:11) matched my topology ID and unit ID, but tTag(12:19) pointed to TxIDs</bit>
-    <bit pos="10">Received unsolicited PowerBus data - The rTag(0:11) of incoming PB data matched my topology ID and unit ID, but rTag(12:19) pointed to TxIDs that</bit>
+    <register name="INT_CQ_ERR_RPT_HOLD">
+        <instance addr="0x02010839" reg_inst="0"/>
+    </register>
+    <register name="INT_CQ_ERR_INFO1">
+        <instance addr="0x0201083B" reg_inst="0"/>
+    </register>
+    <register name="INT_CQ_ERR_INFO2">
+        <instance addr="0x0201083C" reg_inst="0"/>
+    </register>
+    <register name="INT_CQ_ERR_INFO3">
+        <instance addr="0x0201083D" reg_inst="0"/>
+    </register>
+    <register name="INT_PC_ERR0_WOF">
+        <instance addr="0x02010AC2" reg_inst="0"/>
+    </register>
+    <register name="INT_PC_ERR0_WOF_DETAIL">
+        <instance addr="0x02010AC3" reg_inst="0"/>
+    </register>
+    <register name="INT_PC_ERR0_FATAL">
+        <instance addr="0x02010AC4" reg_inst="0"/>
+    </register>
+    <register name="INT_PC_ERR0_RECOV">
+        <instance addr="0x02010AC5" reg_inst="0"/>
+    </register>
+    <register name="INT_PC_ERR0_INFO">
+        <instance addr="0x02010AC6" reg_inst="0"/>
+    </register>
+    <register name="INT_PC_ERR1_WOF">
+        <instance addr="0x02010ACA" reg_inst="0"/>
+    </register>
+    <register name="INT_PC_ERR1_WOF_DETAIL">
+        <instance addr="0x02010ACB" reg_inst="0"/>
+    </register>
+    <register name="INT_PC_ERR1_FATAL">
+        <instance addr="0x02010ACC" reg_inst="0"/>
+    </register>
+    <register name="INT_PC_ERR1_RECOV">
+        <instance addr="0x02010ACD" reg_inst="0"/>
+    </register>
+    <register name="INT_PC_ERR1_INFO">
+        <instance addr="0x02010ACE" reg_inst="0"/>
+    </register>
+    <register name="INT_PC_NXC_WOF_ERR">
+        <instance addr="0x02010AD2" reg_inst="0"/>
+    </register>
+    <register name="INT_PC_NXC_WOF_ERR_DETAIL">
+        <instance addr="0x02010AD3" reg_inst="0"/>
+    </register>
+    <register name="INT_PC_NXC_FATAL_ERR">
+        <instance addr="0x02010AD4" reg_inst="0"/>
+    </register>
+    <register name="INT_PC_NXC_RECOV_ERR">
+        <instance addr="0x02010AD5" reg_inst="0"/>
+    </register>
+    <register name="INT_PC_NXC_INFO_ERR">
+        <instance addr="0x02010AD6" reg_inst="0"/>
+    </register>
+    <register name="INT_VC_WOF_ERR_G0">
+        <instance addr="0x020109C2" reg_inst="0"/>
+    </register>
+    <register name="INT_VC_WOF_ERR_G0_DETAIL">
+        <instance addr="0x020109C3" reg_inst="0"/>
+    </register>
+    <register name="INT_VC_FATAL_ERR_G0">
+        <instance addr="0x020109C4" reg_inst="0"/>
+    </register>
+    <register name="INT_VC_RECOV_ERR_G0">
+        <instance addr="0x020109C5" reg_inst="0"/>
+    </register>
+    <register name="INT_VC_INFO_ERR_G0">
+        <instance addr="0x020109C6" reg_inst="0"/>
+    </register>
+    <register name="INT_VC_WOF_ERR_G1">
+        <instance addr="0x020109CA" reg_inst="0"/>
+    </register>
+    <register name="INT_VC_WOF_ERR_G1_DETAIL">
+        <instance addr="0x020109CB" reg_inst="0"/>
+    </register>
+    <register name="INT_VC_FATAL_ERR_G1">
+        <instance addr="0x020109CC" reg_inst="0"/>
+    </register>
+    <register name="INT_VC_RECOV_ERR_G1">
+        <instance addr="0x020109CD" reg_inst="0"/>
+    </register>
+    <register name="INT_VC_INFO_ERR_G1">
+        <instance addr="0x020109CE" reg_inst="0"/>
+    </register>
+    <capture_group node_inst="0">
+        <capture_register reg_inst="0" reg_name="INT_CQ_ERR_RPT_HOLD" />
+        <capture_register reg_inst="0" reg_name="INT_CQ_ERR_INFO1" />
+        <capture_register reg_inst="0" reg_name="INT_CQ_ERR_INFO2" />
+        <capture_register reg_inst="0" reg_name="INT_CQ_ERR_INFO3" />
+        <capture_register reg_inst="0" reg_name="INT_PC_ERR0_WOF" />
+        <capture_register reg_inst="0" reg_name="INT_PC_ERR0_WOF_DETAIL" />
+        <capture_register reg_inst="0" reg_name="INT_PC_ERR0_FATAL" />
+        <capture_register reg_inst="0" reg_name="INT_PC_ERR0_RECOV" />
+        <capture_register reg_inst="0" reg_name="INT_PC_ERR0_INFO" />
+        <capture_register reg_inst="0" reg_name="INT_PC_ERR1_WOF" />
+        <capture_register reg_inst="0" reg_name="INT_PC_ERR1_WOF_DETAIL" />
+        <capture_register reg_inst="0" reg_name="INT_PC_ERR1_FATAL" />
+        <capture_register reg_inst="0" reg_name="INT_PC_ERR1_RECOV" />
+        <capture_register reg_inst="0" reg_name="INT_PC_ERR1_INFO" />
+        <capture_register reg_inst="0" reg_name="INT_PC_NXC_WOF_ERR" />
+        <capture_register reg_inst="0" reg_name="INT_PC_NXC_WOF_ERR_DETAIL" />
+        <capture_register reg_inst="0" reg_name="INT_PC_NXC_FATAL_ERR" />
+        <capture_register reg_inst="0" reg_name="INT_PC_NXC_RECOV_ERR" />
+        <capture_register reg_inst="0" reg_name="INT_PC_NXC_INFO_ERR" />
+        <capture_register reg_inst="0" reg_name="INT_VC_WOF_ERR_G0" />
+        <capture_register reg_inst="0" reg_name="INT_VC_WOF_ERR_G0_DETAIL" />
+        <capture_register reg_inst="0" reg_name="INT_VC_FATAL_ERR_G0" />
+        <capture_register reg_inst="0" reg_name="INT_VC_RECOV_ERR_G0" />
+        <capture_register reg_inst="0" reg_name="INT_VC_INFO_ERR_G0" />
+        <capture_register reg_inst="0" reg_name="INT_VC_WOF_ERR_G1" />
+        <capture_register reg_inst="0" reg_name="INT_VC_WOF_ERR_G1_DETAIL" />
+        <capture_register reg_inst="0" reg_name="INT_VC_FATAL_ERR_G1" />
+        <capture_register reg_inst="0" reg_name="INT_VC_RECOV_ERR_G1" />
+        <capture_register reg_inst="0" reg_name="INT_VC_INFO_ERR_G1" />
+    </capture_group>
+    <bit pos="0">CE while consuming data from the PowerBus Data ramp</bit>
+    <bit pos="1">UE while consuming data from the PowerBus Data ramp</bit>
+    <bit pos="2">SUE while consuming data from the PowerBus Data ramp</bit>
+    <bit pos="3">CE while reading the PowerBus Data In Array</bit>
+    <bit pos="4">UE detected while reading the PowerBus Data In Array</bit>
+    <bit pos="5">CE while reading the PowerBus Data Out Array</bit>
+    <bit pos="6">UE while reading the PowerBus Data Out Array</bit>
+    <bit pos="7">CE while consuming data on the AIB Data Bus</bit>
+    <bit pos="8">UE while consuming data on the AIB Data Bus</bit>
+    <bit pos="9">Received an unsolicited master Combined Response</bit>
+    <bit pos="10">Received unsolicited PowerBus data</bit>
     <bit pos="11">Parity error detected on AIB credit signals from PC</bit>
     <bit pos="12">Parity error detected on AIB credit available signals from PC</bit>
     <bit pos="13">Parity error detected on AIB credit signals from VC</bit>
@@ -24,31 +142,31 @@
     <bit pos="15">Parity error detected on AIB Command Control</bit>
     <bit pos="16">Parity error detected on AIB Command Bus</bit>
     <bit pos="17">Parity error detected on AIB Data Control</bit>
-    <bit pos="18">Parity error detected on one of the following PowerBus interfaces (Rcmdx, cRespx, Data rtag).  See INT_CQ_ERR_INFO0 for details.</bit>
-    <bit pos="19">Slave CI Store or CI Load to an improper location.  This includes a Read targeting a WO space, a Write targeting a RO space, or targeting reserved</bit>
-    <bit pos="20">Slave CI Store or CI Load to an invalid Set Translation Table entry (that are associated with the NVPG, NVC, ESB and END BARs).</bit>
-    <bit pos="21">Slave CI Store or CI Load (that targets the IC_BAR) with a size violation, alignment problem, or comes from an unsupported source.</bit>
-    <bit pos="22">Slave CI Store or CI Load (that does not target the IC_BAR) with a size violation, alignment problem or comes from an unsupported source.</bit>
-    <bit pos="23">Migration Register Table (MRT) access - invalid entry selected.</bit>
-    <bit pos="24">Migration Register Table (MRT) access - The Table Size received in the AIB command is greater than the Target Page Size in the MRT entry.</bit>
+    <bit pos="18">Parity err detected in a PowerBus interface(Rcmdx, cRespx, Data rtag)</bit>
+    <bit pos="19">Slave CI Store or CI Load to an improper location</bit>
+    <bit pos="20">Slave CI Store or CI Load to an invalid Set Translation Table entry</bit>
+    <bit pos="21">Slave CI Store or CI Load error (targeting IC_BAR)</bit>
+    <bit pos="22">Slave CI Store or CI Load error (not targetting IC_BAR)</bit>
+    <bit pos="23">Migration Register Table (MRT) access - invalid entry selected</bit>
+    <bit pos="24">Migration Register Table (MRT) access - size error</bit>
     <bit pos="25">SCOM satellite error</bit>
-    <bit pos="26">Topology ID Index Translation Table Entry Invalid - When INT initiates a master op (Read or Write) on the PowerBus, in determining the initial</bit>
+    <bit pos="26">Topology ID Index Translation Table Entry Invalid</bit>
     <bit pos="27">Master Write Queue has flagged a PowerBus operational hang</bit>
     <bit pos="28">Master Read Queue has flagged a PowerBus operational hang</bit>
     <bit pos="29">Master Interrupt Queue has flagged a PowerBus operational hang</bit>
     <bit pos="30">Master Read Queue has flagged a PowerBus data hang</bit>
     <bit pos="31">CI Store Queue has flagged a PowerBus data hang</bit>
-    <bit pos="32">CI Load Queue has flagged an AIB data hang - Once a CI Load request has been sent on AIB, I use the PowerBus data hang timer mechanism (the</bit>
-    <bit pos="33">Bad cResp received during a Master Write command.</bit>
-    <bit pos="34">Bad cResp received during a Master Read command.</bit>
-    <bit pos="35">Bad cResp received during a Master Interrupt command.</bit>
-    <bit pos="36">A Master Read machine received cResp of abort_trm or abort_trm_ed. In addition to setting this error bit, the Read machine behaved as if the cResp was</bit>
-    <bit pos="37">Master Interrupt Protocol Error - The PowerBus cResp to a master interrupt command was a response that should never happen.  In the P10 INT Workbook,</bit>
-    <bit pos="38">Master Memory Op Targeted Secure Memory - VC or PC sent CQ a memory operation with the secure RA bit (bit 12) = 1 while SMF is enabled.</bit>
-    <bit pos="39">AIB Fence Raised - This bit is set whenever CQ, PC, or VC assert &quot;AIB Fence&quot;.  This bit is useful to know if AIB fence was raised before another FIR</bit>
-    <bit pos="40">Parity error detected on CQs configuration registers.</bit>
-    <bit pos="41">Reserved</bit>
-    <bit pos="42">Command Queue (FSM) severe error summary.  See INT_CQ_ERR_INFO3 for details.  This includes queue overflows and FSM parity errors.</bit>
+    <bit pos="32">CI Load Queue has flagged an AIB data hang</bit>
+    <bit pos="33">Bad cResp received during a Master Write command</bit>
+    <bit pos="34">Bad cResp received during a Master Read command</bit>
+    <bit pos="35">Bad cResp received during a Master Interrupt command</bit>
+    <bit pos="36">A Master Read machine received cResp of abort_trm or abort_trm_ed</bit>
+    <bit pos="37">Master Interrupt Protocol Error</bit>
+    <bit pos="38">Master Memory Op Targeted Secure Memory</bit>
+    <bit pos="39">AIB Fence Raised</bit>
+    <bit pos="40">Parity error detected on CQs configuration registers</bit>
+    <bit pos="41">reserved</bit>
+    <bit pos="42">Command Queue (FSM) severe error summary</bit>
     <bit pos="43">PC fatal error summary, as indicated on pc_cq_fatal_error(0:3)</bit>
     <bit pos="44">PC fatal error summary, as indicated on pc_cq_fatal_error(0:3)</bit>
     <bit pos="45">PC fatal error summary, as indicated on pc_cq_fatal_error(0:3)</bit>

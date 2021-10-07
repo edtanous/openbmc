@@ -6,52 +6,62 @@
         <action attn_type="RE" config="01"/>
         <action attn_type="UCS" config="11"/>
     </local_fir>
-    <bit pos="0">DMA Hang Timer FIR bit</bit>
-    <bit pos="1">SHM invalid state error FIR bit</bit>
-    <bit pos="2">Reserved FIR bit 2</bit>
-    <bit pos="3">Reserved FIR bit 3</bit>
-    <bit pos="4">Channel 0 842 array corrected ECC error FIR bit</bit>
-    <bit pos="5">Channel 0 842 array uncorrectable ECC error FIR bit</bit>
-    <bit pos="6">Channel 1 842 array corrected ECC error FIR bit</bit>
-    <bit pos="7">Channel 1 842 array uncorrectable ECC error FIR bit</bit>
-    <bit pos="8">DMA non-zero CSB CC detected FIR bit. Lab use only. Masked.</bit>
-    <bit pos="9">DMA array correctable ECC error FIR bit</bit>
-    <bit pos="10">DMA outbound write/inbound read correctable ECC error FIR bit</bit>
-    <bit pos="11">Channel 4 Gzip array corrected ECC error FIR bit</bit>
-    <bit pos="12">Channel 4 Gzip array corrected ECC error FIR bit</bit>
-    <bit pos="13">Channel 4 Gzip array parity error FIR bit</bit>
-    <bit pos="14">Error from other SCOM satellites FIR bit</bit>
-    <bit pos="15">DMA invalid state error FIR bit</bit>
-    <bit pos="16">DMA invalid state error FIR bit. Unrecoverable despite name</bit>
-    <bit pos="17">DMA array uncorrectable ECC error FIR bit</bit>
-    <bit pos="18">DMA outbound write/inbound read uncorrectable ECC error FIR bit</bit>
-    <bit pos="19">DMA inbound read error FIR bit</bit>
-    <bit pos="20">Channel 0 842 invalid state error FIR bit</bit>
-    <bit pos="21">Channel 1 842 invalid state error FIR bit</bit>
-    <bit pos="22">Channel 2 SYM invalid state error FIR bit</bit>
-    <bit pos="23">Channel 3 SYMinvalid state error FIR bit</bit>
-    <bit pos="24">Channel 4 Gzip invalid state error FIR bit</bit>
-    <bit pos="25">Reserved FIR bit 25</bit>
-    <bit pos="26">Reserved FIR bit 26</bit>
-    <bit pos="27">Reserved FIR bit 27</bit>
-    <bit pos="28">Reserved FIR bit 28</bit>
-    <bit pos="29">Reserved FIR bit 29</bit>
-    <bit pos="30">Reserved FIR bit 30</bit>
-    <bit pos="31">UE error on CRB QW0 or QW4 FIR bit</bit>
-    <bit pos="32">SUE error on CRB QW0 or QW4 FIR bit</bit>
-    <bit pos="33">SUE error on something other than CRB QW0 or QW4 FIR bit</bit>
-    <bit pos="34">Channel 0 842 watchdog timer expired FIR bit</bit>
-    <bit pos="35">Channel 1 842 watchdog timer expired FIR bit</bit>
-    <bit pos="36">Channel 2 SYM watchdog timer expired FIR bit</bit>
-    <bit pos="37">Channel 3 SYM watchdog timer expired FIR bit</bit>
-    <bit pos="38">Reserved FIR bit 38. Hypervisor can use to signal local xstop to FSP.</bit>
-    <bit pos="39">Channel 4 Gzip watchdog timer expired FIR bit</bit>
-    <bit pos="40">Reserved FIR bit 40</bit>
-    <bit pos="41">Reserved FIR bit 41</bit>
-    <bit pos="42">Reserved FIR bit 42</bit>
-    <bit pos="43">Reserved FIR bit 43</bit>
-    <bit pos="44">Reserved FIR bit 44</bit>
-    <bit pos="45">Reserved FIR bit 45</bit>
-    <bit pos="46">Reserved FIR bit 46</bit>
-    <bit pos="47">Reserved FIR bit 47</bit>
+    <register name="SU_DMA_ERROR_REPORT_0">
+        <instance addr="0x02011057" reg_inst="0"/>
+    </register>
+    <register name="SU_DMA_ERROR_REPORT_1">
+        <instance addr="0x02011058" reg_inst="0"/>
+    </register>
+    <capture_group node_inst="0">
+        <capture_register reg_inst="0" reg_name="SU_DMA_ERROR_REPORT_0" />
+        <capture_register reg_inst="0" reg_name="SU_DMA_ERROR_REPORT_1" />
+    </capture_group>
+    <bit pos="0">DMA hang timer expired</bit>
+    <bit pos="1">SHM invalid state</bit>
+    <bit pos="2">reserved</bit>
+    <bit pos="3">reserved</bit>
+    <bit pos="4">Channel 0 842 engine ECC CE</bit>
+    <bit pos="5">Channel 0 842 engine ECC UE</bit>
+    <bit pos="6">Channel 1 842 engine ECC CE</bit>
+    <bit pos="7">Channel 1 842 engine ECC UE</bit>
+    <bit pos="8">DMA Non-zero CSB CC detected</bit>
+    <bit pos="9">DMA array ECC CE</bit>
+    <bit pos="10">DMA outbound write/inbound read ECC CE</bit>
+    <bit pos="11">Channel 4 GZIP ECC CE</bit>
+    <bit pos="12">Channel 4 GZIP ECC UE</bit>
+    <bit pos="13">Channel 4 GZIP ECC PE</bit>
+    <bit pos="14">Error from other SCOM satellites</bit>
+    <bit pos="15">DMA invalid state error (unrecoverable)</bit>
+    <bit pos="16">DMA invalid state error (unrecoverable)</bit>
+    <bit pos="17">DMA array ECC UE</bit>
+    <bit pos="18">DMA outbound write/inbound read ECC UE</bit>
+    <bit pos="19">DMA inbound read error</bit>
+    <bit pos="20">Channel 0 842 invalid state error</bit>
+    <bit pos="21">Channel 1 842 invalid state error</bit>
+    <bit pos="22">Channel 2 SYM invalid state error</bit>
+    <bit pos="23">Channel 3 SYM invalid state error</bit>
+    <bit pos="24">Channel 4 GZIP invalid state error</bit>
+    <bit pos="25">reserved</bit>
+    <bit pos="26">reserved</bit>
+    <bit pos="27">reserved</bit>
+    <bit pos="28">reserved</bit>
+    <bit pos="29">reserved</bit>
+    <bit pos="30">reserved</bit>
+    <bit pos="31">UE error on CRB QW0 or QW4</bit>
+    <bit pos="32">SUE error on CRB QW0 or QW4</bit>
+    <bit pos="33">SUE error on something other than CRB QW0 or QW4</bit>
+    <bit pos="34">Channel 0 842 watchdog timer expired</bit>
+    <bit pos="35">Channel 1 842 watchdog timer expired</bit>
+    <bit pos="36">Channel 2 SYM watchdog timer expired</bit>
+    <bit pos="37">Channel 3 SYM watchdog timer expired</bit>
+    <bit pos="38">Hypervisor local checkstop</bit>
+    <bit pos="39">Channel 4 Gzip watchdog timer expired</bit>
+    <bit pos="40">reserved</bit>
+    <bit pos="41">reserved</bit>
+    <bit pos="42">reserved</bit>
+    <bit pos="43">reserved</bit>
+    <bit pos="44">reserved</bit>
+    <bit pos="45">reserved</bit>
+    <bit pos="46">reserved</bit>
+    <bit pos="47">reserved</bit>
 </attn_node>
