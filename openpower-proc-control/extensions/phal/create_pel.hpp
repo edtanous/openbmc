@@ -25,14 +25,15 @@ using namespace openpower::phal;
 void createBootErrorPEL(const FFDCData& ffdcData, const json& calloutData);
 
 /**
- * @brief Create SBE boot error PEL
+ * @brief Create SBE boot error PEL and return id
  *
  * @param[in] event - the event type
  * @param[in] sbeError - SBE error object
  * @param[in] ffdcData - failure data to append to PEL
+ * @return Platform log id
  */
-void createSbeErrorPEL(const std::string& event, const sbeError_t& sbeError,
-                       const FFDCData& ffdcData);
+uint32_t createSbeErrorPEL(const std::string& event, const sbeError_t& sbeError,
+                           const FFDCData& ffdcData);
 
 /**
  * @brief Create a PEL for the specified event type and additional data

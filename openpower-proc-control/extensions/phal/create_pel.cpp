@@ -30,6 +30,7 @@ namespace pel
 
 constexpr auto loggingObjectPath = "/xyz/openbmc_project/logging";
 constexpr auto loggingInterface = "xyz.openbmc_project.Logging.Create";
+constexpr auto opLoggingInterface = "org.open_power.Logging.PEL";
 
 void createBootErrorPEL(const FFDCData& ffdcData, const json& calloutData)
 {
@@ -86,9 +87,10 @@ void createBootErrorPEL(const FFDCData& ffdcData, const json& calloutData)
     }
 }
 
-void createSbeErrorPEL(const std::string& event, const sbeError_t& sbeError,
-                       const FFDCData& ffdcData)
+uint32_t createSbeErrorPEL(const std::string& event, const sbeError_t& sbeError,
+                           const FFDCData& ffdcData)
 {
+    uint32_t plid = 0;
     std::map<std::string, std::string> additionalData;
     auto bus = sdbusplus::bus::new_default();
 
@@ -105,28 +107,43 @@ void createSbeErrorPEL(const std::string& event, const sbeError_t& sbeError,
         uint8_t, uint8_t, sdbusplus::message::unix_fd>>
         pelFFDCInfo;
 
-    // Refer phosphor-logging/extensions/openpower-pels/README.md section
-    // "Self Boot Engine(SBE) First Failure Data Capture(FFDC) Support"
-    // for details of related to createPEL with SBE FFDC information
-    // usin g CreateWithFFDCFiles api.
-    pelFFDCInfo.push_back(
-        std::make_tuple(sdbusplus::xyz::openbmc_project::Logging::server::
-                            Create::FFDCFormat::Custom,
-                        static_cast<uint8_t>(0xCB), static_cast<uint8_t>(0x01),
-                        sbeError.getFd()));
+    // get SBE ffdc file descriptor
+    auto fd = sbeError.getFd();
+
+    // Negative fd value indicates error case or invalid file
+    // No need of special processing , just log error with additional ffdc.
+    if (fd > 0)
+    {
+        // Refer phosphor-logging/extensions/openpower-pels/README.md section
+        // "Self Boot Engine(SBE) First Failure Data Capture(FFDC) Support"
+        // for details of related to createPEL with SBE FFDC information
+        // usin g CreateWithFFDCFiles api.
+        pelFFDCInfo.push_back(
+            std::make_tuple(sdbusplus::xyz::openbmc_project::Logging::server::
+                                Create::FFDCFormat::Custom,
+                            static_cast<uint8_t>(0xCB),
+                            static_cast<uint8_t>(0x01), sbeError.getFd()));
+    }
     try
     {
         std::string service =
-            util::getService(bus, loggingObjectPath, loggingInterface);
+            util::getService(bus, loggingObjectPath, opLoggingInterface);
         auto method =
             bus.new_method_call(service.c_str(), loggingObjectPath,
-                                loggingInterface, "CreateWithFFDCFiles");
+                                opLoggingInterface, "CreatePELWithFFDCFiles");
         auto level =
             sdbusplus::xyz::openbmc_project::Logging::server::convertForMessage(
                 sdbusplus::xyz::openbmc_project::Logging::server::Entry::Level::
                     Error);
         method.append(event, level, additionalData, pelFFDCInfo);
-        auto resp = bus.call(method);
+        auto response = bus.call(method);
+
+        // reply will be tuple containing bmc log id, platform log id
+        std::tuple<uint32_t, uint32_t> reply = {0, 0};
+
+        // parse dbus response into reply
+        response.read(reply);
+        plid = std::get<1>(reply); // platform log id is tuple "second"
     }
     catch (const sdbusplus::exception::exception& e)
     {
@@ -142,6 +159,8 @@ void createSbeErrorPEL(const std::string& event, const sbeError_t& sbeError,
     {
         throw e;
     }
+
+    return plid;
 }
 
 void createPEL(const std::string& event, const FFDCData& ffdcData)
