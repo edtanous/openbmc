@@ -29,8 +29,8 @@
     <bit pos="21">PSI global error bit 0</bit>
     <bit pos="22">PSI global error bit 1</bit>
     <bit pos="23">Upstream error</bit>
-    <bit pos="24">Spare fir</bit>
-    <bit pos="25">Spare fir</bit>
-    <bit pos="26">Spare fir</bit>
+    <bit pos="24">spare</bit>
+    <bit pos="25">spare</bit>
+    <bit pos="26">spare</bit>
     <bit pos="27">fir parity Error</bit>
 </attn_node>

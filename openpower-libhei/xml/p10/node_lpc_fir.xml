@@ -13,6 +13,6 @@
     <bit pos="5">the_OPB_Master_LS_was_not_able_to_end_the_requested_OPB_access_within_the_OPB_Master_LS_hang_timeout_time</bit>
     <bit pos="6">a parity_error_was_detected_in_the_OPB_Master_LS_command_buffer</bit>
     <bit pos="7">a parity_error_was_detected_in_the_OPB_Master_LS_data_buffer</bit>
-    <bit pos="8">reserved_bit_1_tied_to_zero</bit>
-    <bit pos="9">reserved_bit_0_tied_to_zero</bit>
+    <bit pos="8">spare</bit>
+    <bit pos="9">spare</bit>
 </attn_node>

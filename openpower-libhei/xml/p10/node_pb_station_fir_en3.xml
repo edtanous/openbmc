@@ -6,15 +6,21 @@
         <action attn_type="RE" config="01"/>
         <action attn_type="SPA" config="10"/>
     </local_fir>
+    <register name="PB_STATION_MODE_EN3">
+        <instance addr="0x0301128A" reg_inst="0"/>
+    </register>
+    <capture_group node_inst="0">
+        <capture_register reg_inst="0" reg_name="PB_STATION_MODE_EN1" />
+    </capture_group>
     <bit pos="0">protocol_error</bit>
     <bit pos="1">overflow_error</bit>
     <bit pos="2">hw_parity_error</bit>
-    <bit pos="3">fir_spare_3</bit>
+    <bit pos="3">spare</bit>
     <bit pos="4">coherency_error</bit>
     <bit pos="5">cresp_addr_error</bit>
     <bit pos="6">cresp_error</bit>
     <bit pos="7">hang_recovery_limit_error</bit>
-    <bit pos="8">fir_spare_8</bit>
+    <bit pos="8">spare</bit>
     <bit pos="9">hang_recovery_gte_level1</bit>
     <bit pos="10">force_mp_ipl</bit>
     <bit pos="11">pb_cmd_snooper_error</bit>

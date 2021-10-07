@@ -5,6 +5,12 @@
         <action attn_type="CS" config="00"/>
         <action attn_type="RE" config="01"/>
     </local_fir>
+    <register name="HCA_ERR_RPT_HOLD_REG">
+        <instance addr="0x03011D56" reg_inst="0"/>
+    </register>
+    <capture_group node_inst="0">
+        <capture_register reg_inst="0" reg_name="HCA_ERR_RPT_HOLD_REG" />
+    </capture_group>
     <bit pos="0">Powerbus rcmd address parity error</bit>
     <bit pos="1">Powerbus rcmd ttag parity error</bit>
     <bit pos="2">Powerbus cresp ttag parity error</bit>

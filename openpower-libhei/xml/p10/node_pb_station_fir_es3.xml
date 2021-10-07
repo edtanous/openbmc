@@ -6,6 +6,12 @@
         <action attn_type="RE" config="01"/>
         <action attn_type="SPA" config="10"/>
     </local_fir>
+    <register name="PB_STATION_MODE_ES3">
+        <instance addr="0x0301138A" reg_inst="0"/>
+    </register>
+    <capture_group node_inst="0">
+        <capture_register reg_inst="0" reg_name="PB_STATION_MODE_ES3" />
+    </capture_group>
     <bit pos="0">protocol_error</bit>
     <bit pos="1">overflow_error</bit>
     <bit pos="2">hw_parity_error</bit>
