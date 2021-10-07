@@ -4,6 +4,7 @@ extern "C"
 }
 
 #include "create_pel.hpp"
+#include "dump_utils.hpp"
 #include "extensions/phal/common_utils.hpp"
 #include "phal_error.hpp"
 
@@ -555,21 +556,40 @@ void processSbeBootError()
         dumpIsRequired = true;
     }
 
+    std::string event;
+
     if ((sbeError.errType() == SBE_FFDC_NO_DATA) ||
         (sbeError.errType() == SBE_CMD_TIMEOUT) || (dumpIsRequired))
     {
-        // Create SBE Dump type error log and trigger Dump
-        openpower::pel::createPEL(
-            "org.open_power.Processor.Error.SbeBootTimeout", pelAdditionalData);
-        // TODO Add dump request
-        return;
+        event = "org.open_power.Processor.Error.SbeBootTimeout";
+        dumpIsRequired = true;
+    }
+    else
+    {
+        event = "org.open_power.Processor.Error.SbeBootFailure";
     }
     // SRC6 : [0:15] chip position
-    uint32_t word6 = pdbg_target_index(procTarget);
-    pelAdditionalData.emplace_back("SRC6", std::to_string(word6 << 16));
+    uint32_t index = pdbg_target_index(procTarget);
+    pelAdditionalData.emplace_back("SRC6", std::to_string(index << 16));
     // Create SBE Error with FFDC data.
-    createSbeErrorPEL("org.open_power.Processor.Error.SbeBootFailure", sbeError,
-                      pelAdditionalData);
+    auto logId = createSbeErrorPEL(event, sbeError, pelAdditionalData);
+
+    if (dumpIsRequired)
+    {
+        using namespace openpower::phal::dump;
+        DumpParameters dumpParameters = {logId, index, SBE_DUMP_TIMEOUT,
+                                         DumpType::SBE};
+        try
+        {
+            requestDump(dumpParameters);
+        }
+        catch (const std::runtime_error& e)
+        {
+            // Allowing call back to handle the error gracefully.
+            log<level::ERR>("Dump collection failed");
+            // TODO revist error handling.
+        }
+    }
 }
 
 void reset()
