@@ -89,6 +89,7 @@ if build_phal
         'extensions/phal/pdbg_utils.cpp',
         'extensions/phal/create_pel.cpp',
         'extensions/phal/phal_error.cpp',
+        'extensions/phal/dump_utils.cpp',
     ]
     extra_dependencies += [
         dependency('libdt-api'),
