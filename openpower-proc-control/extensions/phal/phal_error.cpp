@@ -272,15 +272,29 @@ void processIplErrorCallback(const ipl_error_info& errInfo)
         return;
     }
 
-    if (errInfo.type == IPL_ERR_SBE_BOOT)
+    if ((errInfo.type == IPL_ERR_SBE_BOOT) ||
+        (errInfo.type == IPL_ERR_SBE_CHIPOP))
     {
+        // handle SBE related failures.
         processSbeBootError();
         return;
     }
 
-    // TODO: Keeping the existing behaviour now
-    // Handle errors based on special reason codes once support is available
-    processBootError(false);
+    if (errInfo.type == IPL_ERR_HWP)
+    {
+        // Handle hwp failure
+        processBootError(false);
+        return;
+    }
+
+    // Log PEL for any other failures
+    if (errInfo.type != IPL_ERR_OK)
+    {
+        createPEL("org.open_power.PHAL.Error.Boot");
+        // reset trace log and exit
+        reset();
+        return;
+    }
 }
 
 void processBootError(bool status)
@@ -548,11 +562,12 @@ void processSbeBootError()
         // Capture FFDC information on primary processor
         sbeError = captureFFDC(procTarget);
     }
-    catch (const std::exception& e)
+    catch (const phalError_t& phalError)
     {
         // Fail to collect FFDC information , trigger Dump
         log<level::ERR>(
-            fmt::format("captureFFDC: Exception{}", e.what()).c_str());
+            fmt::format("captureFFDC: Exception({})", phalError.what())
+                .c_str());
         dumpIsRequired = true;
     }
 
