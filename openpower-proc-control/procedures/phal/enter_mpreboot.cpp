@@ -23,6 +23,7 @@ extern "C"
 }
 
 #include "extensions/phal/create_pel.hpp"
+#include "extensions/phal/dump_utils.hpp"
 
 #include <attributes_info.H>
 #include <fmt/format.h>
@@ -89,11 +90,15 @@ void sbeEnterMpReboot(struct pdbg_target* tgt)
         FFDCData pelAdditionalData;
         pelAdditionalData.emplace_back("SRC6",
                                        std::to_string((index << 16) | cmd));
-        createSbeErrorPEL(event, sbeError, pelAdditionalData);
+        auto logId = createSbeErrorPEL(event, sbeError, pelAdditionalData);
 
         if (dumpIsRequired)
         {
-            // TODO Request SBE Dump
+            // Request SBE Dump
+            using namespace openpower::phal::dump;
+            DumpParameters dumpParameters = {logId, index, SBE_DUMP_TIMEOUT,
+                                             DumpType::SBE};
+            requestDump(dumpParameters);
         }
         throw;
     }
