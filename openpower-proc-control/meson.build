@@ -69,6 +69,7 @@ if build_p9
         'procedures/p9/set_sync_fsi_clock_mode.cpp',
         'procedures/p9/start_host.cpp',
         'procedures/p9/start_host_mpreboot.cpp',
+        'procedures/p9/enter_mpreboot.cpp',
     ]
 endif
 if build_openfsi
@@ -83,6 +84,7 @@ if build_phal
         'procedures/phal/proc_pre_poweroff.cpp',
         'procedures/phal/check_host_running.cpp',
         'procedures/phal/import_devtree.cpp',
+        'procedures/phal/enter_mpreboot.cpp',
         'extensions/phal/common_utils.cpp',
         'extensions/phal/pdbg_utils.cpp',
         'extensions/phal/create_pel.cpp',
@@ -116,7 +118,6 @@ executable(
         'targeting.cpp',
         'procedures/common/cfam_overrides.cpp',
         'procedures/common/cfam_reset.cpp',
-        'procedures/common/enter_mpreboot.cpp',
         'procedures/common/collect_sbe_hb_data.cpp',
         'util.cpp',
     ] + extra_sources,
