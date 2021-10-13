@@ -60,6 +60,17 @@ void sbeEnterMpReboot(struct pdbg_target* tgt)
     }
     catch (const sbeError_t& sbeError)
     {
+        if (sbeError.errType() == SBE_CHIPOP_NOT_ALLOWED)
+        {
+            // SBE is not ready to accept chip-ops,
+            // Skip the request, no additional error handling required.
+            log<level::INFO>(
+                fmt::format("EnterMPIPL: Skipping ({}) on proc({})",
+                            sbeError.what(), pdbg_target_index(tgt))
+                    .c_str());
+            return;
+        }
+
         log<level::ERR>(fmt::format("EnterMPIPL failed({}) on proc({})",
                                     sbeError.what(), pdbg_target_index(tgt))
                             .c_str());
