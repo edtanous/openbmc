@@ -1,20 +1,12 @@
 #include <assert.h>
-#include <libpdbg.h>
 #include <unistd.h>
 
 #include <analyzer/ras-data/ras-data-parser.hpp>
 #include <analyzer/service_data.hpp>
 #include <attn/attn_dump.hpp>
 #include <hei_main.hpp>
-#include <phosphor-logging/log.hpp>
 #include <util/pdbg.hpp>
 #include <util/trace.hpp>
-
-#include <algorithm>
-#include <fstream>
-#include <iostream>
-#include <map>
-#include <string>
 
 namespace analyzer
 {
@@ -28,6 +20,15 @@ namespace analyzer
  * @param o_chips The returned list of active chips.
  */
 void initializeIsolator(std::vector<libhei::Chip>& o_chips);
+
+/**
+ * @brief  Will get the list of active chip and initialize the isolator.
+ * @param  i_isoData   The data gathered during isolation (for FFDC).
+ * @param  o_rootCause The returned root cause signature.
+ * @return True, if root cause has been found. False, otherwise.
+ */
+bool filterRootCause(const libhei::IsolationData& i_isoData,
+                     libhei::Signature& o_rootCause);
 
 /**
  * @brief Will create and submit a PEL using the given data.
@@ -69,59 +70,6 @@ const char* __attn(libhei::AttentionType_t i_attnType)
 
 //------------------------------------------------------------------------------
 
-bool __filterRootCause(const libhei::IsolationData& i_isoData,
-                       libhei::Signature& o_signature)
-{
-    // We'll need to make a copy of the list so that the original list is
-    // maintained for the log.
-    std::vector<libhei::Signature> sigList{i_isoData.getSignatureList()};
-
-    // For debug, trace out the original list of signatures before filtering.
-    for (const auto& sig : sigList)
-    {
-        trace::inf("Signature: %s 0x%0" PRIx32 " %s",
-                   util::pdbg::getPath(sig.getChip()), sig.toUint32(),
-                   __attn(sig.getAttnType()));
-    }
-
-    // Special and host attentions are not supported by this user application.
-    auto newEndItr =
-        std::remove_if(sigList.begin(), sigList.end(), [&](const auto& t) {
-            return (libhei::ATTN_TYPE_SP_ATTN == t.getAttnType() ||
-                    libhei::ATTN_TYPE_HOST_ATTN == t.getAttnType());
-        });
-
-    // Shrink the vector, if needed.
-    sigList.resize(std::distance(sigList.begin(), newEndItr));
-
-    // START WORKAROUND
-    // TODO: Filtering should be determined by the RAS Data Files provided by
-    //       the host firmware via the PNOR (similar to the Chip Data Files).
-    //       Until that support is available, use a rudimentary filter that
-    //       first looks for any recoverable attention, then any unit checkstop,
-    //       and then any system checkstop. This is built on the premise that
-    //       recoverable errors could be the root cause of an system checkstop
-    //       attentions. Fortunately, we just need to sort the list by the
-    //       greater attention type value.
-    std::sort(sigList.begin(), sigList.end(),
-              [&](const auto& a, const auto& b) {
-                  return a.getAttnType() > b.getAttnType();
-              });
-    // END WORKAROUND
-
-    // Check if a root cause attention was found.
-    if (!sigList.empty())
-    {
-        // The entry at the front of the list will be the root cause.
-        o_signature = sigList.front();
-        return true;
-    }
-
-    return false; // default, no active attentions found.
-}
-
-//------------------------------------------------------------------------------
-
 bool analyzeHardware(attn::DumpParameters& o_dumpParameters)
 {
     bool attnFound = false;
@@ -144,9 +92,17 @@ bool analyzeHardware(attn::DumpParameters& o_dumpParameters)
     libhei::IsolationData isoData{};
     libhei::isolate(chips, isoData);
 
+    // For debug, trace out the original list of signatures before filtering.
+    for (const auto& sig : isoData.getSignatureList())
+    {
+        trace::inf("Signature: %s 0x%0" PRIx32 " %s",
+                   util::pdbg::getPath(sig.getChip()), sig.toUint32(),
+                   __attn(sig.getAttnType()));
+    }
+
     // Filter for root cause attention.
     libhei::Signature rootCause{};
-    attnFound = __filterRootCause(isoData, rootCause);
+    attnFound = filterRootCause(isoData, rootCause);
 
     if (!attnFound)
     {
