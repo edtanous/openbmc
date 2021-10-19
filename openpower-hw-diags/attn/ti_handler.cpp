@@ -1,5 +1,6 @@
 #include <attn/attn_common.hpp>
 #include <attn/attn_dbus.hpp>
+#include <attn/attn_dump.hpp>
 #include <attn/attn_logging.hpp>
 #include <attn/pel/pel_common.hpp>
 #include <attn/ti_handler.hpp>
@@ -111,117 +112,54 @@ void handlePhypTi(TiDataArea* i_tiDataArea)
 }
 
 /**
- * @brief Handle a hostboot terminate immediate special attention
+ * @brief Handle a hostboot terminate immediate with SRC provided
  *
- * The TI info data area will contain information pertaining to the TI
- * condition. The course of action to take regarding the host state will
- * depend on the contents of the TI info data area. We will also create a
- * PEL containing the TI info data and FFDC data captured in the system
- * journal.
+ * The TI info will contain the log ID of the event log that has already been
+ * submitted by hostboot. In this case the attention handler does not need to
+ * create a PEL. A hostboot dump may be requested and the host will be
+ * transitioned.
  *
  * @param i_tiDataArea pointer to TI information filled in by hostboot
  */
-void handleHbTi(TiDataArea* i_tiDataArea)
+void handleHbTiWithEid(TiDataArea* i_tiDataArea)
 {
-    trace<level::INFO>("HB TI");
+    trace<level::INFO>("HB TI with PLID/EID");
 
-    bool hbDumpRequested = true; // HB dump is common case
-    bool generatePel     = true; // assume PEL will be created
-    bool terminateHost   = true; // transition host state
+    if (nullptr != i_tiDataArea)
+    {
+        // see if HB dump is requested
+        if (0 != i_tiDataArea->hbDumpFlag)
+        {
+            // retrieve log ID from TI info data
+            uint32_t logId = be32toh(i_tiDataArea->asciiData1);
+            requestDump(DumpParameters{logId, 0, DumpType::Hostboot});
+        }
+    }
+
+    util::dbus::transitionHost(util::dbus::HostState::Quiesce);
+}
+
+/**
+ * @brief Handle a hostboot terminate immediate with SRC provided
+ *
+ * The TI info will contain the reason code and additional data necessary
+ * to create a PEL on behalf of hostboot. A hostboot dump may be created
+ * (after generating the PEL) and the host may be transitioned depending
+ * on the reason code.
+ *
+ * @param i_tiDataArea pointer to TI information filled in by hostboot
+ */
+void handleHbTiWithSrc(TiDataArea* i_tiDataArea)
+{
+    trace<level::INFO>("HB TI with SRC");
 
     // handle specific hostboot reason codes
     if (nullptr != i_tiDataArea)
     {
-        std::stringstream ss; // stream object for tracing
-        std::string strobj;   // string object for tracing
+        // Reason code is byte 2 and 3 of 4 byte srcWord12HbWord0
+        uint16_t reasonCode = be32toh(i_tiDataArea->srcWord12HbWord0);
 
-        switch (i_tiDataArea->hbTerminateType)
-        {
-            case TI_WITH_PLID:
-            case TI_WITH_EID:
-
-                // trace this value
-                ss.str(std::string()); // empty the stream
-                ss.clear();            // clear the stream
-                ss << "TI with PLID/EID: " << std::hex << std::showbase
-                   << std::setw(8) << std::setfill('0')
-                   << be32toh(i_tiDataArea->asciiData1);
-                strobj = ss.str();
-                trace<level::INFO>(strobj.c_str());
-
-                // see if HB dump is requested
-                if (0 == i_tiDataArea->hbDumpFlag)
-                {
-                    hbDumpRequested = false; // no HB dump requested
-                }
-                break;
-            case TI_WITH_SRC:
-                // Reason code is byte 2 and 3 of 4 byte srcWord12HbWord0
-                uint16_t reasonCode = be32toh(i_tiDataArea->srcWord12HbWord0);
-
-                // trace this value
-                ss.str(std::string()); // empty the stream
-                ss.clear();            // clear the stream
-                ss << "TI with SRC: " << std::hex << std::showbase
-                   << std::setw(4) << std::setfill('0') << (int)reasonCode;
-                strobj = ss.str();
-                trace<level::INFO>(strobj.c_str());
-
-                switch (reasonCode)
-                {
-                    case HB_SRC_SHUTDOWN_REQUEST:
-                        trace<level::INFO>("shutdown request");
-                        generatePel     = false;
-                        hbDumpRequested = false;
-                        break;
-                    case HB_SRC_KEY_TRANSITION:
-                        // Note: Should never see this so lets leave
-                        // hbDumpRequested == true so we can figure out why
-                        // we are here.
-                        trace<level::INFO>("key transition");
-                        terminateHost = false;
-                        break;
-                    case HB_SRC_INSUFFICIENT_HW:
-                        trace<level::INFO>("insufficient hardware");
-                        break;
-                    case HB_SRC_TPM_FAIL:
-                        trace<level::INFO>("TPM fail");
-                        break;
-                    case HB_SRC_ROM_VERIFY:
-                        trace<level::INFO>("ROM verify");
-                        break;
-                    case HB_SRC_EXT_MISMATCH:
-                        trace<level::INFO>("EXT mismatch");
-                        break;
-                    case HB_SRC_ECC_UE:
-                        trace<level::INFO>("ECC UE");
-                        break;
-                    case HB_SRC_UNSUPPORTED_MODE:
-                        trace<level::INFO>("unsupported mode");
-                        break;
-                    case HB_SRC_UNSUPPORTED_SFCRANGE:
-                        trace<level::INFO>("unsupported SFC range");
-                        break;
-                    case HB_SRC_PARTITION_TABLE:
-                        trace<level::INFO>("partition table invalid");
-                        break;
-                    case HB_SRC_UNSUPPORTED_HARDWARE:
-                        trace<level::INFO>("unsupported hardware");
-                        break;
-                    case HB_SRC_PNOR_CORRUPTION:
-                        trace<level::INFO>("PNOR corruption");
-                        break;
-                    default:
-                        trace<level::INFO>("reason: other");
-                }
-
-                break; // case TI_WITH_SRC
-        }
-    }
-
-    if (true == generatePel)
-    {
-        if (nullptr != i_tiDataArea)
+        if (reasonCode != HB_SRC_SHUTDOWN_REQUEST)
         {
             // gather additional data for PEL
             std::map<std::string, std::string> tiAdditionalData;
@@ -240,21 +178,57 @@ void handleHbTi(TiDataArea* i_tiDataArea)
 
             // Request dump after generating event log?
             tiAdditionalData["Dump"] =
-                (true == hbDumpRequested) ? "true" : "false";
+                (0 != i_tiDataArea->hbDumpFlag) ? "true" : "false";
 
             // Generate event log
             eventTerminate(tiAdditionalData, (char*)i_tiDataArea);
         }
-        else
+
+        if (HB_SRC_KEY_TRANSITION != reasonCode)
         {
-            // TI data was not available This should not happen.
-            eventAttentionFail((int)AttnSection::handleHbTi | ATTN_INFO_NULL);
+            util::dbus::transitionHost(util::dbus::HostState::Quiesce);
         }
     }
-
-    if (true == terminateHost)
+    else
     {
-        util::dbus::transitionHost(util::dbus::HostState::Quiesce);
+        // TI data was not available, this should not happen
+        eventAttentionFail((int)AttnSection::handleHbTi | ATTN_INFO_NULL);
+    }
+}
+
+/**
+ * @brief Handle a hostboot terminate immediate special attention
+ *
+ * The TI info data area will contain information pertaining to the TI
+ * condition. The course of action to take regarding the host state will
+ * depend on the contents of the TI info data area. We will also create a
+ * PEL containing the TI info data and FFDC data captured in the system
+ * journal.
+ *
+ * @param i_tiDataArea pointer to TI information filled in by hostboot
+ */
+void handleHbTi(TiDataArea* i_tiDataArea)
+{
+    trace<level::INFO>("HB TI");
+
+    // handle specific hostboot reason codes
+    if (nullptr != i_tiDataArea)
+    {
+        uint8_t terminateType = i_tiDataArea->hbTerminateType;
+
+        if (TI_WITH_SRC == terminateType)
+        {
+            handleHbTiWithSrc(i_tiDataArea);
+        }
+        else
+        {
+            handleHbTiWithEid(i_tiDataArea);
+        }
+    }
+    else
+    {
+        // TI data was not available, this should not happen
+        eventAttentionFail((int)AttnSection::handleHbTi | ATTN_INFO_NULL);
     }
 }
 
