@@ -33,6 +33,15 @@ binaryblob.pb.h binaryblob.pb.cc: $(srcdir)/$(PROTOS_PATH)/binaryblob.proto
 
 BUILT_SOURCES = binaryblob.pb.h binaryblob.pb.cc
 
+bin_PROGRAMS =
+
+if BUILD_BLOBTOOL
+bin_PROGRAMS += blobtool
+blobtool_SOURCES = blobtool.cpp
+blobtool_LDADD = libbinarystore.la
+blobtool_LDFLAGS = -lprotobuf
+endif
+
 SUBDIRS = . test
 
 ACLOCAL_AMFLAGS = -I m4

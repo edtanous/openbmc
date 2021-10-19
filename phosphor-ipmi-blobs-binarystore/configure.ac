@@ -36,6 +36,17 @@ AC_ARG_ENABLE([oe-sdk],
     AS_HELP_STRING([--enable-oe-sdk], [Link testcases absolutely against OE SDK so they can be ran within it.])
 )
 
+# Add --disable-blobtool flag to configure script
+AC_ARG_ENABLE([blobtool],
+    AS_HELP_STRING([--disable-blobtool], [Disable blobtool, command line tool to inspect the blobs]),
+    [case "${enableval}" in
+        no) build_blobtool=false;;
+        *) build_blobtool=true;;
+    esac],
+    [build_blobtool=true]
+)
+AM_CONDITIONAL([BUILD_BLOBTOOL], [ test x${build_blobtool} = xtrue ])
+
 # Check for OECORE_TARGET_SYSROOT in the environment.
 AC_ARG_VAR(OECORE_TARGET_SYSROOT,
     [Path to the OE SDK SYSROOT])
