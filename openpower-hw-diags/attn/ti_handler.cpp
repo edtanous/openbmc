@@ -99,14 +99,16 @@ void handlePhypTi(TiDataArea* i_tiDataArea)
 
     // We are finished creating the event log entries so transition host to
     // the required state.
-    if (true == util::dbus::autoRebootEnabled())
+    if (true == util::dbus::dumpPolicyEnabled())
     {
-        // If autoreboot is enabled we will start crash (mpipl) mode target
+        // MPIPL is considered a "dump" so we will qualify this transition with
+        // the dumpPolicyEnabled property. MPIPL is triggered by by starting
+        // the host "crash" target.
         util::dbus::transitionHost(util::dbus::HostState::Crash);
     }
     else
     {
-        // If autoreboot is disabled we will quiesce the host
+        // If dumpPolicyEnabled property is disabled we will quiesce the host
         util::dbus::transitionHost(util::dbus::HostState::Quiesce);
     }
 }

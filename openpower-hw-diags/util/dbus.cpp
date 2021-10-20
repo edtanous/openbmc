@@ -198,15 +198,16 @@ void transitionHost(const HostState i_hostState)
     }
 }
 
-/** @brief Read state of autoreboot propertyi via dbus */
+/** @brief Read state of autoRebootEnabled property via dbus */
 bool autoRebootEnabled()
 {
-    bool autoReboot = false; // assume autoreboot attribute not available
+    // Assume true in case autoRebootEnbabled property is not available
+    bool autoReboot = true;
 
     constexpr auto interface = "xyz.openbmc_project.Control.Boot.RebootPolicy";
 
-    DBusService service;
-    DBusPath path;
+    DBusService service; // will find this
+    DBusPath path;       // will find this
 
     // find a dbus object and path that implements the interface
     if (0 == find(interface, path, service))
@@ -271,6 +272,35 @@ HostRunningState hostRunningState()
     }
 
     return host;
+}
+
+/** @brief Read state of dumpPolicyEnabled property via dbus */
+bool dumpPolicyEnabled()
+{
+    // Assume true In case dumpPolicyEnabled property is not available
+    bool dumpPolicyEnabled = true;
+
+    constexpr auto interface = "xyz.openbmc_project.Object.Enable";
+    constexpr auto path      = "/xyz/openbmc_project/dump/system_dump_policy";
+
+    DBusService service; // will find this
+
+    // find a dbus object and path that implements the interface
+    if (0 == findService(interface, path, service))
+    {
+        DBusValue value;
+
+        // autoreboot policy is implemented as a property
+        constexpr auto property = "Enabled";
+
+        if (0 == getProperty(interface, path, service, property, value))
+        {
+            // return value is a variant, dump policy enabled is a boolean
+            dumpPolicyEnabled = std::get<bool>(value);
+        }
+    }
+
+    return dumpPolicyEnabled;
 }
 
 } // namespace dbus

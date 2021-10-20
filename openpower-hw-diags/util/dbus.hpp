@@ -82,10 +82,9 @@ enum class HostState
 void transitionHost(const HostState i_hostState);
 
 /**
- * @brief Read autoreboot property
+ * @brief Read autoRebootEnabled property
  *
- * Read the autoreboot property via dbus. This status will be used to
- * determine whether to either mpipl or quiesce the host on TI condition.
+ * @return false if autoRebootEnabled policy false, else true
  */
 bool autoRebootEnabled();
 
@@ -106,6 +105,13 @@ enum class HostRunningState
  * @return HostType == "Unknown", "Started or "NotStarted"
  */
 HostRunningState hostRunningState();
+
+/**
+ * @brief Read dumpPolicyEnabled property
+ *
+ * @return false if dumpPolicyEnabled property is false, else true
+ */
+bool dumpPolicyEnabled();
 
 } // namespace dbus
 
