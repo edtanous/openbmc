@@ -13,8 +13,8 @@
 # limitations under the License.
 
 project(
-  'google-misc',
-  'c',
+  'gbmc-ncsid',
+  ['cpp', 'c'],
   version: '0.1',
   meson_version: '>=0.57.0',
   default_options: [
@@ -25,17 +25,10 @@ project(
     'tests=' + (meson.is_subproject() ? 'disabled' : 'auto'),
   ])
 
-# Dummy file to make code coverage happy
-executable('hello', 'hello.c')
+subdir('src')
 
-# Meson has no feature option to str...
-tests_str = get_option('tests').enabled() ? 'enabled' : 'disabled'
-if get_option('tests').auto()
-  tests_str = 'auto'
+build_tests = get_option('tests')
+
+if not build_tests.disabled()
+  subdir('test')
 endif
-
-subproject('acpi-power-state-daemon')
-subproject('ncsid', default_options: 'tests=' + tests_str)
-subproject('metrics-ipmi-blobs', default_options: 'tests=' + tests_str)
-subproject('nemora-postd')
-subproject('libcr51sign')
