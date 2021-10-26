@@ -17,8 +17,7 @@
 int slp::udp::Server::run()
 {
     struct sockaddr_in6 serverAddr
-    {
-    };
+    {};
 
     sd_event* event = nullptr;
 
