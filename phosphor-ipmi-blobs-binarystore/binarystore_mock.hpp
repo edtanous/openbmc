@@ -51,6 +51,11 @@ class MockBinaryStore : public BinaryStoreInterface
     MOCK_METHOD0(close, bool());
     MOCK_METHOD1(stat, bool(blobs::BlobMeta* meta));
 
+    std::vector<uint8_t> readBlob(const std::string& blobId) const override
+    {
+        return real_store_.readBlob(blobId);
+    }
+
   private:
     BinaryStore real_store_;
 };

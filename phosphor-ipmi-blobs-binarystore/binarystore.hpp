@@ -48,6 +48,11 @@ class BinaryStore : public BinaryStoreInterface
         blob_.set_blob_base_id(baseBlobId_);
     }
 
+    BinaryStore(std::unique_ptr<SysFile> file, bool readOnly = false) :
+        readOnly_{readOnly}, file_(std::move(file))
+    {
+    }
+
     ~BinaryStore() = default;
 
     BinaryStore(const BinaryStore&) = delete;
@@ -60,6 +65,7 @@ class BinaryStore : public BinaryStoreInterface
     bool openOrCreateBlob(const std::string& blobId, uint16_t flags) override;
     bool deleteBlob(const std::string& blobId) override;
     std::vector<uint8_t> read(uint32_t offset, uint32_t requestedSize) override;
+    std::vector<uint8_t> readBlob(const std::string& blobId) const override;
     bool write(uint32_t offset, const std::vector<uint8_t>& data) override;
     bool commit() override;
     bool close() override;
@@ -76,6 +82,17 @@ class BinaryStore : public BinaryStoreInterface
         createFromConfig(const std::string& baseBlobId,
                          std::unique_ptr<SysFile> file);
 
+    /**
+     * Helper factory method to create a BinaryStore instance
+     * This function should be used with existing stores. It reads
+     * the baseBlobId name from the storage.
+     * @param sysFile: system file object for storing binary
+     * @param readOnly: if true, open the store in read only mode
+     * @returns unique_ptr to constructed BinaryStore.
+     */
+    static std::unique_ptr<BinaryStoreInterface>
+        createFromFile(std::unique_ptr<SysFile> file, bool readOnly = true);
+
   private:
     /* Load the serialized data from sysfile if commit state is dirty.
      * Returns False if encountered error when loading */
@@ -84,7 +101,10 @@ class BinaryStore : public BinaryStoreInterface
     std::string baseBlobId_;
     binaryblobproto::BinaryBlobBase blob_;
     binaryblobproto::BinaryBlob* currentBlob_ = nullptr;
+    /* True if current blob is writable */
     bool writable_ = false;
+    /* True if the entire store (not just individual blobs) is read only */
+    bool readOnly_ = false;
     std::unique_ptr<SysFile> file_ = nullptr;
     CommitState commitState_ = CommitState::Dirty;
 };

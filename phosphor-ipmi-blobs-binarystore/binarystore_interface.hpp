@@ -61,6 +61,14 @@ class BinaryStoreInterface
                                       uint32_t requestedSize) = 0;
 
     /**
+     * Reads all data from the blob
+     * @param blobId: The blob id to operate on.
+     * @returns Bytes able to read. Returns empty if nothing can be read or
+     *          if there is no such blob.
+     */
+    virtual std::vector<uint8_t> readBlob(const std::string& blobId) const = 0;
+
+    /**
      * Writes data to the currently openend blob.
      * @param offset: offset into the blob to write
      * @param data: bytes to write

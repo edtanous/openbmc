@@ -19,7 +19,8 @@ check_PROGRAMS = \
 	handler_stat_unittest \
 	handler_open_unittest \
 	handler_readwrite_unittest \
-	handler_unittest
+	handler_unittest \
+	binarystore_unittest
 TESTS = $(check_PROGRAMS)
 
 parse_config_unittest_SOURCES = parse_config_unittest.cpp
@@ -71,3 +72,10 @@ handler_readwrite_unittest_LDADD = $(PHOSPHOR_LOGGING_LIBS) \
 	$(top_builddir)/libbinarystore_la-binaryblob.pb.o \
 	-lprotobuf
 handler_readwrite_unittest_CXXFLAGS = $(PHOSPHOR_LOGGING_CFLAGS)
+
+binarystore_unittest_SOURCES = binarystore_unittest.cpp
+binarystore_unittest_LDADD = $(PHOSPHOR_LOGGING_LIBS) \
+	$(top_builddir)/binarystore.o \
+	$(top_builddir)/libbinarystore_la-binaryblob.pb.o \
+	-lprotobuf
+binarystore_unittest_CXXFLAGS = $(PHOSPHOR_LOGGING_CFLAGS)

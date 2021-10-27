@@ -9,6 +9,7 @@
 #include <blobs-ipmid/blobs.hpp>
 #include <boost/endian/arithmetic.hpp>
 #include <cstdint>
+#include <ipmid/handler.hpp>
 #include <memory>
 #include <phosphor-logging/elog.hpp>
 #include <string>
@@ -39,6 +40,25 @@ std::unique_ptr<BinaryStoreInterface>
     }
 
     auto store = std::make_unique<BinaryStore>(baseBlobId, std::move(file));
+
+    if (!store->loadSerializedData())
+    {
+        return nullptr;
+    }
+
+    return std::move(store);
+}
+
+std::unique_ptr<BinaryStoreInterface>
+    BinaryStore::createFromFile(std::unique_ptr<SysFile> file, bool readOnly)
+{
+    if (!file)
+    {
+        log<level::ERR>("Unable to create binarystore from invalid file");
+        return nullptr;
+    }
+
+    auto store = std::make_unique<BinaryStore>(std::move(file), readOnly);
 
     if (!store->loadSerializedData())
     {
@@ -93,7 +113,7 @@ bool BinaryStore::loadSerializedData()
         return true;
     }
 
-    if (blob_.blob_base_id() != baseBlobId_)
+    if (blob_.blob_base_id() != baseBlobId_ && !readOnly_)
     {
         /* Uh oh, stale data loaded. Clean it and commit. */
         // TODO: it might be safer to add an option in config to error out
@@ -111,13 +131,18 @@ bool BinaryStore::loadSerializedData()
 
 std::string BinaryStore::getBaseBlobId() const
 {
-    return baseBlobId_;
+    if (!baseBlobId_.empty())
+    {
+        return baseBlobId_;
+    }
+
+    return blob_.blob_base_id();
 }
 
 std::vector<std::string> BinaryStore::getBlobIds() const
 {
     std::vector<std::string> result;
-    result.push_back(baseBlobId_);
+    result.push_back(getBaseBlobId());
 
     for (const auto& blob : blob_.blobs())
     {
@@ -144,6 +169,13 @@ bool BinaryStore::openOrCreateBlob(const std::string& blobId, uint16_t flags)
         return false;
     }
 
+    if (readOnly_ && (flags & blobs::OpenFlags::write))
+    {
+        log<level::ERR>("Can't open the blob for writing: read-only store",
+                        entry("BLOB_ID=%s", blobId.c_str()));
+        return false;
+    }
+
     writable_ = flags & blobs::OpenFlags::write;
 
     /* If there are uncommitted data, discard them. */
@@ -166,11 +198,20 @@ bool BinaryStore::openOrCreateBlob(const std::string& blobId, uint16_t flags)
     }
 
     /* Otherwise, create the blob and append it */
-    currentBlob_ = blob_.add_blobs();
-    currentBlob_->set_blob_id(blobId);
+    if (readOnly_)
+    {
+        return false;
+    }
+    else
+    {
+        currentBlob_ = blob_.add_blobs();
+        currentBlob_->set_blob_id(blobId);
 
-    commitState_ = CommitState::Dirty;
-    log<level::NOTICE>("Created new blob", entry("BLOB_ID=%s", blobId.c_str()));
+        commitState_ = CommitState::Dirty;
+        log<level::NOTICE>("Created new blob",
+                           entry("BLOB_ID=%s", blobId.c_str()));
+    }
+
     return true;
 }
 
@@ -208,6 +249,23 @@ std::vector<uint8_t> BinaryStore::read(uint32_t offset, uint32_t requestedSize)
     return result;
 }
 
+std::vector<uint8_t> BinaryStore::readBlob(const std::string& blobId) const
+{
+    const auto blobs = blob_.blobs();
+    const auto blobIt =
+        std::find_if(blobs.begin(), blobs.end(),
+                     [&](const auto& b) { return b.blob_id() == blobId; });
+
+    if (blobIt == blobs.end())
+    {
+        throw ipmi::HandlerCompletion(ipmi::ccUnspecifiedError);
+    }
+
+    const auto blobData = blobIt->data();
+
+    return std::vector<uint8_t>(blobData.begin(), blobData.end());
+}
+
 bool BinaryStore::write(uint32_t offset, const std::vector<uint8_t>& data)
 {
     if (!currentBlob_)
@@ -242,6 +300,12 @@ bool BinaryStore::write(uint32_t offset, const std::vector<uint8_t>& data)
 
 bool BinaryStore::commit()
 {
+    if (readOnly_)
+    {
+        log<level::ERR>("ReadOnly blob, not committing");
+        return false;
+    }
+
     /* Store as little endian to be platform agnostic. Consistent with read. */
     auto blobData = blob_.SerializeAsString();
     boost::endian::little_uint64_t sizeLE = blobData.size();
