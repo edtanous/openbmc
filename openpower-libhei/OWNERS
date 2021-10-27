@@ -35,25 +35,21 @@ owners:
 - zshelle@us.ibm.com
 
 reviewers:
+- austinfcui@gmail.com
 - ben.tyner@ibm.com
-- bjs@us.ibm.com
 - cnpalmer@us.ibm.com
-- paul.greenwood@ibm.com
 
 matches:
 
 openbmc:
+- name: Austin Cui
+  email: austinfcui@gmail.com
+  discord: NA
 - name: Ben Tyner
   email: ben.tyner@ibm.com
   discord: bentyner
-- name: Brian Stegmiller
-  email: bjs@us.ibm.com
-  discord: NA
 - name: Caleb Palmer
   email: cnpalmer@us.ibm.com
-  discord: NA
-- name: Paul Greenwood
-  email: paul.greenwood@ibm.com
   discord: NA
 - name: Zane Shelley
   email: zshelle@us.ibm.com
