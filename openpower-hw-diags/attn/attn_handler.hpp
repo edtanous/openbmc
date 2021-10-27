@@ -6,9 +6,10 @@ namespace attn
 {
 
 /** @brief Attention global status bits */
-constexpr uint32_t SBE_ATTN       = 0x00000002;
-constexpr uint32_t CHECKSTOP_ATTN = 0x40000000;
-constexpr uint32_t SPECIAL_ATTN   = 0x20000000;
+constexpr uint32_t SBE_ATTN         = 0x00000002;
+constexpr uint32_t CHECKSTOP_ATTN   = 0x40000000;
+constexpr uint32_t SPECIAL_ATTN     = 0x20000000;
+constexpr uint32_t RECOVERABLE_ATTN = 0x10000000;
 
 // Need to add defaultOpalTiInfo with SRC BB821410 (ascii)
 

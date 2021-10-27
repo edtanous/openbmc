@@ -1,6 +1,7 @@
 #include <libpdbg.h>
 
 #include <attn/attn_common.hpp>
+#include <attn/attn_handler.hpp>
 #include <attn/attn_logging.hpp>
 #include <sdbusplus/bus.hpp>
 #include <util/pdbg.hpp>
@@ -88,5 +89,72 @@ void addHbStatusRegs()
     return;
 
 } // end addHbStatusRegs
+
+/** @brief Check for recoverable errors present */
+bool recoverableErrors()
+{
+    bool recoverableErrors = false; // assume no recoverable attentions
+
+    pdbg_target* target;
+    pdbg_for_each_class_target("proc", target)
+    {
+        if (PDBG_TARGET_ENABLED == pdbg_target_probe(target))
+        {
+            auto proc = pdbg_target_index(target); // get processor number
+
+            // Use PIB target to determine if a processor is enabled
+            char path[16];
+            sprintf(path, "/proc%d/pib", proc);
+            pdbg_target* pibTarget = pdbg_target_from_path(nullptr, path);
+
+            // sanity check
+            if (nullptr == pibTarget)
+            {
+                trace<level::INFO>("pib path or target not found");
+                continue;
+            }
+
+            // check if pib target is enabled - indicates proc is enabled
+            if (PDBG_TARGET_ENABLED == pdbg_target_probe(pibTarget))
+            {
+                // The processor FSI target is required for CFAM read
+                sprintf(path, "/proc%d/fsi", proc);
+                pdbg_target* fsiTarget = pdbg_target_from_path(nullptr, path);
+
+                // sanity check
+                if (nullptr == fsiTarget)
+                {
+                    trace<level::INFO>("fsi path or target not found");
+                    continue;
+                }
+
+                uint32_t isr_val = 0xffffffff; // invalid isr value
+
+                // get active attentions on processor
+                if (RC_SUCCESS != fsi_read(fsiTarget, 0x1007, &isr_val))
+                {
+                    // log cfam read error
+                    trace<level::ERROR>("Error! cfam read 0x1007 FAILED");
+                    eventAttentionFail((int)AttnSection::attnHandler |
+                                       ATTN_PDBG_CFAM);
+                }
+                // check for invalid/stale value
+                else if (0xffffffff == isr_val)
+                {
+                    trace<level::ERROR>("Error! cfam read 0x1007 INVALID");
+                    continue;
+                }
+                // check recoverable error status bit
+                else if (0 != (isr_val & RECOVERABLE_ATTN))
+                {
+                    recoverableErrors = true;
+                    break;
+                }
+            } // fsi target enabled
+        }     // pib target enabled
+    }         // next processor
+
+    return recoverableErrors;
+}
 
 } // namespace attn

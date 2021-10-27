@@ -104,5 +104,10 @@ void PelMinimal::setSymptomId(const std::string& symptomId)
     _eh->setSymptomId(symptomId);
 }
 
+void PelMinimal::setPlid(uint32_t plid)
+{
+    _ph->setPlid(plid);
+}
+
 } // namespace pel
 } // namespace attn

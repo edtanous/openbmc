@@ -45,4 +45,11 @@ enum AttnCodes
  */
 void addHbStatusRegs();
 
+/**
+ * @brief Check for recoverable errors present
+ *
+ * @return true if any recoverable errors are present, else false
+ */
+bool recoverableErrors();
+
 } // namespace attn

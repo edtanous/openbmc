@@ -74,6 +74,9 @@ void handlePhypTi(TiDataArea* i_tiDataArea)
     // gather additional data for PEL
     std::map<std::string, std::string> tiAdditionalData;
 
+    // make note of recoverable errors present
+    tiAdditionalData["recoverables"] = recoverableErrors() ? "true" : "false";
+
     if (nullptr != i_tiDataArea)
     {
         parsePhypOpalTiInfo(tiAdditionalData, i_tiDataArea);
@@ -165,6 +168,10 @@ void handleHbTiWithSrc(TiDataArea* i_tiDataArea)
         {
             // gather additional data for PEL
             std::map<std::string, std::string> tiAdditionalData;
+
+            // make note of recoverable errors present
+            tiAdditionalData["recoverables"] =
+                recoverableErrors() ? "true" : "false";
 
             parseHbTiInfo(tiAdditionalData, i_tiDataArea);
 

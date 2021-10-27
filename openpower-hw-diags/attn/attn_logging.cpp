@@ -1,5 +1,6 @@
 #include <unistd.h>
 
+#include <analyzer/analyzer_main.hpp>
 #include <attn/attn_common.hpp>
 #include <attn/attn_dbus.hpp>
 #include <attn/attn_dump.hpp>
@@ -195,7 +196,7 @@ std::vector<util::FFDCFile> createFFDCFiles(char* i_buffer = nullptr,
  * here contains data to be committed to the PEL and it can also be used to
  * create the PEL as it contains needed information.
  *
- * @param   i_buffer - buffer containing a raw PEL
+ * @param   i_rawPel - buffer containing a raw PEL
  * @param   i_additional - additional data to be added to the new PEL
  */
 void createPelCustom(std::vector<uint8_t>& i_rawPel,
@@ -210,6 +211,19 @@ void createPelCustom(std::vector<uint8_t>& i_rawPel,
     // based on the sybsystem's TI info.
     uint8_t subsystem = std::stoi(i_additional["Subsystem"]);
     tiPel->setSubsystem(subsystem);
+
+    // If recoverable attentions are active we will call the analyzer and
+    // then link the custom pel to analyzer pel.
+    std::map<std::string, std::string>::iterator it;
+    it = i_additional.find("recoverables");
+    if (it != i_additional.end() && "true" == it->second)
+    {
+        DumpParameters dumpParameters;
+        if (analyzer::analyzeHardware(dumpParameters))
+        {
+            tiPel->setPlid(dumpParameters.logId);
+        }
+    }
 
     if (static_cast<uint8_t>(pel::SubsystemID::hypervisor) == subsystem)
     {
@@ -382,7 +396,7 @@ uint32_t event(EventType i_event,
 
         // If this is a TI event we will create an additional PEL that is
         // specific to the subsystem that generated the TI.
-        if ((true == tiEvent) && (0 != pelId))
+        if ((0 != pelId) && (true == tiEvent))
         {
             // get file descriptor and size of information PEL
             int pelFd = getPel(pelId);

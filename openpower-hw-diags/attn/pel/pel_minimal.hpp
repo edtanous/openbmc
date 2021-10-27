@@ -121,6 +121,11 @@ class PelMinimal
      */
     void setSymptomId(const std::string& symptomId);
 
+    /**
+     * @brief Update the PLID
+     */
+    void setPlid(uint32_t plid);
+
   private:
     /**
      * @brief Maximum PEL size

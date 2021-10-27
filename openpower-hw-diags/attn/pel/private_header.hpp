@@ -104,6 +104,13 @@ class PrivateHeader : public Section
      */
     void setSectionCount(uint8_t sectionCount);
 
+    /**
+     * @brief Set the plid in this PEL
+     *
+     * @param[in] plid - platform log ID
+     */
+    void setPlid(uint32_t plid);
+
   private:
     /**
      * @brief The creation time timestamp

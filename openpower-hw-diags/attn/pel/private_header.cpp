@@ -34,5 +34,10 @@ void PrivateHeader::setSectionCount(uint8_t sectionCount)
     _sectionCount = sectionCount;
 }
 
+void PrivateHeader::setPlid(uint32_t plid)
+{
+    _plid = plid;
+}
+
 } // namespace pel
 } // namespace attn
