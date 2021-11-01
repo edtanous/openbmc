@@ -6,6 +6,7 @@ extern "C"
 #include "attributes_info.H"
 
 #include "extensions/phal/common_utils.hpp"
+#include "extensions/phal/create_pel.hpp"
 #include "extensions/phal/phal_error.hpp"
 #include "util.hpp"
 
@@ -178,19 +179,24 @@ void startHost(enum ipl_type iplType = IPL_TYPE_NORMAL)
     {
         phal_init();
         ipl_set_type(iplType);
+        if (iplType == IPL_TYPE_NORMAL)
+        {
+            // Update SEEPROM side only for NORMAL boot
+            selectBootSeeprom();
+        }
+        setClkNETerminationSite();
     }
     catch (const std::exception& ex)
     {
-        log<level::ERR>("Exception raised during init PHAL",
+        log<level::ERR>("Exception raised during ipl initialisation",
                         entry("EXCEPTION=%s", ex.what()));
+        openpower::pel::createPEL("org.open_power.PHAL.Error.Boot");
         openpower::pel::detail::processBootError(false);
-        throw std::runtime_error("PHAL initialization failed");
+        throw std::runtime_error("IPL initialization failed");
     }
 
     // To clear trace if success
     openpower::pel::detail::processBootError(true);
-
-    setClkNETerminationSite();
 
     // callback method will be called upon failure which will create the PEL
     int rc = ipl_run_major(0);
@@ -217,23 +223,7 @@ void startHostMpReboot()
  */
 void startHostNormal()
 {
-    // Run select seeprom before poweron
-    try
-    {
-        selectBootSeeprom();
-
-        // To clear trace as it is success
-        openpower::pel::detail::processBootError(true);
-    }
-    catch (const std::exception& ex)
-    {
-        // create PEL in failure
-        openpower::pel::detail::processBootError(false);
-        log<level::ERR>("SEEPROM selection failed", entry("ERR=%s", ex.what()));
-        throw ex;
-    }
-
-    startHost();
+    startHost(IPL_TYPE_NORMAL);
 }
 
 REGISTER_PROCEDURE("startHost", startHostNormal)
