@@ -4,6 +4,8 @@ extern "C"
 #include <libpdbg_sbe.h>
 }
 
+#include <config.h>
+
 #ifdef CONFIG_PHAL_API
 #include <libphal.H>
 #endif
