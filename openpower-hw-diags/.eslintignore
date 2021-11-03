@@ -1,0 +1,2 @@
+# Ignore meson log output
+build/meson-logs/*
