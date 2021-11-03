@@ -97,6 +97,22 @@ std::tuple<std::string, std::string>
 
 //------------------------------------------------------------------------------
 
+void __calloutBackplane(ServiceData& io_sd, const callout::Priority& i_priority)
+{
+    // TODO: There isn't a device tree object for this. So will need to hardcode
+    //       the location code for now. In the future, we will need a mechanism
+    //       to make this data driven.
+
+    nlohmann::json callout;
+    callout["LocationCode"] = "P0";
+    callout["Priority"]     = i_priority.getUserDataString();
+    callout["Deconfigured"] = false;
+    callout["Guarded"]      = false;
+    io_sd.addCallout(callout);
+}
+
+//------------------------------------------------------------------------------
+
 void HardwareCalloutResolution::resolve(ServiceData& io_sd) const
 {
     // Get the location code and entity path for this target.
@@ -180,13 +196,7 @@ void BusCalloutResolution::resolve(ServiceData& io_sd) const
 
     // Callout everything else in between.
     // TODO: For P10 (OMI bus and XBUS), the callout is simply the backplane.
-    //       There isn't a devtree object for this, yet. So will need to
-    //       hardcode the location code for now. In the future, we will need a
-    //       mechanism to make this data driven.
-    nlohmann::json bpCallout;
-    bpCallout["LocationCode"] = "P0";
-    bpCallout["Priority"]     = iv_priority.getUserDataString();
-    io_sd.addCallout(bpCallout);
+    __calloutBackplane(io_sd, iv_priority);
 
     // Guard the RX endpoint.
     Guard guard = io_sd.addGuard(rxPath, iv_guard);
@@ -230,35 +240,18 @@ void ProcedureCalloutResolution::resolve(ServiceData& io_sd) const
 
 void ClockCalloutResolution::resolve(ServiceData& io_sd) const
 {
-    // Add the callout to the service data.
-    // TODO: For P10, the callout is simply the backplane. There isn't a devtree
-    //       object for this, yet. So will need to hardcode the location code
-    //       for now. In the future, we will need a mechanism to make this data
-    //       driven.
-    nlohmann::json callout;
-    callout["LocationCode"] = "P0";
-    callout["Priority"]     = iv_priority.getUserDataString();
-    io_sd.addCallout(callout);
-
-    // Add the guard info to the service data.
-    // TODO: Still waiting for clock targets to be defined in the device tree.
-    //       For get the processor path for the FFDC.
-    // static const std::map<callout::ClockType, std::string> m = {
-    //     {callout::ClockType::OSC_REF_CLOCK_0, ""},
-    //     {callout::ClockType::OSC_REF_CLOCK_1, ""},
-    // };
-    // auto target = std::string{util::pdbg::getPath(m.at(iv_clockType))};
-    // auto guardPath = util::pdbg::getPhysDevPath(target);
-    // Guard guard = io_sd.addGuard(guardPath, iv_guard);
-    auto guardPath = __getRootCauseChipPath(io_sd);
+    // Callout the clock target.
+    // TODO: For P10, the callout is simply the backplane. Also, there are no
+    //       clock targets in the device tree. So at the moment there is no
+    //       guard support for clock targets.
+    __calloutBackplane(io_sd, iv_priority);
 
     // Add the callout FFDC to the service data.
+    // TODO: Add the target and guard type if guard is ever supported.
     nlohmann::json ffdc;
     ffdc["Callout Type"] = "Clock Callout";
     ffdc["Clock Type"]   = iv_clockType.getString();
-    ffdc["Target"]       = guardPath;
     ffdc["Priority"]     = iv_priority.getRegistryString();
-    ffdc["Guard Type"]   = ""; // TODO: guard.getString();
     io_sd.addCalloutFFDC(ffdc);
 }
 
@@ -319,6 +312,8 @@ TEST(Resolution, TestSet1)
         "Priority": "H"
     },
     {
+        "Deconfigured": false,
+        "Guarded": false,
         "LocationCode": "P0",
         "Priority": "L"
     }
@@ -336,6 +331,8 @@ TEST(Resolution, TestSet1)
         "Priority": "H"
     },
     {
+        "Deconfigured": false,
+        "Guarded": false,
         "LocationCode": "P0",
         "Priority": "L"
     }
@@ -482,6 +479,8 @@ TEST(Resolution, BusCallout)
         "Priority": "A"
     },
     {
+        "Deconfigured": false,
+        "Guarded": false,
         "LocationCode": "P0",
         "Priority": "L"
     }
@@ -534,6 +533,8 @@ TEST(Resolution, ClockCallout)
     j = sd.getCalloutList();
     s = R"([
     {
+        "Deconfigured": false,
+        "Guarded": false,
         "LocationCode": "P0",
         "Priority": "H"
     }
@@ -546,9 +547,7 @@ TEST(Resolution, ClockCallout)
     {
         "Callout Type": "Clock Callout",
         "Clock Type": "OSC_REF_CLOCK_1",
-        "Guard Type": "",
-        "Priority": "high",
-        "Target": "/proc0"
+        "Priority": "high"
     }
 ])";
     EXPECT_EQ(s, j.dump(4));
