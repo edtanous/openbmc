@@ -1,7 +1,6 @@
 #pragma once
 
 #include <analyzer/callout.hpp>
-#include <analyzer/guard.hpp>
 #include <hei_main.hpp>
 #include <nlohmann/json.hpp>
 
@@ -49,11 +48,6 @@ class ServiceData
      *  callout list (unit paths, bus types, etc.). */
     nlohmann::json iv_calloutFFDC = nlohmann::json::array();
 
-    /** The list of hardware guard requests. Some information will be added to
-     *  the PEL, but the actual guard record will be created after submitting
-     *  the PEL. */
-    std::vector<Guard> iv_guardList;
-
   public:
     /** @return The signature of the root cause attention. */
     const libhei::Signature& getRootCause() const
@@ -84,26 +78,6 @@ class ServiceData
         iv_calloutFFDC.push_back(i_ffdc);
     }
 
-    /**
-     * @brief  Add a guard request to the guard list.
-     * @param  i_path  Entity path for the target part.
-     * @param  i_guard True, if the part should be guarded. False, otherwise.
-     * @return A reference to the object just added to the guard list.
-     */
-    const Guard& addGuard(const std::string& i_path, bool i_guard)
-    {
-        Guard::Type guardType = Guard::Type::NONE;
-        if (i_guard)
-        {
-            // The guard type is dependent on the presence of a system checkstop
-            // attention.
-            guardType =
-                queryCheckstop() ? Guard::Type::FATAL : Guard::Type::NON_FATAL;
-        }
-
-        return iv_guardList.emplace_back(i_path, guardType);
-    }
-
     /** @brief Accessor to iv_calloutList. */
     const nlohmann::json& getCalloutList() const
     {
@@ -114,12 +88,6 @@ class ServiceData
     const nlohmann::json& getCalloutFFDC() const
     {
         return iv_calloutFFDC;
-    }
-
-    /** @brief Accessor to iv_guardList. */
-    const std::vector<Guard>& getGuardList() const
-    {
-        return iv_guardList;
     }
 };
 

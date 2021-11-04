@@ -126,13 +126,6 @@ bool analyzeHardware(attn::DumpParameters& o_dumpParameters)
         // Create and commit a PEL.
         uint32_t logId = std::get<1>(createPel(isoData, servData));
 
-        // Write guard records to persistent storage.
-        // TODO: The PEL ID will be required, but interface is still unknown.
-        for (const auto& guard : servData.getGuardList())
-        {
-            guard.apply();
-        }
-
         // Gather/return information needed for dump.
         // TODO: Need ID from root cause. At the moment, HUID does not exist in
         //       devtree. Will need a better ID definition.

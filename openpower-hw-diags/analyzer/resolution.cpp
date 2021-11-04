@@ -157,21 +157,15 @@ void HardwareCalloutResolution::resolve(ServiceData& io_sd) const
     // Get the target for the hardware callout.
     auto target = __getUnitTarget(__getRootCauseChipTarget(io_sd), iv_unitPath);
 
-    // Get the entity path for this target.
-    auto entityPath = util::pdbg::getPhysDevPath(target);
-
     // Add the actual callout to the service data.
     __calloutTarget(io_sd, target, iv_priority, iv_guard);
-
-    // Add the guard info to the service data.
-    Guard guard = io_sd.addGuard(entityPath, iv_guard);
 
     // Add the callout FFDC to the service data.
     nlohmann::json ffdc;
     ffdc["Callout Type"] = "Hardware Callout";
-    ffdc["Target"]       = entityPath;
+    ffdc["Target"]       = util::pdbg::getPhysDevPath(target);
     ffdc["Priority"]     = iv_priority.getRegistryString();
-    ffdc["Guard Type"]   = guard.getString();
+    ffdc["Guard"]        = iv_guard;
     io_sd.addCalloutFFDC(ffdc);
 }
 
@@ -191,17 +185,13 @@ void ConnectedCalloutResolution::resolve(ServiceData& io_sd) const
     // Callout the TX endpoint.
     __calloutTarget(io_sd, txTarget, iv_priority, iv_guard);
 
-    // Guard the TX endpoint.
-    Guard txGuard =
-        io_sd.addGuard(util::pdbg::getPhysDevPath(txTarget), iv_guard);
-
     // Add the callout FFDC to the service data.
     nlohmann::json ffdc;
     ffdc["Callout Type"] = "Connected Callout";
     ffdc["Bus Type"]     = iv_busType.getString();
     ffdc["Target"]       = util::pdbg::getPhysDevPath(txTarget);
     ffdc["Priority"]     = iv_priority.getRegistryString();
-    ffdc["Guard Type"]   = txGuard.getString();
+    ffdc["Guard"]        = iv_guard;
     io_sd.addCalloutFFDC(ffdc);
 }
 
@@ -228,16 +218,6 @@ void BusCalloutResolution::resolve(ServiceData& io_sd) const
     // TODO: For P10 (OMI bus and XBUS), the callout is simply the backplane.
     __calloutBackplane(io_sd, iv_priority);
 
-    // Guard the RX endpoint.
-    Guard guard =
-        io_sd.addGuard(util::pdbg::getPhysDevPath(rxTarget), iv_guard);
-
-    // Guard the TX endpoint.
-    // No need to check return because it is the same as RX target.
-    io_sd.addGuard(util::pdbg::getPhysDevPath(txTarget), iv_guard);
-
-    // TODO: Currently no guard for "everything else in between".
-
     // Add the callout FFDC to the service data.
     nlohmann::json ffdc;
     ffdc["Callout Type"] = "Bus Callout";
@@ -245,7 +225,7 @@ void BusCalloutResolution::resolve(ServiceData& io_sd) const
     ffdc["RX Target"]    = util::pdbg::getPhysDevPath(rxTarget);
     ffdc["TX Target"]    = util::pdbg::getPhysDevPath(txTarget);
     ffdc["Priority"]     = iv_priority.getRegistryString();
-    ffdc["Guard Type"]   = guard.getString();
+    ffdc["Guard"]        = iv_guard;
     io_sd.addCalloutFFDC(ffdc);
 }
 

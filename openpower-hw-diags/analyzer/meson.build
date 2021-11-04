@@ -3,7 +3,6 @@ analyzer_src = files(
     'analyzer_main.cpp',
     'create_pel.cpp',
     'filter-root-cause.cpp',
-    'guard.cpp',
     'hei_user_interface.cpp',
     'initialize_isolator.cpp',
     'ras-data/ras-data-parser.cpp',

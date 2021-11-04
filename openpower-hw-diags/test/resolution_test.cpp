@@ -135,15 +135,12 @@ void HardwareCalloutResolution::resolve(ServiceData& io_sd) const
     // Add the actual callout to the service data.
     __calloutTarget(io_sd, locCode, iv_priority, iv_guard);
 
-    // Add the guard info to the service data.
-    Guard guard = io_sd.addGuard(entityPath, iv_guard);
-
     // Add the callout FFDC to the service data.
     nlohmann::json ffdc;
     ffdc["Callout Type"] = "Hardware Callout";
     ffdc["Target"]       = entityPath;
     ffdc["Priority"]     = iv_priority.getRegistryString();
-    ffdc["Guard Type"]   = guard.getString();
+    ffdc["Guard"]        = iv_guard;
     io_sd.addCalloutFFDC(ffdc);
 }
 
@@ -163,16 +160,13 @@ void ConnectedCalloutResolution::resolve(ServiceData& io_sd) const
     // Callout the TX endpoint.
     __calloutTarget(io_sd, std::get<1>(txPath), iv_priority, iv_guard);
 
-    // Guard the TX endpoint.
-    Guard txGuard = io_sd.addGuard(std::get<0>(txPath), iv_guard);
-
     // Add the callout FFDC to the service data.
     nlohmann::json ffdc;
     ffdc["Callout Type"] = "Connected Callout";
     ffdc["Bus Type"]     = iv_busType.getString();
     ffdc["Target"]       = std::get<0>(txPath);
     ffdc["Priority"]     = iv_priority.getRegistryString();
-    ffdc["Guard Type"]   = txGuard.getString();
+    ffdc["Guard"]        = iv_guard;
     io_sd.addCalloutFFDC(ffdc);
 }
 
@@ -199,15 +193,6 @@ void BusCalloutResolution::resolve(ServiceData& io_sd) const
     // TODO: For P10 (OMI bus and XBUS), the callout is simply the backplane.
     __calloutBackplane(io_sd, iv_priority);
 
-    // Guard the RX endpoint.
-    Guard guard = io_sd.addGuard(rxPath, iv_guard);
-
-    // Guard the TX endpoint.
-    // No need to check return because it is the same as RX target.
-    io_sd.addGuard(std::get<0>(txPath), iv_guard);
-
-    // TODO: Currently no guard for "everything else in between".
-
     // Add the callout FFDC to the service data.
     nlohmann::json ffdc;
     ffdc["Callout Type"] = "Bus Callout";
@@ -215,7 +200,7 @@ void BusCalloutResolution::resolve(ServiceData& io_sd) const
     ffdc["RX Target"]    = rxPath;
     ffdc["TX Target"]    = std::get<0>(txPath);
     ffdc["Priority"]     = iv_priority.getRegistryString();
-    ffdc["Guard Type"]   = guard.getString();
+    ffdc["Guard"]        = iv_guard;
     io_sd.addCalloutFFDC(ffdc);
 }
 
@@ -376,7 +361,7 @@ TEST(Resolution, HardwareCallout)
     s = R"([
     {
         "Callout Type": "Hardware Callout",
-        "Guard Type": "FATAL",
+        "Guard": true,
         "Priority": "medium_group_A",
         "Target": "/proc0/pib/perv12/mc0/mi0/mcc0/omi0"
     }
@@ -436,21 +421,21 @@ TEST(Resolution, ConnectedCallout)
     {
         "Bus Type": "SMP_BUS",
         "Callout Type": "Connected Callout",
-        "Guard Type": "FATAL",
+        "Guard": true,
         "Priority": "medium_group_A",
         "Target": "/proc1/pib/perv24/pauc0/iohs0/smpgroup0"
     },
     {
         "Bus Type": "OMI_BUS",
         "Callout Type": "Connected Callout",
-        "Guard Type": "FATAL",
+        "Guard": true,
         "Priority": "medium_group_B",
         "Target": "/proc0/pib/perv12/mc0/mi0/mcc0/omi0"
     },
     {
         "Bus Type": "OMI_BUS",
         "Callout Type": "Connected Callout",
-        "Guard Type": "FATAL",
+        "Guard": true,
         "Priority": "medium_group_C",
         "Target": "/proc0/pib/perv12/mc0/mi0/mcc0/omi0/ocmb0"
     }
@@ -509,21 +494,21 @@ TEST(Resolution, BusCallout)
     s = R"([
     {
         "Callout Type": "Hardware Callout",
-        "Guard Type": "FATAL",
+        "Guard": true,
         "Priority": "medium_group_A",
         "Target": "/proc0/pib/perv12/mc0/mi0/mcc0/omi0"
     },
     {
         "Bus Type": "OMI_BUS",
         "Callout Type": "Connected Callout",
-        "Guard Type": "FATAL",
+        "Guard": true,
         "Priority": "medium_group_A",
         "Target": "/proc0/pib/perv12/mc0/mi0/mcc0/omi0/ocmb0"
     },
     {
         "Bus Type": "OMI_BUS",
         "Callout Type": "Bus Callout",
-        "Guard Type": "NONE",
+        "Guard": false,
         "Priority": "low",
         "RX Target": "/proc0/pib/perv12/mc0/mi0/mcc0/omi0",
         "TX Target": "/proc0/pib/perv12/mc0/mi0/mcc0/omi0/ocmb0"
