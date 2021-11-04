@@ -123,6 +123,19 @@ pdbg_target* __getConnectedTarget(pdbg_target* i_rxTarget,
 
 //------------------------------------------------------------------------------
 
+void __calloutTarget(ServiceData& io_sd, pdbg_target* i_target,
+                     const callout::Priority& i_priority, bool i_guard)
+{
+    nlohmann::json callout;
+    callout["LocationCode"] = util::pdbg::getLocationCode(i_target);
+    callout["Priority"]     = i_priority.getUserDataString();
+    callout["Deconfigured"] = false;
+    callout["Guarded"]      = i_guard;
+    io_sd.addCallout(callout);
+}
+
+//------------------------------------------------------------------------------
+
 void __calloutBackplane(ServiceData& io_sd, const callout::Priority& i_priority)
 {
     // TODO: There isn't a device tree object for this. So will need to hardcode
@@ -144,15 +157,11 @@ void HardwareCalloutResolution::resolve(ServiceData& io_sd) const
     // Get the target for the hardware callout.
     auto target = __getUnitTarget(__getRootCauseChipTarget(io_sd), iv_unitPath);
 
-    // Get the location code and entity path for this target.
-    auto locCode    = util::pdbg::getLocationCode(target);
+    // Get the entity path for this target.
     auto entityPath = util::pdbg::getPhysDevPath(target);
 
     // Add the actual callout to the service data.
-    nlohmann::json callout;
-    callout["LocationCode"] = locCode;
-    callout["Priority"]     = iv_priority.getUserDataString();
-    io_sd.addCallout(callout);
+    __calloutTarget(io_sd, target, iv_priority, iv_guard);
 
     // Add the guard info to the service data.
     Guard guard = io_sd.addGuard(entityPath, iv_guard);
@@ -180,10 +189,7 @@ void ConnectedCalloutResolution::resolve(ServiceData& io_sd) const
     auto txTarget = __getConnectedTarget(rxTarget, iv_busType);
 
     // Callout the TX endpoint.
-    nlohmann::json txCallout;
-    txCallout["LocationCode"] = util::pdbg::getLocationCode(txTarget);
-    txCallout["Priority"]     = iv_priority.getUserDataString();
-    io_sd.addCallout(txCallout);
+    __calloutTarget(io_sd, txTarget, iv_priority, iv_guard);
 
     // Guard the TX endpoint.
     Guard txGuard =
@@ -213,16 +219,10 @@ void BusCalloutResolution::resolve(ServiceData& io_sd) const
     auto txTarget = __getConnectedTarget(rxTarget, iv_busType);
 
     // Callout the RX endpoint.
-    nlohmann::json rxCallout;
-    rxCallout["LocationCode"] = util::pdbg::getLocationCode(rxTarget);
-    rxCallout["Priority"]     = iv_priority.getUserDataString();
-    io_sd.addCallout(rxCallout);
+    __calloutTarget(io_sd, rxTarget, iv_priority, iv_guard);
 
     // Callout the TX endpoint.
-    nlohmann::json txCallout;
-    txCallout["LocationCode"] = util::pdbg::getLocationCode(txTarget);
-    txCallout["Priority"]     = iv_priority.getUserDataString();
-    io_sd.addCallout(txCallout);
+    __calloutTarget(io_sd, txTarget, iv_priority, iv_guard);
 
     // Callout everything else in between.
     // TODO: For P10 (OMI bus and XBUS), the callout is simply the backplane.

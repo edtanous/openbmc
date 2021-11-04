@@ -97,6 +97,19 @@ std::tuple<std::string, std::string>
 
 //------------------------------------------------------------------------------
 
+void __calloutTarget(ServiceData& io_sd, const std::string& i_locCode,
+                     const callout::Priority& i_priority, bool i_guard)
+{
+    nlohmann::json callout;
+    callout["LocationCode"] = i_locCode;
+    callout["Priority"]     = i_priority.getUserDataString();
+    callout["Deconfigured"] = false;
+    callout["Guarded"]      = i_guard;
+    io_sd.addCallout(callout);
+}
+
+//------------------------------------------------------------------------------
+
 void __calloutBackplane(ServiceData& io_sd, const callout::Priority& i_priority)
 {
     // TODO: There isn't a device tree object for this. So will need to hardcode
@@ -120,10 +133,7 @@ void HardwareCalloutResolution::resolve(ServiceData& io_sd) const
     auto entityPath = __getUnitPath(locCode, iv_unitPath);
 
     // Add the actual callout to the service data.
-    nlohmann::json callout;
-    callout["LocationCode"] = locCode;
-    callout["Priority"]     = iv_priority.getUserDataString();
-    io_sd.addCallout(callout);
+    __calloutTarget(io_sd, locCode, iv_priority, iv_guard);
 
     // Add the guard info to the service data.
     Guard guard = io_sd.addGuard(entityPath, iv_guard);
@@ -151,10 +161,7 @@ void ConnectedCalloutResolution::resolve(ServiceData& io_sd) const
     auto txPath = __getConnectedPath(rxPath, iv_busType);
 
     // Callout the TX endpoint.
-    nlohmann::json txCallout;
-    txCallout["LocationCode"] = std::get<1>(txPath);
-    txCallout["Priority"]     = iv_priority.getUserDataString();
-    io_sd.addCallout(txCallout);
+    __calloutTarget(io_sd, std::get<1>(txPath), iv_priority, iv_guard);
 
     // Guard the TX endpoint.
     Guard txGuard = io_sd.addGuard(std::get<0>(txPath), iv_guard);
@@ -183,16 +190,10 @@ void BusCalloutResolution::resolve(ServiceData& io_sd) const
     auto txPath = __getConnectedPath(rxPath, iv_busType);
 
     // Callout the RX endpoint.
-    nlohmann::json rxCallout;
-    rxCallout["LocationCode"] = chipPath;
-    rxCallout["Priority"]     = iv_priority.getUserDataString();
-    io_sd.addCallout(rxCallout);
+    __calloutTarget(io_sd, chipPath, iv_priority, iv_guard);
 
     // Callout the TX endpoint.
-    nlohmann::json txCallout;
-    txCallout["LocationCode"] = std::get<1>(txPath);
-    txCallout["Priority"]     = iv_priority.getUserDataString();
-    io_sd.addCallout(txCallout);
+    __calloutTarget(io_sd, std::get<1>(txPath), iv_priority, iv_guard);
 
     // Callout everything else in between.
     // TODO: For P10 (OMI bus and XBUS), the callout is simply the backplane.
@@ -308,6 +309,8 @@ TEST(Resolution, TestSet1)
     j = sd1.getCalloutList();
     s = R"([
     {
+        "Deconfigured": false,
+        "Guarded": false,
         "LocationCode": "/proc0",
         "Priority": "H"
     },
@@ -327,6 +330,8 @@ TEST(Resolution, TestSet1)
         "Procedure": "NEXTLVL"
     },
     {
+        "Deconfigured": false,
+        "Guarded": true,
         "LocationCode": "/proc0",
         "Priority": "H"
     },
@@ -358,6 +363,8 @@ TEST(Resolution, HardwareCallout)
     j = sd.getCalloutList();
     s = R"([
     {
+        "Deconfigured": false,
+        "Guarded": true,
         "LocationCode": "/proc0",
         "Priority": "A"
     }
@@ -403,14 +410,20 @@ TEST(Resolution, ConnectedCallout)
     j = sd.getCalloutList();
     s = R"([
     {
+        "Deconfigured": false,
+        "Guarded": true,
         "LocationCode": "/proc1",
         "Priority": "A"
     },
     {
+        "Deconfigured": false,
+        "Guarded": true,
         "LocationCode": "/proc0",
         "Priority": "B"
     },
     {
+        "Deconfigured": false,
+        "Guarded": true,
         "LocationCode": "/proc0/pib/perv12/mc0/mi0/mcc0/omi0/ocmb0",
         "Priority": "C"
     }
@@ -471,10 +484,14 @@ TEST(Resolution, BusCallout)
     j = sd.getCalloutList();
     s = R"([
     {
+        "Deconfigured": false,
+        "Guarded": true,
         "LocationCode": "/proc0",
         "Priority": "A"
     },
     {
+        "Deconfigured": false,
+        "Guarded": true,
         "LocationCode": "/proc0/pib/perv12/mc0/mi0/mcc0/omi0/ocmb0",
         "Priority": "A"
     },
