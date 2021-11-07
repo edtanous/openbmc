@@ -127,7 +127,7 @@ class BlobInterface
      *
      * @param[in] path - the blobId path.
      */
-    virtual void deleteBlob(const std::string& id) = 0;
+    virtual bool deleteBlob(const std::string& id) = 0;
 
     /**
      * Read bytes from a blob.

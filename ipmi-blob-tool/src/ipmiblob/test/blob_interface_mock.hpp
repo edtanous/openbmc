@@ -25,7 +25,7 @@ class BlobInterfaceMock : public BlobInterface
     MOCK_METHOD(std::uint16_t, openBlob, (const std::string&, std::uint16_t),
                 (override));
     MOCK_METHOD(void, closeBlob, (std::uint16_t), (override));
-    MOCK_METHOD(void, deleteBlob, (const std::string&), (override));
+    MOCK_METHOD(bool, deleteBlob, (const std::string&), (override));
     MOCK_METHOD(std::vector<std::uint8_t>, readBytes,
                 (std::uint16_t, std::uint32_t, std::uint32_t), (override));
 };

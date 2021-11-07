@@ -567,7 +567,7 @@ TEST_F(BlobHandlerTest, deleteBlobSucceeds)
                 sendPacket(ipmiOEMNetFn, ipmiOEMBlobCmd, ContainerEq(request)))
         .WillOnce(Return(resp));
 
-    blob.deleteBlob("abcd");
+    EXPECT_TRUE(blob.deleteBlob("abcd"));
 }
 
 } // namespace ipmiblob

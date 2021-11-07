@@ -357,7 +357,7 @@ void BlobHandler::closeBlob(std::uint16_t session)
     }
 }
 
-void BlobHandler::deleteBlob(const std::string& id)
+bool BlobHandler::deleteBlob(const std::string& id)
 {
     std::vector<std::uint8_t> name;
     std::copy(id.begin(), id.end(), std::back_inserter(name));
@@ -366,11 +366,13 @@ void BlobHandler::deleteBlob(const std::string& id)
     try
     {
         sendIpmiPayload(BlobOEMCommands::bmcBlobDelete, name);
+        return true;
     }
     catch (const BlobException& b)
     {
         std::fprintf(stderr, "Received failure on delete: %s\n", b.what());
     }
+    return false;
 }
 
 std::vector<std::uint8_t> BlobHandler::readBytes(std::uint16_t session,
