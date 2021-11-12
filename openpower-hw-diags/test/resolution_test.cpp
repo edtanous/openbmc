@@ -98,13 +98,28 @@ std::tuple<std::string, std::string>
 //------------------------------------------------------------------------------
 
 void __calloutTarget(ServiceData& io_sd, const std::string& i_locCode,
-                     const callout::Priority& i_priority, bool i_guard)
+                     const callout::Priority& i_priority, bool i_guard,
+                     const std::string& i_guardPath)
 {
     nlohmann::json callout;
     callout["LocationCode"] = i_locCode;
     callout["Priority"]     = i_priority.getUserDataString();
     callout["Deconfigured"] = false;
-    callout["Guarded"]      = i_guard;
+    callout["Guarded"]      = false; // default
+
+    // Check if guard info should be added.
+    if (i_guard)
+    {
+        auto guardType = io_sd.queryGuardPolicy();
+
+        if (!(callout::GuardType::NONE == guardType))
+        {
+            callout["Guarded"]    = true;
+            callout["Guard Path"] = i_guardPath;
+            callout["Guard Type"] = guardType.getString();
+        }
+    }
+
     io_sd.addCallout(callout);
 }
 
@@ -133,7 +148,7 @@ void HardwareCalloutResolution::resolve(ServiceData& io_sd) const
     auto entityPath = __getUnitPath(locCode, iv_unitPath);
 
     // Add the actual callout to the service data.
-    __calloutTarget(io_sd, locCode, iv_priority, iv_guard);
+    __calloutTarget(io_sd, locCode, iv_priority, iv_guard, entityPath);
 
     // Add the callout FFDC to the service data.
     nlohmann::json ffdc;
@@ -158,7 +173,8 @@ void ConnectedCalloutResolution::resolve(ServiceData& io_sd) const
     auto txPath = __getConnectedPath(rxPath, iv_busType);
 
     // Callout the TX endpoint.
-    __calloutTarget(io_sd, std::get<1>(txPath), iv_priority, iv_guard);
+    __calloutTarget(io_sd, std::get<1>(txPath), iv_priority, iv_guard,
+                    std::get<0>(txPath));
 
     // Add the callout FFDC to the service data.
     nlohmann::json ffdc;
@@ -184,10 +200,11 @@ void BusCalloutResolution::resolve(ServiceData& io_sd) const
     auto txPath = __getConnectedPath(rxPath, iv_busType);
 
     // Callout the RX endpoint.
-    __calloutTarget(io_sd, chipPath, iv_priority, iv_guard);
+    __calloutTarget(io_sd, chipPath, iv_priority, iv_guard, rxPath);
 
     // Callout the TX endpoint.
-    __calloutTarget(io_sd, std::get<1>(txPath), iv_priority, iv_guard);
+    __calloutTarget(io_sd, std::get<1>(txPath), iv_priority, iv_guard,
+                    std::get<0>(txPath));
 
     // Callout everything else in between.
     // TODO: For P10 (OMI bus and XBUS), the callout is simply the backplane.
@@ -316,6 +333,8 @@ TEST(Resolution, TestSet1)
     },
     {
         "Deconfigured": false,
+        "Guard Path": "/proc0/pib/perv39/eq7/fc1/core1",
+        "Guard Type": "GARD_Predictive",
         "Guarded": true,
         "LocationCode": "/proc0",
         "Priority": "H"
@@ -349,6 +368,8 @@ TEST(Resolution, HardwareCallout)
     s = R"([
     {
         "Deconfigured": false,
+        "Guard Path": "/proc0/pib/perv12/mc0/mi0/mcc0/omi0",
+        "Guard Type": "GARD_Unrecoverable",
         "Guarded": true,
         "LocationCode": "/proc0",
         "Priority": "A"
@@ -396,18 +417,24 @@ TEST(Resolution, ConnectedCallout)
     s = R"([
     {
         "Deconfigured": false,
+        "Guard Path": "/proc1/pib/perv24/pauc0/iohs0/smpgroup0",
+        "Guard Type": "GARD_Unrecoverable",
         "Guarded": true,
         "LocationCode": "/proc1",
         "Priority": "A"
     },
     {
         "Deconfigured": false,
+        "Guard Path": "/proc0/pib/perv12/mc0/mi0/mcc0/omi0",
+        "Guard Type": "GARD_Unrecoverable",
         "Guarded": true,
         "LocationCode": "/proc0",
         "Priority": "B"
     },
     {
         "Deconfigured": false,
+        "Guard Path": "/proc0/pib/perv12/mc0/mi0/mcc0/omi0/ocmb0",
+        "Guard Type": "GARD_Unrecoverable",
         "Guarded": true,
         "LocationCode": "/proc0/pib/perv12/mc0/mi0/mcc0/omi0/ocmb0",
         "Priority": "C"
@@ -470,12 +497,16 @@ TEST(Resolution, BusCallout)
     s = R"([
     {
         "Deconfigured": false,
+        "Guard Path": "/proc0/pib/perv12/mc0/mi0/mcc0/omi0",
+        "Guard Type": "GARD_Unrecoverable",
         "Guarded": true,
         "LocationCode": "/proc0",
         "Priority": "A"
     },
     {
         "Deconfigured": false,
+        "Guard Path": "/proc0/pib/perv12/mc0/mi0/mcc0/omi0/ocmb0",
+        "Guard Type": "GARD_Unrecoverable",
         "Guarded": true,
         "LocationCode": "/proc0/pib/perv12/mc0/mi0/mcc0/omi0/ocmb0",
         "Priority": "A"

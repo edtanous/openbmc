@@ -126,6 +126,8 @@ bool analyzeHardware(attn::DumpParameters& o_dumpParameters)
         // Create and commit a PEL.
         uint32_t logId = std::get<1>(createPel(isoData, servData));
 
+        trace::inf("PEL created: PLID=0x%0" PRIx32, logId);
+
         // Gather/return information needed for dump.
         // TODO: Need ID from root cause. At the moment, HUID does not exist in
         //       devtree. Will need a better ID definition.

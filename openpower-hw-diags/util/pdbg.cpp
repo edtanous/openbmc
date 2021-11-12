@@ -296,6 +296,38 @@ std::string getPhysDevPath(pdbg_target* trgt)
 
 //------------------------------------------------------------------------------
 
+std::vector<uint8_t> getPhysBinPath(pdbg_target* target)
+{
+    std::vector<uint8_t> binPath;
+
+    if (nullptr != target)
+    {
+#ifdef CONFIG_PHAL_API
+
+        ATTR_PHYS_BIN_PATH_Type value;
+        if (DT_GET_PROP(ATTR_PHYS_BIN_PATH, target, value))
+        {
+            // The attrirbute for this target does not exist. Get the immediate
+            // parent in the devtree path and try again. Note that if there is
+            // no parent target, nullptr will be returned and that will be
+            // checked above.
+            return getPhysBinPath(pdbg_target_parent(nullptr, target));
+        }
+
+        // Attribute was found. Copy the attribute array to the returned
+        // vector. Note that the reason we return the vector instead of just
+        // returning the array is because the array type and details only
+        // exists in this specific configuration.
+        binPath.insert(binPath.end(), value, value + sizeof(value));
+
+#endif
+    }
+
+    return binPath;
+}
+
+//------------------------------------------------------------------------------
+
 } // namespace pdbg
 
 } // namespace util

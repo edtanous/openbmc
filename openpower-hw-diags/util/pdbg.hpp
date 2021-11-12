@@ -110,6 +110,16 @@ std::string getLocationCode(pdbg_target* trgt);
  */
 std::string getPhysDevPath(pdbg_target* trgt);
 
+/**
+ * @return A vector of bytes representing the numerical values of the physical
+ *         device path (entity path) of the given target. An empty vector
+ *         indicates the target was null or the attribute does not exist for
+ *         this target or any parent targets along the device tree path.
+ * @note   This function requires PHAL APIs that are only available in certain
+ *         environments. If they do not exist, an empty vector is returned.
+ */
+std::vector<uint8_t> getPhysBinPath(pdbg_target* trgt);
+
 } // namespace pdbg
 
 } // namespace util

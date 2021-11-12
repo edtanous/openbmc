@@ -130,7 +130,21 @@ void __calloutTarget(ServiceData& io_sd, pdbg_target* i_target,
     callout["LocationCode"] = util::pdbg::getLocationCode(i_target);
     callout["Priority"]     = i_priority.getUserDataString();
     callout["Deconfigured"] = false;
-    callout["Guarded"]      = i_guard;
+    callout["Guarded"]      = false; // default
+
+    // Check if guard info should be added.
+    if (i_guard)
+    {
+        auto guardType = io_sd.queryGuardPolicy();
+
+        if (!(callout::GuardType::NONE == guardType))
+        {
+            callout["Guarded"]    = true;
+            callout["EntityPath"] = util::pdbg::getPhysBinPath(i_target);
+            callout["GuardType"]  = guardType.getString();
+        }
+    }
+
     io_sd.addCallout(callout);
 }
 

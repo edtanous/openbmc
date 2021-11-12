@@ -62,6 +62,18 @@ class ServiceData
         return iv_isCheckstop;
     }
 
+    /** @return Returns the guard type based on current analysis policies. */
+    callout::GuardType queryGuardPolicy() const
+    {
+        // TODO: Manual execution of the analyzer (i.e. from the command line),
+        //       will eventually require the ability to not guard. This is
+        //       useful when we simply want to check for attentions in the
+        //       hardware with no service action.
+
+        return queryCheckstop() ? callout::GuardType::UNRECOVERABLE
+                                : callout::GuardType::PREDICTIVE;
+    }
+
     /**
      * @brief Add callout information to the callout list.
      * @param The JSON object for this callout.
