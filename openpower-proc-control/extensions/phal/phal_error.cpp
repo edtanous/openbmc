@@ -458,6 +458,9 @@ void processBootError(bool status)
                          }
                          jsonCalloutData["Deconfigured"] = cdg_tgt.deconfigure;
                          jsonCalloutData["Guarded"] = cdg_tgt.guard;
+                         jsonCalloutData["GuardType"] = cdg_tgt.guard_type;
+                         jsonCalloutData["EntityPath"] =
+                             cdg_tgt.target_entity_path;
 
                          jsonCalloutDataList.emplace_back(jsonCalloutData);
                      });
