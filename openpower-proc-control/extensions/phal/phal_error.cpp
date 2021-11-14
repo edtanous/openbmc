@@ -543,10 +543,16 @@ void processSbeBootError()
     if (procTarget == nullptr)
     {
         log<level::ERR>("processSbeBootError: fail to get primary processor");
-        // Initialise the SRC6 with default data, not used in this use case.
-        pelAdditionalData.emplace_back("SRC6", "00000000");
-        openpower::pel::createPEL(
-            "org.open_power.Processor.Error.SbeBootFailure", pelAdditionalData);
+        // Add BMC code callout and create PEL
+        json jsonCalloutDataList;
+        jsonCalloutDataList = json::array();
+        json jsonCalloutData;
+        jsonCalloutData["Procedure"] = "BMC0001";
+        jsonCalloutData["Priority"] = "H";
+        jsonCalloutDataList.emplace_back(jsonCalloutData);
+        openpower::pel::createErrorPEL(
+            "org.open_power.Processor.Error.SbeBootFailure",
+            jsonCalloutDataList);
         return;
     }
     // SBE error object.
