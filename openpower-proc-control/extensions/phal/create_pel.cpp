@@ -32,7 +32,8 @@ constexpr auto loggingObjectPath = "/xyz/openbmc_project/logging";
 constexpr auto loggingInterface = "xyz.openbmc_project.Logging.Create";
 constexpr auto opLoggingInterface = "org.open_power.Logging.PEL";
 
-void createBootErrorPEL(const FFDCData& ffdcData, const json& calloutData)
+void createErrorPEL(const std::string& event, const json& calloutData,
+                    const FFDCData& ffdcData)
 {
     std::map<std::string, std::string> additionalData;
     auto bus = sdbusplus::bus::new_default();
@@ -57,8 +58,6 @@ void createBootErrorPEL(const FFDCData& ffdcData, const json& calloutData)
                             static_cast<uint8_t>(0xCA),
                             static_cast<uint8_t>(0x01), ffdcFile.getFileFD()));
 
-        static constexpr auto bootErrorMessage =
-            "org.open_power.PHAL.Error.Boot";
         std::string service =
             util::getService(bus, loggingObjectPath, loggingInterface);
         auto method =
@@ -68,16 +67,16 @@ void createBootErrorPEL(const FFDCData& ffdcData, const json& calloutData)
             sdbusplus::xyz::openbmc_project::Logging::server::convertForMessage(
                 sdbusplus::xyz::openbmc_project::Logging::server::Entry::Level::
                     Error);
-        method.append(bootErrorMessage, level, additionalData, pelCalloutInfo);
+        method.append(event, level, additionalData, pelCalloutInfo);
         auto resp = bus.call(method);
     }
     catch (const sdbusplus::exception::exception& e)
     {
-        log<level::ERR>("D-Bus call exception",
-                        entry("OBJPATH=%s", loggingObjectPath),
-                        entry("INTERFACE=%s", loggingInterface),
-                        entry("EXCEPTION=%s", e.what()));
-
+        log<level::ERR>(
+            fmt::format("D-Bus call exception",
+                        "OBJPATH={}, INTERFACE={}, event={}, EXCEPTION={}",
+                        loggingObjectPath, loggingInterface, event, e.what())
+                .c_str());
         throw std::runtime_error(
             "Error in invoking D-Bus logging create interface");
     }

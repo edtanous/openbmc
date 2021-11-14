@@ -17,12 +17,14 @@ using json = nlohmann::json;
 using namespace openpower::phal;
 
 /**
- * @brief Create boot error PEL
+ * @brief Create PEL with additional parameters and callout
  *
- * @param[in] ffdcData - failure data to append to PEL
+ * @param[in] event - the event type
  * @param[in] calloutData - callout data to append to PEL
+ * @param[in] ffdcData - failure data to append to PEL
  */
-void createBootErrorPEL(const FFDCData& ffdcData, const json& calloutData);
+void createErrorPEL(const std::string& event, const json& calloutData = {},
+                    const FFDCData& ffdcData = {});
 
 /**
  * @brief Create SBE boot error PEL and return id

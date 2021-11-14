@@ -501,9 +501,8 @@ void processBootError(bool status)
                 // Considering a element having higher priority than b element
                 return true;
             });
-
-        openpower::pel::createBootErrorPEL(pelAdditionalData,
-                                           jsonCalloutDataList);
+        openpower::pel::createErrorPEL("org.open_power.PHAL.Error.Boot",
+                                       jsonCalloutDataList, pelAdditionalData);
     }
     catch (const std::exception& ex)
     {
