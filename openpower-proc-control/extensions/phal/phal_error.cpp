@@ -30,6 +30,7 @@ namespace openpower
 namespace phal
 {
 using namespace phosphor::logging;
+using namespace openpower::phal::exception;
 
 /**
  * Used to pass buffer to pdbg callback api to get required target
@@ -75,6 +76,8 @@ constexpr int requireAttrNotFound = 2;
 int pdbgCallbackToGetTgtReqAttrsVal(struct pdbg_target* target,
                                     void* appPrivData)
 {
+    using namespace openpower::phal::pdbg;
+
     TargetInfo* targetInfo = static_cast<TargetInfo*>(appPrivData);
 
     ATTR_PHYS_BIN_PATH_Type physBinPath;
@@ -105,10 +108,18 @@ int pdbgCallbackToGetTgtReqAttrsVal(struct pdbg_target* target,
         return continueTgtTraversal;
     }
 
-    if (DT_GET_PROP(ATTR_LOCATION_CODE, target, targetInfo->locationCode))
+    try
     {
-        log<level::ERR>("Could not read LOCATION_CODE attribute");
-        return requireAttrNotFound;
+        // Get location code information
+        openpower::phal::pdbg::getLocationCode(target,
+                                               targetInfo->locationCode);
+    }
+    catch (const std::exception& e)
+    {
+        // log message and continue with default data
+        log<level::ERR>(fmt::format("getLocationCode({}): Exception({})",
+                                    pdbg_target_path(target), e.what())
+                            .c_str());
     }
 
     if (DT_GET_PROP(ATTR_PHYS_DEV_PATH, target, targetInfo->physDevPath))
@@ -502,7 +513,6 @@ void processSbeBootError()
     log<level::INFO>("processSbeBootError : Entered ");
 
     using namespace openpower::phal::sbe;
-    using namespace openpower::phal::exception;
 
     // To store phal trace and other additional data about ffdc.
     FFDCData pelAdditionalData;
