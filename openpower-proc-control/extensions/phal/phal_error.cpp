@@ -459,6 +459,33 @@ void processBootError(bool status)
 
                          jsonCalloutDataList.emplace_back(jsonCalloutData);
                      });
+            // Adding procedure callout
+            calloutCount = 0;
+            for_each(
+                ffdc.hwp_errorinfo.procedures_callout.begin(),
+                ffdc.hwp_errorinfo.procedures_callout.end(),
+                [&pelAdditionalData, &calloutCount, &jsonCalloutDataList](
+                    const ProcedureCallout& procCallout) -> void {
+                    calloutCount++;
+                    std::stringstream keyPrefix;
+                    keyPrefix << "HWP_PROC_CO_" << std::setfill('0')
+                              << std::setw(2) << calloutCount << "_";
+
+                    pelAdditionalData.emplace_back(
+                        std::string(keyPrefix.str()).append("PRIORITY"),
+                        procCallout.callout_priority);
+
+                    pelAdditionalData.emplace_back(
+                        std::string(keyPrefix.str()).append("MAINT_PROCEDURE"),
+                        procCallout.proc_callout);
+
+                    json jsonCalloutData;
+                    jsonCalloutData["Procedure"] = procCallout.proc_callout;
+                    std::string pelPriority =
+                        getPelPriority(procCallout.callout_priority);
+                    jsonCalloutData["Priority"] = pelPriority;
+                    jsonCalloutDataList.emplace_back(jsonCalloutData);
+                });
         }
         else if ((ffdc.ffdc_type != FFDC_TYPE_NONE) &&
                  (ffdc.ffdc_type != FFDC_TYPE_UNSUPPORTED))
