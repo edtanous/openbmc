@@ -108,7 +108,7 @@ class Procedure
     }
 };
 
-inline const Procedure Procedure::NEXTLVL{"NEXTLVL"};
+inline const Procedure Procedure::NEXTLVL{"next_level_support"};
 
 /** @brief Container class for bus callout service actions. */
 class BusType

@@ -329,7 +329,7 @@ TEST(Resolution, TestSet1)
     s = R"([
     {
         "Priority": "L",
-        "Procedure": "NEXTLVL"
+        "Procedure": "next_level_support"
     },
     {
         "Deconfigured": false,
@@ -605,7 +605,7 @@ TEST(Resolution, ProcedureCallout)
     s = R"([
     {
         "Priority": "L",
-        "Procedure": "NEXTLVL"
+        "Procedure": "next_level_support"
     }
 ])";
     EXPECT_EQ(s, j.dump(4));
@@ -616,7 +616,7 @@ TEST(Resolution, ProcedureCallout)
     {
         "Callout Type": "Procedure Callout",
         "Priority": "low",
-        "Procedure": "NEXTLVL"
+        "Procedure": "next_level_support"
     }
 ])";
     EXPECT_EQ(s, j.dump(4));
