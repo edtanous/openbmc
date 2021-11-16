@@ -128,12 +128,11 @@ bool analyzeHardware(attn::DumpParameters& o_dumpParameters)
 
         trace::inf("PEL created: PLID=0x%0" PRIx32, logId);
 
-        // Gather/return information needed for dump.
+        // Gather/return information needed for dump. A hardware dump will
+        // always be used for system checkstop attenions. Software dumps will be
+        // reserved for MP-IPLs during TI analysis.
         // TODO: Need ID from root cause. At the moment, HUID does not exist in
         //       devtree. Will need a better ID definition.
-        // TODO: HW dump is default, but some attentions may require something
-        //       different. Will need to investigate adding that information to
-        //       the RAS data files.
         o_dumpParameters.logId    = logId;
         o_dumpParameters.unitId   = 0;
         o_dumpParameters.dumpType = attn::DumpType::Hardware;
