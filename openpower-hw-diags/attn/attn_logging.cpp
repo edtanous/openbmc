@@ -219,9 +219,11 @@ void createPelCustom(std::vector<uint8_t>& i_rawPel,
     if (it != i_additional.end() && "true" == it->second)
     {
         DumpParameters dumpParameters;
-        if (analyzer::analyzeHardware(dumpParameters))
+        auto plid = analyzer::analyzeHardware(dumpParameters);
+        if (0 != plid)
         {
-            tiPel->setPlid(dumpParameters.logId);
+            // Link the PLID if an attention was found and a PEL was generated.
+            tiPel->setPlid(plid);
         }
     }
 
@@ -436,7 +438,7 @@ uint32_t event(EventType i_event,
                 if ("true" == i_additional["Dump"])
                 {
                     // will not return until dump is complete
-                    requestDump(DumpParameters{pelId, 0, DumpType::Hostboot});
+                    requestDump(pelId, DumpParameters{0, DumpType::Hostboot});
                 }
             }
         }

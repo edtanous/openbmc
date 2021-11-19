@@ -36,7 +36,7 @@ int handleVital(Attention* i_attention)
         if ((0 != pelId) && (util::dbus::HostRunningState::NotStarted ==
                              util::dbus::hostRunningState()))
         {
-            requestDump(DumpParameters{pelId, 0, DumpType::SBE});
+            requestDump(pelId, DumpParameters{0, DumpType::SBE});
         }
 
         // transition host

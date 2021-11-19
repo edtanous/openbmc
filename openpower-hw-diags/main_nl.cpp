@@ -49,7 +49,7 @@ int main(int argc, char* argv[])
         if (true == getCliOption(argv, argv + argc, "--analyze"))
         {
             attn::DumpParameters dumpParameters;
-            rc = analyzer::analyzeHardware(dumpParameters); // analyze hardware
+            analyzer::analyzeHardware(dumpParameters); // analyze hardware
         }
         // daemon mode
         else

@@ -11,7 +11,7 @@
  * This is the main interface to the hardware diagnostics application. This
  * application will either be loaded as a daemon for monitoring the attention
  * gpio or it will be loaded as an application to analyze hardware and
- * diagnose hadrware error conditions.
+ * diagnose hardware error conditions.
  *
  *     Usage:
  *        --analyze:              Analyze the hardware
@@ -60,7 +60,8 @@ int main(int argc, char* argv[])
         // Either analyze (application mode) or daemon mode
         if (true == getCliOption(argv, argv + argc, "--analyze"))
         {
-            rc = analyzer::analyzeHardware(); // analyze hardware
+            attn::DumpParameters dumpParameters;
+            analyzer::analyzeHardware(dumpParameters); // analyze hardware
         }
         // daemon mode
         else

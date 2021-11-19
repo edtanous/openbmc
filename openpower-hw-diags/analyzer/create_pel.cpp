@@ -308,9 +308,11 @@ std::string __getMessageSeverity(bool i_isCheckstop)
 
 //------------------------------------------------------------------------------
 
-std::tuple<uint32_t, uint32_t> createPel(const libhei::IsolationData& i_isoData,
-                                         const ServiceData& i_servData)
+uint32_t createPel(const libhei::IsolationData& i_isoData,
+                   const ServiceData& i_servData)
 {
+    uint32_t o_plid = 0; // default, zero indicates PEL was not created
+
     // The message registry will require additional log data to fill in keywords
     // and additional log data.
     std::map<std::string, std::string> logData;
@@ -348,9 +350,6 @@ std::tuple<uint32_t, uint32_t> createPel(const libhei::IsolationData& i_isoData,
     std::vector<util::FFDCTuple> userData;
     util::transformFFDC(userDataFiles, userData);
 
-    // Response will be a tuple containing bmc-log-id, pel-log-id
-    std::tuple<uint32_t, uint32_t> response = {0, 0};
-
     try
     {
         // We want to use the logging interface that returns the event log
@@ -387,8 +386,13 @@ std::tuple<uint32_t, uint32_t> createPel(const libhei::IsolationData& i_isoData,
             // Log the event.
             auto reply = bus.call(method);
 
+            // Response will be a tuple containing bmc-log-id, pel-log-id
+            std::tuple<uint32_t, uint32_t> response = {0, 0};
+
             // Parse reply for response
             reply.read(response);
+
+            o_plid = std::get<1>(response);
         }
     }
     catch (const sdbusplus::exception::SdBusError& e)
@@ -398,8 +402,8 @@ std::tuple<uint32_t, uint32_t> createPel(const libhei::IsolationData& i_isoData,
         trace::err(exceptionString.c_str());
     }
 
-    // return tuple of {bmc-log-id, pel-log-id} or {0, 0} on error
-    return response;
+    // Return the platorm log ID of the error.
+    return o_plid;
 }
 
 } // namespace analyzer

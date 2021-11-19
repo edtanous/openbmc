@@ -11,18 +11,10 @@ namespace analyzer
  *         attentions.
  *
  * @param[out] o_dumpParameters Dump request parameters
- * @return True if an active attenion was successfully analyzed, false
- *         otherwise.
- *         For system checkstop handling:
- *            If analysis fails, there likely is a defect in the design because
- *            an active attention is required to trigger the interrupt.
- *         For TI handling:
- *            It is possible that a recoverable attention could cause a TI,
- *            however, it is not required. Therefore, it is expected that
- *            analysis could fail to find an attention and it should not be
- *            treated as a defect.
+ * @return The platform log ID (PLID) of the PEL generated during analysis. Will
+ *         return zero if no PEL is generated.
  */
-bool analyzeHardware(attn::DumpParameters& o_dumpParameters);
+uint32_t analyzeHardware(attn::DumpParameters& o_dumpParameters);
 
 /**
  * @brief Get error analyzer build information

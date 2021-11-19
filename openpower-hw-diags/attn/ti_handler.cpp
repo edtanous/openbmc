@@ -137,7 +137,7 @@ void handleHbTiWithEid(TiDataArea* i_tiDataArea)
         {
             // retrieve log ID from TI info data
             uint32_t logId = be32toh(i_tiDataArea->asciiData1);
-            requestDump(DumpParameters{logId, 0, DumpType::Hostboot});
+            requestDump(logId, DumpParameters{0, DumpType::Hostboot});
         }
     }
 

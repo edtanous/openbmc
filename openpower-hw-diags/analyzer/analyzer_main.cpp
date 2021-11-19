@@ -34,10 +34,10 @@ bool filterRootCause(const libhei::IsolationData& i_isoData,
  * @brief Will create and submit a PEL using the given data.
  * @param i_isoData   The data gathered during isolation (for FFDC).
  * @param i_servData  Data regarding service actions gathered during analysis.
- * @return Tuple of BMC log id, platform log id
+ * @return The platform log ID. Will return zero if no PEL is generated.
  */
-std::tuple<uint32_t, uint32_t> createPel(const libhei::IsolationData& i_isoData,
-                                         const ServiceData& i_servData);
+uint32_t createPel(const libhei::IsolationData& i_isoData,
+                   const ServiceData& i_servData);
 
 //------------------------------------------------------------------------------
 
@@ -70,14 +70,14 @@ const char* __attn(libhei::AttentionType_t i_attnType)
 
 //------------------------------------------------------------------------------
 
-bool analyzeHardware(attn::DumpParameters& o_dumpParameters)
+uint32_t analyzeHardware(attn::DumpParameters& o_dumpParameters)
 {
-    bool attnFound = false;
+    uint32_t o_plid = 0; // default, zero indicates PEL was not created
 
     if (!util::pdbg::queryHardwareAnalysisSupported())
     {
         trace::err("Hardware error analysis is not supported on this system");
-        return attnFound;
+        return o_plid;
     }
 
     trace::inf(">>> enter analyzeHardware()");
@@ -102,7 +102,7 @@ bool analyzeHardware(attn::DumpParameters& o_dumpParameters)
 
     // Filter for root cause attention.
     libhei::Signature rootCause{};
-    attnFound = filterRootCause(isoData, rootCause);
+    bool attnFound = filterRootCause(isoData, rootCause);
 
     if (!attnFound)
     {
@@ -124,18 +124,24 @@ bool analyzeHardware(attn::DumpParameters& o_dumpParameters)
         rasData.getResolution(rootCause)->resolve(servData);
 
         // Create and commit a PEL.
-        uint32_t logId = std::get<1>(createPel(isoData, servData));
+        o_plid = createPel(isoData, servData);
 
-        trace::inf("PEL created: PLID=0x%0" PRIx32, logId);
+        if (0 == o_plid)
+        {
+            trace::err("Failed to create PEL");
+        }
+        else
+        {
+            trace::inf("PEL created: PLID=0x%0" PRIx32, o_plid);
 
-        // Gather/return information needed for dump. A hardware dump will
-        // always be used for system checkstop attenions. Software dumps will be
-        // reserved for MP-IPLs during TI analysis.
-        // TODO: Need ID from root cause. At the moment, HUID does not exist in
-        //       devtree. Will need a better ID definition.
-        o_dumpParameters.logId    = logId;
-        o_dumpParameters.unitId   = 0;
-        o_dumpParameters.dumpType = attn::DumpType::Hardware;
+            // Gather/return information needed for dump. A hardware dump will
+            // always be used for system checkstop attenions. Software dumps
+            // will be reserved for MP-IPLs during TI analysis.
+            // TODO: Need ID from root cause. At the moment, HUID does not exist
+            //       in devtree. Will need a better ID definition.
+            o_dumpParameters.unitId   = 0;
+            o_dumpParameters.dumpType = attn::DumpType::Hardware;
+        }
     }
 
     // All done, clean up the isolator.
@@ -144,7 +150,7 @@ bool analyzeHardware(attn::DumpParameters& o_dumpParameters)
 
     trace::inf("<<< exit analyzeHardware()");
 
-    return attnFound;
+    return o_plid;
 }
 
 //------------------------------------------------------------------------------

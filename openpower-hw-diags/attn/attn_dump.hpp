@@ -16,7 +16,6 @@ enum class DumpType
 class DumpParameters
 {
   public:
-    uint32_t logId;
     uint32_t unitId;
     DumpType dumpType;
 };
@@ -27,8 +26,9 @@ class DumpParameters
  * Request a dump from the dump manager and register a monitor for observing
  * the dump progress.
  *
+ * @param i_logId        The platform log ID associated with the dump request.
  * @param dumpParameters Parameters for the dump request
  */
-void requestDump(const DumpParameters& dumpParameters);
+void requestDump(uint32_t i_logId, const DumpParameters& dumpParameters);
 
 } // namespace attn

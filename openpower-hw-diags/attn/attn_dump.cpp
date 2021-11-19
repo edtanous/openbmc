@@ -78,7 +78,7 @@ void monitorDump(const std::string& i_path)
 }
 
 /** Request a dump from the dump manager */
-void requestDump(const DumpParameters& i_dumpParameters)
+void requestDump(uint32_t i_logId, const DumpParameters& i_dumpParameters)
 {
     constexpr auto path      = "/org/openpower/dump";
     constexpr auto interface = "xyz.openbmc_project.Dump.Create";
@@ -94,7 +94,7 @@ void requestDump(const DumpParameters& i_dumpParameters)
             std::map<std::string, std::variant<std::string, uint64_t>>
                 createParams;
             createParams["com.ibm.Dump.Create.CreateParameters.ErrorLogId"] =
-                uint64_t(i_dumpParameters.logId);
+                uint64_t(i_logId);
             if (DumpType::Hostboot == i_dumpParameters.dumpType)
             {
                 createParams["com.ibm.Dump.Create.CreateParameters.DumpType"] =
