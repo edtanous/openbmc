@@ -249,7 +249,8 @@ int handleCheckstop(Attention* i_attention)
         // Look for any attentions found in hardware. This will generate and
         // commit a PEL if any errors are found.
         DumpParameters dumpParameters;
-        auto logid = analyzer::analyzeHardware(dumpParameters);
+        auto logid = analyzer::analyzeHardware(
+            analyzer::AnalysisType::SYSTEM_CHECKSTOP, dumpParameters);
         if (0 == logid)
         {
             // A PEL should exist for a checkstop attention.

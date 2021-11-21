@@ -60,8 +60,14 @@ int main(int argc, char* argv[])
         // Either analyze (application mode) or daemon mode
         if (true == getCliOption(argv, argv + argc, "--analyze"))
         {
+            // Analyze the host hardware.
+            // TODO: At the moment, we'll only do MANUAL analysis (no service
+            //       actions). It may be possible in the future to allow command
+            //       line options to change the analysis type, if needed.
+
             attn::DumpParameters dumpParameters;
-            analyzer::analyzeHardware(dumpParameters); // analyze hardware
+            analyzer::analyzeHardware(analyzer::AnalysisType::MANUAL,
+                                      dumpParameters);
         }
         // daemon mode
         else

@@ -219,7 +219,8 @@ void createPelCustom(std::vector<uint8_t>& i_rawPel,
     if (it != i_additional.end() && "true" == it->second)
     {
         DumpParameters dumpParameters;
-        auto plid = analyzer::analyzeHardware(dumpParameters);
+        auto plid = analyzer::analyzeHardware(
+            analyzer::AnalysisType::TERMINATE_IMMEDIATE, dumpParameters);
         if (0 != plid)
         {
             // Link the PLID if an attention was found and a PEL was generated.

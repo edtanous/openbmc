@@ -1,6 +1,7 @@
 #include <assert.h>
 #include <unistd.h>
 
+#include <analyzer/analyzer_main.hpp>
 #include <analyzer/ras-data/ras-data-parser.hpp>
 #include <analyzer/service_data.hpp>
 #include <attn/attn_dump.hpp>
@@ -41,10 +42,10 @@ uint32_t createPel(const libhei::IsolationData& i_isoData,
 
 //------------------------------------------------------------------------------
 
-const char* __attn(libhei::AttentionType_t i_attnType)
+const char* __attn(libhei::AttentionType_t i_type)
 {
     const char* str = "";
-    switch (i_attnType)
+    switch (i_type)
     {
         case libhei::ATTN_TYPE_CHECKSTOP:
             str = "CHECKSTOP";
@@ -62,7 +63,7 @@ const char* __attn(libhei::AttentionType_t i_attnType)
             str = "HOST_ATTN";
             break;
         default:
-            trace::err("Unsupported attention type: %u", i_attnType);
+            trace::err("Unsupported attention type: %u", i_type);
             assert(0);
     }
     return str;
@@ -70,7 +71,30 @@ const char* __attn(libhei::AttentionType_t i_attnType)
 
 //------------------------------------------------------------------------------
 
-uint32_t analyzeHardware(attn::DumpParameters& o_dumpParameters)
+const char* __analysisType(AnalysisType i_type)
+{
+    const char* str = "";
+    switch (i_type)
+    {
+        case AnalysisType::SYSTEM_CHECKSTOP:
+            str = "SYSTEM_CHECKSTOP";
+            break;
+        case AnalysisType::TERMINATE_IMMEDIATE:
+            str = "TERMINATE_IMMEDIATE";
+            break;
+        case AnalysisType::MANUAL:
+            str = "MANUAL";
+            break;
+        default:
+            trace::err("Unsupported analysis type: %u", i_type);
+            assert(0);
+    }
+    return str;
+}
+
+//------------------------------------------------------------------------------
+
+uint32_t analyzeHardware(AnalysisType i_type, attn::DumpParameters& o_dump)
 {
     uint32_t o_plid = 0; // default, zero indicates PEL was not created
 
@@ -80,7 +104,7 @@ uint32_t analyzeHardware(attn::DumpParameters& o_dumpParameters)
         return o_plid;
     }
 
-    trace::inf(">>> enter analyzeHardware()");
+    trace::inf(">>> enter analyzeHardware(%s)", __analysisType(i_type));
 
     // Initialize the isolator and get all of the chips to be analyzed.
     trace::inf("Initializing the isolator...");
@@ -139,8 +163,8 @@ uint32_t analyzeHardware(attn::DumpParameters& o_dumpParameters)
             // will be reserved for MP-IPLs during TI analysis.
             // TODO: Need ID from root cause. At the moment, HUID does not exist
             //       in devtree. Will need a better ID definition.
-            o_dumpParameters.unitId   = 0;
-            o_dumpParameters.dumpType = attn::DumpType::Hardware;
+            o_dump.unitId   = 0;
+            o_dump.dumpType = attn::DumpType::Hardware;
         }
     }
 
