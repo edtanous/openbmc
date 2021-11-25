@@ -2,6 +2,7 @@
 Description=phosphor ECC dbus
 Wants=phosphor-dbus-monitor.service
 After=phosphor-dbus-monitor.service
+ConditionPathExists=|/sys/devices/system/edac/mc/mc0
 
 [Service]
 ExecStart=@bindir@/ecc_main
