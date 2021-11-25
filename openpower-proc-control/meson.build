@@ -39,6 +39,22 @@ conf_data.set_quoted('DEVTREE_EXP_FILE', get_option('DEVTREE_EXP_FILE'),
                       description : 'Path to the devtree export copy file'
                     )
 
+conf_data.set_quoted('CEC_DEVTREE_RW_PATH', get_option('CEC_DEVTREE_RW_PATH'),
+                      description : 'Path to the devtree file r/w version'
+                    )
+
+conf_data.set_quoted('CEC_DEVTREE_RO_PATH', get_option('CEC_DEVTREE_RO_PATH'),
+                      description : 'Path to the devtree file read only version'
+                    )
+
+conf_data.set_quoted('CEC_INFODB_PATH', get_option('CEC_INFODB_PATH'),
+                      description : 'Path to the devtree attributes based database path'
+                    )
+
+conf_data.set_quoted('DEVTREE_REINIT_ATTRS_LIST', get_option('DEVTREE_REINIT_ATTRS_LIST'),
+                      description : 'Path to the phal devtree reinit attribute list file'
+                    )
+
 configure_file(configuration : conf_data,
                output : 'config.h'
               )
@@ -85,6 +101,7 @@ if build_phal
         'procedures/phal/check_host_running.cpp',
         'procedures/phal/import_devtree.cpp',
         'procedures/phal/enter_mpreboot.cpp',
+        'procedures/phal/reinit_devtree.cpp',
         'extensions/phal/common_utils.cpp',
         'extensions/phal/pdbg_utils.cpp',
         'extensions/phal/create_pel.cpp',
@@ -97,6 +114,7 @@ if build_phal
         cxx.find_library('ekb'),
         cxx.find_library('ipl'),
         cxx.find_library('phal'),
+        cxx.find_library('dtree'),
     ]
     extra_unit_files = [
         'service_files/set-spi-mux.service',

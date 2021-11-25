@@ -11,3 +11,20 @@ option('DEVTREE_EXP_FILE', type : 'string',
         value : '/var/lib/phal/exportdevtree',
         description : 'Path to the devtree export copy file'
 )
+option('CEC_DEVTREE_RW_PATH', type : 'string',
+        value : '/var/lib/phosphor-software-manager/pnor/rw/DEVTREE',
+        description : 'Path to the devtree file r/w version'
+)
+option('CEC_DEVTREE_RO_PATH', type : 'string',
+        value : '/var/lib/phosphor-software-manager/pnor/ro/DEVTREE',
+        description : 'Path to the devtree file read only version'
+)
+option('CEC_INFODB_PATH', type : 'string',
+        value : '/usr/share/pdata/attributes_info.db',
+        description : 'Path to the devtree attributes based database path'
+)
+option('DEVTREE_REINIT_ATTRS_LIST', type : 'string',
+        value : '/usr/share/pdata/reinit_devtree_attrs_list',
+        description : 'Path to the phal devtree reinit attribute list file'
+)
+
