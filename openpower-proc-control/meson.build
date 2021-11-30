@@ -102,6 +102,7 @@ if build_phal
         'procedures/phal/import_devtree.cpp',
         'procedures/phal/enter_mpreboot.cpp',
         'procedures/phal/reinit_devtree.cpp',
+        'procedures/phal/thread_stopall.cpp',
         'extensions/phal/common_utils.cpp',
         'extensions/phal/pdbg_utils.cpp',
         'extensions/phal/create_pel.cpp',
