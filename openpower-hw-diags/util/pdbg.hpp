@@ -67,6 +67,16 @@ pdbg_target* getPibTrgt(pdbg_target* i_procTrgt);
 pdbg_target* getFsiTrgt(pdbg_target* i_procTrgt);
 
 /**
+ * @brief  Reads a SCOM register.
+ * @param  i_trgt Given target.
+ * @param  i_addr Given address.
+ * @param  o_val  The returned value of the register.
+ * @return 0 if successful, non-0 otherwise.
+ * @note   Will assert the given target is a proc target.
+ */
+int getScom(pdbg_target* i_trgt, uint64_t i_addr, uint64_t& o_val);
+
+/**
  * @brief  Reads a CFAM FSI register.
  * @param  i_trgt Given target.
  * @param  i_addr Given address.
@@ -81,6 +91,11 @@ int getCfam(pdbg_target* i_trgt, uint32_t i_addr, uint32_t& o_val);
  * @param o_chips The returned list of chips.
  */
 void getActiveChips(std::vector<libhei::Chip>& o_chips);
+
+/**
+ * @return The primary processor (i.e. the processor connected to the BMC).
+ */
+pdbg_target* getPrimaryProcessor();
 
 /**
  * @return True, if hardware analysis is supported on this system. False,

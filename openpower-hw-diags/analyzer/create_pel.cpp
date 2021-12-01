@@ -25,9 +25,10 @@ namespace analyzer
 
 enum FfdcSubType_t : uint8_t
 {
-    FFDC_SIGNATURES    = 0x01,
-    FFDC_REGISTER_DUMP = 0x02,
-    FFDC_CALLOUT_FFDC  = 0x03,
+    FFDC_SIGNATURES      = 0x01,
+    FFDC_REGISTER_DUMP   = 0x02,
+    FFDC_CALLOUT_FFDC    = 0x03,
+    FFDC_HB_SCRATCH_REGS = 0x04,
 
     // For the callout section, the value of '0xCA' is required per the
     // phosphor-logging openpower-pel extention spec.
@@ -224,6 +225,57 @@ void __captureRegisterDump(const libhei::IsolationData& i_isoData,
 
 //------------------------------------------------------------------------------
 
+void __captureHostbootScratchRegisters(
+    std::vector<util::FFDCFile>& io_userDataFiles)
+{
+    // Get the Hostboot scratch registers from the primary processor.
+
+    uint32_t cfamAddr  = 0x283C;
+    uint32_t cfamValue = 0;
+
+    uint64_t scomAddr  = 0x4602F489;
+    uint64_t scomValue = 0;
+
+    auto priProc = util::pdbg::getPrimaryProcessor();
+    if (nullptr == priProc)
+    {
+        trace::err("Unable to get primary processor");
+    }
+    else
+    {
+        if (0 != util::pdbg::getCfam(priProc, cfamAddr, cfamValue))
+        {
+            cfamValue = 0; // just in case
+        }
+
+        if (0 != util::pdbg::getScom(priProc, scomAddr, scomValue))
+        {
+            scomValue = 0; // just in case
+        }
+    }
+
+    // Create a new entry for this user data section.
+    io_userDataFiles.emplace_back(util::FFDCFormat::Custom,
+                                  FFDC_HB_SCRATCH_REGS, FFDC_VERSION1);
+
+    // Create a streamer for easy writing to the FFDC file.
+    auto path = io_userDataFiles.back().getPath();
+    util::BinFileWriter stream{path};
+
+    // Add the data (CFAM addr/val, then SCOM addr/val).
+    stream << cfamAddr << cfamValue << scomAddr << scomValue;
+
+    // If the stream failed for any reason, remove the FFDC file.
+    if (!stream.good())
+    {
+        trace::err("Unable to write register dump FFDC file: %s",
+                   path.string().c_str());
+        io_userDataFiles.pop_back();
+    }
+}
+
+//------------------------------------------------------------------------------
+
 std::string __getMessageRegistry(bool i_isCheckstop)
 {
     // For now, there are only two choices:
@@ -278,6 +330,9 @@ std::tuple<uint32_t, uint32_t> createPel(const libhei::IsolationData& i_isoData,
 
     // Add the list of callouts to the PEL.
     __addCalloutList(i_servData, userDataFiles);
+
+    // Add the Hostboot scratch register to the PEL.
+    __captureHostbootScratchRegisters(userDataFiles);
 
     // Add the callout FFDC to the PEL.
     __addCalloutFFDC(i_servData, userDataFiles);
