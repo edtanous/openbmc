@@ -8,6 +8,7 @@
 #include <attn/attn_main.hpp>
 #include <buildinfo.hpp>
 #include <cli.hpp>
+#include <util/pdbg_callback.hpp>
 
 /**
  * @brief Attention handler application main()
@@ -37,6 +38,9 @@ int main(int argc, char* argv[])
     }
     else
     {
+        // set PDBG log callback function.
+        pdbg_set_logfunc(util::pdbg_log_callback);
+
         // Pdbg targets should only be initialized once according to
         // libpdbg documentation. Initializing them here will make sure
         // they are initialized for the attention handler, invocation of
