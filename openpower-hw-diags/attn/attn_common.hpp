@@ -3,6 +3,9 @@
 namespace attn
 {
 
+// number of seconds to wait for power fault handling
+constexpr int POWER_FAULT_WAIT = 10;
+
 /** @brief Attention handler return codes */
 enum ReturnCodes
 {
@@ -51,5 +54,12 @@ void addHbStatusRegs();
  * @return true if any recoverable errors are present, else false
  */
 bool recoverableErrors();
+
+/**
+ * @brief sleep for n-seconds
+ *
+ * @param[in] seconds number of seconds to sleep
+ */
+void sleepSeconds(const unsigned int seconds);
 
 } // namespace attn

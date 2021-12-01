@@ -157,4 +157,40 @@ bool recoverableErrors()
     return recoverableErrors;
 }
 
+/** @brief timesec less-than-equal-to compare */
+bool operator<=(const timespec& lhs, const timespec& rhs)
+{
+    if (lhs.tv_sec == rhs.tv_sec)
+        return lhs.tv_nsec <= rhs.tv_nsec;
+    else
+        return lhs.tv_sec <= rhs.tv_sec;
+}
+
+/** @brief sleep for n-seconds */
+void sleepSeconds(const unsigned int seconds)
+{
+    auto count = seconds;
+    struct timespec requested, remaining;
+
+    while (0 < count)
+    {
+        requested.tv_sec  = 1;
+        requested.tv_nsec = 0;
+        remaining         = requested;
+
+        while (-1 == nanosleep(&requested, &remaining))
+        {
+            // if not changing or implausible then abort
+            if (requested <= remaining)
+            {
+                break;
+            }
+
+            // back to sleep
+            requested = remaining;
+        }
+        count--;
+    }
+}
+
 } // namespace attn

@@ -243,6 +243,9 @@ int handleCheckstop(Attention* i_attention)
     }
     else
     {
+        // wait for power fault handling before starting analyses
+        sleepSeconds(POWER_FAULT_WAIT);
+
         // Look for any attentions found in hardware. This will generate and
         // commit a PEL if any errors are found.
         DumpParameters dumpParameters;
