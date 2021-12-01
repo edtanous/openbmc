@@ -195,6 +195,13 @@ static int counter = 0;
 // list of debug traces
 static std::vector<std::pair<std::string, std::string>> traceLog;
 
+/**
+ * @brief Process platform realted boot failure
+ *
+ * @param[in] errInfo - error details
+ */
+static void processPlatBootError(const ipl_error_info& errInfo);
+
 void processLogTraceCallback(void*, const char* fmt, va_list ap)
 {
     va_list vap;
@@ -260,53 +267,40 @@ void processIplErrorCallback(const ipl_error_info& errInfo)
         fmt::format("processIplErrorCallback: Error type({})", errInfo.type)
             .c_str());
 
-    if (errInfo.type == IPL_ERR_OK)
+    switch (errInfo.type)
     {
-        // reset trace log and exit
-        reset();
-        return;
-    }
-
-    if ((errInfo.type == IPL_ERR_SBE_BOOT) ||
-        (errInfo.type == IPL_ERR_SBE_CHIPOP))
-    {
-        // handle SBE related failures.
-        processSbeBootError();
-        return;
-    }
-
-    if (errInfo.type == IPL_ERR_HWP)
-    {
-        // Handle hwp failure
-        processBootError(false);
-        return;
-    }
-
-    // Log PEL for any other failures
-    if (errInfo.type != IPL_ERR_OK)
-    {
-        createPEL("org.open_power.PHAL.Error.Boot");
-        // reset trace log and exit
-        reset();
-        return;
+        case IPL_ERR_OK:
+            // reset trace log and exit
+            reset();
+            break;
+        case IPL_ERR_SBE_BOOT:
+        case IPL_ERR_SBE_CHIPOP:
+            // handle SBE related failures.
+            processSbeBootError();
+            break;
+        case IPL_ERR_HWP:
+            // Handle hwp failure
+            processBootError(false);
+            break;
+        case IPL_ERR_PLAT:
+            processPlatBootError(errInfo);
+            break;
+        default:
+            createPEL("org.open_power.PHAL.Error.Boot");
+            // reset trace log and exit
+            reset();
+            break;
     }
 }
 
-void processBootError(bool status)
+void processBootErrorHelper(FFDC* ffdc)
 {
-    log<level::INFO>("processBootError ", entry("STATUS=%d", status));
+    log<level::INFO>("processBootErrorHelper ");
     try
     {
-        // return If no failure during hwp execution
-        if (status)
-            return;
-
-        // Collecting ffdc details from phal
-        FFDC ffdc;
-        libekb_get_ffdc(ffdc);
-
         log<level::INFO>(
-            fmt::format("PHAL FFDC: Return Message[{}]", ffdc.message).c_str());
+            fmt::format("PHAL FFDC: Return Message[{}]", ffdc->message)
+                .c_str());
 
         // To store callouts details in json format as per pel expectation.
         json jsonCalloutDataList;
@@ -315,16 +309,16 @@ void processBootError(bool status)
         // To store phal trace and other additional data about ffdc.
         FFDCData pelAdditionalData;
 
-        if (ffdc.ffdc_type == FFDC_TYPE_HWP)
+        if (ffdc->ffdc_type == FFDC_TYPE_HWP)
         {
             // Adding hardware procedures return code details
-            pelAdditionalData.emplace_back("HWP_RC", ffdc.hwp_errorinfo.rc);
+            pelAdditionalData.emplace_back("HWP_RC", ffdc->hwp_errorinfo.rc);
             pelAdditionalData.emplace_back("HWP_RC_DESC",
-                                           ffdc.hwp_errorinfo.rc_desc);
+                                           ffdc->hwp_errorinfo.rc_desc);
 
             // Adding hardware procedures required ffdc data for debug
-            for_each(ffdc.hwp_errorinfo.ffdcs_data.begin(),
-                     ffdc.hwp_errorinfo.ffdcs_data.end(),
+            for_each(ffdc->hwp_errorinfo.ffdcs_data.begin(),
+                     ffdc->hwp_errorinfo.ffdcs_data.end(),
                      [&pelAdditionalData](
                          std::pair<std::string, std::string>& ele) -> void {
                          std::string keyWithPrefix("HWP_FFDC_");
@@ -336,8 +330,8 @@ void processBootError(bool status)
 
             // Adding hardware callout details
             int calloutCount = 0;
-            for_each(ffdc.hwp_errorinfo.hwcallouts.begin(),
-                     ffdc.hwp_errorinfo.hwcallouts.end(),
+            for_each(ffdc->hwp_errorinfo.hwcallouts.begin(),
+                     ffdc->hwp_errorinfo.hwcallouts.end(),
                      [&pelAdditionalData, &calloutCount, &jsonCalloutDataList](
                          const HWCallout& hwCallout) -> void {
                          calloutCount++;
@@ -392,8 +386,8 @@ void processBootError(bool status)
 
             // Adding CDG (callout, deconfigure and guard) targets details
             calloutCount = 0;
-            for_each(ffdc.hwp_errorinfo.cdg_targets.begin(),
-                     ffdc.hwp_errorinfo.cdg_targets.end(),
+            for_each(ffdc->hwp_errorinfo.cdg_targets.begin(),
+                     ffdc->hwp_errorinfo.cdg_targets.end(),
                      [&pelAdditionalData, &calloutCount,
                       &jsonCalloutDataList](const CDG_Target& cdg_tgt) -> void {
                          calloutCount++;
@@ -462,8 +456,8 @@ void processBootError(bool status)
             // Adding procedure callout
             calloutCount = 0;
             for_each(
-                ffdc.hwp_errorinfo.procedures_callout.begin(),
-                ffdc.hwp_errorinfo.procedures_callout.end(),
+                ffdc->hwp_errorinfo.procedures_callout.begin(),
+                ffdc->hwp_errorinfo.procedures_callout.end(),
                 [&pelAdditionalData, &calloutCount, &jsonCalloutDataList](
                     const ProcedureCallout& procCallout) -> void {
                     calloutCount++;
@@ -487,13 +481,13 @@ void processBootError(bool status)
                     jsonCalloutDataList.emplace_back(jsonCalloutData);
                 });
         }
-        else if ((ffdc.ffdc_type != FFDC_TYPE_NONE) &&
-                 (ffdc.ffdc_type != FFDC_TYPE_UNSUPPORTED))
+        else if ((ffdc->ffdc_type != FFDC_TYPE_NONE) &&
+                 (ffdc->ffdc_type != FFDC_TYPE_UNSUPPORTED))
         {
             log<level::ERR>(
                 fmt::format("Unsupported phal FFDC type to create PEL. "
                             "MSG: {}",
-                            ffdc.message)
+                            ffdc->message)
                     .c_str());
         }
 
@@ -537,6 +531,50 @@ void processBootError(bool status)
         throw ex;
     }
     reset();
+}
+
+void processPlatBootError(const ipl_error_info& errInfo)
+{
+    log<level::INFO>("processPlatBootError ");
+
+    // Collecting ffdc details from phal
+    FFDC* ffdc = reinterpret_cast<FFDC*>(errInfo.private_data);
+    try
+    {
+        processBootErrorHelper(ffdc);
+    }
+    catch (const std::exception& ex)
+    {
+        log<level::ERR>(
+            fmt::format("processPlatBootError: exception({})", ex.what())
+                .c_str());
+        throw ex;
+    }
+}
+
+void processBootError(bool status)
+{
+    log<level::INFO>(
+        fmt::format("processBootError: status({})", status).c_str());
+
+    try
+    {
+        // return If no failure during hwp execution
+        if (status)
+            return;
+
+        // Collecting ffdc details from phal
+        FFDC ffdc;
+        libekb_get_ffdc(ffdc);
+
+        processBootErrorHelper(&ffdc);
+    }
+    catch (const std::exception& ex)
+    {
+        log<level::ERR>(
+            fmt::format("processBootError: exception({})", ex.what()).c_str());
+        throw ex;
+    }
 }
 
 void processSbeBootError()
