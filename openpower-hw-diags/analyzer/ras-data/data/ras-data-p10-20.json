@@ -96,6 +96,7 @@
 
        "pec0" : "pib/perv8/pec0",
        "pec1" : "pib/perv9/pec1",
+
        "pau0" : "pib/perv16/pauc0/pau0",
        "pau3" : "pib/perv17/pauc1/pau1",
        "pau4" : "pib/perv18/pauc2/pau0",
@@ -911,6 +912,9 @@
             { "type": "callout_connected", "name": "omi15", "priority": "HIGH", "guard": true  },
             { "type": "callout_unit",      "name": "omi15", "priority": "LOW",  "guard": false }
         ],
+
+        "pec0": [ { "type": "callout_unit", "name": "pec0", "priority": "MED", "guard": true } ],
+        "pec1": [ { "type": "callout_unit", "name": "pec1", "priority": "MED", "guard": true } ],
 
         "pau0": [ { "type": "callout_unit", "name": "pau0", "priority": "MED", "guard": true } ],
         "pau3": [ { "type": "callout_unit", "name": "pau3", "priority": "MED", "guard": true } ],
