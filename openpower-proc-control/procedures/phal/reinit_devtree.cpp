@@ -22,6 +22,36 @@ namespace openpower
 {
 namespace phal
 {
+using namespace phosphor::logging;
+using FILE_Ptr = std::unique_ptr<FILE, decltype(&::fclose)>;
+namespace fs = std::filesystem;
+
+void applyAttrOverride(fs::path& devtreeFile)
+{
+    constexpr auto DEVTREE_ATTR_OVERRIDE_PATH = "/tmp/devtree_attr_override";
+    auto overrideFile = fs::path(DEVTREE_ATTR_OVERRIDE_PATH);
+    if (!fs::exists(overrideFile))
+    {
+        return;
+    }
+
+    // Open attribute override file in r/o mode
+    FILE_Ptr fpOverride(fopen(DEVTREE_ATTR_OVERRIDE_PATH, "r"), fclose);
+
+    // Update Devtree with attribute override data.
+    auto ret = dtree_cronus_import(devtreeFile.c_str(), CEC_INFODB_PATH,
+                                   fpOverride.get());
+    if (ret)
+    {
+        log<level::ERR>(
+            fmt::format("Failed({}) to update attribute override data", ret)
+                .c_str());
+        throw std::runtime_error(
+            "applyAttrOverride: dtree_cronus_import failed");
+    }
+    log<level::INFO>("DEVTREE: Applied attribute override data");
+}
+
 /**
  * @brief reinitialize the devtree attributes.
  * In the regular host boot path devtree attribute need to
@@ -36,15 +66,14 @@ namespace phal
  * 2. Create temporary devtree file by copying devtree r/o file
  * 3. Override temporary copy of devtree with attribute data file
  *    from step 1.
+ * 3a. Apply user provided attribute override if present in the
+ *     predefined location.
  * 4. Copy  temporary copy devtree to r/w devtree version file.
  */
 
 void reinitDevtree()
 {
-    using namespace phosphor::logging;
-    using FILE_Ptr = std::unique_ptr<FILE, decltype(&::fclose)>;
     using json = nlohmann::json;
-    namespace fs = std::filesystem;
 
     log<level::INFO>("reinitDevtree: started");
 
@@ -131,6 +160,9 @@ void reinitDevtree()
             throw std::runtime_error(
                 "reinitDevtree: dtree_cronus_import function failed");
         }
+        // Step 3.a: Apply user provided attribute override data if present.
+        applyAttrOverride(tmpDevtreePath);
+
         // Temporary file reinit is success.
         tmpReinitDone = true;
     }
