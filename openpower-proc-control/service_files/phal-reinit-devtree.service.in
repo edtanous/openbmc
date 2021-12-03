@@ -8,6 +8,7 @@ Type=oneshot
 RemainAfterExit=no
 ExecStart=/bin/rm -f /var/lib/phal/genesisboot
 ExecStart=/bin/rm -f /var/lib/phal/exportdevtree
+ExecStart=/usr/bin/openpower-proc-control reinitDevtree
 
 [Install]
 RequiredBy=obmc-host-start@0.target
