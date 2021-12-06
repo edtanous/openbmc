@@ -86,6 +86,7 @@ if build_p9
         'procedures/p9/start_host.cpp',
         'procedures/p9/start_host_mpreboot.cpp',
         'procedures/p9/enter_mpreboot.cpp',
+        'procedures/p9/thread_stopall.cpp',
     ]
 endif
 if build_openfsi
