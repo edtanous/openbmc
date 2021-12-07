@@ -128,24 +128,47 @@ uint32_t analyzeHardware(AnalysisType i_type, attn::DumpParameters& o_dump)
     libhei::Signature rootCause{};
     bool attnFound = filterRootCause(isoData, rootCause);
 
-    if (!attnFound)
+    // If a root cause attention was found, or if this was a system checkstop,
+    // generate a PEL.
+    if (attnFound || AnalysisType::SYSTEM_CHECKSTOP == i_type)
     {
-        // It is possible for TI handling, or manually initiated analysis via
-        // the command line, that there will not be an active attention. In
-        // which case, we will do nothing and let the caller of this function
-        // determine if this is the expected behavior.
-        trace::inf("No active attentions found");
-    }
-    else
-    {
-        trace::inf("Root cause attention: %s 0x%0" PRIx32 " %s",
-                   util::pdbg::getPath(rootCause.getChip()),
-                   rootCause.toUint32(), __attn(rootCause.getAttnType()));
+        if (attnFound)
+        {
+            trace::inf("Root cause attention: %s 0x%0" PRIx32 " %s",
+                       util::pdbg::getPath(rootCause.getChip()),
+                       rootCause.toUint32(), __attn(rootCause.getAttnType()));
+        }
+        else
+        {
+            // This is bad. Analysis should have found a root cause attention
+            // for a system checkstop. Issues could range from code bugs to SCOM
+            // errors. Regardless, generate a PEL with FFDC to assist with
+            // debug.
+            trace::err("System checkstop with no root cause attention");
+            rootCause = libhei::Signature{}; // just in case
+        }
 
-        // Resolve any service actions required by the root cause.
-        RasDataParser rasData{};
+        // Start building the service data.
         ServiceData servData{rootCause, isoData.queryCheckstop()};
-        rasData.getResolution(rootCause)->resolve(servData);
+
+        // Apply any service actions, if needed. Note that there are no
+        // resolutions for manual analysis.
+        if (AnalysisType::MANUAL != i_type)
+        {
+            if (attnFound)
+            {
+                // Resolve the root cause attention.
+                RasDataParser rasData{};
+                rasData.getResolution(rootCause)->resolve(servData);
+            }
+            else
+            {
+                // Analysis failed so apply the Level 2 Support resolution.
+                ProcedureCalloutResolution res{callout::Procedure::NEXTLVL,
+                                               callout::Priority::HIGH};
+                res.resolve(servData);
+            }
+        }
 
         // Create and commit a PEL.
         o_plid = createPel(isoData, servData);
@@ -166,6 +189,14 @@ uint32_t analyzeHardware(AnalysisType i_type, attn::DumpParameters& o_dump)
             o_dump.unitId   = 0;
             o_dump.dumpType = attn::DumpType::Hardware;
         }
+    }
+    else
+    {
+        // It is possible for TI handling, or manually initiated analysis via
+        // the command line, that there will not be an active attention. In
+        // which case, we will do nothing and let the caller of this function
+        // determine if this is the expected behavior.
+        trace::inf("No active attentions found");
     }
 
     // All done, clean up the isolator.
