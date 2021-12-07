@@ -1,5 +1,6 @@
 #include <stdio.h>
 
+#include <analyzer/analyzer_main.hpp>
 #include <analyzer/resolution.hpp>
 #include <util/trace.hpp>
 
@@ -297,8 +298,8 @@ TEST(Resolution, TestSet1)
     // Get some ServiceData objects
     libhei::Chip chip{chip_str, 0xdeadbeef};
     libhei::Signature sig{chip, 0xabcd, 0, 0, libhei::ATTN_TYPE_CHECKSTOP};
-    ServiceData sd1{sig, true};
-    ServiceData sd2{sig, false};
+    ServiceData sd1{sig, AnalysisType::SYSTEM_CHECKSTOP};
+    ServiceData sd2{sig, AnalysisType::TERMINATE_IMMEDIATE};
 
     // Resolve
     l1->resolve(sd1);
@@ -356,7 +357,7 @@ TEST(Resolution, HardwareCallout)
 
     libhei::Chip chip{chip_str, 0xdeadbeef};
     libhei::Signature sig{chip, 0xabcd, 0, 0, libhei::ATTN_TYPE_CHECKSTOP};
-    ServiceData sd{sig, true};
+    ServiceData sd{sig, AnalysisType::SYSTEM_CHECKSTOP};
 
     c1->resolve(sd);
 
@@ -403,7 +404,7 @@ TEST(Resolution, ConnectedCallout)
 
     libhei::Chip chip{chip_str, 0xdeadbeef};
     libhei::Signature sig{chip, 0xabcd, 0, 0, libhei::ATTN_TYPE_CHECKSTOP};
-    ServiceData sd{sig, true};
+    ServiceData sd{sig, AnalysisType::SYSTEM_CHECKSTOP};
 
     nlohmann::json j{};
     std::string s{};
@@ -483,7 +484,7 @@ TEST(Resolution, BusCallout)
 
     libhei::Chip chip{chip_str, 0xdeadbeef};
     libhei::Signature sig{chip, 0xabcd, 0, 0, libhei::ATTN_TYPE_CHECKSTOP};
-    ServiceData sd{sig, true};
+    ServiceData sd{sig, AnalysisType::SYSTEM_CHECKSTOP};
 
     nlohmann::json j{};
     std::string s{};
@@ -555,7 +556,7 @@ TEST(Resolution, ClockCallout)
 
     libhei::Chip chip{chip_str, 0xdeadbeef};
     libhei::Signature sig{chip, 0xabcd, 0, 0, libhei::ATTN_TYPE_CHECKSTOP};
-    ServiceData sd{sig, true};
+    ServiceData sd{sig, AnalysisType::SYSTEM_CHECKSTOP};
 
     c1->resolve(sd);
 
@@ -593,7 +594,7 @@ TEST(Resolution, ProcedureCallout)
 
     libhei::Chip chip{chip_str, 0xdeadbeef};
     libhei::Signature sig{chip, 0xabcd, 0, 0, libhei::ATTN_TYPE_CHECKSTOP};
-    ServiceData sd{sig, true};
+    ServiceData sd{sig, AnalysisType::SYSTEM_CHECKSTOP};
 
     c1->resolve(sd);
 

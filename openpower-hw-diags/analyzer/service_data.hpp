@@ -1,5 +1,6 @@
 #pragma once
 
+#include <analyzer/analyzer_main.hpp>
 #include <analyzer/callout.hpp>
 #include <hei_main.hpp>
 #include <nlohmann/json.hpp>
@@ -17,11 +18,12 @@ class ServiceData
     /**
      * @brief Constructor from components.
      * @param The signature of the root cause attention.
-     * @param True if the signature list contained a system checkstop attention.
-     *        False, otherwise.
+     * @param The type of analysis to perform.
      */
-    ServiceData(const libhei::Signature& i_rootCause, bool i_isCheckstop) :
-        iv_rootCause(i_rootCause), iv_isCheckstop(i_isCheckstop)
+    ServiceData(const libhei::Signature& i_rootCause,
+                AnalysisType i_analysisType) :
+        iv_rootCause(i_rootCause),
+        iv_analysisType(i_analysisType)
     {}
 
     /** @brief Destructor. */
@@ -37,9 +39,8 @@ class ServiceData
     /** The signature of the root cause attention. */
     const libhei::Signature iv_rootCause;
 
-    /** True if the signature list contained a system checkstop attention.
-     *  False, otherwise. */
-    const bool iv_isCheckstop;
+    /** The type of analysis to perform. */
+    const AnalysisType iv_analysisType;
 
     /** The list of callouts that will be added to a PEL. */
     nlohmann::json iv_calloutList = nlohmann::json::array();
@@ -55,23 +56,25 @@ class ServiceData
         return iv_rootCause;
     }
 
-    /** @return True if the signature list contained a system checkstop
-     *          attention. False, otherwise. */
-    bool queryCheckstop() const
+    /** @return The type of analysis to perform. */
+    AnalysisType getAnalysisType() const
     {
-        return iv_isCheckstop;
+        return iv_analysisType;
     }
 
     /** @return Returns the guard type based on current analysis policies. */
     callout::GuardType queryGuardPolicy() const
     {
-        // TODO: Manual execution of the analyzer (i.e. from the command line),
-        //       will eventually require the ability to not guard. This is
-        //       useful when we simply want to check for attentions in the
-        //       hardware with no service action.
+        if (AnalysisType::SYSTEM_CHECKSTOP == iv_analysisType)
+        {
+            return callout::GuardType::UNRECOVERABLE;
+        }
+        else if (AnalysisType::TERMINATE_IMMEDIATE == iv_analysisType)
+        {
+            return callout::GuardType::PREDICTIVE;
+        }
 
-        return queryCheckstop() ? callout::GuardType::UNRECOVERABLE
-                                : callout::GuardType::PREDICTIVE;
+        return callout::GuardType::NONE;
     }
 
     /**

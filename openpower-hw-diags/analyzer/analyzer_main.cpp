@@ -149,7 +149,7 @@ uint32_t analyzeHardware(AnalysisType i_type, attn::DumpParameters& o_dump)
         }
 
         // Start building the service data.
-        ServiceData servData{rootCause, isoData.queryCheckstop()};
+        ServiceData servData{rootCause, i_type};
 
         // Apply any service actions, if needed. Note that there are no
         // resolutions for manual analysis.
