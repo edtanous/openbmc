@@ -276,31 +276,39 @@ void __captureHostbootScratchRegisters(
 
 //------------------------------------------------------------------------------
 
-std::string __getMessageRegistry(bool i_isCheckstop)
+std::string __getMessageRegistry(AnalysisType i_type)
 {
-    // For now, there are only two choices:
-    return i_isCheckstop ? "org.open_power.HwDiags.Error.Checkstop"
-                         : "org.open_power.HwDiags.Error.Predictive";
+
+    if (AnalysisType::SYSTEM_CHECKSTOP == i_type)
+    {
+        return "org.open_power.HwDiags.Error.Checkstop";
+    }
+    else if (AnalysisType::TERMINATE_IMMEDIATE == i_type)
+    {
+        return "org.open_power.HwDiags.Error.Predictive";
+    }
+
+    return "org.open_power.HwDiags.Error.Informational"; // default
 }
 
 //------------------------------------------------------------------------------
 
-std::string __getMessageSeverity(bool i_isCheckstop)
+std::string __getMessageSeverity(AnalysisType i_type)
 {
-    // We could specify the PEL severity in the message registry entry. However,
-    // that would require multiple copies of each entry for each possible
-    // severity. As a workaround, we will not explicitly state the PEL severity
-    // in the message registry. Instead, the message severity will be converted
-    // into a PEL severity via the openpower-pels extention of phosphor-logging.
+    // Default severity is informational (no service action required).
+    LogSvr::Entry::Level severity = LogSvr::Entry::Level::Informational;
 
-    // Initially, we'll use a severity that will generate a predictive PEL. This
-    // is intended for Terminate Immediate (TI) errors and will require service.
-    LogSvr::Entry::Level severity = LogSvr::Entry::Level::Warning;
-
-    // If the reason for analysis was due to a system checsktop, the severity
-    // will be upgraded to a unrecoverable PEL.
-    if (i_isCheckstop)
+    if (AnalysisType::SYSTEM_CHECKSTOP == i_type)
+    {
+        // System checkstops are always unrecoverable errors (service action
+        // required).
         severity = LogSvr::Entry::Level::Error;
+    }
+    else if (AnalysisType::TERMINATE_IMMEDIATE == i_type)
+    {
+        // TIs will be reported as a predicive error (service action required).
+        severity = LogSvr::Entry::Level::Warning;
+    }
 
     // Convert the message severity to a string.
     return LogSvr::Entry::convertLevelToString(severity);
@@ -322,10 +330,6 @@ uint32_t createPel(const libhei::IsolationData& i_isoData,
     //          temporary files will be deleted. So they must remain in scope
     //          until the PEL is submitted.
     std::vector<util::FFDCFile> userDataFiles;
-
-    // In several cases, it is important to know if the reason for analysis was
-    // due to a system checsktop.
-    bool isCheckstop = i_isoData.queryCheckstop();
 
     // Set words 6-9 of the SRC.
     __setSrc(i_servData.getRootCause(), logData);
@@ -375,10 +379,10 @@ uint32_t createPel(const libhei::IsolationData& i_isoData,
             logData["_PID"] = std::to_string(getpid());
 
             // Get the message registry entry for this failure.
-            auto message = __getMessageRegistry(isCheckstop);
+            auto message = __getMessageRegistry(i_servData.getAnalysisType());
 
             // Get the message severity for this failure.
-            auto severity = __getMessageSeverity(isCheckstop);
+            auto severity = __getMessageSeverity(i_servData.getAnalysisType());
 
             // Add the message, with additional log and user data.
             method.append(message, severity, logData, userData);
