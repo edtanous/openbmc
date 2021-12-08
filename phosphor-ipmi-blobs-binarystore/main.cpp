@@ -74,5 +74,5 @@ std::unique_ptr<blobs::GenericBlobInterface> createHandler()
             config.blobBaseId, std::move(file)));
     }
 
-    return std::move(handler);
+    return handler;
 }

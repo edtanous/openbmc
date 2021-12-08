@@ -146,15 +146,15 @@ bool BinaryStoreBlobHandler::write(uint16_t session, uint32_t offset,
     return it->second->write(offset, data);
 }
 
-bool BinaryStoreBlobHandler::writeMeta(uint16_t session, uint32_t offset,
-                                       const std::vector<uint8_t>& data)
+bool BinaryStoreBlobHandler::writeMeta(uint16_t, uint32_t,
+                                       const std::vector<uint8_t>&)
 {
     /* Binary store handler doesn't support write meta */
     return false;
 }
 
 bool BinaryStoreBlobHandler::commit(uint16_t session,
-                                    const std::vector<uint8_t>& data)
+                                    const std::vector<uint8_t>&)
 {
     auto it = sessions_.find(session);
     if (it == sessions_.end())

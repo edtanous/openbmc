@@ -46,7 +46,7 @@ std::unique_ptr<BinaryStoreInterface>
         return nullptr;
     }
 
-    return std::move(store);
+    return store;
 }
 
 std::unique_ptr<BinaryStoreInterface>
@@ -65,7 +65,7 @@ std::unique_ptr<BinaryStoreInterface>
         return nullptr;
     }
 
-    return std::move(store);
+    return store;
 }
 
 bool BinaryStore::loadSerializedData()
@@ -215,7 +215,7 @@ bool BinaryStore::openOrCreateBlob(const std::string& blobId, uint16_t flags)
     return true;
 }
 
-bool BinaryStore::deleteBlob(const std::string& blobId)
+bool BinaryStore::deleteBlob(const std::string&)
 {
     return false;
 }
