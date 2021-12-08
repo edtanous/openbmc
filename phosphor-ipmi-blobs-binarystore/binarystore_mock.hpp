@@ -5,6 +5,7 @@
 #include "sys_file.hpp"
 
 #include <memory>
+#include <optional>
 #include <string>
 #include <vector>
 
@@ -19,8 +20,9 @@ class MockBinaryStore : public BinaryStoreInterface
 {
   public:
     MockBinaryStore(const std::string& baseBlobId,
-                    std::unique_ptr<SysFile> file) :
-        real_store_(baseBlobId, std::move(file))
+                    std::unique_ptr<SysFile> file,
+                    std::optional<uint32_t> maxSize = std::nullopt) :
+        real_store_(baseBlobId, std::move(file), maxSize)
     {
         // Implemented calls in BinaryStore will be directed to the real object.
         ON_CALL(*this, getBaseBlobId)

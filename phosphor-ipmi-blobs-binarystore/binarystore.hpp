@@ -8,6 +8,7 @@
 #include <blobs-ipmid/blobs.hpp>
 #include <cstdint>
 #include <memory>
+#include <optional>
 #include <string>
 #include <vector>
 
@@ -42,15 +43,27 @@ class BinaryStore : public BinaryStoreInterface
     };
 
     BinaryStore() = delete;
-    BinaryStore(const std::string& baseBlobId, std::unique_ptr<SysFile> file) :
-        baseBlobId_(baseBlobId), file_(std::move(file))
+    BinaryStore(const std::string& baseBlobId, std::unique_ptr<SysFile> file,
+                std::optional<uint32_t> maxSize = std::nullopt) :
+        baseBlobId_(baseBlobId),
+        file_(std::move(file)), maxSize(maxSize)
     {
         blob_.set_blob_base_id(baseBlobId_);
+        if (maxSize)
+        {
+            blob_.set_max_size_bytes(*maxSize);
+        }
     }
 
-    BinaryStore(std::unique_ptr<SysFile> file, bool readOnly = false) :
-        readOnly_{readOnly}, file_(std::move(file))
+    BinaryStore(std::unique_ptr<SysFile> file, bool readOnly = false,
+                std::optional<uint32_t> maxSize = std::nullopt) :
+        readOnly_{readOnly},
+        file_(std::move(file)), maxSize(maxSize)
     {
+        if (maxSize)
+        {
+            blob_.set_max_size_bytes(*maxSize);
+        }
     }
 
     ~BinaryStore() = default;
@@ -80,7 +93,8 @@ class BinaryStore : public BinaryStoreInterface
      */
     static std::unique_ptr<BinaryStoreInterface>
         createFromConfig(const std::string& baseBlobId,
-                         std::unique_ptr<SysFile> file);
+                         std::unique_ptr<SysFile> file,
+                         std::optional<uint32_t> maxSize = std::nullopt);
 
     /**
      * Helper factory method to create a BinaryStore instance
@@ -91,7 +105,8 @@ class BinaryStore : public BinaryStoreInterface
      * @returns unique_ptr to constructed BinaryStore.
      */
     static std::unique_ptr<BinaryStoreInterface>
-        createFromFile(std::unique_ptr<SysFile> file, bool readOnly = true);
+        createFromFile(std::unique_ptr<SysFile> file, bool readOnly = true,
+                       std::optional<uint32_t> maxSize = std::nullopt);
 
   private:
     /* Load the serialized data from sysfile if commit state is dirty.
@@ -107,6 +122,7 @@ class BinaryStore : public BinaryStoreInterface
     bool readOnly_ = false;
     std::unique_ptr<SysFile> file_ = nullptr;
     CommitState commitState_ = CommitState::Dirty;
+    std::optional<uint32_t> maxSize;
 };
 
 } // namespace binstore

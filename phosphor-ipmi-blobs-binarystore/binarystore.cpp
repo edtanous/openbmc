@@ -11,6 +11,7 @@
 #include <cstdint>
 #include <ipmid/handler.hpp>
 #include <memory>
+#include <optional>
 #include <phosphor-logging/elog.hpp>
 #include <string>
 #include <vector>
@@ -30,7 +31,8 @@ using namespace phosphor::logging;
 
 std::unique_ptr<BinaryStoreInterface>
     BinaryStore::createFromConfig(const std::string& baseBlobId,
-                                  std::unique_ptr<SysFile> file)
+                                  std::unique_ptr<SysFile> file,
+                                  std::optional<uint32_t> maxSize)
 {
     if (baseBlobId.empty() || !file)
     {
@@ -39,7 +41,8 @@ std::unique_ptr<BinaryStoreInterface>
         return nullptr;
     }
 
-    auto store = std::make_unique<BinaryStore>(baseBlobId, std::move(file));
+    auto store =
+        std::make_unique<BinaryStore>(baseBlobId, std::move(file), maxSize);
 
     if (!store->loadSerializedData())
     {
@@ -50,7 +53,8 @@ std::unique_ptr<BinaryStoreInterface>
 }
 
 std::unique_ptr<BinaryStoreInterface>
-    BinaryStore::createFromFile(std::unique_ptr<SysFile> file, bool readOnly)
+    BinaryStore::createFromFile(std::unique_ptr<SysFile> file, bool readOnly,
+                                std::optional<uint32_t> maxSize)
 {
     if (!file)
     {
@@ -58,7 +62,8 @@ std::unique_ptr<BinaryStoreInterface>
         return nullptr;
     }
 
-    auto store = std::make_unique<BinaryStore>(std::move(file), readOnly);
+    auto store =
+        std::make_unique<BinaryStore>(std::move(file), readOnly, maxSize);
 
     if (!store->loadSerializedData())
     {
@@ -91,6 +96,16 @@ bool BinaryStore::loadSerializedData()
             /* Fail to parse the data, which might mean no preexsiting blobs
              * and is a valid case to handle. Simply init an empty binstore. */
             commitState_ = CommitState::Uninitialized;
+        }
+
+        // The new max size takes priority
+        if (maxSize)
+        {
+            blob_.set_max_size_bytes(*maxSize);
+        }
+        else
+        {
+            blob_.clear_max_size_bytes();
         }
     }
     catch (const std::system_error& e)
@@ -288,9 +303,25 @@ bool BinaryStore::write(uint32_t offset, const std::vector<uint8_t>& data)
         return false;
     }
 
+    bool needResize = offset + data.size() > dataPtr->size();
+
+    // current size is the binary blob proto size + uint64 tracking the total
+    // size of the binary blob.
+    // currentSize = blob_size + x (uint64_t), where x = blob_size.
+    size_t currentSize = blob_.SerializeAsString().size() +
+                         sizeof(boost::endian::little_uint64_t);
+    size_t sizeDelta = needResize ? offset + data.size() - dataPtr->size() : 0;
+
+    if (maxSize && currentSize + sizeDelta > *maxSize)
+    {
+        log<level::ERR>("Write data would make the total size exceed the max "
+                        "size allowed. Return.");
+        return false;
+    }
+
     commitState_ = CommitState::Dirty;
     /* Copy (overwrite) the data */
-    if (offset + data.size() > dataPtr->size())
+    if (needResize)
     {
         dataPtr->resize(offset + data.size()); // not enough space, extend
     }
@@ -312,6 +343,13 @@ bool BinaryStore::commit()
     std::string commitData(reinterpret_cast<const char*>(sizeLE.data()),
                            sizeof(sizeLE));
     commitData += blobData;
+
+    // This should never be true if it is blocked by the write command
+    if (maxSize && sizeof(commitData) > *maxSize)
+    {
+        log<level::ERR>("Commit Data excedded maximum allowed size");
+        return false;
+    }
 
     try
     {

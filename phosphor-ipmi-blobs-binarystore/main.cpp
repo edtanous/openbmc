@@ -71,7 +71,7 @@ std::unique_ptr<blobs::GenericBlobInterface> createHandler()
                                                             config.offsetBytes);
 
         handler->addNewBinaryStore(binstore::BinaryStore::createFromConfig(
-            config.blobBaseId, std::move(file)));
+            config.blobBaseId, std::move(file), config.maxSizeBytes));
     }
 
     return handler;
