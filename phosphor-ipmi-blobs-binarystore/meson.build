@@ -10,7 +10,6 @@ project(
   ]
 )
 
-
 cpp = meson.get_compiler('cpp')
 cpp.has_header('boost/endian/arithmetic.hpp')
 cpp.has_header('nlohmann/json.hpp')
@@ -19,42 +18,8 @@ ipmi_blob_dep = dependency('phosphor-ipmi-blobs')
 phosphor_logging_dep = dependency('phosphor-logging')
 
 subdir('proto')
-
-binarystoreblob_pre = declare_dependency(
-  include_directories: [
-    include_directories('.'),
-    include_directories('proto')],
-  dependencies: [
-    protobuf_dep,
-    ipmi_blob_dep,
-    phosphor_logging_dep,
-  ])
-
-binarystoreblob_lib = library(
-  'binarystore',
-  'binarystore.cpp',
-  'sys.cpp',
-  'sys_file_impl.cpp',
-  'handler.cpp',
-  proto,
-  implicit_include_directories: false,
-  dependencies: binarystoreblob_pre,
-  install: true,
-  install_dir: get_option('libdir') / 'blob-ipmid')
-
-binarystoreblob_dep = declare_dependency(
-  link_with: binarystoreblob_lib,
-  dependencies: binarystoreblob_pre)
-
-if not get_option('blobtool').disabled()
-  executable(
-    'blobtool',
-    'blobtool.cpp',
-    implicit_include_directories: false,
-    dependencies: binarystoreblob_dep,
-    install: true)
-endif
-
+subdir('include')
+subdir('src')
 
 if not get_option('tests').disabled()
   subdir('test')
