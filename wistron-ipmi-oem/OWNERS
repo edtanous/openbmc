@@ -32,13 +32,17 @@
 # data within them will be kept sorted.
 
 owners:
-- ben_pai@wistron.com
+- bob_king@wistron.com
+- lulu_su@wistron.com
 
 reviewers:
 
 matches:
 
 openbmc:
-- name: Ben Pai
-  email: ben_pai@wistron.com
+- name: Bob King
+  email: bob_king@wistron.com
+  discord: NA
+- name: Lulu Su
+  email: lulu_su@wistron.com
   discord: NA
