@@ -38,6 +38,7 @@ tests = [
   'bin_stream_test',
   'ffdc_file_test',
   'resolution_test',
+  'pdbg_dts_test',
   'test-lpc-timeout',
   'test-pll-unlock',
 ]
