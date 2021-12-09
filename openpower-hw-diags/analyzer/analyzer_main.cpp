@@ -24,11 +24,13 @@ void initializeIsolator(std::vector<libhei::Chip>& o_chips);
 
 /**
  * @brief  Will get the list of active chip and initialize the isolator.
+ * @param  i_type      The type of analysis to perform. See enum for details.
  * @param  i_isoData   The data gathered during isolation (for FFDC).
  * @param  o_rootCause The returned root cause signature.
  * @return True, if root cause has been found. False, otherwise.
  */
-bool filterRootCause(const libhei::IsolationData& i_isoData,
+bool filterRootCause(AnalysisType i_type,
+                     const libhei::IsolationData& i_isoData,
                      libhei::Signature& o_rootCause);
 
 /**
@@ -126,7 +128,7 @@ uint32_t analyzeHardware(AnalysisType i_type, attn::DumpParameters& o_dump)
 
     // Filter for root cause attention.
     libhei::Signature rootCause{};
-    bool attnFound = filterRootCause(isoData, rootCause);
+    bool attnFound = filterRootCause(i_type, isoData, rootCause);
 
     // If a root cause attention was found, or if this was a system checkstop,
     // generate a PEL.

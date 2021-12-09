@@ -1,5 +1,6 @@
 #include <assert.h>
 
+#include <analyzer_main.hpp>
 #include <hei_main.hpp>
 #include <util/pdbg.hpp>
 
@@ -345,27 +346,22 @@ bool __findNonExternalCs(const std::vector<libhei::Signature>& i_list,
 
 //------------------------------------------------------------------------------
 
-bool filterRootCause(const libhei::IsolationData& i_isoData,
+bool filterRootCause(AnalysisType i_type,
+                     const libhei::IsolationData& i_isoData,
                      libhei::Signature& o_rootCause)
 {
     // We'll need to make a copy of the list so that the original list is
-    // maintained for the log.
+    // maintained for the PEL.
     std::vector<libhei::Signature> list{i_isoData.getSignatureList()};
 
     // START WORKAROUND
     // TODO: Filtering should be data driven. Until that support is available,
     //       use the following isolation rules.
 
-    // Special and host attentions are not supported by this user application.
-    auto itr = std::remove_if(list.begin(), list.end(), [&](const auto& t) {
-        return (libhei::ATTN_TYPE_SP_ATTN == t.getAttnType() ||
-                libhei::ATTN_TYPE_HOST_ATTN == t.getAttnType());
-    });
-    list.resize(std::distance(list.begin(), itr));
-
+    // Ensure the list is not empty before continuing.
     if (list.empty())
     {
-        return false; // the list is empty, nothing more to do
+        return false; // nothing more to do
     }
 
     // First, look for any RCS OSC errors. This must always be first because
@@ -382,6 +378,9 @@ bool filterRootCause(const libhei::IsolationData& i_isoData,
     {
         return true;
     }
+
+    // Regardless of the analysis type, always look for anything that could be
+    // blamed as the root cause of a system checkstop.
 
     // Memory channel failure attentions will produce SUEs and likely cause
     // downstream attentions, including a system checkstop.
@@ -417,26 +416,30 @@ bool filterRootCause(const libhei::IsolationData& i_isoData,
         return true;
     }
 
-    if (!list.empty())
+    if (AnalysisType::SYSTEM_CHECKSTOP != i_type)
     {
-        // TODO: At this point, we have not found any known errors that could be
-        //       attributed to a system checkstop attention. This would be an
-        //       isolation error if this function is called specifically for
-        //       checkstop analysis, but this function currently is called for
-        //       TIs and manual analysis as well. For now, we'll just sort the
-        //       remaining list (recoverable, unit checkstop, and then system
-        //       checkstop) and return the first element in the list. Later,
-        //       we'll change this to properly handle error path scenarios.
+        // No system checkstop root cause attentions were found. Next, look for
+        // any recoverable or unit checkstop attentions that could be associated
+        // with a TI.
 
-        // Fortunately, we just need to sort the list by the greater attention
-        // type value.
-        std::sort(list.begin(), list.end(), [&](const auto& a, const auto& b) {
-            return a.getAttnType() > b.getAttnType();
+        auto itr = std::find_if(list.begin(), list.end(), [&](const auto& t) {
+            return (libhei::ATTN_TYPE_RECOVERABLE == t.getAttnType() ||
+                    libhei::ATTN_TYPE_UNIT_CS == t.getAttnType());
         });
 
-        // The entry at the front of the list will be the root cause.
-        o_rootCause = list.front();
-        return true;
+        if (list.end() != itr)
+        {
+            o_rootCause = *itr;
+            return true;
+        }
+
+        if (AnalysisType::TERMINATE_IMMEDIATE != i_type)
+        {
+            // No attentions associated with a system checkstop or TI were
+            // found. Simply, return the first entry in the list.
+            o_rootCause = list.front();
+            return true;
+        }
     }
 
     // END WORKAROUND
