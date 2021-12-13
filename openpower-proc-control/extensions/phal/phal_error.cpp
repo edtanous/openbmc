@@ -366,22 +366,6 @@ void processBootErrorHelper(FFDC* ffdc)
                          pelAdditionalData.emplace_back(
                              std::string(keyPrefix.str()).append("CLK_POS"),
                              std::to_string(hwCallout.clkPos));
-
-                         json jsonCalloutData;
-                         jsonCalloutData["LocationCode"] = locationCode;
-                         std::string pelPriority =
-                             getPelPriority(hwCallout.callout_priority);
-                         jsonCalloutData["Priority"] = pelPriority;
-
-                         if (targetInfo.mruId != 0)
-                         {
-                             jsonCalloutData["MRUs"] = json::array({
-                                 {{"ID", targetInfo.mruId},
-                                  {"Priority", pelPriority}},
-                             });
-                         }
-
-                         jsonCalloutDataList.emplace_back(jsonCalloutData);
                      });
 
             // Adding CDG (callout, deconfigure and guard) targets details
