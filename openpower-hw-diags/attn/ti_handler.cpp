@@ -164,6 +164,12 @@ void handleHbTiWithSrc(TiDataArea* i_tiDataArea)
         // Reason code is byte 2 and 3 of 4 byte srcWord12HbWord0
         uint16_t reasonCode = be32toh(i_tiDataArea->srcWord12HbWord0);
 
+        // buffer for formatted string (+1 for null, just in case)
+        char buffer[sizeof("reason code 1234 ")];
+        sprintf(buffer, "reason code %04x", reasonCode);
+        trace<level::INFO>(buffer);
+
+        // for clean shutdown (reason code 050B) no PEL and no dump
         if (reasonCode != HB_SRC_SHUTDOWN_REQUEST)
         {
             // gather additional data for PEL
@@ -185,9 +191,9 @@ void handleHbTiWithSrc(TiDataArea* i_tiDataArea)
                 << std::hex << be32toh(i_tiDataArea->srcWord12HbWord0);
             tiAdditionalData["SrcAscii"] = src.str();
 
-            // Request dump after generating event log?
-            tiAdditionalData["Dump"] =
-                (0 != i_tiDataArea->hbDumpFlag) ? "true" : "false";
+            // dump flag is only valid for TI with EID (not TI with SRC)
+            trace<level::INFO>("Ignoring TI info dump flag for HB TI with SRC");
+            tiAdditionalData["Dump"] = "true";
 
             // Generate event log
             eventTerminate(tiAdditionalData, (char*)i_tiDataArea);
