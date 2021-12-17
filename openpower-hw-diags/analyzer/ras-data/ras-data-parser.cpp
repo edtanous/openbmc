@@ -257,9 +257,9 @@ std::shared_ptr<Resolution>
         else if ("plugin" == type)
         {
             auto name = a.at("name").get<std::string>();
+            auto inst = a.at("instance").get<unsigned int>();
 
-            // TODO
-            trace::inf("plugin: name=%s", name.c_str());
+            o_list->push(std::make_shared<PluginResolution>(name, inst));
         }
         else
         {

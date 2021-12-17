@@ -225,6 +225,7 @@ platform specific code.
 |----------|-------------------------------------------------------------------|
 | type     | value (string): `plugin`                                          |
 | name     | A string representing the plugin name.                            |
+| instance | Some plugins may be defined for multiple register/unit instances. |
 
 ### 5.2) `actions` example
 

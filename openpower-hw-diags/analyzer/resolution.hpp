@@ -196,6 +196,36 @@ class ProcedureCalloutResolution : public Resolution
 };
 
 /**
+ * @brief Some service actions cannot be contained within the RAS data files.
+ *        This resolution class allows a predefined plugin function to be
+ *        called to do additional service action work.
+ */
+class PluginResolution : public Resolution
+{
+  public:
+    /**
+     * @brief Constructor from components.
+     * @param i_name     The name of the plugin.
+     * @param i_instance A plugin could be defined for multiple chip
+     *                   units/registers.
+     */
+    PluginResolution(const std::string& i_name, unsigned int i_instance) :
+        iv_name(i_name), iv_instance(i_instance)
+    {}
+
+  private:
+    /** The name of the plugin. */
+    const std::string iv_name;
+
+    /** Some plugins will define the same action for multiple instances of a
+     *  register (i.e. for each core on a processor). */
+    const unsigned int iv_instance;
+
+  public:
+    void resolve(ServiceData& io_sd) const override;
+};
+
+/**
  * @brief Contains a list of resolutions. This resolutions will be resolved the
  *        list in the order in which they were inputted into the constructor.
  */

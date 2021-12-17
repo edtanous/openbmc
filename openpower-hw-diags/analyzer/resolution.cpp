@@ -282,4 +282,12 @@ void ProcedureCalloutResolution::resolve(ServiceData& io_sd) const
 
 //------------------------------------------------------------------------------
 
+void PluginResolution::resolve(ServiceData&) const
+{
+    trace::inf("PluginResolution: iv_name=%s iv_instance=%u", iv_name.c_str(),
+               iv_instance);
+}
+
+//------------------------------------------------------------------------------
+
 } // namespace analyzer

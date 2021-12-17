@@ -205,8 +205,13 @@
                                     }
                                 },
                                 "then": {
-                                    "required": [ "name" ],
-                                    "not": { "required": [ "priority", "guard" ] }
+                                    "required": [ "name", "instance" ],
+                                    "not": { "required": [ "priority", "guard" ] },
+                                    "properties": {
+                                        "instance": {
+                                            "type": "integer"
+                                        }
+                                    }
                                 }
                             }
                         ]

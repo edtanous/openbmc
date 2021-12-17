@@ -936,11 +936,11 @@
             { "type": "action", "name": "self_L" }
         ],
         "pll_unlock_0": [
-            { "type": "plugin", "name": "pll_unlock_0" },
+            { "type": "plugin", "name": "pll_unlock", "instance": 0 },
             { "type": "callout_self", "priority": "MED", "guard": false }
         ],
         "pll_unlock_1": [
-            { "type": "plugin", "name": "pll_unlock_1" },
+            { "type": "plugin", "name": "pll_unlock", "instance": 1 },
             { "type": "callout_self", "priority": "MED", "guard": false }
         ],
         "pcb_slave_parity": [
