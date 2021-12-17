@@ -2,6 +2,7 @@
 
 #include <analyzer_main.hpp>
 #include <hei_main.hpp>
+#include <hei_util.hpp>
 #include <util/pdbg.hpp>
 
 #include <algorithm>
@@ -13,50 +14,12 @@ namespace analyzer
 
 //------------------------------------------------------------------------------
 
-uint64_t __hash(unsigned int i_bytes, const std::string& i_str)
-{
-    // This hash is a simple "n*s[0] + (n-1)*s[1] + ... + s[n-1]" algorithm,
-    // where s[i] is a chunk from the input string the length of i_bytes.
-
-    // Currently only supporting 1-8 byte hashes.
-    assert(1 <= i_bytes && i_bytes <= sizeof(uint64_t));
-
-    // Start hashing each chunk.
-    uint64_t sumA = 0;
-    uint64_t sumB = 0;
-
-    // Iterate one chunk at a time.
-    for (unsigned int i = 0; i < i_str.size(); i += i_bytes)
-    {
-        // Combine each chunk into a single integer value. If we reach the end
-        // of the string, pad with null characters.
-        uint64_t chunk = 0;
-        for (unsigned int j = 0; j < i_bytes; j++)
-        {
-            chunk <<= 8;
-            chunk |= (i + j < i_str.size()) ? i_str[i + j] : '\0';
-        }
-
-        // Apply the simple hash.
-        sumA += chunk;
-        sumB += sumA;
-    }
-
-    // Mask off everything except the target number of bytes.
-    auto mask = std::numeric_limits<uint64_t>::max();
-    sumB &= mask >> ((sizeof(uint64_t) - i_bytes) * 8);
-
-    return sumB;
-}
-
-//------------------------------------------------------------------------------
-
 bool __findRcsOscError(const std::vector<libhei::Signature>& i_list,
                        libhei::Signature& o_rootCause)
 {
     // TODO: Consider returning all of them instead of one as root cause.
     auto itr = std::find_if(i_list.begin(), i_list.end(), [&](const auto& t) {
-        return (__hash(2, "TP_LOCAL_FIR") == t.getId() &&
+        return (libhei::hash<libhei::NodeId_t>("TP_LOCAL_FIR") == t.getId() &&
                 (42 == t.getBit() || 43 == t.getBit()));
     });
 
@@ -76,7 +39,7 @@ bool __findPllUnlock(const std::vector<libhei::Signature>& i_list,
 {
     // TODO: Consider returning all of them instead of one as root cause.
     auto itr = std::find_if(i_list.begin(), i_list.end(), [&](const auto& t) {
-        return (__hash(2, "PLL_UNLOCK") == t.getId() &&
+        return (libhei::hash<libhei::NodeId_t>("PLL_UNLOCK") == t.getId() &&
                 (0 == t.getBit() || 1 == t.getBit()));
     });
 
@@ -96,9 +59,12 @@ bool __findMemoryChannelFailure(const std::vector<libhei::Signature>& i_list,
 {
     using namespace util::pdbg;
 
-    static const auto mc_dstl_fir       = __hash(2, "MC_DSTL_FIR");
-    static const auto mc_ustl_fir       = __hash(2, "MC_USTL_FIR");
-    static const auto mc_omi_dl_err_rpt = __hash(2, "MC_OMI_DL_ERR_RPT");
+    using func  = libhei::NodeId_t (*)(const std::string& i_str);
+    func __hash = libhei::hash<libhei::NodeId_t>;
+
+    static const auto mc_dstl_fir       = __hash("MC_DSTL_FIR");
+    static const auto mc_ustl_fir       = __hash("MC_USTL_FIR");
+    static const auto mc_omi_dl_err_rpt = __hash("MC_OMI_DL_ERR_RPT");
 
     for (const auto s : i_list)
     {
@@ -161,22 +127,25 @@ bool __findCsRootCause(const libhei::Signature& i_signature)
 {
     using namespace util::pdbg;
 
+    using func  = libhei::NodeId_t (*)(const std::string& i_str);
+    func __hash = libhei::hash<libhei::NodeId_t>;
+
     // PROC registers
-    static const auto eq_core_fir      = __hash(2, "EQ_CORE_FIR");
-    static const auto eq_l2_fir        = __hash(2, "EQ_L2_FIR");
-    static const auto eq_l3_fir        = __hash(2, "EQ_L3_FIR");
-    static const auto eq_ncu_fir       = __hash(2, "EQ_NCU_FIR");
-    static const auto iohs_dlp_fir_oc  = __hash(2, "IOHS_DLP_FIR_OC");
-    static const auto iohs_dlp_fir_smp = __hash(2, "IOHS_DLP_FIR_SMP");
-    static const auto nx_cq_fir        = __hash(2, "NX_CQ_FIR");
-    static const auto nx_dma_eng_fir   = __hash(2, "NX_DMA_ENG_FIR");
-    static const auto pau_fir_0        = __hash(2, "PAU_FIR_0");
-    static const auto pau_fir_1        = __hash(2, "PAU_FIR_1");
-    static const auto pau_fir_2        = __hash(2, "PAU_FIR_2");
-    static const auto pau_ptl_fir      = __hash(2, "PAU_PTL_FIR");
+    static const auto eq_core_fir      = __hash("EQ_CORE_FIR");
+    static const auto eq_l2_fir        = __hash("EQ_L2_FIR");
+    static const auto eq_l3_fir        = __hash("EQ_L3_FIR");
+    static const auto eq_ncu_fir       = __hash("EQ_NCU_FIR");
+    static const auto iohs_dlp_fir_oc  = __hash("IOHS_DLP_FIR_OC");
+    static const auto iohs_dlp_fir_smp = __hash("IOHS_DLP_FIR_SMP");
+    static const auto nx_cq_fir        = __hash("NX_CQ_FIR");
+    static const auto nx_dma_eng_fir   = __hash("NX_DMA_ENG_FIR");
+    static const auto pau_fir_0        = __hash("PAU_FIR_0");
+    static const auto pau_fir_1        = __hash("PAU_FIR_1");
+    static const auto pau_fir_2        = __hash("PAU_FIR_2");
+    static const auto pau_ptl_fir      = __hash("PAU_PTL_FIR");
 
     // OCMB registers
-    static const auto rdffir = __hash(2, "RDFFIR");
+    static const auto rdffir = __hash("RDFFIR");
 
     const auto targetType = getTrgtType(getTrgt(i_signature.getChip()));
     const auto id         = i_signature.getId();
@@ -323,7 +292,7 @@ bool __findNonExternalCs(const std::vector<libhei::Signature>& i_list,
 {
     using namespace util::pdbg;
 
-    static const auto pb_ext_fir = __hash(2, "PB_EXT_FIR");
+    static const auto pb_ext_fir = libhei::hash<libhei::NodeId_t>("PB_EXT_FIR");
 
     for (const auto s : i_list)
     {
