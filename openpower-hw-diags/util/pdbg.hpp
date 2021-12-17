@@ -145,6 +145,12 @@ std::string getPhysDevPath(pdbg_target* trgt);
  */
 std::vector<uint8_t> getPhysBinPath(pdbg_target* trgt);
 
+/**
+ * @brief  Uses an SBE chip-op to query if there has been an LPC timeout.
+ * @return True, if there was an LPC timeout. False, otherwise.
+ */
+bool queryLpcTimeout(pdbg_target* target);
+
 } // namespace pdbg
 
 } // namespace util

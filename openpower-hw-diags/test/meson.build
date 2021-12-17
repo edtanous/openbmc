@@ -38,6 +38,7 @@ tests = [
   'bin_stream_test',
   'ffdc_file_test',
   'resolution_test',
+  'test-lpc-timeout',
   'test-pll-unlock',
 ]
 
@@ -56,11 +57,15 @@ util_src = files(
     '../util/temporary_file.cpp',
 )
 
+sim_src = files(
+  'pdbg-sim-only.cpp',
+)
+
 foreach t : tests
     test(t,
          executable(t.underscorify(),
                     [ files(t + '.cpp'), pdbg_test_dtb,
-                      analyzer_src, util_src ],
+                      analyzer_src, util_src, sim_src ],
                     dependencies : [ libhei_dep, libpdbg_dep, gtest_dep ],
                     cpp_args : test_arg,
                     include_directories : incdir),

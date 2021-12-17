@@ -1,3 +1,10 @@
+//------------------------------------------------------------------------------
+// IMPORTANT:
+// This file will be built in CI test and should work out-of-the-box in CI test
+// with use of the fake device tree. Any functions that require addition support
+// to simulate in CI test should be put in `pdbg_no_sim.cpp`.
+//------------------------------------------------------------------------------
+
 #include <assert.h>
 #include <config.h>
 
