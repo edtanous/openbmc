@@ -10,6 +10,10 @@ analyzer_src = files(
     'service_data.cpp',
 )
 
+plugins_src = files(
+    'plugins/p10-plugins.cpp',
+)
+
 # Library dependencies.
 analyzer_deps = [
     dbus_interfaces_dep,
@@ -22,7 +26,7 @@ analyzer_deps = [
 # Create static library.
 analyzer_lib = static_library(
     'analyzer_lib',
-    analyzer_src,
+    [ analyzer_src, plugins_src ],
     include_directories : incdir,
     dependencies : analyzer_deps,
     cpp_args : [ package_args, test_arg ],

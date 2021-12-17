@@ -1,3 +1,4 @@
+#include <analyzer/plugins/plugin.hpp>
 #include <analyzer/resolution.hpp>
 #include <util/pdbg.hpp>
 #include <util/trace.hpp>
@@ -282,10 +283,15 @@ void ProcedureCalloutResolution::resolve(ServiceData& io_sd) const
 
 //------------------------------------------------------------------------------
 
-void PluginResolution::resolve(ServiceData&) const
+void PluginResolution::resolve(ServiceData& io_sd) const
 {
-    trace::inf("PluginResolution: iv_name=%s iv_instance=%u", iv_name.c_str(),
-               iv_instance);
+    // Get the plugin function and call it.
+
+    auto chip = io_sd.getRootCause().getChip();
+
+    auto func = PluginMap::getSingleton().get(chip.getType(), iv_name);
+
+    func(iv_instance, chip, io_sd);
 }
 
 //------------------------------------------------------------------------------
