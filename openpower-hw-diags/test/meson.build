@@ -38,9 +38,11 @@ tests = [
   'bin_stream_test',
   'ffdc_file_test',
   'resolution_test',
+  'test-pll-unlock',
 ]
 
 analyzer_src = files(
+  '../analyzer/plugins/p10-plugins.cpp',
   '../analyzer/service_data.cpp',
   '../analyzer/resolution.cpp',
 )
