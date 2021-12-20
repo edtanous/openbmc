@@ -1,6 +1,6 @@
 # OpenBMC openpower-libhei project, see README.md for details.
 project('openpower-libhei', 'cpp',
-        version: '0.1', meson_version: '>=0.50.0',
+        version: '0.1', meson_version: '>=0.51.0',
         default_options: [
             'warning_level=3',
             'werror=true',
