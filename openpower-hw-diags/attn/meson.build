@@ -22,8 +22,7 @@ configure_file(
     output: 'attn_handler.service',
     install: true,
     install_dir:
-        dependency('systemd').get_pkgconfig_variable(
-            'systemdsystemunitdir')
+        dependency('systemd').get_variable(pkgconfig: 'systemdsystemunitdir')
 )
 
 # see if phosphor-logging is available, if not use test case logging code
