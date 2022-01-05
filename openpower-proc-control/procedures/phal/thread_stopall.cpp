@@ -89,9 +89,10 @@ void threadStopAll(void)
                     pelAdditionalData.emplace_back(
                         "SRC6", std::to_string((index << 16) | cmd));
 
+                    // Create informational error log.
                     createSbeErrorPEL(
                         "org.open_power.Processor.Error.SbeChipOpFailure",
-                        sbeError, pelAdditionalData);
+                        sbeError, pelAdditionalData, Severity::Informational);
                 }
                 else
                 {
