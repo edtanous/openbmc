@@ -53,6 +53,39 @@ void applyAttrOverride(fs::path& devtreeFile)
 }
 
 /**
+ * @brief Compute RO device tree file path from RW symbolic link
+ * @return RO file path one failure exception will be thrown
+ */
+fs::path computeRODeviceTreePath()
+{
+    // Symbolic links are not created for RO files, compute the lid name
+    // for the RW symbolic link and use it to compute RO file.
+    // Example:
+    // RW file = /media/hostfw/running/DEVTREE -> 81e00672.lid
+    // RO file = /media/hostfw/running-ro/ + 81e00672.lid
+    fs::path rwFileName = fs::read_symlink(CEC_DEVTREE_RW_PATH);
+    if (rwFileName.empty())
+    {
+        std::string err =
+            fmt::format("Failed to read the target file "
+                        "for the RW device tree symbolic link ({})",
+                        CEC_DEVTREE_RW_PATH);
+        log<level::ERR>(err.c_str());
+        throw std::runtime_error(err);
+    }
+    fs::path roFilePath = CEC_DEVTREE_RO_BASE_PATH / rwFileName;
+    if (!fs::exists(roFilePath))
+    {
+        auto err = fmt::format("RO device tree file ({}) does not "
+                               "exit ",
+                               roFilePath.string());
+        log<level::ERR>(err.c_str());
+        throw std::runtime_error(err);
+    }
+    return roFilePath;
+}
+
+/**
  * @brief reinitialize the devtree attributes.
  * In the regular host boot path devtree attribute need to
  * initialize the default data and also some of the selected
@@ -135,7 +168,8 @@ void reinitDevtree()
         }
 
         // Step 2: Create temporary devtree file by copying devtree r/o version
-        std::filesystem::copy(CEC_DEVTREE_RO_PATH, tmpDevtreePath, copyOptions);
+        fs::path roFilePath = computeRODeviceTreePath();
+        std::filesystem::copy(roFilePath, tmpDevtreePath, copyOptions);
 
         // get r/o version data file pointer
         FILE_Ptr fpImport(fopen(tmpFile.getPath().c_str(), "r"), fclose);
@@ -196,10 +230,10 @@ void reinitDevtree()
         else
         {
             // Attempt boot with genesis mode attribute data.
+            fs::path roFilePath = computeRODeviceTreePath();
             log<level::WARNING>("reinitDevtree: DEVTREE(r/w) initilizing with "
                                 "genesis mode attribute data");
-            std::filesystem::copy(CEC_DEVTREE_RO_PATH, CEC_DEVTREE_RW_PATH,
-                                  copyOptions);
+            std::filesystem::copy(roFilePath, CEC_DEVTREE_RW_PATH, copyOptions);
         }
     }
     catch (const std::exception& e)

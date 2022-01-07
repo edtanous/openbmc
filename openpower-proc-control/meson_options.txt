@@ -12,12 +12,12 @@ option('DEVTREE_EXP_FILE', type : 'string',
         description : 'Path to the devtree export copy file'
 )
 option('CEC_DEVTREE_RW_PATH', type : 'string',
-        value : '/var/lib/phosphor-software-manager/pnor/rw/DEVTREE',
+        value : '/media/hostfw/running/DEVTREE',
         description : 'Path to the devtree file r/w version'
 )
-option('CEC_DEVTREE_RO_PATH', type : 'string',
-        value : '/var/lib/phosphor-software-manager/pnor/ro/DEVTREE',
-        description : 'Path to the devtree file read only version'
+option('CEC_DEVTREE_RO_BASE_PATH', type : 'string',
+        value : '/media/hostfw/running-ro/',
+        description : 'Base path to the devtree file read only version'
 )
 option('CEC_INFODB_PATH', type : 'string',
         value : '/usr/share/pdata/attributes_info.db',
