@@ -195,6 +195,32 @@ class ProcedureCalloutResolution : public Resolution
     void resolve(ServiceData& io_sd) const override;
 };
 
+/** @brief Resolves a part callout service event. */
+class PartCalloutResolution : public Resolution
+{
+  public:
+    /**
+     * @brief Constructor from components.
+     * @param i_part     The part callout type.
+     * @param i_priority The callout priority.
+     */
+    PartCalloutResolution(const callout::PartType& i_part,
+                          const callout::Priority& i_priority) :
+        iv_part(i_part),
+        iv_priority(i_priority)
+    {}
+
+  private:
+    /** The part callout type. */
+    const callout::PartType iv_part;
+
+    /** The callout priority. */
+    const callout::Priority iv_priority;
+
+  public:
+    void resolve(ServiceData& io_sd) const override;
+};
+
 /**
  * @brief Some service actions cannot be contained within the RAS data files.
  *        This resolution class allows a predefined plugin function to be

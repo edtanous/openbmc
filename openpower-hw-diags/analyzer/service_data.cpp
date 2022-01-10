@@ -116,6 +116,31 @@ void ServiceData::calloutProcedure(const callout::Procedure& i_procedure,
 
 //------------------------------------------------------------------------------
 
+void ServiceData::calloutPart(const callout::PartType& i_part,
+                              const callout::Priority& i_priority)
+{
+    if (callout::PartType::PNOR == i_part)
+    {
+        // The PNOR is on the BMC card.
+        // TODO: Will need to be modified if we ever support systems with more
+        //       than one BMC.
+        addTargetCallout(util::pdbg::getTrgt("/bmc0"), i_priority, false);
+    }
+    else
+    {
+        throw std::logic_error("Unsupported part type: " + i_part.getString());
+    }
+
+    // Add the callout FFDC.
+    nlohmann::json ffdc;
+    ffdc["Callout Type"] = "Part Callout";
+    ffdc["Part Type"]    = i_part.getString();
+    ffdc["Priority"]     = i_priority.getRegistryString();
+    addCalloutFFDC(ffdc);
+}
+
+//------------------------------------------------------------------------------
+
 void ServiceData::addCallout(const nlohmann::json& i_callout)
 {
     // The new callout is either a hardware callout with a location code or a

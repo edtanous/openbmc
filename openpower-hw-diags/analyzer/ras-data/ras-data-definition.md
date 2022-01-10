@@ -210,8 +210,9 @@ callout actions (e.g. the PNOR).
 
 Supported parts:
 
-| Part     | Description                                                       |
-|----------|-------------------------------------------------------------------|
+| Part Type     | Description                                                  |
+|---------------|--------------------------------------------------------------|
+| PNOR          | The part containing the PNOR                                 |
 
 #### 5.1.9) action type `plugin`
 

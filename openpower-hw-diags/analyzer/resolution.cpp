@@ -100,6 +100,14 @@ void ProcedureCalloutResolution::resolve(ServiceData& io_sd) const
 
 //------------------------------------------------------------------------------
 
+void PartCalloutResolution::resolve(ServiceData& io_sd) const
+{
+    // Add the callout and the FFDC to the service data.
+    io_sd.calloutPart(iv_part, iv_priority);
+}
+
+//------------------------------------------------------------------------------
+
 void PluginResolution::resolve(ServiceData& io_sd) const
 {
     // Get the plugin function and call it.

@@ -181,6 +181,39 @@ class ClockType
 inline const ClockType ClockType::OSC_REF_CLOCK_0{"OSC_REF_CLOCK_0"};
 inline const ClockType ClockType::OSC_REF_CLOCK_1{"OSC_REF_CLOCK_1"};
 
+/** @brief Container class for part callout service actions. */
+class PartType
+{
+  public:
+    /** The part containing the PNOR. */
+    static const PartType PNOR;
+
+  private:
+    /**
+     * @brief Constructor from components.
+     * @param i_string The string representation of the part callout.
+     */
+    explicit PartType(const std::string& i_string) : iv_string(i_string) {}
+
+  private:
+    /** The string representation of the part callout. */
+    const std::string iv_string;
+
+  public:
+    bool operator==(const PartType& r) const
+    {
+        return this->iv_string == r.iv_string;
+    }
+
+    /** iv_string accessor */
+    std::string getString() const
+    {
+        return iv_string;
+    }
+};
+
+inline const PartType PartType::PNOR{"PNOR"};
+
 /** @brief Container class for guard service actions. */
 class GuardType
 {

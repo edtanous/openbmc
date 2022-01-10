@@ -416,3 +416,43 @@ TEST(Resolution, ProcedureCallout)
 ])";
     EXPECT_EQ(s, j.dump(4));
 }
+
+TEST(Resolution, PartCallout)
+{
+    pdbg_targets_init(nullptr);
+
+    auto c1 = std::make_shared<PartCalloutResolution>(callout::PartType::PNOR,
+                                                      callout::Priority::MED);
+
+    libhei::Chip chip{util::pdbg::getTrgt(chip_str), 0xdeadbeef};
+    libhei::Signature sig{chip, 0xabcd, 0, 0, libhei::ATTN_TYPE_CHECKSTOP};
+    ServiceData sd{sig, AnalysisType::SYSTEM_CHECKSTOP};
+
+    c1->resolve(sd);
+
+    nlohmann::json j{};
+    std::string s{};
+
+    // Callout list
+    j = sd.getCalloutList();
+    s = R"([
+    {
+        "Deconfigured": false,
+        "Guarded": false,
+        "LocationCode": "/bmc0",
+        "Priority": "M"
+    }
+])";
+    EXPECT_EQ(s, j.dump(4));
+
+    // Callout FFDC
+    j = sd.getCalloutFFDC();
+    s = R"([
+    {
+        "Callout Type": "Part Callout",
+        "Part Type": "PNOR",
+        "Priority": "medium"
+    }
+])";
+    EXPECT_EQ(s, j.dump(4));
+}

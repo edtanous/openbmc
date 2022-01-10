@@ -250,9 +250,15 @@ std::shared_ptr<Resolution>
             auto name     = a.at("name").get<std::string>();
             auto priority = a.at("priority").get<std::string>();
 
-            // TODO
-            trace::inf("callout_part: name=%s priority=%s", name.c_str(),
-                       priority.c_str());
+            // clang-format off
+            static const std::map<std::string, callout::PartType> m =
+            {
+                {"PNOR", callout::PartType::PNOR},
+            };
+            // clang-format on
+
+            o_list->push(std::make_shared<PartCalloutResolution>(
+                m.at(name), getPriority(priority)));
         }
         else if ("plugin" == type)
         {

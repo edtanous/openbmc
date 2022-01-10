@@ -125,6 +125,14 @@ class ServiceData
     void calloutProcedure(const callout::Procedure& i_procedure,
                           const callout::Priority& i_priority);
 
+    /**
+     * @brief Add callout for part type.
+     * @param i_part     The part type.
+     * @param i_priority The callout priority.
+     */
+    void calloutPart(const callout::PartType& i_part,
+                     const callout::Priority& i_priority);
+
     /** @brief Accessor to iv_calloutList. */
     const nlohmann::json& getCalloutList() const
     {
