@@ -2,6 +2,8 @@
 
 #include <libpdbg.h>
 
+#include <analyzer/callout.hpp>
+
 #include <string>
 #include <vector>
 
@@ -51,6 +53,14 @@ uint8_t getTrgtType(pdbg_target* i_trgt);
 
 /** @return The target type of the given chip. */
 uint8_t getTrgtType(const libhei::Chip& i_chip);
+
+/**
+ * @return The connected target on the other side of the given bus.
+ * @param  i_rxTarget The target on the receiving side (RX) of the bus.
+ * @param  i_busType  The bus type.
+ */
+pdbg_target* getConnectedTarget(pdbg_target* i_rxTarget,
+                                const analyzer::callout::BusType& i_busType);
 
 /**
  * @return The pib target associated with the given proc target.

@@ -45,85 +45,6 @@ pdbg_target* __getUnitTarget(pdbg_target* i_chipTarget,
 
 //------------------------------------------------------------------------------
 
-// Helper function to get the connected target on the other side of the
-// given bus.
-pdbg_target* __getConnectedTarget(pdbg_target* i_rxTarget,
-                                  const callout::BusType& i_busType)
-{
-    assert(nullptr != i_rxTarget);
-
-    pdbg_target* txTarget = nullptr;
-
-    auto rxType        = util::pdbg::getTrgtType(i_rxTarget);
-    std::string rxPath = util::pdbg::getPath(i_rxTarget);
-
-    if (callout::BusType::SMP_BUS == i_busType &&
-        util::pdbg::TYPE_IOLINK == rxType)
-    {
-        // TODO: Will need to reference some sort of data that can tell us how
-        //       the processors are connected in the system. For now, return the
-        //       RX target to avoid returning a nullptr.
-        trace::inf("No support to get peer target on SMP bus");
-        txTarget = i_rxTarget;
-    }
-    else if (callout::BusType::SMP_BUS == i_busType &&
-             util::pdbg::TYPE_IOHS == rxType)
-    {
-        // TODO: Will need to reference some sort of data that can tell us how
-        //       the processors are connected in the system. For now, return the
-        //       RX target to avoid returning a nullptr.
-        trace::inf("No support to get peer target on SMP bus");
-        txTarget = i_rxTarget;
-    }
-    else if (callout::BusType::OMI_BUS == i_busType &&
-             util::pdbg::TYPE_OMI == rxType)
-    {
-        // This is a bit clunky. The pdbg APIs only give us the ability to
-        // iterate over the children instead of just returning a list. So we'll
-        // push all the children to a list and go from there.
-        std::vector<pdbg_target*> childList;
-
-        pdbg_target* childTarget = nullptr;
-        pdbg_for_each_target("ocmb", i_rxTarget, childTarget)
-        {
-            if (nullptr != childTarget)
-            {
-                childList.push_back(childTarget);
-            }
-        }
-
-        // We know there should only be one OCMB per OMI.
-        if (1 != childList.size())
-        {
-            throw std::logic_error("Invalid child list size for " + rxPath);
-        }
-
-        // Get the connected target.
-        txTarget = childList.front();
-    }
-    else if (callout::BusType::OMI_BUS == i_busType &&
-             util::pdbg::TYPE_OCMB == rxType)
-    {
-        txTarget = pdbg_target_parent("omi", i_rxTarget);
-        if (nullptr == txTarget)
-        {
-            throw std::logic_error("No parent OMI found for " + rxPath);
-        }
-    }
-    else
-    {
-        // This would be a code bug.
-        throw std::logic_error("Unsupported config: i_rxTarget=" + rxPath +
-                               " i_busType=" + i_busType.getString());
-    }
-
-    assert(nullptr != txTarget); // just in case we missed something above
-
-    return txTarget;
-}
-
-//------------------------------------------------------------------------------
-
 void __calloutTarget(ServiceData& io_sd, pdbg_target* i_target,
                      const callout::Priority& i_priority, bool i_guard)
 {
@@ -195,7 +116,7 @@ void ConnectedCalloutResolution::resolve(ServiceData& io_sd) const
     auto rxTarget = __getUnitTarget(chipTarget, iv_unitPath);
 
     // Get the endpoint target for the transfer side of the bus.
-    auto txTarget = __getConnectedTarget(rxTarget, iv_busType);
+    auto txTarget = util::pdbg::getConnectedTarget(rxTarget, iv_busType);
 
     // Callout the TX endpoint.
     __calloutTarget(io_sd, txTarget, iv_priority, iv_guard);
@@ -221,7 +142,7 @@ void BusCalloutResolution::resolve(ServiceData& io_sd) const
     auto rxTarget = __getUnitTarget(chipTarget, iv_unitPath);
 
     // Get the endpoint target for the transfer side of the bus.
-    auto txTarget = __getConnectedTarget(rxTarget, iv_busType);
+    auto txTarget = util::pdbg::getConnectedTarget(rxTarget, iv_busType);
 
     // Callout the RX endpoint.
     __calloutTarget(io_sd, rxTarget, iv_priority, iv_guard);
