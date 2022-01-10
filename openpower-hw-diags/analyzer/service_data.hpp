@@ -4,6 +4,7 @@
 #include <analyzer/callout.hpp>
 #include <hei_main.hpp>
 #include <nlohmann/json.hpp>
+#include <util/pdbg.hpp>
 
 namespace analyzer
 {
@@ -78,6 +79,66 @@ class ServiceData
     }
 
     /**
+     * @brief Add callout for a pdbg_target.
+     * @param i_target   The chip or unit target to add to the callout list.
+     * @param i_priority The callout priority.
+     * @param i_guard    True if guard is required. False, otherwise.
+     */
+    void calloutTarget(pdbg_target* i_target,
+                       const callout::Priority& i_priority, bool i_guard);
+
+    /**
+     * @brief Add callout for a connected target on the other side of a bus.
+     * @param i_rxTarget The target on the receiving side (RX) of the bus.
+     * @param i_busType  The bus type.
+     * @param i_priority The callout priority.
+     * @param i_guard    True if guard is required. False, otherwise.
+     */
+    void calloutConnected(pdbg_target* i_rxTarget,
+                          const callout::BusType& i_busType,
+                          const callout::Priority& i_priority, bool i_guard);
+
+    /**
+     * @brief Add callout for an entire bus.
+     * @param i_rxTarget The target on the receiving side (RX) of the bus.
+     * @param i_busType  The bus type.
+     * @param i_priority The callout priority.
+     * @param i_guard    True if guard is required. False, otherwise.
+     */
+    void calloutBus(pdbg_target* i_rxTarget, const callout::BusType& i_busType,
+                    const callout::Priority& i_priority, bool i_guard);
+
+    /**
+     * @brief Add callout for a clock.
+     * @param i_clockType The clock type.
+     * @param i_priority  The callout priority.
+     * @param i_guard     True if guard is required. False, otherwise.
+     */
+    void calloutClock(const callout::ClockType& i_clockType,
+                      const callout::Priority& i_priority, bool i_guard);
+
+    /**
+     * @brief Add callout for a service procedure.
+     * @param i_procedure The procedure type.
+     * @param i_priority  The callout priority.
+     */
+    void calloutProcedure(const callout::Procedure& i_procedure,
+                          const callout::Priority& i_priority);
+
+    /** @brief Accessor to iv_calloutList. */
+    const nlohmann::json& getCalloutList() const
+    {
+        return iv_calloutList;
+    }
+
+    /** @brief Accessor to iv_calloutFFDC. */
+    const nlohmann::json& getCalloutFFDC() const
+    {
+        return iv_calloutFFDC;
+    }
+
+  private:
+    /**
      * @brief Add callout information to the callout list.
      * @param The JSON object for this callout.
      */
@@ -93,17 +154,22 @@ class ServiceData
         iv_calloutFFDC.push_back(i_ffdc);
     }
 
-    /** @brief Accessor to iv_calloutList. */
-    const nlohmann::json& getCalloutList() const
-    {
-        return iv_calloutList;
-    }
+    /**
+     * @brief A simple helper function for all the callout functions that need
+     *        to callout a target (callout only, no FFDC).
+     * @param i_target   The chip or unit target to add to the callout list.
+     * @param i_priority The callout priority.
+     * @param i_guard    True if guard is required. False, otherwise.
+     */
+    void addTargetCallout(pdbg_target* i_target,
+                          const callout::Priority& i_priority, bool i_guard);
 
-    /** @brief Accessor to iv_calloutFFDC. */
-    const nlohmann::json& getCalloutFFDC() const
-    {
-        return iv_calloutFFDC;
-    }
+    /**
+     * @brief A simple helper function for all the callout functions that need
+     *        to callout a the backplane (callout only, no FFDC).
+     * @param i_priority The callout priority.
+     */
+    void addBackplaneCallout(const callout::Priority& i_priority);
 };
 
 } // namespace analyzer

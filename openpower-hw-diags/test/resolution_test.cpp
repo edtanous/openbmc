@@ -235,21 +235,24 @@ TEST(Resolution, ConnectedCallout)
         "Callout Type": "Connected Callout",
         "Guard": true,
         "Priority": "medium_group_A",
-        "Target": "/proc0/pib/perv24/pauc0/iohs0/smpgroup0"
+        "RX Target": "/proc0/pib/perv24/pauc0/iohs0/smpgroup0",
+        "TX Target": "/proc0/pib/perv24/pauc0/iohs0/smpgroup0"
     },
     {
         "Bus Type": "OMI_BUS",
         "Callout Type": "Connected Callout",
         "Guard": true,
         "Priority": "medium_group_B",
-        "Target": "/proc0/pib/perv12/mc0/mi0/mcc0/omi0"
+        "RX Target": "/proc0/pib/perv12/mc0/mi0/mcc0/omi0/ocmb0",
+        "TX Target": "/proc0/pib/perv12/mc0/mi0/mcc0/omi0"
     },
     {
         "Bus Type": "OMI_BUS",
         "Callout Type": "Connected Callout",
         "Guard": true,
         "Priority": "medium_group_C",
-        "Target": "/proc0/pib/perv12/mc0/mi0/mcc0/omi0/ocmb0"
+        "RX Target": "/proc0/pib/perv12/mc0/mi0/mcc0/omi0",
+        "TX Target": "/proc0/pib/perv12/mc0/mi0/mcc0/omi0/ocmb0"
     }
 ])";
     EXPECT_EQ(s, j.dump(4));
@@ -321,7 +324,8 @@ TEST(Resolution, BusCallout)
         "Callout Type": "Connected Callout",
         "Guard": true,
         "Priority": "medium_group_A",
-        "Target": "/proc0/pib/perv12/mc0/mi0/mcc0/omi0/ocmb0"
+        "RX Target": "/proc0/pib/perv12/mc0/mi0/mcc0/omi0",
+        "TX Target": "/proc0/pib/perv12/mc0/mi0/mcc0/omi0/ocmb0"
     },
     {
         "Bus Type": "OMI_BUS",
