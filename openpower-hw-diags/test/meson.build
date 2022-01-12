@@ -24,6 +24,13 @@ test_arg = [
     '-DTEST_TRACE',
 ]
 
+# Compile the test dts into a binary for pdbg.
+pdbg_test_dtb = custom_target('build_pdbg_test_dtb',
+    input   : files('pdbg_test.dts'),
+    output  : 'pdbg_test.dtb',
+    command : [ find_program('dtc'), '-I', 'dts', '-O', 'dtb',
+                '-o', '@OUTPUT@', '@INPUT@' ])
+
 # end2end code exerciser for experiment and testing
 subdir('end2end')
 
@@ -38,9 +45,12 @@ analyzer_src = files(
 )
 
 foreach t : tests
-    test(t, executable(t.underscorify(), [ t + '.cpp', analyzer_src ],
-                       link_with : [ util_lib ],
-                       dependencies : [ libhei_dep, gtest_dep ],
-                       cpp_args : test_arg,
-                       include_directories : incdir))
+    test(t,
+         executable(t.underscorify(),
+                    [ files(t + '.cpp'), pdbg_test_dtb, analyzer_src ],
+                    link_with : [ util_lib ],
+                    dependencies : [ libhei_dep, gtest_dep ],
+                    cpp_args : test_arg,
+                    include_directories : incdir),
+         env : [ 'PDBG_DTB=' + pdbg_test_dtb.full_path() ])
 endforeach
