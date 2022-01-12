@@ -42,14 +42,24 @@ tests = [
 
 analyzer_src = files(
   '../analyzer/service_data.cpp',
+  '../analyzer/resolution.cpp',
+)
+
+# We cannot link to `util_lib` because that is built without `-DTEST_TRACE` and
+# any of the util functions that use `trace.hpp` will throw a linker error
+# because we don't have access to phosphor-logging in test ... yet.
+util_src = files(
+    '../util/ffdc_file.cpp',
+    '../util/pdbg.cpp',
+    '../util/temporary_file.cpp',
 )
 
 foreach t : tests
     test(t,
          executable(t.underscorify(),
-                    [ files(t + '.cpp'), pdbg_test_dtb, analyzer_src ],
-                    link_with : [ util_lib ],
-                    dependencies : [ libhei_dep, gtest_dep ],
+                    [ files(t + '.cpp'), pdbg_test_dtb,
+                      analyzer_src, util_src ],
+                    dependencies : [ libhei_dep, libpdbg_dep, gtest_dep ],
                     cpp_args : test_arg,
                     include_directories : incdir),
          env : [ 'PDBG_DTB=' + pdbg_test_dtb.full_path() ])
