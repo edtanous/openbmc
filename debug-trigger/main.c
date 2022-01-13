@@ -14,29 +14,34 @@
 #include <sys/types.h>
 #include <unistd.h>
 
+static void process_debug(int sink)
+{
+	static const char action = 'c';
+	ssize_t rc;
+
+	sync();
+
+	if ((rc = write(sink, &action, sizeof(action))) == sizeof(action))
+		return;
+
+	if (rc == -1) {
+		warn("Failed to execute debug command");
+	} else {
+		warnx("Failed to execute debug command: %zd", rc);
+	}
+}
+
 static int process(int source, int sink)
 {
 	ssize_t ingress;
 	char command;
 
 	while ((ingress = read(source, &command, sizeof(command))) == sizeof(command)) {
-		static const char action = 'c';
 		ssize_t rc;
 
 		switch (command) {
-		case 'D': /* Debug */
-			sync();
-
-			if ((rc = write(sink, &action, sizeof(action))) == sizeof(action))
-				continue;
-
-			if (rc == -1) {
-				warn("Failed to execute command 0x%02x (%c)",
-						command, command);
-			} else {
-				warnx("Failed to execute command 0x%02x (%c): %zd",
-						command, command, rc);
-			}
+		case 'D':
+			process_debug(sink);
 			break;
 		case 'R':
 			sync();
