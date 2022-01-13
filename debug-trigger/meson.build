@@ -6,7 +6,9 @@ project('debug-trigger', 'c',
 		'werror=true',
 		'c_std=gnu18',
 	])
-executable('debug-trigger', 'main.c', install: true)
+
+config = configuration_data()
+debug_trigger_deps = []
 
 if get_option('systemd')
 	systemd = dependency('systemd')
@@ -15,7 +17,11 @@ if get_option('systemd')
 		       output: 'debug-trigger@.service',
 		       copy: true,
 		       install_dir: unitdir)
+	debug_trigger_deps += dependency('libsystemd')
 endif
+
+config.set10('HAVE_SYSTEMD', get_option('systemd'))
+config_h = configure_file(configuration: config, output: 'config.h')
 
 udev = dependency('udev')
 udevdir = udev.get_pkgconfig_variable('udevdir')
@@ -27,3 +33,7 @@ foreach trigger : triggers
 	rulesdir = udevdir + '/rules.d'
 	configure_file(input: src, output: dst, copy: true, install_dir: rulesdir)
 endforeach
+
+executable('debug-trigger', 'main.c', config_h,
+	   dependencies: debug_trigger_deps,
+	   install: true)
