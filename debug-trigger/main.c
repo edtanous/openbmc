@@ -2,18 +2,30 @@
 // Copyright (C) 2021 IBM Corp.
 
 /*
- * debug-trigger listens for an external signal that the BMC is in some way unresponsive. When the
+ * debug-trigger listens for an external signal that the BMC is in some way unresponsive. When a
  * signal is received it triggers a crash to collect debug data and reboots the system in the hope
  * that it will recover.
  *
  * Usage: debug-trigger [SOURCE] [SINK]
  *
+ * Options:
+ *  --sink-actions=ACTION
+ *	Set the class of sink action(s) to be used. Defaults to 'sysrq'
+ *
  * Examples:
  *  debug-trigger
- *	Set the source as stdin and the sink as stdout. Useful for testing.
+ *	Set the source as stdin, the sink as stdout, and use the default 'sysrq' set of sink
+ *	actions. Useful for testing.
+ *
+ *  debug-trigger --sink-actions=sysrq
+ *	Explicitly use the 'sysrq' set of sink actions with stdin as the source and stdout as the
+ *	sink.
  *
  *  debug-trigger /dev/serio_raw0 /proc/sysrq-trigger
- *	Open /dev/serio_raw0 as the source and /proc/sysrq-trigger as the sink.
+ *	Open /dev/serio_raw0 as the source and /proc/sysrq-trigger as the sink, with the default
+ *	'sysrq' set of sink actions. When 'D' is read from /dev/serio_raw0 'c' will be written to
+ *	/proc/sysrq-trigger, causing a kernel panic. When 'R' is read from /dev/serio_raw0 'b' will
+ *	be written to /proc/sysrq-trigger, causing an immediate reboot of the system.
  */
 
 #include <err.h>
@@ -112,6 +124,7 @@ static int process(int source, struct debug_sink *sink)
 
 int main(int argc, char * const argv[])
 {
+	const char *sink_actions = NULL;
 	struct debug_sink_sysrq sysrq;
 	struct debug_sink sink;
 	char devnode[PATH_MAX];
@@ -119,9 +132,10 @@ int main(int argc, char * const argv[])
 	int sourcefd;
 	int sinkfd;
 
-	/* Option processing. Currently nothing implemented, but allows us to use optind */
+	/* Option processing */
 	while (1) {
 		static struct option long_options[] = {
+			{"sink-actions", required_argument, 0, 's'},
 			{0, 0, 0, 0},
 		};
 		int c;
@@ -129,16 +143,25 @@ int main(int argc, char * const argv[])
 		c = getopt_long(argc, argv, "", long_options, NULL);
 		if (c == -1)
 			break;
+
+		switch (c) {
+		case 's':
+			sink_actions = optarg;
+			break;
+		default:
+			break;
+		}
 	}
 
 	/*
-	 * The default behaviour sets the source as stdin and the sink as stdout. This allows
-	 * trivial testing on the command-line with just a keyboard and without crashing the system.
+	 * The default behaviour sets the source file descriptor as stdin and the sink file
+	 * descriptor as stdout. This allows trivial testing on the command-line with just a
+	 * keyboard and without crashing the system.
 	 */
 	sourcefd = 0;
 	sinkfd = 1;
 
-	/* Handle the source argument, if any */
+	/* Handle the source path argument, if any */
 	if (optind < argc) {
 		char devpath[PATH_MAX];
 
@@ -161,25 +184,31 @@ int main(int argc, char * const argv[])
 		optind++;
 	}
 
-	/* Handle the sink argument, if any */
-	if (optind < argc) {
-		/*
-		 * Just open the sink path directly. If we ever need different behaviour then we
-		 * patch this bit when we know what we need.
-		 */
-		if ((sinkfd = open(argv[optind], O_WRONLY)) == -1)
-			err(EXIT_FAILURE, "Failed to open %s", argv[optind]);
+	/*
+	 * Handle the sink path argument, if any. If sink_actions hasn't been set via the
+	 * --sink-actions option, then default to 'sysrq'. Otherwise, if --sink-actions=sysrq has
+	 * been passed, do as we're told and use the 'sysrq' sink actions.
+	 */
+	if (!sink_actions || !strcmp("sysrq", sink_actions)) {
+		if (optind < argc) {
+			/*
+			 * Just open the sink path directly. If we ever need different behaviour
+			 * then we patch this bit when we know what we need.
+			 */
+			if ((sinkfd = open(argv[optind], O_WRONLY)) == -1)
+				err(EXIT_FAILURE, "Failed to open %s", argv[optind]);
 
-		optind++;
+			optind++;
+		}
+
+		sysrq.sink = sinkfd;
+		sink.ops = &sysrq_sink_ops;
+		sink.ctx = &sysrq;
 	}
 
 	/* Check we're done with the command-line */
 	if (optind < argc)
 		err(EXIT_FAILURE, "Found %d unexpected arguments", argc - optind);
-
-	sysrq.sink = sinkfd;
-	sink.ops = &sysrq_sink_ops;
-	sink.ctx = &sysrq;
 
 	/* Trigger the actions on the sink when we receive an event from the source */
 	if (process(sourcefd, &sink) < 0)
