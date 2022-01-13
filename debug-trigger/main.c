@@ -31,27 +31,32 @@ static void process_debug(int sink)
 	}
 }
 
+static void process_reboot(int sink __attribute__((unused)))
+{
+	ssize_t rc;
+
+	sync();
+
+	if ((rc = reboot(LINUX_REBOOT_CMD_RESTART))) {
+		if (rc == -1)
+			warn("Failed to reboot BMC");
+		else
+			warnx("Failed to reboot BMC: %zd", rc);
+	}
+}
+
 static int process(int source, int sink)
 {
 	ssize_t ingress;
 	char command;
 
 	while ((ingress = read(source, &command, sizeof(command))) == sizeof(command)) {
-		ssize_t rc;
-
 		switch (command) {
 		case 'D':
 			process_debug(sink);
 			break;
 		case 'R':
-			sync();
-
-			if ((rc = reboot(LINUX_REBOOT_CMD_RESTART))) {
-				if (rc == -1)
-					warn("Failed to reboot BMC");
-				else
-					warnx("Failed to reboot BMC: %zd", rc);
-			}
+			process_reboot(sink);
 			break;
 		default:
 			warnx("Unexpected command: 0x%02x (%c)", command, command);
