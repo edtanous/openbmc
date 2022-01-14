@@ -4,4 +4,6 @@ After=xyz.openbmc_project.Dump.Manager.service
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/debug-trigger /%I /proc/sysrq-trigger
+Environment=DEBUG_TRIGGER_OPTIONS= DEBUG_TRIGGER_SOURCE=/%I DEBUG_TRIGGER_SINK=/proc/sysrq-trigger
+EnvironmentFile=-/etc/default/debug-trigger
+ExecStart=/usr/bin/debug-trigger $DEBUG_TRIGGER_OPTIONS $DEBUG_TRIGGER_SOURCE $DEBUG_TRIGGER_SINK
