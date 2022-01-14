@@ -548,7 +548,7 @@ int main(int argc, char * const argv[])
 		devnode[PATH_MAX - 1] = '\0';
 
 		if ((sourcefd = open(devnode, O_RDONLY)) == -1)
-			err(EXIT_FAILURE, "Failed to open %s", devnode);
+			err(EXIT_FAILURE, "Failed to open source %s", devnode);
 
 		optind++;
 	}
@@ -565,7 +565,7 @@ int main(int argc, char * const argv[])
 			 * then we patch this bit when we know what we need.
 			 */
 			if ((sinkfd = open(argv[optind], O_WRONLY)) == -1)
-				err(EXIT_FAILURE, "Failed to open %s", argv[optind]);
+				err(EXIT_FAILURE, "Failed to open sink %s", argv[optind]);
 
 			optind++;
 		}
