@@ -1,5 +1,6 @@
 [Unit]
 Description=BMC Debug Trigger
+After=xyz.openbmc_project.Dump.Manager.service
 
 [Service]
 Type=simple
