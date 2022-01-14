@@ -29,6 +29,7 @@
  */
 
 #include <err.h>
+#include <errno.h>
 #include <fcntl.h>
 #include <getopt.h>
 #include <libgen.h>
@@ -40,6 +41,19 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
+
+struct debug_source_ops {
+	int (*poll)(void *ctx, char *op);
+};
+
+struct debug_source {
+	const struct debug_source_ops *ops;
+	void *ctx;
+};
+
+struct debug_source_basic {
+	int source;
+};
 
 struct debug_sink_ops {
 	void (*debug)(void *ctx);
@@ -98,12 +112,34 @@ const struct debug_sink_ops sysrq_sink_ops = {
 	.reboot = sysrq_sink_reboot,
 };
 
-static int process(int source, struct debug_sink *sink)
+static int basic_source_poll(void *ctx, char *op)
 {
+	struct debug_source_basic *basic = ctx;
 	ssize_t ingress;
-	char command;
 
-	while ((ingress = read(source, &command, sizeof(command))) == sizeof(command)) {
+	if ((ingress = read(basic->source, op, 1)) != 1) {
+		if (ingress < 0) {
+			warn("Failed to read from basic source");
+			return -errno;
+		}
+
+		/* Unreachable */
+		errx(EXIT_FAILURE, "Bad read, requested 1 got %zd", ingress);
+	}
+
+	return 0;
+}
+
+const struct debug_source_ops basic_source_ops = {
+	.poll = basic_source_poll,
+};
+
+static int process(struct debug_source *source, struct debug_sink *sink)
+{
+	char command;
+	int rc;
+
+	while (!(rc = source->ops->poll(source->ctx, &command))) {
 		switch (command) {
 		case 'D':
 			sink->ops->debug(sink->ctx);
@@ -116,16 +152,18 @@ static int process(int source, struct debug_sink *sink)
 		}
 	}
 
-	if (ingress == -1)
-		warn("Failed to read from source");
+	if (rc < 0)
+		warnx("Failed to poll source: %s", strerror(-rc));
 
-	return ingress;
+	return rc;
 }
 
 int main(int argc, char * const argv[])
 {
 	const char *sink_actions = NULL;
+	struct debug_source_basic basic;
 	struct debug_sink_sysrq sysrq;
+	struct debug_source source;
 	struct debug_sink sink;
 	char devnode[PATH_MAX];
 	char *devid;
@@ -210,8 +248,12 @@ int main(int argc, char * const argv[])
 	if (optind < argc)
 		err(EXIT_FAILURE, "Found %d unexpected arguments", argc - optind);
 
+	basic.source = sourcefd;
+	source.ops = &basic_source_ops;
+	source.ctx = &basic;
+
 	/* Trigger the actions on the sink when we receive an event from the source */
-	if (process(sourcefd, &sink) < 0)
+	if (process(&source, &sink) < 0)
 		errx(EXIT_FAILURE, "Failure while processing command stream");
 
 	return 0;
