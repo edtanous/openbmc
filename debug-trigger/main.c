@@ -471,9 +471,11 @@ static int process(struct debug_source *source, struct debug_sink *sink)
 	while (!(rc = source->ops->poll(source->ctx, &command))) {
 		switch (command) {
 		case 'D':
+			warnx("Debug action triggered\n");
 			sink->ops->debug(sink->ctx);
 			break;
 		case 'R':
+			warnx("Reboot action triggered\n");
 			sink->ops->reboot(sink->ctx);
 			break;
 		default:
