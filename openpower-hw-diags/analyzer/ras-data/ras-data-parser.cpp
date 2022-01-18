@@ -137,7 +137,8 @@ std::tuple<callout::BusType, std::string>
     std::string unitPath{}; // default empty if unit does not exist
     if (bus.contains("unit"))
     {
-        unitPath = bus.at("unit").get<std::string>();
+        auto unit = bus.at("unit").get<std::string>();
+        unitPath  = i_data.at("units").at(unit).get<std::string>();
     }
 
     return std::make_tuple(busType, unitPath);
