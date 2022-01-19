@@ -1,4 +1,11 @@
-project('debug-trigger', 'c', license: 'Apache-2.0', version: '0.1')
+project('debug-trigger', 'c',
+	license: 'Apache-2.0',
+	version: '0.1',
+	default_options: [
+		'warning_level=3',
+		'werror=true',
+		'c_std=gnu18',
+	])
 executable('debug-trigger', 'main.c', install: true)
 
 if get_option('systemd')
