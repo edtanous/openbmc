@@ -16,6 +16,7 @@
 
 static void process_debug(int sink)
 {
+	/* https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/admin-guide/sysrq.rst?h=v5.16#n93 */
 	static const char action = 'c';
 	ssize_t rc;
 
@@ -31,17 +32,21 @@ static void process_debug(int sink)
 	}
 }
 
-static void process_reboot(int sink __attribute__((unused)))
+static void process_reboot(int sink)
 {
+	/* https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/admin-guide/sysrq.rst?h=v5.16#n90 */
+	static const char action = 'b';
 	ssize_t rc;
 
 	sync();
 
-	if ((rc = reboot(LINUX_REBOOT_CMD_RESTART))) {
-		if (rc == -1)
-			warn("Failed to reboot BMC");
-		else
-			warnx("Failed to reboot BMC: %zd", rc);
+	if ((rc = write(sink, &action, sizeof(action))) == sizeof(action))
+		return;
+
+	if (rc == -1) {
+		warn("Failed to reboot BMC");
+	} else {
+		warnx("Failed to reboot BMC: %zd", rc);
 	}
 }
 
