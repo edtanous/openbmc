@@ -56,8 +56,10 @@ TEST(Resolution, TestSet1)
     // Get some ServiceData objects
     libhei::Chip chip{util::pdbg::getTrgt(chip_str), 0xdeadbeef};
     libhei::Signature sig{chip, 0xabcd, 0, 0, libhei::ATTN_TYPE_CHECKSTOP};
-    ServiceData sd1{sig, AnalysisType::SYSTEM_CHECKSTOP};
-    ServiceData sd2{sig, AnalysisType::TERMINATE_IMMEDIATE};
+    ServiceData sd1{sig, AnalysisType::SYSTEM_CHECKSTOP,
+                    libhei::IsolationData{}};
+    ServiceData sd2{sig, AnalysisType::TERMINATE_IMMEDIATE,
+                    libhei::IsolationData{}};
 
     // Resolve
     l1->resolve(sd1);
@@ -139,7 +141,8 @@ TEST(Resolution, HardwareCallout)
 
     libhei::Chip chip{util::pdbg::getTrgt(chip_str), 0xdeadbeef};
     libhei::Signature sig{chip, 0xabcd, 0, 0, libhei::ATTN_TYPE_CHECKSTOP};
-    ServiceData sd{sig, AnalysisType::SYSTEM_CHECKSTOP};
+    ServiceData sd{sig, AnalysisType::SYSTEM_CHECKSTOP,
+                   libhei::IsolationData{}};
 
     c1->resolve(sd);
 
@@ -188,7 +191,8 @@ TEST(Resolution, ConnectedCallout)
 
     libhei::Chip chip{util::pdbg::getTrgt(chip_str), 0xdeadbeef};
     libhei::Signature sig{chip, 0xabcd, 0, 0, libhei::ATTN_TYPE_CHECKSTOP};
-    ServiceData sd{sig, AnalysisType::SYSTEM_CHECKSTOP};
+    ServiceData sd{sig, AnalysisType::SYSTEM_CHECKSTOP,
+                   libhei::IsolationData{}};
 
     nlohmann::json j{};
     std::string s{};
@@ -273,7 +277,8 @@ TEST(Resolution, BusCallout)
 
     libhei::Chip chip{util::pdbg::getTrgt(chip_str), 0xdeadbeef};
     libhei::Signature sig{chip, 0xabcd, 0, 0, libhei::ATTN_TYPE_CHECKSTOP};
-    ServiceData sd{sig, AnalysisType::SYSTEM_CHECKSTOP};
+    ServiceData sd{sig, AnalysisType::SYSTEM_CHECKSTOP,
+                   libhei::IsolationData{}};
 
     nlohmann::json j{};
     std::string s{};
@@ -348,7 +353,8 @@ TEST(Resolution, ClockCallout)
 
     libhei::Chip chip{util::pdbg::getTrgt(chip_str), 0xdeadbeef};
     libhei::Signature sig{chip, 0xabcd, 0, 0, libhei::ATTN_TYPE_CHECKSTOP};
-    ServiceData sd{sig, AnalysisType::SYSTEM_CHECKSTOP};
+    ServiceData sd{sig, AnalysisType::SYSTEM_CHECKSTOP,
+                   libhei::IsolationData{}};
 
     c1->resolve(sd);
 
@@ -388,7 +394,8 @@ TEST(Resolution, ProcedureCallout)
 
     libhei::Chip chip{util::pdbg::getTrgt(chip_str), 0xdeadbeef};
     libhei::Signature sig{chip, 0xabcd, 0, 0, libhei::ATTN_TYPE_CHECKSTOP};
-    ServiceData sd{sig, AnalysisType::SYSTEM_CHECKSTOP};
+    ServiceData sd{sig, AnalysisType::SYSTEM_CHECKSTOP,
+                   libhei::IsolationData{}};
 
     c1->resolve(sd);
 
@@ -426,7 +433,8 @@ TEST(Resolution, PartCallout)
 
     libhei::Chip chip{util::pdbg::getTrgt(chip_str), 0xdeadbeef};
     libhei::Signature sig{chip, 0xabcd, 0, 0, libhei::ATTN_TYPE_CHECKSTOP};
-    ServiceData sd{sig, AnalysisType::SYSTEM_CHECKSTOP};
+    ServiceData sd{sig, AnalysisType::SYSTEM_CHECKSTOP,
+                   libhei::IsolationData{}};
 
     c1->resolve(sd);
 

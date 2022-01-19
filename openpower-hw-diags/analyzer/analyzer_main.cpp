@@ -35,12 +35,10 @@ bool filterRootCause(AnalysisType i_type,
 
 /**
  * @brief Will create and submit a PEL using the given data.
- * @param i_isoData   The data gathered during isolation (for FFDC).
  * @param i_servData  Data regarding service actions gathered during analysis.
  * @return The platform log ID. Will return zero if no PEL is generated.
  */
-uint32_t createPel(const libhei::IsolationData& i_isoData,
-                   const ServiceData& i_servData);
+uint32_t createPel(const ServiceData& i_servData);
 
 //------------------------------------------------------------------------------
 
@@ -151,7 +149,7 @@ uint32_t analyzeHardware(AnalysisType i_type, attn::DumpParameters& o_dump)
         }
 
         // Start building the service data.
-        ServiceData servData{rootCause, i_type};
+        ServiceData servData{rootCause, i_type, isoData};
 
         // Apply any service actions, if needed. Note that there are no
         // resolutions for manual analysis.
@@ -173,7 +171,7 @@ uint32_t analyzeHardware(AnalysisType i_type, attn::DumpParameters& o_dump)
         }
 
         // Create and commit a PEL.
-        o_plid = createPel(isoData, servData);
+        o_plid = createPel(servData);
 
         if (0 == o_plid)
         {

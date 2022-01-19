@@ -18,13 +18,15 @@ class ServiceData
   public:
     /**
      * @brief Constructor from components.
-     * @param The signature of the root cause attention.
-     * @param The type of analysis to perform.
+     * @param i_rootCause    The signature of the root cause attention.
+     * @param i_analysisType The type of analysis to perform.
+     * @param i_isoData      The data found during isolation.
      */
     ServiceData(const libhei::Signature& i_rootCause,
-                AnalysisType i_analysisType) :
+                AnalysisType i_analysisType,
+                const libhei::IsolationData& i_isoData) :
         iv_rootCause(i_rootCause),
-        iv_analysisType(i_analysisType)
+        iv_analysisType(i_analysisType), iv_isoData(i_isoData)
     {}
 
     /** @brief Destructor. */
@@ -42,6 +44,9 @@ class ServiceData
 
     /** The type of analysis to perform. */
     const AnalysisType iv_analysisType;
+
+    /** The data found during isolation. */
+    const libhei::IsolationData iv_isoData;
 
     /** The list of callouts that will be added to a PEL. */
     nlohmann::json iv_calloutList = nlohmann::json::array();
@@ -61,6 +66,12 @@ class ServiceData
     AnalysisType getAnalysisType() const
     {
         return iv_analysisType;
+    }
+
+    /** @return The data found during isolation. */
+    const libhei::IsolationData& getIsolationData() const
+    {
+        return iv_isoData;
     }
 
     /** @return Returns the guard type based on current analysis policies. */

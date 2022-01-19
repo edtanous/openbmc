@@ -316,8 +316,7 @@ std::string __getMessageSeverity(AnalysisType i_type)
 
 //------------------------------------------------------------------------------
 
-uint32_t createPel(const libhei::IsolationData& i_isoData,
-                   const ServiceData& i_servData)
+uint32_t createPel(const ServiceData& i_servData)
 {
     uint32_t o_plid = 0; // default, zero indicates PEL was not created
 
@@ -344,10 +343,10 @@ uint32_t createPel(const libhei::IsolationData& i_isoData,
     __addCalloutFFDC(i_servData, userDataFiles);
 
     // Capture the complete signature list.
-    __captureSignatureList(i_isoData, userDataFiles);
+    __captureSignatureList(i_servData.getIsolationData(), userDataFiles);
 
     // Capture the complete signature list.
-    __captureRegisterDump(i_isoData, userDataFiles);
+    __captureRegisterDump(i_servData.getIsolationData(), userDataFiles);
 
     // Now, that all of the user data files have been created, transform the
     // data into the proper format for the PEL.
