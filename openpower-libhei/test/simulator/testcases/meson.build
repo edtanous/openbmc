@@ -4,5 +4,6 @@ test_src = files(
     'exp20_foxhound7.cpp',
     'exp20_tlx_err_rpt_1.cpp',
     'omi_dl_fatal.cpp',
+    'tod_fault.cpp',
 )
 

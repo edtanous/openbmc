@@ -79,8 +79,7 @@ void SimulatorData::endIteration()
     IsolationData isoData{};
     isolate(iv_chipList, isoData);
 
-    /* TODO: Currently used for debug. Eventually, we want this and the
-     *       signature list written to file.
+    /* TODO: Currently used for debug. Eventually, we want this written to file.
     for (const auto& e : isoData.getRegisterDump())
     {
         HEI_INF("Chip: %s", (const char*)e.first.getChip());
@@ -101,6 +100,15 @@ void SimulatorData::endIteration()
 
     std::sort(iv_expSigList.begin(), iv_expSigList.end());
     std::sort(givenSigList.begin(), givenSigList.end());
+
+    /* TODO: Currently used for debug. Eventually, we want this written to file.
+    for (const auto& s : givenSigList)
+    {
+        HEI_INF("Signature: %s 0x%04x %u %u %u",
+                (const char*)s.getChip().getChip(), s.getId(), s.getInstance(),
+                s.getBit(), s.getAttnType());
+    }
+    */
 
     ASSERT_TRUE(std::equal(givenSigList.begin(), givenSigList.end(),
                            iv_expSigList.begin()));

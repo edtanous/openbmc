@@ -107,6 +107,124 @@
         <instance reg_inst="39" addr="0x270F001F" />
     </register>
 
+    <register name="TOD_M_PATH_CTRL">
+        <instance reg_inst="0" addr="0x00040000" />
+    </register>
+
+    <register name="TOD_PRI_PORT_0_CTRL">
+        <instance reg_inst="0" addr="0x00040001" />
+    </register>
+
+    <register name="TOD_PRI_PORT_1_CTRL">
+        <instance reg_inst="0" addr="0x00040002" />
+    </register>
+
+    <register name="TOD_SEC_PORT_0_CTRL">
+        <instance reg_inst="0" addr="0x00040003" />
+    </register>
+
+    <register name="TOD_SEC_PORT_1_CTRL">
+        <instance reg_inst="0" addr="0x00040004" />
+    </register>
+
+    <register name="TOD_S_PATH_CTRL">
+        <instance reg_inst="0" addr="0x00040005" />
+    </register>
+
+    <register name="TOD_I_PATH_CTRL">
+        <instance reg_inst="0" addr="0x00040006" />
+    </register>
+
+    <register name="TOD_PSS_MSS_CTRL">
+        <instance reg_inst="0" addr="0x00040007" />
+    </register>
+
+    <register name="TOD_PSS_MSS_STATUS">
+        <instance reg_inst="0" addr="0x00040008" />
+    </register>
+
+    <register name="TOD_M_PATH_STATUS">
+        <instance reg_inst="0" addr="0x00040009" />
+    </register>
+
+    <register name="TOD_S_PATH_STATUS">
+        <instance reg_inst="0" addr="0x0004000A" />
+    </register>
+
+    <register name="TOD_M_PATH_0_STEP_STEER">
+        <instance reg_inst="0" addr="0x0004000E" />
+    </register>
+
+    <register name="TOD_M_PATH_1_STEP_STEER">
+        <instance reg_inst="0" addr="0x0004000F" />
+    </register>
+
+    <register name="TOD_CHIP_CTRL">
+        <instance reg_inst="0" addr="0x00040010" />
+    </register>
+
+    <register name="TOD_TRACE_DATA_1">
+        <instance reg_inst="0" addr="0x0004001D" />
+    </register>
+
+    <register name="TOD_TRACE_DATA_2">
+        <instance reg_inst="0" addr="0x0004001E" />
+    </register>
+
+    <register name="TOD_TRACE_DATA_3">
+        <instance reg_inst="0" addr="0x0004001F" />
+    </register>
+
+    <register name="TOD_FSM">
+        <instance reg_inst="0" addr="0x00040024" />
+    </register>
+
+    <register name="TOD_TX_TTYPE_CTRL">
+        <instance reg_inst="0" addr="0x00040027" />
+    </register>
+
+    <register name="TOD_RX_TTYPE_CTRL">
+        <instance reg_inst="0" addr="0x00040029" />
+    </register>
+
+    <register name="TOD_ERROR">
+        <instance reg_inst="0" addr="0x00040030" />
+    </register>
+
+    <register name="TOD_ERROR_MASK">
+        <instance reg_inst="0" addr="0x00040032" />
+    </register>
+
+    <register name="TOD_ERROR_ROUTING">
+        <instance reg_inst="0" addr="0x00040033" />
+    </register>
+
+    <capture_group node_inst="0">
+        <capture_register reg_inst="0" reg_name="TOD_M_PATH_CTRL" />
+        <capture_register reg_inst="0" reg_name="TOD_PRI_PORT_0_CTRL" />
+        <capture_register reg_inst="0" reg_name="TOD_PRI_PORT_1_CTRL" />
+        <capture_register reg_inst="0" reg_name="TOD_SEC_PORT_0_CTRL" />
+        <capture_register reg_inst="0" reg_name="TOD_SEC_PORT_1_CTRL" />
+        <capture_register reg_inst="0" reg_name="TOD_S_PATH_CTRL" />
+        <capture_register reg_inst="0" reg_name="TOD_I_PATH_CTRL" />
+        <capture_register reg_inst="0" reg_name="TOD_PSS_MSS_CTRL" />
+        <capture_register reg_inst="0" reg_name="TOD_PSS_MSS_STATUS" />
+        <capture_register reg_inst="0" reg_name="TOD_M_PATH_STATUS" />
+        <capture_register reg_inst="0" reg_name="TOD_S_PATH_STATUS" />
+        <capture_register reg_inst="0" reg_name="TOD_M_PATH_0_STEP_STEER" />
+        <capture_register reg_inst="0" reg_name="TOD_M_PATH_1_STEP_STEER" />
+        <capture_register reg_inst="0" reg_name="TOD_CHIP_CTRL" />
+        <capture_register reg_inst="0" reg_name="TOD_TRACE_DATA_1" />
+        <capture_register reg_inst="0" reg_name="TOD_TRACE_DATA_2" />
+        <capture_register reg_inst="0" reg_name="TOD_TRACE_DATA_3" />
+        <capture_register reg_inst="0" reg_name="TOD_FSM" />
+        <capture_register reg_inst="0" reg_name="TOD_TX_TTYPE_CTRL" />
+        <capture_register reg_inst="0" reg_name="TOD_RX_TTYPE_CTRL" />
+        <capture_register reg_inst="0" reg_name="TOD_ERROR" />
+        <capture_register reg_inst="0" reg_name="TOD_ERROR_MASK" />
+        <capture_register reg_inst="0" reg_name="TOD_ERROR_ROUTING" />
+    </capture_group>
+
     <bit pos="0">CFIR - Parity or PCB access error</bit>
     <bit pos="1">CPLT_CTRL - PCB access error</bit>
     <bit pos="2">CC - PCB access error</bit>
@@ -132,7 +250,7 @@
     <bit pos="22">ITR - PCB error</bit>
     <bit pos="23">PCB Master - timeout</bit>
     <bit pos="24">I2CM - Parity errors</bit>
-    <bit pos="25">TOD - any error</bit>
+    <bit pos="25" child_node="TOD_ERROR">TOD - any error</bit>
     <bit pos="26">TOD - access error PIB</bit>
     <bit pos="27">TOD - Error reported from PHYP</bit>
     <bit pos="28" child_node="PLL_UNLOCK">PCB slave error</bit>
