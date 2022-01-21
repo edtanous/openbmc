@@ -108,6 +108,14 @@ void lpc_timeout(unsigned int, const libhei::Chip& i_chip,
     }
 }
 
+/**
+ * @brief Handles TOD step check fault attentions.
+ */
+void tod_step_check_fault(unsigned int, const libhei::Chip&, ServiceData&)
+{
+    // TODO
+}
+
 } // namespace P10
 
 PLUGIN_DEFINE_NS(P10_10, P10, pll_unlock);
@@ -115,5 +123,8 @@ PLUGIN_DEFINE_NS(P10_20, P10, pll_unlock);
 
 PLUGIN_DEFINE_NS(P10_10, P10, lpc_timeout);
 PLUGIN_DEFINE_NS(P10_20, P10, lpc_timeout);
+
+PLUGIN_DEFINE_NS(P10_10, P10, tod_step_check_fault);
+PLUGIN_DEFINE_NS(P10_20, P10, tod_step_check_fault);
 
 } // namespace analyzer
