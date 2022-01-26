@@ -180,6 +180,7 @@ Supported clock types:
 |-----------------|------------------------------------------------------------|
 | OSC_REF_CLOCK_0 | Oscillator reference clock 0                               |
 | OSC_REF_CLOCK_1 | Oscillator reference clock 1                               |
+| TOD_CLOCK       | Time of Day (TOD) clock                                    |
 
 #### 5.1.7) action type `callout_procedure`
 

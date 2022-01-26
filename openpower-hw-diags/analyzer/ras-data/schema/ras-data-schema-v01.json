@@ -158,7 +158,8 @@
                                         "name": {
                                             "enum": [
                                                 "OSC_REF_CLOCK_0",
-                                                "OSC_REF_CLOCK_1"
+                                                "OSC_REF_CLOCK_1",
+                                                "TOD_CLOCK"
                                             ]
                                         }
                                     }

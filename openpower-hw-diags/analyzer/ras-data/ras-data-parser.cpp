@@ -225,6 +225,7 @@ std::shared_ptr<Resolution>
             {
                 {"OSC_REF_CLOCK_0", callout::ClockType::OSC_REF_CLOCK_0},
                 {"OSC_REF_CLOCK_1", callout::ClockType::OSC_REF_CLOCK_1},
+                {"TOD_CLOCK",       callout::ClockType::TOD_CLOCK},
             };
             // clang-format on
 

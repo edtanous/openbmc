@@ -12,6 +12,7 @@ analyzer_src = files(
 
 plugins_src = files(
     'plugins/p10-plugins.cpp',
+    'plugins/p10-tod-plugins.cpp',
 )
 
 # Library dependencies.

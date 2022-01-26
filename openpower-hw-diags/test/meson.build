@@ -31,6 +31,8 @@ pdbg_test_dtb = custom_target('build_pdbg_test_dtb',
     command : [ find_program('dtc'), '-I', 'dts', '-O', 'dtb',
                 '-o', '@OUTPUT@', '@INPUT@' ])
 
+pdbg_env = 'PDBG_DTB=' + pdbg_test_dtb.full_path()
+
 # end2end code exerciser for experiment and testing
 subdir('end2end')
 
@@ -70,5 +72,29 @@ foreach t : tests
                     dependencies : [ libhei_dep, libpdbg_dep, gtest_dep ],
                     cpp_args : test_arg,
                     include_directories : incdir),
-         env : [ 'PDBG_DTB=' + pdbg_test_dtb.full_path() ])
+         env : pdbg_env)
 endforeach
+
+################################################################################
+
+tc = 'test-tod-step-check-fault'
+
+src = [
+  files(
+    tc + '.cpp',
+    '../analyzer/plugins/p10-tod-plugins.cpp',
+    '../analyzer/service_data.cpp',
+    '../util/pdbg.cpp',
+  ),
+  pdbg_test_dtb,
+]
+
+dep = [ libhei_dep, libpdbg_dep, gtest_dep ]
+
+var = [ pdbg_env ]
+
+exe = executable(tc.underscorify(), src, dependencies: dep,
+                 cpp_args: test_arg, include_directories: incdir)
+
+test(tc, exe, env: var)
+

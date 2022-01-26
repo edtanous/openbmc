@@ -158,6 +158,9 @@ class ClockType
     /** Oscillator reference clock 1. */
     static const ClockType OSC_REF_CLOCK_1;
 
+    /** Time of Day (TOD) clock. */
+    static const ClockType TOD_CLOCK;
+
   private:
     /**
      * @brief Constructor from components.
@@ -180,6 +183,7 @@ class ClockType
 
 inline const ClockType ClockType::OSC_REF_CLOCK_0{"OSC_REF_CLOCK_0"};
 inline const ClockType ClockType::OSC_REF_CLOCK_1{"OSC_REF_CLOCK_1"};
+inline const ClockType ClockType::TOD_CLOCK{"TOD_CLOCK"};
 
 /** @brief Container class for part callout service actions. */
 class PartType
