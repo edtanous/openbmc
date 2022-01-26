@@ -20,14 +20,19 @@ if not gtest_dep.found() or not gmock_dep.found()
     endif
 endif
 
+# NOTE: We cannot link to `util_lib` because that is built without
+#       `-DTEST_TRACE` and any of the util functions that use `trace.hpp` will
+#       throw a linker error because we don't have access to phosphor-logging
+#       in test ... yet.
+
 test_arg = [
     '-DTEST_TRACE',
 ]
 
 # Compile the test dts into a binary for pdbg.
 pdbg_test_dtb = custom_target('build_pdbg_test_dtb',
-    input   : files('pdbg_test.dts'),
-    output  : 'pdbg_test.dtb',
+    input   : files('pdbg-test.dts'),
+    output  : 'pdbg-test.dtb',
     command : [ find_program('dtc'), '-I', 'dts', '-O', 'dtb',
                 '-o', '@OUTPUT@', '@INPUT@' ])
 
@@ -36,44 +41,137 @@ pdbg_env = 'PDBG_DTB=' + pdbg_test_dtb.full_path()
 # end2end code exerciser for experiment and testing
 subdir('end2end')
 
-tests = [
-  'bin_stream_test',
-  'ffdc_file_test',
-  'resolution_test',
-  'pdbg_dts_test',
-  'test-lpc-timeout',
-  'test-pll-unlock',
+################################################################################
+
+tc = 'test-bin-stream'
+
+src = [
+  files(
+    tc + '.cpp',
+  ),
 ]
 
-analyzer_src = files(
-  '../analyzer/plugins/p10-plugins.cpp',
-  '../analyzer/service_data.cpp',
-  '../analyzer/resolution.cpp',
-)
+dep = [ gtest_dep ]
 
-# We cannot link to `util_lib` because that is built without `-DTEST_TRACE` and
-# any of the util functions that use `trace.hpp` will throw a linker error
-# because we don't have access to phosphor-logging in test ... yet.
-util_src = files(
+var = [ ]
+
+exe = executable(tc.underscorify(), src, dependencies: dep,
+                 cpp_args: test_arg, include_directories: incdir)
+
+test(tc, exe, env: var)
+
+################################################################################
+
+tc = 'test-ffdc-file'
+
+src = [
+  files(
+    tc + '.cpp',
     '../util/ffdc_file.cpp',
-    '../util/pdbg.cpp',
     '../util/temporary_file.cpp',
-)
+  ),
+]
 
-sim_src = files(
-  'pdbg-sim-only.cpp',
-)
+dep = [ gtest_dep ]
 
-foreach t : tests
-    test(t,
-         executable(t.underscorify(),
-                    [ files(t + '.cpp'), pdbg_test_dtb,
-                      analyzer_src, util_src, sim_src ],
-                    dependencies : [ libhei_dep, libpdbg_dep, gtest_dep ],
-                    cpp_args : test_arg,
-                    include_directories : incdir),
-         env : pdbg_env)
-endforeach
+var = [ ]
+
+exe = executable(tc.underscorify(), src, dependencies: dep,
+                 cpp_args: test_arg, include_directories: incdir)
+
+test(tc, exe, env: var)
+
+################################################################################
+
+tc = 'test-lpc-timeout'
+
+src = [
+  files(
+    tc + '.cpp',
+    '../analyzer/plugins/p10-plugins.cpp',
+    '../analyzer/service_data.cpp',
+    '../util/pdbg.cpp',
+    'pdbg-sim-only.cpp',
+  ),
+  pdbg_test_dtb,
+]
+
+dep = [ libhei_dep, libpdbg_dep, gtest_dep ]
+
+var = [ pdbg_env ]
+
+exe = executable(tc.underscorify(), src, dependencies: dep,
+                 cpp_args: test_arg, include_directories: incdir)
+
+test(tc, exe, env: var)
+
+################################################################################
+
+tc = 'test-pdbg-dts'
+
+src = [
+  files(
+    tc + '.cpp',
+    '../util/pdbg.cpp',
+  ),
+  pdbg_test_dtb,
+]
+
+dep = [ libhei_dep, libpdbg_dep, gtest_dep ]
+
+var = [ pdbg_env ]
+
+exe = executable(tc.underscorify(), src, dependencies: dep,
+                 cpp_args: test_arg, include_directories: incdir)
+
+test(tc, exe, env: var)
+
+################################################################################
+
+tc = 'test-pll-unlock'
+
+src = [
+  files(
+    tc + '.cpp',
+    '../analyzer/plugins/p10-plugins.cpp',
+    '../analyzer/service_data.cpp',
+    '../util/pdbg.cpp',
+    'pdbg-sim-only.cpp',
+  ),
+  pdbg_test_dtb,
+]
+
+dep = [ libhei_dep, libpdbg_dep, gtest_dep ]
+
+var = [ pdbg_env ]
+
+exe = executable(tc.underscorify(), src, dependencies: dep,
+                 cpp_args: test_arg, include_directories: incdir)
+
+test(tc, exe, env: var)
+
+################################################################################
+
+tc = 'test-resolution'
+
+src = [
+  files(
+    tc + '.cpp',
+    '../analyzer/resolution.cpp',
+    '../analyzer/service_data.cpp',
+    '../util/pdbg.cpp',
+  ),
+  pdbg_test_dtb,
+]
+
+dep = [ libhei_dep, libpdbg_dep, gtest_dep ]
+
+var = [ pdbg_env ]
+
+exe = executable(tc.underscorify(), src, dependencies: dep,
+                 cpp_args: test_arg, include_directories: incdir)
+
+test(tc, exe, env: var)
 
 ################################################################################
 
