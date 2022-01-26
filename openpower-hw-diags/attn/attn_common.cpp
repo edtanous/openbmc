@@ -5,6 +5,7 @@
 #include <attn/attn_logging.hpp>
 #include <sdbusplus/bus.hpp>
 #include <util/pdbg.hpp>
+#include <util/trace.hpp>
 
 #include <iomanip>
 #include <iostream>
@@ -32,31 +33,23 @@ void addHbStatusRegs()
 
         if ((nullptr != fsiTarget) && (nullptr != pibTarget))
         {
-            // buffer for formatted strings (+1 for null, just in case)
-            char buffer[sizeof("some read error: 0x0123456789ABCDEF ")];
-
             // get first debug reg (CFAM)
             if (RC_SUCCESS != fsi_read(fsiTarget, l_cfamAddr, &l_cfamData))
             {
-                sprintf(buffer, "cfam read error: 0x%08x", l_cfamAddr);
-                trace<level::ERROR>(buffer);
+                trace::err("cfam read error: 0x%08x", l_cfamAddr);
                 l_cfamData = 0xFFFFFFFF;
             }
 
             // Get SCOM regs next (just 2 of them)
             if (RC_SUCCESS != pib_read(pibTarget, l_scomAddr1, &l_scomData1))
             {
-                sprintf(buffer, "scom read error: 0x%016" PRIx64 "",
-                        l_scomAddr1);
-                trace<level::ERROR>(buffer);
+                trace::err("scom read error: 0x%016" PRIx64 "", l_scomAddr1);
                 l_scomData1 = 0xFFFFFFFFFFFFFFFFull;
             }
 
             if (RC_SUCCESS != pib_read(pibTarget, l_scomAddr2, &l_scomData2))
             {
-                sprintf(buffer, "scom read error: 0x%016" PRIx64 "",
-                        l_scomAddr2);
-                trace<level::ERROR>(buffer);
+                trace::err("scom read error: 0x%016" PRIx64 "", l_scomAddr2);
                 l_scomData2 = 0xFFFFFFFFFFFFFFFFull;
             }
         }
@@ -64,26 +57,12 @@ void addHbStatusRegs()
         // Trace out the results here of all 3 regs
         // (Format should resemble FSP: HostBoot Reg:0000283C  Data:AA801504
         // 00000000  Proc:00050001 )
-        std::stringstream ss1, ss2, ss3;
-
-        ss1 << "HostBoot Reg:" << std::setw(8) << std::setfill('0') << std::hex
-            << l_cfamAddr << " Data:" << l_cfamData << " Proc:00000000";
-
-        ss2 << "HostBoot Reg:" << std::setw(8) << std::setfill('0') << std::hex
-            << l_scomAddr1 << " Data:" << std::setw(16) << l_scomData1
-            << " Proc:00000000";
-
-        ss3 << "HostBoot Reg:" << std::setw(8) << std::setfill('0') << std::hex
-            << l_scomAddr2 << " Data:" << std::setw(16) << l_scomData2
-            << " Proc:00000000";
-
-        std::string strobj1 = ss1.str();
-        std::string strobj2 = ss2.str();
-        std::string strobj3 = ss3.str();
-
-        trace<level::INFO>(strobj1.c_str());
-        trace<level::INFO>(strobj2.c_str());
-        trace<level::INFO>(strobj3.c_str());
+        trace::inf("HostBoot Reg:%08x Data:%08x Proc:00000000", l_cfamAddr,
+                   l_cfamData);
+        trace::inf("HostBoot Reg:%08x Data:%016" PRIx64 " Proc:00000000",
+                   l_scomAddr1, l_scomData1);
+        trace::inf("HostBoot Reg:%08x Data:%016" PRIx64 " Proc:00000000",
+                   l_scomAddr2, l_scomData2);
     }
 
     return;
@@ -110,7 +89,7 @@ bool recoverableErrors()
             // sanity check
             if (nullptr == pibTarget)
             {
-                trace<level::INFO>("pib path or target not found");
+                trace::inf("pib path or target not found");
                 continue;
             }
 
@@ -124,7 +103,7 @@ bool recoverableErrors()
                 // sanity check
                 if (nullptr == fsiTarget)
                 {
-                    trace<level::INFO>("fsi path or target not found");
+                    trace::inf("fsi path or target not found");
                     continue;
                 }
 
@@ -134,14 +113,14 @@ bool recoverableErrors()
                 if (RC_SUCCESS != fsi_read(fsiTarget, 0x1007, &isr_val))
                 {
                     // log cfam read error
-                    trace<level::ERROR>("Error! cfam read 0x1007 FAILED");
+                    trace::err("cfam read 0x1007 FAILED");
                     eventAttentionFail((int)AttnSection::attnHandler |
                                        ATTN_PDBG_CFAM);
                 }
                 // check for invalid/stale value
                 else if (0xffffffff == isr_val)
                 {
-                    trace<level::ERROR>("Error! cfam read 0x1007 INVALID");
+                    trace::err("cfam read 0x1007 INVALID");
                     continue;
                 }
                 // check recoverable error status bit

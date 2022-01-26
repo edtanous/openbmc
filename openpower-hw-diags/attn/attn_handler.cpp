@@ -80,7 +80,7 @@ void attnHandler(Config* i_config)
     uint32_t isr_val, isr_mask;
 
     // loop through processors looking for active attentions
-    trace<level::INFO>("Attention handler started");
+    trace::inf("Attention handler started");
 
     pdbg_target* target;
     pdbg_for_each_class_target("proc", target)
@@ -97,7 +97,7 @@ void attnHandler(Config* i_config)
             // sanity check
             if (nullptr == pibTarget)
             {
-                trace<level::INFO>("pib path or target not found");
+                trace::inf("pib path or target not found");
                 continue;
             }
 
@@ -111,13 +111,12 @@ void attnHandler(Config* i_config)
                 // sanity check
                 if (nullptr == fsiTarget)
                 {
-                    trace<level::INFO>("fsi path or target not found");
+                    trace::inf("fsi path or target not found");
                     continue;
                 }
 
                 // trace the proc number
-                std::string traceMsg = "proc: " + std::to_string(proc);
-                trace<level::INFO>(traceMsg.c_str());
+                trace::inf("proc: %u", proc);
 
                 isr_val = 0xffffffff; // invalid isr value
 
@@ -125,23 +124,19 @@ void attnHandler(Config* i_config)
                 if (RC_SUCCESS != fsi_read(fsiTarget, 0x1007, &isr_val))
                 {
                     // log cfam read error
-                    trace<level::INFO>("Error! cfam read 0x1007 FAILED");
+                    trace::err("cfam read 0x1007 FAILED");
                     eventAttentionFail((int)AttnSection::attnHandler |
                                        ATTN_PDBG_CFAM);
                 }
                 else if (0xffffffff == isr_val)
                 {
-                    trace<level::INFO>("Error! cfam read 0x1007 INVALID");
+                    trace::err("cfam read 0x1007 INVALID");
                     continue;
                 }
                 else
                 {
                     // trace isr value
-                    std::stringstream ssIsr;
-                    ssIsr << "cfam 0x1007 = 0x" << std::setw(8)
-                          << std::setfill('0') << std::hex << isr_val;
-                    std::string strobjIsr = ssIsr.str();
-                    trace<level::INFO>(strobjIsr.c_str());
+                    trace::inf("cfam 0x1007 = 0x%08x", isr_val);
 
                     isr_mask = 0xffffffff; // invalid isr mask
 
@@ -149,23 +144,19 @@ void attnHandler(Config* i_config)
                     if (RC_SUCCESS != fsi_read(fsiTarget, 0x100d, &isr_mask))
                     {
                         // log cfam read error
-                        trace<level::INFO>("Error! cfam read 0x100d FAILED");
+                        trace::err("cfam read 0x100d FAILED");
                         eventAttentionFail((int)AttnSection::attnHandler |
                                            ATTN_PDBG_CFAM);
                     }
                     else if (0xffffffff == isr_mask)
                     {
-                        trace<level::INFO>("Error! cfam read 0x100d INVALID");
+                        trace::err("cfam read 0x100d INVALID");
                         continue;
                     }
                     else
                     {
                         // trace true mask
-                        std::stringstream ssMask;
-                        ssMask << "cfam 0x100d = 0x" << std::setw(8)
-                               << std::setfill('0') << std::hex << isr_mask;
-                        std::string strobjMask = ssMask.str();
-                        trace<level::INFO>(strobjMask.c_str());
+                        trace::inf("cfam 0x100d = 0x%08x", isr_mask);
 
                         // SBE vital attention active and not masked?
                         if (true == activeAttn(isr_val, isr_mask, SBE_ATTN))
@@ -233,7 +224,7 @@ int handleCheckstop(Attention* i_attention)
 {
     int rc = RC_SUCCESS; // assume checkstop handled
 
-    trace<level::INFO>("checkstop handler started");
+    trace::inf("checkstop handler started");
 
     // capture some additional data for logs/traces
     addHbStatusRegs();
@@ -241,7 +232,7 @@ int handleCheckstop(Attention* i_attention)
     // if checkstop handling enabled, handle checkstop attention
     if (false == (i_attention->getConfig()->getFlag(enCheckstop)))
     {
-        trace<level::INFO>("Checkstop handling disabled");
+        trace::inf("Checkstop handling disabled");
     }
     else
     {
@@ -290,7 +281,7 @@ int handleSpecial(Attention* i_attention)
     if (nullptr != attnProc)
     {
 #ifdef CONFIG_PHAL_API
-        trace<level::INFO>("using libphal to get TI info");
+        trace::inf("using libphal to get TI info");
 
         // phal library uses proc target for get ti info
         if (PDBG_TARGET_ENABLED == pdbg_target_probe(attnProc))
@@ -313,7 +304,7 @@ int handleSpecial(Attention* i_attention)
             }
         }
 #else
-        trace<level::INFO>("using libpdbg to get TI info");
+        trace::inf("using libpdbg to get TI info");
 
         // pdbg library uses pib target for get ti info
         char path[16];
@@ -333,7 +324,7 @@ int handleSpecial(Attention* i_attention)
     // dynamic TI info is not available
     if (nullptr == tiInfo)
     {
-        trace<level::INFO>("TI info data ptr is invalid");
+        trace::inf("TI info data ptr is invalid");
         getStaticTiInfo(tiInfo);
         tiInfoStatic = true;
     }
@@ -350,7 +341,7 @@ int handleSpecial(Attention* i_attention)
     }
     else
     {
-        trace<level::INFO>("TI info NOT valid");
+        trace::inf("TI info NOT valid");
 
         // if configured to handle TI as default special attention
         if (i_attention->getConfig()->getFlag(dfltTi))
@@ -387,7 +378,7 @@ int handleSpecial(Attention* i_attention)
     // trace non-successful exit condition
     if (RC_SUCCESS != rc)
     {
-        trace<level::INFO>("Special attn not handled");
+        trace::inf("Special attn not handled");
     }
 
     return rc;
@@ -413,23 +404,23 @@ bool activeAttn(uint32_t i_val, uint32_t i_mask, uint32_t i_attn)
     // if attention active
     if (0 != (i_val & i_attn))
     {
-        std::stringstream ss;
+        std::string msg;
 
         bool validAttn = true; // known attention type
 
         switch (i_attn)
         {
             case SBE_ATTN:
-                ss << "SBE attn";
+                msg = "SBE attn";
                 break;
             case CHECKSTOP_ATTN:
-                ss << "Checkstop attn";
+                msg = "Checkstop attn";
                 break;
             case SPECIAL_ATTN:
-                ss << "Special attn";
+                msg = "Special attn";
                 break;
             default:
-                ss << "Unknown attn";
+                msg       = "Unknown attn";
                 validAttn = false;
         }
 
@@ -442,12 +433,11 @@ bool activeAttn(uint32_t i_val, uint32_t i_mask, uint32_t i_attn)
             }
             else
             {
-                ss << " masked";
+                msg += " masked";
             }
         }
 
-        std::string strobj = ss.str();      // ss.str() is temporary
-        trace<level::INFO>(strobj.c_str()); // commit trace stream
+        trace::inf(msg.c_str()); // commit trace stream
     }
 
     return rc;
@@ -522,7 +512,7 @@ void getStaticTiInfo(uint8_t*& tiInfo)
     }
 
     // trace host state
-    trace<level::INFO>(stateString.c_str());
+    trace::inf(stateString.c_str());
 }
 
 /**
@@ -540,16 +530,8 @@ bool tiInfoValid(uint8_t* tiInfo)
     {
         TiDataArea* tiDataArea = (TiDataArea*)tiInfo;
 
-        std::stringstream ss; // string stream object for tracing
-        std::string strobj;   // string object for tracing
-
         // trace a few known TI data area values
-        ss.str(std::string()); // empty the stream
-        ss.clear();            // clear the stream
-        ss << "TI data command = 0x" << std::setw(2) << std::setfill('0')
-           << std::hex << (int)tiDataArea->command;
-        strobj = ss.str();
-        trace<level::INFO>(strobj.c_str());
+        trace::inf("TI data command = 0x02x", tiDataArea->command);
 
         // Another check for valid TI Info since it has been seen that
         // tiInfo[0] != 0 but TI info is not valid
@@ -558,26 +540,12 @@ bool tiInfoValid(uint8_t* tiInfo)
             tiInfoValid = true;
 
             // trace some more data since TI info appears valid
-            ss.str(std::string()); // empty the stream
-            ss.clear();            // clear the stream
-            ss << "TI data term-type = 0x" << std::setw(2) << std::setfill('0')
-               << std::hex << (int)tiDataArea->hbTerminateType;
-            strobj = ss.str();
-            trace<level::INFO>(strobj.c_str());
+            trace::inf("TI data term-type = 0x02x",
+                       tiDataArea->hbTerminateType);
 
-            ss.str(std::string()); // empty the stream
-            ss.clear();            // clear the stream
-            ss << "TI data SRC format = 0x" << std::setw(2) << std::setfill('0')
-               << std::hex << (int)tiDataArea->srcFormat;
-            strobj = ss.str();
-            trace<level::INFO>(strobj.c_str());
+            trace::inf("TI data SRC format = 0x02x", tiDataArea->srcFormat);
 
-            ss.str(std::string()); // empty the stream
-            ss.clear();            // clear the stream
-            ss << "TI data source = 0x" << std::setw(2) << std::setfill('0')
-               << std::hex << (int)tiDataArea->source;
-            strobj = ss.str();
-            trace<level::INFO>(strobj.c_str());
+            trace::inf("TI data source = 0x02x", tiDataArea->source);
         }
     }
 

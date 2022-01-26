@@ -7,6 +7,7 @@
 #include <sdbusplus/bus.hpp>
 #include <sdbusplus/exception.hpp>
 #include <util/dbus.hpp>
+#include <util/trace.hpp>
 
 #include <iomanip>
 #include <iostream>
@@ -69,7 +70,7 @@ int tiHandler(TiDataArea* i_tiDataArea)
  */
 void handlePhypTi(TiDataArea* i_tiDataArea)
 {
-    trace<level::INFO>("PHYP TI");
+    trace::inf("PHYP TI");
 
     // gather additional data for PEL
     std::map<std::string, std::string> tiAdditionalData;
@@ -128,7 +129,7 @@ void handlePhypTi(TiDataArea* i_tiDataArea)
  */
 void handleHbTiWithEid(TiDataArea* i_tiDataArea)
 {
-    trace<level::INFO>("HB TI with PLID/EID");
+    trace::inf("HB TI with PLID/EID");
 
     if (nullptr != i_tiDataArea)
     {
@@ -156,7 +157,7 @@ void handleHbTiWithEid(TiDataArea* i_tiDataArea)
  */
 void handleHbTiWithSrc(TiDataArea* i_tiDataArea)
 {
-    trace<level::INFO>("HB TI with SRC");
+    trace::inf("HB TI with SRC");
 
     // handle specific hostboot reason codes
     if (nullptr != i_tiDataArea)
@@ -164,10 +165,7 @@ void handleHbTiWithSrc(TiDataArea* i_tiDataArea)
         // Reason code is byte 2 and 3 of 4 byte srcWord12HbWord0
         uint16_t reasonCode = be32toh(i_tiDataArea->srcWord12HbWord0);
 
-        // buffer for formatted string (+1 for null, just in case)
-        char buffer[sizeof("reason code 1234 ")];
-        sprintf(buffer, "reason code %04x", reasonCode);
-        trace<level::INFO>(buffer);
+        trace::inf("reason code %04x", reasonCode);
 
         // for clean shutdown (reason code 050B) no PEL and no dump
         if (reasonCode != HB_SRC_SHUTDOWN_REQUEST)
@@ -184,6 +182,7 @@ void handleHbTiWithSrc(TiDataArea* i_tiDataArea)
             tiAdditionalData["Subsystem"] = std::to_string(
                 static_cast<uint8_t>(pel::SubsystemID::hostboot));
 
+            // TODO: will update as part of other story.
             // Translate hex src value to ascii. This results in an 8
             // character SRC (hostboot SRC is 32 bits)
             std::stringstream src;
@@ -192,7 +191,7 @@ void handleHbTiWithSrc(TiDataArea* i_tiDataArea)
             tiAdditionalData["SrcAscii"] = src.str();
 
             // dump flag is only valid for TI with EID (not TI with SRC)
-            trace<level::INFO>("Ignoring TI info dump flag for HB TI with SRC");
+            trace::inf("Ignoring TI info dump flag for HB TI with SRC");
             tiAdditionalData["Dump"] = "true";
 
             // Generate event log
@@ -224,7 +223,7 @@ void handleHbTiWithSrc(TiDataArea* i_tiDataArea)
  */
 void handleHbTi(TiDataArea* i_tiDataArea)
 {
-    trace<level::INFO>("HB TI");
+    trace::inf("HB TI");
 
     // handle specific hostboot reason codes
     if (nullptr != i_tiDataArea)
@@ -256,6 +255,7 @@ void parsePhypOpalTiInfo(std::map<std::string, std::string>& i_map,
         return;
     }
 
+    // TODO: will update as part of other story.
     std::stringstream ss;
 
     ss << "0x00 TI Area Valid:" << std::setw(2) << std::setfill('0') << std::hex
@@ -338,6 +338,7 @@ void parseHbTiInfo(std::map<std::string, std::string>& i_map,
         return;
     }
 
+    // TODO: will update as part of other story.
     std::stringstream ss;
 
     ss << "0x00 TI Area Valid:" << std::setw(2) << std::setfill('0') << std::hex

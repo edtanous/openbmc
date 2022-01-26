@@ -3,6 +3,7 @@
 #include <attn/attn_logging.hpp>
 #include <sdbusplus/bus.hpp>
 #include <sdbusplus/exception.hpp>
+#include <util/trace.hpp>
 
 namespace attn
 {
@@ -36,8 +37,8 @@ uint dumpStatusChanged(sdbusplus::message::message& i_msg, std::string i_path,
                                     "OperationStatus.InProgress" != *status))
         {
             // dump is done, trace some info and change in progress flag
-            trace<level::INFO>(i_path.c_str());
-            trace<level::INFO>((*status).c_str());
+            trace::inf(i_path.c_str());
+            trace::inf(status->c_str());
             o_inProgress = false;
         }
     }
@@ -68,13 +69,13 @@ void monitorDump(const std::string& i_path)
             });
 
     // wait for dump status to be completed (complete == true)
-    trace<level::INFO>("dump requested (waiting)");
+    trace::inf("dump requested (waiting)");
     while (true == inProgress)
     {
         bus.wait(0);
         bus.process_discard();
     }
-    trace<level::INFO>("dump completed");
+    trace::inf("dump completed");
 }
 
 /** Request a dump from the dump manager */
@@ -131,9 +132,8 @@ void requestDump(uint32_t i_logId, const DumpParameters& i_dumpParameters)
         }
         catch (const sdbusplus::exception::SdBusError& e)
         {
-            trace<level::ERROR>("requestDump exception");
-            std::string traceMsg = std::string(e.what(), maxTraceLen);
-            trace<level::ERROR>(traceMsg.c_str());
+            trace::err("requestDump exception");
+            trace::err(e.what());
         }
     }
 }

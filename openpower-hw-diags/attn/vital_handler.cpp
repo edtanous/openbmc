@@ -4,6 +4,7 @@
 #include <attn/attn_logging.hpp>
 #include <sdbusplus/bus.hpp>
 #include <util/dbus.hpp>
+#include <util/trace.hpp>
 
 namespace attn
 {
@@ -19,12 +20,12 @@ int handleVital(Attention* i_attention)
 {
     int rc = RC_SUCCESS; // assume vital handled
 
-    trace<level::INFO>("vital handler started");
+    trace::inf("vital handler started");
 
     // if vital handling enabled, handle vital attention
     if (false == (i_attention->getConfig()->getFlag(enVital)))
     {
-        trace<level::INFO>("vital handling disabled");
+        trace::inf("vital handling disabled");
         rc = RC_NOT_HANDLED;
     }
     else

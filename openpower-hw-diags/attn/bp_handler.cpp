@@ -1,6 +1,7 @@
 #include <attn/attn_common.hpp>
 #include <attn/attn_logging.hpp>
 #include <sdbusplus/bus.hpp>
+#include <util/trace.hpp>
 
 namespace attn
 {
@@ -16,7 +17,7 @@ int bpHandler()
     int rc = RC_SUCCESS; // assume success
 
     // trace message
-    trace<level::INFO>("Notify Cronus");
+    trace::inf("Notify Cronus");
 
     // notify Cronus over dbus
     try
@@ -32,9 +33,8 @@ int bpHandler()
     }
     catch (const sdbusplus::exception::SdBusError& e)
     {
-        trace<level::INFO>("bpHandler() exception");
-        std::string traceMsg = std::string(e.what(), maxTraceLen);
-        trace<level::ERROR>(traceMsg.c_str());
+        trace::inf("bpHandler() exception");
+        trace::err(e.what());
         rc = RC_NOT_HANDLED;
     }
 

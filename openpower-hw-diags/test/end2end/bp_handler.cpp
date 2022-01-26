@@ -1,4 +1,4 @@
-#include <attn/attn_logging.hpp>
+#include <util/trace.hpp>
 
 namespace attn
 {
@@ -7,7 +7,7 @@ namespace attn
 void bpHandler()
 {
     // trace message
-    trace<level::INFO>("breakpoint handler");
+    trace::inf("breakpoint handler");
 }
 
 } // namespace attn
