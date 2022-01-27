@@ -101,7 +101,7 @@ void sbeEnterMpReboot(struct pdbg_target* tgt)
         FFDCData pelAdditionalData;
         pelAdditionalData.emplace_back("SRC6",
                                        std::to_string((index << 16) | cmd));
-        auto logId = createSbeErrorPEL(event, sbeError, pelAdditionalData);
+        auto logId = createSbeErrorPEL(event, sbeError, pelAdditionalData, tgt);
 
         if (dumpIsRequired)
         {

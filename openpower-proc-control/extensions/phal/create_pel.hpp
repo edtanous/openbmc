@@ -8,6 +8,11 @@
 
 #include <string>
 #include <vector>
+
+extern "C"
+{
+#include <libpdbg.h>
+}
 namespace openpower
 {
 namespace pel
@@ -34,11 +39,13 @@ void createErrorPEL(const std::string& event, const json& calloutData = {},
  * @param[in] event - the event type
  * @param[in] sbeError - SBE error object
  * @param[in] ffdcData - failure data to append to PEL
+ * @param[in] procTarget - pdbg processor target
  * @param[in] severity - severity of the log
  * @return Platform log id
  */
 uint32_t createSbeErrorPEL(const std::string& event, const sbeError_t& sbeError,
                            const FFDCData& ffdcData,
+                           struct pdbg_target* procTarget,
                            const Severity severity = Severity::Error);
 
 /**

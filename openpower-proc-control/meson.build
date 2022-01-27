@@ -186,6 +186,7 @@ if build_phal
             dependency('fmt'),
             dependency('phosphor-dbus-interfaces'),
             cxx.find_library('pdbg'),
+            cxx.find_library('phal'),
        ],
        install: true
    )

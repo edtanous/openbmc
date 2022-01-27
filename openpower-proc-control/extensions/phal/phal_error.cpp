@@ -684,7 +684,8 @@ void processSbeBootError()
     uint32_t index = pdbg_target_index(procTarget);
     pelAdditionalData.emplace_back("SRC6", std::to_string(index << 16));
     // Create SBE Error with FFDC data.
-    auto logId = createSbeErrorPEL(event, sbeError, pelAdditionalData);
+    auto logId =
+        createSbeErrorPEL(event, sbeError, pelAdditionalData, procTarget);
 
     if (dumpIsRequired)
     {

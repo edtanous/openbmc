@@ -92,7 +92,8 @@ void threadStopAll(void)
                     // Create informational error log.
                     createSbeErrorPEL(
                         "org.open_power.Processor.Error.SbeChipOpFailure",
-                        sbeError, pelAdditionalData, Severity::Informational);
+                        sbeError, pelAdditionalData, procTarget,
+                        Severity::Informational);
                 }
                 else
                 {

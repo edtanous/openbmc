@@ -1,10 +1,13 @@
 #include "create_pel.hpp"
 
+#include "attributes_info.H"
+
 #include "util.hpp"
 
 #include <fcntl.h>
 #include <fmt/format.h>
 #include <libekb.H>
+#include <libphal.H>
 #include <unistd.h>
 
 #include <phosphor-logging/elog.hpp>
@@ -31,6 +34,49 @@ namespace pel
 constexpr auto loggingObjectPath = "/xyz/openbmc_project/logging";
 constexpr auto loggingInterface = "xyz.openbmc_project.Logging.Create";
 constexpr auto opLoggingInterface = "org.open_power.Logging.PEL";
+
+/**
+ * @brief get SBE special callout information
+ *
+ *        This function add the special sbe callout in the user provided
+ *        json callout list. includes BMC0002 procedure callout with
+ *        high priority and processor callout with medium priority.
+ *
+ * @param[in] procTarget - pdbg processor target
+ * @param[out] jsonCalloutDataList - reference to json callout list
+ */
+static void getSBECallout(struct pdbg_target* procTarget,
+                          json& jsonCalloutDataList)
+{
+    using namespace openpower::phal::pdbg;
+
+    json jsonProcedCallout;
+
+    // Add procedure callout
+    jsonProcedCallout["Procedure"] = "BMC0002";
+    jsonProcedCallout["Priority"] = "H";
+    jsonCalloutDataList.emplace_back(std::move(jsonProcedCallout));
+    try
+    {
+        ATTR_LOCATION_CODE_Type locationCode;
+        // Initialize with default data.
+        memset(&locationCode, '\0', sizeof(locationCode));
+        // Get location code information
+        openpower::phal::pdbg::getLocationCode(procTarget, locationCode);
+        json jsonProcCallout;
+        jsonProcCallout["LocationCode"] = locationCode;
+        jsonProcCallout["Deconfigured"] = false;
+        jsonProcCallout["Guarded"] = false;
+        jsonProcCallout["Priority"] = "M";
+        jsonCalloutDataList.emplace_back(std::move(jsonProcCallout));
+    }
+    catch (const std::exception& e)
+    {
+        log<level::ERR>(fmt::format("getLocationCode({}): Exception({})",
+                                    pdbg_target_path(procTarget), e.what())
+                            .c_str());
+    }
+}
 
 void createErrorPEL(const std::string& event, const json& calloutData,
                     const FFDCData& ffdcData)
@@ -87,7 +133,9 @@ void createErrorPEL(const std::string& event, const json& calloutData,
 }
 
 uint32_t createSbeErrorPEL(const std::string& event, const sbeError_t& sbeError,
-                           const FFDCData& ffdcData, const Severity severity)
+                           const FFDCData& ffdcData,
+                           struct pdbg_target* procTarget,
+                           const Severity severity)
 {
     uint32_t plid = 0;
     std::map<std::string, std::string> additionalData;
@@ -123,6 +171,38 @@ uint32_t createSbeErrorPEL(const std::string& event, const sbeError_t& sbeError,
                             static_cast<uint8_t>(0xCB),
                             static_cast<uint8_t>(0x01), sbeError.getFd()));
     }
+
+    // Workaround : currently sbe_extract_rc hwp procedure based callout
+    // handling is not available. openbmc issue #2917
+    // As per discussion with RAS team adding additional callout for
+    // SBE timeout error case, till this hwp based error handling in place.
+    // Note: PEL needs ffdcFile file till pel creation. This is forced to
+    // define ffdcFile function level scope.
+    std::unique_ptr<FFDCFile> FFDCFilePtr;
+    try
+    {
+        if ((event == "org.open_power.Processor.Error.SbeBootTimeout") &&
+            (severity == Severity::Error))
+        {
+            json jsonCalloutDataList;
+            jsonCalloutDataList = json::array();
+            getSBECallout(procTarget, jsonCalloutDataList);
+            FFDCFilePtr = std::make_unique<FFDCFile>(jsonCalloutDataList);
+            pelFFDCInfo.push_back(std::make_tuple(
+                sdbusplus::xyz::openbmc_project::Logging::server::Create::
+                    FFDCFormat::JSON,
+                static_cast<uint8_t>(0xCA), static_cast<uint8_t>(0x01),
+                FFDCFilePtr->getFileFD()));
+        }
+    }
+    catch (const std::exception& e)
+    {
+        log<level::ERR>(
+            fmt::format("Skipping SBE special callout due to Exception({})",
+                        e.what())
+                .c_str());
+    }
+
     try
     {
         std::string service =
@@ -157,7 +237,6 @@ uint32_t createSbeErrorPEL(const std::string& event, const sbeError_t& sbeError,
     {
         throw e;
     }
-
     return plid;
 }
 
