@@ -164,9 +164,8 @@ uint32_t analyzeHardware(AnalysisType i_type, attn::DumpParameters& o_dump)
             else
             {
                 // Analysis failed so apply the Level 2 Support resolution.
-                ProcedureCalloutResolution res{callout::Procedure::NEXTLVL,
-                                               callout::Priority::HIGH};
-                res.resolve(servData);
+                servData.calloutProcedure(callout::Procedure::NEXTLVL,
+                                          callout::Priority::HIGH);
             }
         }
 
