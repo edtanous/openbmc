@@ -95,8 +95,8 @@ class ServiceData
      * @param i_priority The callout priority.
      * @param i_guard    True if guard is required. False, otherwise.
      */
-    void calloutTarget(pdbg_target* i_target,
-                       const callout::Priority& i_priority, bool i_guard);
+    void calloutTarget(pdbg_target* i_target, callout::Priority i_priority,
+                       bool i_guard);
 
     /**
      * @brief Add callout for a connected target on the other side of a bus.
@@ -107,7 +107,7 @@ class ServiceData
      */
     void calloutConnected(pdbg_target* i_rxTarget,
                           const callout::BusType& i_busType,
-                          const callout::Priority& i_priority, bool i_guard);
+                          callout::Priority i_priority, bool i_guard);
 
     /**
      * @brief Add callout for an entire bus.
@@ -117,7 +117,7 @@ class ServiceData
      * @param i_guard    True if guard is required. False, otherwise.
      */
     void calloutBus(pdbg_target* i_rxTarget, const callout::BusType& i_busType,
-                    const callout::Priority& i_priority, bool i_guard);
+                    callout::Priority i_priority, bool i_guard);
 
     /**
      * @brief Add callout for a clock.
@@ -126,7 +126,7 @@ class ServiceData
      * @param i_guard     True if guard is required. False, otherwise.
      */
     void calloutClock(const callout::ClockType& i_clockType,
-                      const callout::Priority& i_priority, bool i_guard);
+                      callout::Priority i_priority, bool i_guard);
 
     /**
      * @brief Add callout for a service procedure.
@@ -134,7 +134,7 @@ class ServiceData
      * @param i_priority  The callout priority.
      */
     void calloutProcedure(const callout::Procedure& i_procedure,
-                          const callout::Priority& i_priority);
+                          callout::Priority i_priority);
 
     /**
      * @brief Add callout for part type.
@@ -142,7 +142,7 @@ class ServiceData
      * @param i_priority The callout priority.
      */
     void calloutPart(const callout::PartType& i_part,
-                     const callout::Priority& i_priority);
+                     callout::Priority i_priority);
 
     /** @brief Accessor to iv_calloutList. */
     const nlohmann::json& getCalloutList() const
@@ -180,15 +180,15 @@ class ServiceData
      * @param i_priority The callout priority.
      * @param i_guard    True if guard is required. False, otherwise.
      */
-    void addTargetCallout(pdbg_target* i_target,
-                          const callout::Priority& i_priority, bool i_guard);
+    void addTargetCallout(pdbg_target* i_target, callout::Priority i_priority,
+                          bool i_guard);
 
     /**
      * @brief A simple helper function for all the callout functions that need
      *        to callout a the backplane (callout only, no FFDC).
      * @param i_priority The callout priority.
      */
-    void addBackplaneCallout(const callout::Priority& i_priority);
+    void addBackplaneCallout(callout::Priority i_priority);
 };
 
 } // namespace analyzer

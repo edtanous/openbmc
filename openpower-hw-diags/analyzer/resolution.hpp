@@ -36,8 +36,7 @@ class HardwareCalloutResolution : public Resolution
      * @param i_guard    True, if guard is required. False, otherwise.
      */
     HardwareCalloutResolution(const std::string& i_unitPath,
-                              const callout::Priority& i_priority,
-                              bool i_guard) :
+                              callout::Priority i_priority, bool i_guard) :
         iv_unitPath(i_unitPath),
         iv_priority(i_priority), iv_guard(i_guard)
     {}
@@ -72,8 +71,7 @@ class ConnectedCalloutResolution : public Resolution
      */
     ConnectedCalloutResolution(const callout::BusType& i_busType,
                                const std::string& i_unitPath,
-                               const callout::Priority& i_priority,
-                               bool i_guard) :
+                               callout::Priority i_priority, bool i_guard) :
         iv_busType(i_busType),
         iv_unitPath(i_unitPath), iv_priority(i_priority), iv_guard(i_guard)
     {}
@@ -115,7 +113,7 @@ class BusCalloutResolution : public Resolution
      */
     BusCalloutResolution(const callout::BusType& i_busType,
                          const std::string& i_unitPath,
-                         const callout::Priority& i_priority, bool i_guard) :
+                         callout::Priority i_priority, bool i_guard) :
         iv_busType(i_busType),
         iv_unitPath(i_unitPath), iv_priority(i_priority), iv_guard(i_guard)
     {}
@@ -150,7 +148,7 @@ class ClockCalloutResolution : public Resolution
      * @param i_guard     The guard type for this callout.
      */
     ClockCalloutResolution(const callout::ClockType& i_clockType,
-                           const callout::Priority& i_priority, bool i_guard) :
+                           callout::Priority i_priority, bool i_guard) :
         iv_clockType(i_clockType),
         iv_priority(i_priority), iv_guard(i_guard)
     {}
@@ -179,7 +177,7 @@ class ProcedureCalloutResolution : public Resolution
      * @param i_priority  The callout priority.
      */
     ProcedureCalloutResolution(const callout::Procedure& i_procedure,
-                               const callout::Priority& i_priority) :
+                               callout::Priority i_priority) :
         iv_procedure(i_procedure),
         iv_priority(i_priority)
     {}
@@ -205,7 +203,7 @@ class PartCalloutResolution : public Resolution
      * @param i_priority The callout priority.
      */
     PartCalloutResolution(const callout::PartType& i_part,
-                          const callout::Priority& i_priority) :
+                          callout::Priority i_priority) :
         iv_part(i_part),
         iv_priority(i_priority)
     {}

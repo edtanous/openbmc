@@ -1,5 +1,6 @@
 #pragma once
 
+#include <map>
 #include <string>
 
 namespace analyzer
@@ -10,76 +11,66 @@ namespace callout
 
 /** @brief All callouts will have a priority indicating when to issue the
  *         required service action. */
-class Priority
+enum class Priority
 {
-  public:
     /** Serivce is mandatory. */
-    static const Priority HIGH;
+    HIGH,
 
     /** Serivce medium priority callouts one at a time, in order, until the
      *  issue is resolved. */
-    static const Priority MED;
+    MED,
 
     /** Same as MED, except replace all A's as a group. */
-    static const Priority MED_A;
+    MED_A,
 
-    /** Same as MED, except replace all A's as a group. */
-    static const Priority MED_B;
+    /** Same as MED, except replace all B's as a group. */
+    MED_B,
 
-    /** Same as MED, except replace all A's as a group. */
-    static const Priority MED_C;
+    /** Same as MED, except replace all C's as a group. */
+    MED_C,
 
     /** If servicing all high and medium priority callouts did not resolve
      *  the issue, service low priority callouts one at a time, in order,
      *  until the issue is resolved. */
-    static const Priority LOW;
-
-  private:
-    /**
-     * @brief Constructor from components.
-     *
-     * At the moment, the priority values for the callout list user data
-     * section are different from the priority values hard-coded in the
-     * registry. Therefore, two different values must be stored.
-     *
-     * @param i_registry The string representation of a priority used in
-     *                   registry callouts.
-     * @param i_userData The string representation of a priority used in user
-     *                   data callouts.
-     */
-    Priority(const std::string& i_registry, const std::string& i_userData) :
-        iv_registry(i_registry), iv_userData(i_userData)
-    {}
-
-  private:
-    /** The string representation of a priority used in registry callouts. */
-    const std::string iv_registry;
-
-    /** The string representation of a priority used in user data callouts. */
-    const std::string iv_userData;
-
-  public:
-    /** iv_registry accessor */
-    const std::string& getRegistryString() const
-    {
-        return iv_registry;
-    }
-
-    /** iv_userData accessor */
-    const std::string& getUserDataString() const
-    {
-        return iv_userData;
-    }
+    LOW,
 };
 
-// clang-format off
-inline const Priority Priority::HIGH {"high",          "H"};
-inline const Priority Priority::MED  {"medium",        "M"};
-inline const Priority Priority::MED_A{"medium_group_A","A"};
-inline const Priority Priority::MED_B{"medium_group_B","B"};
-inline const Priority Priority::MED_C{"medium_group_C","C"};
-inline const Priority Priority::LOW  {"low",           "L"};
-// clang-format on
+/** @return The string representation of the priority used in callouts. */
+inline std::string getString(Priority i_priority)
+{
+    // clang-format off
+    static const std::map<Priority, std::string> m =
+    {
+        {Priority::HIGH,  "H"},
+        {Priority::MED,   "M"},
+        {Priority::MED_A, "A"},
+        {Priority::MED_B, "B"},
+        {Priority::MED_C, "C"},
+        {Priority::LOW,   "L"},
+    };
+    // clang-format on
+
+    return m.at(i_priority);
+}
+
+/** @return The string representation of the priority used in The callout FFDC.
+ */
+inline std::string getStringFFDC(Priority i_priority)
+{
+    // clang-format off
+    static const std::map<Priority, std::string> m =
+    {
+        {Priority::HIGH,  "high"},
+        {Priority::MED,   "medium"},
+        {Priority::MED_A, "medium_group_A"},
+        {Priority::MED_B, "medium_group_B"},
+        {Priority::MED_C, "medium_group_C"},
+        {Priority::LOW,   "low"},
+    };
+    // clang-format on
+
+    return m.at(i_priority);
+}
 
 /** @brief Container class for procedure callout service actions. */
 class Procedure
