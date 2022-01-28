@@ -1,5 +1,7 @@
 #pragma once
 
+#include <fmt/format.h>
+
 #include <analyzer/analyzer_main.hpp>
 #include <analyzer/callout.hpp>
 #include <hei_main.hpp>
@@ -156,6 +158,23 @@ class ServiceData
         return iv_calloutFFDC;
     }
 
+    /**
+     * @brief Adds the SRC subsystem to the given additional PEL data.
+     * @param io_additionalData The additional PEL data.
+     */
+    void addSrcSubsystem(
+        std::map<std::string, std::string>& io_additionalData) const
+    {
+        io_additionalData["PEL_SUBSYSTEM"] =
+            fmt::format("0x{:02x}", iv_srcSubsystem.first);
+    }
+
+    /** @brief Accessor to iv_srcSubsystem. */
+    const std::pair<callout::SrcSubsystem, callout::Priority> getSubsys() const
+    {
+        return iv_srcSubsystem;
+    }
+
   private:
     /**
      * @brief Add callout information to the callout list.
@@ -189,6 +208,31 @@ class ServiceData
      * @param i_priority The callout priority.
      */
     void addBackplaneCallout(callout::Priority i_priority);
+
+  private:
+    /**
+     * @brief Compares the current SRC subsystem type with the given SRC
+     *        subsystem type and stores the highest priority callout subsystem.
+     *        If the two subsystems are of equal priority. The stored subsystem
+     *        is used.
+     * @param i_subsystem The given subsystem type.
+     * @param i_priority  The callout priority associated with the given
+     *                    subsystem.
+     */
+    void setSrcSubsystem(callout::SrcSubsystem i_subsystem,
+                         callout::Priority i_priority);
+
+    /**
+     * @brief Returns the appropriate SRC subsystem based on the input target.
+     * @param i_trgt The given pdbg target.
+     */
+    callout::SrcSubsystem getTargetSubsystem(pdbg_target* i_target);
+
+    /** The SRC subsystem field (2nd byte of the primary SRC) is based on the
+     *  callouts the PEL. As callouts are to the service data, we'll need to
+     *  keep track of the highest priority callout subsystem. */
+    std::pair<callout::SrcSubsystem, callout::Priority> iv_srcSubsystem = {
+        callout::SrcSubsystem::CEC_HARDWARE, callout::Priority::LOW};
 };
 
 } // namespace analyzer

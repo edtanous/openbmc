@@ -23,11 +23,23 @@ namespace pdbg
 /** Chip target types. */
 enum TargetType_t : uint8_t
 {
-    TYPE_PROC   = 0x05,
-    TYPE_IOLINK = 0x47,
-    TYPE_OMI    = 0x48,
-    TYPE_OCMB   = 0x4b,
-    TYPE_IOHS   = 0x51,
+    TYPE_DIMM     = 0x03,
+    TYPE_PROC     = 0x05,
+    TYPE_CORE     = 0x07,
+    TYPE_EQ       = 0x23,
+    TYPE_PEC      = 0x2d,
+    TYPE_PHB      = 0x2e,
+    TYPE_MC       = 0x44,
+    TYPE_IOLINK   = 0x47,
+    TYPE_OMI      = 0x48,
+    TYPE_MCC      = 0x49,
+    TYPE_OMIC     = 0x4a,
+    TYPE_OCMB     = 0x4b,
+    TYPE_MEM_PORT = 0x4c,
+    TYPE_NMMU     = 0x4f,
+    TYPE_PAU      = 0x50,
+    TYPE_IOHS     = 0x51,
+    TYPE_PAUC     = 0x52,
 };
 
 /** @return The target associated with the given chip. */

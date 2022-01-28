@@ -18,6 +18,7 @@ void ServiceData::calloutTarget(pdbg_target* i_target,
     ffdc["Priority"]     = callout::getStringFFDC(i_priority);
     ffdc["Guard"]        = i_guard;
     addCalloutFFDC(ffdc);
+    setSrcSubsystem(getTargetSubsystem(i_target), i_priority);
 }
 
 //------------------------------------------------------------------------------
@@ -41,6 +42,7 @@ void ServiceData::calloutConnected(pdbg_target* i_rxTarget,
     ffdc["Priority"]     = callout::getStringFFDC(i_priority);
     ffdc["Guard"]        = i_guard;
     addCalloutFFDC(ffdc);
+    setSrcSubsystem(getTargetSubsystem(txTarget), i_priority);
 }
 
 //------------------------------------------------------------------------------
@@ -71,6 +73,7 @@ void ServiceData::calloutBus(pdbg_target* i_rxTarget,
     ffdc["Priority"]     = callout::getStringFFDC(i_priority);
     ffdc["Guard"]        = i_guard;
     addCalloutFFDC(ffdc);
+    setSrcSubsystem(i_busType.getSrcSubsystem(), i_priority);
 }
 
 //------------------------------------------------------------------------------
@@ -91,6 +94,7 @@ void ServiceData::calloutClock(const callout::ClockType& i_clockType,
     ffdc["Clock Type"]   = i_clockType.getString();
     ffdc["Priority"]     = callout::getStringFFDC(i_priority);
     addCalloutFFDC(ffdc);
+    setSrcSubsystem(i_clockType.getSrcSubsystem(), i_priority);
 }
 
 //------------------------------------------------------------------------------
@@ -110,6 +114,7 @@ void ServiceData::calloutProcedure(const callout::Procedure& i_procedure,
     ffdc["Procedure"]    = i_procedure.getString();
     ffdc["Priority"]     = callout::getStringFFDC(i_priority);
     addCalloutFFDC(ffdc);
+    setSrcSubsystem(i_procedure.getSrcSubsystem(), i_priority);
 }
 
 //------------------------------------------------------------------------------
@@ -135,6 +140,7 @@ void ServiceData::calloutPart(const callout::PartType& i_part,
     ffdc["Part Type"]    = i_part.getString();
     ffdc["Priority"]     = callout::getStringFFDC(i_priority);
     addCalloutFFDC(ffdc);
+    setSrcSubsystem(i_part.getSrcSubsystem(), i_priority);
 }
 
 //------------------------------------------------------------------------------
@@ -231,6 +237,80 @@ void ServiceData::addBackplaneCallout(callout::Priority i_priority)
     callout["Guarded"]      = false;
 
     addCallout(callout);
+}
+
+//------------------------------------------------------------------------------
+
+void ServiceData::setSrcSubsystem(callout::SrcSubsystem i_subsystem,
+                                  callout::Priority i_priority)
+{
+    // clang-format off
+    static const std::map<callout::Priority, unsigned int> m =
+    {
+        // Note that all medium priorities, including groups A, B, and C, are
+        // the same priority.
+        {callout::Priority::HIGH,  3},
+        {callout::Priority::MED,   2},
+        {callout::Priority::MED_A, 2},
+        {callout::Priority::MED_B, 2},
+        {callout::Priority::MED_C, 2},
+        {callout::Priority::LOW,   1},
+    };
+    // clang-format on
+
+    // The default subsystem is CEC_HARDWARE with LOW priority. Change the
+    // subsystem if the given subsystem has a higher priority or if the stored
+    // subsystem is still the default.
+    if (m.at(iv_srcSubsystem.second) < m.at(i_priority) ||
+        (callout::SrcSubsystem::CEC_HARDWARE == iv_srcSubsystem.first &&
+         callout::Priority::LOW == iv_srcSubsystem.second))
+    {
+        iv_srcSubsystem.first  = i_subsystem;
+        iv_srcSubsystem.second = i_priority;
+    }
+}
+
+//------------------------------------------------------------------------------
+
+callout::SrcSubsystem ServiceData::getTargetSubsystem(pdbg_target* i_target)
+{
+    using TargetType_t = util::pdbg::TargetType_t;
+
+    // Default the subsystem to CEC_HARDWARE
+    callout::SrcSubsystem o_subSys = callout::SrcSubsystem::CEC_HARDWARE;
+
+    // clang-format off
+    static const std::map<uint8_t, callout::SrcSubsystem> subSysMap =
+    {
+        {TargetType_t::TYPE_DIMM,     callout::SrcSubsystem::MEMORY_DIMM   },
+        {TargetType_t::TYPE_PROC,     callout::SrcSubsystem::PROCESSOR     },
+        {TargetType_t::TYPE_CORE,     callout::SrcSubsystem::PROCESSOR_UNIT},
+        {TargetType_t::TYPE_EQ,       callout::SrcSubsystem::PROCESSOR     },
+        {TargetType_t::TYPE_PEC,      callout::SrcSubsystem::PHB           },
+        {TargetType_t::TYPE_PHB,      callout::SrcSubsystem::PHB           },
+        {TargetType_t::TYPE_MC,       callout::SrcSubsystem::MEMORY        },
+        {TargetType_t::TYPE_IOLINK,   callout::SrcSubsystem::CEC_HARDWARE  },
+        {TargetType_t::TYPE_OMI,      callout::SrcSubsystem::MEMORY        },
+        {TargetType_t::TYPE_MCC,      callout::SrcSubsystem::MEMORY        },
+        {TargetType_t::TYPE_OMIC,     callout::SrcSubsystem::MEMORY        },
+        {TargetType_t::TYPE_OCMB,     callout::SrcSubsystem::MEMORY        },
+        {TargetType_t::TYPE_MEM_PORT, callout::SrcSubsystem::MEMORY        },
+        {TargetType_t::TYPE_NMMU,     callout::SrcSubsystem::PROCESSOR     },
+        {TargetType_t::TYPE_PAU,      callout::SrcSubsystem::PROCESSOR_BUS },
+        {TargetType_t::TYPE_IOHS,     callout::SrcSubsystem::PROCESSOR_BUS },
+        {TargetType_t::TYPE_PAUC,     callout::SrcSubsystem::PROCESSOR     },
+    };
+    // clang-format on
+
+    auto targetType = util::pdbg::getTrgtType(i_target);
+
+    // If the type of the input target exists in the map, update the output
+    if (subSysMap.count(targetType) > 0)
+    {
+        o_subSys = subSysMap.at(targetType);
+    }
+
+    return o_subSys;
 }
 
 //------------------------------------------------------------------------------

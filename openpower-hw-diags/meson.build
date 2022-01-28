@@ -61,6 +61,8 @@ dbus_interfaces_dep = dependency('phosphor-dbus-interfaces')
 
 libpdbg_dep = cmplr.find_library('pdbg')
 
+fmt_dep = dependency('fmt')
+
 if get_option('phal').enabled()
   libphal_dep = cmplr.find_library('phal')
 endif

@@ -72,6 +72,29 @@ inline std::string getStringFFDC(Priority i_priority)
     return m.at(i_priority);
 }
 
+/** These SRC subsystem values are defined by the PEL spec. */
+enum class SrcSubsystem
+{
+    // Can also reference `extensions/openpower-pels/pel_values.cpp` from
+    // `openbmc/phosphor-logging` for the full list of these values.
+
+    PROCESSOR      = 0x10,
+    PROCESSOR_UNIT = 0x13,
+    PROCESSOR_BUS  = 0x14,
+
+    MEMORY      = 0x20,
+    MEMORY_BUS  = 0x22,
+    MEMORY_DIMM = 0x23,
+
+    PHB = 0x38,
+
+    CEC_HARDWARE = 0x50,
+    CEC_CLOCKS   = 0x58,
+    CEC_TOD      = 0x5A,
+
+    OTHERS = 0x70,
+};
+
 /** @brief Container class for procedure callout service actions. */
 class Procedure
 {
@@ -85,11 +108,16 @@ class Procedure
      * @param i_string The string representation of the procedure used for
      *                 callouts.
      */
-    explicit Procedure(const std::string& i_string) : iv_string(i_string) {}
+    Procedure(const std::string& i_string, const SrcSubsystem i_subsystem) :
+        iv_string(i_string), iv_subsystem(i_subsystem)
+    {}
 
   private:
     /** The string representation of the procedure used for callouts. */
     const std::string iv_string;
+
+    /** The associated SRC subsystem of the procedure. */
+    const SrcSubsystem iv_subsystem;
 
   public:
     /** iv_string accessor */
@@ -97,9 +125,16 @@ class Procedure
     {
         return iv_string;
     }
+
+    /** iv_subsystem accessor */
+    SrcSubsystem getSrcSubsystem() const
+    {
+        return iv_subsystem;
+    }
 };
 
-inline const Procedure Procedure::NEXTLVL{"next_level_support"};
+inline const Procedure Procedure::NEXTLVL{"next_level_support",
+                                          SrcSubsystem::OTHERS};
 
 /** @brief Container class for bus callout service actions. */
 class BusType
@@ -117,16 +152,22 @@ class BusType
      * @param i_string The string representation of the procedure used for
      *                 callouts.
      */
-    explicit BusType(const std::string& i_string) : iv_string(i_string) {}
+    BusType(const std::string& i_string, const SrcSubsystem i_subsystem) :
+        iv_string(i_string), iv_subsystem(i_subsystem)
+    {}
 
   private:
     /** The string representation of the procedure used for callouts. */
     const std::string iv_string;
 
+    /** The associated SRC subsystem of the bus. */
+    const SrcSubsystem iv_subsystem;
+
   public:
     bool operator==(const BusType& r) const
     {
-        return this->iv_string == r.iv_string;
+        return ((this->iv_string == r.iv_string) &&
+                (this->iv_subsystem == r.iv_subsystem));
     }
 
     /** iv_string accessor */
@@ -134,10 +175,16 @@ class BusType
     {
         return iv_string;
     }
+
+    /** iv_subsystem accessor */
+    SrcSubsystem getSrcSubsystem() const
+    {
+        return iv_subsystem;
+    }
 };
 
-inline const BusType BusType::SMP_BUS{"SMP_BUS"};
-inline const BusType BusType::OMI_BUS{"OMI_BUS"};
+inline const BusType BusType::SMP_BUS{"SMP_BUS", SrcSubsystem::PROCESSOR_BUS};
+inline const BusType BusType::OMI_BUS{"OMI_BUS", SrcSubsystem::MEMORY_BUS};
 
 /** @brief Container class for clock callout service actions. */
 class ClockType
@@ -158,11 +205,16 @@ class ClockType
      * @param i_string The string representation of the procedure used for
      *                 callouts.
      */
-    explicit ClockType(const std::string& i_string) : iv_string(i_string) {}
+    ClockType(const std::string& i_string, const SrcSubsystem i_subsystem) :
+        iv_string(i_string), iv_subsystem(i_subsystem)
+    {}
 
   private:
     /** The string representation of the procedure used for callouts. */
     const std::string iv_string;
+
+    /** The associated SRC subsystem of the clock. */
+    const SrcSubsystem iv_subsystem;
 
   public:
     /** iv_string accessor */
@@ -170,11 +222,19 @@ class ClockType
     {
         return iv_string;
     }
+
+    /** iv_subsystem accessor */
+    SrcSubsystem getSrcSubsystem() const
+    {
+        return iv_subsystem;
+    }
 };
 
-inline const ClockType ClockType::OSC_REF_CLOCK_0{"OSC_REF_CLOCK_0"};
-inline const ClockType ClockType::OSC_REF_CLOCK_1{"OSC_REF_CLOCK_1"};
-inline const ClockType ClockType::TOD_CLOCK{"TOD_CLOCK"};
+inline const ClockType ClockType::OSC_REF_CLOCK_0{"OSC_REF_CLOCK_0",
+                                                  SrcSubsystem::CEC_CLOCKS};
+inline const ClockType ClockType::OSC_REF_CLOCK_1{"OSC_REF_CLOCK_1",
+                                                  SrcSubsystem::CEC_CLOCKS};
+inline const ClockType ClockType::TOD_CLOCK{"TOD_CLOCK", SrcSubsystem::CEC_TOD};
 
 /** @brief Container class for part callout service actions. */
 class PartType
@@ -188,16 +248,22 @@ class PartType
      * @brief Constructor from components.
      * @param i_string The string representation of the part callout.
      */
-    explicit PartType(const std::string& i_string) : iv_string(i_string) {}
+    PartType(const std::string& i_string, const SrcSubsystem i_subsystem) :
+        iv_string(i_string), iv_subsystem(i_subsystem)
+    {}
 
   private:
     /** The string representation of the part callout. */
     const std::string iv_string;
 
+    /** The associated SRC subsystem of the part. */
+    const SrcSubsystem iv_subsystem;
+
   public:
     bool operator==(const PartType& r) const
     {
-        return this->iv_string == r.iv_string;
+        return ((this->iv_string == r.iv_string) &&
+                (this->iv_subsystem == r.iv_subsystem));
     }
 
     /** iv_string accessor */
@@ -205,9 +271,15 @@ class PartType
     {
         return iv_string;
     }
+
+    /** iv_subsystem accessor */
+    SrcSubsystem getSrcSubsystem() const
+    {
+        return iv_subsystem;
+    }
 };
 
-inline const PartType PartType::PNOR{"PNOR"};
+inline const PartType PartType::PNOR{"PNOR", SrcSubsystem::CEC_HARDWARE};
 
 /** @brief Container class for guard service actions. */
 class GuardType

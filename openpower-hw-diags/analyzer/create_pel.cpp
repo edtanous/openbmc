@@ -330,6 +330,9 @@ uint32_t createPel(const ServiceData& i_servData)
     //          until the PEL is submitted.
     std::vector<util::FFDCFile> userDataFiles;
 
+    // Set the subsystem in the primary SRC.
+    i_servData.addSrcSubsystem(logData);
+
     // Set words 6-9 of the SRC.
     __setSrc(i_servData.getRootCause(), logData);
 

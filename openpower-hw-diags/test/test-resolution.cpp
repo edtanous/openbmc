@@ -65,6 +65,14 @@ TEST(Resolution, TestSet1)
     l1->resolve(sd1);
     l2->resolve(sd2);
 
+    // Verify the subsystems
+    std::pair<callout::SrcSubsystem, callout::Priority> subsys = {
+        callout::SrcSubsystem::PROCESSOR, callout::Priority::HIGH};
+    EXPECT_EQ(sd1.getSubsys(), subsys);
+
+    subsys = {callout::SrcSubsystem::PROCESSOR, callout::Priority::HIGH};
+    EXPECT_EQ(sd2.getSubsys(), subsys);
+
     // Start verifying
     nlohmann::json j{};
     std::string s{};
@@ -146,6 +154,11 @@ TEST(Resolution, HardwareCallout)
 
     c1->resolve(sd);
 
+    // Verify the subsystem
+    std::pair<callout::SrcSubsystem, callout::Priority> subsys = {
+        callout::SrcSubsystem::MEMORY, callout::Priority::MED_A};
+    EXPECT_EQ(sd.getSubsys(), subsys);
+
     nlohmann::json j{};
     std::string s{};
 
@@ -200,6 +213,11 @@ TEST(Resolution, ConnectedCallout)
     c1->resolve(sd);
     c2->resolve(sd);
     c3->resolve(sd);
+
+    // Verify the subsystem
+    std::pair<callout::SrcSubsystem, callout::Priority> subsys = {
+        callout::SrcSubsystem::CEC_HARDWARE, callout::Priority::MED_A};
+    EXPECT_EQ(sd.getSubsys(), subsys);
 
     // Callout list
     j = sd.getCalloutList();
@@ -287,6 +305,11 @@ TEST(Resolution, BusCallout)
     c2->resolve(sd);
     c3->resolve(sd);
 
+    // Verify the subsystem
+    std::pair<callout::SrcSubsystem, callout::Priority> subsys = {
+        callout::SrcSubsystem::MEMORY, callout::Priority::MED_A};
+    EXPECT_EQ(sd.getSubsys(), subsys);
+
     // Callout list
     j = sd.getCalloutList();
     s = R"([
@@ -358,6 +381,11 @@ TEST(Resolution, ClockCallout)
 
     c1->resolve(sd);
 
+    // Verify the subsystem
+    std::pair<callout::SrcSubsystem, callout::Priority> subsys = {
+        callout::SrcSubsystem::CEC_CLOCKS, callout::Priority::HIGH};
+    EXPECT_EQ(sd.getSubsys(), subsys);
+
     nlohmann::json j{};
     std::string s{};
 
@@ -399,6 +427,11 @@ TEST(Resolution, ProcedureCallout)
 
     c1->resolve(sd);
 
+    // Verify the subsystem
+    std::pair<callout::SrcSubsystem, callout::Priority> subsys = {
+        callout::SrcSubsystem::OTHERS, callout::Priority::LOW};
+    EXPECT_EQ(sd.getSubsys(), subsys);
+
     nlohmann::json j{};
     std::string s{};
 
@@ -437,6 +470,11 @@ TEST(Resolution, PartCallout)
                    libhei::IsolationData{}};
 
     c1->resolve(sd);
+
+    // Verify the subsystem
+    std::pair<callout::SrcSubsystem, callout::Priority> subsys = {
+        callout::SrcSubsystem::CEC_HARDWARE, callout::Priority::MED};
+    EXPECT_EQ(sd.getSubsys(), subsys);
 
     nlohmann::json j{};
     std::string s{};
