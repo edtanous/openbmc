@@ -958,7 +958,7 @@
         ],
 
         "tod_step_check_fault": [
-            { "type": "plugin", "name": "tod_step_check_fault" }
+            { "type": "plugin", "name": "tod_step_check_fault", "instance": 0 }
         ],
 
         "masked"         : [ { "type": "action", "name": "level2" } ],
