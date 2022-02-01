@@ -51,7 +51,4 @@ uint32_t eventVital();
 /** @brief Commit attention handler failure event to log */
 void eventAttentionFail(int i_error);
 
-/** @brief Commit sbe chipop event to log */
-void eventPhalSbeChipop(uint32_t proc);
-
 } // namespace attn

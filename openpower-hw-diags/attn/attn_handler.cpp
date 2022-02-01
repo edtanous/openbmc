@@ -21,6 +21,8 @@ extern "C"
 #include <attn/ti_handler.hpp>
 #include <attn/vital_handler.hpp>
 #include <util/dbus.hpp>
+#include <util/ffdc_file.hpp>
+#include <util/trace.hpp>
 
 #include <algorithm>
 #include <iomanip>
@@ -56,7 +58,7 @@ bool activeAttn(uint32_t i_val, uint32_t i_mask, uint32_t i_attn);
 #ifdef CONFIG_PHAL_API
 /** @brief Handle phal sbe exception */
 void phalSbeExceptionHandler(openpower::phal::exception::SbeError& e,
-                             uint32_t procNum);
+                             uint32_t chipPosition, uint32_t command);
 #endif
 
 /** @brief Get static TI info data based on host state */
@@ -298,11 +300,16 @@ int handleSpecial(Attention* i_attention)
                 // get dynamic TI info
                 openpower::phal::sbe::getTiInfo(attnProc, &tiInfo, &tiInfoLen);
             }
-            catch (openpower::phal::exception::SbeError& e)
+            catch (openpower::phal::exception::SbeError& sbeError)
             {
                 // library threw an exception
+                // note: phal::sbe::getTiInfo = command class | command ==
+                // 0xa900 | 0x04 = 0xa904. The sbe fifo command class and
+                // commands are defined in the sbefifo library source code but
+                // do not seem to be exported/installed for consumption
+                // externally.
                 uint32_t procNum = pdbg_target_index(attnProc);
-                phalSbeExceptionHandler(e, procNum);
+                phalSbeExceptionHandler(sbeError, procNum, 0xa904);
             }
         }
 #else
@@ -447,23 +454,42 @@ bool activeAttn(uint32_t i_val, uint32_t i_mask, uint32_t i_attn)
 }
 
 #ifdef CONFIG_PHAL_API
+
 /**
  * @brief Handle phal sbe exception
  *
  * @param[in] e - exception object
  * @param[in] procNum - processor number associated with sbe exception
  */
-void phalSbeExceptionHandler(openpower::phal::exception::SbeError& e,
-                             uint32_t procNum)
+void phalSbeExceptionHandler(openpower::phal::exception::SbeError& sbeError,
+                             uint32_t chipPosition, uint32_t command)
 {
-    // trace exception details
-    std::string traceMsg = std::string(e.what());
-    trace<level::ERROR>(traceMsg.c_str());
+    trace::err("Attention handler phal exception handler");
 
-    // Handle SBE chipop timeout error
-    if (e.errType() == openpower::phal::exception::SBE_CHIPOP_NOT_ALLOWED)
+    // Trace exception details
+    trace::err(sbeError.what());
+
+    // Create event log entry with SBE FFDC data if provided
+    auto fd = sbeError.getFd();
+    if (fd > 0)
     {
-        eventPhalSbeChipop(procNum);
+        trace::err("SBE FFDC data is available");
+
+        // FFDC parser expects chip position and command (command class |
+        // command) to be in the additional data.
+        std::map<std::string, std::string> additionalData = {
+            {"SRC6", std::to_string((chipPosition << 16) | command)}};
+
+        // See phosphor-logging/extensions/openpower-pels/README.md, "Self Boot
+        // Engine(SBE) First Failure Data Capture(FFDC)" - SBE FFDC file type
+        // is 0xCB, version is 0x01.
+        std::vector<util::FFDCTuple> ffdc{util::FFDCTuple{
+            util::FFDCFormat::Custom, static_cast<uint8_t>(0xCB),
+            static_cast<uint8_t>(0x01), fd}};
+
+        // Create event log entry with FFDC data
+        createPel("org.open_power.Processor.Error.SbeChipOpFailure",
+                  additionalData, ffdc);
     }
 }
 #endif
