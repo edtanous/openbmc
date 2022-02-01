@@ -20,6 +20,8 @@ if not gtest_dep.found() or not gmock_dep.found()
     endif
 endif
 
+################################################################################
+
 # NOTE: We cannot link to `util_lib` because that is built without
 #       `-DTEST_TRACE` and any of the util functions that use `trace.hpp` will
 #       throw a linker error because we don't have access to phosphor-logging
@@ -27,6 +29,7 @@ endif
 
 test_arg = [
     '-DTEST_TRACE',
+    package_args,
 ]
 
 # Compile the test dts into a binary for pdbg.
@@ -134,7 +137,10 @@ src = [
   files(
     tc + '.cpp',
     '../analyzer/plugins/p10-plugins.cpp',
+    '../analyzer/ras-data/ras-data-parser.cpp',
+    '../analyzer/resolution.cpp',
     '../analyzer/service_data.cpp',
+    '../util/data_file.cpp',
     '../util/pdbg.cpp',
     'pdbg-sim-only.cpp',
   ),

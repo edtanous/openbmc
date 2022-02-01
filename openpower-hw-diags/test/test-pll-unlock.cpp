@@ -1,6 +1,7 @@
 #include <stdio.h>
 
 #include <analyzer/plugins/plugin.hpp>
+#include <analyzer/ras-data/ras-data-parser.hpp>
 #include <hei_util.hpp>
 #include <util/pdbg.hpp>
 #include <util/trace.hpp>
@@ -21,14 +22,12 @@ TEST(PllUnlock, TestSet1)
 
     libhei::Signature sig11{chip1, nodeId, 0, 1, libhei::ATTN_TYPE_CHECKSTOP};
 
-    auto plugin = PluginMap::getSingleton().get(chip1.getType(), "pll_unlock");
-
     libhei::IsolationData isoData{};
     isoData.addSignature(sig11);
     ServiceData sd{sig11, AnalysisType::SYSTEM_CHECKSTOP, isoData};
 
-    // Call the PLL unlock plugin.
-    plugin(1, chip1, sd);
+    RasDataParser rasData{};
+    rasData.getResolution(sig11)->resolve(sd);
 
     nlohmann::json j{};
     std::string s{};
