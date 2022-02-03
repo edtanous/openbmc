@@ -27,7 +27,7 @@ analyzer_deps = [
 # Create static library.
 analyzer_lib = static_library(
     'analyzer_lib',
-    [ analyzer_src, plugins_src ],
+    [ analyzer_src ],
     include_directories : incdir,
     dependencies : analyzer_deps,
     cpp_args : [ package_args, test_arg ],
