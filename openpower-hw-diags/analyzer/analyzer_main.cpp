@@ -157,13 +157,27 @@ uint32_t analyzeHardware(AnalysisType i_type, attn::DumpParameters& o_dump)
         {
             if (attnFound)
             {
-                // Resolve the root cause attention.
-                RasDataParser rasData{};
-                rasData.getResolution(rootCause)->resolve(servData);
+                try
+                {
+                    // Resolve the root cause attention.
+                    RasDataParser rasData{};
+                    rasData.getResolution(rootCause)->resolve(servData);
+                }
+                catch (const std::exception& e)
+                {
+                    trace::err("Exception caught during root cause analysis");
+                    trace::err(e.what());
+
+                    // We'll still want to create a PEL for the FFDC, but
+                    // since the analysis failed, we need to callout Level 2
+                    // Support.
+                    servData.calloutProcedure(callout::Procedure::NEXTLVL,
+                                              callout::Priority::HIGH);
+                }
             }
             else
             {
-                // Analysis failed so apply the Level 2 Support resolution.
+                // Analysis failed so callout the Level 2 Support.
                 servData.calloutProcedure(callout::Procedure::NEXTLVL,
                                           callout::Priority::HIGH);
             }

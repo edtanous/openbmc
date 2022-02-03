@@ -166,9 +166,20 @@ void ServiceData::addCallout(const nlohmann::json& i_callout)
 
     // A map to determine the priority order. All of the medium priorities,
     // including the medium group priorities, are all the same level.
+    // clang-format off
     static const std::map<std::string, unsigned int> m = {
-        {"H", 3}, {"M", 2}, {"A", 2}, {"B", 2}, {"C", 2}, {"L", 1},
+        {callout::getString(callout::Priority::HIGH),  3},
+        {callout::getString(callout::Priority::MED),   2},
+        {callout::getString(callout::Priority::MED_A), 2},
+        {callout::getString(callout::Priority::MED_B), 2},
+        {callout::getString(callout::Priority::MED_C), 2},
+        {callout::getString(callout::Priority::LOW),   1},
     };
+    // clang-format on
+
+    // The new callout must contain a valid priority.
+    assert(i_callout.contains("Priority") &&
+           m.contains(i_callout.at("Priority")));
 
     bool addCallout = true;
 

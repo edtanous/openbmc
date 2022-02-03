@@ -4,6 +4,7 @@
 
 #include <analyzer/service_data.hpp>
 #include <hei_chip.hpp>
+#include <util/trace.hpp>
 
 #include <functional>
 #include <map>
@@ -107,7 +108,20 @@ class PluginMap
     PluginFunction get(libhei::ChipType_t i_type,
                        const std::string& i_name) const
     {
-        return iv_map.at(i_type).at(i_name);
+        PluginFunction func;
+
+        try
+        {
+            func = iv_map.at(i_type).at(i_name);
+        }
+        catch (const std::out_of_range& e)
+        {
+            trace::err("Plugin not defined: i_type=0x%08x i_name=%s", i_type,
+                       i_name.c_str());
+            throw; // caught later downstream
+        }
+
+        return func;
     }
 };
 

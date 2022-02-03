@@ -16,11 +16,34 @@ namespace analyzer
 std::shared_ptr<Resolution>
     RasDataParser::getResolution(const libhei::Signature& i_signature)
 {
-    const auto data = iv_dataFiles.at(i_signature.getChip().getType());
+    nlohmann::json data;
+
+    try
+    {
+        data = iv_dataFiles.at(i_signature.getChip().getType());
+    }
+    catch (const std::out_of_range& e)
+    {
+        trace::err("No RAS data defined for chip type: 0x%08x",
+                   i_signature.getChip().getType());
+        throw; // caught later downstream
+    }
 
     const auto action = parseSignature(data, i_signature);
 
-    return parseAction(data, action);
+    std::shared_ptr<Resolution> resolution;
+
+    try
+    {
+        resolution = parseAction(data, action);
+    }
+    catch (...)
+    {
+        trace::err("Unable to get resolution for action: %s", action.c_str());
+        throw; // caught later downstream
+    }
+
+    return resolution;
 }
 
 //------------------------------------------------------------------------------
@@ -46,15 +69,23 @@ void RasDataParser::initDataFiles()
         std::ifstream file{path};
         assert(file.good()); // The file must be readable.
 
-        // Parse the JSON.
-        auto schema = nlohmann::json::parse(file);
+        try
+        {
+            // Parse the JSON.
+            auto schema = nlohmann::json::parse(file);
 
-        // Get the schema version.
-        auto version = schema.at("version").get<unsigned int>();
+            // Get the schema version.
+            auto version = schema.at("version").get<unsigned int>();
 
-        // Keep track of the schemas.
-        auto ret = schemaFiles.emplace(version, schema);
-        assert(ret.second); // Should not have duplicate entries
+            // Keep track of the schemas.
+            auto ret = schemaFiles.emplace(version, schema);
+            assert(ret.second); // Should not have duplicate entries
+        }
+        catch (...)
+        {
+            trace::err("Failed to parse file: %s", path.string().c_str());
+            throw; // caught later downstream
+        }
     }
 
     // Get the RAS data files from the package `data` subdirectory.
@@ -72,27 +103,35 @@ void RasDataParser::initDataFiles()
         std::ifstream file{path};
         assert(file.good()); // The file must be readable.
 
-        // Parse the JSON.
-        const auto data = nlohmann::json::parse(file);
+        try
+        {
+            // Parse the JSON.
+            const auto data = nlohmann::json::parse(file);
 
-        // Get the data version.
-        auto version = data.at("version").get<unsigned int>();
+            // Get the data version.
+            auto version = data.at("version").get<unsigned int>();
 
-        // Get the schema for this file.
-        auto schema = schemaFiles.at(version);
+            // Get the schema for this file.
+            auto schema = schemaFiles.at(version);
 
-        // Validate the data against the schema.
-        assert(util::validateJson(schema, data));
+            // Validate the data against the schema.
+            assert(util::validateJson(schema, data));
 
-        // Get the chip model/EC level from the data. The value is currently
-        // stored as a string representation of the hex value. So it will have
-        // to be converted to an integer.
-        libhei::ChipType_t chipType =
-            std::stoul(data.at("model_ec").get<std::string>(), 0, 16);
+            // Get the chip model/EC level from the data. The value is currently
+            // stored as a string representation of the hex value. So it will
+            // have to be converted to an integer.
+            libhei::ChipType_t chipType =
+                std::stoul(data.at("model_ec").get<std::string>(), 0, 16);
 
-        // So far, so good. Add the entry.
-        auto ret = iv_dataFiles.emplace(chipType, data);
-        assert(ret.second); // Should not have duplicate entries
+            // So far, so good. Add the entry.
+            auto ret = iv_dataFiles.emplace(chipType, data);
+            assert(ret.second); // Should not have duplicate entries
+        }
+        catch (...)
+        {
+            trace::err("Failed to parse file: %s", path.string().c_str());
+            throw; // caught later downstream
+        }
     }
 }
 
@@ -112,8 +151,22 @@ std::string RasDataParser::parseSignature(const nlohmann::json& i_data,
     sprintf(buf, "%02x", i_signature.getInstance());
     std::string inst{buf};
 
+    std::string action;
+
+    try
+    {
+        action =
+            i_data.at("signatures").at(id).at(bit).at(inst).get<std::string>();
+    }
+    catch (const std::out_of_range& e)
+    {
+        trace::err("No action defined for signature: %s %s %s", id.c_str(),
+                   bit.c_str(), inst.c_str());
+        throw; // caught later downstream
+    }
+
     // Return the action.
-    return i_data.at("signatures").at(id).at(bit).at(inst).get<std::string>();
+    return action;
 }
 
 //------------------------------------------------------------------------------
