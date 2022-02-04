@@ -165,8 +165,8 @@ class ServiceData
     void addSrcSubsystem(
         std::map<std::string, std::string>& io_additionalData) const
     {
-        io_additionalData["PEL_SUBSYSTEM"] =
-            fmt::format("0x{:02x}", iv_srcSubsystem.first);
+        io_additionalData["PEL_SUBSYSTEM"] = fmt::format(
+            "0x{:02x}", static_cast<uint8_t>(iv_srcSubsystem.first));
     }
 
     /** @brief Accessor to iv_srcSubsystem. */
