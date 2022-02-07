@@ -32,10 +32,10 @@
 # data within them will be kept sorted.
 
 owners:
-- kunyi731@gmail.com
+- benjaminfair@google.com
+- wltu@google.com
 
 reviewers:
-- benjaminfair@google.com
 - venture@google.com
 
 matches:
@@ -44,9 +44,9 @@ openbmc:
 - name: Benjamin Fair
   email: benjaminfair@google.com
   discord: benjaminfair
-- name: Kun Yi
-  email: kunyi731@gmail.com
-  discord: NA
 - name: Patrick Venture
   email: venture@google.com
   discord: Venture
+- name: Willy Tu
+  email: wltu@google.com
+  discord: wltu
