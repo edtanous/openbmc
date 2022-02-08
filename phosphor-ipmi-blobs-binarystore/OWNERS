@@ -36,7 +36,6 @@ owners:
 - wltu@google.com
 
 reviewers:
-- venture@google.com
 
 matches:
 
@@ -44,9 +43,6 @@ openbmc:
 - name: Benjamin Fair
   email: benjaminfair@google.com
   discord: benjaminfair
-- name: Patrick Venture
-  email: venture@google.com
-  discord: Venture
 - name: Willy Tu
   email: wltu@google.com
   discord: wltu
