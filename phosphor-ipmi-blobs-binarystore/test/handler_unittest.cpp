@@ -17,11 +17,8 @@
 
 using ::testing::_;
 using ::testing::AtLeast;
-using ::testing::ElementsAreArray;
-using ::testing::IsEmpty;
 using ::testing::Return;
 using ::testing::StrEq;
-using ::testing::StrNe;
 using ::testing::UnorderedElementsAreArray;
 
 using namespace std::string_literals;
@@ -161,7 +158,6 @@ TEST_F(BinaryStoreBlobHandlerBasicTest, StaleDataIsClearedDuringCreation)
           })";
 
     // Create sysfile containing a valid but stale blob
-    const std::string staleBaseId = "/stale/"s;
     const std::string staleBlobId = "/stale/blob"s;
     binaryblobproto::BinaryBlobBase staleBlob;
     EXPECT_TRUE(TextFormat::ParseFromString(basicTestStaleBlobStr, &staleBlob));

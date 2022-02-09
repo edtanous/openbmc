@@ -157,12 +157,11 @@ std::string BinaryStore::getBaseBlobId() const
 std::vector<std::string> BinaryStore::getBlobIds() const
 {
     std::vector<std::string> result;
-    result.push_back(getBaseBlobId());
-
-    for (const auto& blob : blob_.blobs())
-    {
-        result.push_back(blob.blob_id());
-    }
+    result.reserve(blob_.blobs().size() + 1);
+    result.emplace_back(getBaseBlobId());
+    std::for_each(
+        blob_.blobs().begin(), blob_.blobs().end(),
+        [&result](const auto& blob) { result.emplace_back(blob.blob_id()); });
 
     return result;
 }

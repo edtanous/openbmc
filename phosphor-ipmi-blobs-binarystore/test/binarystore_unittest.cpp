@@ -47,7 +47,7 @@ const std::string smallInputProto = "blob_base_id: \"/s/test\""
 class SysFileBuf : public binstore::SysFile
 {
   public:
-    SysFileBuf(std::string* storage) : data_{storage}
+    explicit SysFileBuf(std::string* storage) : data_{storage}
     {
     }
 

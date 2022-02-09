@@ -26,7 +26,7 @@ class FakeSysFile : public SysFile
     FakeSysFile()
     {
     }
-    FakeSysFile(const std::string& s) : data_(s)
+    explicit FakeSysFile(const std::string& s) : data_(s)
     {
     }
 

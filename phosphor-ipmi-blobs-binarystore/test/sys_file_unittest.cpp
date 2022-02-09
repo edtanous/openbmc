@@ -12,8 +12,6 @@ using namespace binstore;
 using namespace std::string_literals;
 
 using ::testing::_;
-using ::testing::Args;
-using ::testing::Ge;
 using ::testing::IsEmpty;
 using ::testing::NotNull;
 using ::testing::Return;

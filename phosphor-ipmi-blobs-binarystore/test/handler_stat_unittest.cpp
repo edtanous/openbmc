@@ -2,12 +2,6 @@
 
 #include <gtest/gtest.h>
 
-using ::testing::_;
-using ::testing::ElementsAre;
-using ::testing::IsEmpty;
-using ::testing::Return;
-using ::testing::StartsWith;
-
 using namespace std::string_literals;
 
 namespace blobs

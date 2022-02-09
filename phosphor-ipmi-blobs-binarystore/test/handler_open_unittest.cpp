@@ -2,7 +2,6 @@
 
 using ::testing::_;
 using ::testing::Return;
-using ::testing::StartsWith;
 using ::testing::UnorderedElementsAreArray;
 
 using namespace std::string_literals;
