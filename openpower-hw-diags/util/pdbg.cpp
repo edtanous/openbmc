@@ -452,6 +452,27 @@ void getActiveChips(std::vector<libhei::Chip>& o_chips)
 
 //------------------------------------------------------------------------------
 
+void getActiveProcessorChips(std::vector<pdbg_target*>& o_chips)
+{
+    o_chips.clear();
+
+    pdbg_target* procTrgt;
+    pdbg_for_each_class_target("proc", procTrgt)
+    {
+        // We cannot use the proc target to determine if the chip is active.
+        // There is some design limitation in pdbg that requires the proc
+        // targets to always be active. Instead, we must get the associated pib
+        // target and check if it is active.
+
+        if (PDBG_TARGET_ENABLED != pdbg_target_probe(getPibTrgt(procTrgt)))
+            continue;
+
+        o_chips.push_back(procTrgt);
+    }
+}
+
+//------------------------------------------------------------------------------
+
 pdbg_target* getPrimaryProcessor()
 {
     // TODO: For at least P10, the primary processor (the one connected directly

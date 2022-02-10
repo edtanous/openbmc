@@ -39,13 +39,9 @@ TEST(TodStepCheckFault, TestSet1)
     s = R"([
     {
         "Deconfigured": false,
-        "Guarded": false,
-        "LocationCode": "P0",
-        "Priority": "M"
-    },
-    {
-        "Deconfigured": false,
-        "Guarded": false,
+        "EntityPath": [],
+        "GuardType": "GARD_Unrecoverable",
+        "Guarded": true,
         "LocationCode": "/proc1",
         "Priority": "M"
     }
@@ -56,13 +52,8 @@ TEST(TodStepCheckFault, TestSet1)
     j = sd.getCalloutFFDC();
     s = R"([
     {
-        "Callout Type": "Clock Callout",
-        "Clock Type": "TOD_CLOCK",
-        "Priority": "medium"
-    },
-    {
         "Callout Type": "Hardware Callout",
-        "Guard": false,
+        "Guard": true,
         "Priority": "medium",
         "Target": "/proc1"
     }

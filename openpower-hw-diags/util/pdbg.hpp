@@ -127,6 +127,12 @@ int getCfam(pdbg_target* i_trgt, uint32_t i_addr, uint32_t& o_val);
 void getActiveChips(std::vector<libhei::Chip>& o_chips);
 
 /**
+ * @brief Returns the list of all active processor chips in the system.
+ * @param o_chips The returned list of chips.
+ */
+void getActiveProcessorChips(std::vector<pdbg_target*>& o_chips);
+
+/**
  * @return The primary processor (i.e. the processor connected to the BMC).
  */
 pdbg_target* getPrimaryProcessor();
