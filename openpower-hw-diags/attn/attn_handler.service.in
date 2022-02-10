@@ -8,6 +8,7 @@ After=op-cfam-reset.service
 After=cfam_override@0.service
 Conflicts=obmc-host-stop@0.target
 Conflicts=obmc-host-timeout@0.target
+StartLimitIntervalSec=600
 
 [Service]
 @ENABLE_PHAL_TRUE@Environment="PDBG_DTB=/var/lib/phosphor-software-manager/pnor/rw/DEVTREE"
