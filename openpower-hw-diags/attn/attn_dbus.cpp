@@ -1,6 +1,6 @@
-#include <attn_common.hpp>
-#include <attn_dbus.hpp>
-#include <attn_logging.hpp>
+#include <attn/attn_common.hpp>
+#include <attn/attn_dbus.hpp>
+#include <attn/attn_logging.hpp>
 #include <util/trace.hpp>
 
 #include <string>

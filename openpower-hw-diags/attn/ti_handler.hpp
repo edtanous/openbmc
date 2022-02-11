@@ -2,6 +2,9 @@
 
 #include <stdint.h>
 
+#include <map>
+#include <string>
+
 /**
  * @brief TI special attention handler
  *
