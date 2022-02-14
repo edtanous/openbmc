@@ -6,6 +6,7 @@ Wants=obmc-power-stop-pre@%i.target
 Before=obmc-power-stop-pre@%i.target
 Wants=obmc-host-stopped@%i.target
 After=obmc-host-stopped@%i.target
+After=openpower-update-bios-attr-table.service
 Conflicts=obmc-chassis-poweron@%i.target
 
 [Service]

@@ -5,6 +5,7 @@ After=obmc-host-stop-pre@%i.target
 Wants=obmc-host-stopping@%i.target
 Before=obmc-host-stopping@%i.target
 After=op-occ-disable@%i.service
+After=openpower-update-bios-attr-table.service
 Conflicts=obmc-host-startmin@%i.target
 ConditionPathExists=/sys/class/fsi-master/fsi0/slave@00:00/cfam_id
 ConditionPathExists=!/run/openbmc/mpreboot@%i

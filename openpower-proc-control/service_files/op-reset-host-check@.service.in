@@ -8,6 +8,7 @@ Wants=obmc-host-reset-running@%i.target
 Before=obmc-host-reset-running@%i.target
 Wants=op-reset-chassis-on@%i.service
 After=op-reset-chassis-on@%i.service
+After=openpower-update-bios-attr-table.service
 Conflicts=obmc-host-stop@%i.target
 ConditionPathExists=/run/openbmc/chassis@%i-on
 ConditionPathExists=!/run/openbmc/host@%i-on

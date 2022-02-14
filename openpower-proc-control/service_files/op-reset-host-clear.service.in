@@ -2,6 +2,7 @@
 Description=Clear host running status register
 Wants=obmc-host-stop-pre@0.target
 Before=obmc-host-stop-pre@0.target
+After=openpower-update-bios-attr-table.service
 Conflicts=obmc-host-startmin@0.target
 
 [Service]

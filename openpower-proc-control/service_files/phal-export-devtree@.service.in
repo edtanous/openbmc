@@ -2,6 +2,7 @@
 Description=Export Host%i PHAL devtree attributes
 Wants=obmc-host-started@%i.target
 After=obmc-host-started@%i.target
+After=openpower-update-bios-attr-table.service
 Conflicts=obmc-host-stop@%i.target
 
 [Service]

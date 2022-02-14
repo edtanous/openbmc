@@ -2,6 +2,7 @@
 Description=Import Host%i PHAL devtree attributes
 After=obmc-host-reset-running@%i.target
 Before=attn_handler.service
+After=openpower-update-bios-attr-table.service
 ConditionPathExists=/run/openbmc/chassis@%i-on
 ConditionPathExists=/run/openbmc/host@%i-on
 

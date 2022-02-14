@@ -2,6 +2,7 @@
 Description=Start the Open Power Host Control NMI service
 Wants=obmc-host-started@0.target
 After=obmc-host-started@0.target
+After=openpower-update-bios-attr-table.service
 Conflicts=obmc-host-stop@0.target
 
 [Service]

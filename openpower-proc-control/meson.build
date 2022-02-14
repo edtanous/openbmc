@@ -61,6 +61,9 @@ configure_file(configuration : conf_data,
 unit_subs = configuration_data()
 unit_subs.set('bindir', join_paths(get_option('prefix'), get_option('bindir')))
 unit_subs.set('ENABLE_PHAL_TRUE', '#')
+unit_subs.set('CEC_DEVTREE_RW_PATH', get_option('CEC_DEVTREE_RW_PATH'),
+               description : 'Path to the devtree file r/w version'
+             )
 
 if get_option('phal').enabled() and get_option('p9').enabled()
     error('phal and p9 cannot be selected at the same time')

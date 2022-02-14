@@ -3,6 +3,8 @@ extern "C"
 #include <libpdbg.h>
 }
 
+#include "config.h"
+
 #include "extensions/phal/pdbg_utils.hpp"
 #include "extensions/phal/phal_error.hpp"
 
@@ -125,10 +127,7 @@ uint32_t putCFAM(struct pdbg_target* procTarget, const uint32_t reg,
 void setDevtreeEnv()
 {
     // PDBG_DTB environment variable set to CEC device tree path
-    static constexpr auto PDBG_DTB_PATH =
-        "/var/lib/phosphor-software-manager/pnor/rw/DEVTREE";
-
-    if (setenv("PDBG_DTB", PDBG_DTB_PATH, 1))
+    if (setenv("PDBG_DTB", CEC_DEVTREE_RW_PATH, 1))
     {
         log<level::ERR>(
             fmt::format("Failed to set PDBG_DTB: ({})", strerror(errno))
