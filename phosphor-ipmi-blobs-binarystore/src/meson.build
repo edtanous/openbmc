@@ -13,6 +13,7 @@ binarystoreblob_pre = declare_dependency(
 
 binarystoreblob_lib = library(
   'binarystore',
+  'main.cpp',
   'binarystore.cpp',
   'sys.cpp',
   'sys_file_impl.cpp',
