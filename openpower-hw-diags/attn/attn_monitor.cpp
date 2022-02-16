@@ -30,7 +30,6 @@ void AttnMonitor::scheduleGPIOEvent()
 void AttnMonitor::handleGPIOEvent()
 {
     gpiod_line_event gpioEvent;
-    std::string logMessage;
 
     if (gpiod_line_event_read_fd(iv_gpioEventDescriptor.native_handle(),
                                  &gpioEvent) < 0)

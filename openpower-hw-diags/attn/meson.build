@@ -25,13 +25,6 @@ configure_file(
         dependency('systemd').get_variable(pkgconfig: 'systemdsystemunitdir')
 )
 
-# see if phosphor-logging is available, if not use test case logging code
-if (true == phosphor_logging)
-    logging_src = 'attn_logging.cpp'
-else
-    logging_src = '../test/end2end/logging.cpp'
-endif
-
 # Source files.
 attn_src = files(
     'attention.cpp',
@@ -40,10 +33,10 @@ attn_src = files(
     'attn_dbus.cpp',
     'attn_dump.cpp',
     'attn_handler.cpp',
+    'attn_logging.cpp',
     'attn_main.cpp',
     'attn_monitor.cpp',
     'bp_handler.cpp',
-    logging_src,
     'ti_handler.cpp',
     'vital_handler.cpp',
 )

@@ -67,17 +67,14 @@ if get_option('phal').enabled()
   libphal_dep = cmplr.find_library('phal')
 endif
 
-# See if phosphor-logging is available, if not use test case logging code. This
-# allows for local builds outside of CI test sandbox.
+# See if phosphor-logging is available, if not use test case logging code.
 h = 'phosphor-logging/log.hpp'
 if cmplr.compiles('#include <@0@>'.format(h), name : '#include <@0@>'.format(h))
     test_arg = []
-    phosphor_logging = true
 else
     test_arg = [
         '-DTEST_TRACE',
     ]
-    phosphor_logging = false
 endif
 
 pthread = declare_dependency(link_args : '-pthread')
