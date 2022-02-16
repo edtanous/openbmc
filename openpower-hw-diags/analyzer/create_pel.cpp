@@ -316,7 +316,7 @@ std::string __getMessageSeverity(AnalysisType i_type)
 
 //------------------------------------------------------------------------------
 
-uint32_t createPel(const ServiceData& i_servData)
+uint32_t commitPel(const ServiceData& i_servData)
 {
     uint32_t o_plid = 0; // default, zero indicates PEL was not created
 
@@ -356,56 +356,18 @@ uint32_t createPel(const ServiceData& i_servData)
     std::vector<util::FFDCTuple> userData;
     util::transformFFDC(userDataFiles, userData);
 
-    try
+    // Get the message registry entry for this failure.
+    auto message = __getMessageRegistry(i_servData.getAnalysisType());
+
+    // Get the message severity for this failure.
+    auto severity = __getMessageSeverity(i_servData.getAnalysisType());
+
+    // Create the PEL
+    o_plid = util::dbus::createPel(message, severity, logData, userData);
+
+    if (0 == o_plid)
     {
-        // We want to use the logging interface that returns the event log
-        // id's of the newly created logs (org.open_power.Logging.PEL) so
-        // find the service that implements this interface.
-        constexpr auto interface = "org.open_power.Logging.PEL";
-        constexpr auto path      = "/xyz/openbmc_project/logging";
-        std::string service;
-
-        if (0 == util::dbus::findService(interface, path, service))
-        {
-            // Use function that returns log id's
-            constexpr auto function = "CreatePELWithFFDCFiles";
-
-            // Get access to logging interface and method for creating log.
-            auto bus = sdbusplus::bus::new_default_system();
-
-            // Using direct create method (for additional data).
-            auto method =
-                bus.new_method_call(service.c_str(), path, interface, function);
-
-            // The "Create" method requires manually adding the process ID.
-            logData["_PID"] = std::to_string(getpid());
-
-            // Get the message registry entry for this failure.
-            auto message = __getMessageRegistry(i_servData.getAnalysisType());
-
-            // Get the message severity for this failure.
-            auto severity = __getMessageSeverity(i_servData.getAnalysisType());
-
-            // Add the message, with additional log and user data.
-            method.append(message, severity, logData, userData);
-
-            // Log the event.
-            auto reply = bus.call(method);
-
-            // Response will be a tuple containing bmc-log-id, pel-log-id
-            std::tuple<uint32_t, uint32_t> response = {0, 0};
-
-            // Parse reply for response
-            reply.read(response);
-
-            o_plid = std::get<1>(response);
-        }
-    }
-    catch (const sdbusplus::exception::SdBusError& e)
-    {
-        trace::err("Exception while creating event log entry");
-        std::string exceptionString = std::string(e.what());
-        trace::err(exceptionString.c_str());
+        trace::err("Error while creating event log entry");
     }
 
     // Return the platorm log ID of the error.

@@ -38,7 +38,7 @@ bool filterRootCause(AnalysisType i_type,
  * @param i_servData  Data regarding service actions gathered during analysis.
  * @return The platform log ID. Will return zero if no PEL is generated.
  */
-uint32_t createPel(const ServiceData& i_servData);
+uint32_t commitPel(const ServiceData& i_servData);
 
 //------------------------------------------------------------------------------
 
@@ -184,7 +184,7 @@ uint32_t analyzeHardware(AnalysisType i_type, attn::DumpParameters& o_dump)
         }
 
         // Create and commit a PEL.
-        o_plid = createPel(servData);
+        o_plid = commitPel(servData);
 
         if (0 == o_plid)
         {
