@@ -1,6 +1,7 @@
 #include <attn/attn_common.hpp>
 #include <attn/attn_dbus.hpp>
 #include <attn/attn_logging.hpp>
+#include <util/dbus.hpp>
 #include <util/trace.hpp>
 
 #include <string>
@@ -18,37 +19,18 @@ int dbusMethod(const std::string& i_path, const std::string& i_interface,
 
     try
     {
-        constexpr auto serviceFind   = "xyz.openbmc_project.ObjectMapper";
-        constexpr auto pathFind      = "/xyz/openbmc_project/object_mapper";
-        constexpr auto interfaceFind = "xyz.openbmc_project.ObjectMapper";
-        constexpr auto functionFind  = "GetObject";
-
         auto bus = sdbusplus::bus::new_system(); // using system dbus
 
-        // method to find service from object path and object interface
-        auto method = bus.new_method_call(serviceFind, pathFind, interfaceFind,
-                                          functionFind);
+        // we need to find the service implementing the interface
+        util::dbus::DBusService service;
 
-        // find the service for specified object path and interface
-        method.append(i_path.c_str());
-        method.append(std::vector<std::string>({i_interface}));
-        auto reply = bus.call(method);
-
-        // dbus call results
-        std::map<std::string, std::vector<std::string>> responseFindService;
-        reply.read(responseFindService);
-
-        // If we successfully found the service associated with the dbus object
-        // path and interface then create a method for the specified interface
-        // and function.
-        if (!responseFindService.empty())
+        if (0 == util::dbus::findService(i_interface, i_path, service))
         {
-            auto service = responseFindService.begin()->first;
-
             // return the method
             o_method =
                 bus.new_method_call(service.c_str(), i_path.c_str(),
                                     i_interface.c_str(), i_function.c_str());
+
             rc = RC_SUCCESS;
         }
         else
