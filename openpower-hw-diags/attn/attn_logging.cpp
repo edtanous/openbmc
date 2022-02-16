@@ -7,6 +7,7 @@
 #include <attn/attn_logging.hpp>
 #include <attn/pel/pel_minimal.hpp>
 #include <phosphor-logging/log.hpp>
+#include <util/dbus.hpp>
 #include <util/ffdc.hpp>
 #include <util/trace.hpp>
 
@@ -291,7 +292,8 @@ uint32_t event(EventType i_event,
     {
         // Create PEL with additional data and FFDC data. The newly created
         // PEL's platform log-id will be returned.
-        pelId = createPel(eventName, i_additional, createFFDCTuples(i_ffdc));
+        pelId = util::dbus::createPel(eventName, levelPelError, i_additional,
+                                      createFFDCTuples(i_ffdc));
 
         // If this is a TI event we will create an additional PEL that is
         // specific to the subsystem that generated the TI.

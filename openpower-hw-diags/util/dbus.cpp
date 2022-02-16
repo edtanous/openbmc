@@ -303,6 +303,58 @@ bool dumpPolicyEnabled()
     return dumpPolicyEnabled;
 }
 
+/** @brief Create a PEL */
+uint32_t createPel(const std::string& i_message, const std::string& i_severity,
+                   std::map<std::string, std::string>& io_additional,
+                   const std::vector<util::FFDCTuple>& i_ffdc)
+{
+    // CreatePELWithFFDCFiles returns plid
+    int plid = 0;
+
+    // Sdbus call specifics
+    constexpr auto interface = "org.open_power.Logging.PEL";
+    constexpr auto path      = "/xyz/openbmc_project/logging";
+
+    // we need to find the service implementing the interface
+    util::dbus::DBusService service;
+
+    if (0 == findService(interface, path, service))
+    {
+        try
+        {
+            constexpr auto function = "CreatePELWithFFDCFiles";
+
+            // The "Create" method requires manually adding the process ID.
+            io_additional["_PID"] = std::to_string(getpid());
+
+            // create dbus method
+            auto bus = sdbusplus::bus::new_system();
+            sdbusplus::message::message method =
+                bus.new_method_call(service.c_str(), path, interface, function);
+
+            // append additional dbus call paramaters
+            method.append(i_message, i_severity, io_additional, i_ffdc);
+
+            // using system dbus
+            auto response = bus.call(method);
+
+            // reply will be tuple containing bmc log id, platform log id
+            std::tuple<uint32_t, uint32_t> reply = {0, 0};
+
+            // parse dbus response into reply
+            response.read(reply);
+            plid = std::get<1>(reply); // platform log id is tuple "second"
+        }
+        catch (const sdbusplus::exception::SdBusError& e)
+        {
+            trace::err("createPel exception");
+            trace::err(e.what());
+        }
+    }
+
+    return plid; // platform log id or 0
+}
+
 } // namespace dbus
 
 } // namespace util

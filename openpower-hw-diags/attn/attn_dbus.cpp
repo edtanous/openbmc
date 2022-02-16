@@ -50,51 +50,6 @@ int dbusMethod(const std::string& i_path, const std::string& i_interface,
     return rc;
 }
 
-/** @brief Create a PEL for the specified event type */
-uint32_t createPel(const std::string& i_event,
-                   std::map<std::string, std::string>& i_additional,
-                   const std::vector<util::FFDCTuple>& i_ffdc)
-{
-    // CreatePELWithFFDCFiles returns plid
-    int plid = 0;
-
-    // Need to provide pid when using create or create-with-ffdc methods
-    i_additional.emplace("_PID", std::to_string(getpid()));
-
-    // Sdbus call specifics
-    constexpr auto interface = "org.open_power.Logging.PEL";
-    constexpr auto function  = "CreatePELWithFFDCFiles";
-
-    sdbusplus::message::message method;
-
-    if (0 == dbusMethod(pathLogging, interface, function, method))
-    {
-        try
-        {
-            // append additional dbus call paramaters
-            method.append(i_event, levelPelError, i_additional, i_ffdc);
-
-            // using system dbus
-            auto bus      = sdbusplus::bus::new_system();
-            auto response = bus.call(method);
-
-            // reply will be tuple containing bmc log id, platform log id
-            std::tuple<uint32_t, uint32_t> reply = {0, 0};
-
-            // parse dbus response into reply
-            response.read(reply);
-            plid = std::get<1>(reply); // platform log id is tuple "second"
-        }
-        catch (const sdbusplus::exception::SdBusError& e)
-        {
-            trace::err("createPel exception");
-            trace::err(e.what());
-        }
-    }
-
-    return plid; // platform log id or 0
-}
-
 /** @brief Create a PEL from raw PEL data */
 void createPelRaw(const std::vector<uint8_t>& i_buffer)
 {

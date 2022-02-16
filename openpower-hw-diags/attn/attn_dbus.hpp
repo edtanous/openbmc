@@ -26,24 +26,6 @@ int dbusMethod(const std::string& i_path, const std::string& i_interface,
                sdbusplus::message::message& o_method);
 
 /**
- * Create a PEL for the specified event type
- *
- * The additional data provided in the map will be placed in a user data
- * section of the PEL and may additionally contain key words to trigger
- * certain behaviors by the backend logging code. Each set of data described
- * in the vector of ffdc data will be placed in additional user data
- * sections.
- *
- * @param  i_event - the event type
- * @param  i_additional - map of additional data
- * @param  i_ffdc - vector of ffdc data
- * @return Platform log id or 0 if error
- */
-uint32_t createPel(const std::string& i_event,
-                   std::map<std::string, std::string>& i_additional,
-                   const std::vector<util::FFDCTuple>& i_ffdc);
-
-/**
  * Create a PEL from raw PEL data
  *
  * Create a PEL based on the pel defined in the data buffer specified.
