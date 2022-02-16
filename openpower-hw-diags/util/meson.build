@@ -2,6 +2,7 @@
 util_src = files(
     'data_file.cpp',
     'dbus.cpp',
+    'ffdc.cpp',
     'ffdc_file.cpp',
     'pdbg.cpp',
     'pdbg-no-sim.cpp',
