@@ -18,14 +18,12 @@ namespace attn
  * @param i_interface - dbus method interface
  * @param i_function - dbus interface function
  * @param o_method - method that is created
- * @param i_extended - optional for extended methods
  * @return non-zero if error
  *
  **/
 int dbusMethod(const std::string& i_path, const std::string& i_interface,
                const std::string& i_function,
-               sdbusplus::message::message& o_method,
-               const std::string& i_extended = "");
+               sdbusplus::message::message& o_method);
 
 /**
  * Create a PEL for the specified event type

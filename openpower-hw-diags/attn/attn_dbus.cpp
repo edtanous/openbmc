@@ -12,8 +12,7 @@ namespace attn
 /** @brief Create a dbus method */
 int dbusMethod(const std::string& i_path, const std::string& i_interface,
                const std::string& i_function,
-               sdbusplus::message::message& o_method,
-               const std::string& i_extended)
+               sdbusplus::message::message& o_method)
 {
     int rc = RC_DBUS_ERROR; // assume error
 
@@ -46,22 +45,10 @@ int dbusMethod(const std::string& i_path, const std::string& i_interface,
         {
             auto service = responseFindService.begin()->first;
 
-            // Some methods (e.g. get attribute) take an extended parameter
-            if (i_extended == "")
-            {
-                // return the method
-                o_method = bus.new_method_call(service.c_str(), i_path.c_str(),
-                                               i_interface.c_str(),
-                                               i_function.c_str());
-            }
-            else
-            {
-                // return extended method
-                o_method =
-                    bus.new_method_call(service.c_str(), i_path.c_str(),
-                                        i_extended.c_str(), i_function.c_str());
-            }
-
+            // return the method
+            o_method =
+                bus.new_method_call(service.c_str(), i_path.c_str(),
+                                    i_interface.c_str(), i_function.c_str());
             rc = RC_SUCCESS;
         }
         else
