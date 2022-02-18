@@ -51,6 +51,7 @@
             perv1 {
                 compatible = "ibm,power10-chiplet";
                 index = <0x01>;
+                ATTR_CHIP_UNIT_POS = [ 01 ];
                 ATTR_FAPI_POS = <1>;
                 ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 05 00 2C 01 00 00 00 00 00 00 00 00 00 00 00 00  ];
                 ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/perv-1";
@@ -60,6 +61,7 @@
             perv12 {
                 compatible = "ibm,power10-chiplet";
                 index = <0x0c>;
+                ATTR_CHIP_UNIT_POS = [ 0C ];
                 ATTR_FAPI_POS = <12>;
                 ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 05 00 2C 0C 00 00 00 00 00 00 00 00 00 00 00 00  ];
                 ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/perv-12";
@@ -68,6 +70,7 @@
                 mc0 {
                     compatible = "ibm,power10-mc";
                     index = <0x00>;
+                    ATTR_CHIP_UNIT_POS = [ 00 ];
                     ATTR_FAPI_POS = <0>;
                     ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 05 00 44 00 00 00 00 00 00 00 00 00 00 00 00 00  ];
                     ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/mc-0";
@@ -76,6 +79,7 @@
                     mi0 {
                         compatible = "ibm,power10-mi";
                         index = <0x00>;
+                        ATTR_CHIP_UNIT_POS = [ 00 ];
                         ATTR_FAPI_POS = <0>;
                         ATTR_PHYS_BIN_PATH = [ 25 01 00 02 00 05 00 44 00 26 00 00 00 00 00 00 00 00 00 00 00  ];
                         ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/mc-0/mi-0";
@@ -84,6 +88,7 @@
                         mcc0 {
                             compatible = "ibm,power10-mcc";
                             index = <0x00>;
+                            ATTR_CHIP_UNIT_POS = [ 00 ];
                             ATTR_FAPI_POS = <0>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 00 44 00 26 00 49 00 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/mc-0/mi-0/mcc-0";
@@ -92,6 +97,7 @@
                             omi0 {
                                 compatible = "ibm,power10-omi";
                                 index = <0x00>;
+                                ATTR_CHIP_UNIT_POS = [ 00 ];
                                 ATTR_FAPI_POS = <0>;
                                 ATTR_PHYS_BIN_PATH = [ 27 01 00 02 00 05 00 44 00 26 00 49 00 48 00 00 00 00 00 00 00  ];
                                 ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/mc-0/mi-0/mcc-0/omi-0";
@@ -111,6 +117,7 @@
                                     mem_port0 {
                                         compatible = "ibm,power10-memport";
                                         index = <0x00>;
+                                        ATTR_CHIP_UNIT_POS = [ 00 ];
                                         ATTR_FAPI_POS = <0>;
                                         ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 4B 00 4C 00 00 00 00 00 00 00 00 00 00 00 00 00  ];
                                         ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/ocmb_chip-0/mem_port-0";
@@ -132,6 +139,7 @@
                             omi1 {
                                 compatible = "ibm,power10-omi";
                                 index = <0x01>;
+                                ATTR_CHIP_UNIT_POS = [ 01 ];
                                 ATTR_FAPI_POS = <1>;
                                 ATTR_PHYS_BIN_PATH = [ 27 01 00 02 00 05 00 44 00 26 00 49 00 48 01 00 00 00 00 00 00  ];
                                 ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/mc-0/mi-0/mcc-0/omi-1";
@@ -151,6 +159,7 @@
                                     mem_port0 {
                                         compatible = "ibm,power10-memport";
                                         index = <0x01>;
+                                        ATTR_CHIP_UNIT_POS = [ 00 ];
                                         ATTR_FAPI_POS = <1>;
                                         ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 4B 01 4C 00 00 00 00 00 00 00 00 00 00 00 00 00  ];
                                         ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/ocmb_chip-1/mem_port-0";
@@ -173,6 +182,7 @@
                         mcc1 {
                             compatible = "ibm,power10-mcc";
                             index = <0x01>;
+                            ATTR_CHIP_UNIT_POS = [ 01 ];
                             ATTR_FAPI_POS = <1>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 00 44 00 26 00 49 01 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/mc-0/mi-0/mcc-1";
@@ -181,6 +191,7 @@
                             omi0 {
                                 compatible = "ibm,power10-omi";
                                 index = <0x02>;
+                                ATTR_CHIP_UNIT_POS = [ 02 ];
                                 ATTR_FAPI_POS = <2>;
                                 ATTR_PHYS_BIN_PATH = [ 27 01 00 02 00 05 00 44 00 26 00 49 01 48 00 00 00 00 00 00 00  ];
                                 ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/mc-0/mi-0/mcc-1/omi-0";
@@ -200,6 +211,7 @@
                                     mem_port0 {
                                         compatible = "ibm,power10-memport";
                                         index = <0x02>;
+                                        ATTR_CHIP_UNIT_POS = [ 00 ];
                                         ATTR_FAPI_POS = <2>;
                                         ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 4B 02 4C 00 00 00 00 00 00 00 00 00 00 00 00 00  ];
                                         ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/ocmb_chip-2/mem_port-0";
@@ -221,6 +233,7 @@
                             omi1 {
                                 compatible = "ibm,power10-omi";
                                 index = <0x03>;
+                                ATTR_CHIP_UNIT_POS = [ 03 ];
                                 ATTR_FAPI_POS = <3>;
                                 ATTR_PHYS_BIN_PATH = [ 27 01 00 02 00 05 00 44 00 26 00 49 01 48 01 00 00 00 00 00 00  ];
                                 ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/mc-0/mi-0/mcc-1/omi-1";
@@ -240,6 +253,7 @@
                                     mem_port0 {
                                         compatible = "ibm,power10-memport";
                                         index = <0x03>;
+                                        ATTR_CHIP_UNIT_POS = [ 00 ];
                                         ATTR_FAPI_POS = <3>;
                                         ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 4B 03 4C 00 00 00 00 00 00 00 00 00 00 00 00 00  ];
                                         ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/ocmb_chip-3/mem_port-0";
@@ -263,6 +277,7 @@
                     omic0 {
                         compatible = "ibm,power10-omic";
                         index = <0x00>;
+                        ATTR_CHIP_UNIT_POS = [ 00 ];
                         ATTR_FAPI_POS = <0>;
                         ATTR_PHYS_BIN_PATH = [ 25 01 00 02 00 05 00 44 00 4A 00 00 00 00 00 00 00 00 00 00 00  ];
                         ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/mc-0/omic-0";
@@ -272,6 +287,7 @@
                     omic1 {
                         compatible = "ibm,power10-omic";
                         index = <0x01>;
+                        ATTR_CHIP_UNIT_POS = [ 01 ];
                         ATTR_FAPI_POS = <1>;
                         ATTR_PHYS_BIN_PATH = [ 25 01 00 02 00 05 00 44 00 4A 01 00 00 00 00 00 00 00 00 00 00  ];
                         ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/mc-0/omic-1";
@@ -283,6 +299,7 @@
             perv13 {
                 compatible = "ibm,power10-chiplet";
                 index = <0x0d>;
+                ATTR_CHIP_UNIT_POS = [ 0D ];
                 ATTR_FAPI_POS = <13>;
                 ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 05 00 2C 0D 00 00 00 00 00 00 00 00 00 00 00 00  ];
                 ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/perv-13";
@@ -291,6 +308,7 @@
                 mc1 {
                     compatible = "ibm,power10-mc";
                     index = <0x01>;
+                    ATTR_CHIP_UNIT_POS = [ 01 ];
                     ATTR_FAPI_POS = <1>;
                     ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 05 00 44 01 00 00 00 00 00 00 00 00 00 00 00 00  ];
                     ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/mc-1";
@@ -299,6 +317,7 @@
                     mi0 {
                         compatible = "ibm,power10-mi";
                         index = <0x01>;
+                        ATTR_CHIP_UNIT_POS = [ 01 ];
                         ATTR_FAPI_POS = <1>;
                         ATTR_PHYS_BIN_PATH = [ 25 01 00 02 00 05 00 44 01 26 00 00 00 00 00 00 00 00 00 00 00  ];
                         ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/mc-1/mi-0";
@@ -307,6 +326,7 @@
                         mcc0 {
                             compatible = "ibm,power10-mcc";
                             index = <0x02>;
+                            ATTR_CHIP_UNIT_POS = [ 02 ];
                             ATTR_FAPI_POS = <2>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 00 44 01 26 00 49 00 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/mc-1/mi-0/mcc-0";
@@ -315,6 +335,7 @@
                             omi0 {
                                 compatible = "ibm,power10-omi";
                                 index = <0x04>;
+                                ATTR_CHIP_UNIT_POS = [ 04 ];
                                 ATTR_FAPI_POS = <4>;
                                 ATTR_PHYS_BIN_PATH = [ 27 01 00 02 00 05 00 44 01 26 00 49 00 48 00 00 00 00 00 00 00  ];
                                 ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/mc-1/mi-0/mcc-0/omi-0";
@@ -334,6 +355,7 @@
                                     mem_port0 {
                                         compatible = "ibm,power10-memport";
                                         index = <0x04>;
+                                        ATTR_CHIP_UNIT_POS = [ 00 ];
                                         ATTR_FAPI_POS = <4>;
                                         ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 4B 04 4C 00 00 00 00 00 00 00 00 00 00 00 00 00  ];
                                         ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/ocmb_chip-4/mem_port-0";
@@ -355,6 +377,7 @@
                             omi1 {
                                 compatible = "ibm,power10-omi";
                                 index = <0x05>;
+                                ATTR_CHIP_UNIT_POS = [ 05 ];
                                 ATTR_FAPI_POS = <5>;
                                 ATTR_PHYS_BIN_PATH = [ 27 01 00 02 00 05 00 44 01 26 00 49 00 48 01 00 00 00 00 00 00  ];
                                 ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/mc-1/mi-0/mcc-0/omi-1";
@@ -374,6 +397,7 @@
                                     mem_port0 {
                                         compatible = "ibm,power10-memport";
                                         index = <0x05>;
+                                        ATTR_CHIP_UNIT_POS = [ 00 ];
                                         ATTR_FAPI_POS = <5>;
                                         ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 4B 05 4C 00 00 00 00 00 00 00 00 00 00 00 00 00  ];
                                         ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/ocmb_chip-5/mem_port-0";
@@ -396,6 +420,7 @@
                         mcc1 {
                             compatible = "ibm,power10-mcc";
                             index = <0x03>;
+                            ATTR_CHIP_UNIT_POS = [ 03 ];
                             ATTR_FAPI_POS = <3>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 00 44 01 26 00 49 01 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/mc-1/mi-0/mcc-1";
@@ -404,6 +429,7 @@
                             omi0 {
                                 compatible = "ibm,power10-omi";
                                 index = <0x06>;
+                                ATTR_CHIP_UNIT_POS = [ 06 ];
                                 ATTR_FAPI_POS = <6>;
                                 ATTR_PHYS_BIN_PATH = [ 27 01 00 02 00 05 00 44 01 26 00 49 01 48 00 00 00 00 00 00 00  ];
                                 ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/mc-1/mi-0/mcc-1/omi-0";
@@ -423,6 +449,7 @@
                                     mem_port0 {
                                         compatible = "ibm,power10-memport";
                                         index = <0x06>;
+                                        ATTR_CHIP_UNIT_POS = [ 00 ];
                                         ATTR_FAPI_POS = <6>;
                                         ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 4B 06 4C 00 00 00 00 00 00 00 00 00 00 00 00 00  ];
                                         ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/ocmb_chip-6/mem_port-0";
@@ -444,6 +471,7 @@
                             omi1 {
                                 compatible = "ibm,power10-omi";
                                 index = <0x07>;
+                                ATTR_CHIP_UNIT_POS = [ 07 ];
                                 ATTR_FAPI_POS = <7>;
                                 ATTR_PHYS_BIN_PATH = [ 27 01 00 02 00 05 00 44 01 26 00 49 01 48 01 00 00 00 00 00 00  ];
                                 ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/mc-1/mi-0/mcc-1/omi-1";
@@ -463,6 +491,7 @@
                                     mem_port0 {
                                         compatible = "ibm,power10-memport";
                                         index = <0x07>;
+                                        ATTR_CHIP_UNIT_POS = [ 00 ];
                                         ATTR_FAPI_POS = <7>;
                                         ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 4B 07 4C 00 00 00 00 00 00 00 00 00 00 00 00 00  ];
                                         ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/ocmb_chip-7/mem_port-0";
@@ -486,6 +515,7 @@
                     omic0 {
                         compatible = "ibm,power10-omic";
                         index = <0x02>;
+                        ATTR_CHIP_UNIT_POS = [ 02 ];
                         ATTR_FAPI_POS = <2>;
                         ATTR_PHYS_BIN_PATH = [ 25 01 00 02 00 05 00 44 01 4A 00 00 00 00 00 00 00 00 00 00 00  ];
                         ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/mc-1/omic-0";
@@ -495,6 +525,7 @@
                     omic1 {
                         compatible = "ibm,power10-omic";
                         index = <0x03>;
+                        ATTR_CHIP_UNIT_POS = [ 03 ];
                         ATTR_FAPI_POS = <3>;
                         ATTR_PHYS_BIN_PATH = [ 25 01 00 02 00 05 00 44 01 4A 01 00 00 00 00 00 00 00 00 00 00  ];
                         ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/mc-1/omic-1";
@@ -506,6 +537,7 @@
             perv14 {
                 compatible = "ibm,power10-chiplet";
                 index = <0x0e>;
+                ATTR_CHIP_UNIT_POS = [ 0E ];
                 ATTR_FAPI_POS = <14>;
                 ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 05 00 2C 0E 00 00 00 00 00 00 00 00 00 00 00 00  ];
                 ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/perv-14";
@@ -514,6 +546,7 @@
                 mc2 {
                     compatible = "ibm,power10-mc";
                     index = <0x02>;
+                    ATTR_CHIP_UNIT_POS = [ 02 ];
                     ATTR_FAPI_POS = <2>;
                     ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 05 00 44 02 00 00 00 00 00 00 00 00 00 00 00 00  ];
                     ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/mc-2";
@@ -522,6 +555,7 @@
                     mi0 {
                         compatible = "ibm,power10-mi";
                         index = <0x02>;
+                        ATTR_CHIP_UNIT_POS = [ 02 ];
                         ATTR_FAPI_POS = <2>;
                         ATTR_PHYS_BIN_PATH = [ 25 01 00 02 00 05 00 44 02 26 00 00 00 00 00 00 00 00 00 00 00  ];
                         ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/mc-2/mi-0";
@@ -530,6 +564,7 @@
                         mcc0 {
                             compatible = "ibm,power10-mcc";
                             index = <0x04>;
+                            ATTR_CHIP_UNIT_POS = [ 04 ];
                             ATTR_FAPI_POS = <4>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 00 44 02 26 00 49 00 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/mc-2/mi-0/mcc-0";
@@ -538,6 +573,7 @@
                             omi0 {
                                 compatible = "ibm,power10-omi";
                                 index = <0x08>;
+                                ATTR_CHIP_UNIT_POS = [ 08 ];
                                 ATTR_FAPI_POS = <8>;
                                 ATTR_PHYS_BIN_PATH = [ 27 01 00 02 00 05 00 44 02 26 00 49 00 48 00 00 00 00 00 00 00  ];
                                 ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/mc-2/mi-0/mcc-0/omi-0";
@@ -547,6 +583,7 @@
                             omi1 {
                                 compatible = "ibm,power10-omi";
                                 index = <0x09>;
+                                ATTR_CHIP_UNIT_POS = [ 09 ];
                                 ATTR_FAPI_POS = <9>;
                                 ATTR_PHYS_BIN_PATH = [ 27 01 00 02 00 05 00 44 02 26 00 49 00 48 01 00 00 00 00 00 00  ];
                                 ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/mc-2/mi-0/mcc-0/omi-1";
@@ -557,6 +594,7 @@
                         mcc1 {
                             compatible = "ibm,power10-mcc";
                             index = <0x05>;
+                            ATTR_CHIP_UNIT_POS = [ 05 ];
                             ATTR_FAPI_POS = <5>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 00 44 02 26 00 49 01 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/mc-2/mi-0/mcc-1";
@@ -565,6 +603,7 @@
                             omi0 {
                                 compatible = "ibm,power10-omi";
                                 index = <0x0a>;
+                                ATTR_CHIP_UNIT_POS = [ 0A ];
                                 ATTR_FAPI_POS = <10>;
                                 ATTR_PHYS_BIN_PATH = [ 27 01 00 02 00 05 00 44 02 26 00 49 01 48 00 00 00 00 00 00 00  ];
                                 ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/mc-2/mi-0/mcc-1/omi-0";
@@ -574,6 +613,7 @@
                             omi1 {
                                 compatible = "ibm,power10-omi";
                                 index = <0x0b>;
+                                ATTR_CHIP_UNIT_POS = [ 0B ];
                                 ATTR_FAPI_POS = <11>;
                                 ATTR_PHYS_BIN_PATH = [ 27 01 00 02 00 05 00 44 02 26 00 49 01 48 01 00 00 00 00 00 00  ];
                                 ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/mc-2/mi-0/mcc-1/omi-1";
@@ -585,6 +625,7 @@
                     omic0 {
                         compatible = "ibm,power10-omic";
                         index = <0x04>;
+                        ATTR_CHIP_UNIT_POS = [ 04 ];
                         ATTR_FAPI_POS = <4>;
                         ATTR_PHYS_BIN_PATH = [ 25 01 00 02 00 05 00 44 02 4A 00 00 00 00 00 00 00 00 00 00 00  ];
                         ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/mc-2/omic-0";
@@ -594,6 +635,7 @@
                     omic1 {
                         compatible = "ibm,power10-omic";
                         index = <0x05>;
+                        ATTR_CHIP_UNIT_POS = [ 05 ];
                         ATTR_FAPI_POS = <5>;
                         ATTR_PHYS_BIN_PATH = [ 25 01 00 02 00 05 00 44 02 4A 01 00 00 00 00 00 00 00 00 00 00  ];
                         ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/mc-2/omic-1";
@@ -605,6 +647,7 @@
             perv15 {
                 compatible = "ibm,power10-chiplet";
                 index = <0x0f>;
+                ATTR_CHIP_UNIT_POS = [ 0F ];
                 ATTR_FAPI_POS = <15>;
                 ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 05 00 2C 0F 00 00 00 00 00 00 00 00 00 00 00 00  ];
                 ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/perv-15";
@@ -613,6 +656,7 @@
                 mc3 {
                     compatible = "ibm,power10-mc";
                     index = <0x03>;
+                    ATTR_CHIP_UNIT_POS = [ 03 ];
                     ATTR_FAPI_POS = <3>;
                     ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 05 00 44 03 00 00 00 00 00 00 00 00 00 00 00 00  ];
                     ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/mc-3";
@@ -621,6 +665,7 @@
                     mi0 {
                         compatible = "ibm,power10-mi";
                         index = <0x03>;
+                        ATTR_CHIP_UNIT_POS = [ 03 ];
                         ATTR_FAPI_POS = <3>;
                         ATTR_PHYS_BIN_PATH = [ 25 01 00 02 00 05 00 44 03 26 00 00 00 00 00 00 00 00 00 00 00  ];
                         ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/mc-3/mi-0";
@@ -629,6 +674,7 @@
                         mcc0 {
                             compatible = "ibm,power10-mcc";
                             index = <0x06>;
+                            ATTR_CHIP_UNIT_POS = [ 06 ];
                             ATTR_FAPI_POS = <6>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 00 44 03 26 00 49 00 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/mc-3/mi-0/mcc-0";
@@ -637,6 +683,7 @@
                             omi0 {
                                 compatible = "ibm,power10-omi";
                                 index = <0x0c>;
+                                ATTR_CHIP_UNIT_POS = [ 0C ];
                                 ATTR_FAPI_POS = <12>;
                                 ATTR_PHYS_BIN_PATH = [ 27 01 00 02 00 05 00 44 03 26 00 49 00 48 00 00 00 00 00 00 00  ];
                                 ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/mc-3/mi-0/mcc-0/omi-0";
@@ -646,6 +693,7 @@
                             omi1 {
                                 compatible = "ibm,power10-omi";
                                 index = <0x0d>;
+                                ATTR_CHIP_UNIT_POS = [ 0D ];
                                 ATTR_FAPI_POS = <13>;
                                 ATTR_PHYS_BIN_PATH = [ 27 01 00 02 00 05 00 44 03 26 00 49 00 48 01 00 00 00 00 00 00  ];
                                 ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/mc-3/mi-0/mcc-0/omi-1";
@@ -656,6 +704,7 @@
                         mcc1 {
                             compatible = "ibm,power10-mcc";
                             index = <0x07>;
+                            ATTR_CHIP_UNIT_POS = [ 07 ];
                             ATTR_FAPI_POS = <7>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 00 44 03 26 00 49 01 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/mc-3/mi-0/mcc-1";
@@ -664,6 +713,7 @@
                             omi0 {
                                 compatible = "ibm,power10-omi";
                                 index = <0x0e>;
+                                ATTR_CHIP_UNIT_POS = [ 0E ];
                                 ATTR_FAPI_POS = <14>;
                                 ATTR_PHYS_BIN_PATH = [ 27 01 00 02 00 05 00 44 03 26 00 49 01 48 00 00 00 00 00 00 00  ];
                                 ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/mc-3/mi-0/mcc-1/omi-0";
@@ -673,6 +723,7 @@
                             omi1 {
                                 compatible = "ibm,power10-omi";
                                 index = <0x0f>;
+                                ATTR_CHIP_UNIT_POS = [ 0F ];
                                 ATTR_FAPI_POS = <15>;
                                 ATTR_PHYS_BIN_PATH = [ 27 01 00 02 00 05 00 44 03 26 00 49 01 48 01 00 00 00 00 00 00  ];
                                 ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/mc-3/mi-0/mcc-1/omi-1";
@@ -684,6 +735,7 @@
                     omic0 {
                         compatible = "ibm,power10-omic";
                         index = <0x06>;
+                        ATTR_CHIP_UNIT_POS = [ 06 ];
                         ATTR_FAPI_POS = <6>;
                         ATTR_PHYS_BIN_PATH = [ 25 01 00 02 00 05 00 44 03 4A 00 00 00 00 00 00 00 00 00 00 00  ];
                         ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/mc-3/omic-0";
@@ -693,6 +745,7 @@
                     omic1 {
                         compatible = "ibm,power10-omic";
                         index = <0x07>;
+                        ATTR_CHIP_UNIT_POS = [ 07 ];
                         ATTR_FAPI_POS = <7>;
                         ATTR_PHYS_BIN_PATH = [ 25 01 00 02 00 05 00 44 03 4A 01 00 00 00 00 00 00 00 00 00 00  ];
                         ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/mc-3/omic-1";
@@ -704,6 +757,7 @@
             perv16 {
                 compatible = "ibm,power10-chiplet";
                 index = <0x10>;
+                ATTR_CHIP_UNIT_POS = [ 10 ];
                 ATTR_FAPI_POS = <16>;
                 ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 05 00 2C 10 00 00 00 00 00 00 00 00 00 00 00 00  ];
                 ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/perv-16";
@@ -712,6 +766,7 @@
                 pauc0 {
                     compatible = "ibm,power10-pauc";
                     index = <0x00>;
+                    ATTR_CHIP_UNIT_POS = [ 00 ];
                     ATTR_FAPI_POS = <0>;
                     ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 05 00 52 00 00 00 00 00 00 00 00 00 00 00 00 00  ];
                     ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/pauc-0";
@@ -720,6 +775,7 @@
                     pau0 {
                         compatible = "ibm,power10-pau";
                         index = <0x00>;
+                        ATTR_CHIP_UNIT_POS = [ 00 ];
                         ATTR_FAPI_POS = <0>;
                         ATTR_PHYS_BIN_PATH = [ 25 01 00 02 00 05 00 52 00 50 00 00 00 00 00 00 00 00 00 00 00  ];
                         ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/pauc-0/pau-0";
@@ -731,6 +787,7 @@
             perv17 {
                 compatible = "ibm,power10-chiplet";
                 index = <0x11>;
+                ATTR_CHIP_UNIT_POS = [ 11 ];
                 ATTR_FAPI_POS = <17>;
                 ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 05 00 2C 11 00 00 00 00 00 00 00 00 00 00 00 00  ];
                 ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/perv-17";
@@ -739,6 +796,7 @@
                 pauc1 {
                     compatible = "ibm,power10-pauc";
                     index = <0x01>;
+                    ATTR_CHIP_UNIT_POS = [ 01 ];
                     ATTR_FAPI_POS = <1>;
                     ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 05 00 52 01 00 00 00 00 00 00 00 00 00 00 00 00  ];
                     ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/pauc-1";
@@ -747,6 +805,7 @@
                     pau1 {
                         compatible = "ibm,power10-pau";
                         index = <0x03>;
+                        ATTR_CHIP_UNIT_POS = [ 03 ];
                         ATTR_FAPI_POS = <3>;
                         ATTR_PHYS_BIN_PATH = [ 25 01 00 02 00 05 00 52 01 50 01 00 00 00 00 00 00 00 00 00 00  ];
                         ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/pauc-1/pau-1";
@@ -758,6 +817,7 @@
             perv18 {
                 compatible = "ibm,power10-chiplet";
                 index = <0x12>;
+                ATTR_CHIP_UNIT_POS = [ 12 ];
                 ATTR_FAPI_POS = <18>;
                 ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 05 00 2C 12 00 00 00 00 00 00 00 00 00 00 00 00  ];
                 ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/perv-18";
@@ -766,6 +826,7 @@
                 pauc2 {
                     compatible = "ibm,power10-pauc";
                     index = <0x02>;
+                    ATTR_CHIP_UNIT_POS = [ 02 ];
                     ATTR_FAPI_POS = <2>;
                     ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 05 00 52 02 00 00 00 00 00 00 00 00 00 00 00 00  ];
                     ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/pauc-2";
@@ -774,6 +835,7 @@
                     pau0 {
                         compatible = "ibm,power10-pau";
                         index = <0x04>;
+                        ATTR_CHIP_UNIT_POS = [ 04 ];
                         ATTR_FAPI_POS = <4>;
                         ATTR_PHYS_BIN_PATH = [ 25 01 00 02 00 05 00 52 02 50 00 00 00 00 00 00 00 00 00 00 00  ];
                         ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/pauc-2/pau-0";
@@ -783,6 +845,7 @@
                     pau1 {
                         compatible = "ibm,power10-pau";
                         index = <0x05>;
+                        ATTR_CHIP_UNIT_POS = [ 05 ];
                         ATTR_FAPI_POS = <5>;
                         ATTR_PHYS_BIN_PATH = [ 25 01 00 02 00 05 00 52 02 50 01 00 00 00 00 00 00 00 00 00 00  ];
                         ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/pauc-2/pau-1";
@@ -794,6 +857,7 @@
             perv19 {
                 compatible = "ibm,power10-chiplet";
                 index = <0x13>;
+                ATTR_CHIP_UNIT_POS = [ 13 ];
                 ATTR_FAPI_POS = <19>;
                 ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 05 00 2C 13 00 00 00 00 00 00 00 00 00 00 00 00  ];
                 ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/perv-19";
@@ -802,6 +866,7 @@
                 pauc3 {
                     compatible = "ibm,power10-pauc";
                     index = <0x03>;
+                    ATTR_CHIP_UNIT_POS = [ 03 ];
                     ATTR_FAPI_POS = <3>;
                     ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 05 00 52 03 00 00 00 00 00 00 00 00 00 00 00 00  ];
                     ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/pauc-3";
@@ -810,6 +875,7 @@
                     pau0 {
                         compatible = "ibm,power10-pau";
                         index = <0x06>;
+                        ATTR_CHIP_UNIT_POS = [ 06 ];
                         ATTR_FAPI_POS = <6>;
                         ATTR_PHYS_BIN_PATH = [ 25 01 00 02 00 05 00 52 03 50 00 00 00 00 00 00 00 00 00 00 00  ];
                         ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/pauc-3/pau-0";
@@ -819,6 +885,7 @@
                     pau1 {
                         compatible = "ibm,power10-pau";
                         index = <0x07>;
+                        ATTR_CHIP_UNIT_POS = [ 07 ];
                         ATTR_FAPI_POS = <7>;
                         ATTR_PHYS_BIN_PATH = [ 25 01 00 02 00 05 00 52 03 50 01 00 00 00 00 00 00 00 00 00 00  ];
                         ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/pauc-3/pau-1";
@@ -830,6 +897,7 @@
             perv2 {
                 compatible = "ibm,power10-chiplet";
                 index = <0x02>;
+                ATTR_CHIP_UNIT_POS = [ 02 ];
                 ATTR_FAPI_POS = <2>;
                 ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 05 00 2C 02 00 00 00 00 00 00 00 00 00 00 00 00  ];
                 ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/perv-2";
@@ -838,6 +906,7 @@
                 nmmu0 {
                     compatible = "ibm,power10-nmmu";
                     index = <0x00>;
+                    ATTR_CHIP_UNIT_POS = [ 00 ];
                     ATTR_FAPI_POS = <0>;
                     ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 05 00 4F 00 00 00 00 00 00 00 00 00 00 00 00 00  ];
                     ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/nmmu-0";
@@ -848,6 +917,7 @@
             perv24 {
                 compatible = "ibm,power10-chiplet";
                 index = <0x18>;
+                ATTR_CHIP_UNIT_POS = [ 18 ];
                 ATTR_FAPI_POS = <24>;
                 ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 05 00 2C 18 00 00 00 00 00 00 00 00 00 00 00 00  ];
                 ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/perv-24";
@@ -859,6 +929,7 @@
                     iohs0 {
                         compatible = "ibm,power10-iohs";
                         index = <0x00>;
+                        ATTR_CHIP_UNIT_POS = [ 00 ];
                         ATTR_FAPI_POS = <0>;
                         ATTR_PHYS_BIN_PATH = [ 25 01 00 02 00 05 00 52 00 51 00 00 00 00 00 00 00 00 00 00 00  ];
                         ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/pauc-0/iohs-0";
@@ -867,6 +938,7 @@
                         smpgroup0 {
                             compatible = "ibm,power10-smpgroup";
                             index = <0x00>;
+                            ATTR_CHIP_UNIT_POS = [ 00 ];
                             ATTR_FAPI_POS = <0>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 00 52 00 51 00 47 00 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/pauc-0/iohs-0/smpgroup-0";
@@ -876,6 +948,7 @@
                         smpgroup1 {
                             compatible = "ibm,power10-smpgroup";
                             index = <0x01>;
+                            ATTR_CHIP_UNIT_POS = [ 01 ];
                             ATTR_FAPI_POS = <1>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 00 52 00 51 00 47 01 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/pauc-0/iohs-0/smpgroup-1";
@@ -888,6 +961,7 @@
             perv25 {
                 compatible = "ibm,power10-chiplet";
                 index = <0x19>;
+                ATTR_CHIP_UNIT_POS = [ 19 ];
                 ATTR_FAPI_POS = <25>;
                 ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 05 00 2C 19 00 00 00 00 00 00 00 00 00 00 00 00  ];
                 ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/perv-25";
@@ -899,6 +973,7 @@
                     iohs1 {
                         compatible = "ibm,power10-iohs";
                         index = <0x01>;
+                        ATTR_CHIP_UNIT_POS = [ 01 ];
                         ATTR_FAPI_POS = <1>;
                         ATTR_PHYS_BIN_PATH = [ 25 01 00 02 00 05 00 52 00 51 01 00 00 00 00 00 00 00 00 00 00  ];
                         ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/pauc-0/iohs-1";
@@ -907,6 +982,7 @@
                         smpgroup0 {
                             compatible = "ibm,power10-smpgroup";
                             index = <0x02>;
+                            ATTR_CHIP_UNIT_POS = [ 02 ];
                             ATTR_FAPI_POS = <2>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 00 52 00 51 01 47 00 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/pauc-0/iohs-1/smpgroup-0";
@@ -916,6 +992,7 @@
                         smpgroup1 {
                             compatible = "ibm,power10-smpgroup";
                             index = <0x03>;
+                            ATTR_CHIP_UNIT_POS = [ 03 ];
                             ATTR_FAPI_POS = <3>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 00 52 00 51 01 47 01 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/pauc-0/iohs-1/smpgroup-1";
@@ -928,6 +1005,7 @@
             perv26 {
                 compatible = "ibm,power10-chiplet";
                 index = <0x1a>;
+                ATTR_CHIP_UNIT_POS = [ 1A ];
                 ATTR_FAPI_POS = <26>;
                 ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 05 00 2C 1A 00 00 00 00 00 00 00 00 00 00 00 00  ];
                 ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/perv-26";
@@ -939,6 +1017,7 @@
                     iohs0 {
                         compatible = "ibm,power10-iohs";
                         index = <0x02>;
+                        ATTR_CHIP_UNIT_POS = [ 02 ];
                         ATTR_FAPI_POS = <2>;
                         ATTR_PHYS_BIN_PATH = [ 25 01 00 02 00 05 00 52 01 51 00 00 00 00 00 00 00 00 00 00 00  ];
                         ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/pauc-1/iohs-0";
@@ -947,6 +1026,7 @@
                         smpgroup0 {
                             compatible = "ibm,power10-smpgroup";
                             index = <0x04>;
+                            ATTR_CHIP_UNIT_POS = [ 04 ];
                             ATTR_FAPI_POS = <4>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 00 52 01 51 00 47 00 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/pauc-1/iohs-0/smpgroup-0";
@@ -956,6 +1036,7 @@
                         smpgroup1 {
                             compatible = "ibm,power10-smpgroup";
                             index = <0x05>;
+                            ATTR_CHIP_UNIT_POS = [ 05 ];
                             ATTR_FAPI_POS = <5>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 00 52 01 51 00 47 01 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/pauc-1/iohs-0/smpgroup-1";
@@ -968,6 +1049,7 @@
             perv27 {
                 compatible = "ibm,power10-chiplet";
                 index = <0x1b>;
+                ATTR_CHIP_UNIT_POS = [ 1B ];
                 ATTR_FAPI_POS = <27>;
                 ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 05 00 2C 1B 00 00 00 00 00 00 00 00 00 00 00 00  ];
                 ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/perv-27";
@@ -979,6 +1061,7 @@
                     iohs1 {
                         compatible = "ibm,power10-iohs";
                         index = <0x03>;
+                        ATTR_CHIP_UNIT_POS = [ 03 ];
                         ATTR_FAPI_POS = <3>;
                         ATTR_PHYS_BIN_PATH = [ 25 01 00 02 00 05 00 52 01 51 01 00 00 00 00 00 00 00 00 00 00  ];
                         ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/pauc-1/iohs-1";
@@ -987,6 +1070,7 @@
                         smpgroup0 {
                             compatible = "ibm,power10-smpgroup";
                             index = <0x06>;
+                            ATTR_CHIP_UNIT_POS = [ 06 ];
                             ATTR_FAPI_POS = <6>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 00 52 01 51 01 47 00 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/pauc-1/iohs-1/smpgroup-0";
@@ -996,6 +1080,7 @@
                         smpgroup1 {
                             compatible = "ibm,power10-smpgroup";
                             index = <0x07>;
+                            ATTR_CHIP_UNIT_POS = [ 07 ];
                             ATTR_FAPI_POS = <7>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 00 52 01 51 01 47 01 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/pauc-1/iohs-1/smpgroup-1";
@@ -1008,6 +1093,7 @@
             perv28 {
                 compatible = "ibm,power10-chiplet";
                 index = <0x1c>;
+                ATTR_CHIP_UNIT_POS = [ 1C ];
                 ATTR_FAPI_POS = <28>;
                 ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 05 00 2C 1C 00 00 00 00 00 00 00 00 00 00 00 00  ];
                 ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/perv-28";
@@ -1019,6 +1105,7 @@
                     iohs0 {
                         compatible = "ibm,power10-iohs";
                         index = <0x04>;
+                        ATTR_CHIP_UNIT_POS = [ 04 ];
                         ATTR_FAPI_POS = <4>;
                         ATTR_PHYS_BIN_PATH = [ 25 01 00 02 00 05 00 52 02 51 00 00 00 00 00 00 00 00 00 00 00  ];
                         ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/pauc-2/iohs-0";
@@ -1027,6 +1114,7 @@
                         smpgroup0 {
                             compatible = "ibm,power10-smpgroup";
                             index = <0x08>;
+                            ATTR_CHIP_UNIT_POS = [ 08 ];
                             ATTR_FAPI_POS = <8>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 00 52 02 51 00 47 00 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/pauc-2/iohs-0/smpgroup-0";
@@ -1036,6 +1124,7 @@
                         smpgroup1 {
                             compatible = "ibm,power10-smpgroup";
                             index = <0x09>;
+                            ATTR_CHIP_UNIT_POS = [ 09 ];
                             ATTR_FAPI_POS = <9>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 00 52 02 51 00 47 01 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/pauc-2/iohs-0/smpgroup-1";
@@ -1048,6 +1137,7 @@
             perv29 {
                 compatible = "ibm,power10-chiplet";
                 index = <0x1d>;
+                ATTR_CHIP_UNIT_POS = [ 1D ];
                 ATTR_FAPI_POS = <29>;
                 ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 05 00 2C 1D 00 00 00 00 00 00 00 00 00 00 00 00  ];
                 ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/perv-29";
@@ -1059,6 +1149,7 @@
                     iohs1 {
                         compatible = "ibm,power10-iohs";
                         index = <0x05>;
+                        ATTR_CHIP_UNIT_POS = [ 05 ];
                         ATTR_FAPI_POS = <5>;
                         ATTR_PHYS_BIN_PATH = [ 25 01 00 02 00 05 00 52 02 51 01 00 00 00 00 00 00 00 00 00 00  ];
                         ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/pauc-2/iohs-1";
@@ -1067,6 +1158,7 @@
                         smpgroup0 {
                             compatible = "ibm,power10-smpgroup";
                             index = <0x0a>;
+                            ATTR_CHIP_UNIT_POS = [ 0A ];
                             ATTR_FAPI_POS = <10>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 00 52 02 51 01 47 00 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/pauc-2/iohs-1/smpgroup-0";
@@ -1076,6 +1168,7 @@
                         smpgroup1 {
                             compatible = "ibm,power10-smpgroup";
                             index = <0x0b>;
+                            ATTR_CHIP_UNIT_POS = [ 0B ];
                             ATTR_FAPI_POS = <11>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 00 52 02 51 01 47 01 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/pauc-2/iohs-1/smpgroup-1";
@@ -1088,6 +1181,7 @@
             perv3 {
                 compatible = "ibm,power10-chiplet";
                 index = <0x03>;
+                ATTR_CHIP_UNIT_POS = [ 03 ];
                 ATTR_FAPI_POS = <3>;
                 ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 05 00 2C 03 00 00 00 00 00 00 00 00 00 00 00 00  ];
                 ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/perv-3";
@@ -1096,6 +1190,7 @@
                 nmmu1 {
                     compatible = "ibm,power10-nmmu";
                     index = <0x01>;
+                    ATTR_CHIP_UNIT_POS = [ 01 ];
                     ATTR_FAPI_POS = <1>;
                     ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 05 00 4F 01 00 00 00 00 00 00 00 00 00 00 00 00  ];
                     ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/nmmu-1";
@@ -1106,6 +1201,7 @@
             perv30 {
                 compatible = "ibm,power10-chiplet";
                 index = <0x1e>;
+                ATTR_CHIP_UNIT_POS = [ 1E ];
                 ATTR_FAPI_POS = <30>;
                 ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 05 00 2C 1E 00 00 00 00 00 00 00 00 00 00 00 00  ];
                 ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/perv-30";
@@ -1117,6 +1213,7 @@
                     iohs0 {
                         compatible = "ibm,power10-iohs";
                         index = <0x06>;
+                        ATTR_CHIP_UNIT_POS = [ 06 ];
                         ATTR_FAPI_POS = <6>;
                         ATTR_PHYS_BIN_PATH = [ 25 01 00 02 00 05 00 52 03 51 00 00 00 00 00 00 00 00 00 00 00  ];
                         ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/pauc-3/iohs-0";
@@ -1125,6 +1222,7 @@
                         smpgroup0 {
                             compatible = "ibm,power10-smpgroup";
                             index = <0x0c>;
+                            ATTR_CHIP_UNIT_POS = [ 0C ];
                             ATTR_FAPI_POS = <12>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 00 52 03 51 00 47 00 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/pauc-3/iohs-0/smpgroup-0";
@@ -1134,6 +1232,7 @@
                         smpgroup1 {
                             compatible = "ibm,power10-smpgroup";
                             index = <0x0d>;
+                            ATTR_CHIP_UNIT_POS = [ 0D ];
                             ATTR_FAPI_POS = <13>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 00 52 03 51 00 47 01 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/pauc-3/iohs-0/smpgroup-1";
@@ -1146,6 +1245,7 @@
             perv31 {
                 compatible = "ibm,power10-chiplet";
                 index = <0x1f>;
+                ATTR_CHIP_UNIT_POS = [ 1F ];
                 ATTR_FAPI_POS = <31>;
                 ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 05 00 2C 1F 00 00 00 00 00 00 00 00 00 00 00 00  ];
                 ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/perv-31";
@@ -1157,6 +1257,7 @@
                     iohs1 {
                         compatible = "ibm,power10-iohs";
                         index = <0x07>;
+                        ATTR_CHIP_UNIT_POS = [ 07 ];
                         ATTR_FAPI_POS = <7>;
                         ATTR_PHYS_BIN_PATH = [ 25 01 00 02 00 05 00 52 03 51 01 00 00 00 00 00 00 00 00 00 00  ];
                         ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/pauc-3/iohs-1";
@@ -1165,6 +1266,7 @@
                         smpgroup0 {
                             compatible = "ibm,power10-smpgroup";
                             index = <0x0e>;
+                            ATTR_CHIP_UNIT_POS = [ 0E ];
                             ATTR_FAPI_POS = <14>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 00 52 03 51 01 47 00 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/pauc-3/iohs-1/smpgroup-0";
@@ -1174,6 +1276,7 @@
                         smpgroup1 {
                             compatible = "ibm,power10-smpgroup";
                             index = <0x0f>;
+                            ATTR_CHIP_UNIT_POS = [ 0F ];
                             ATTR_FAPI_POS = <15>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 00 52 03 51 01 47 01 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/pauc-3/iohs-1/smpgroup-1";
@@ -1186,6 +1289,7 @@
             perv32 {
                 compatible = "ibm,power10-chiplet";
                 index = <0x20>;
+                ATTR_CHIP_UNIT_POS = [ 20 ];
                 ATTR_FAPI_POS = <32>;
                 ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 05 00 2C 20 00 00 00 00 00 00 00 00 00 00 00 00  ];
                 ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/perv-32";
@@ -1194,6 +1298,7 @@
                 eq0 {
                     compatible = "ibm,power10-eq";
                     index = <0x00>;
+                    ATTR_CHIP_UNIT_POS = [ 00 ];
                     ATTR_FAPI_POS = <0>;
                     ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 05 00 23 00 00 00 00 00 00 00 00 00 00 00 00 00  ];
                     ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/eq-0";
@@ -1210,6 +1315,7 @@
                         core0 {
                             compatible = "ibm,power10-core";
                             index = <0x00>;
+                            ATTR_CHIP_UNIT_POS = [ 00 ];
                             ATTR_FAPI_POS = <0>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 00 23 00 53 00 07 00 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/eq-0/fc-0/core-0";
@@ -1219,6 +1325,7 @@
                         core1 {
                             compatible = "ibm,power10-core";
                             index = <0x01>;
+                            ATTR_CHIP_UNIT_POS = [ 01 ];
                             ATTR_FAPI_POS = <1>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 00 23 00 53 00 07 01 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/eq-0/fc-0/core-1";
@@ -1237,6 +1344,7 @@
                         core0 {
                             compatible = "ibm,power10-core";
                             index = <0x02>;
+                            ATTR_CHIP_UNIT_POS = [ 02 ];
                             ATTR_FAPI_POS = <2>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 00 23 00 53 01 07 00 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/eq-0/fc-1/core-0";
@@ -1246,6 +1354,7 @@
                         core1 {
                             compatible = "ibm,power10-core";
                             index = <0x03>;
+                            ATTR_CHIP_UNIT_POS = [ 03 ];
                             ATTR_FAPI_POS = <3>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 00 23 00 53 01 07 01 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/eq-0/fc-1/core-1";
@@ -1258,6 +1367,7 @@
             perv33 {
                 compatible = "ibm,power10-chiplet";
                 index = <0x21>;
+                ATTR_CHIP_UNIT_POS = [ 21 ];
                 ATTR_FAPI_POS = <33>;
                 ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 05 00 2C 21 00 00 00 00 00 00 00 00 00 00 00 00  ];
                 ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/perv-33";
@@ -1266,6 +1376,7 @@
                 eq1 {
                     compatible = "ibm,power10-eq";
                     index = <0x01>;
+                    ATTR_CHIP_UNIT_POS = [ 01 ];
                     ATTR_FAPI_POS = <1>;
                     ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 05 00 23 01 00 00 00 00 00 00 00 00 00 00 00 00  ];
                     ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/eq-1";
@@ -1282,6 +1393,7 @@
                         core0 {
                             compatible = "ibm,power10-core";
                             index = <0x04>;
+                            ATTR_CHIP_UNIT_POS = [ 04 ];
                             ATTR_FAPI_POS = <4>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 00 23 01 53 00 07 00 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/eq-1/fc-0/core-0";
@@ -1291,6 +1403,7 @@
                         core1 {
                             compatible = "ibm,power10-core";
                             index = <0x05>;
+                            ATTR_CHIP_UNIT_POS = [ 05 ];
                             ATTR_FAPI_POS = <5>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 00 23 01 53 00 07 01 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/eq-1/fc-0/core-1";
@@ -1309,6 +1422,7 @@
                         core0 {
                             compatible = "ibm,power10-core";
                             index = <0x06>;
+                            ATTR_CHIP_UNIT_POS = [ 06 ];
                             ATTR_FAPI_POS = <6>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 00 23 01 53 01 07 00 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/eq-1/fc-1/core-0";
@@ -1318,6 +1432,7 @@
                         core1 {
                             compatible = "ibm,power10-core";
                             index = <0x07>;
+                            ATTR_CHIP_UNIT_POS = [ 07 ];
                             ATTR_FAPI_POS = <7>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 00 23 01 53 01 07 01 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/eq-1/fc-1/core-1";
@@ -1330,6 +1445,7 @@
             perv34 {
                 compatible = "ibm,power10-chiplet";
                 index = <0x22>;
+                ATTR_CHIP_UNIT_POS = [ 22 ];
                 ATTR_FAPI_POS = <34>;
                 ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 05 00 2C 22 00 00 00 00 00 00 00 00 00 00 00 00  ];
                 ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/perv-34";
@@ -1338,6 +1454,7 @@
                 eq2 {
                     compatible = "ibm,power10-eq";
                     index = <0x02>;
+                    ATTR_CHIP_UNIT_POS = [ 02 ];
                     ATTR_FAPI_POS = <2>;
                     ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 05 00 23 02 00 00 00 00 00 00 00 00 00 00 00 00  ];
                     ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/eq-2";
@@ -1354,6 +1471,7 @@
                         core0 {
                             compatible = "ibm,power10-core";
                             index = <0x08>;
+                            ATTR_CHIP_UNIT_POS = [ 08 ];
                             ATTR_FAPI_POS = <8>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 00 23 02 53 00 07 00 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/eq-2/fc-0/core-0";
@@ -1363,6 +1481,7 @@
                         core1 {
                             compatible = "ibm,power10-core";
                             index = <0x09>;
+                            ATTR_CHIP_UNIT_POS = [ 09 ];
                             ATTR_FAPI_POS = <9>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 00 23 02 53 00 07 01 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/eq-2/fc-0/core-1";
@@ -1381,6 +1500,7 @@
                         core0 {
                             compatible = "ibm,power10-core";
                             index = <0x0a>;
+                            ATTR_CHIP_UNIT_POS = [ 0A ];
                             ATTR_FAPI_POS = <10>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 00 23 02 53 01 07 00 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/eq-2/fc-1/core-0";
@@ -1390,6 +1510,7 @@
                         core1 {
                             compatible = "ibm,power10-core";
                             index = <0x0b>;
+                            ATTR_CHIP_UNIT_POS = [ 0B ];
                             ATTR_FAPI_POS = <11>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 00 23 02 53 01 07 01 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/eq-2/fc-1/core-1";
@@ -1402,6 +1523,7 @@
             perv35 {
                 compatible = "ibm,power10-chiplet";
                 index = <0x23>;
+                ATTR_CHIP_UNIT_POS = [ 23 ];
                 ATTR_FAPI_POS = <35>;
                 ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 05 00 2C 23 00 00 00 00 00 00 00 00 00 00 00 00  ];
                 ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/perv-35";
@@ -1410,6 +1532,7 @@
                 eq3 {
                     compatible = "ibm,power10-eq";
                     index = <0x03>;
+                    ATTR_CHIP_UNIT_POS = [ 03 ];
                     ATTR_FAPI_POS = <3>;
                     ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 05 00 23 03 00 00 00 00 00 00 00 00 00 00 00 00  ];
                     ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/eq-3";
@@ -1426,6 +1549,7 @@
                         core0 {
                             compatible = "ibm,power10-core";
                             index = <0x0c>;
+                            ATTR_CHIP_UNIT_POS = [ 0C ];
                             ATTR_FAPI_POS = <12>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 00 23 03 53 00 07 00 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/eq-3/fc-0/core-0";
@@ -1435,6 +1559,7 @@
                         core1 {
                             compatible = "ibm,power10-core";
                             index = <0x0d>;
+                            ATTR_CHIP_UNIT_POS = [ 0D ];
                             ATTR_FAPI_POS = <13>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 00 23 03 53 00 07 01 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/eq-3/fc-0/core-1";
@@ -1453,6 +1578,7 @@
                         core0 {
                             compatible = "ibm,power10-core";
                             index = <0x0e>;
+                            ATTR_CHIP_UNIT_POS = [ 0E ];
                             ATTR_FAPI_POS = <14>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 00 23 03 53 01 07 00 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/eq-3/fc-1/core-0";
@@ -1462,6 +1588,7 @@
                         core1 {
                             compatible = "ibm,power10-core";
                             index = <0x0f>;
+                            ATTR_CHIP_UNIT_POS = [ 0F ];
                             ATTR_FAPI_POS = <15>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 00 23 03 53 01 07 01 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/eq-3/fc-1/core-1";
@@ -1474,6 +1601,7 @@
             perv36 {
                 compatible = "ibm,power10-chiplet";
                 index = <0x24>;
+                ATTR_CHIP_UNIT_POS = [ 24 ];
                 ATTR_FAPI_POS = <36>;
                 ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 05 00 2C 24 00 00 00 00 00 00 00 00 00 00 00 00  ];
                 ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/perv-36";
@@ -1482,6 +1610,7 @@
                 eq4 {
                     compatible = "ibm,power10-eq";
                     index = <0x04>;
+                    ATTR_CHIP_UNIT_POS = [ 04 ];
                     ATTR_FAPI_POS = <4>;
                     ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 05 00 23 04 00 00 00 00 00 00 00 00 00 00 00 00  ];
                     ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/eq-4";
@@ -1498,6 +1627,7 @@
                         core0 {
                             compatible = "ibm,power10-core";
                             index = <0x10>;
+                            ATTR_CHIP_UNIT_POS = [ 10 ];
                             ATTR_FAPI_POS = <16>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 00 23 04 53 00 07 00 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/eq-4/fc-0/core-0";
@@ -1507,6 +1637,7 @@
                         core1 {
                             compatible = "ibm,power10-core";
                             index = <0x11>;
+                            ATTR_CHIP_UNIT_POS = [ 11 ];
                             ATTR_FAPI_POS = <17>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 00 23 04 53 00 07 01 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/eq-4/fc-0/core-1";
@@ -1525,6 +1656,7 @@
                         core0 {
                             compatible = "ibm,power10-core";
                             index = <0x12>;
+                            ATTR_CHIP_UNIT_POS = [ 12 ];
                             ATTR_FAPI_POS = <18>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 00 23 04 53 01 07 00 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/eq-4/fc-1/core-0";
@@ -1534,6 +1666,7 @@
                         core1 {
                             compatible = "ibm,power10-core";
                             index = <0x13>;
+                            ATTR_CHIP_UNIT_POS = [ 13 ];
                             ATTR_FAPI_POS = <19>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 00 23 04 53 01 07 01 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/eq-4/fc-1/core-1";
@@ -1546,6 +1679,7 @@
             perv37 {
                 compatible = "ibm,power10-chiplet";
                 index = <0x25>;
+                ATTR_CHIP_UNIT_POS = [ 25 ];
                 ATTR_FAPI_POS = <37>;
                 ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 05 00 2C 25 00 00 00 00 00 00 00 00 00 00 00 00  ];
                 ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/perv-37";
@@ -1554,6 +1688,7 @@
                 eq5 {
                     compatible = "ibm,power10-eq";
                     index = <0x05>;
+                    ATTR_CHIP_UNIT_POS = [ 05 ];
                     ATTR_FAPI_POS = <5>;
                     ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 05 00 23 05 00 00 00 00 00 00 00 00 00 00 00 00  ];
                     ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/eq-5";
@@ -1570,6 +1705,7 @@
                         core0 {
                             compatible = "ibm,power10-core";
                             index = <0x14>;
+                            ATTR_CHIP_UNIT_POS = [ 14 ];
                             ATTR_FAPI_POS = <20>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 00 23 05 53 00 07 00 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/eq-5/fc-0/core-0";
@@ -1579,6 +1715,7 @@
                         core1 {
                             compatible = "ibm,power10-core";
                             index = <0x15>;
+                            ATTR_CHIP_UNIT_POS = [ 15 ];
                             ATTR_FAPI_POS = <21>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 00 23 05 53 00 07 01 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/eq-5/fc-0/core-1";
@@ -1597,6 +1734,7 @@
                         core0 {
                             compatible = "ibm,power10-core";
                             index = <0x16>;
+                            ATTR_CHIP_UNIT_POS = [ 16 ];
                             ATTR_FAPI_POS = <22>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 00 23 05 53 01 07 00 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/eq-5/fc-1/core-0";
@@ -1606,6 +1744,7 @@
                         core1 {
                             compatible = "ibm,power10-core";
                             index = <0x17>;
+                            ATTR_CHIP_UNIT_POS = [ 17 ];
                             ATTR_FAPI_POS = <23>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 00 23 05 53 01 07 01 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/eq-5/fc-1/core-1";
@@ -1618,6 +1757,7 @@
             perv38 {
                 compatible = "ibm,power10-chiplet";
                 index = <0x26>;
+                ATTR_CHIP_UNIT_POS = [ 26 ];
                 ATTR_FAPI_POS = <38>;
                 ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 05 00 2C 26 00 00 00 00 00 00 00 00 00 00 00 00  ];
                 ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/perv-38";
@@ -1626,6 +1766,7 @@
                 eq6 {
                     compatible = "ibm,power10-eq";
                     index = <0x06>;
+                    ATTR_CHIP_UNIT_POS = [ 06 ];
                     ATTR_FAPI_POS = <6>;
                     ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 05 00 23 06 00 00 00 00 00 00 00 00 00 00 00 00  ];
                     ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/eq-6";
@@ -1642,6 +1783,7 @@
                         core0 {
                             compatible = "ibm,power10-core";
                             index = <0x18>;
+                            ATTR_CHIP_UNIT_POS = [ 18 ];
                             ATTR_FAPI_POS = <24>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 00 23 06 53 00 07 00 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/eq-6/fc-0/core-0";
@@ -1651,6 +1793,7 @@
                         core1 {
                             compatible = "ibm,power10-core";
                             index = <0x19>;
+                            ATTR_CHIP_UNIT_POS = [ 19 ];
                             ATTR_FAPI_POS = <25>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 00 23 06 53 00 07 01 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/eq-6/fc-0/core-1";
@@ -1669,6 +1812,7 @@
                         core0 {
                             compatible = "ibm,power10-core";
                             index = <0x1a>;
+                            ATTR_CHIP_UNIT_POS = [ 1A ];
                             ATTR_FAPI_POS = <26>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 00 23 06 53 01 07 00 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/eq-6/fc-1/core-0";
@@ -1678,6 +1822,7 @@
                         core1 {
                             compatible = "ibm,power10-core";
                             index = <0x1b>;
+                            ATTR_CHIP_UNIT_POS = [ 1B ];
                             ATTR_FAPI_POS = <27>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 00 23 06 53 01 07 01 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/eq-6/fc-1/core-1";
@@ -1690,6 +1835,7 @@
             perv39 {
                 compatible = "ibm,power10-chiplet";
                 index = <0x27>;
+                ATTR_CHIP_UNIT_POS = [ 27 ];
                 ATTR_FAPI_POS = <39>;
                 ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 05 00 2C 27 00 00 00 00 00 00 00 00 00 00 00 00  ];
                 ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/perv-39";
@@ -1698,6 +1844,7 @@
                 eq7 {
                     compatible = "ibm,power10-eq";
                     index = <0x07>;
+                    ATTR_CHIP_UNIT_POS = [ 07 ];
                     ATTR_FAPI_POS = <7>;
                     ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 05 00 23 07 00 00 00 00 00 00 00 00 00 00 00 00  ];
                     ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/eq-7";
@@ -1714,6 +1861,7 @@
                         core0 {
                             compatible = "ibm,power10-core";
                             index = <0x1c>;
+                            ATTR_CHIP_UNIT_POS = [ 1C ];
                             ATTR_FAPI_POS = <28>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 00 23 07 53 00 07 00 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/eq-7/fc-0/core-0";
@@ -1723,6 +1871,7 @@
                         core1 {
                             compatible = "ibm,power10-core";
                             index = <0x1d>;
+                            ATTR_CHIP_UNIT_POS = [ 1D ];
                             ATTR_FAPI_POS = <29>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 00 23 07 53 00 07 01 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/eq-7/fc-0/core-1";
@@ -1741,6 +1890,7 @@
                         core0 {
                             compatible = "ibm,power10-core";
                             index = <0x1e>;
+                            ATTR_CHIP_UNIT_POS = [ 1E ];
                             ATTR_FAPI_POS = <30>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 00 23 07 53 01 07 00 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/eq-7/fc-1/core-0";
@@ -1750,6 +1900,7 @@
                         core1 {
                             compatible = "ibm,power10-core";
                             index = <0x1f>;
+                            ATTR_CHIP_UNIT_POS = [ 1F ];
                             ATTR_FAPI_POS = <31>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 00 23 07 53 01 07 01 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/eq-7/fc-1/core-1";
@@ -1762,6 +1913,7 @@
             perv8 {
                 compatible = "ibm,power10-chiplet";
                 index = <0x08>;
+                ATTR_CHIP_UNIT_POS = [ 08 ];
                 ATTR_FAPI_POS = <8>;
                 ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 05 00 2C 08 00 00 00 00 00 00 00 00 00 00 00 00  ];
                 ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/perv-8";
@@ -1770,6 +1922,7 @@
                 pec0 {
                     compatible = "ibm,power10-pec";
                     index = <0x00>;
+                    ATTR_CHIP_UNIT_POS = [ 00 ];
                     ATTR_FAPI_POS = <0>;
                     ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 05 00 2D 00 00 00 00 00 00 00 00 00 00 00 00 00  ];
                     ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/pec-0";
@@ -1778,6 +1931,7 @@
                     phb0 {
                         compatible = "ibm,power10-phb";
                         index = <0x00>;
+                        ATTR_CHIP_UNIT_POS = [ 00 ];
                         ATTR_FAPI_POS = <0>;
                         ATTR_PHYS_BIN_PATH = [ 25 01 00 02 00 05 00 2D 00 2E 00 00 00 00 00 00 00 00 00 00 00  ];
                         ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/pec-0/phb-0";
@@ -1787,6 +1941,7 @@
                     phb1 {
                         compatible = "ibm,power10-phb";
                         index = <0x01>;
+                        ATTR_CHIP_UNIT_POS = [ 01 ];
                         ATTR_FAPI_POS = <1>;
                         ATTR_PHYS_BIN_PATH = [ 25 01 00 02 00 05 00 2D 00 2E 01 00 00 00 00 00 00 00 00 00 00  ];
                         ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/pec-0/phb-1";
@@ -1796,6 +1951,7 @@
                     phb2 {
                         compatible = "ibm,power10-phb";
                         index = <0x02>;
+                        ATTR_CHIP_UNIT_POS = [ 02 ];
                         ATTR_FAPI_POS = <2>;
                         ATTR_PHYS_BIN_PATH = [ 25 01 00 02 00 05 00 2D 00 2E 02 00 00 00 00 00 00 00 00 00 00  ];
                         ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/pec-0/phb-2";
@@ -1807,6 +1963,7 @@
             perv9 {
                 compatible = "ibm,power10-chiplet";
                 index = <0x09>;
+                ATTR_CHIP_UNIT_POS = [ 09 ];
                 ATTR_FAPI_POS = <9>;
                 ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 05 00 2C 09 00 00 00 00 00 00 00 00 00 00 00 00  ];
                 ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/perv-9";
@@ -1815,6 +1972,7 @@
                 pec1 {
                     compatible = "ibm,power10-pec";
                     index = <0x01>;
+                    ATTR_CHIP_UNIT_POS = [ 01 ];
                     ATTR_FAPI_POS = <1>;
                     ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 05 00 2D 01 00 00 00 00 00 00 00 00 00 00 00 00  ];
                     ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/pec-1";
@@ -1823,6 +1981,7 @@
                     phb0 {
                         compatible = "ibm,power10-phb";
                         index = <0x03>;
+                        ATTR_CHIP_UNIT_POS = [ 03 ];
                         ATTR_FAPI_POS = <3>;
                         ATTR_PHYS_BIN_PATH = [ 25 01 00 02 00 05 00 2D 01 2E 00 00 00 00 00 00 00 00 00 00 00  ];
                         ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/pec-1/phb-0";
@@ -1832,6 +1991,7 @@
                     phb1 {
                         compatible = "ibm,power10-phb";
                         index = <0x04>;
+                        ATTR_CHIP_UNIT_POS = [ 04 ];
                         ATTR_FAPI_POS = <4>;
                         ATTR_PHYS_BIN_PATH = [ 25 01 00 02 00 05 00 2D 01 2E 01 00 00 00 00 00 00 00 00 00 00  ];
                         ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/pec-1/phb-1";
@@ -1841,6 +2001,7 @@
                     phb2 {
                         compatible = "ibm,power10-phb";
                         index = <0x05>;
+                        ATTR_CHIP_UNIT_POS = [ 05 ];
                         ATTR_FAPI_POS = <5>;
                         ATTR_PHYS_BIN_PATH = [ 25 01 00 02 00 05 00 2D 01 2E 02 00 00 00 00 00 00 00 00 00 00  ];
                         ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-0/pec-1/phb-2";
@@ -1888,6 +2049,7 @@
             perv1 {
                 compatible = "ibm,power10-chiplet";
                 index = <0x01>;
+                ATTR_CHIP_UNIT_POS = [ 01 ];
                 ATTR_FAPI_POS = <57>;
                 ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 05 01 2C 01 00 00 00 00 00 00 00 00 00 00 00 00  ];
                 ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/perv-1";
@@ -1897,6 +2059,7 @@
             perv12 {
                 compatible = "ibm,power10-chiplet";
                 index = <0x0c>;
+                ATTR_CHIP_UNIT_POS = [ 0C ];
                 ATTR_FAPI_POS = <68>;
                 ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 05 01 2C 0C 00 00 00 00 00 00 00 00 00 00 00 00  ];
                 ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/perv-12";
@@ -1905,6 +2068,7 @@
                 mc0 {
                     compatible = "ibm,power10-mc";
                     index = <0x00>;
+                    ATTR_CHIP_UNIT_POS = [ 00 ];
                     ATTR_FAPI_POS = <4>;
                     ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 05 01 44 00 00 00 00 00 00 00 00 00 00 00 00 00  ];
                     ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/mc-0";
@@ -1913,6 +2077,7 @@
                     mi0 {
                         compatible = "ibm,power10-mi";
                         index = <0x00>;
+                        ATTR_CHIP_UNIT_POS = [ 00 ];
                         ATTR_FAPI_POS = <4>;
                         ATTR_PHYS_BIN_PATH = [ 25 01 00 02 00 05 01 44 00 26 00 00 00 00 00 00 00 00 00 00 00  ];
                         ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/mc-0/mi-0";
@@ -1921,6 +2086,7 @@
                         mcc0 {
                             compatible = "ibm,power10-mcc";
                             index = <0x00>;
+                            ATTR_CHIP_UNIT_POS = [ 00 ];
                             ATTR_FAPI_POS = <8>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 01 44 00 26 00 49 00 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/mc-0/mi-0/mcc-0";
@@ -1929,6 +2095,7 @@
                             omi0 {
                                 compatible = "ibm,power10-omi";
                                 index = <0x00>;
+                                ATTR_CHIP_UNIT_POS = [ 00 ];
                                 ATTR_FAPI_POS = <16>;
                                 ATTR_PHYS_BIN_PATH = [ 27 01 00 02 00 05 01 44 00 26 00 49 00 48 00 00 00 00 00 00 00  ];
                                 ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/mc-0/mi-0/mcc-0/omi-0";
@@ -1938,6 +2105,7 @@
                             omi1 {
                                 compatible = "ibm,power10-omi";
                                 index = <0x01>;
+                                ATTR_CHIP_UNIT_POS = [ 01 ];
                                 ATTR_FAPI_POS = <17>;
                                 ATTR_PHYS_BIN_PATH = [ 27 01 00 02 00 05 01 44 00 26 00 49 00 48 01 00 00 00 00 00 00  ];
                                 ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/mc-0/mi-0/mcc-0/omi-1";
@@ -1948,6 +2116,7 @@
                         mcc1 {
                             compatible = "ibm,power10-mcc";
                             index = <0x01>;
+                            ATTR_CHIP_UNIT_POS = [ 01 ];
                             ATTR_FAPI_POS = <9>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 01 44 00 26 00 49 01 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/mc-0/mi-0/mcc-1";
@@ -1956,6 +2125,7 @@
                             omi0 {
                                 compatible = "ibm,power10-omi";
                                 index = <0x02>;
+                                ATTR_CHIP_UNIT_POS = [ 02 ];
                                 ATTR_FAPI_POS = <18>;
                                 ATTR_PHYS_BIN_PATH = [ 27 01 00 02 00 05 01 44 00 26 00 49 01 48 00 00 00 00 00 00 00  ];
                                 ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/mc-0/mi-0/mcc-1/omi-0";
@@ -1965,6 +2135,7 @@
                             omi1 {
                                 compatible = "ibm,power10-omi";
                                 index = <0x03>;
+                                ATTR_CHIP_UNIT_POS = [ 03 ];
                                 ATTR_FAPI_POS = <19>;
                                 ATTR_PHYS_BIN_PATH = [ 27 01 00 02 00 05 01 44 00 26 00 49 01 48 01 00 00 00 00 00 00  ];
                                 ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/mc-0/mi-0/mcc-1/omi-1";
@@ -1976,6 +2147,7 @@
                     omic0 {
                         compatible = "ibm,power10-omic";
                         index = <0x00>;
+                        ATTR_CHIP_UNIT_POS = [ 00 ];
                         ATTR_FAPI_POS = <8>;
                         ATTR_PHYS_BIN_PATH = [ 25 01 00 02 00 05 01 44 00 4A 00 00 00 00 00 00 00 00 00 00 00  ];
                         ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/mc-0/omic-0";
@@ -1985,6 +2157,7 @@
                     omic1 {
                         compatible = "ibm,power10-omic";
                         index = <0x01>;
+                        ATTR_CHIP_UNIT_POS = [ 01 ];
                         ATTR_FAPI_POS = <9>;
                         ATTR_PHYS_BIN_PATH = [ 25 01 00 02 00 05 01 44 00 4A 01 00 00 00 00 00 00 00 00 00 00  ];
                         ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/mc-0/omic-1";
@@ -1996,6 +2169,7 @@
             perv13 {
                 compatible = "ibm,power10-chiplet";
                 index = <0x0d>;
+                ATTR_CHIP_UNIT_POS = [ 0D ];
                 ATTR_FAPI_POS = <69>;
                 ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 05 01 2C 0D 00 00 00 00 00 00 00 00 00 00 00 00  ];
                 ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/perv-13";
@@ -2004,6 +2178,7 @@
                 mc1 {
                     compatible = "ibm,power10-mc";
                     index = <0x01>;
+                    ATTR_CHIP_UNIT_POS = [ 01 ];
                     ATTR_FAPI_POS = <5>;
                     ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 05 01 44 01 00 00 00 00 00 00 00 00 00 00 00 00  ];
                     ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/mc-1";
@@ -2012,6 +2187,7 @@
                     mi0 {
                         compatible = "ibm,power10-mi";
                         index = <0x01>;
+                        ATTR_CHIP_UNIT_POS = [ 01 ];
                         ATTR_FAPI_POS = <5>;
                         ATTR_PHYS_BIN_PATH = [ 25 01 00 02 00 05 01 44 01 26 00 00 00 00 00 00 00 00 00 00 00  ];
                         ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/mc-1/mi-0";
@@ -2020,6 +2196,7 @@
                         mcc0 {
                             compatible = "ibm,power10-mcc";
                             index = <0x02>;
+                            ATTR_CHIP_UNIT_POS = [ 02 ];
                             ATTR_FAPI_POS = <10>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 01 44 01 26 00 49 00 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/mc-1/mi-0/mcc-0";
@@ -2028,6 +2205,7 @@
                             omi0 {
                                 compatible = "ibm,power10-omi";
                                 index = <0x04>;
+                                ATTR_CHIP_UNIT_POS = [ 04 ];
                                 ATTR_FAPI_POS = <20>;
                                 ATTR_PHYS_BIN_PATH = [ 27 01 00 02 00 05 01 44 01 26 00 49 00 48 00 00 00 00 00 00 00  ];
                                 ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/mc-1/mi-0/mcc-0/omi-0";
@@ -2037,6 +2215,7 @@
                             omi1 {
                                 compatible = "ibm,power10-omi";
                                 index = <0x05>;
+                                ATTR_CHIP_UNIT_POS = [ 05 ];
                                 ATTR_FAPI_POS = <21>;
                                 ATTR_PHYS_BIN_PATH = [ 27 01 00 02 00 05 01 44 01 26 00 49 00 48 01 00 00 00 00 00 00  ];
                                 ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/mc-1/mi-0/mcc-0/omi-1";
@@ -2047,6 +2226,7 @@
                         mcc1 {
                             compatible = "ibm,power10-mcc";
                             index = <0x03>;
+                            ATTR_CHIP_UNIT_POS = [ 03 ];
                             ATTR_FAPI_POS = <11>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 01 44 01 26 00 49 01 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/mc-1/mi-0/mcc-1";
@@ -2055,6 +2235,7 @@
                             omi0 {
                                 compatible = "ibm,power10-omi";
                                 index = <0x06>;
+                                ATTR_CHIP_UNIT_POS = [ 06 ];
                                 ATTR_FAPI_POS = <22>;
                                 ATTR_PHYS_BIN_PATH = [ 27 01 00 02 00 05 01 44 01 26 00 49 01 48 00 00 00 00 00 00 00  ];
                                 ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/mc-1/mi-0/mcc-1/omi-0";
@@ -2064,6 +2245,7 @@
                             omi1 {
                                 compatible = "ibm,power10-omi";
                                 index = <0x07>;
+                                ATTR_CHIP_UNIT_POS = [ 07 ];
                                 ATTR_FAPI_POS = <23>;
                                 ATTR_PHYS_BIN_PATH = [ 27 01 00 02 00 05 01 44 01 26 00 49 01 48 01 00 00 00 00 00 00  ];
                                 ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/mc-1/mi-0/mcc-1/omi-1";
@@ -2075,6 +2257,7 @@
                     omic0 {
                         compatible = "ibm,power10-omic";
                         index = <0x02>;
+                        ATTR_CHIP_UNIT_POS = [ 02 ];
                         ATTR_FAPI_POS = <10>;
                         ATTR_PHYS_BIN_PATH = [ 25 01 00 02 00 05 01 44 01 4A 00 00 00 00 00 00 00 00 00 00 00  ];
                         ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/mc-1/omic-0";
@@ -2084,6 +2267,7 @@
                     omic1 {
                         compatible = "ibm,power10-omic";
                         index = <0x03>;
+                        ATTR_CHIP_UNIT_POS = [ 03 ];
                         ATTR_FAPI_POS = <11>;
                         ATTR_PHYS_BIN_PATH = [ 25 01 00 02 00 05 01 44 01 4A 01 00 00 00 00 00 00 00 00 00 00  ];
                         ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/mc-1/omic-1";
@@ -2095,6 +2279,7 @@
             perv14 {
                 compatible = "ibm,power10-chiplet";
                 index = <0x0e>;
+                ATTR_CHIP_UNIT_POS = [ 0E ];
                 ATTR_FAPI_POS = <70>;
                 ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 05 01 2C 0E 00 00 00 00 00 00 00 00 00 00 00 00  ];
                 ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/perv-14";
@@ -2103,6 +2288,7 @@
                 mc2 {
                     compatible = "ibm,power10-mc";
                     index = <0x02>;
+                    ATTR_CHIP_UNIT_POS = [ 02 ];
                     ATTR_FAPI_POS = <6>;
                     ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 05 01 44 02 00 00 00 00 00 00 00 00 00 00 00 00  ];
                     ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/mc-2";
@@ -2111,6 +2297,7 @@
                     mi0 {
                         compatible = "ibm,power10-mi";
                         index = <0x02>;
+                        ATTR_CHIP_UNIT_POS = [ 02 ];
                         ATTR_FAPI_POS = <6>;
                         ATTR_PHYS_BIN_PATH = [ 25 01 00 02 00 05 01 44 02 26 00 00 00 00 00 00 00 00 00 00 00  ];
                         ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/mc-2/mi-0";
@@ -2119,6 +2306,7 @@
                         mcc0 {
                             compatible = "ibm,power10-mcc";
                             index = <0x04>;
+                            ATTR_CHIP_UNIT_POS = [ 04 ];
                             ATTR_FAPI_POS = <12>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 01 44 02 26 00 49 00 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/mc-2/mi-0/mcc-0";
@@ -2127,6 +2315,7 @@
                             omi0 {
                                 compatible = "ibm,power10-omi";
                                 index = <0x08>;
+                                ATTR_CHIP_UNIT_POS = [ 08 ];
                                 ATTR_FAPI_POS = <24>;
                                 ATTR_PHYS_BIN_PATH = [ 27 01 00 02 00 05 01 44 02 26 00 49 00 48 00 00 00 00 00 00 00  ];
                                 ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/mc-2/mi-0/mcc-0/omi-0";
@@ -2146,6 +2335,7 @@
                                     mem_port0 {
                                         compatible = "ibm,power10-memport";
                                         index = <0x08>;
+                                        ATTR_CHIP_UNIT_POS = [ 00 ];
                                         ATTR_FAPI_POS = <24>;
                                         ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 4B 08 4C 00 00 00 00 00 00 00 00 00 00 00 00 00  ];
                                         ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/ocmb_chip-8/mem_port-0";
@@ -2167,6 +2357,7 @@
                             omi1 {
                                 compatible = "ibm,power10-omi";
                                 index = <0x09>;
+                                ATTR_CHIP_UNIT_POS = [ 09 ];
                                 ATTR_FAPI_POS = <25>;
                                 ATTR_PHYS_BIN_PATH = [ 27 01 00 02 00 05 01 44 02 26 00 49 00 48 01 00 00 00 00 00 00  ];
                                 ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/mc-2/mi-0/mcc-0/omi-1";
@@ -2186,6 +2377,7 @@
                                     mem_port0 {
                                         compatible = "ibm,power10-memport";
                                         index = <0x09>;
+                                        ATTR_CHIP_UNIT_POS = [ 00 ];
                                         ATTR_FAPI_POS = <25>;
                                         ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 4B 09 4C 00 00 00 00 00 00 00 00 00 00 00 00 00  ];
                                         ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/ocmb_chip-9/mem_port-0";
@@ -2208,6 +2400,7 @@
                         mcc1 {
                             compatible = "ibm,power10-mcc";
                             index = <0x05>;
+                            ATTR_CHIP_UNIT_POS = [ 05 ];
                             ATTR_FAPI_POS = <13>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 01 44 02 26 00 49 01 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/mc-2/mi-0/mcc-1";
@@ -2216,6 +2409,7 @@
                             omi0 {
                                 compatible = "ibm,power10-omi";
                                 index = <0x0a>;
+                                ATTR_CHIP_UNIT_POS = [ 0A ];
                                 ATTR_FAPI_POS = <26>;
                                 ATTR_PHYS_BIN_PATH = [ 27 01 00 02 00 05 01 44 02 26 00 49 01 48 00 00 00 00 00 00 00  ];
                                 ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/mc-2/mi-0/mcc-1/omi-0";
@@ -2235,6 +2429,7 @@
                                     mem_port0 {
                                         compatible = "ibm,power10-memport";
                                         index = <0x0a>;
+                                        ATTR_CHIP_UNIT_POS = [ 00 ];
                                         ATTR_FAPI_POS = <26>;
                                         ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 4B 0A 4C 00 00 00 00 00 00 00 00 00 00 00 00 00  ];
                                         ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/ocmb_chip-10/mem_port-0";
@@ -2256,6 +2451,7 @@
                             omi1 {
                                 compatible = "ibm,power10-omi";
                                 index = <0x0b>;
+                                ATTR_CHIP_UNIT_POS = [ 0B ];
                                 ATTR_FAPI_POS = <27>;
                                 ATTR_PHYS_BIN_PATH = [ 27 01 00 02 00 05 01 44 02 26 00 49 01 48 01 00 00 00 00 00 00  ];
                                 ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/mc-2/mi-0/mcc-1/omi-1";
@@ -2275,6 +2471,7 @@
                                     mem_port0 {
                                         compatible = "ibm,power10-memport";
                                         index = <0x0b>;
+                                        ATTR_CHIP_UNIT_POS = [ 00 ];
                                         ATTR_FAPI_POS = <27>;
                                         ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 4B 0B 4C 00 00 00 00 00 00 00 00 00 00 00 00 00  ];
                                         ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/ocmb_chip-11/mem_port-0";
@@ -2298,6 +2495,7 @@
                     omic0 {
                         compatible = "ibm,power10-omic";
                         index = <0x04>;
+                        ATTR_CHIP_UNIT_POS = [ 04 ];
                         ATTR_FAPI_POS = <12>;
                         ATTR_PHYS_BIN_PATH = [ 25 01 00 02 00 05 01 44 02 4A 00 00 00 00 00 00 00 00 00 00 00  ];
                         ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/mc-2/omic-0";
@@ -2307,6 +2505,7 @@
                     omic1 {
                         compatible = "ibm,power10-omic";
                         index = <0x05>;
+                        ATTR_CHIP_UNIT_POS = [ 05 ];
                         ATTR_FAPI_POS = <13>;
                         ATTR_PHYS_BIN_PATH = [ 25 01 00 02 00 05 01 44 02 4A 01 00 00 00 00 00 00 00 00 00 00  ];
                         ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/mc-2/omic-1";
@@ -2318,6 +2517,7 @@
             perv15 {
                 compatible = "ibm,power10-chiplet";
                 index = <0x0f>;
+                ATTR_CHIP_UNIT_POS = [ 0F ];
                 ATTR_FAPI_POS = <71>;
                 ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 05 01 2C 0F 00 00 00 00 00 00 00 00 00 00 00 00  ];
                 ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/perv-15";
@@ -2326,6 +2526,7 @@
                 mc3 {
                     compatible = "ibm,power10-mc";
                     index = <0x03>;
+                    ATTR_CHIP_UNIT_POS = [ 03 ];
                     ATTR_FAPI_POS = <7>;
                     ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 05 01 44 03 00 00 00 00 00 00 00 00 00 00 00 00  ];
                     ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/mc-3";
@@ -2334,6 +2535,7 @@
                     mi0 {
                         compatible = "ibm,power10-mi";
                         index = <0x03>;
+                        ATTR_CHIP_UNIT_POS = [ 03 ];
                         ATTR_FAPI_POS = <7>;
                         ATTR_PHYS_BIN_PATH = [ 25 01 00 02 00 05 01 44 03 26 00 00 00 00 00 00 00 00 00 00 00  ];
                         ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/mc-3/mi-0";
@@ -2342,6 +2544,7 @@
                         mcc0 {
                             compatible = "ibm,power10-mcc";
                             index = <0x06>;
+                            ATTR_CHIP_UNIT_POS = [ 06 ];
                             ATTR_FAPI_POS = <14>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 01 44 03 26 00 49 00 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/mc-3/mi-0/mcc-0";
@@ -2350,6 +2553,7 @@
                             omi0 {
                                 compatible = "ibm,power10-omi";
                                 index = <0x0c>;
+                                ATTR_CHIP_UNIT_POS = [ 0C ];
                                 ATTR_FAPI_POS = <28>;
                                 ATTR_PHYS_BIN_PATH = [ 27 01 00 02 00 05 01 44 03 26 00 49 00 48 00 00 00 00 00 00 00  ];
                                 ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/mc-3/mi-0/mcc-0/omi-0";
@@ -2369,6 +2573,7 @@
                                     mem_port0 {
                                         compatible = "ibm,power10-memport";
                                         index = <0x0c>;
+                                        ATTR_CHIP_UNIT_POS = [ 00 ];
                                         ATTR_FAPI_POS = <28>;
                                         ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 4B 0C 4C 00 00 00 00 00 00 00 00 00 00 00 00 00  ];
                                         ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/ocmb_chip-12/mem_port-0";
@@ -2390,6 +2595,7 @@
                             omi1 {
                                 compatible = "ibm,power10-omi";
                                 index = <0x0d>;
+                                ATTR_CHIP_UNIT_POS = [ 0D ];
                                 ATTR_FAPI_POS = <29>;
                                 ATTR_PHYS_BIN_PATH = [ 27 01 00 02 00 05 01 44 03 26 00 49 00 48 01 00 00 00 00 00 00  ];
                                 ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/mc-3/mi-0/mcc-0/omi-1";
@@ -2409,6 +2615,7 @@
                                     mem_port0 {
                                         compatible = "ibm,power10-memport";
                                         index = <0x0d>;
+                                        ATTR_CHIP_UNIT_POS = [ 00 ];
                                         ATTR_FAPI_POS = <29>;
                                         ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 4B 0D 4C 00 00 00 00 00 00 00 00 00 00 00 00 00  ];
                                         ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/ocmb_chip-13/mem_port-0";
@@ -2431,6 +2638,7 @@
                         mcc1 {
                             compatible = "ibm,power10-mcc";
                             index = <0x07>;
+                            ATTR_CHIP_UNIT_POS = [ 07 ];
                             ATTR_FAPI_POS = <15>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 01 44 03 26 00 49 01 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/mc-3/mi-0/mcc-1";
@@ -2439,6 +2647,7 @@
                             omi0 {
                                 compatible = "ibm,power10-omi";
                                 index = <0x0e>;
+                                ATTR_CHIP_UNIT_POS = [ 0E ];
                                 ATTR_FAPI_POS = <30>;
                                 ATTR_PHYS_BIN_PATH = [ 27 01 00 02 00 05 01 44 03 26 00 49 01 48 00 00 00 00 00 00 00  ];
                                 ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/mc-3/mi-0/mcc-1/omi-0";
@@ -2458,6 +2667,7 @@
                                     mem_port0 {
                                         compatible = "ibm,power10-memport";
                                         index = <0x0e>;
+                                        ATTR_CHIP_UNIT_POS = [ 00 ];
                                         ATTR_FAPI_POS = <30>;
                                         ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 4B 0E 4C 00 00 00 00 00 00 00 00 00 00 00 00 00  ];
                                         ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/ocmb_chip-14/mem_port-0";
@@ -2479,6 +2689,7 @@
                             omi1 {
                                 compatible = "ibm,power10-omi";
                                 index = <0x0f>;
+                                ATTR_CHIP_UNIT_POS = [ 0F ];
                                 ATTR_FAPI_POS = <31>;
                                 ATTR_PHYS_BIN_PATH = [ 27 01 00 02 00 05 01 44 03 26 00 49 01 48 01 00 00 00 00 00 00  ];
                                 ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/mc-3/mi-0/mcc-1/omi-1";
@@ -2498,6 +2709,7 @@
                                     mem_port0 {
                                         compatible = "ibm,power10-memport";
                                         index = <0x0f>;
+                                        ATTR_CHIP_UNIT_POS = [ 00 ];
                                         ATTR_FAPI_POS = <31>;
                                         ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 4B 0F 4C 00 00 00 00 00 00 00 00 00 00 00 00 00  ];
                                         ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/ocmb_chip-15/mem_port-0";
@@ -2521,6 +2733,7 @@
                     omic0 {
                         compatible = "ibm,power10-omic";
                         index = <0x06>;
+                        ATTR_CHIP_UNIT_POS = [ 06 ];
                         ATTR_FAPI_POS = <14>;
                         ATTR_PHYS_BIN_PATH = [ 25 01 00 02 00 05 01 44 03 4A 00 00 00 00 00 00 00 00 00 00 00  ];
                         ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/mc-3/omic-0";
@@ -2530,6 +2743,7 @@
                     omic1 {
                         compatible = "ibm,power10-omic";
                         index = <0x07>;
+                        ATTR_CHIP_UNIT_POS = [ 07 ];
                         ATTR_FAPI_POS = <15>;
                         ATTR_PHYS_BIN_PATH = [ 25 01 00 02 00 05 01 44 03 4A 01 00 00 00 00 00 00 00 00 00 00  ];
                         ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/mc-3/omic-1";
@@ -2541,6 +2755,7 @@
             perv16 {
                 compatible = "ibm,power10-chiplet";
                 index = <0x10>;
+                ATTR_CHIP_UNIT_POS = [ 10 ];
                 ATTR_FAPI_POS = <72>;
                 ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 05 01 2C 10 00 00 00 00 00 00 00 00 00 00 00 00  ];
                 ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/perv-16";
@@ -2549,6 +2764,7 @@
                 pauc0 {
                     compatible = "ibm,power10-pauc";
                     index = <0x00>;
+                    ATTR_CHIP_UNIT_POS = [ 00 ];
                     ATTR_FAPI_POS = <4>;
                     ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 05 01 52 00 00 00 00 00 00 00 00 00 00 00 00 00  ];
                     ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/pauc-0";
@@ -2557,6 +2773,7 @@
                     pau0 {
                         compatible = "ibm,power10-pau";
                         index = <0x00>;
+                        ATTR_CHIP_UNIT_POS = [ 00 ];
                         ATTR_FAPI_POS = <8>;
                         ATTR_PHYS_BIN_PATH = [ 25 01 00 02 00 05 01 52 00 50 00 00 00 00 00 00 00 00 00 00 00  ];
                         ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/pauc-0/pau-0";
@@ -2568,6 +2785,7 @@
             perv17 {
                 compatible = "ibm,power10-chiplet";
                 index = <0x11>;
+                ATTR_CHIP_UNIT_POS = [ 11 ];
                 ATTR_FAPI_POS = <73>;
                 ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 05 01 2C 11 00 00 00 00 00 00 00 00 00 00 00 00  ];
                 ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/perv-17";
@@ -2576,6 +2794,7 @@
                 pauc1 {
                     compatible = "ibm,power10-pauc";
                     index = <0x01>;
+                    ATTR_CHIP_UNIT_POS = [ 01 ];
                     ATTR_FAPI_POS = <5>;
                     ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 05 01 52 01 00 00 00 00 00 00 00 00 00 00 00 00  ];
                     ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/pauc-1";
@@ -2584,6 +2803,7 @@
                     pau1 {
                         compatible = "ibm,power10-pau";
                         index = <0x03>;
+                        ATTR_CHIP_UNIT_POS = [ 03 ];
                         ATTR_FAPI_POS = <11>;
                         ATTR_PHYS_BIN_PATH = [ 25 01 00 02 00 05 01 52 01 50 01 00 00 00 00 00 00 00 00 00 00  ];
                         ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/pauc-1/pau-1";
@@ -2595,6 +2815,7 @@
             perv18 {
                 compatible = "ibm,power10-chiplet";
                 index = <0x12>;
+                ATTR_CHIP_UNIT_POS = [ 12 ];
                 ATTR_FAPI_POS = <74>;
                 ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 05 01 2C 12 00 00 00 00 00 00 00 00 00 00 00 00  ];
                 ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/perv-18";
@@ -2603,6 +2824,7 @@
                 pauc2 {
                     compatible = "ibm,power10-pauc";
                     index = <0x02>;
+                    ATTR_CHIP_UNIT_POS = [ 02 ];
                     ATTR_FAPI_POS = <6>;
                     ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 05 01 52 02 00 00 00 00 00 00 00 00 00 00 00 00  ];
                     ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/pauc-2";
@@ -2611,6 +2833,7 @@
                     pau0 {
                         compatible = "ibm,power10-pau";
                         index = <0x04>;
+                        ATTR_CHIP_UNIT_POS = [ 04 ];
                         ATTR_FAPI_POS = <12>;
                         ATTR_PHYS_BIN_PATH = [ 25 01 00 02 00 05 01 52 02 50 00 00 00 00 00 00 00 00 00 00 00  ];
                         ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/pauc-2/pau-0";
@@ -2620,6 +2843,7 @@
                     pau1 {
                         compatible = "ibm,power10-pau";
                         index = <0x05>;
+                        ATTR_CHIP_UNIT_POS = [ 05 ];
                         ATTR_FAPI_POS = <13>;
                         ATTR_PHYS_BIN_PATH = [ 25 01 00 02 00 05 01 52 02 50 01 00 00 00 00 00 00 00 00 00 00  ];
                         ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/pauc-2/pau-1";
@@ -2631,6 +2855,7 @@
             perv19 {
                 compatible = "ibm,power10-chiplet";
                 index = <0x13>;
+                ATTR_CHIP_UNIT_POS = [ 13 ];
                 ATTR_FAPI_POS = <75>;
                 ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 05 01 2C 13 00 00 00 00 00 00 00 00 00 00 00 00  ];
                 ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/perv-19";
@@ -2639,6 +2864,7 @@
                 pauc3 {
                     compatible = "ibm,power10-pauc";
                     index = <0x03>;
+                    ATTR_CHIP_UNIT_POS = [ 03 ];
                     ATTR_FAPI_POS = <7>;
                     ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 05 01 52 03 00 00 00 00 00 00 00 00 00 00 00 00  ];
                     ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/pauc-3";
@@ -2647,6 +2873,7 @@
                     pau0 {
                         compatible = "ibm,power10-pau";
                         index = <0x06>;
+                        ATTR_CHIP_UNIT_POS = [ 06 ];
                         ATTR_FAPI_POS = <14>;
                         ATTR_PHYS_BIN_PATH = [ 25 01 00 02 00 05 01 52 03 50 00 00 00 00 00 00 00 00 00 00 00  ];
                         ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/pauc-3/pau-0";
@@ -2656,6 +2883,7 @@
                     pau1 {
                         compatible = "ibm,power10-pau";
                         index = <0x07>;
+                        ATTR_CHIP_UNIT_POS = [ 07 ];
                         ATTR_FAPI_POS = <15>;
                         ATTR_PHYS_BIN_PATH = [ 25 01 00 02 00 05 01 52 03 50 01 00 00 00 00 00 00 00 00 00 00  ];
                         ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/pauc-3/pau-1";
@@ -2667,6 +2895,7 @@
             perv2 {
                 compatible = "ibm,power10-chiplet";
                 index = <0x02>;
+                ATTR_CHIP_UNIT_POS = [ 02 ];
                 ATTR_FAPI_POS = <58>;
                 ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 05 01 2C 02 00 00 00 00 00 00 00 00 00 00 00 00  ];
                 ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/perv-2";
@@ -2675,6 +2904,7 @@
                 nmmu0 {
                     compatible = "ibm,power10-nmmu";
                     index = <0x00>;
+                    ATTR_CHIP_UNIT_POS = [ 00 ];
                     ATTR_FAPI_POS = <2>;
                     ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 05 01 4F 00 00 00 00 00 00 00 00 00 00 00 00 00  ];
                     ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/nmmu-0";
@@ -2685,6 +2915,7 @@
             perv24 {
                 compatible = "ibm,power10-chiplet";
                 index = <0x18>;
+                ATTR_CHIP_UNIT_POS = [ 18 ];
                 ATTR_FAPI_POS = <80>;
                 ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 05 01 2C 18 00 00 00 00 00 00 00 00 00 00 00 00  ];
                 ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/perv-24";
@@ -2696,6 +2927,7 @@
                     iohs0 {
                         compatible = "ibm,power10-iohs";
                         index = <0x00>;
+                        ATTR_CHIP_UNIT_POS = [ 00 ];
                         ATTR_FAPI_POS = <8>;
                         ATTR_PHYS_BIN_PATH = [ 25 01 00 02 00 05 01 52 00 51 00 00 00 00 00 00 00 00 00 00 00  ];
                         ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/pauc-0/iohs-0";
@@ -2704,6 +2936,7 @@
                         smpgroup0 {
                             compatible = "ibm,power10-smpgroup";
                             index = <0x00>;
+                            ATTR_CHIP_UNIT_POS = [ 00 ];
                             ATTR_FAPI_POS = <16>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 01 52 00 51 00 47 00 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/pauc-0/iohs-0/smpgroup-0";
@@ -2713,6 +2946,7 @@
                         smpgroup1 {
                             compatible = "ibm,power10-smpgroup";
                             index = <0x01>;
+                            ATTR_CHIP_UNIT_POS = [ 01 ];
                             ATTR_FAPI_POS = <17>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 01 52 00 51 00 47 01 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/pauc-0/iohs-0/smpgroup-1";
@@ -2725,6 +2959,7 @@
             perv25 {
                 compatible = "ibm,power10-chiplet";
                 index = <0x19>;
+                ATTR_CHIP_UNIT_POS = [ 19 ];
                 ATTR_FAPI_POS = <81>;
                 ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 05 01 2C 19 00 00 00 00 00 00 00 00 00 00 00 00  ];
                 ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/perv-25";
@@ -2736,6 +2971,7 @@
                     iohs1 {
                         compatible = "ibm,power10-iohs";
                         index = <0x01>;
+                        ATTR_CHIP_UNIT_POS = [ 01 ];
                         ATTR_FAPI_POS = <9>;
                         ATTR_PHYS_BIN_PATH = [ 25 01 00 02 00 05 01 52 00 51 01 00 00 00 00 00 00 00 00 00 00  ];
                         ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/pauc-0/iohs-1";
@@ -2744,6 +2980,7 @@
                         smpgroup0 {
                             compatible = "ibm,power10-smpgroup";
                             index = <0x02>;
+                            ATTR_CHIP_UNIT_POS = [ 02 ];
                             ATTR_FAPI_POS = <18>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 01 52 00 51 01 47 00 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/pauc-0/iohs-1/smpgroup-0";
@@ -2753,6 +2990,7 @@
                         smpgroup1 {
                             compatible = "ibm,power10-smpgroup";
                             index = <0x03>;
+                            ATTR_CHIP_UNIT_POS = [ 03 ];
                             ATTR_FAPI_POS = <19>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 01 52 00 51 01 47 01 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/pauc-0/iohs-1/smpgroup-1";
@@ -2765,6 +3003,7 @@
             perv26 {
                 compatible = "ibm,power10-chiplet";
                 index = <0x1a>;
+                ATTR_CHIP_UNIT_POS = [ 1A ];
                 ATTR_FAPI_POS = <82>;
                 ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 05 01 2C 1A 00 00 00 00 00 00 00 00 00 00 00 00  ];
                 ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/perv-26";
@@ -2776,6 +3015,7 @@
                     iohs0 {
                         compatible = "ibm,power10-iohs";
                         index = <0x02>;
+                        ATTR_CHIP_UNIT_POS = [ 02 ];
                         ATTR_FAPI_POS = <10>;
                         ATTR_PHYS_BIN_PATH = [ 25 01 00 02 00 05 01 52 01 51 00 00 00 00 00 00 00 00 00 00 00  ];
                         ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/pauc-1/iohs-0";
@@ -2784,6 +3024,7 @@
                         smpgroup0 {
                             compatible = "ibm,power10-smpgroup";
                             index = <0x04>;
+                            ATTR_CHIP_UNIT_POS = [ 04 ];
                             ATTR_FAPI_POS = <20>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 01 52 01 51 00 47 00 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/pauc-1/iohs-0/smpgroup-0";
@@ -2793,6 +3034,7 @@
                         smpgroup1 {
                             compatible = "ibm,power10-smpgroup";
                             index = <0x05>;
+                            ATTR_CHIP_UNIT_POS = [ 05 ];
                             ATTR_FAPI_POS = <21>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 01 52 01 51 00 47 01 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/pauc-1/iohs-0/smpgroup-1";
@@ -2805,6 +3047,7 @@
             perv27 {
                 compatible = "ibm,power10-chiplet";
                 index = <0x1b>;
+                ATTR_CHIP_UNIT_POS = [ 1B ];
                 ATTR_FAPI_POS = <83>;
                 ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 05 01 2C 1B 00 00 00 00 00 00 00 00 00 00 00 00  ];
                 ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/perv-27";
@@ -2816,6 +3059,7 @@
                     iohs1 {
                         compatible = "ibm,power10-iohs";
                         index = <0x03>;
+                        ATTR_CHIP_UNIT_POS = [ 03 ];
                         ATTR_FAPI_POS = <11>;
                         ATTR_PHYS_BIN_PATH = [ 25 01 00 02 00 05 01 52 01 51 01 00 00 00 00 00 00 00 00 00 00  ];
                         ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/pauc-1/iohs-1";
@@ -2824,6 +3068,7 @@
                         smpgroup0 {
                             compatible = "ibm,power10-smpgroup";
                             index = <0x06>;
+                            ATTR_CHIP_UNIT_POS = [ 06 ];
                             ATTR_FAPI_POS = <22>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 01 52 01 51 01 47 00 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/pauc-1/iohs-1/smpgroup-0";
@@ -2833,6 +3078,7 @@
                         smpgroup1 {
                             compatible = "ibm,power10-smpgroup";
                             index = <0x07>;
+                            ATTR_CHIP_UNIT_POS = [ 07 ];
                             ATTR_FAPI_POS = <23>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 01 52 01 51 01 47 01 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/pauc-1/iohs-1/smpgroup-1";
@@ -2845,6 +3091,7 @@
             perv28 {
                 compatible = "ibm,power10-chiplet";
                 index = <0x1c>;
+                ATTR_CHIP_UNIT_POS = [ 1C ];
                 ATTR_FAPI_POS = <84>;
                 ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 05 01 2C 1C 00 00 00 00 00 00 00 00 00 00 00 00  ];
                 ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/perv-28";
@@ -2856,6 +3103,7 @@
                     iohs0 {
                         compatible = "ibm,power10-iohs";
                         index = <0x04>;
+                        ATTR_CHIP_UNIT_POS = [ 04 ];
                         ATTR_FAPI_POS = <12>;
                         ATTR_PHYS_BIN_PATH = [ 25 01 00 02 00 05 01 52 02 51 00 00 00 00 00 00 00 00 00 00 00  ];
                         ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/pauc-2/iohs-0";
@@ -2864,6 +3112,7 @@
                         smpgroup0 {
                             compatible = "ibm,power10-smpgroup";
                             index = <0x08>;
+                            ATTR_CHIP_UNIT_POS = [ 08 ];
                             ATTR_FAPI_POS = <24>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 01 52 02 51 00 47 00 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/pauc-2/iohs-0/smpgroup-0";
@@ -2873,6 +3122,7 @@
                         smpgroup1 {
                             compatible = "ibm,power10-smpgroup";
                             index = <0x09>;
+                            ATTR_CHIP_UNIT_POS = [ 09 ];
                             ATTR_FAPI_POS = <25>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 01 52 02 51 00 47 01 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/pauc-2/iohs-0/smpgroup-1";
@@ -2885,6 +3135,7 @@
             perv29 {
                 compatible = "ibm,power10-chiplet";
                 index = <0x1d>;
+                ATTR_CHIP_UNIT_POS = [ 1D ];
                 ATTR_FAPI_POS = <85>;
                 ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 05 01 2C 1D 00 00 00 00 00 00 00 00 00 00 00 00  ];
                 ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/perv-29";
@@ -2896,6 +3147,7 @@
                     iohs1 {
                         compatible = "ibm,power10-iohs";
                         index = <0x05>;
+                        ATTR_CHIP_UNIT_POS = [ 05 ];
                         ATTR_FAPI_POS = <13>;
                         ATTR_PHYS_BIN_PATH = [ 25 01 00 02 00 05 01 52 02 51 01 00 00 00 00 00 00 00 00 00 00  ];
                         ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/pauc-2/iohs-1";
@@ -2904,6 +3156,7 @@
                         smpgroup0 {
                             compatible = "ibm,power10-smpgroup";
                             index = <0x0a>;
+                            ATTR_CHIP_UNIT_POS = [ 0A ];
                             ATTR_FAPI_POS = <26>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 01 52 02 51 01 47 00 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/pauc-2/iohs-1/smpgroup-0";
@@ -2913,6 +3166,7 @@
                         smpgroup1 {
                             compatible = "ibm,power10-smpgroup";
                             index = <0x0b>;
+                            ATTR_CHIP_UNIT_POS = [ 0B ];
                             ATTR_FAPI_POS = <27>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 01 52 02 51 01 47 01 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/pauc-2/iohs-1/smpgroup-1";
@@ -2925,6 +3179,7 @@
             perv3 {
                 compatible = "ibm,power10-chiplet";
                 index = <0x03>;
+                ATTR_CHIP_UNIT_POS = [ 03 ];
                 ATTR_FAPI_POS = <59>;
                 ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 05 01 2C 03 00 00 00 00 00 00 00 00 00 00 00 00  ];
                 ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/perv-3";
@@ -2933,6 +3188,7 @@
                 nmmu1 {
                     compatible = "ibm,power10-nmmu";
                     index = <0x01>;
+                    ATTR_CHIP_UNIT_POS = [ 01 ];
                     ATTR_FAPI_POS = <3>;
                     ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 05 01 4F 01 00 00 00 00 00 00 00 00 00 00 00 00  ];
                     ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/nmmu-1";
@@ -2943,6 +3199,7 @@
             perv30 {
                 compatible = "ibm,power10-chiplet";
                 index = <0x1e>;
+                ATTR_CHIP_UNIT_POS = [ 1E ];
                 ATTR_FAPI_POS = <86>;
                 ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 05 01 2C 1E 00 00 00 00 00 00 00 00 00 00 00 00  ];
                 ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/perv-30";
@@ -2954,6 +3211,7 @@
                     iohs0 {
                         compatible = "ibm,power10-iohs";
                         index = <0x06>;
+                        ATTR_CHIP_UNIT_POS = [ 06 ];
                         ATTR_FAPI_POS = <14>;
                         ATTR_PHYS_BIN_PATH = [ 25 01 00 02 00 05 01 52 03 51 00 00 00 00 00 00 00 00 00 00 00  ];
                         ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/pauc-3/iohs-0";
@@ -2962,6 +3220,7 @@
                         smpgroup0 {
                             compatible = "ibm,power10-smpgroup";
                             index = <0x0c>;
+                            ATTR_CHIP_UNIT_POS = [ 0C ];
                             ATTR_FAPI_POS = <28>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 01 52 03 51 00 47 00 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/pauc-3/iohs-0/smpgroup-0";
@@ -2971,6 +3230,7 @@
                         smpgroup1 {
                             compatible = "ibm,power10-smpgroup";
                             index = <0x0d>;
+                            ATTR_CHIP_UNIT_POS = [ 0D ];
                             ATTR_FAPI_POS = <29>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 01 52 03 51 00 47 01 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/pauc-3/iohs-0/smpgroup-1";
@@ -2983,6 +3243,7 @@
             perv31 {
                 compatible = "ibm,power10-chiplet";
                 index = <0x1f>;
+                ATTR_CHIP_UNIT_POS = [ 1F ];
                 ATTR_FAPI_POS = <87>;
                 ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 05 01 2C 1F 00 00 00 00 00 00 00 00 00 00 00 00  ];
                 ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/perv-31";
@@ -2994,6 +3255,7 @@
                     iohs1 {
                         compatible = "ibm,power10-iohs";
                         index = <0x07>;
+                        ATTR_CHIP_UNIT_POS = [ 07 ];
                         ATTR_FAPI_POS = <15>;
                         ATTR_PHYS_BIN_PATH = [ 25 01 00 02 00 05 01 52 03 51 01 00 00 00 00 00 00 00 00 00 00  ];
                         ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/pauc-3/iohs-1";
@@ -3002,6 +3264,7 @@
                         smpgroup0 {
                             compatible = "ibm,power10-smpgroup";
                             index = <0x0e>;
+                            ATTR_CHIP_UNIT_POS = [ 0E ];
                             ATTR_FAPI_POS = <30>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 01 52 03 51 01 47 00 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/pauc-3/iohs-1/smpgroup-0";
@@ -3011,6 +3274,7 @@
                         smpgroup1 {
                             compatible = "ibm,power10-smpgroup";
                             index = <0x0f>;
+                            ATTR_CHIP_UNIT_POS = [ 0F ];
                             ATTR_FAPI_POS = <31>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 01 52 03 51 01 47 01 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/pauc-3/iohs-1/smpgroup-1";
@@ -3023,6 +3287,7 @@
             perv32 {
                 compatible = "ibm,power10-chiplet";
                 index = <0x20>;
+                ATTR_CHIP_UNIT_POS = [ 20 ];
                 ATTR_FAPI_POS = <88>;
                 ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 05 01 2C 20 00 00 00 00 00 00 00 00 00 00 00 00  ];
                 ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/perv-32";
@@ -3031,6 +3296,7 @@
                 eq0 {
                     compatible = "ibm,power10-eq";
                     index = <0x00>;
+                    ATTR_CHIP_UNIT_POS = [ 00 ];
                     ATTR_FAPI_POS = <8>;
                     ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 05 01 23 00 00 00 00 00 00 00 00 00 00 00 00 00  ];
                     ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/eq-0";
@@ -3047,6 +3313,7 @@
                         core0 {
                             compatible = "ibm,power10-core";
                             index = <0x00>;
+                            ATTR_CHIP_UNIT_POS = [ 00 ];
                             ATTR_FAPI_POS = <32>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 01 23 00 53 00 07 00 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/eq-0/fc-0/core-0";
@@ -3056,6 +3323,7 @@
                         core1 {
                             compatible = "ibm,power10-core";
                             index = <0x01>;
+                            ATTR_CHIP_UNIT_POS = [ 01 ];
                             ATTR_FAPI_POS = <33>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 01 23 00 53 00 07 01 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/eq-0/fc-0/core-1";
@@ -3074,6 +3342,7 @@
                         core0 {
                             compatible = "ibm,power10-core";
                             index = <0x02>;
+                            ATTR_CHIP_UNIT_POS = [ 02 ];
                             ATTR_FAPI_POS = <34>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 01 23 00 53 01 07 00 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/eq-0/fc-1/core-0";
@@ -3083,6 +3352,7 @@
                         core1 {
                             compatible = "ibm,power10-core";
                             index = <0x03>;
+                            ATTR_CHIP_UNIT_POS = [ 03 ];
                             ATTR_FAPI_POS = <35>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 01 23 00 53 01 07 01 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/eq-0/fc-1/core-1";
@@ -3095,6 +3365,7 @@
             perv33 {
                 compatible = "ibm,power10-chiplet";
                 index = <0x21>;
+                ATTR_CHIP_UNIT_POS = [ 21 ];
                 ATTR_FAPI_POS = <89>;
                 ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 05 01 2C 21 00 00 00 00 00 00 00 00 00 00 00 00  ];
                 ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/perv-33";
@@ -3103,6 +3374,7 @@
                 eq1 {
                     compatible = "ibm,power10-eq";
                     index = <0x01>;
+                    ATTR_CHIP_UNIT_POS = [ 01 ];
                     ATTR_FAPI_POS = <9>;
                     ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 05 01 23 01 00 00 00 00 00 00 00 00 00 00 00 00  ];
                     ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/eq-1";
@@ -3119,6 +3391,7 @@
                         core0 {
                             compatible = "ibm,power10-core";
                             index = <0x04>;
+                            ATTR_CHIP_UNIT_POS = [ 04 ];
                             ATTR_FAPI_POS = <36>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 01 23 01 53 00 07 00 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/eq-1/fc-0/core-0";
@@ -3128,6 +3401,7 @@
                         core1 {
                             compatible = "ibm,power10-core";
                             index = <0x05>;
+                            ATTR_CHIP_UNIT_POS = [ 05 ];
                             ATTR_FAPI_POS = <37>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 01 23 01 53 00 07 01 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/eq-1/fc-0/core-1";
@@ -3146,6 +3420,7 @@
                         core0 {
                             compatible = "ibm,power10-core";
                             index = <0x06>;
+                            ATTR_CHIP_UNIT_POS = [ 06 ];
                             ATTR_FAPI_POS = <38>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 01 23 01 53 01 07 00 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/eq-1/fc-1/core-0";
@@ -3155,6 +3430,7 @@
                         core1 {
                             compatible = "ibm,power10-core";
                             index = <0x07>;
+                            ATTR_CHIP_UNIT_POS = [ 07 ];
                             ATTR_FAPI_POS = <39>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 01 23 01 53 01 07 01 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/eq-1/fc-1/core-1";
@@ -3167,6 +3443,7 @@
             perv34 {
                 compatible = "ibm,power10-chiplet";
                 index = <0x22>;
+                ATTR_CHIP_UNIT_POS = [ 22 ];
                 ATTR_FAPI_POS = <90>;
                 ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 05 01 2C 22 00 00 00 00 00 00 00 00 00 00 00 00  ];
                 ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/perv-34";
@@ -3175,6 +3452,7 @@
                 eq2 {
                     compatible = "ibm,power10-eq";
                     index = <0x02>;
+                    ATTR_CHIP_UNIT_POS = [ 02 ];
                     ATTR_FAPI_POS = <10>;
                     ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 05 01 23 02 00 00 00 00 00 00 00 00 00 00 00 00  ];
                     ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/eq-2";
@@ -3191,6 +3469,7 @@
                         core0 {
                             compatible = "ibm,power10-core";
                             index = <0x08>;
+                            ATTR_CHIP_UNIT_POS = [ 08 ];
                             ATTR_FAPI_POS = <40>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 01 23 02 53 00 07 00 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/eq-2/fc-0/core-0";
@@ -3200,6 +3479,7 @@
                         core1 {
                             compatible = "ibm,power10-core";
                             index = <0x09>;
+                            ATTR_CHIP_UNIT_POS = [ 09 ];
                             ATTR_FAPI_POS = <41>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 01 23 02 53 00 07 01 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/eq-2/fc-0/core-1";
@@ -3218,6 +3498,7 @@
                         core0 {
                             compatible = "ibm,power10-core";
                             index = <0x0a>;
+                            ATTR_CHIP_UNIT_POS = [ 0A ];
                             ATTR_FAPI_POS = <42>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 01 23 02 53 01 07 00 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/eq-2/fc-1/core-0";
@@ -3227,6 +3508,7 @@
                         core1 {
                             compatible = "ibm,power10-core";
                             index = <0x0b>;
+                            ATTR_CHIP_UNIT_POS = [ 0B ];
                             ATTR_FAPI_POS = <43>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 01 23 02 53 01 07 01 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/eq-2/fc-1/core-1";
@@ -3239,6 +3521,7 @@
             perv35 {
                 compatible = "ibm,power10-chiplet";
                 index = <0x23>;
+                ATTR_CHIP_UNIT_POS = [ 23 ];
                 ATTR_FAPI_POS = <91>;
                 ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 05 01 2C 23 00 00 00 00 00 00 00 00 00 00 00 00  ];
                 ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/perv-35";
@@ -3247,6 +3530,7 @@
                 eq3 {
                     compatible = "ibm,power10-eq";
                     index = <0x03>;
+                    ATTR_CHIP_UNIT_POS = [ 03 ];
                     ATTR_FAPI_POS = <11>;
                     ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 05 01 23 03 00 00 00 00 00 00 00 00 00 00 00 00  ];
                     ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/eq-3";
@@ -3263,6 +3547,7 @@
                         core0 {
                             compatible = "ibm,power10-core";
                             index = <0x0c>;
+                            ATTR_CHIP_UNIT_POS = [ 0C ];
                             ATTR_FAPI_POS = <44>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 01 23 03 53 00 07 00 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/eq-3/fc-0/core-0";
@@ -3272,6 +3557,7 @@
                         core1 {
                             compatible = "ibm,power10-core";
                             index = <0x0d>;
+                            ATTR_CHIP_UNIT_POS = [ 0D ];
                             ATTR_FAPI_POS = <45>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 01 23 03 53 00 07 01 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/eq-3/fc-0/core-1";
@@ -3290,6 +3576,7 @@
                         core0 {
                             compatible = "ibm,power10-core";
                             index = <0x0e>;
+                            ATTR_CHIP_UNIT_POS = [ 0E ];
                             ATTR_FAPI_POS = <46>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 01 23 03 53 01 07 00 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/eq-3/fc-1/core-0";
@@ -3299,6 +3586,7 @@
                         core1 {
                             compatible = "ibm,power10-core";
                             index = <0x0f>;
+                            ATTR_CHIP_UNIT_POS = [ 0F ];
                             ATTR_FAPI_POS = <47>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 01 23 03 53 01 07 01 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/eq-3/fc-1/core-1";
@@ -3311,6 +3599,7 @@
             perv36 {
                 compatible = "ibm,power10-chiplet";
                 index = <0x24>;
+                ATTR_CHIP_UNIT_POS = [ 24 ];
                 ATTR_FAPI_POS = <92>;
                 ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 05 01 2C 24 00 00 00 00 00 00 00 00 00 00 00 00  ];
                 ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/perv-36";
@@ -3319,6 +3608,7 @@
                 eq4 {
                     compatible = "ibm,power10-eq";
                     index = <0x04>;
+                    ATTR_CHIP_UNIT_POS = [ 04 ];
                     ATTR_FAPI_POS = <12>;
                     ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 05 01 23 04 00 00 00 00 00 00 00 00 00 00 00 00  ];
                     ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/eq-4";
@@ -3335,6 +3625,7 @@
                         core0 {
                             compatible = "ibm,power10-core";
                             index = <0x10>;
+                            ATTR_CHIP_UNIT_POS = [ 10 ];
                             ATTR_FAPI_POS = <48>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 01 23 04 53 00 07 00 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/eq-4/fc-0/core-0";
@@ -3344,6 +3635,7 @@
                         core1 {
                             compatible = "ibm,power10-core";
                             index = <0x11>;
+                            ATTR_CHIP_UNIT_POS = [ 11 ];
                             ATTR_FAPI_POS = <49>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 01 23 04 53 00 07 01 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/eq-4/fc-0/core-1";
@@ -3362,6 +3654,7 @@
                         core0 {
                             compatible = "ibm,power10-core";
                             index = <0x12>;
+                            ATTR_CHIP_UNIT_POS = [ 12 ];
                             ATTR_FAPI_POS = <50>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 01 23 04 53 01 07 00 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/eq-4/fc-1/core-0";
@@ -3371,6 +3664,7 @@
                         core1 {
                             compatible = "ibm,power10-core";
                             index = <0x13>;
+                            ATTR_CHIP_UNIT_POS = [ 13 ];
                             ATTR_FAPI_POS = <51>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 01 23 04 53 01 07 01 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/eq-4/fc-1/core-1";
@@ -3383,6 +3677,7 @@
             perv37 {
                 compatible = "ibm,power10-chiplet";
                 index = <0x25>;
+                ATTR_CHIP_UNIT_POS = [ 25 ];
                 ATTR_FAPI_POS = <93>;
                 ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 05 01 2C 25 00 00 00 00 00 00 00 00 00 00 00 00  ];
                 ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/perv-37";
@@ -3391,6 +3686,7 @@
                 eq5 {
                     compatible = "ibm,power10-eq";
                     index = <0x05>;
+                    ATTR_CHIP_UNIT_POS = [ 05 ];
                     ATTR_FAPI_POS = <13>;
                     ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 05 01 23 05 00 00 00 00 00 00 00 00 00 00 00 00  ];
                     ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/eq-5";
@@ -3407,6 +3703,7 @@
                         core0 {
                             compatible = "ibm,power10-core";
                             index = <0x14>;
+                            ATTR_CHIP_UNIT_POS = [ 14 ];
                             ATTR_FAPI_POS = <52>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 01 23 05 53 00 07 00 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/eq-5/fc-0/core-0";
@@ -3416,6 +3713,7 @@
                         core1 {
                             compatible = "ibm,power10-core";
                             index = <0x15>;
+                            ATTR_CHIP_UNIT_POS = [ 15 ];
                             ATTR_FAPI_POS = <53>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 01 23 05 53 00 07 01 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/eq-5/fc-0/core-1";
@@ -3434,6 +3732,7 @@
                         core0 {
                             compatible = "ibm,power10-core";
                             index = <0x16>;
+                            ATTR_CHIP_UNIT_POS = [ 16 ];
                             ATTR_FAPI_POS = <54>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 01 23 05 53 01 07 00 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/eq-5/fc-1/core-0";
@@ -3443,6 +3742,7 @@
                         core1 {
                             compatible = "ibm,power10-core";
                             index = <0x17>;
+                            ATTR_CHIP_UNIT_POS = [ 17 ];
                             ATTR_FAPI_POS = <55>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 01 23 05 53 01 07 01 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/eq-5/fc-1/core-1";
@@ -3455,6 +3755,7 @@
             perv38 {
                 compatible = "ibm,power10-chiplet";
                 index = <0x26>;
+                ATTR_CHIP_UNIT_POS = [ 26 ];
                 ATTR_FAPI_POS = <94>;
                 ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 05 01 2C 26 00 00 00 00 00 00 00 00 00 00 00 00  ];
                 ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/perv-38";
@@ -3463,6 +3764,7 @@
                 eq6 {
                     compatible = "ibm,power10-eq";
                     index = <0x06>;
+                    ATTR_CHIP_UNIT_POS = [ 06 ];
                     ATTR_FAPI_POS = <14>;
                     ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 05 01 23 06 00 00 00 00 00 00 00 00 00 00 00 00  ];
                     ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/eq-6";
@@ -3479,6 +3781,7 @@
                         core0 {
                             compatible = "ibm,power10-core";
                             index = <0x18>;
+                            ATTR_CHIP_UNIT_POS = [ 18 ];
                             ATTR_FAPI_POS = <56>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 01 23 06 53 00 07 00 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/eq-6/fc-0/core-0";
@@ -3488,6 +3791,7 @@
                         core1 {
                             compatible = "ibm,power10-core";
                             index = <0x19>;
+                            ATTR_CHIP_UNIT_POS = [ 19 ];
                             ATTR_FAPI_POS = <57>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 01 23 06 53 00 07 01 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/eq-6/fc-0/core-1";
@@ -3506,6 +3810,7 @@
                         core0 {
                             compatible = "ibm,power10-core";
                             index = <0x1a>;
+                            ATTR_CHIP_UNIT_POS = [ 1A ];
                             ATTR_FAPI_POS = <58>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 01 23 06 53 01 07 00 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/eq-6/fc-1/core-0";
@@ -3515,6 +3820,7 @@
                         core1 {
                             compatible = "ibm,power10-core";
                             index = <0x1b>;
+                            ATTR_CHIP_UNIT_POS = [ 1B ];
                             ATTR_FAPI_POS = <59>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 01 23 06 53 01 07 01 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/eq-6/fc-1/core-1";
@@ -3527,6 +3833,7 @@
             perv39 {
                 compatible = "ibm,power10-chiplet";
                 index = <0x27>;
+                ATTR_CHIP_UNIT_POS = [ 27 ];
                 ATTR_FAPI_POS = <95>;
                 ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 05 01 2C 27 00 00 00 00 00 00 00 00 00 00 00 00  ];
                 ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/perv-39";
@@ -3535,6 +3842,7 @@
                 eq7 {
                     compatible = "ibm,power10-eq";
                     index = <0x07>;
+                    ATTR_CHIP_UNIT_POS = [ 07 ];
                     ATTR_FAPI_POS = <15>;
                     ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 05 01 23 07 00 00 00 00 00 00 00 00 00 00 00 00  ];
                     ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/eq-7";
@@ -3551,6 +3859,7 @@
                         core0 {
                             compatible = "ibm,power10-core";
                             index = <0x1c>;
+                            ATTR_CHIP_UNIT_POS = [ 1C ];
                             ATTR_FAPI_POS = <60>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 01 23 07 53 00 07 00 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/eq-7/fc-0/core-0";
@@ -3560,6 +3869,7 @@
                         core1 {
                             compatible = "ibm,power10-core";
                             index = <0x1d>;
+                            ATTR_CHIP_UNIT_POS = [ 1D ];
                             ATTR_FAPI_POS = <61>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 01 23 07 53 00 07 01 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/eq-7/fc-0/core-1";
@@ -3578,6 +3888,7 @@
                         core0 {
                             compatible = "ibm,power10-core";
                             index = <0x1e>;
+                            ATTR_CHIP_UNIT_POS = [ 1E ];
                             ATTR_FAPI_POS = <62>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 01 23 07 53 01 07 00 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/eq-7/fc-1/core-0";
@@ -3587,6 +3898,7 @@
                         core1 {
                             compatible = "ibm,power10-core";
                             index = <0x1f>;
+                            ATTR_CHIP_UNIT_POS = [ 1F ];
                             ATTR_FAPI_POS = <63>;
                             ATTR_PHYS_BIN_PATH = [ 26 01 00 02 00 05 01 23 07 53 01 07 01 00 00 00 00 00 00 00 00  ];
                             ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/eq-7/fc-1/core-1";
@@ -3599,6 +3911,7 @@
             perv8 {
                 compatible = "ibm,power10-chiplet";
                 index = <0x08>;
+                ATTR_CHIP_UNIT_POS = [ 08 ];
                 ATTR_FAPI_POS = <64>;
                 ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 05 01 2C 08 00 00 00 00 00 00 00 00 00 00 00 00  ];
                 ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/perv-8";
@@ -3607,6 +3920,7 @@
                 pec0 {
                     compatible = "ibm,power10-pec";
                     index = <0x00>;
+                    ATTR_CHIP_UNIT_POS = [ 00 ];
                     ATTR_FAPI_POS = <2>;
                     ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 05 01 2D 00 00 00 00 00 00 00 00 00 00 00 00 00  ];
                     ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/pec-0";
@@ -3615,6 +3929,7 @@
                     phb0 {
                         compatible = "ibm,power10-phb";
                         index = <0x00>;
+                        ATTR_CHIP_UNIT_POS = [ 00 ];
                         ATTR_FAPI_POS = <6>;
                         ATTR_PHYS_BIN_PATH = [ 25 01 00 02 00 05 01 2D 00 2E 00 00 00 00 00 00 00 00 00 00 00  ];
                         ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/pec-0/phb-0";
@@ -3624,6 +3939,7 @@
                     phb1 {
                         compatible = "ibm,power10-phb";
                         index = <0x01>;
+                        ATTR_CHIP_UNIT_POS = [ 01 ];
                         ATTR_FAPI_POS = <7>;
                         ATTR_PHYS_BIN_PATH = [ 25 01 00 02 00 05 01 2D 00 2E 01 00 00 00 00 00 00 00 00 00 00  ];
                         ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/pec-0/phb-1";
@@ -3633,6 +3949,7 @@
                     phb2 {
                         compatible = "ibm,power10-phb";
                         index = <0x02>;
+                        ATTR_CHIP_UNIT_POS = [ 02 ];
                         ATTR_FAPI_POS = <8>;
                         ATTR_PHYS_BIN_PATH = [ 25 01 00 02 00 05 01 2D 00 2E 02 00 00 00 00 00 00 00 00 00 00  ];
                         ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/pec-0/phb-2";
@@ -3644,6 +3961,7 @@
             perv9 {
                 compatible = "ibm,power10-chiplet";
                 index = <0x09>;
+                ATTR_CHIP_UNIT_POS = [ 09 ];
                 ATTR_FAPI_POS = <65>;
                 ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 05 01 2C 09 00 00 00 00 00 00 00 00 00 00 00 00  ];
                 ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/perv-9";
@@ -3652,6 +3970,7 @@
                 pec1 {
                     compatible = "ibm,power10-pec";
                     index = <0x01>;
+                    ATTR_CHIP_UNIT_POS = [ 01 ];
                     ATTR_FAPI_POS = <3>;
                     ATTR_PHYS_BIN_PATH = [ 24 01 00 02 00 05 01 2D 01 00 00 00 00 00 00 00 00 00 00 00 00  ];
                     ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/pec-1";
@@ -3660,6 +3979,7 @@
                     phb0 {
                         compatible = "ibm,power10-phb";
                         index = <0x03>;
+                        ATTR_CHIP_UNIT_POS = [ 03 ];
                         ATTR_FAPI_POS = <9>;
                         ATTR_PHYS_BIN_PATH = [ 25 01 00 02 00 05 01 2D 01 2E 00 00 00 00 00 00 00 00 00 00 00  ];
                         ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/pec-1/phb-0";
@@ -3669,6 +3989,7 @@
                     phb1 {
                         compatible = "ibm,power10-phb";
                         index = <0x04>;
+                        ATTR_CHIP_UNIT_POS = [ 04 ];
                         ATTR_FAPI_POS = <10>;
                         ATTR_PHYS_BIN_PATH = [ 25 01 00 02 00 05 01 2D 01 2E 01 00 00 00 00 00 00 00 00 00 00  ];
                         ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/pec-1/phb-1";
@@ -3678,6 +3999,7 @@
                     phb2 {
                         compatible = "ibm,power10-phb";
                         index = <0x05>;
+                        ATTR_CHIP_UNIT_POS = [ 05 ];
                         ATTR_FAPI_POS = <11>;
                         ATTR_PHYS_BIN_PATH = [ 25 01 00 02 00 05 01 2D 01 2E 02 00 00 00 00 00 00 00 00 00 00  ];
                         ATTR_PHYS_DEV_PATH = "physical:sys-0/node-0/proc-1/pec-1/phb-2";

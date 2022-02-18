@@ -106,3 +106,58 @@ TEST(PDBG, PdbgDtsTest4)
         EXPECT_EQ(attr, fapi_pos);
     }
 }
+
+TEST(util_pdbg, getParentChip)
+{
+    using namespace util::pdbg;
+    pdbg_targets_init(nullptr);
+
+    auto procChip = getTrgt("/proc0");
+    auto omiUnit  = getTrgt("/proc0/pib/perv13/mc1/mi0/mcc0/omi1");
+
+    EXPECT_EQ(procChip, getParentChip(procChip)); // get self
+    EXPECT_EQ(procChip, getParentChip(omiUnit));  // get unit
+
+    auto ocmbChip = getTrgt("/proc0/pib/perv13/mc1/mi0/mcc0/omi1/ocmb0");
+    auto memPortUnit =
+        getTrgt("/proc0/pib/perv13/mc1/mi0/mcc0/omi1/ocmb0/mem_port0");
+
+    EXPECT_EQ(ocmbChip, getParentChip(ocmbChip));    // get self
+    EXPECT_EQ(ocmbChip, getParentChip(memPortUnit)); // get unit
+}
+
+TEST(util_pdbg, getChipUnit)
+{
+    using namespace util::pdbg;
+    pdbg_targets_init(nullptr);
+
+    auto procChip   = getTrgt("/proc0");
+    auto omiUnit    = getTrgt("/proc0/pib/perv13/mc1/mi0/mcc0/omi1");
+    auto omiUnitPos = 5;
+
+    // Get the unit and verify.
+    EXPECT_EQ(omiUnit, getChipUnit(procChip, TYPE_OMI, omiUnitPos));
+
+    // Expect an exception when passing a unit instead of a chip.
+    EXPECT_THROW(getChipUnit(omiUnit, TYPE_OMI, omiUnitPos), std::logic_error);
+
+    // Expect an exception when passing a chip type.
+    EXPECT_THROW(getChipUnit(procChip, TYPE_PROC, omiUnitPos),
+                 std::out_of_range);
+
+    // Expect an exception when passing a unit type not on the target chip.
+    EXPECT_THROW(getChipUnit(procChip, TYPE_MEM_PORT, omiUnitPos),
+                 std::out_of_range);
+
+    // Expect a nullptr if the target is not found.
+    EXPECT_EQ(nullptr, getChipUnit(procChip, TYPE_OMI, 100));
+
+    auto ocmbChip = getTrgt("/proc0/pib/perv13/mc1/mi0/mcc0/omi1/ocmb0");
+    auto memPortUnit =
+        getTrgt("/proc0/pib/perv13/mc1/mi0/mcc0/omi1/ocmb0/mem_port0");
+    auto memPortUnitPos = 0;
+
+    // Get the unit and verify.
+    EXPECT_EQ(memPortUnit,
+              getChipUnit(ocmbChip, TYPE_MEM_PORT, memPortUnitPos));
+}

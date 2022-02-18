@@ -66,6 +66,15 @@ uint32_t getChipPos(const libhei::Chip& i_chip)
 
 //------------------------------------------------------------------------------
 
+uint8_t getUnitPos(pdbg_target* i_trgt)
+{
+    uint8_t attr = 0;
+    pdbg_target_get_attribute(i_trgt, "ATTR_CHIP_UNIT_POS", 1, 1, &attr);
+    return attr;
+}
+
+//------------------------------------------------------------------------------
+
 uint8_t getTrgtType(pdbg_target* i_trgt)
 {
     uint8_t attr = 0;
@@ -76,6 +85,112 @@ uint8_t getTrgtType(pdbg_target* i_trgt)
 uint8_t getTrgtType(const libhei::Chip& i_chip)
 {
     return getTrgtType(getTrgt(i_chip));
+}
+
+//------------------------------------------------------------------------------
+
+pdbg_target* getParentChip(pdbg_target* i_unitTarget)
+{
+    assert(nullptr != i_unitTarget);
+
+    // Check if the given target is already a chip.
+    auto targetType = getTrgtType(i_unitTarget);
+    if (TYPE_PROC == targetType || TYPE_OCMB == targetType)
+    {
+        return i_unitTarget; // simply return the given target
+    }
+
+    // Check if this unit is on an OCMB.
+    pdbg_target* parentChip = pdbg_target_parent("ocmb", i_unitTarget);
+
+    // If not on the OCMB, check if this unit is on a PROC.
+    if (nullptr == parentChip)
+    {
+        parentChip = pdbg_target_parent("proc", i_unitTarget);
+    }
+
+    // There should always be a parent chip. Throw an error if not found.
+    if (nullptr == parentChip)
+    {
+        throw std::logic_error("No parent chip found: i_unitTarget=" +
+                               std::string{getPath(i_unitTarget)});
+    }
+
+    return parentChip;
+}
+
+//------------------------------------------------------------------------------
+
+pdbg_target* getChipUnit(pdbg_target* i_parentChip, TargetType_t i_unitType,
+                         uint8_t i_unitPos)
+{
+    assert(nullptr != i_parentChip);
+
+    auto parentType = getTrgtType(i_parentChip);
+
+    std::string devTreeType{};
+
+    if (TYPE_PROC == parentType)
+    {
+        // clang-format off
+        static const std::map<TargetType_t, std::string> m =
+        {
+            {TYPE_MC,     "mc"      },
+            {TYPE_MCC,    "mcc"     },
+            {TYPE_OMI,    "omi"     },
+            {TYPE_OMIC,   "omic"    },
+            {TYPE_PAUC,   "pauc"    },
+            {TYPE_PAU,    "pau"     },
+            {TYPE_NMMU,   "nmmu"    },
+            {TYPE_IOHS,   "iohs"    },
+            {TYPE_IOLINK, "smpgroup"},
+            {TYPE_EQ,     "eq"      },
+            {TYPE_CORE,   "core"    },
+            {TYPE_PEC,    "pec"     },
+            {TYPE_PHB,    "phb"     },
+            {TYPE_NX,     "nx"      },
+        };
+        // clang-format on
+
+        devTreeType = m.at(i_unitType);
+    }
+    else if (TYPE_OCMB == parentType)
+    {
+        // clang-format off
+        static const std::map<TargetType_t, std::string> m =
+        {
+            {TYPE_MEM_PORT, "mem_port"},
+        };
+        // clang-format on
+
+        devTreeType = m.at(i_unitType);
+    }
+    else
+    {
+        throw std::logic_error("Unexpected parent chip: " +
+                               std::string{getPath(i_parentChip)});
+    }
+
+    // Iterate all children of the parent and match the unit position.
+    pdbg_target* unitTarget = nullptr;
+    pdbg_for_each_target(devTreeType.c_str(), i_parentChip, unitTarget)
+    {
+        if (nullptr != unitTarget && i_unitPos == getUnitPos(unitTarget))
+        {
+            break; // found it
+        }
+    }
+
+    // Print a warning if the target unit is not found, but don't throw an
+    // error.  Instead let the calling code deal with the it.
+    if (nullptr == unitTarget)
+    {
+        trace::err("No unit target found: i_parentChip=%s i_unitType=0x%02x "
+                   "i_unitPos=%u",
+                   getPath(i_parentChip), i_unitType, i_unitPos);
+    }
+
+    return unitTarget;
 }
 
 //------------------------------------------------------------------------------
