@@ -79,12 +79,14 @@ enum class SrcSubsystem
     // `openbmc/phosphor-logging` for the full list of these values.
 
     PROCESSOR      = 0x10,
+    PROCESSOR_FRU  = 0x11,
     PROCESSOR_UNIT = 0x13,
     PROCESSOR_BUS  = 0x14,
 
-    MEMORY      = 0x20,
+    MEMORY_CTLR = 0x21,
     MEMORY_BUS  = 0x22,
     MEMORY_DIMM = 0x23,
+    MEMORY_FRU  = 0x24,
 
     PHB = 0x38,
 

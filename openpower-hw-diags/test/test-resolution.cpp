@@ -67,10 +67,10 @@ TEST(Resolution, TestSet1)
 
     // Verify the subsystems
     std::pair<callout::SrcSubsystem, callout::Priority> subsys = {
-        callout::SrcSubsystem::PROCESSOR, callout::Priority::HIGH};
+        callout::SrcSubsystem::PROCESSOR_FRU, callout::Priority::HIGH};
     EXPECT_EQ(sd1.getSubsys(), subsys);
 
-    subsys = {callout::SrcSubsystem::PROCESSOR, callout::Priority::HIGH};
+    subsys = {callout::SrcSubsystem::PROCESSOR_FRU, callout::Priority::HIGH};
     EXPECT_EQ(sd2.getSubsys(), subsys);
 
     // Start verifying
@@ -156,7 +156,7 @@ TEST(Resolution, HardwareCallout)
 
     // Verify the subsystem
     std::pair<callout::SrcSubsystem, callout::Priority> subsys = {
-        callout::SrcSubsystem::MEMORY, callout::Priority::MED_A};
+        callout::SrcSubsystem::MEMORY_CTLR, callout::Priority::MED_A};
     EXPECT_EQ(sd.getSubsys(), subsys);
 
     nlohmann::json j{};
@@ -216,7 +216,7 @@ TEST(Resolution, ConnectedCallout)
 
     // Verify the subsystem
     std::pair<callout::SrcSubsystem, callout::Priority> subsys = {
-        callout::SrcSubsystem::CEC_HARDWARE, callout::Priority::MED_A};
+        callout::SrcSubsystem::PROCESSOR_BUS, callout::Priority::MED_A};
     EXPECT_EQ(sd.getSubsys(), subsys);
 
     // Callout list
@@ -307,7 +307,7 @@ TEST(Resolution, BusCallout)
 
     // Verify the subsystem
     std::pair<callout::SrcSubsystem, callout::Priority> subsys = {
-        callout::SrcSubsystem::MEMORY, callout::Priority::MED_A};
+        callout::SrcSubsystem::MEMORY_CTLR, callout::Priority::MED_A};
     EXPECT_EQ(sd.getSubsys(), subsys);
 
     // Callout list

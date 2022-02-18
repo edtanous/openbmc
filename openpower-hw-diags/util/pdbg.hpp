@@ -26,6 +26,7 @@ enum TargetType_t : uint8_t
     TYPE_DIMM     = 0x03,
     TYPE_PROC     = 0x05,
     TYPE_CORE     = 0x07,
+    TYPE_NX       = 0x1e,
     TYPE_EQ       = 0x23,
     TYPE_PEC      = 0x2d,
     TYPE_PHB      = 0x2e,
