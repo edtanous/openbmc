@@ -156,7 +156,7 @@ bool __findCsRootCause(const libhei::Signature& i_signature)
         if (eq_core_fir == id &&
             (3 == bit || 5 == bit || 8 == bit || 12 == bit || 22 == bit ||
              25 == bit || 32 == bit || 36 == bit || 38 == bit || 46 == bit ||
-             47 == bit || 57 == bit))
+             47 == bit))
         {
             return true;
         }
@@ -389,11 +389,16 @@ bool filterRootCause(AnalysisType i_type,
     {
         // No system checkstop root cause attentions were found. Next, look for
         // any recoverable or unit checkstop attentions that could be associated
-        // with a TI.
+        // with a TI. Also, ignore any attentions from EQ_CORE_FIR[56:57]
+        // because they simply indicate an attention came from the other core in
+        // the fused core pair.
 
         auto itr = std::find_if(list.begin(), list.end(), [&](const auto& t) {
-            return (libhei::ATTN_TYPE_RECOVERABLE == t.getAttnType() ||
-                    libhei::ATTN_TYPE_UNIT_CS == t.getAttnType());
+            return (
+                (libhei::ATTN_TYPE_RECOVERABLE == t.getAttnType() ||
+                 libhei::ATTN_TYPE_UNIT_CS == t.getAttnType()) &&
+                !(libhei::hash<libhei::NodeId_t>("EQ_CORE_FIR") == t.getId() &&
+                  (56 == t.getBit() || 57 == t.getBit())));
         });
 
         if (list.end() != itr)
