@@ -347,7 +347,7 @@ bool BinaryStore::commit()
     // This should never be true if it is blocked by the write command
     if (maxSize && sizeof(commitData) > *maxSize)
     {
-        log<level::ERR>("Commit Data excedded maximum allowed size");
+        log<level::ERR>("Commit Data exceeded maximum allowed size");
         return false;
     }
 
