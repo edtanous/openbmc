@@ -11,7 +11,7 @@ binarystoreblob_pre = declare_dependency(
   ]
 )
 
-binarystoreblob_lib = library(
+binarystoreblob_lib = static_library(
   'binarystoreblob',
   'binarystore.cpp',
   'sys.cpp',
