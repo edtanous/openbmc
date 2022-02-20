@@ -6,6 +6,7 @@
 #include <fcntl.h>
 #include <unistd.h>
 
+#include <optional>
 #include <string>
 
 namespace binstore
@@ -21,7 +22,8 @@ class SysFileImpl : public SysFile
      *     actually reads underlying file at 'offset'
      * @param sys Syscall operation interface
      */
-    explicit SysFileImpl(const std::string& path, size_t offset = 0,
+    explicit SysFileImpl(const std::string& path,
+                         std::optional<size_t> offset = std::nullopt,
                          const internal::Sys* sys = &internal::sys_impl);
     ~SysFileImpl();
     SysFileImpl() = delete;

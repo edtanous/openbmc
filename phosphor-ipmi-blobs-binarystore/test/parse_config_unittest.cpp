@@ -51,6 +51,16 @@ TEST(ParseConfigTest, TestConfigArray)
      {
        "blobBaseId": "/test/",
        "sysFilePath": "/another/path"
+    },
+     {
+       "blobBaseId": "/test/",
+       "sysFilePath": "/another/path",
+       "offsetBytes": 32
+    },
+     {
+       "blobBaseId": "/test/",
+       "sysFilePath": "/another/path",
+       "maxSizeBytes": 32
     }]
   )"_json;
 
@@ -60,7 +70,9 @@ TEST(ParseConfigTest, TestConfigArray)
 
         EXPECT_NO_THROW(parseFromConfigFile(element, config));
         EXPECT_EQ(config.blobBaseId, "/test/");
-        EXPECT_TRUE(config.offsetBytes == 32 || config.offsetBytes == 0);
-        EXPECT_TRUE(config.maxSizeBytes == 32 || config.maxSizeBytes == 0);
+        EXPECT_TRUE(config.offsetBytes == std::nullopt ||
+                    *config.offsetBytes == 32);
+        EXPECT_TRUE(config.maxSizeBytes == std::nullopt ||
+                    *config.maxSizeBytes == 32);
     }
 }

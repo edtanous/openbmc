@@ -2,6 +2,7 @@
 
 #include <cstdint>
 #include <nlohmann/json.hpp>
+#include <optional>
 #include <string>
 
 using std::uint32_t;
@@ -12,10 +13,10 @@ namespace conf
 
 struct BinaryBlobConfig
 {
-    std::string blobBaseId;  // Required
-    std::string sysFilePath; // Required
-    uint32_t offsetBytes;    // Optional
-    uint32_t maxSizeBytes;   // Optional
+    std::string blobBaseId;               // Required
+    std::string sysFilePath;              // Required
+    std::optional<uint32_t> offsetBytes;  // Optional
+    std::optional<uint32_t> maxSizeBytes; // Optional
 };
 
 /**
@@ -28,8 +29,19 @@ static inline void parseFromConfigFile(const json& j, BinaryBlobConfig& config)
 {
     j.at("blobBaseId").get_to(config.blobBaseId);
     j.at("sysFilePath").get_to(config.sysFilePath);
-    config.offsetBytes = j.value("offsetBytes", 0);
-    config.maxSizeBytes = j.value("maxSizeBytes", 0);
+    if (j.contains("offsetBytes"))
+    {
+        uint32_t val;
+        j.at("offsetBytes").get_to(val);
+        config.offsetBytes = val;
+    }
+
+    if (j.contains("maxSizeBytes"))
+    {
+        uint32_t val;
+        j.at("maxSizeBytes").get_to(val);
+        config.maxSizeBytes = val;
+    }
 }
 
 } // namespace conf

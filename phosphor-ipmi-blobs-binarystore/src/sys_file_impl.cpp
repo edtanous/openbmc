@@ -1,5 +1,6 @@
 #include "sys_file_impl.hpp"
 
+#include <optional>
 #include <system_error>
 
 using namespace std::string_literals;
@@ -19,12 +20,12 @@ std::system_error errnoException(const std::string& message)
 
 } // namespace
 
-SysFileImpl::SysFileImpl(const std::string& path, size_t offset,
+SysFileImpl::SysFileImpl(const std::string& path, std::optional<size_t> offset,
                          const internal::Sys* sys) :
     sys(sys)
 {
     fd_ = sys->open(path.c_str(), O_RDWR);
-    offset_ = offset;
+    offset_ = offset ? *offset : 0;
 
     if (fd_ < 0)
     {
