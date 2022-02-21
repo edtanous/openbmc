@@ -14,7 +14,7 @@ constexpr auto chip_str = "/proc0";
 
 // Unit paths
 constexpr auto proc_str   = "";
-constexpr auto iolink_str = "pib/perv24/pauc0/iohs0/smpgroup0";
+constexpr auto iolink_str = "pib/perv26/pauc1/iohs0/smpgroup0";
 constexpr auto omi_str    = "pib/perv12/mc0/mi0/mcc0/omi0";
 constexpr auto ocmb_str   = "pib/perv12/mc0/mi0/mcc0/omi0/ocmb0";
 constexpr auto core_str   = "pib/perv39/eq7/fc1/core1";
@@ -227,7 +227,7 @@ TEST(Resolution, ConnectedCallout)
         "EntityPath": [],
         "GuardType": "GARD_Unrecoverable",
         "Guarded": true,
-        "LocationCode": "/proc0/pib/perv24/pauc0/iohs0/smpgroup0",
+        "LocationCode": "/proc1/pib/perv25/pauc0/iohs1/smpgroup0",
         "Priority": "A"
     },
     {
@@ -257,8 +257,8 @@ TEST(Resolution, ConnectedCallout)
         "Callout Type": "Connected Callout",
         "Guard": true,
         "Priority": "medium_group_A",
-        "RX Target": "/proc0/pib/perv24/pauc0/iohs0/smpgroup0",
-        "TX Target": "/proc0/pib/perv24/pauc0/iohs0/smpgroup0"
+        "RX Target": "/proc0/pib/perv26/pauc1/iohs0/smpgroup0",
+        "TX Target": "/proc1/pib/perv25/pauc0/iohs1/smpgroup0"
     },
     {
         "Bus Type": "OMI_BUS",

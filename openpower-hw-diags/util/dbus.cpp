@@ -1,3 +1,5 @@
+#include <fmt/format.h>
+
 #include <util/dbus.hpp>
 #include <util/trace.hpp>
 #include <xyz/openbmc_project/State/Boot/Progress/server.hpp>
@@ -353,6 +355,77 @@ uint32_t createPel(const std::string& i_message, const std::string& i_severity,
     }
 
     return plid; // platform log id or 0
+}
+
+MachineType getMachineType()
+{
+    // default to Rainier 2S4U
+    MachineType machineType = MachineType::Rainier_2S4U;
+
+    // The return value of the dbus operation is a vector of 4 uint8_ts
+    std::vector<uint8_t> ids;
+
+    constexpr auto interface = "com.ibm.ipzvpd.VSBP";
+
+    DBusService service;
+    DBusPath path;
+
+    if (0 == find(interface, path, service))
+    {
+        DBusValue value;
+
+        // Machine ID is given from the "IM" keyword
+        constexpr auto property = "IM";
+
+        if (0 == getProperty(interface, path, service, property, value))
+        {
+            // return value is a variant, ID value is a vector of 4 uint8_ts
+            ids = std::get<std::vector<uint8_t>>(value);
+
+            // Convert the returned ID value to a hex string to determine
+            // machine type. The hex values corresponding to the machine type
+            // are defined in /openbmc/openpower-vpd-parser/const.hpp
+            // RAINIER_2S4U == 0x50001000
+            // RAINIER_2S2U == 0x50001001
+            // RAINIER_1S4U == 0x50001002
+            // RAINIER_1S2U == 0x50001003
+            // EVEREST      == 0x50003000
+            try
+            {
+                // Format the vector into a single hex string to compare to.
+                std::string hexId =
+                    fmt::format("0x{:02x}{:02x}{:02x}{:02x}", ids.at(0),
+                                ids.at(1), ids.at(2), ids.at(3));
+
+                std::map<std::string, MachineType> typeMap = {
+                    {"0x50001000", MachineType::Rainier_2S4U},
+                    {"0x50001001", MachineType::Rainier_2S2U},
+                    {"0x50001002", MachineType::Rainier_1S4U},
+                    {"0x50001003", MachineType::Rainier_1S2U},
+                    {"0x50003000", MachineType::Everest},
+                };
+
+                machineType = typeMap.at(hexId);
+            }
+            catch (const std::out_of_range& e)
+            {
+                trace::err("Out of range exception caught from returned "
+                           "machine ID.");
+                for (const auto& id : ids)
+                {
+                    trace::err("Returned Machine ID value: 0x%x", id);
+                }
+                throw;
+            }
+        }
+    }
+    else
+    {
+        throw std::invalid_argument(
+            "Unable to find dbus service to get machine type.");
+    }
+
+    return machineType;
 }
 
 } // namespace dbus

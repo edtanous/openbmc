@@ -9,14 +9,22 @@
 #include <config.h>
 
 #include <hei_main.hpp>
+#include <nlohmann/json.hpp>
+#include <util/dbus.hpp>
 #include <util/pdbg.hpp>
 #include <util/trace.hpp>
+
+#include <filesystem>
+#include <fstream>
+#include <string>
 
 #ifdef CONFIG_PHAL_API
 #include <attributes_info.H>
 #endif
 
 using namespace analyzer;
+
+namespace fs = std::filesystem;
 
 namespace util
 {
@@ -195,6 +203,67 @@ pdbg_target* getChipUnit(pdbg_target* i_parentChip, TargetType_t i_unitType,
 
 //------------------------------------------------------------------------------
 
+pdbg_target* getTargetAcrossBus(pdbg_target* i_rxTarget)
+{
+    assert(nullptr != i_rxTarget);
+
+    // Validate target type
+    auto rxType = util::pdbg::getTrgtType(i_rxTarget);
+    assert(util::pdbg::TYPE_IOLINK == rxType ||
+           util::pdbg::TYPE_IOHS == rxType);
+
+    pdbg_target* o_peerTarget;
+    fs::path filePath;
+
+    // Open the appropriate data file depending on machine type
+    util::dbus::MachineType machineType = util::dbus::getMachineType();
+    switch (machineType)
+    {
+        // Rainier 4U
+        case util::dbus::MachineType::Rainier_2S4U:
+        case util::dbus::MachineType::Rainier_1S4U:
+            filePath =
+                fs::path{PACKAGE_DIR "util-data/peer-targets-rainier-4u.json"};
+            break;
+        // Rainier 2U
+        case util::dbus::MachineType::Rainier_2S2U:
+        case util::dbus::MachineType::Rainier_1S2U:
+            filePath =
+                fs::path{PACKAGE_DIR "util-data/peer-targets-rainier-2u.json"};
+            break;
+        // Everest
+        case util::dbus::MachineType::Everest:
+            filePath =
+                fs::path{PACKAGE_DIR "util-data/peer-targets-everest.json"};
+            break;
+        default:
+            trace::err("Invalid machine type found %d",
+                       static_cast<uint8_t>(machineType));
+            break;
+    }
+
+    std::ifstream file{filePath};
+    assert(file.good());
+
+    try
+    {
+        auto trgtMap         = nlohmann::json::parse(file);
+        std::string rxPath   = util::pdbg::getPath(i_rxTarget);
+        std::string peerPath = trgtMap.at(rxPath).get<std::string>();
+
+        o_peerTarget = util::pdbg::getTrgt(peerPath);
+    }
+    catch (...)
+    {
+        trace::err("Failed to parse file: %s", filePath.string().c_str());
+        throw;
+    }
+
+    return o_peerTarget;
+}
+
+//------------------------------------------------------------------------------
+
 pdbg_target* getConnectedTarget(pdbg_target* i_rxTarget,
                                 const callout::BusType& i_busType)
 {
@@ -208,27 +277,19 @@ pdbg_target* getConnectedTarget(pdbg_target* i_rxTarget,
     if (callout::BusType::SMP_BUS == i_busType &&
         util::pdbg::TYPE_IOLINK == rxType)
     {
-        // TODO: Will need to reference some sort of data that can tell us how
-        //       the processors are connected in the system. For now, return the
-        //       RX target to avoid returning a nullptr.
-        trace::inf("No support to get peer target on SMP bus");
-        txTarget = i_rxTarget;
+        txTarget = getTargetAcrossBus(i_rxTarget);
     }
     else if (callout::BusType::SMP_BUS == i_busType &&
              util::pdbg::TYPE_IOHS == rxType)
     {
-        // TODO: Will need to reference some sort of data that can tell us how
-        //       the processors are connected in the system. For now, return the
-        //       RX target to avoid returning a nullptr.
-        trace::inf("No support to get peer target on SMP bus");
-        txTarget = i_rxTarget;
+        txTarget = getTargetAcrossBus(i_rxTarget);
     }
     else if (callout::BusType::OMI_BUS == i_busType &&
              util::pdbg::TYPE_OMI == rxType)
     {
         // This is a bit clunky. The pdbg APIs only give us the ability to
-        // iterate over the children instead of just returning a list. So we'll
-        // push all the children to a list and go from there.
+        // iterate over the children instead of just returning a list. So
+        // we'll push all the children to a list and go from there.
         std::vector<pdbg_target*> childList;
 
         pdbg_target* childTarget = nullptr;
@@ -309,9 +370,9 @@ pdbg_target* getFsiTrgt(pdbg_target* i_procTrgt)
 //------------------------------------------------------------------------------
 
 // IMPORTANT:
-// The ATTR_CHIP_ID attribute will be synced from Hostboot to the BMC at some
-// point during the IPL. It is possible that this information is needed before
-// the sync occurs, in which case the value will return 0.
+// The ATTR_CHIP_ID attribute will be synced from Hostboot to the BMC at
+// some point during the IPL. It is possible that this information is needed
+// before the sync occurs, in which case the value will return 0.
 uint32_t __getChipId(pdbg_target* i_trgt)
 {
     uint32_t attr = 0;
@@ -320,9 +381,9 @@ uint32_t __getChipId(pdbg_target* i_trgt)
 }
 
 // IMPORTANT:
-// The ATTR_EC attribute will be synced from Hostboot to the BMC at some point
-// during the IPL. It is possible that this information is needed before the
-// sync occurs, in which case the value will return 0.
+// The ATTR_EC attribute will be synced from Hostboot to the BMC at some
+// point during the IPL. It is possible that this information is needed
+// before the sync occurs, in which case the value will return 0.
 uint8_t __getChipEc(pdbg_target* i_trgt)
 {
     uint8_t attr = 0;
@@ -338,11 +399,11 @@ uint32_t __getChipIdEc(pdbg_target* i_trgt)
     if (((0 == chipId) || (0 == chipEc)) && (TYPE_PROC == getTrgtType(i_trgt)))
     {
         // There is a special case where the model/level attributes have not
-        // been initialized in the devtree. This is possible on the epoch IPL
-        // where an attention occurs before Hostboot is able to update the
-        // devtree information on the BMC. It may is still possible to get this
-        // information from chips with CFAM access (i.e. a processor) via the
-        // CFAM chip ID register.
+        // been initialized in the devtree. This is possible on the epoch
+        // IPL where an attention occurs before Hostboot is able to update
+        // the devtree information on the BMC. It may is still possible to
+        // get this information from chips with CFAM access (i.e. a
+        // processor) via the CFAM chip ID register.
 
         uint32_t val = 0;
         if (0 == getCfam(i_trgt, 0x100a, val))
@@ -358,16 +419,16 @@ uint32_t __getChipIdEc(pdbg_target* i_trgt)
 void __addChip(std::vector<libhei::Chip>& o_chips, pdbg_target* i_trgt,
                libhei::ChipType_t i_type)
 {
-    // Trace each chip for debug. It is important to show the type just in case
-    // the model/EC does not exist. See note below.
+    // Trace each chip for debug. It is important to show the type just in
+    // case the model/EC does not exist. See note below.
     trace::inf("Chip found: type=0x%08" PRIx32 " chip=%s", i_type,
                getPath(i_trgt));
 
     if (0 == i_type)
     {
-        // This is a special case. See the details in __getChipIdEC(). There is
-        // nothing more we can do with this chip since we don't know what it is.
-        // So ignore the chip for now.
+        // This is a special case. See the details in __getChipIdEC(). There
+        // is nothing more we can do with this chip since we don't know what
+        // it is. So ignore the chip for now.
     }
     else
     {
@@ -385,8 +446,8 @@ void getActiveChips(std::vector<libhei::Chip>& o_chips)
     {
         // We cannot use the proc target to determine if the chip is active.
         // There is some design limitation in pdbg that requires the proc
-        // targets to always be active. Instead, we must get the associated pib
-        // target and check if it is active.
+        // targets to always be active. Instead, we must get the associated
+        // pib target and check if it is active.
 
         // Active processors only.
         if (PDBG_TARGET_ENABLED != pdbg_target_probe(getPibTrgt(procTrgt)))
@@ -434,7 +495,8 @@ void getActiveProcessorChips(std::vector<pdbg_target*>& o_chips)
 
 pdbg_target* getPrimaryProcessor()
 {
-    // TODO: For at least P10, the primary processor (the one connected directly
+    // TODO: For at least P10, the primary processor (the one connected
+    // directly
     //       to the BMC), will always be PROC 0. We will need to update this
     //       later if we ever support an alternate primary processor.
     return getTrgt("/proc0");
@@ -519,10 +581,10 @@ std::vector<uint8_t> getPhysBinPath(pdbg_target* target)
         ATTR_PHYS_BIN_PATH_Type value;
         if (DT_GET_PROP(ATTR_PHYS_BIN_PATH, target, value))
         {
-            // The attrirbute for this target does not exist. Get the immediate
-            // parent in the devtree path and try again. Note that if there is
-            // no parent target, nullptr will be returned and that will be
-            // checked above.
+            // The attrirbute for this target does not exist. Get the
+            // immediate parent in the devtree path and try again. Note that
+            // if there is no parent target, nullptr will be returned and
+            // that will be checked above.
             return getPhysBinPath(pdbg_target_parent(nullptr, target));
         }
 
