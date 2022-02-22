@@ -1,5 +1,6 @@
 #include <fcntl.h>
 
+#include <test/sim-hw-access.hpp>
 #include <util/pdbg.hpp>
 #include <util/trace.hpp>
 
@@ -160,4 +161,73 @@ TEST(util_pdbg, getChipUnit)
     // Get the unit and verify.
     EXPECT_EQ(memPortUnit,
               getChipUnit(ocmbChip, TYPE_MEM_PORT, memPortUnitPos));
+}
+
+TEST(util_pdbg, getScom)
+{
+    using namespace util::pdbg;
+    pdbg_targets_init(nullptr);
+
+    auto procChip = getTrgt("/proc0");
+    auto ocmbChip = getTrgt("/proc0/pib/perv13/mc1/mi0/mcc0/omi1/ocmb0");
+    auto omiUnit  = getTrgt("/proc0/pib/perv13/mc1/mi0/mcc0/omi1");
+
+    sim::ScomAccess& scom = sim::ScomAccess::getSingleton();
+    scom.flush();
+    scom.add(procChip, 0x11111111, 0x0011223344556677);
+    scom.error(ocmbChip, 0x22222222);
+
+    int rc       = 0;
+    uint64_t val = 0;
+
+    // Test good path.
+    rc = getScom(procChip, 0x11111111, val);
+    EXPECT_EQ(0, rc);
+    EXPECT_EQ(0x0011223344556677, val);
+
+    // Test address that has not been added to ScomAccess.
+    rc = getScom(procChip, 0x33333333, val);
+    EXPECT_EQ(0, rc);
+    EXPECT_EQ(0, val);
+
+    // Test SCOM error.
+    rc = getScom(ocmbChip, 0x22222222, val);
+    EXPECT_EQ(1, rc);
+
+    // Test non-chip target.
+    EXPECT_DEATH({ getScom(omiUnit, 0x11111111, val); }, "");
+}
+
+TEST(util_pdbg, getCfam)
+{
+    using namespace util::pdbg;
+    pdbg_targets_init(nullptr);
+
+    auto procChip = getTrgt("/proc0");
+    auto omiUnit  = getTrgt("/proc0/pib/perv13/mc1/mi0/mcc0/omi1");
+
+    sim::CfamAccess& cfam = sim::CfamAccess::getSingleton();
+    cfam.flush();
+    cfam.add(procChip, 0x11111111, 0x00112233);
+    cfam.error(procChip, 0x22222222);
+
+    int rc       = 0;
+    uint32_t val = 0;
+
+    // Test good path.
+    rc = getCfam(procChip, 0x11111111, val);
+    EXPECT_EQ(0, rc);
+    EXPECT_EQ(0x00112233, val);
+
+    // Test address that has not been added to CfamAccess.
+    rc = getCfam(procChip, 0x33333333, val);
+    EXPECT_EQ(0, rc);
+    EXPECT_EQ(0, val);
+
+    // Test CFAM error.
+    rc = getCfam(procChip, 0x22222222, val);
+    EXPECT_EQ(1, rc);
+
+    // Test non-chip target.
+    EXPECT_DEATH({ getCfam(omiUnit, 0x11111111, val); }, "");
 }

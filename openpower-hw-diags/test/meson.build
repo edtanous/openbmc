@@ -116,6 +116,7 @@ src = [
   files(
     tc + '.cpp',
     '../util/pdbg.cpp',
+    'pdbg-sim-only.cpp',
   ),
   pdbg_test_dtb,
 ]
@@ -166,6 +167,7 @@ src = [
     '../analyzer/resolution.cpp',
     '../analyzer/service_data.cpp',
     '../util/pdbg.cpp',
+    'pdbg-sim-only.cpp',
   ),
   pdbg_test_dtb,
 ]
@@ -189,6 +191,7 @@ src = [
     '../analyzer/plugins/p10-tod-plugins.cpp',
     '../analyzer/service_data.cpp',
     '../util/pdbg.cpp',
+    'pdbg-sim-only.cpp',
   ),
   pdbg_test_dtb,
 ]

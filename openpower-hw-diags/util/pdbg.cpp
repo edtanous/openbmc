@@ -308,47 +308,6 @@ pdbg_target* getFsiTrgt(pdbg_target* i_procTrgt)
 
 //------------------------------------------------------------------------------
 
-int getScom(pdbg_target* i_trgt, uint64_t i_addr, uint64_t& o_val)
-{
-    // Only processor targets are supported.
-    // TODO: Will need to add OCMB support later.
-    assert(TYPE_PROC == getTrgtType(i_trgt));
-
-    auto pibTrgt = util::pdbg::getPibTrgt(i_trgt);
-
-    int rc = pib_read(pibTrgt, i_addr, &o_val);
-
-    if (0 != rc)
-    {
-        trace::err("pib_read failure: target=%s addr=0x%0" PRIx64,
-                   util::pdbg::getPath(pibTrgt), i_addr);
-    }
-
-    return rc;
-}
-
-//------------------------------------------------------------------------------
-
-int getCfam(pdbg_target* i_trgt, uint32_t i_addr, uint32_t& o_val)
-{
-    // Only processor targets are supported.
-    assert(TYPE_PROC == getTrgtType(i_trgt));
-
-    auto fsiTrgt = util::pdbg::getFsiTrgt(i_trgt);
-
-    int rc = fsi_read(fsiTrgt, i_addr, &o_val);
-
-    if (0 != rc)
-    {
-        trace::err("fsi_read failure: target=%s addr=0x%08x",
-                   util::pdbg::getPath(fsiTrgt), i_addr);
-    }
-
-    return rc;
-}
-
-//------------------------------------------------------------------------------
-
 // IMPORTANT:
 // The ATTR_CHIP_ID attribute will be synced from Hostboot to the BMC at some
 // point during the IPL. It is possible that this information is needed before
