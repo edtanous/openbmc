@@ -9,6 +9,11 @@ namespace pel
 
 PelMinimal::PelMinimal(std::vector<uint8_t>& data)
 {
+    initialize(data);
+}
+
+void PelMinimal::initialize(std::vector<uint8_t>& data)
+{
     Stream pelData{data};
 
     _ph = std::make_unique<PrivateHeader>(pelData);

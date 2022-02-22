@@ -52,6 +52,13 @@ class PelMinimal
     explicit PelMinimal(std::vector<uint8_t>& data);
 
     /**
+     * @brief Initialize the object's data members
+     *
+     * @param[in] data - reference to the vector
+     */
+    void initialize(std::vector<uint8_t>& data);
+
+    /**
      * @brief Stream raw PEL data to buffer
      *
      * @param[out] pelBuffer - What the data will be written to
