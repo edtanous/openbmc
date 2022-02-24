@@ -1,0 +1,16 @@
+[Unit]
+Description=PHAL, Create boottime guard indicator
+Wants=start_host@0.service
+Before=start_host@0.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=no
+ExecStart=/bin/mkdir -p /tmp/phal
+# PHAL will take some guard actions based on the below indicator
+# and remove it.
+ExecStart=/bin/touch /tmp/phal/boottime_guard_indicator
+
+[Install]
+WantedBy=obmc-host-start@0.target
+WantedBy=obmc-host-quiesce@0.target

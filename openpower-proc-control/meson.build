@@ -128,6 +128,7 @@ if build_phal
         'service_files/op-reset-host-clear.service',
         'service_files/phal-import-devtree@.service',
         'service_files/phal-export-devtree@.service',
+        'service_files/phal-create-boottime-guard-indicator.service',
     ]
     unit_subs.set('ENABLE_PHAL_TRUE', '')
 endif
