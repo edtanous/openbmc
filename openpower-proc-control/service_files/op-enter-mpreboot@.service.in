@@ -7,6 +7,7 @@ Before=obmc-host-stopping@%i.target
 Before=op-stop-instructions@%i.service
 After=phosphor-reset-sensor-states@%i.service
 Before=phosphor-reboot-host@%i.service
+Before=clear_hostdumps_poweroff.service
 After=openpower-update-bios-attr-table.service
 Conflicts=obmc-host-startmin@%i.target
 
