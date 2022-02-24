@@ -7,24 +7,22 @@ src_pb = custom_target(
     '@INPUT@'
   ],
   output: [
-    'binaryblob.pb.cc',
     'binaryblob.pb.h',
+    'binaryblob.pb.cc',
   ],
   input: 'binaryblob.proto')
 
 binaryblobproto_pre = declare_dependency(
   include_directories: include_directories('.'),
-  dependencies: dependency('protobuf')
-)
+  dependencies: dependency('protobuf'))
 
 binaryblobproto_lib = static_library(
   'binaryblob_proto',
-  src_pb,
+  src_pb[1],
   implicit_include_directories: false,
-  dependencies: binaryblobproto_pre
-)
+  dependencies: binaryblobproto_pre)
 
 binaryblobproto_dep = declare_dependency(
   dependencies: binaryblobproto_pre,
-  link_with: binaryblobproto_lib
-)
+  link_with: binaryblobproto_lib,
+  sources: src_pb[0])
