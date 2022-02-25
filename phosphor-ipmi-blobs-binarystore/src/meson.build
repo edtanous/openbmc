@@ -14,6 +14,7 @@ binarystoreblob_lib = library(
   'handler.cpp',
   implicit_include_directories: false,
   dependencies: binarystoreblob_pre,
+  version: meson.project_version(),
   install: true)
 
 binarystoreblob_dep = declare_dependency(
