@@ -45,26 +45,34 @@ enum FfdcVersion_t : uint8_t
 void __getSrc(const libhei::Signature& i_signature, uint32_t& o_word6,
               uint32_t& o_word7, uint32_t& o_word8)
 {
-    // [ 0:15] chip model
-    // [16:23] reserved space in chip ID
-    // [24:31] chip EC level
-    o_word6 = i_signature.getChip().getType();
+    o_word6 = o_word7 = o_word8 = 0; // default
 
-    // [ 0:15] chip position
-    // [16:23] node position
-    // [24:31] signature attention type
-    auto chipPos    = util::pdbg::getChipPos(i_signature.getChip());
-    uint8_t nodePos = 0; // TODO: multi-node support
-    auto attn       = i_signature.getAttnType();
+    // Note that the chip could be null if there was no root cause attention
+    // found during analysis.
+    if (nullptr != i_signature.getChip().getChip())
+    {
+        // [ 0:15] chip model
+        // [16:23] reserved space in chip ID
+        // [24:31] chip EC level
+        o_word6 = i_signature.getChip().getType();
 
-    o_word7 = (chipPos & 0xffff) << 16 | (nodePos & 0xff) << 8 | (attn & 0xff);
+        // [ 0:15] chip position
+        // [16:23] node position
+        // [24:31] signature attention type
+        auto chipPos    = util::pdbg::getChipPos(i_signature.getChip());
+        uint8_t nodePos = 0; // TODO: multi-node support
+        auto attn       = i_signature.getAttnType();
 
-    // [ 0:15] signature ID
-    // [16:23] signature instance
-    // [24:31] signature bit position
-    o_word8 = i_signature.toUint32();
+        o_word7 =
+            (chipPos & 0xffff) << 16 | (nodePos & 0xff) << 8 | (attn & 0xff);
 
-    // Word 9 is currently unused
+        // [ 0:15] signature ID
+        // [16:23] signature instance
+        // [24:31] signature bit position
+        o_word8 = i_signature.toUint32();
+
+        // Word 9 is currently unused
+    }
 }
 
 //------------------------------------------------------------------------------
