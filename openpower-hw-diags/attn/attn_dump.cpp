@@ -5,6 +5,11 @@
 #include <sdbusplus/exception.hpp>
 #include <util/trace.hpp>
 
+constexpr uint64_t dumpTimeout = 3600000000; // microseconds
+
+constexpr auto operationStatusInProgress =
+    "xyz.openbmc_project.Common.Progress.OperationStatus.InProgress";
+
 namespace attn
 {
 
@@ -12,12 +17,11 @@ namespace attn
  *  Callback for dump request properties change signal monitor
  *
  * @param[in] i_msg         Dbus message from the dbus match infrastructure
- * @param[in] i_path        The object path we are monitoring
- * @param[out] o_inProgress Used to break out of our dbus wait loop
- * @reutn Always non-zero indicating no error, no cascading callbacks
+ * @param[out] o_dumpStatus Dump status dbus response string
+ * @return Always non-zero indicating no error, no cascading callbacks
  */
-uint dumpStatusChanged(sdbusplus::message::message& i_msg, std::string i_path,
-                       bool& o_inProgress)
+uint dumpStatusChanged(sdbusplus::message::message& i_msg,
+                       std::string& o_dumpStatus)
 {
     // reply (msg) will be a property change message
     std::string interface;
@@ -33,13 +37,9 @@ uint dumpStatusChanged(sdbusplus::message::message& i_msg, std::string i_path,
         const std::string* status =
             std::get_if<std::string>(&(dumpStatus->second));
 
-        if ((nullptr != status) && ("xyz.openbmc_project.Common.Progress."
-                                    "OperationStatus.InProgress" != *status))
+        if (nullptr != status)
         {
-            // dump is done, trace some info and change in progress flag
-            trace::inf(i_path.c_str());
-            trace::inf(status->c_str());
-            o_inProgress = false;
+            o_dumpStatus = *status;
         }
     }
 
@@ -53,29 +53,51 @@ uint dumpStatusChanged(sdbusplus::message::message& i_msg, std::string i_path,
  */
 void monitorDump(const std::string& i_path)
 {
-    bool inProgress = true; // callback will update this
-
     // setup the signal match rules and callback
     std::string matchInterface = "xyz.openbmc_project.Common.Progress";
     auto bus                   = sdbusplus::bus::new_system();
 
+    // monitor dump status change property, will update dumpStatus
+    std::string dumpStatus = "requested";
     std::unique_ptr<sdbusplus::bus::match_t> match =
         std::make_unique<sdbusplus::bus::match_t>(
             bus,
             sdbusplus::bus::match::rules::propertiesChanged(
                 i_path.c_str(), matchInterface.c_str()),
-            [&](auto& msg) {
-                return dumpStatusChanged(msg, i_path, inProgress);
-            });
+            [&](auto& msg) { return dumpStatusChanged(msg, dumpStatus); });
 
     // wait for dump status to be completed (complete == true)
-    trace::inf("dump requested (waiting)");
-    while (true == inProgress)
+    trace::inf("dump requested %s", i_path.c_str());
+
+    // wait for dump status not InProgress or timeout
+    uint64_t timeRemaining = dumpTimeout;
+
+    std::chrono::steady_clock::time_point begin =
+        std::chrono::steady_clock::now();
+
+    while (("requested" == dumpStatus ||
+            operationStatusInProgress == dumpStatus) &&
+           0 != timeRemaining)
     {
-        bus.wait(0);
+        bus.wait(timeRemaining);
+        uint64_t timeElapsed =
+            std::chrono::duration_cast<std::chrono::microseconds>(
+                std::chrono::steady_clock::now() - begin)
+                .count();
+
+        timeRemaining =
+            timeElapsed > timeRemaining ? 0 : timeRemaining - timeElapsed;
+
         bus.process_discard();
     }
-    trace::inf("dump completed");
+
+    if (0 == timeRemaining)
+    {
+        trace::err("dump request timed out after %" PRIu64 " microseconds",
+                   dumpTimeout);
+    }
+
+    trace::inf("dump status: %s", dumpStatus.c_str());
 }
 
 /** Request a dump from the dump manager */
