@@ -40,6 +40,7 @@ class NvmeSSD : public NvmeIfaces
     NvmeSSD(sdbusplus::bus::bus& bus, const char* objPath) :
         NvmeIfaces(bus, objPath), bus(bus)
     {
+        ValueIface::unit(Unit::DegreesC);
     }
 
     /** @brief Set sensor value temperature to nvme D-bus  */
