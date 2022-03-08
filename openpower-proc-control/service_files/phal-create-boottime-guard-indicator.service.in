@@ -1,6 +1,5 @@
 [Unit]
 Description=PHAL, Create boottime guard indicator
-Wants=start_host@0.service
 Before=start_host@0.service
 
 [Service]
