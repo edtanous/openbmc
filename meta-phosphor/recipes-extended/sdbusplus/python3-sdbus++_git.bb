@@ -15,6 +15,8 @@ LIC_FILES_CHKSUM = "file://${COREBASE}/meta/files/common-licenses/Apache-2.0;md5
 
 S="${WORKDIR}/git/tools"
 
+SETUPTOOLS_SETUP_PATH = "${S}"
+
 DEPENDS += " \
     ${PYTHON_PN}-inflection-native \
     ${PYTHON_PN}-mako-native \
