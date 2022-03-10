@@ -2,3 +2,5 @@ build*/*
 customrc
 *.sw?
 .repo/
+**/oe-logs
+**/oe-workdir
