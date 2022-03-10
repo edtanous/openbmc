@@ -77,3 +77,6 @@ python do_emit_env() {
 }
 
 do_install[postfuncs] += "do_emit_env"
+
+inherit externalsrc
+EXTERNALSRC:pn-phosphor-mapper = "${TOPDIR}/../phosphor-objmgr"

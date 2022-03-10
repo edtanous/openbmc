@@ -14,3 +14,6 @@ S = "${WORKDIR}/git"
 SYSTEMD_SERVICE:${PN} += "xyz.openbmc_project.HostErrorMonitor.service"
 
 EXTRA_OECMAKE = "-DYOCTO=1"
+
+inherit externalsrc
+EXTERNALSRC:pn-host-error-monitor = "${TOPDIR}/../host-error-monitor"

@@ -33,3 +33,6 @@ EXTRA_OEMESON += "-Dtests=disabled"
 
 CXXFLAGS:append:gbmc = '${@"" if not d.getVar("GBMC_NCSI_IF_NAME") else \
   " -DNCSI_IPMI_CHANNEL=1 -DNCSI_IF_NAME=" + d.getVar("GBMC_NCSI_IF_NAME")}'
+
+inherit externalsrc
+EXTERNALSRC:pn-google-ipmi-sys = "${TOPDIR}/../google-ipmi-sys"

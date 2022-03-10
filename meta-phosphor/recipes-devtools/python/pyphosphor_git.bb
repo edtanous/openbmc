@@ -53,3 +53,6 @@ SRC_URI += "git://github.com/openbmc/pyphosphor;branch=master;protocol=https"
 SRCREV = "cb240aa1ed95799d2ea8bde951c6ed443839a7e0"
 
 S = "${WORKDIR}/git"
+
+inherit externalsrc
+EXTERNALSRC:pn-pyphosphor = "${TOPDIR}/../pyphosphor"

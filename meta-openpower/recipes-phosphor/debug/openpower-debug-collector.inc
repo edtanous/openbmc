@@ -3,3 +3,6 @@ LICENSE = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=e3fc50a88d0a364313df4b21ef20c29e"
 SRC_URI += "git://github.com/openbmc/openpower-debug-collector;branch=master;protocol=https"
 SRCREV = "b64983f0c1cc04a64082f6096f6a2e1e40223968"
+
+inherit externalsrc
+EXTERNALSRC:pn-openpower-debug-collector.inc = "${TOPDIR}/../openpower-debug-collector"

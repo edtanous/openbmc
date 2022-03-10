@@ -35,3 +35,6 @@ PACKAGECONFIG[log-watchdog] = "-Dlog-watchdog=true,-Dlog-watchdog=false,"
 PACKAGECONFIG[log-alarm] = "-Dlog-alarm=true,-Dlog-alarm=false,"
 PACKAGECONFIG[send-to-logger] = "-Dsend-to-logger=true,-Dsend-to-logger=false,phosphor-logging"
 PACKAGECONFIG[clears-sel] = "-Dclears-sel=true,-Dclears-sel=false"
+
+inherit externalsrc
+EXTERNALSRC:pn-phosphor-sel-logger = "${TOPDIR}/../phosphor-sel-logger"

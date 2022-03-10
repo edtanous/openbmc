@@ -21,3 +21,6 @@ FILES:${PN} += " \
                ${sysconfdir}/key_file \
                ${sysconfdir}/ipmi_pass \
                "
+
+inherit externalsrc
+EXTERNALSRC:pn-pam-ipmi = "${TOPDIR}/../pam-ipmi"

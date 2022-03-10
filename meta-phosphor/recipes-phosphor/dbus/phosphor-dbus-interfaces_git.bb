@@ -36,3 +36,6 @@ FILES:${PN}-doc += "${datadir}/${BPN}"
 EXTRA_OEMESON:append = " \
         -Db_lto=true \
         ${@pdi_meson_config(d)}"
+
+inherit externalsrc
+EXTERNALSRC:pn-phosphor-dbus-interfaces = "${TOPDIR}/../phosphor-dbus-interfaces"

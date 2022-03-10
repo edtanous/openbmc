@@ -59,3 +59,6 @@ RDEPENDS:${PN}-http-redirect-awk = "${VIRTUAL-RUNTIME_base-utils}"
 
 # usb-ctrl
 FILES:${PN}-usb-ctrl = "${bindir}/usb-ctrl"
+
+inherit externalsrc
+EXTERNALSRC:pn-phosphor-misc = "${TOPDIR}/../phosphor-misc"

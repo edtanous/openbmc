@@ -75,3 +75,6 @@ BLOBIPMI_PROVIDER_LIBRARY += "liblogblob.so"
 BLOBIPMI_PROVIDER_LIBRARY += "${@bb.utils.contains('PACKAGECONFIG', 'cleanup-delete', 'libfirmwarecleanupblob.so', '', d)}"
 
 do_configure[depends] += "virtual/kernel:do_shared_workdir"
+
+inherit externalsrc
+EXTERNALSRC:pn-phosphor-ipmi-flash = "${TOPDIR}/../phosphor-ipmi-flash"

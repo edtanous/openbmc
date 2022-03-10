@@ -72,3 +72,6 @@ EXTRA_OEMESON = " \
         -Dyamldir=${STAGING_DIR_TARGET}${yaml_dir} \
         -Dcallout_yaml=${STAGING_DIR_NATIVE}${callouts_datadir}/callouts.yaml \
         "
+
+inherit externalsrc
+EXTERNALSRC:pn-phosphor-logging = "${TOPDIR}/../phosphor-logging"

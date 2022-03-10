@@ -24,3 +24,6 @@ FILES:${PN}:append = " ${libdir}/ipmid-providers/lib*${SOLIBS}"
 FILES:${PN}:append = " ${libdir}/host-ipmid/lib*${SOLIBS}"
 FILES:${PN}:append = " ${libdir}/net-ipmid/lib*${SOLIBS}"
 FILES:${PN}-dev:append = " ${libdir}/ipmid-providers/lib*${SOLIBSDEV}"
+
+inherit externalsrc
+EXTERNALSRC:pn-fii-ipmi-oem = "${TOPDIR}/../foxconn-ipmi-oem"

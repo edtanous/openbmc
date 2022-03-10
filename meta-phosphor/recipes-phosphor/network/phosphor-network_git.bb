@@ -40,3 +40,6 @@ SYSTEMD_SERVICE:${PN} += "xyz.openbmc_project.Network.service"
 SYSTEMD_SERVICE:${PN}:append = "${@bb.utils.contains('PACKAGECONFIG', 'ibm-hyp-nw-config', ' xyz.openbmc_project.Network.Hypervisor.service', '', d)}"
 
 EXTRA_OEMESON:append = " -Dtests=disabled"
+
+inherit externalsrc
+EXTERNALSRC:pn-phosphor-network = "${TOPDIR}/../phosphor-networkd"

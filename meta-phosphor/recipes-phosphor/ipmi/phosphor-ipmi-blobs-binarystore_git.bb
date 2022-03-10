@@ -28,3 +28,6 @@ BLOBIPMI_PROVIDER_LIBRARY += "libbinarystore.so"
 
 EXTRA_OEMESON:append = " -Dtests=disabled"
 
+
+inherit externalsrc
+EXTERNALSRC:pn-phosphor-ipmi-blobs-binarystore = "${TOPDIR}/../phosphor-ipmi-blobs-binarystore"

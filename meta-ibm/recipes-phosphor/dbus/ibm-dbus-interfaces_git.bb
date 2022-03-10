@@ -29,3 +29,6 @@ PACKAGECONFIG:remove:class-native = "libibm_dbus"
 PACKAGECONFIG:remove:class-nativesdk = "libibm_dbus"
 
 BBCLASSEXTEND += "native nativesdk"
+
+inherit externalsrc
+EXTERNALSRC:pn-ibm-dbus-interfaces = "${TOPDIR}/../ibm-dbus-interfaces"

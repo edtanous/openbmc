@@ -19,3 +19,6 @@ SRCREV = "a6cd704bda72e39e1b94652a9eb0733da8498791"
 S = "${WORKDIR}/git"
 
 SYSTEMD_SERVICE:${PN} = "phosphor-health-monitor.service"
+
+inherit externalsrc
+EXTERNALSRC:pn-phosphor-health-monitor = "${TOPDIR}/../phosphor-health-monitor"

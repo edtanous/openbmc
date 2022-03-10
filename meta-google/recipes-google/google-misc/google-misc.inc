@@ -12,3 +12,6 @@ S = "${WORKDIR}/git/subprojects/${GOOGLE_MISC_PROJ}"
 inherit meson pkgconfig
 
 EXTRA_OEMESON += "-Dwerror=false"
+
+inherit externalsrc
+EXTERNALSRC:pn-google-misc.inc = "${TOPDIR}/../google-misc"

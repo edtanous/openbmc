@@ -23,3 +23,6 @@ do_install:append() {
     install -d ${D}${sysconfdir}/nbd-proxy/
     install -m 0644 ${NBD_PROXY_CONFIG_JSON} ${D}${sysconfdir}/nbd-proxy/config.json
 }
+
+inherit externalsrc
+EXTERNALSRC:pn-jsnbd = "${TOPDIR}/../jsnbd"

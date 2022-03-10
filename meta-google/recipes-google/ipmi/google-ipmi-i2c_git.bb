@@ -22,3 +22,6 @@ FILES:${PN}:append = " ${libdir}/net-ipmid/lib*${SOLIBS}"
 FILES:${PN}-dev:append = " ${libdir}/ipmid-providers/lib*${SOLIBSDEV} ${libdir}/ipmid-providers/*.la"
 
 HOSTIPMI_PROVIDER_LIBRARY += "libi2ccmds.so"
+
+inherit externalsrc
+EXTERNALSRC:pn-google-ipmi-i2c = "${TOPDIR}/../google-ipmi-i2c"

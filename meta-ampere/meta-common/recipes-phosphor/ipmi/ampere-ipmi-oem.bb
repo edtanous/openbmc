@@ -30,3 +30,6 @@ do_install:append(){
    install -d ${D}${includedir}/ampere-ipmi-oem
    install -m 0644 -D ${S}/include/*.hpp ${D}${includedir}/ampere-ipmi-oem
 }
+
+inherit externalsrc
+EXTERNALSRC:pn-ampere-ipmi-oem.bb = "${TOPDIR}/../ampere-ipmi-oem"

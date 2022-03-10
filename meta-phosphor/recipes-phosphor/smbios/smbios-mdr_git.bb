@@ -37,3 +37,6 @@ FILES:${PN}:append = " ${libdir}/ipmid-providers/lib*${SOLIBS}"
 FILES:${PN}:append = " ${libdir}/blob-ipmid/lib*${SOLIBS}"
 FILES:${PN}-dev:append  = " ${libdir}/ipmid-providers/lib*${SOLIBSDEV}"
 BLOBIPMI_PROVIDER_LIBRARY += "${@bb.utils.contains('PACKAGECONFIG', 'smbios-ipmi-blob', 'libsmbiosstore.so', '', d)}"
+
+inherit externalsrc
+EXTERNALSRC:pn-smbios-mdr = "${TOPDIR}/../smbios-mdr"

@@ -16,3 +16,6 @@ S = "${WORKDIR}/git"
 
 SRC_URI = "git://github.com/openbmc/phosphor-power-control;branch=master;protocol=https"
 SRCREV = "ca9aa00180423b548369a7485bbca641581cc1ab"
+
+inherit externalsrc
+EXTERNALSRC:pn-obmc-phosphor-power = "${TOPDIR}/../phosphor-power-control"

@@ -33,3 +33,6 @@ DEPENDS += " \
     phosphor-dbus-interfaces \
     phosphor-logging \
     "
+
+inherit externalsrc
+EXTERNALSRC:pn-obmc-phosphor-buttons = "${TOPDIR}/../phosphor-buttons"

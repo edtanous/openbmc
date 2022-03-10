@@ -36,3 +36,6 @@ do_install:append() {
 }
 
 S = "${WORKDIR}/git"
+
+inherit externalsrc
+EXTERNALSRC:pn-libmctp = "${TOPDIR}/../libmctp"

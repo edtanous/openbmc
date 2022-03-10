@@ -23,3 +23,5 @@ DEPENDS = " \
     sdbusplus \
     systemd \
     "
+inherit externalsrc
+EXTERNALSRC:pn-srvcfg-manager = "${TOPDIR}/../service-config-manager"

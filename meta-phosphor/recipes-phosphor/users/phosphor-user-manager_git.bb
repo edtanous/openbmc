@@ -43,3 +43,6 @@ DBUS_SERVICE:phosphor-ldap = " \
 SRC_URI += "git://github.com/openbmc/phosphor-user-manager;branch=master;protocol=https"
 SRCREV = "ca039ca36114aaacb059abc7545073ab735c3b25"
 S = "${WORKDIR}/git"
+
+inherit externalsrc
+EXTERNALSRC:pn-phosphor-user-manager = "${TOPDIR}/../phosphor-user-manager"

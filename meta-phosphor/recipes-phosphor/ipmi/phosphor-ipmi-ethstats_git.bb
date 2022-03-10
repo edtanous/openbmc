@@ -24,3 +24,6 @@ FILES:${PN}-dev:append = " ${libdir}/ipmid-providers/lib*${SOLIBSDEV} ${libdir}/
 HOSTIPMI_PROVIDER_LIBRARY += "libethstatscmd.so"
 
 EXTRA_OECONF += "--disable-tests"
+
+inherit externalsrc
+EXTERNALSRC:pn-phosphor-ipmi-ethstats = "${TOPDIR}/../phosphor-ipmi-ethstats"

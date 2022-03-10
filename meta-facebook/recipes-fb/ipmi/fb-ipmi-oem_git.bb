@@ -37,3 +37,6 @@ do_install:append(){
    install -d ${D}${includedir}/fb-ipmi-oem
    install -m 0644 -D ${S}/include/*.hpp ${D}${includedir}/fb-ipmi-oem
 }
+
+inherit externalsrc
+EXTERNALSRC:pn-fb-ipmi-oem = "${TOPDIR}/../fb-ipmi-oem"

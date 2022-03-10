@@ -29,3 +29,6 @@ PACKAGECONFIG:remove:class-native = "libintel_dbus"
 PACKAGECONFIG:remove:class-nativesdk = "libintel_dbus"
 
 BBCLASSEXTEND += "native nativesdk"
+
+inherit externalsrc
+EXTERNALSRC:pn-intel-dbus-interfaces = "${TOPDIR}/../intel-dbus-interfaces"

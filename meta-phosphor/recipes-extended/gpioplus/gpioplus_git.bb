@@ -17,3 +17,6 @@ SRC_URI += "git://github.com/openbmc/gpioplus;branch=master;protocol=https"
 SRCREV = "8944f2e24ad8152793af010906faf06607f0e04b"
 
 S = "${WORKDIR}/git"
+
+inherit externalsrc
+EXTERNALSRC:pn-gpioplus = "${TOPDIR}/../gpioplus"

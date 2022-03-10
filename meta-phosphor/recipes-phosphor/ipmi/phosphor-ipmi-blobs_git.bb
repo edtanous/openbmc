@@ -24,3 +24,6 @@ EXTRA_OEMESON:append = " \
   -Dtests=disabled \
   -Dexamples=false \
   "
+
+inherit externalsrc
+EXTERNALSRC:pn-phosphor-ipmi-blobs = "${TOPDIR}/../phosphor-ipmi-blobs"

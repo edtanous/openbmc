@@ -36,3 +36,6 @@ PACKAGECONFIG[phal] = "-Dphal=enabled, -Dphal=disabled, ipl pdata"
 # Don't build CI tests
 EXTRA_OEMESON = "-Dtests=disabled"
 
+
+inherit externalsrc
+EXTERNALSRC:pn-openpower-hw-diags = "${TOPDIR}/../openpower-hw-diags"

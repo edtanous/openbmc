@@ -3,3 +3,6 @@ LICENSE = "GPL-3.0"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=7702f203b58979ebbc31bfaeb44f219c"
 SRC_URI += "git://github.com/openbmc/ipmi-fru-parser;branch=master;protocol=https"
 SRCREV = "bc145078e775d4945f9f0162a2aa4eff58d776e7"
+
+inherit externalsrc
+EXTERNALSRC:pn-phosphor-ipmi-fru.inc = "${TOPDIR}/../ipmi-fru-parser"

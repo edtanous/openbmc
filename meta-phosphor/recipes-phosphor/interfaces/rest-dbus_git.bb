@@ -25,3 +25,6 @@ SRC_URI += "git://github.com/openbmc/rest-dbus.git;branch=master;protocol=https"
 SRCREV = "99d57f2698568be1bf989057f678ff5c053e7957"
 
 S = "${WORKDIR}/git"
+
+inherit externalsrc
+EXTERNALSRC:pn-rest-dbus = "${TOPDIR}/../rest-dbus"

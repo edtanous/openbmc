@@ -74,3 +74,6 @@ DBUS_SERVICE:${PN} += "org.open_power.Software.Host.Updater.service"
 SYSTEMD_SERVICE:${PN} += " \
         op-pnor-msl.service \
         "
+
+inherit externalsrc
+EXTERNALSRC:pn-openpower-software-manager = "${TOPDIR}/../openpower-pnor-code-mgmt"

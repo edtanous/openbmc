@@ -20,3 +20,6 @@ SRCREV = "1204b43374720e9b338ea0aa6be75d8d27e0477e"
 S = "${WORKDIR}/git"
 
 SYSTEMD_SERVICE:${PN} = "phosphor-virtual-sensor.service"
+
+inherit externalsrc
+EXTERNALSRC:pn-phosphor-virtual-sensor = "${TOPDIR}/../phosphor-virtual-sensor"

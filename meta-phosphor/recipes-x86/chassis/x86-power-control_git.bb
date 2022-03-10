@@ -34,3 +34,6 @@ DEPENDS += " \
     phosphor-logging \
   "
 FILES:${PN}  += "${systemd_system_unitdir}/xyz.openbmc_project.Chassis.Control.Power@.service"
+
+inherit externalsrc
+EXTERNALSRC:pn-x86-power-control = "${TOPDIR}/../x86-power-control"

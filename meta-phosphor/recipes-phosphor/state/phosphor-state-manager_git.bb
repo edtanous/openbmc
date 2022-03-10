@@ -196,3 +196,6 @@ SRC_URI += "git://github.com/openbmc/phosphor-state-manager;branch=master;protoc
 SRCREV = "2e352a21b64c6dcfe3bea980ff459d99f355828f"
 
 S = "${WORKDIR}/git"
+
+inherit externalsrc
+EXTERNALSRC:pn-phosphor-state-manager = "${TOPDIR}/../phosphor-state-manager"

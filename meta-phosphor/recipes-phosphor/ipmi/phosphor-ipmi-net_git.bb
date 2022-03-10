@@ -50,3 +50,6 @@ SYSTEMD_SERVICE:${PN} = " \
 # config file with the same 'name' as the interfaces above
 # Override the default phosphor-ipmi-config.bb with a bbappend
 
+
+inherit externalsrc
+EXTERNALSRC:pn-phosphor-ipmi-net = "${TOPDIR}/../phosphor-net-ipmid"

@@ -30,3 +30,6 @@ do_install:append(){
    install -d ${D}${includedir}/intel-ipmi-oem
    install -m 0644 -D ${S}/include/*.hpp ${D}${includedir}/intel-ipmi-oem
 }
+
+inherit externalsrc
+EXTERNALSRC:pn-intel-ipmi-oem = "${TOPDIR}/../intel-ipmi-oem"

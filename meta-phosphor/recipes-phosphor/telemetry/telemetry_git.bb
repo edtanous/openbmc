@@ -25,3 +25,6 @@ DEPENDS = "boost \
 SYSTEMD_SERVICE:${PN} = "xyz.openbmc_project.Telemetry.service"
 EXTRA_OEMESON = "-Dbuildtest=false"
 
+
+inherit externalsrc
+EXTERNALSRC:pn-telemetry = "${TOPDIR}/../telemetry"

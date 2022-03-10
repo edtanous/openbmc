@@ -87,3 +87,6 @@ do_install:append() {
         fi
 
 }
+
+inherit externalsrc
+EXTERNALSRC:pn-obmc-console = "${TOPDIR}/../obmc-console"

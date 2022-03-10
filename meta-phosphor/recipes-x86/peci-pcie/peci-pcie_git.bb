@@ -18,3 +18,6 @@ S = "${WORKDIR}/git"
 SYSTEMD_SERVICE:${PN} += "xyz.openbmc_project.PCIe.service"
 
 EXTRA_OECMAKE = "-DYOCTO=1"
+
+inherit externalsrc
+EXTERNALSRC:pn-peci-pcie = "${TOPDIR}/../peci-pcie"

@@ -20,3 +20,6 @@ DEPENDS = "sdbusplus \
 S = "${WORKDIR}/git"
 inherit cmake pkgconfig systemd 
 FILES:${PN} += "/usr/share/ipmbbridge/ipmb-channels.json"
+
+inherit externalsrc
+EXTERNALSRC:pn-phosphor-ipmi-ipmb = "${TOPDIR}/../ipmbbridge"

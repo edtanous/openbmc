@@ -61,3 +61,6 @@ EXTRA_OEMESON = " \
 SYSTEMD_SERVICE:${PN} += "bmcweb.service bmcweb.socket"
 
 FULL_OPTIMIZATION = "-Os "
+
+inherit externalsrc
+EXTERNALSRC:pn-bmcweb = "${TOPDIR}/../bmcweb"

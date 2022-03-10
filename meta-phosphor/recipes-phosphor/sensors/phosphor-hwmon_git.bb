@@ -95,3 +95,6 @@ EOF
         done
     fi
 }
+
+inherit externalsrc
+EXTERNALSRC:pn-phosphor-hwmon = "${TOPDIR}/../phosphor-hwmon"

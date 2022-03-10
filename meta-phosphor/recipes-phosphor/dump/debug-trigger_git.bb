@@ -32,3 +32,6 @@ PACKAGECONFIG[triggers] = " \
     systemd udev"
 
 SYSTEMD_SERVICE:${PN} += "debug-trigger@.service"
+
+inherit externalsrc
+EXTERNALSRC:pn-debug-trigger = "${TOPDIR}/../debug-trigger"

@@ -20,3 +20,6 @@ SRCREV = "c33f294ecc59cd31698ada37827bb5c9f00adc8b"
 S = "${WORKDIR}/git"
 
 SYSTEMD_SERVICE:${PN} = " ${PN}.service"
+
+inherit externalsrc
+EXTERNALSRC:pn-phosphor-ecc = "${TOPDIR}/../phosphor-ecc"

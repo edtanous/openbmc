@@ -30,3 +30,6 @@ do_install () {
    find ${D}${datadir}/www -type d -exec chmod a=rx,u+w '{}' +
 }
 
+
+inherit externalsrc
+EXTERNALSRC:pn-phosphor-webui = "${TOPDIR}/../phosphor-webui"

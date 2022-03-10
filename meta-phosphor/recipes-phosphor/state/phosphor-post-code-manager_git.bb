@@ -32,3 +32,6 @@ DEPENDS += " \
     libcereal \
     "
 
+
+inherit externalsrc
+EXTERNALSRC:pn-phosphor-post-code-manager = "${TOPDIR}/../phosphor-post-code-manager"

@@ -45,3 +45,6 @@ SYSTEMD_SERVICE:${PN} +=  " \
         ${@bb.utils.contains('MACHINE_FEATURES', 'phal', 'set-spi-mux.service', '', d)} \
         ${@bb.utils.contains('MACHINE_FEATURES', 'phal', 'phal-create-boottime-guard-indicator.service', '', d)} \
         "
+
+inherit externalsrc
+EXTERNALSRC:pn-op-proc-control = "${TOPDIR}/../openpower-proc-control"

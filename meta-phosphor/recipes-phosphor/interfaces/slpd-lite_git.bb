@@ -19,3 +19,6 @@ SRC_URI += "git://github.com/openbmc/slpd-lite;branch=master;protocol=https"
 SRCREV = "ef078cd0d560b8c49061f0b855f0cb4450e69b3a"
 
 S = "${WORKDIR}/git"
+
+inherit externalsrc
+EXTERNALSRC:pn-slpd-lite = "${TOPDIR}/../slpd-lite"

@@ -40,3 +40,6 @@ S = "${WORKDIR}/git"
 EXTRA_OECONF = " \
         YAML_PATH=${STAGING_DIR_HOST}${config_dir} \
         "
+
+inherit externalsrc
+EXTERNALSRC:pn-phosphor-dbus-monitor = "${TOPDIR}/../phosphor-dbus-monitor"

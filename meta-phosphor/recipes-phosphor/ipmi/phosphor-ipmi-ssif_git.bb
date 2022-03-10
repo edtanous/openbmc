@@ -23,3 +23,6 @@ S = "${WORKDIR}/git"
 SRC_URI = "git://github.com/openbmc/ssifbridge.git;protocol=https;branch=master"
 SRCREV= "2c2b8280584d05d16a4d0c180be8c3a6ee37aec2"
 
+
+inherit externalsrc
+EXTERNALSRC:pn-phosphor-ipmi-ssif = "${TOPDIR}/../ssifbridge"

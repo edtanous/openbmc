@@ -50,3 +50,6 @@ EXTRA_OEMESON = " \
 
 SYSTEMD_SERVICE:${PN} = "xyz.openbmc_project.Software.Psu.Updater.service"
 SYSTEMD_SERVICE:${PN} += "psu-update@.service"
+
+inherit externalsrc
+EXTERNALSRC:pn-phosphor-psu-software-manager = "${TOPDIR}/../phosphor-psu-code-mgmt"

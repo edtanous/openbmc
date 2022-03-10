@@ -66,3 +66,6 @@ do_report(){
 }
 
 addtask report after do_install
+
+inherit externalsrc
+EXTERNALSRC:pn-ibm-logging = "${TOPDIR}/../ibm-logging"

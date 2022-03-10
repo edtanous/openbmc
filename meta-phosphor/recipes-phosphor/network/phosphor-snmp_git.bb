@@ -24,3 +24,6 @@ DEPENDS += "phosphor-logging"
 DEPENDS += "net-snmp"
 
 S = "${WORKDIR}/git"
+
+inherit externalsrc
+EXTERNALSRC:pn-phosphor-snmp = "${TOPDIR}/../phosphor-snmp"

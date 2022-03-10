@@ -40,3 +40,6 @@ SYSTEMD_SERVICE:${PN} = " \
         "
 
 FILES:${PN}:append = " ${systemd_system_unitdir}/* ${datadir}/dbus-1"
+
+inherit externalsrc
+EXTERNALSRC:pn-phosphor-certificate-manager = "${TOPDIR}/../phosphor-certificate-manager"

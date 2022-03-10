@@ -67,3 +67,6 @@ do_install:append() {
                      ${D}${sysconfdir}/hostlogger/${DEFAULT_INSTANCE}.conf
   fi
 }
+
+inherit externalsrc
+EXTERNALSRC:pn-phosphor-hostlogger = "${TOPDIR}/../phosphor-hostlogger"

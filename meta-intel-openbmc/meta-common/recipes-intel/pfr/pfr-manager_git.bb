@@ -21,3 +21,6 @@ DEPENDS += " \
     i2c-tools \
     libgpiod \
     "
+
+inherit externalsrc
+EXTERNALSRC:pn-pfr-manager = "${TOPDIR}/../pfr-manager"

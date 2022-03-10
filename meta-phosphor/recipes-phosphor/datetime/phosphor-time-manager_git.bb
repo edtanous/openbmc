@@ -25,3 +25,6 @@ PV = "1.0+git${SRCPV}"
 S = "${WORKDIR}/git"
 
 DBUS_SERVICE:${PN} += "xyz.openbmc_project.Time.Manager.service"
+
+inherit externalsrc
+EXTERNALSRC:pn-phosphor-time-manager = "${TOPDIR}/../phosphor-time-manager"

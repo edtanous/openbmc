@@ -48,3 +48,6 @@ SRCREV = "c4b6ce728089737ad85ab5cfa7f34e2a912f091b"
 S = "${WORKDIR}/git"
 
 EXTRA_OEMESON:append = " -Dtests=disabled"
+
+inherit externalsrc
+EXTERNALSRC:pn-phosphor-gpio-monitor = "${TOPDIR}/../phosphor-gpio-monitor"

@@ -78,3 +78,6 @@ inherit pkgconfig meson systemd
 S = "${WORKDIR}/git"
 
 EXTRA_OEMESON:append = " -Dtests=disabled"
+
+inherit externalsrc
+EXTERNALSRC:pn-dbus-sensors = "${TOPDIR}/../dbus-sensors"

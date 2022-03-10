@@ -28,3 +28,6 @@ DEPENDS = " boost \
             systemd \
             nlohmann-json "
 
+
+inherit externalsrc
+EXTERNALSRC:pn-biosconfig-manager = "${TOPDIR}/../bios-settings-mgr"

@@ -23,3 +23,6 @@ SRC_URI += "git://github.com/openbmc/stdplus;branch=master;protocol=https"
 SRCREV = "1151c6d3d93369f16ccedd16dbb410ec2c59cfa5"
 
 S = "${WORKDIR}/git"
+
+inherit externalsrc
+EXTERNALSRC:pn-stdplus = "${TOPDIR}/../stdplus"

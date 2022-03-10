@@ -15,3 +15,6 @@ SYSTEMD_SERVICE:${PN} += "start-ipkvm.service"
 S = "${WORKDIR}/git"
 
 inherit pkgconfig meson systemd
+
+inherit externalsrc
+EXTERNALSRC:pn-obmc-ikvm = "${TOPDIR}/../obmc-ikvm"

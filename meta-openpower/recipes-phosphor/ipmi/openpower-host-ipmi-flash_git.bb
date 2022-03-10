@@ -26,3 +26,6 @@ SRCREV = "90eea43e3e6a019344158766ac092acf2a240c24"
 FILES:${PN}:append = " ${libdir}/ipmid-providers/lib*${SOLIBS}"
 FILES:${PN}:append = " ${libdir}/host-ipmid/lib*${SOLIBS}"
 FILES:${PN}-dev:append = " ${libdir}/ipmid-providers/lib*${SOLIBSDEV} ${libdir}/ipmid-providers/*.la"
+
+inherit externalsrc
+EXTERNALSRC:pn-openpower-host-ipmi-flash = "${TOPDIR}/../openpower-host-ipmi-flash"

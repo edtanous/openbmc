@@ -27,3 +27,6 @@ do_install:append() {
         install -d ${D}/${nonarch_base_libdir}/udev/rules.d/
         install -m 0644 ${WORKDIR}/70-leds.rules ${D}/${nonarch_base_libdir}/udev/rules.d/
 }
+
+inherit externalsrc
+EXTERNALSRC:pn-phosphor-led-sysfs = "${TOPDIR}/../phosphor-led-sysfs"

@@ -19,3 +19,6 @@ SRCREV = "5c4de839b88fc69387a49bbf1d8b09f304c16582"
 S = "${WORKDIR}/git"
 
 SYSTEMD_SERVICE:${PN} = "xyz.openbmc_project.nvme.manager.service"
+
+inherit externalsrc
+EXTERNALSRC:pn-phosphor-nvme = "${TOPDIR}/../phosphor-nvme"

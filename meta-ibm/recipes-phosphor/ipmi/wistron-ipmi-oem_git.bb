@@ -21,3 +21,6 @@ FILES:${PN}:append = " ${libdir}/host-ipmid/lib*${SOLIBS}"
 FILES:${PN}-dev:append = " ${libdir}/ipmid-providers/lib*${SOLIBSDEV} ${libdir}/ipmid-providers/*.la"
 
 HOSTIPMI_PROVIDER_LIBRARY += "libwistronoem.so"
+
+inherit externalsrc
+EXTERNALSRC:pn-wistron-ipmi-oem = "${TOPDIR}/../wistron-ipmi-oem"
