@@ -6,9 +6,10 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=a81586a64ad4e476c791cda7e2f2c52e"
 
 DEPENDS = "re2c-native ninja-native"
 
-SRCREV = "a524bf3f6bacd1b4ad85d719eed2737d8562f27a"
+SRCREV = "c9e21dbbc4c746ba397c0f9bec5f65c99f783c08"
 
-SRC_URI = "git://github.com/ninja-build/ninja.git;branch=release;protocol=https"
+# https://github.com/ninja-build/ninja/issues/1139
+SRC_URI = "git://github.com/ninja-build/ninja.git;branch=kitware-staged-features;protocol=https;nobranch=1"
 UPSTREAM_CHECK_GITTAGREGEX = "v(?P<pver>.*)"
 
 S = "${WORKDIR}/git"

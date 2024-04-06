@@ -171,7 +171,7 @@ do_configure[postfuncs] += "meson_do_qa_configure"
 
 do_compile[progress] = "outof:^\[(\d+)/(\d+)\]\s+"
 meson_do_compile() {
-    meson compile -v ${PARALLEL_MAKE} ${MESON_TARGET}
+    meson compile -v ${PARALLEL_MAKE} ${EXTRA_OEMESON_COMPILE} ${MESON_TARGET}
 }
 
 meson_do_install() {
