@@ -1,3 +1,5 @@
+FILESEXTRAPATHS:prepend := "${THISDIR}/${PN}:"
+
 SUMMARY = "Network DBUS object"
 DESCRIPTION = "Network DBUS object"
 HOMEPAGE = "http://github.com/openbmc/phosphor-networkd"
@@ -38,3 +40,11 @@ FILES:${PN} += "${datadir}/dbus-1/system.d"
 FILES:${PN} += "${systemd_unitdir}/network/60-phosphor-networkd-default.network"
 
 UBOOT_ENV_RDEPENDS = "${@d.getVar('PREFERRED_PROVIDER_u-boot-fw-utils', True) or 'u-boot-fw-utils'}"
+SRC_URI += " \
+    file://60-phosphor-networkd-default.network \
+"
+
+do_install:append(){
+        mkdir -p ${D}/${systemd_unitdir}/network/
+	install ${WORKDIR}/60-phosphor-networkd-default.network "${D}/${systemd_unitdir}/network/"
+}
