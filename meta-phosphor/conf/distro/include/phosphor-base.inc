@@ -112,6 +112,17 @@ DISTRO_FEATURES += " \
 
 DISTRO_EXTRA_RDEPENDS:remove:qemuarm = "packagegroup-core-device-devel"
 
+GOVERSION ?= "1.10%"
+PREFERRED_VERSION_virtual/${TARGET_PREFIX}go ?= "${GOVERSION}"
+PREFERRED_VERSION_go-cross-${TARGET_ARCH} ?= "${GOVERSION}"
+PREFERRED_VERSION_go-crosssdk-${SDK_ARCH} ?= "${GOVERSION}"
+PREFERRED_VERSION_go-cross-canadian-${TRANSLATED_TARGET_ARCH} ?= "${GOVERSION}"
+PREFERRED_VERSION_go ?= "${GOVERSION}"
+PREFERRED_VERSION_go-native ?= "${GOVERSION}"
+PREFERRED_VERSION_go-runtime ?= "${GOVERSION}"
+PREFERRED_VERSION_nativesdk-go ?= "${GOVERSION}"
+PREFERRED_VERSION_nativesdk-go-runtime ?= "${GOVERSION}"
+
 include conf/distro/include/openbmc-phosphor/${MACHINE}.inc
 
 IMAGE_CLASSES:append = " image_types_phosphor phosphor-rootfs-postcommands"
