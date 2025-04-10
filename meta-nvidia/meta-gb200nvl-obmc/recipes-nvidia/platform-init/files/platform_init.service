@@ -1,0 +1,10 @@
+[Unit]
+Description=Start up the GB200Nvl hardware
+
+[Service]
+type=simple
+ExecStart=/usr/libexec/platform-init
+SyslogIdentifier=gb200nvl-platform-init
+
+[Install]
+WantedBy=multi-user.target
